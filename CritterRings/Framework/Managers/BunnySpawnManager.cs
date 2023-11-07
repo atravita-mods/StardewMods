@@ -1,10 +1,10 @@
-﻿using AtraShared.Utils.Extensions;
+﻿namespace CritterRings.Framework.Managers;
+
+using AtraShared.Utils.Extensions;
 
 using StardewModdingAPI.Events;
 
 using StardewValley.TerrainFeatures;
-
-namespace CritterRings.Framework.Managers;
 
 /// <summary>
 /// Monitors bushes.
@@ -93,7 +93,7 @@ internal sealed class BunnySpawnManager : IDisposable
     private void OnWarp(object? sender, WarpedEventArgs e)
     {
         if (this.farmerRef?.TryGetTarget(out Farmer? farmer) != true || this.disposedValue || farmer is null
-            || !ReferenceEquals(farmer, e.Player))
+            || !ReferenceEquals(farmer, e.Player) || ReferenceEquals(e.NewLocation, e.OldLocation) || e.NewLocation is null)
         {
             ModEntry.ModMonitor.DebugOnlyLog($"Warp event raised, not for us", LogLevel.Info);
             return;
@@ -142,7 +142,19 @@ internal sealed class BunnySpawnManager : IDisposable
         /// <returns>this.</returns>
         internal LargeObjectListener ChangeLocation(GameLocation newLocation)
         {
+            // okay, I guess nothing actually changed?
+            if (ReferenceEquals(this.location, newLocation))
+            {
+                return this;
+            }
+
             this.monitor.DebugOnlyLog($"(Bunny Ring) Changing bushwatcher {this.location?.NameOrUniqueName} -> {newLocation.NameOrUniqueName}");
+
+            if (this.location is not null)
+            {
+                this.location.largeTerrainFeatures.OnValueAdded -= this.OnValueAdded;
+                this.location.largeTerrainFeatures.OnValueRemoved -= this.OnValueRemoved;
+            }
 
             if (newLocation.largeTerrainFeatures is not null)
             {
@@ -150,11 +162,6 @@ internal sealed class BunnySpawnManager : IDisposable
                 newLocation.largeTerrainFeatures.OnValueRemoved += this.OnValueRemoved;
             }
 
-            if (this.location is not null)
-            {
-                this.location.largeTerrainFeatures.OnValueAdded -= this.OnValueAdded;
-                this.location.largeTerrainFeatures.OnValueRemoved -= this.OnValueRemoved;
-            }
             this.location = newLocation;
             this.watchedBushes = null;
             return this;
@@ -189,7 +196,7 @@ internal sealed class BunnySpawnManager : IDisposable
         {
             if (feature is Bush bush)
             {
-                this.monitor.DebugOnlyLog($"Bush added at {bush.tilePosition}");
+                this.monitor.DebugOnlyLog($"Bush added at {bush.Tile}");
                 this.watchedBushes ??= this.location?.largeTerrainFeatures?.OfType<Bush>()?.ToList() ?? new();
                 this.watchedBushes.Add(bush);
             }
@@ -199,7 +206,7 @@ internal sealed class BunnySpawnManager : IDisposable
         {
             if (feature is Bush bush && this.watchedBushes?.Remove(bush) == true)
             {
-                this.monitor.DebugOnlyLog($"Bush removed at {bush.tilePosition}");
+                this.monitor.DebugOnlyLog($"Bush removed at {bush.Tile}");
             }
         }
     }

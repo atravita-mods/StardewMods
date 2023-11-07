@@ -1,27 +1,26 @@
-﻿using AtraCore.Framework.Caches;
+﻿namespace GrowableBushes.Framework;
+
+using AtraCore.Framework.Caches;
 
 using AtraShared.Caching;
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Menuing;
 using AtraShared.Utils;
 using AtraShared.Utils.Extensions;
-
+using GrowableBushes.Framework.Items;
 using HarmonyLib;
 
 using Microsoft.Xna.Framework;
 
 using StardewModdingAPI.Events;
 
-using StardewValley.Locations;
 using StardewValley.Menus;
-
-using AtraUtils = AtraShared.Utils.Utils;
-
-namespace GrowableBushes.Framework;
 
 /// <summary>
 /// Manages Caroline's bush shop.
 /// </summary>
 [HarmonyPatch(typeof(Utility))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class ShopManager
 {
     private const string BUILDING = "Buildings";
@@ -109,7 +108,7 @@ internal static class ShopManager
                 interval = 50000f,
                 totalNumberOfLoops = 9999,
                 scale = 4f,
-                layerDepth = (((tile.Y - 0.5f) * Game1.tileSize) / 10000f) + 0.01f, // a little offset so it doesn't show up on the floor.
+                layerDepth = MathF.BitIncrement((((tile.Y - 0.5f) * Game1.tileSize) / 10000f) + 0.01f), // a little offset so it doesn't show up on the floor.
                 id = 777f,
             });
         }
@@ -151,20 +150,18 @@ internal static class ShopManager
     /// </summary>
     /// <param name="__result">shop inventory to add to.</param>
     [HarmonyPatch(nameof(Utility.getAllFurnituresForFree))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
     private static void Postfix(Dictionary<ISalable, int[]> __result)
     {
         try
         {
-            if (!ModEntry.Config.BushesInFurnitureCatalogue)
+            if (ModEntry.Config.BushesInFurnitureCatalogue)
             {
-                return;
+                __result.PopulateSellablesWithBushes(free: true);
             }
-            __result.PopulateSellablesWithBushes(free: true);
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed while trying to add bushes to the catalogue\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("adding bushes to the catalogue", ex);
         }
     }
 

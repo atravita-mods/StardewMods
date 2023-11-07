@@ -2,8 +2,9 @@
 
 using AtraBase.Toolkit;
 
-using GrowableBushes.Framework;
-
+using AtraShared.ConstantsAndEnums;
+using AtraShared.Utils.Extensions;
+using GrowableBushes.Framework.Items;
 using HarmonyLib;
 
 using Microsoft.Xna.Framework;
@@ -14,19 +15,19 @@ using StardewValley.Tools;
 namespace GrowableBushes.HarmonyPatches;
 
 /// <summary>
-/// Holds patches that lets npcs trample bushes.
+/// Holds patches that lets NPCs trample bushes.
 /// </summary>
 [HarmonyPatch(typeof(Character))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class CharacterTramplePatches
 {
     [MethodImpl(TKConstants.Hot)]
     [HarmonyPriority(Priority.HigherThanNormal)]
     [HarmonyPatch(nameof(Character.MovePosition))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
     private static void Prefix(Character __instance, GameLocation currentLocation)
     {
         if (!ModEntry.Config.ShouldNPCsTrampleBushes || __instance is not NPC npc || !npc.isVillager()
-            || currentLocation?.largeTerrainFeatures is null)
+            || currentLocation?.largeTerrainFeatures?.Count is 0 or null)
         {
             return;
         }
@@ -43,14 +44,14 @@ internal static class CharacterTramplePatches
                 {
                     bush.health = -1f;
                     Axe axe = new() { UpgradeLevel = 3 };
-                    bush.performToolAction(axe, 0, bush.currentTileLocation, currentLocation);
+                    bush.performToolAction(axe, 0, bush.Tile);
                     currentLocation.largeTerrainFeatures.RemoveAt(i);
                 }
             }
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed in trying to trample a bush:\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("trampling a bush", ex);
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using AtraShared.ConstantsAndEnums;
+﻿using AtraCore.Framework.Internal;
+
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
@@ -9,13 +11,8 @@ using AtraUtils = AtraShared.Utils.Utils;
 namespace HolidaySales;
 
 /// <inheritdoc />
-internal sealed class ModEntry : Mod
+internal sealed class ModEntry : BaseMod<ModEntry>
 {
-    /// <summary>
-    /// Gets the logger for this mod.
-    /// </summary>
-    internal static IMonitor ModMonitor { get; private set; } = null!;
-
     /// <summary>
     /// Gets the config instance for this mod.
     /// </summary>
@@ -26,14 +23,11 @@ internal sealed class ModEntry : Mod
     {
         // initialize translations.
         I18n.Init(helper.Translation);
+        base.Entry(helper);
 
-        // statics
-        ModMonitor = this.Monitor;
         Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
 
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunch;
-
-        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
     }
 
     private void OnGameLaunch(object? sender, GameLaunchedEventArgs e)

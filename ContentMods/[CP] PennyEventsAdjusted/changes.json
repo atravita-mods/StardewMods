@@ -1,13 +1,28 @@
 {
     "Changes": [
     {
+        "LogName": "Remove vanilla 8 heart in rain.",
+        "Action": "EditData",
+        "Target": "Data/Events/Forest",
+        "Entries": {
+            "181928/f Penny 2000/t 900 1600": null,
+        },
+        "When": {
+            "Weather: valley": "Rain, Storm",
+        }
+    },
+    {
         "LogName": "Vanilla eight-heart (no kids)",
         "Action": "EditData",
         "Target": "Data/Events/Forest",
         "Entries": {
-            "181928/f Penny 2000/t 900 1600": null
+            "181928/f Penny 2000/t 900 1600": null,
+            "181928/f Penny 2000/w sunny/t 900 1600": null // SVE
         },
-        "When": {"Weather|contains=Rain, Storm": true}
+        "When": {
+            "Season": "Winter",
+            "DisableInWinter": true
+        }
     },
     {
         "LogName": "Eight-heart event, with one kid",
@@ -77,6 +92,22 @@
         "When": {
             "Weather|contains=Rain, Storm": false,
             "Relationship:Penny|contains=Married": true,
+            "HasMod|contains=FlashShifter.StardewValleyExpandedCP": false
+        }
+    },
+    {
+        "LogName": "Eight heart event, married to Penny",
+        "Action": "EditData",
+        "Target": "Data/Events/Forest",
+        "Fields": {
+            "181928/f Penny 2000/w sunny/t 900 1600":{
+                17: "speak Penny \"{{i18n:ask-speaker1}}#$b#{{i18n:ask-speaker2}}$h\""
+            },
+        },
+        "When": {
+            "Weather|contains=Rain, Storm": false,
+            "Relationship:Penny|contains=Married": true,
+            "HasMod": "FlashShifter.StardewValleyExpandedCP"
         }
     },
     {

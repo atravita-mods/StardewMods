@@ -58,8 +58,6 @@ public sealed class ModConfig
     [GMCMSection("Shop", -10)]
     public Vector2 GiantCropShopLocation { get; set; } = new(8, 14);
 
-    // TODO: check positioning with SVE.
-
     /// <summary>
     /// Gets or sets the tile of the resource shop's location.
     /// </summary>

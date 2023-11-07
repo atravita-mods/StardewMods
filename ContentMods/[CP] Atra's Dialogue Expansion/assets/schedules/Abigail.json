@@ -1,0 +1,24 @@
+{
+    "Changes":[
+        {
+            "Action": "EditData",
+            "Target": "Characters/schedules/Abigail",
+            "Entries": {
+                // restore her going to the night market.
+                "marriage_winter_15": "830 SeedShop 6 19 0 \"Strings\\schedules\\Abigail:marriage_Mon.000\"/1430 Beach 30 34 2 \"Strings\\schedules\\Abigail:winter_15.000\"/2400 BusStop -1 23 3"
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Characters/schedules/Abigail",
+            "Entries": {
+                // Restore her going to visit Sebastian.
+                "marriage_{{season}}_{{day}}": "0900 SebastianRoom 5 4 2 abigail_sit_down/1700 bed"
+            },
+            "When": {
+                "EnableFor": "Sebastian",
+                "Day": "11, 25"
+            }
+        }
+    ]
+}

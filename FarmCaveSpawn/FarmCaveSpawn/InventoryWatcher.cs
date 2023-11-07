@@ -4,6 +4,8 @@ using AtraShared.Wrappers;
 
 using StardewModdingAPI.Events;
 
+using StardewValley.Extensions;
+
 namespace FarmCaveSpawn;
 
 /// <summary>
@@ -12,6 +14,8 @@ namespace FarmCaveSpawn;
 public sealed class InventoryManagerModel
 {
     public HashSet<string> Saplings { get; set; } = new();
+
+    public HashSet<string> Fruits { get; set; } = new();
 }
 
 /// <summary>
@@ -31,7 +35,7 @@ internal static class InventoryWatcher
     /// Sets useful fields.
     /// </summary>
     /// <param name="uniqueID">Unique ID of this mod.</param>
-    internal static void Initialize(string uniqueID) => UniqueID = uniqueID;
+    internal static void Initialize(string uniqueID) => UniqueID = string.Intern(uniqueID);
 
     /// <inheritdoc cref="IGameLoopEvents.SaveLoaded"/>
     internal static void Load(IMultiplayerHelper multi, IDataHelper data)
@@ -63,9 +67,9 @@ internal static class InventoryWatcher
     {
         foreach (Item item in e.Added)
         {
-            if (item is SObject obj && obj.isSapling() && Game1Wrappers.ObjectInfo.TryGetValue(obj.ParentSheetIndex, out string? data))
+            if (item.HasTypeObject() && item is SObject obj && obj.isSapling() && Game1Wrappers.ObjectData.TryGetValue(obj.ItemId, out var data))
             {
-                string name = data.GetNthChunk('/').ToString();
+                string name = data.Name;
                 if (!string.IsNullOrWhiteSpace(name) && model?.Saplings?.Add(name) == true)
                 {
                     multi.SendMessage(name, SAPLING, new[] { UniqueID });
@@ -76,20 +80,21 @@ internal static class InventoryWatcher
     }
 
     /// <summary>
-    /// Checks whether or not a specific <paramref name="parentSheetIndex"/> corresponds to a sapling seen before.
+    /// Checks whether or not a specific <paramref name="itemID"/> corresponds to a sapling seen before.
     /// </summary>
-    /// <param name="parentSheetIndex">Parent sheet index to check.</param>
+    /// <param name="itemID">Parent sheet index to check.</param>
     /// <returns>If the sapling has been viewed.</returns>
-    internal static bool HaveSeen(int parentSheetIndex)
+    internal static bool HaveSeen(string itemID)
     {
-        if (Game1Wrappers.ObjectInfo.TryGetValue(parentSheetIndex, out string? data))
+        if (Game1Wrappers.ObjectData.TryGetValue(itemID, out var data))
         {
-            string name = data.GetNthChunk('/').ToString();
+            string name = data.Name;
             return model?.Saplings?.Contains(name) == true;
         }
         return false;
     }
 
+    /// <inheritdoc cref="IMultiplayerEvents.PeerConnected"/>
     internal static void OnPeerConnected(PeerConnectedEventArgs e, IMultiplayerHelper multi)
     {
         if (Context.IsMainPlayer && model is not null)
@@ -102,6 +107,7 @@ internal static class InventoryWatcher
         }
     }
 
+    /// <inheritdoc cref="IMultiplayerEvents.ModMessageReceived"/>
     internal static void OnModMessageRecieved(ModMessageReceivedEventArgs e)
     {
         if (e.FromModID != UniqueID || Context.ScreenId != 0)

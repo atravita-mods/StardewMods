@@ -1,0 +1,71 @@
+{"Changes":[
+    {
+        "Action": "EditData",
+        "LogName": "Marriage - generic",
+        "Target": "{{MarriageDialoguePath}}",
+        "Entries": {
+            "Rainy_Day_0": "{{i18n: rainy-day-0.0}}#$e#{{i18n: rainy-day-0.1}}$s",
+
+            "OneKid_0": "{{i18n: one-kid.0.{{season}}| default = {{i18n:one-kid.0}} }}$h",
+            "TwoKids_0": "{{i18n: two-kids.0.{{season}} | default = {{i18n: two-kids.0}} }}[194 195 210 211]$h",
+            "TwoKids_3": "{{i18n: two-kids.3}}",
+
+            "Bad_2": "#$c .5#{{i18n: bad-2a}}$s#{{i18n: bad-2b}}$a",
+            "Bad_3": "{{i18n: bad-3}}$s",
+            "Bad_4": "{{i18n: bad-4a}}$s",
+
+            // additional specific day dialogue.
+            "spring_1": "{{i18n: spring-1.{{YearModulus}}| default = {{i18n: spring-1}} }}$h",
+            "spring_14": "{{i18n: spring-14}}[210 211 201]$h",
+            "summer_8": "{{i18n: summer-8}}[253]$h",
+            "fall_12": "{{i18n: fall-12}}[608 607 604]$h",
+            "winter_16": "{{i18n: winter-16.{{YearModulus}}| default = {{i18n: winter-18}} }}[199 218 219 236]$h",
+
+            // pre-festival dialogue
+            "summer_27": "{{i18n:summer-27}}$h",
+            "fall_15": "{{i18n:fall-15}}$h"
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName":"Marriage - generic - kids",
+        "Target": "{{MarriageDialoguePath}}",
+        "When": {
+            "ChildStatus": "Multiple"
+        },
+        "Entries": {
+            "fall_15": "{{i18n:fall-15-kids}}$h",
+            "winter_20": "{{i18n:winter-20.{{Random:00,01,02}} }}$h"
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Marriage - generic - later",
+        "Target": "{{MarriageDialoguePath}}",
+        "Entries": {
+            "Good_0": "{{i18n:good-0}}$h",
+            "Good_2": "{{i18n:good-2}}$h",
+            "Good_3": "{{i18n:good-3a}}#$b#{{i18n:good-3b}}$h",
+
+            "TwoKids_2": "#$c .5#{{i18n:two-kids.2a}}$h#{{i18n:two-kids.2b}}$h#",
+
+            // more additional special day dialogue.
+            "fall_28": "{{i18n:fall-28.{{Random:01, 02, 03, 04}} }}[368 370 371 465 466 480 245 246]$h",
+        },
+        "When": {
+            "Year|contains=1,2": false
+        }
+    },
+    {
+        "Action":"EditData",
+        "LogName": "Marriage - generic - movies",
+        "Target": "{{MarriageDialoguePath}}",
+        "Entries": {
+            "Good_1": "#$c .9#{{i18n:movies-good.{{season}} }}$h#{{i18n:movies-good.{{season}} }} {{i18n:with-ticket}}[809]$h"
+        },
+        "When": {
+            "MovieStatus|contains=None": false,
+            "Random: true, false": true
+        }
+    }
+]}

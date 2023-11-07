@@ -1,25 +1,27 @@
-﻿using AtraShared.ConstantsAndEnums;
+﻿namespace CatGiftsRedux.Framework;
+
+using AtraBase.Toolkit;
+
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations.GMCMAttributes;
 
-namespace CatGiftsRedux.Framework;
-
-[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "This is a record.")]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopErrorConsts.IsRecord)]
 public record ItemRecord(ItemTypeEnum Type, string Identifier);
 
-[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Stylecop doesn't understand records.")]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopErrorConsts.IsRecord)]
 public record WeightedItemData(ItemRecord Item, double Weight);
 
 /// <summary>
 /// The config class for this mod.
 /// </summary>
-[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "Fields kept near accessors.")]
+[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = StyleCopErrorConsts.AccessorsNearFields)]
 public sealed class ModConfig
 {
     /// <summary>
     /// Gets or sets the list of items never to produce (unless it's in the user list.)
     /// </summary>
     [GMCMDefaultIgnore]
-    public HashSet<ItemRecord> Denylist { get; set; } = new()
+    public ItemRecord[] Denylist { get; set; } = new ItemRecord[]
     {
         new (ItemTypeEnum.SObject, "Mango Sapling"),
         new (ItemTypeEnum.SObject, "Banana Sapling"),
@@ -31,7 +33,7 @@ public sealed class ModConfig
     /// Gets or sets a list of things the user wants to drop.
     /// </summary>
     [GMCMDefaultIgnore]
-    public List<WeightedItemData> UserDefinedItemList { get; set; } = new()
+    public WeightedItemData[] UserDefinedItemList { get; set; } = new WeightedItemData[]
     {
         new (
             new (ItemTypeEnum.SObject, "Trash"),
@@ -86,13 +88,16 @@ public sealed class ModConfig
         set => this.weeklyLimit = Math.Clamp(value, 0, 7);
     }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether or not the pet will bring gifts in rain.
+    /// </summary>
     public bool GiftsInRain { get; set; } = false;
 
     /// <summary>
     /// Gets or sets a list of place names pets can bring you forage from.
     /// </summary>
     [GMCMDefaultIgnore]
-    public List<string> ForageFromMaps { get; set; } = new() { "Forest", "Beach", "Mountain" };
+    public string[] ForageFromMaps { get; set; } = new string[] { "Forest", "Beach", "Mountain" };
 
     /// <summary>
     /// Gets or sets a value indicating how much to weigh the forage from maps picker.

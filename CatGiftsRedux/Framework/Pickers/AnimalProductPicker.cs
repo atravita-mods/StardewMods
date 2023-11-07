@@ -4,6 +4,8 @@ using AtraCore.Framework.ItemManagement;
 
 using AtraShared.Utils.Extensions;
 
+using StardewValley.Extensions;
+using StardewValley.GameData.FarmAnimals;
 using StardewValley.Objects;
 
 namespace CatGiftsRedux.Framework.Pickers;
@@ -22,8 +24,8 @@ internal static class AnimalProductPicker
     {
         ModEntry.ModMonitor.DebugOnlyLog("Picked Animal Products");
 
-        Dictionary<string, string>? content = Game1.content.Load<Dictionary<string, string>>("Data\\FarmAnimals");
-        if (content.Count == 0)
+        var data = Game1.farmAnimalData;
+        if (data.Count == 0)
         {
             return null;
         }
@@ -31,20 +33,13 @@ internal static class AnimalProductPicker
         int tries = 3;
         do
         {
-            KeyValuePair<string, string> randomAnimal = content.ElementAt(random.Next(content.Count));
-            if (int.TryParse(randomAnimal.Value.GetNthChunk('/', 2), out int id) && id > 0)
+            FarmAnimalData randomAnimal = data.Values.ElementAt(random.Next(data.Count));
+            FarmAnimalProduce product = random.ChooseFrom(randomAnimal.ProduceItemIds);
+            if (!Utils.ForbiddenFromRandomPicking(product.ItemId)
+                && GameStateQuery.CheckConditions(product.Condition, Game1.getFarm(), random: random)
+                && ItemRegistry.Create(ItemRegistry.type_object + product.ItemId) is SObject obj)
             {
-                if (Utils.ForbiddenFromRandomPicking(id))
-                {
-                    continue;
-                }
-
-                if (DataToItemMap.IsActuallyRing(id))
-                {
-                    return new Ring(id);
-                }
-
-                return new SObject(id, 1);
+                return obj;
             }
         }
         while (tries-- > 0);

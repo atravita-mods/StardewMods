@@ -27,7 +27,7 @@ internal class SObjectDrawTranspiler
         {
             return Color.White;
         }
-        if (PFMMachineHandler.ValidMachines.TryGetValue(obj.ParentSheetIndex, out MachineStatus status))
+        if (PFMMachineHandler.ValidMachines.TryGetValue(obj.QualifiedItemId, out MachineStatus status))
         {
             return status switch
             {
@@ -36,13 +36,13 @@ internal class SObjectDrawTranspiler
                 _ => Color.White,
             };
         }
-        else if (ModEntry.Config.VanillaMachines.TryGetValue((VanillaMachinesEnum)obj.ParentSheetIndex, out bool val) && val)
+        else if (ModEntry.Config.VanillaMachines.TryGetValue(obj.QualifiedItemId, out bool val) && val)
         {
-            if (obj is Cask cask && Game1.currentLocation is GameLocation loc && !cask.IsValidCaskLocation(loc))
+            if (obj is Cask cask && !cask.IsValidCaskLocation())
             {
                 return ModEntry.Config.InvalidColor;
             }
-            else if (obj.ParentSheetIndex == (int)VanillaMachinesEnum.BeeHouse && BeehouseHandler.Status.Value == MachineStatus.Invalid)
+            else if (obj.QualifiedItemId == BeehouseHandler.BeeHouse && BeehouseHandler.Status.Value == MachineStatus.Invalid)
             {
                 return ModEntry.Config.InvalidColor;
             }
@@ -57,7 +57,7 @@ internal class SObjectDrawTranspiler
 #pragma warning disable SA1116 // Split parameters should start on line after declaration. Reviewed
     [HarmonyAfter("Digus.ProducerFrameworkMod")]
     [HarmonyPatch(nameof(SObject.draw), new[] { typeof(SpriteBatch), typeof(int), typeof(int), typeof(float) })]
-    [SuppressMessage("SMAPI.CommonErrors", "AvoidNetField:Avoid Netcode types when possible", Justification = "Only used for matching.")]
+    [SuppressMessage("SMAPI.CommonErrors", "AvoidNetField:Avoid Netcode types when possible", Justification = StyleCopConstants.UsedForMatchingOnly)]
     private static IEnumerable<CodeInstruction>? Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
     {
         MethodInfo? pfmGetScale = AccessTools.Method(AccessTools.TypeByName("ProducerFrameworkMod.ObjectOverrides"), "getScale");
@@ -65,7 +65,7 @@ internal class SObjectDrawTranspiler
         {
             ModEntry.ModMonitor.Log($"Found PFM, adjusting transpiler.");
         }
-        var originalGetScale = typeof(SObject).GetCachedMethod(nameof(SObject.getScale), ReflectionCache.FlagTypes.InstanceFlags);
+        MethodInfo originalGetScale = typeof(SObject).GetCachedMethod(nameof(SObject.getScale), ReflectionCache.FlagTypes.InstanceFlags);
 
         try
         {
@@ -117,13 +117,12 @@ internal class SObjectDrawTranspiler
                 new(OpCodes.Ldarg_0),
             }, withLabels: colorLabels);
 
-            //helper.Print();
+            // helper.Print();
             return helper.Render();
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod crashed while transpiling {original.FullDescription()}\n\n{ex}", LogLevel.Error);
-            original.Snitch(ModEntry.ModMonitor);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }

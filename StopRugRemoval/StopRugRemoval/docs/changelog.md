@@ -9,6 +9,17 @@
 <!-- do I need to override reading secret notes too? -->
 <!-- fix the stupid integration issues with CM/SAAT -->
 
+#### Version 1.2.0
+*Updated for Stardew 1.6*
+* Null current locations now will re-check the netlocation ref first. (Apparently they're less than reliable?)
+* Crosscheck player spouse on load.
+* New behavior options for signs and crystalaria.
+* Tooltips now have buff durations.
+* Bomb confirm should now work better with other mods. 
+* Remove no longer needed code for
+    - Preventing music crashes
+    - Preventing the Statue of Fortune from crashing when NPCs had invalid gift tastes.
+
 #### Version 1.1.3
 * Fix integration with GrowableGiantCrops/MoreGrassStarters.
 

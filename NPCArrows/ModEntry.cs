@@ -1,4 +1,8 @@
-﻿using AtraShared.ConstantsAndEnums;
+﻿namespace NPCArrows;
+
+using AtraCore.Framework.Internal;
+
+using AtraShared.ConstantsAndEnums;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -7,23 +11,14 @@ using NPCArrows.Framework;
 
 using StardewModdingAPI.Events;
 
-using StardewValley;
-
-namespace NPCArrows;
-
 /// <inheritdoc />
-internal sealed class ModEntry : Mod
+internal sealed class ModEntry : BaseMod<ModEntry>
 {
-    /// <summary>
-    /// Gets the logging instance for this mod.
-    /// </summary>
-    internal static IMonitor ModMonitor { get; private set; } = null!;
-
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
     {
         I18n.Init(helper.Translation);
-        ModMonitor = this.Monitor;
+        base.Entry(helper);
 
         AssetManager.Initialize(helper.GameContent);
 
@@ -58,7 +53,7 @@ internal sealed class ModEntry : Mod
     {
         Vector2 pos = character.Position + new Vector2(32f, 64f);
 
-        Vector2 arrowPos = Game1.GlobalToLocal(Game1.uiViewport, pos);
+        Vector2 arrowPos = Game1.GlobalToLocal(Game1.viewport, pos);
         Direction direction = Direction.None;
 
         if (arrowPos.X <= 0)
@@ -88,13 +83,13 @@ internal sealed class ModEntry : Mod
             return;
         }
 
-        arrowPos = Utility.snapToInt(arrowPos);
+        arrowPos = Utility.snapToInt(Utility.ModifyCoordinatesForUIScale(arrowPos));
 
         spriteBatch.Draw(
             texture: AssetManager.ArrowTexture,
             position: arrowPos,
             sourceRectangle: null,
-            color: Color.MediumPurple,
+            color: Color.Coral,
             rotation: direction.GetRotationFacing(),
             origin: new Vector2(2f, 2f),
             scale: Game1.pixelZoom,

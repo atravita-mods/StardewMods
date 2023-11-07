@@ -1,6 +1,10 @@
-﻿#if DEBUG
+﻿// Ignore Spelling: apiid api minversion loglevel
+
+#if DEBUG
 using System.Diagnostics;
 #endif
+
+using AtraShared.Utils.Extensions;
 
 using CommunityToolkit.Diagnostics;
 
@@ -104,12 +108,12 @@ public class IntegrationHelper
         }
         catch (Exception ex)
         {
-            this.Monitor.Log($"Failed while attempting to map {apiid}\n\n{ex}", LogLevel.Error);
+            this.Monitor.LogError($"mapping {apiid}", ex);
             api = default;
         }
 #if DEBUG
         sw.Stop();
-        this.Monitor.Log($"Mapping {apiid} took {sw.ElapsedMilliseconds} milliseconds", LogLevel.Info);
+        this.Monitor.LogTimespan($"Mapping {apiid}", sw);
 #endif
         return api is not null;
     }

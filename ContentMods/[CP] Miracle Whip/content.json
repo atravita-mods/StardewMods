@@ -1,0 +1,32 @@
+{
+    "$schema": "https://smapi.io/schemas/content-patcher.json",
+    "Format": "1.29.0",
+    "Changes": [
+        {
+            "Action": "EditData",
+            "Target": "Data/Concessions",
+            "Entries": {
+                "atravita.MiracleWhip": {
+                    "ID": 32,
+                    "Name": "Miracle Whip",
+                    "DisplayName": "{{i18n: MiracleWhip.Name}}",
+                    "Description": "{{i18n: MiracleWhip.Description}}",
+                    "Price": 39,
+                    "ItemTags": [
+                        "Horrid"
+                    ],
+                    "Texture": "{{InternalAssetKey: concession.png}}",
+                    "SpriteIndex": 0
+                }
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Data/ConcessionTastes",
+            "TargetField": ["*", "DislikedTags"],
+            "Entries": {
+                999: "Horrid"
+            }
+        }
+    ]
+}

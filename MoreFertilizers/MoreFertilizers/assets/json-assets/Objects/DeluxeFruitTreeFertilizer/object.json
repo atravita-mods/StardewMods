@@ -7,5 +7,6 @@
   "PurchasePrice": 200,
   "PurchaseFrom": "Sandy",
   "CanPurchase": true,
-  "PurchaseRequirements": [ "y 2", "n qiCave" ]
+  "PurchaseRequirements": [ "y 2", "n qiCave" ],
+  "ContextTags": [ "color_pink" ]
 }

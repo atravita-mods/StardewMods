@@ -8,11 +8,10 @@
  <!--common project properties-->
   <PropertyGroup>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <LangVersion>11</LangVersion>
+    <LangVersion>preview</LangVersion>
     <Nullable>enable</Nullable>
     <WarningsAsErrors>Nullable</WarningsAsErrors>
-    <CheckEolTargetFramework>false</CheckEolTargetFramework>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <!-- Set checked on when compiling Debug. -->
     <CheckForOverflowUnderflow Condition="$(Configuration) == 'Debug'">true</CheckForOverflowUnderflow>
   </PropertyGroup>
@@ -28,10 +27,17 @@
 
   <PropertyGroup>
     <IgnoreModFilePatterns>\.xcf$</IgnoreModFilePatterns>
-    <EnableModZip Condition="$(Configuration) != 'Release'">False</EnableModZip>
+    <EnableModZip Condition="$(Configuration) == 'Debug'">False</EnableModZip>
     <ModZipPath>$(SolutionDir)\_releases</ModZipPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <SignAssembly>True</SignAssembly>
+    <AssemblyOriginatorKeyFile>$(SolutionDir)keypair.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <WarningLevel>9999</WarningLevel>
+  </PropertyGroup>
 
   <!--common packages everyone uses-->
   <ItemGroup>

@@ -5,9 +5,7 @@ using AtraCore.Framework.ReflectionManager;
 
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
-
-using GrowableBushes.Framework;
-
+using GrowableBushes.Framework.Items;
 using HarmonyLib;
 
 using StardewValley.TerrainFeatures;
@@ -61,8 +59,7 @@ internal static class GreenhouseBushTranspiler
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod crashed while transpiling {original.FullDescription()}:\n\n{ex}", LogLevel.Error);
-            original.Snitch(ModEntry.ModMonitor);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }

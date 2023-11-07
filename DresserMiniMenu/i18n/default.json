@@ -1,0 +1,19 @@
+﻿{
+
+  "mod-description": "Adds a mini farmer customization menu to the dresser.",
+
+  "IllFormatedConfig": "Config file seems ill-formated, using default. Please use Generic Mod Config Menu to configure.",
+
+  "api-not-found": "{{APIID}} not found, integration disabled.",
+  "api-too-old": "Please update {{apiName}}({{APIID}}) to at least version {{minversion}}. Current version {{currentversion}}. Integration disabled.",
+
+  "DressersAllowBobbers.title": "Dressers Allow Bobbers",
+  "DressersAllowBobbers.description": "If enabled, dressers will store bobbers.",
+  "DressersAllowWeapons.title": "Dressers Allow Weapons",
+  "DressersAllowWeapons.description": "If enabled, dressers will store weapons.",
+  "DresserDressup.title": "Dresser Dressup",
+  "DresserDressup.description": "If enabled, allows you to get dressed from the dresser.",
+
+  "HairArrows.title": "Hair Arrows",
+  "HairArrows.description": "If enabled, allows selection of hair on the mini dresser menu."
+}

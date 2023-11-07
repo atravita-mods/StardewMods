@@ -1,4 +1,6 @@
-﻿using System.Reflection;
+﻿namespace EasierDartPuzzle.HarmonyPatches;
+
+using System.Reflection;
 using System.Reflection.Emit;
 using AtraCore.Framework.ReflectionManager;
 using AtraShared.Utils.Extensions;
@@ -6,8 +8,6 @@ using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
 using StardewValley.Locations;
 using StardewValley.Minigames;
-
-namespace EasierDartPuzzle.HarmonyPatches;
 
 /// <summary>
 /// Transpiler that adjusts the number of darts you get.
@@ -50,35 +50,39 @@ internal static class AdjustDartNumberTranspiler
     {
         try
         {
+
             ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);
             helper.FindNext(new CodeInstructionWrapper[]
             { // find team.GetDroppedLimitNutCount("Darts");
                 new(OpCodes.Ldstr, "Darts"),
                 new(OpCodes.Callvirt, typeof(FarmerTeam).GetCachedMethod(nameof(FarmerTeam.GetDroppedLimitedNutCount), ReflectionCache.FlagTypes.InstanceFlags)),
-            })
-            .FindNext(new CodeInstructionWrapper[]
-            {
-                new(OpCodes.Ldc_I4_S, 20),
-            })
-            .ReplaceInstruction(OpCodes.Call, typeof(AdjustDartNumberTranspiler).GetCachedMethod(nameof(GetMaximumDartNumber), ReflectionCache.FlagTypes.StaticFlags), keepLabels: true)
-            .FindNext(new CodeInstructionWrapper[]
+            });
+
+            var pointer = helper.Pointer;
+            helper.FindNext(new CodeInstructionWrapper[]
             {
                 new(OpCodes.Ldc_I4_S, 15),
             })
             .ReplaceInstruction(OpCodes.Call, typeof(AdjustDartNumberTranspiler).GetCachedMethod(nameof(GetMidddleDartNumber), ReflectionCache.FlagTypes.StaticFlags), keepLabels: true)
+            .JumpTo(pointer)
             .FindNext(new CodeInstructionWrapper[]
              {
                  new(OpCodes.Ldc_I4_S, 10),
              })
-            .ReplaceInstruction(OpCodes.Call, typeof(AdjustDartNumberTranspiler).GetCachedMethod(nameof(GetMinimumDartNumber), ReflectionCache.FlagTypes.StaticFlags), keepLabels: true);
+            .ReplaceInstruction(OpCodes.Call, typeof(AdjustDartNumberTranspiler).GetCachedMethod(nameof(GetMinimumDartNumber), ReflectionCache.FlagTypes.StaticFlags), keepLabels: true)
+            .JumpTo(pointer)
+            .FindNext(new CodeInstructionWrapper[]
+            {
+                new(OpCodes.Ldc_I4_S, 20),
+            })
+            .ReplaceInstruction(OpCodes.Call, typeof(AdjustDartNumberTranspiler).GetCachedMethod(nameof(GetMaximumDartNumber), ReflectionCache.FlagTypes.StaticFlags), keepLabels: true);
 
             // helper.Print();
             return helper.Render();
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Ran into error transpiling {original.Name}\n\n{ex}", LogLevel.Error);
-            original?.Snitch(ModEntry.ModMonitor);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }

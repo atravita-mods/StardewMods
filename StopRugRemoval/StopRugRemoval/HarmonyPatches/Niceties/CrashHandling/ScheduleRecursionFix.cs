@@ -20,13 +20,9 @@ namespace StopRugRemoval.HarmonyPatches.Niceties.CrashHandling;
 [HarmonyPatch(typeof(NPC))]
 internal static class ScheduleRecursionFix
 {
-    private static readonly Lazy<Func<NPC, string>> LastLoadedScheduleGetter = new(
-        () => typeof(NPC).GetCachedField("_lastLoadedScheduleKey", ReflectionCache.FlagTypes.InstanceFlags)
-                         .GetInstanceFieldGetter<NPC, string>());
-
-    private static bool CheckForRecursion(string schedule,  NPC npc)
+    private static bool CheckForRecursion(string scheduleKey, string schedule, NPC npc)
     {
-        if (LastLoadedScheduleGetter.Value(npc) == schedule)
+        if (scheduleKey == schedule)
         {
             ModEntry.ModMonitor.Log($"Schedule disabled for {npc.Name} - infinite recursion found.", LogLevel.Error);
             return true;
@@ -51,15 +47,17 @@ internal static class ScheduleRecursionFix
                 helper.FindNext(new CodeInstructionWrapper[]
                 { // return this.parseMasterSchedule(this.GetMasterScheduleEntry("default" OR "spring");
                     OpCodes.Ldarg_0,
+                    (OpCodes.Ldstr, schedulestring),
                     OpCodes.Ldarg_0,
                     (OpCodes.Ldstr, schedulestring),
                     (OpCodes.Call, typeof(NPC).GetCachedMethod(nameof(NPC.getMasterScheduleEntry), ReflectionCache.FlagTypes.InstanceFlags)),
-                    (OpCodes.Call, typeof(NPC).GetCachedMethod(nameof(NPC.parseMasterSchedule), ReflectionCache.FlagTypes.InstanceFlags)),
+                    (OpCodes.Callvirt, typeof(NPC).GetCachedMethod(nameof(NPC.parseMasterSchedule), ReflectionCache.FlagTypes.InstanceFlags)),
                 })
                 .GetLabels(out IList<Label>? defaultLabels)
                 .DefineAndAttachLabel(out Label defaultJump)
                 .Insert(new CodeInstruction[]
                 {
+                    new (OpCodes.Ldarg_1),
                     new(OpCodes.Ldstr, schedulestring),
                     new(OpCodes.Ldarg_0),
                     new(OpCodes.Call, typeof(ScheduleRecursionFix).GetCachedMethod(nameof(CheckForRecursion), ReflectionCache.FlagTypes.StaticFlags)),
@@ -74,8 +72,7 @@ internal static class ScheduleRecursionFix
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Ran into error transpiling {original.FullDescription()}.\n\n{ex}", LogLevel.Error);
-            original?.Snitch(ModEntry.ModMonitor);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }

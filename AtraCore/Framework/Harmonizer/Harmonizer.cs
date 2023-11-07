@@ -44,7 +44,7 @@ public sealed class Harmonizer
     }
 
     /// <summary>
-    /// The unique ID of this mod.
+    /// Gets the unique ID of this mod.
     /// </summary>
     public string UniqueID { get; init; }
 
@@ -96,7 +96,7 @@ public sealed class Harmonizer
 
 #if DEBUG
         sw.Stop();
-        this.logger.Log($"Took {sw.ElapsedMilliseconds} to apply harmony patches");
+        this.logger.LogTimespan("Applying harmony patches", sw);
 #endif
     }
 

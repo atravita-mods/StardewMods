@@ -1,18 +1,30 @@
-﻿using System.Reflection;
+﻿using System.Globalization;
+using System.Reflection;
 using System.Reflection.Emit;
+
 using AtraBase.Toolkit.Reflection;
+
 using AtraCore.Framework.ReflectionManager;
+
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Menuing;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
+
 using HarmonyLib;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+
 using StardewModdingAPI.Utilities;
+
 using StardewValley.Locations;
 using StardewValley.Menus;
 using StardewValley.Minigames;
+
+using AtraUtils = AtraShared.Utils.Utils;
+using XLocation = xTile.Dimensions.Location;
 
 namespace StopRugRemoval.HarmonyPatches.Niceties;
 
@@ -20,6 +32,7 @@ namespace StopRugRemoval.HarmonyPatches.Niceties;
 /// Patch that replaces the token purchase station with some more options.
 /// </summary>
 [HarmonyPatch(typeof(GameLocation))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class TokenPurchasePatch
 {
     private static void AttemptBuyTokens(int tokens)
@@ -39,34 +52,49 @@ internal static class TokenPurchasePatch
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed while buying club coins?\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("buying club coins?", ex);
         }
     }
 
-    [HarmonyPatch(nameof(GameLocation.performAction))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention")]
-    private static bool Prefix(string action, Farmer who, ref bool __result)
+    [HarmonyPatch(nameof(GameLocation.performAction), new[] { typeof(string[]), typeof(Farmer), typeof(XLocation) })]
+    private static bool Prefix(string[] action, Farmer who, ref bool __result)
     {
-        if (who.IsLocalPlayer && ModEntry.Config.Enabled && action == "BuyQiCoins")
+        if (who.IsLocalPlayer && ModEntry.Config.Enabled && action.Length != 0 && action[0] == "BuyQiCoins")
         {
             try
             {
-                List<Response> responses = new(5);
-                List<Action?> actions = new(5);
-                for (int i = 10; i <= 10000; i *= 10)
+                int length = (int)Math.Log10(Game1.player.Money) - 1;
+                if (length <= 0)
                 {
-                    if (Game1.player.Money < i * 10)
-                    {
-                        break;
-                    }
-                    int copy = i; // prevent accidental capture. There's no explicit notation for that in C#
-
-                    // TODO: fix this to use the player's locale here.
-                    responses.Add(new Response(i.ToString(), i.ToString()));
-                    actions.Add(() => AttemptBuyTokens(copy));
+                    // player really doesn't have enough money to buy anything, defer to vanilla method.
+                    return true;
                 }
 
-                responses.Add(new Response("No", Game1.content.LoadString(@"Strings\Lexicon:QuestionDialogue_No")).SetHotKey(Keys.Escape));
+                Response[] responses = new Response[length + 1];
+                Action[] actions = new Action[length];
+
+                CultureInfo culture = AtraUtils.GetCurrentCulture();
+                ModEntry.ModMonitor.DebugOnlyLog($"Instantiating BuyQiCoins menu with {culture}.");
+
+                int coins = 10;
+                for (int i = 0; i < length; i++)
+                {
+                    int copy = coins; // prevent accidental capture. There's no explicit notation for that in C#
+
+                    Response response = new(
+                                            responseKey: copy.ToString("X", CultureInfo.InvariantCulture),
+                                            responseText: copy.ToString("N", culture));
+
+                    if ((i + 1).MapNumberToKey() is Keys hotkey)
+                    {
+                        response.SetHotKey(hotkey);
+                    }
+
+                    responses[i] = response;
+                    actions[i] = new Action(() => AttemptBuyTokens(copy));
+                }
+
+                responses[length] = new Response("No", Game1.content.LoadString(@"Strings\Lexicon:QuestionDialogue_No")).SetHotKey(Keys.Escape);
 
                 Game1.activeClickableMenu = new DialogueAndAction(I18n.BuyCasino(), responses, actions, ModEntry.InputHelper);
                 __result = true;
@@ -74,7 +102,7 @@ internal static class TokenPurchasePatch
             }
             catch (Exception ex)
             {
-                ModEntry.ModMonitor.Log($"Mod failed while prefixing GameLocation.performAction.\n\n{ex}", LogLevel.Error);
+                ModEntry.ModMonitor.LogError("prefixing GameLocation.performAction", ex);
             }
         }
         return true;
@@ -85,6 +113,7 @@ internal static class TokenPurchasePatch
 /// Patches against the slot menu.
 /// </summary>
 [HarmonyPatch(typeof(Slots))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class SlotMenuPatches
 {
     private const int HEIGHT = 52;
@@ -130,7 +159,6 @@ internal static class SlotMenuPatches
 
     [HarmonyPostfix]
     [HarmonyPatch(nameof(Slots.receiveLeftClick))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention")]
     private static void HandleClick(Slots __instance, ref bool ___spinning, int x, int y)
     {
         if (___spinning)
@@ -201,8 +229,7 @@ internal static class SlotMenuPatches
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Ran into error transpiling Slots.ctor!\n\n{ex}", LogLevel.Error);
-            original?.Snitch(ModEntry.ModMonitor);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }
@@ -219,7 +246,7 @@ internal static class SlotMenuPatches
             {
                 new(OpCodes.Ldarg_0),
                 new(OpCodes.Ldfld, typeof(Slots).GetCachedField("showResult", ReflectionCache.FlagTypes.InstanceFlags)),
-                new(OpCodes.Brfalse_S),
+                new(OpCodes.Brfalse),
             })
             .Advance(2)
             .StoreBranchDest()
@@ -237,8 +264,7 @@ internal static class SlotMenuPatches
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Ran into error transpiling Slots.draw!\n\n{ex}", LogLevel.Error);
-            original?.Snitch(ModEntry.ModMonitor);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }

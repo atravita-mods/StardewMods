@@ -1,5 +1,8 @@
 ﻿using AtraShared.Utils.Extensions;
 
+using StardewValley.GameData.Shops;
+using StardewValley.Internal;
+
 namespace CatGiftsRedux.Framework.Pickers;
 
 /// <summary>
@@ -16,7 +19,12 @@ internal static class HatPicker
     {
         ModEntry.ModMonitor.DebugOnlyLog("Picked hats");
 
-        Dictionary<ISalable, int[]>? stock = Utility.getHatStock();
+        if (!Game1.content.Load<Dictionary<string, ShopData>>(@"Data\Shops").TryGetValue("HatMouse", out ShopData? shop))
+        {
+            return null;
+        }
+
+        Dictionary<ISalable, ItemStockInformation> stock = ShopBuilder.GetShopStock("HatMouse", shop);
         return stock.Count != 0 ? stock.ElementAt(random.Next(stock.Count)).Key as SObject : null;
     }
 }

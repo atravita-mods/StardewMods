@@ -1,6 +1,9 @@
-﻿using AtraBase.Toolkit.Extensions;
+﻿using AtraBase.Toolkit;
+using AtraBase.Toolkit.Extensions;
 
 using NetEscapades.EnumGenerators;
+
+using StardewValley.Buffs;
 
 namespace AtraShared.ConstantsAndEnums;
 
@@ -9,7 +12,7 @@ namespace AtraShared.ConstantsAndEnums;
 /// </summary>
 [Flags]
 [EnumExtensions]
-[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1602:Enumeration items should be documented", Justification = "Self evident.")]
+[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1602:Enumeration items should be documented", Justification = StyleCopErrorConsts.SelfEvident)]
 public enum BuffEnum
 {
     Farming = 1 << Buff.farming,
@@ -22,9 +25,6 @@ public enum BuffEnum
     Speed = 1 << Buff.speed,
     Defense = 1 << Buff.defense,
     Attack = 1 << Buff.attack,
-
-    // not sure where this comes from.
-    Crafting = 1 << Buff.crafting,
 }
 
 /// <summary>
@@ -36,92 +36,91 @@ public static partial class BuffEnumExtensions
     private static readonly Random _random = new Random().PreWarm();
     private static readonly BuffEnum[] _all = BuffEnumExtensions.GetValues();
 
-    private static readonly int CraftingIndex = Array.IndexOf(_all, BuffEnum.Crafting);
-
-    public static BuffEnum GetRandomBuff(Random? random = null, bool includeCrafting = false)
+    public static BuffEnum GetRandomBuff(Random? random = null)
     {
         random ??= _random;
-        if (includeCrafting)
-        {
-            return _all[random.Next(Length)];
-        }
-
-        int value = random.Next(Length - 1);
-        if (value >= CraftingIndex)
-        {
-            value++;
-        }
-        return _all[value];
+        return _all[random.Next(Length)];
     }
 
-    public static Buff GetBuffOf(this BuffEnum buffEnum, int amount, int minutesDuration, string source, string displaySource)
+    public static Buff GetBuffOf(
+        this BuffEnum buffEnum,
+        int amount,
+        int minutesDuration,
+        string source,
+        string displaySource,
+        string? id = null,
+        string? displayName = null,
+        string? description = null)
     {
-        int farming = 0;
+        BuffEffects effects = new();
+
         if (buffEnum.HasFlagFast(BuffEnum.Farming))
         {
-            farming = amount;
+            effects.FarmingLevel.Value = amount;
         }
 
-        int fishing = 0;
         if (buffEnum.HasFlagFast(BuffEnum.Fishing))
         {
-            fishing = amount;
+            effects.FishingLevel.Value = amount;
         }
 
-        int mining = 0;
         if (buffEnum.HasFlagFast(BuffEnum.Mining))
         {
-            mining = amount;
+            effects.MiningLevel.Value = amount;
         }
 
-        int luck = 0;
         if (buffEnum.HasFlagFast(BuffEnum.Luck))
         {
-            luck = amount;
+            effects.LuckLevel.Value = amount;
         }
 
-        int foraging = 0;
         if (buffEnum.HasFlagFast(BuffEnum.Foraging))
         {
-            foraging = amount;
+            effects.ForagingLevel.Value = amount;
         }
 
-        int maxStamina = 0;
         if (buffEnum.HasFlagFast(BuffEnum.MaxStamina))
         {
-            maxStamina = amount * 10;
+            effects.MaxStamina.Value = amount * 10;
         }
 
-        int magneticRadius = 0;
         if (buffEnum.HasFlagFast(BuffEnum.MagneticRadius))
         {
-            magneticRadius = amount * 32;
+            effects.MagneticRadius.Value = amount * 32;
         }
 
-        int speed = 0;
         if (buffEnum.HasFlagFast(BuffEnum.Speed))
         {
-            speed = amount;
+            effects.Speed.Value = amount;
         }
 
-        int defense = 0;
         if (buffEnum.HasFlagFast(BuffEnum.Defense))
         {
-            defense = amount;
+            effects.Defense.Value = amount;
         }
 
-        int attack = 0;
         if (buffEnum.HasFlagFast(BuffEnum.Attack))
         {
-            attack = amount;
+            effects.Attack.Value = amount;
         }
 
-        int crafting = 0;
-        if (buffEnum.HasFlagFast(BuffEnum.Crafting))
+        if (id is null)
         {
-            crafting = amount;
+            Span<byte> buffer = stackalloc byte[16];
+            Random.Shared.NextBytes(buffer);
+            id = Convert.ToBase64String(buffer);
         }
 
-        return new Buff(farming, fishing, mining, 0, luck, foraging, crafting, maxStamina, magneticRadius, speed, defense, attack, minutesDuration, source, displaySource);
+        return new Buff(
+            id,
+            source,
+            displaySource,
+            minutesDuration * Game1.realMilliSecondsPerGameMinute,
+            null,
+            0,
+            effects,
+            false,
+            displayName,
+            description);
     }
 }

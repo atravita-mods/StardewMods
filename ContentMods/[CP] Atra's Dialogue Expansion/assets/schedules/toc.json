@@ -1,0 +1,84 @@
+{
+    "Changes": [
+        {
+            "Action": "Include",
+            "LogName": "Abigail schedules",
+            "FromFile": "assets/schedules/Abigail.json",
+            "When": {
+                "ScheduleChanges": "Abigail"
+            }
+        },
+        {
+            "Action": "Include",
+            "LogName": "Alex schedules",
+            "FromFile": "assets/schedules/Alex.json",
+            "When": {
+                "ScheduleChanges": "Alex"
+            }
+        },
+        {
+            "Action": "Include",
+            "LogName": "Elliott schedules",
+            "FromFile": "assets/schedules/Elliott.json",
+            "When": {
+                "ScheduleChanges": "Elliott"
+            }
+        },
+        {
+            "Action": "Include",
+            "LogName": "Emily schedules",
+            "FromFile": "assets/schedules/Emily.json",
+            "When": {
+                "ScheduleChanges": "Emily"
+            }
+        },
+        {
+            "Action": "Include",
+            "LogName": "Harvey schedules",
+            "FromFile": "assets/schedules/Harvey.json",
+            "When": {
+                "ScheduleChanges": "Harvey"
+            }
+        },
+        {
+            "Action": "Include",
+            "LogName": "Leah schedules",
+            "FromFile": "assets/schedules/Leah.json",
+            "When": {
+                "ScheduleChanges": "Leah"
+            }
+        },
+        {
+            "Action": "Include",
+            "LogName": "Maru schedules",
+            "FromFile": "assets/schedules/Maru.json",
+            "When": {
+                "ScheduleChanges": "Maru"
+            }
+        },
+        {
+            "Action": "Include",
+            "LogName": "Penny schedules",
+            "FromFile": "assets/schedules/Penny.json",
+            "When": {
+                "ScheduleChanges": "Penny"
+            }
+        },
+        {
+            "Action": "Include",
+            "LogName": "Sam schedules",
+            "FromFile": "assets/schedules/Sam.json",
+            "When": {
+                "ScheduleChanges": "Sam"
+            }
+        },
+        {
+            "Action": "Include",
+            "LogName": "Sebastian schedules",
+            "FromFile": "assets/schedules/Sebastian.json",
+            "When": {
+                "ScheduleChanges": "Sebastian"
+            }
+        }
+    ]
+}

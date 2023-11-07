@@ -11,7 +11,7 @@ namespace PrismaticSlime.HarmonyPatches.JellyPatches;
 /// A patch to handle NPCs receiving the prismatic slime jelly.
 /// </summary>
 [HarmonyPatch(typeof(NPC))]
-[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class NPCTryRecieveActiveItemPatches
 {
     [HarmonyPatch(nameof(NPC.tryToReceiveActiveObject))]
@@ -29,10 +29,10 @@ internal static class NPCTryRecieveActiveItemPatches
                         BuffEnum buffEnum = BuffEnumExtensions.GetRandomBuff();
                         Buff buff = buffEnum.GetBuffOf(1, 700, "The Wizard's Gift", I18n.WizardGift());
                         buff.glow = Color.PaleVioletRed;
-                        Game1.buffsDisplay.addOtherBuff(buff);
+                        Game1.player.applyBuff(buff);
 
                         __instance.doEmote(Character.exclamationEmote);
-                        Dialogue item = new(I18n.PrismaticJelly_Wizard(), __instance)
+                        Dialogue item = new(__instance, null, I18n.PrismaticJelly_Wizard())
                         {
                             onFinish = () => who.Money += 2000,
                         };
@@ -41,7 +41,7 @@ internal static class NPCTryRecieveActiveItemPatches
                     }
                     case "Gus":
                     {
-                        Dialogue item = new(I18n.PrismaticJelly_Gus(), __instance)
+                        Dialogue item = new(__instance, null, I18n.PrismaticJelly_Gus())
                         {
                             onFinish = () =>
                             {
@@ -59,7 +59,7 @@ internal static class NPCTryRecieveActiveItemPatches
                         {
                             goto default;
                         }
-                        __instance.CurrentDialogue.Push(new(I18n.PrismaticJelly_Emily(), __instance));
+                        __instance.CurrentDialogue.Push(new(__instance, null, I18n.PrismaticJelly_Emily()));
                         Game1.player.modData?.SetInt(DyePotPatches.ModData, 10);
                         break;
                     }
@@ -74,7 +74,7 @@ internal static class NPCTryRecieveActiveItemPatches
                         }
                         else if (friendship.IsDivorced())
                         {
-                            __instance.CurrentDialogue.Push(new Dialogue(Game1.content.LoadString("Strings\\Characters:Divorced_gift"), __instance));
+                            __instance.CurrentDialogue.Push(new Dialogue(__instance, "Strings\\Characters:Divorced_gift"));
                             Game1.drawDialogue(__instance);
                             return false;
                         }
@@ -97,13 +97,9 @@ internal static class NPCTryRecieveActiveItemPatches
 
                         __instance.doEmote(Character.happyEmote);
                         who.changeFriendship(isBirthday ? 800 : 100, __instance);
-                        if (!__instance.Dialogue.TryGetValue("PrismaticSlimeJelly.Response" + (isBirthday ? ".Birthday" : string.Empty), out string? response))
-                        {
-                            response = isBirthday
-                                ? I18n.PrismaticJelly_Response_Birthday(__instance.displayName)
-                                : I18n.PrismaticJelly_Response(__instance.displayName);
-                        }
-                        __instance.CurrentDialogue.Push(new Dialogue(response, __instance));
+                        Dialogue response = __instance.TryGetDialogue("PrismaticSlimeJelly.Response" + (isBirthday ? ".Birthday" : string.Empty))
+                            ?? new Dialogue(__instance, null, isBirthday ? I18n.PrismaticJelly_Response_Birthday(__instance.displayName) : I18n.PrismaticJelly_Response(__instance.displayName));
+                        __instance.CurrentDialogue.Push(response);
                         break;
                     }
                 }
@@ -114,7 +110,7 @@ internal static class NPCTryRecieveActiveItemPatches
             }
             catch (Exception ex)
             {
-                ModEntry.ModMonitor.Log($"Failed while trying to override NPC.{nameof(NPC.tryToReceiveActiveObject)}\n\n{ex}", LogLevel.Error);
+                ModEntry.ModMonitor.LogError($"overriding NPC.{nameof(NPC.tryToReceiveActiveObject)}", ex);
             }
         }
 

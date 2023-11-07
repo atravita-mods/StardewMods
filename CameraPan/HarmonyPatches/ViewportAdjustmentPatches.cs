@@ -7,6 +7,7 @@ using AtraBase.Toolkit;
 
 using AtraCore.Framework.ReflectionManager;
 
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 
@@ -26,10 +27,9 @@ namespace CameraPan.HarmonyPatches;
 /// Adjusts the viewport based on the offset vector.
 /// </summary>
 [HarmonyPatch(typeof(Game1))]
-[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Named for Harmony.")]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class ViewportAdjustmentPatches
 {
-
     private static readonly PerScreen<CameraBehavior> cameraBehavior = new(() => CameraBehavior.Both);
 
     /// <summary>
@@ -97,6 +97,7 @@ internal static class ViewportAdjustmentPatches
     /// </summary>
     /// <returns>True if panning should be allowed.</returns>
     [MethodImpl(TKConstants.Hot)]
+    [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1202:Elements should be ordered by access", Justification = "Reviewed.")]
     internal static bool ShouldOffset() => !IsGamePanning && !IsInEvent() && cameraBehavior.Value.HasFlagFast(CameraBehavior.Offset);
 
     [MethodImpl(TKConstants.Hot)]
@@ -119,7 +120,7 @@ internal static class ViewportAdjustmentPatches
     }
 
     [HarmonyPatch(nameof(Game1.UpdateViewPort))]
-    [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:Split parameters should start on line after declaration", Justification = "Reviewed.")]
+    [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:Split parameters should start on line after declaration", Justification = StyleCopConstants.SplitParametersIntentional)]
     private static IEnumerable<CodeInstruction>? Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
     {
         try
@@ -188,8 +189,7 @@ internal static class ViewportAdjustmentPatches
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Ran into error transpiling {original.Name}\n\n{ex}", LogLevel.Error);
-            original.Snitch(ModEntry.ModMonitor);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }

@@ -155,7 +155,7 @@ internal static class LocationTileHandler
             Game1.player.jitterStrength = 2f;
             Game1.player.freezePause = 500;
 
-            Multiplayer multi = MultiplayerHelpers.GetMultiplayer();
+            Multiplayer multi = Game1.Multiplayer;
 
             // derived from GameLocation.performTouchAction.
             for (int i = 0; i < 40; i++)

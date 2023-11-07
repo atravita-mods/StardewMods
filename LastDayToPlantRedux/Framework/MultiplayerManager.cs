@@ -79,12 +79,9 @@ internal static class MultiplayerManager
         Farmer farmer = Game1.getFarmer(e.Peer.PlayerID);
         _ = AssignProfessionFarmersIfNeeded(farmer);
 
-        if (!e.Peer.IsSplitScreen)
-        {
-            FarmerWatcher watcher = new();
-            farmer.professions.OnArrayReplaced += watcher.Professions_OnArrayReplaced;
-            farmer.professions.OnElementChanged += watcher.Professions_OnElementChanged;
-        }
+        FarmerWatcher watcher = new();
+        farmer.professions.OnValueAdded += watcher.OnValueChanged;
+        farmer.professions.OnValueRemoved += watcher.OnValueChanged;
     }
 
     /// <summary>
@@ -130,7 +127,7 @@ internal static class MultiplayerManager
             return true;
         }
         else if (AgriculturalistFarmer is null && farmer.professions.Contains(Farmer.agriculturist)
-            && !farmer.professions.Contains(Farmer.agriculturist + 100))
+            && (!farmer.professions.Contains(Farmer.agriculturist + 100) || !shouldCheckPrestiged))
         {
             ModEntry.ModMonitor.Log($"Assigning {farmer.Name} as argicultralist farmer.");
             AgriculturalistFarmer = new WeakReference<Farmer>(farmer);

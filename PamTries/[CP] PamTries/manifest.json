@@ -47,6 +47,10 @@
     {
         "UniqueID": "Rafseazz.RSVCP",
         "IsRequired": false,
+    },
+    {
+        "UniqueID": "atravita.CP.DialogueExpansion",
+        "IsRequired": false,
     }
     ]
 }

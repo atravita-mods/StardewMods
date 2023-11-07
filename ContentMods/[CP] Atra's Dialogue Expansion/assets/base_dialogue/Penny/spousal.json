@@ -1,0 +1,99 @@
+{"Changes":[
+    {
+        "LogName": "Pam - inlaw",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Pam",
+        "When": {
+            "Query: {{Hearts:Penny}} >= 10": true,
+            "EnableFor": "Pam"
+        },
+        "Entries": {
+            "summer_Fri10_inlaw_Penny": "{{i18n: pam-penny-summer-fri10_0}}$h#$b#{{i18n:pam-penny-summer-fri10_1}}"
+        }
+    },
+    {
+        "LogName": "Pam - expecting grandchild",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Pam",
+        "When": {
+            "Query: {{Hearts:Penny}} >= 10": true,
+            "EnableFor": "Pam",
+            "ChildStatus": "Expecting",
+            "DialogueRandom": "bravo, charlie"
+        },
+        "Entries": {
+            "BusStop": "{{i18n: pam-expecting-grandchild-initial}}$h",
+            "Trailer": "{{i18n: pam-expecting-grandchild-initial-b}}$h"
+        }
+    },
+    {
+        "LogName": "Vincent - inlaw",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Vincent",
+        "When": { "EnableFor": "Vincent" },
+        "Entries": {
+            "Tue_inlaw_Penny": "{{i18n:vincent-penny-tue-a}}#$e#{{i18n:vincent-penny-tue-b}}$h"
+        }
+    },
+    {
+        "LogName": "Evelyn - inlaw",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Evelyn",
+        "When": {
+            "Query: {{Hearts:Penny}} >= 10": true,
+            "EnableFor": "Evelyn"
+        },
+        "Entries": {
+            "winter_Mon4_inlaw_Penny": "{{i18n: evelyn-penny-winter-mon4}}$h",
+            "fall_Tue4_inlaw_Penny": "{{i18n: evelyn-penny-fall-tue4}}$h"
+        }
+    },
+    {
+        "LogName": "Maru - inlaw",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Maru",
+        "When": {
+            "Query: {{Hearts:Penny}} >= 10": true,
+            "EnableFor": "Maru"
+        },
+        "Entries": {
+            "winter_Mon4_inlaw_Penny": "{{i18n: maru-penny-winter-mon4-a}}#$e#{{i18n: maru-penny-winter-mon4-b}}$h"
+        }
+    },
+    {
+        "LogName": "Penny - Marriage - in normal dialogue file",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Penny",
+        "Entries": {
+            "Farmhouse_Entry": "{{i18n:homecoming-love}}",
+            "Trailer_Entry": "{{i18n:penny-greet-Pam}}"
+        }
+    },
+    {
+        "LogName": "Penny - marriage",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/MarriageDialoguePenny",
+        "Entries": {
+            "winter_3": "{{i18n: penny-winter-3.00}}#$b#{{i18n: penny-winter-3.01}}"
+        },
+        "When": {
+            "Year|contains = 1,2": false
+        }
+    },
+    {
+        "LogName": "Penny - fix marriage schedule",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/MarriageDialoguePenny",
+        "When": {
+            "Weather: valley": "Rain, Storm",
+            "ScheduleChanges": "Penny"
+        },
+        "Entries": {
+            // instead of ushering around two students that aren't with her
+            // I've replaced Penny's schedule with one of her rain schedules
+            // and have to update dialogue to match.
+            "jobLeave_Penny": "{{i18n:jobLeave-Penny-rain}}$h",
+            "jobReturn_Penny": "{{i18n:jobReturn-Penny-rain}}$h"
+        }
+    }
+]}

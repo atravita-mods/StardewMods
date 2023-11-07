@@ -1,5 +1,10 @@
-﻿using HarmonyLib;
+﻿using AtraShared.ConstantsAndEnums;
+using AtraShared.Utils.Extensions;
+
+using HarmonyLib;
+
 using Microsoft.Xna.Framework;
+
 using StardewValley.Locations;
 using StardewValley.Objects;
 
@@ -9,11 +14,11 @@ namespace StopRugRemoval.HarmonyPatches.OutdoorRugsMostly;
 /// Patches on GameLocation to allow me to place rugs anywhere.
 /// </summary>
 [HarmonyPatch(typeof(GameLocation))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal class GameLocationPatches
 {
     [HarmonyPostfix]
     [HarmonyPatch(nameof(GameLocation.CanPlaceThisFurnitureHere))]
-    [SuppressMessage("StyleCop", "SA1313", Justification = "Style prefered by Harmony")]
     private static void PostfixCanPlaceFurnitureHere(GameLocation __instance, Furniture __0, ref bool __result)
     {
         try
@@ -31,13 +36,12 @@ internal class GameLocationPatches
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed in attempting to place rug outside in PostfixCanPlaceFurnitureHere.\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("placing rug outside", ex);
         }
     }
 
     [HarmonyPrefix]
     [HarmonyPatch(nameof(GameLocation.makeHoeDirt))]
-    [SuppressMessage("StyleCop", "SA1313", Justification = "Style prefered by Harmony")]
     private static bool PrefixMakeHoeDirt(GameLocation __instance, Vector2 tileLocation, bool ignoreChecks = false)
     {
         try
@@ -51,7 +55,7 @@ internal class GameLocationPatches
             int posY = ((int)tileLocation.Y * 64) + 32;
             foreach (Furniture f in __instance.furniture)
             {
-                if (f.furniture_type.Value == Furniture.rug && f.getBoundingBox(f.TileLocation).Contains(posX, posY))
+                if (f.furniture_type.Value == Furniture.rug && f.GetBoundingBox().Contains(posX, posY))
                 {
                     return false;
                 }
@@ -59,14 +63,13 @@ internal class GameLocationPatches
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Encountered error trying to prevent hoeing on rugs.\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("preventing hoeing on rugs", ex);
         }
         return true;
     }
 
     [HarmonyPrefix]
     [HarmonyPatch(nameof(GameLocation.doesTileHavePropertyNoNull))]
-    [SuppressMessage("StyleCop", "SA1313", Justification = "Style prefered by Harmony")]
     private static bool PrefixDoesTileHavePropertyNoNull(GameLocation __instance, int xTile, int yTile, string propertyName, string layerName, ref string __result)
     {
         try
@@ -75,7 +78,7 @@ internal class GameLocationPatches
             {
                 foreach (Furniture f in __instance.furniture)
                 {
-                    if (f.furniture_type.Value == Furniture.rug && f.getBoundingBox(f.TileLocation).Contains((xTile * 64) + 32, (yTile * 64) + 32))
+                    if (f.furniture_type.Value == Furniture.rug && f.GetBoundingBox().Contains((xTile * 64) + 32, (yTile * 64) + 32))
                     {
                         __result = "All";
                         return false;
@@ -85,7 +88,7 @@ internal class GameLocationPatches
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Error encountered trying to prevent grass growth\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("preventing grass growth", ex);
         }
         return true;
     }

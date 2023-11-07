@@ -1,14 +1,38 @@
+// his vanilla personality seems to be "has PTSD"?
+
+// I'm just gonna give him "electronics as a hobby", that fits well with "being a solider" without necessarily making him absolutely a soldier since there's a "Kent-as-journalist" mod.
 {"Changes":[
     {
         "Action": "EditData",
         "LogName": "Kent mid-hearts",
         "Target": "Characters/Dialogue/Kent",
         "Entries": {
-            "2{{YearRemainder}}": "I feel like I'm stuck in place, never really getting better, never really getting worse.$s",
-            "4{{YearRemainder}}": "Couldn't sleep last night. Kept on having nightmares."
-        },
-        "When": {
-            "YearModulus": "1"
+            // after luau
+            "summer_12{{YearRemainder}}": "That music at the luau yesterday, it's really too loud.$s",
+
+            // before Winter Star
+            "winter_15{{YearRemainder}}": "The night market'll be a good opportunity to get Jodi something for Winter Star...",
+            "winter_20{{YearRemainder}}": "Gosh, @, what should I get Jodi for Winter Star?",
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Kent mid-hearts",
+        "Target": "Characters/Dialogue/Kent",
+        "When": { "YearModulus": "2" },
+        "Entries": {
+            "2_2": "I feel like I'm stuck in place, never really getting better, never really getting worse.$s",
+            "4_2": "Couldn't sleep last night. Kept on having nightmares.",
+            "6_2": "Maybe we should get a second bed, I keep on disturbing Jodi with my nightmares.",
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Kent mid-hearts",
+        "Target": "Characters/Dialogue/Kent",
+        "When": {"YearModulus": "4"},
+        "Entries": {
+            "5_2": "The range broke...I think it's just a capacitor that needs replacing, but those aren't easy to order out here.#$b#Placed a rush order from Joja, but shipping is an arm and a leg.#$e#Miss having an Accel components store nearby, but I think that branch of Accel's gone bankrupt." // Accel is apparently RadioShack now too.
         }
     }
 ]}

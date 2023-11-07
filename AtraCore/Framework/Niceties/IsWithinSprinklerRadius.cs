@@ -1,4 +1,6 @@
-﻿using AtraShared.Integrations;
+﻿// Ignore Spelling: locname
+
+using AtraShared.Integrations;
 using AtraShared.Integrations.Interfaces;
 using AtraShared.Niceties;
 using AtraShared.Utils.Extensions;
@@ -26,7 +28,7 @@ public sealed class IsWithinSprinklerRadiusHelper
     private readonly HashSet<string> processedMaps = new();
 
     // helpers
-    private IMonitor monitor;
+    private readonly IMonitor monitor;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="IsWithinSprinklerRadiusHelper"/> class.
@@ -133,7 +135,7 @@ public sealed class IsWithinSprinklerRadiusHelper
             foreach (SObject obj in location.objects.Values)
             {
                 IEnumerable<Vector2> tiles;
-                if (tilemap?.TryGetValue(obj.ParentSheetIndex, out Vector2[]? vector2s) == true)
+                if (int.TryParse(obj.ItemId, out int legacyID) && tilemap?.TryGetValue(legacyID, out Vector2[]? vector2s) == true)
                 { // got tile map from api, adjust from relative to absolute location.
                     tiles = vector2s.Select((v) => v + obj.TileLocation);
                 }

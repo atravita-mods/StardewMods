@@ -1,9 +1,44 @@
+// she should really be friends with Robin, eh?
+
+// Mostly raised by her father (who taught her how to forage).
+// Leah in the city was a storyboarder.
 {"Changes":[
+    {
+        "LogName": "Leah -- Extended Dialogue",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Leah",
+        "Entries": {
+            "movieTheater": "Heard that a movie theater's coming to town!$h#$e$To be honest, movies are certainly something I've missed.",
+
+            // before festivals
+            "summer_27{{YearRemainder}}": "One day I'll be able to capture the beauty of the Moonlight Jellies....",
+            "fall_15{{YearRemainder}}": "Oh, the Stardew Valley Fair is tomorrow, isn't it?#$b#I wonder...I wonder if Lewis would let me enter some of my sculptures.",
+
+            // flesh out seasonal lines
+            "winter_Tue8": "Winter's the season when I'm the busiest. Many people commission paintings or sculptures as Winter Star gifts.$h#$e#Hey, @, do you have a special someone you'd like a gift for?",
+        }
+    },
+    {
+        "LogName": "Leah - taken",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Leah",
+        "When": {
+            "Query: {{Spouse:anyPlayer|contains=Leah}} OR {{Relationship:Leah|contains=Married,Engaged}}": true
+        },
+        "Entries": {
+            // before dance
+            "spring_23{{YearRemainder}}": "Gosh, is it almost the Flower Dance already?#$b#Well, hopefully I'll feel less awkward at the dance this year...",
+        }
+    },
     {
         "LogName": "Leah - mid hearts",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Leah",
+        "When": {"YearModulus": 1},
         "Entries": {
+            // specific days
+            "summer_27{{YearRemainder}}": "Summer's almost over, @. Are you ready for fall?",
+
             "1{{YearRemainder}}": "Start of a new month, @! What are you planning on getting done?",
             "3{{YearRemainder}}": "@, I got a new commission! I'm so excited.$h#$b#They're looking for a nice large landscape scene.",
             "5{{YearRemainder}}": "When I need inspiration, I take walks through the forest.#$b#I love living out here, so much inspiration so close to us.$h",
@@ -13,18 +48,34 @@
 
             "11{{YearRemainder}}": "Baking is as much of an art form as anything else. But I'm not very good at it.",
             "13{{YearRemainder}}": "I eat a lot of salads, they're easy to prepare.#$b#Plus, with all the fresh ingredients around here, they taste great!",
+            "14{{YearRemainder}}": "Sometimes, when I need an extra spot of money, I'll bring some of what I foraged and sell it to Pierre.#$b#Of course, it's not much, but it's also not nothing.",
+            "15{{YearRemainder}}": "I don't usually work with watercolors, but the last few days I've just got a hankering to work more with them.",
+            "16{{YearRemainder}}": "My father didn't like the idea of me moving so far away, but I think this place's great.$h",
 
             "Beach_72_18": "$1 atravitaDialogueLeahBeach#Oh, hi, @, how are you doing today? I found this mussel, isn't the iridescence beautiful?[719]#$e#Nature is so inspiring, isn't it? I love coming out here to paint."
-        },
-        "When": {"YearModulus": 1}
+        }
     },
     {
-        "LogName": "Leah -- Extended Dialogue",
+        "LogName": "Leah - mid hearts",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Leah",
+        "When": {"YearModulus": 2},
         "Entries": {
-            "movieTheater": "Heard that a movie theater's coming to town!$h#$e$To be honest, movies are certainly something I've missed.",
-            "{{TaxDay}}": "Nothing sucks more than having to figure out what I did last year so I can file my taxes.$s"
+            // specific days
+            "summer_27_2": "The moonlight jellies are visiting tomorrow. Will you be there?",
+
+            "1_2": "I prefer woodworking, but my paintings sell decently well.#$b#I'd love to have a painting in an exhibition some day.",
+            "2_2": "Ohh, there's a film festival happening next week in %place. @, do you think I should go?",
+            "3_2": "Don't tell anyone, but there's little I love more than a sappy romance movie.#$b#I don't care they aren't realistic, they're cute.",
+            "4_2": "Hmmm....what should I have for dinner...I wonder what I can forage...",
+            "5_2": "It helps that I can forage some excellent ingredients from our local forests!#$b#Helps me save so much money on food.",
+            "6_2": "Every now and then I get the itch to do some baking...#$b#My cabin doesn't really have a good kitchen, though.",
+            "7_2": "Back when I used to live in the city, there was a great little noodle joint just under my apartment. I used to go there all the time.$h",
+            "8_2": "It's so so hard to make a living as an artist these days. Frankly, @, I worry for the next generation...$s",
+            "9_2": "I started drawing when I was very young. About six or seven or so.",
+            "11_2": "It's, sadly, incredibly hard to make a living as an artist these days...",
+            "12_2": "When I lived in the city, I worked as a storyboarder.#$b#Wasn't really what I wanted to do, but we had a lot of rent to pay.",
+            "16_2": "I made some hand-pulled noodles the other day! It was far easier than I thought it'd be.$h"
         }
     }
 ]}

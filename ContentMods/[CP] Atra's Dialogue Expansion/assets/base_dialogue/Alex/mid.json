@@ -1,0 +1,21 @@
+{"Changes":[
+    {        
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Alex",
+        "LogName": "Alex Base",
+        "Entries": {
+            // Alex will **always** talk about sports
+            // other NPCs join in if the saloon sports is repaired.
+            "Sun4": "{{i18n:alex-sports-sun-low|first = {{FirstSportsTeam}} | second = {{SecondSportsTeam}} }}$h",
+            "Sun8": "{{i18n:alex-sports-sun|first = {{FirstSportsTeam}} | second = {{SecondSportsTeam}} }}$h",
+            "Mon8": "{{i18n:alex-sports-mon|reaction = {{i18n: {{Random:great, incredible, absurd, exciting}} }} }}$h",
+
+            // pre-luau
+            "summer_10{{YearRemainder}}": "{{i18n:alex-pre-luau.{{YearModulus}} }}$h",
+
+            "summer_13{{YearRemainder}}": "{{i18n:alex-birthday-self}}$h",
+
+            "IslandSouth_Entry": "{{i18n: alex-vacation-bubbles}}"
+        }
+    }
+]}

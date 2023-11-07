@@ -1,8 +1,11 @@
-﻿using AtraBase.Toolkit.Extensions;
+﻿// Ignore Spelling: viewport Hoedirt
+
+using AtraBase.Toolkit.Extensions;
 
 using CommunityToolkit.Diagnostics;
 
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 
 using StardewValley.Locations;
 using StardewValley.Monsters;
@@ -30,7 +33,7 @@ public static class GameLocationExtensions
     [SuppressMessage("StyleCop.CSharp.SpacingRules", "SA1008:Opening parenthesis should be spaced correctly", Justification = "Preference.")]
     public static bool IsDangerousLocation(this GameLocation location)
         => !location.IsFarm && !location.IsGreenhouse && location is not (SlimeHutch or Town or IslandWest)
-            && (location is MineShaft or VolcanoDungeon or BugLand || location.characters.Any((character) => character is Monster));
+            && (location is MineShaft or VolcanoDungeon or BugLand || location.characters.Any(static (character) => character is Monster));
 
     /// <summary>
     /// Returns true if there's a festival at a location and the player can't actually warp there yet.
@@ -53,37 +56,53 @@ public static class GameLocationExtensions
                 {
                     festivalData = Game1.temporaryContent.Load<Dictionary<string, string>>($@"Data\Festivals\{Game1.currentSeason}{Game1.dayOfMonth}");
                 }
-                catch (Exception ex)
+                catch (ContentLoadException)
                 {
-                    monitor.Log($"No festival file found for today....did someone screw with the time?\n\n{ex}", LogLevel.Warn);
+                    monitor.Log("No festival file found for today....did someone screw with the time?", LogLevel.Warn);
                     return false;
                 }
-                if (festivalData.TryGetValue("conditions", out string? val))
+                catch (Exception ex)
                 {
-                    string[]? splits = val.Split('/');
-                    if (splits.Length >= 2)
+                    monitor.Log($"Badly formatted festival file for today:\n\n{ex}", LogLevel.Warn);
+                    return false;
+                }
+                if (festivalData.TryGetValue("conditions", out string? val) && val.TrySplitOnce('/', out ReadOnlySpan<char> locName, out ReadOnlySpan<char> times))
+                {
+                    if (!locName.Equals(location.Name, StringComparison.OrdinalIgnoreCase))
                     {
-                        if (!location.Name.Equals(splits[0], StringComparison.OrdinalIgnoreCase))
+                        return false;
+                    }
+                    if (times.TrySplitOnce(' ', out ReadOnlySpan<char> start, out _ )
+                        && int.TryParse(start, out int startTime) && Game1.timeOfDay < startTime)
+                    {
+                        if (alertPlayer)
                         {
-                            return false;
+                            Game1.drawObjectDialogue(Game1.content.LoadString(@"Strings\StringsFromCSFiles:Game1.cs.2973"));
                         }
-                        if (int.TryParse(splits[1].GetNthChunk(' ', 0), out int startTime) && Game1.timeOfDay < startTime)
-                        {
-                            if (alertPlayer)
-                            {
-                                Game1.drawObjectDialogue(Game1.content.LoadString(@"Strings\StringsFromCSFiles:Game1.cs.2973"));
-                            }
-                            return true;
-                        }
+                        return true;
                     }
                 }
             }
         }
         catch (Exception ex)
         {
-            monitor.Log($"Mod failed while trying to find festival days....\n\n{ex}", LogLevel.Error);
+            monitor.LogError("finding festival days", ex);
         }
         return false;
+    }
+
+    /// <summary>
+    /// Checks to see if hoedirt can be created here. Derived from Hoe.
+    /// </summary>
+    /// <param name="location">Game location to pick up from.</param>
+    /// <param name="tile">Tile to make hoedirt at.</param>
+    /// <returns>True if hoedirt can be created, false otherwise.</returns>
+    public static bool CanCreateHoedirtAt(this GameLocation location, Vector2 tile)
+    {
+        Guard.IsNotNull(location);
+        return location.doesTileHaveProperty((int)tile.X, (int)tile.Y, "Diggable", "Back") is not null
+            && !location.IsTileOccupiedBy(tile, CollisionMask.All, CollisionMask.None, useFarmerTile: true)
+            && location.isTilePassable(new XLocation((int)tile.X, (int)tile.Y), Game1.viewport);
     }
 
     /// <summary>
@@ -112,18 +131,18 @@ public static class GameLocationExtensions
     /// <summary>
     /// Whether or not a tile is covered by a Front or AlwaysFront tile at this location.
     /// </summary>
-    /// <param name="loc">GameLocation.</param>
+    /// <param name="location">GameLocation.</param>
     /// <param name="tileLocation">Tile.</param>
     /// <param name="viewport">Viewport.</param>
     /// <returns>True if covered, false otherwise.</returns>
-    public static bool IsTileViewable(this GameLocation? loc, XLocation tileLocation, XRectangle viewport)
+    public static bool IsTileViewable(this GameLocation? location, XLocation tileLocation, XRectangle viewport)
     {
-        if (loc is null)
+        if (location is null)
         {
             return false;
         }
 
-        return (loc.map.GetLayer("Front")?.PickTile(new XLocation(tileLocation.X * 64, tileLocation.Y * 64), viewport.Size)
-            ?? loc.map.GetLayer("AlwaysFront")?.PickTile(new XLocation(tileLocation.X * 64, tileLocation.Y * 64), viewport.Size)) is null;
+        return (location.map.GetLayer("Front")?.PickTile(new XLocation(tileLocation.X * 64, tileLocation.Y * 64), viewport.Size)
+            ?? location.map.GetLayer("AlwaysFront")?.PickTile(new XLocation(tileLocation.X * 64, tileLocation.Y * 64), viewport.Size)) is null;
     }
 }

@@ -1,4 +1,10 @@
-﻿using AtraShared.Utils.Extensions;
+﻿// Ignore Spelling: npc isarrivaltime basekey
+
+using System.Text;
+
+using AtraBase.Toolkit;
+
+using AtraShared.Utils.Extensions;
 using Microsoft.Xna.Framework;
 
 namespace AtraShared.Schedules.DataModels;
@@ -11,12 +17,8 @@ public sealed class SchedulePoint
     private readonly NPC npc;
     private readonly string map;
     private readonly int time;
-    private readonly Point point;
     private readonly int direction = 2;
-    private readonly string? animation;
     private readonly string? dialoguekey;
-
-    private bool isarrivaltime = false;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="SchedulePoint"/> class.
@@ -47,10 +49,10 @@ public sealed class SchedulePoint
         this.npc = npc;
         this.map = map;
         this.time = time;
-        this.isarrivaltime = isarrivaltime;
-        this.point = point;
+        this.IsArrivalTime = isarrivaltime;
+        this.Point = point;
         this.direction = direction;
-        this.animation = animation;
+        this.Animation = animation;
         if (npc.GetRandomDialogue(varKey, random) is string dialogueKey)
         {
             this.dialoguekey = dialogueKey;
@@ -65,21 +67,17 @@ public sealed class SchedulePoint
     /// Gets or sets a value indicating whether gets whether or not the time should be an arrival time.
     /// </summary>
     /// <remarks>As the first point has to be an arrival, we allow this to be set outside this class.</remarks>
-    public bool IsArrivalTime
-    {
-        get => this.isarrivaltime;
-        set => this.isarrivaltime = value;
-    }
+    public bool IsArrivalTime { get; set; } = false;
 
     /// <summary>
     /// Gets the point the schedule is set to happen on.
     /// </summary>
-    public Point Point => this.point;
+    public Point Point { get; init; }
 
     /// <summary>
     /// Gets the animation for this schedule point. Null for no animation.
     /// </summary>
-    public string? Animation => this.animation;
+    public string? Animation { get; init; }
 
     /// <summary>
     /// Method that converts a schedule point into a string Stardew can understand.
@@ -88,23 +86,41 @@ public sealed class SchedulePoint
     [Pure]
     public override string ToString()
     {
-        List<string> schedulestring = new()
-        {
-            $"{(this.isarrivaltime ? "a" : string.Empty)}{this.time}",
-            this.map,
-            this.point.X.ToString(),
-            this.point.Y.ToString(),
-            this.direction.ToString(),
-        };
+        StringBuilder sb = StringBuilderCache.Acquire();
+        this.AppendToStringBuilder(sb);
+        return StringBuilderCache.GetStringAndRelease(sb);
+    }
 
-        if (this.animation is not null)
+    /// <summary>
+    /// Appends the data in this schedulepoint to a stringbuilder.
+    /// </summary>
+    /// <param name="sb">stringbuilder instance to use.</param>
+    /// <returns>Same stringbuilder.</returns>
+    public StringBuilder AppendToStringBuilder(StringBuilder sb)
+    {
+        if (this.IsArrivalTime)
         {
-            schedulestring.Add(this.animation);
+            sb.Append('a');
+        }
+        sb.Append(this.time).Append(' ')
+          .Append(this.map).Append(' ')
+          .Append(this.Point.X).Append(' ')
+          .Append(this.Point.Y).Append(' ')
+          .Append(this.direction);
+
+        if (this.Animation is not null)
+        {
+            sb.Append(' ').Append(this.Animation);
         }
         if (this.dialoguekey is not null)
         {
-            schedulestring.Add($"\"Characters\\Dialogue\\{this.npc.Name}:{this.dialoguekey}\"");
+            sb.Append(' ')
+              .Append("\"Characters\\Dialogue\\")
+              .Append(this.npc.Name)
+              .Append(':')
+              .Append(this.dialoguekey)
+              .Append('"');
         }
-        return string.Join(" ", schedulestring);
+        return sb;
     }
 }

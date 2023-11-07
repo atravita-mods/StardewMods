@@ -5,6 +5,9 @@ using AtraShared.Utils.Extensions;
 
 using SpecialOrdersExtended.DataModels;
 
+using StardewValley.Network;
+using StardewValley.SpecialOrders;
+
 namespace SpecialOrdersExtended.Managers;
 
 /// <summary>
@@ -80,7 +83,7 @@ internal class RecentSOManager
         }
         List<string> keysRemoved = recentCompletedSO.dayUpdate(daysplayed);
         DialogueManager.ClearRepeated(keysRemoved);
-        ModEntry.ModMonitor.LogIfVerbose(() => $"Keys removed from Recent Completed SOs: {string.Join(", ", keysRemoved)}");
+        ModEntry.ModMonitor.LogIfVerbose($"Keys removed from Recent Completed SOs: {string.Join(", ", keysRemoved)}");
     }
 
     /// <summary>
@@ -108,7 +111,7 @@ internal class RecentSOManager
         // Check for any completed orders in the current orders.
         foreach (SpecialOrder order in currentOrders.Values)
         {
-            if (order.questState.Value == SpecialOrder.QuestState.Complete)
+            if (order.questState.Value == SpecialOrderStatus.Complete)
             {
                 if (TryAdd(order.questKey.Value))
                 {
@@ -134,7 +137,7 @@ internal class RecentSOManager
         {
             foreach (string cachedOrder in currentOrderCache)
             {
-                if (!currentOrders.ContainsKey(cachedOrder) && completedOrders.ContainsKey(cachedOrder))
+                if (!currentOrders.ContainsKey(cachedOrder) && completedOrders.Contains(cachedOrder))
                 {// A quest previously in the current quests is gone now
                  // and seems to have appeared in the completed orders
                     if (TryAdd(cachedOrder))

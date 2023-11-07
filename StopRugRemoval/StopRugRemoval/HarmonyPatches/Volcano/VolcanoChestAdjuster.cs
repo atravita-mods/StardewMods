@@ -8,6 +8,8 @@ using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
 using StardewModdingAPI.Events;
+
+using StardewValley.Extensions;
 using StardewValley.Locations;
 
 namespace StopRugRemoval.HarmonyPatches.Volcano;
@@ -82,7 +84,15 @@ internal static class VolcanoChestAdjuster
     /// <param name="multiplayerHelper">SMAPI's multiplayer helper.</param>
     internal static void SaveData(IDataHelper dataHelper, IMultiplayerHelper multiplayerHelper)
     {
-        dataHelper.WriteSaveData(SAVEDATAKEY, data);
+        if (data is not null && (data.CommonChest != -1 || data.RareChest != -1))
+        {
+            dataHelper.WriteSaveData(SAVEDATAKEY, data);
+        }
+        else
+        {
+            // erase data if it's not relevant.
+            dataHelper.WriteSaveData<VolcanoData>(SAVEDATAKEY, null);
+        }
         BroadcastData(multiplayerHelper);
     }
 
@@ -145,7 +155,16 @@ internal static class VolcanoChestAdjuster
         try
         {
             ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);
+
             helper.FindNext(new CodeInstructionWrapper[]
+            {
+                OpCodes.Ldarg_3,
+                OpCodes.Ldc_I4_1,
+                OpCodes.Beq,
+            })
+            .Advance(2)
+            .StoreBranchDest() // this leads to common chests.
+            .FindNext(new CodeInstructionWrapper[]
             { // Find the first call to Random.Next and the local it stores to.
                 new(SpecialCodeInstructionCases.LdArg),
                 new(SpecialCodeInstructionCases.LdLoc),
@@ -170,7 +189,7 @@ internal static class VolcanoChestAdjuster
             helper.FindNext(new CodeInstructionWrapper[]
             { // Find the block just after the while loop
                 new(OpCodes.Ldsfld, typeof(Game1).GetCachedField(nameof(Game1.random), ReflectionCache.FlagTypes.StaticFlags)),
-                new(OpCodes.Callvirt, typeof(Random).GetCachedMethod(nameof(Random.NextDouble), ReflectionCache.FlagTypes.InstanceFlags, Type.EmptyTypes)),
+                new(OpCodes.Call, typeof(RandomExtensions).GetCachedMethod<Random>(nameof(RandomExtensions.NextBool), ReflectionCache.FlagTypes.StaticFlags)),
             })
             .GetLabels(out IList<Label> secondLabelsToMove)
             .DefineAndAttachLabel(out Label firstNoRepeat)
@@ -190,12 +209,7 @@ internal static class VolcanoChestAdjuster
             }, withLabels: secondLabelsToMove);
 
             // Okay, common chests done. Let's go find rare chests.
-            helper.FindNext(new CodeInstructionWrapper[]
-            {
-                new(OpCodes.Ldarg_3),
-                new(OpCodes.Ldc_I4_1),
-                new(OpCodes.Bne_Un),
-            })
+            helper.AdvanceToStoredLabel()
             .FindNext(new CodeInstructionWrapper[]
             { // Find the call to Random.Next and the local it stores to for rare chests.
                 new(SpecialCodeInstructionCases.LdArg),
@@ -244,8 +258,7 @@ internal static class VolcanoChestAdjuster
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Ran into error transpiling volcano dungeon to avoid repeat chest rewards..\n\n{ex}", LogLevel.Error);
-            original?.Snitch(ModEntry.ModMonitor);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }

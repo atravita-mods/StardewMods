@@ -1,0 +1,17 @@
+{
+    "Changes": [
+        {
+            "LogName": "Pierre, Joja completed",
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Pierre",
+            "When": {
+                "IsJojaMartComplete": true
+            },
+            "Entries": {
+                "summer_Mon8": "What good is antitrust law if the government won't use it against Joja?$s",
+                "fall_Tue8": "Joja has low prices precisely because they overwork their employees.#$b#They have nearly three times the injuries as other comparable companies.$s",
+                "winter_Thu10": "They say Joja is the future. That innovation is worth the monopoly. Meh.$a"
+            }
+        },
+    ]
+}

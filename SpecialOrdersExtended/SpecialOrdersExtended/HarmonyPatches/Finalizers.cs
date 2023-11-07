@@ -1,4 +1,8 @@
-﻿using HarmonyLib;
+﻿using AtraShared.ConstantsAndEnums;
+
+using HarmonyLib;
+
+using StardewValley.SpecialOrders;
 
 namespace SpecialOrdersExtended.HarmonyPatches;
 
@@ -6,6 +10,7 @@ namespace SpecialOrdersExtended.HarmonyPatches;
 /// Holds the finalizers for this project.
 /// </summary>
 [HarmonyPatch(typeof(SpecialOrder))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal class Finalizers
 {
     /// <summary>
@@ -17,12 +22,12 @@ internal class Finalizers
     /// <returns>null to suppress the error.</returns>
     [HarmonyFinalizer]
     [HarmonyPatch(nameof(SpecialOrder.GetSpecialOrder))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention")]
     public static Exception? FinalizeGetSpecialOrder(string key, ref SpecialOrder? __result, Exception? __exception)
     {
         if (__exception is not null)
         {
-            ModEntry.ModMonitor.Log($"Detected invalid special order {key}\n\n{__exception}", LogLevel.Error);
+            ModEntry.ModMonitor.Log($"Detected invalid special order {key}:", LogLevel.Error);
+            ModEntry.ModMonitor.Log(__exception.ToString());
             __result = null;
         }
         return null;

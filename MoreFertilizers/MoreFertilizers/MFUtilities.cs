@@ -1,4 +1,6 @@
 ﻿using AtraBase.Toolkit.Extensions;
+
+using AtraCore;
 using AtraCore.Framework.ItemManagement;
 
 using AtraShared.Caching;
@@ -21,7 +23,7 @@ internal static class MFUtilities
     /// <param name="level">Int skill level.</param>
     /// <returns>Fertilizer ID (-1 if not found).</returns>
     internal static int GetRandomFertilizerFromLevel(this int level)
-        => Game1.random.Next(Math.Clamp((int)(level * 1.5) + 1, 0, 16)) switch
+        => Random.Shared.Next(Math.Clamp((int)(level * 1.5) + 1, 0, 16)) switch
             {
                 0 => ModEntry.LuckyFertilizerID,
                 1 => ModEntry.JojaFertilizerID,
@@ -62,14 +64,8 @@ internal static class MFUtilities
             return false;
         }
 
-        string data = Game1Wrappers.ObjectInfo[crop.indexOfHarvest.Value];
-        int index = data.IndexOf('/');
-        if (index >= 0)
-        {
-            ReadOnlySpan<char> span = data.AsSpan(0, index).Trim();
-            return span.Contains("Joja", StringComparison.OrdinalIgnoreCase);
-        }
-        return false;
+        return Game1Wrappers.ObjectData[crop.indexOfHarvest.Value]
+                            .Name.Contains("Joja", StringComparison.Ordinal);
     }
 
     /// <summary>
@@ -78,7 +74,7 @@ internal static class MFUtilities
     /// </summary>
     /// <param name="loc">Location to fix.</param>
     /// <param name="idMapping">IDMapping to use.</param>
-    internal static void FixHoeDirtInLocation(this GameLocation? loc, Dictionary<int, int> idMapping)
+    internal static void FixHoeDirtInLocation(this GameLocation? loc, Dictionary<string, string> idMapping)
     {
         if (loc is null)
         {
@@ -87,9 +83,9 @@ internal static class MFUtilities
 
         foreach (TerrainFeature terrain in loc.terrainFeatures.Values)
         {
-            if (terrain is HoeDirt dirt && dirt.fertilizer.Value != 0)
+            if (terrain is HoeDirt dirt && dirt.fertilizer.Value is not null)
             {
-                if (idMapping.TryGetValue(dirt.fertilizer.Value, out int newval))
+                if (idMapping.TryGetValue(dirt.fertilizer.Value, out string? newval))
                 {
                     dirt.fertilizer.Value = newval;
                 }
@@ -97,9 +93,9 @@ internal static class MFUtilities
         }
         foreach (SObject obj in loc.Objects.Values)
         {
-            if (obj is IndoorPot pot && pot.hoeDirt?.Value?.fertilizer?.Value is int value && value != 0)
+            if (obj is IndoorPot pot && pot.hoeDirt?.Value?.fertilizer?.Value is string value)
             {
-                if (idMapping.TryGetValue(value, out int newvalue))
+                if (idMapping.TryGetValue(value, out string? newvalue))
                 {
                     pot.hoeDirt.Value.fertilizer.Value = newvalue;
                 }
@@ -112,27 +108,30 @@ internal static class MFUtilities
     /// </summary>
     /// <param name="identifier">string identifier.</param>
     /// <returns>id/type tuple, or null for not found.</returns>
-    internal static int? ResolveID(string identifier)
+    internal static string? ResolveID(string identifier)
     {
-        if (!int.TryParse(identifier, out int id))
+        string? itemID = identifier;
+        if (!Game1.objectData.TryGetValue(identifier, out var data))
         {
-            id = DataToItemMap.GetID(ItemTypeEnum.SObject, identifier);
+            itemID = DataToItemMap.GetID(ItemTypeEnum.SObject, identifier);
+            if (itemID is not null)
+            {
+                _ = Game1.objectData.TryGetValue(itemID, out data);
+            }
         }
 
-        if (id < -1 || !Game1Wrappers.ObjectInfo.TryGetValue(id, out string? data))
+        if (itemID is null || data is null)
         {
             ModEntry.ModMonitor.Log($"{identifier} could not be resolved, skipping");
             return null;
         }
 
-        ReadOnlySpan<char> cat = data.GetNthChunk('/', SObject.objectInfoTypeIndex);
-        int index = cat.GetIndexOfWhiteSpace();
-        if (index < 0 || !int.TryParse(cat[(index + 1)..], out int type) || type is not SObject.SeedsCategory)
+        if (data.Category is not SObject.SeedsCategory)
         {
-            ModEntry.ModMonitor.Log($"{identifier} with {id} does not appear to be a seed, skipping.");
+            ModEntry.ModMonitor.Log($"'{identifier}' with '{itemID}' does not appear to be a seed, skipping.");
             return null;
         }
 
-        return id;
+        return itemID;
     }
 }

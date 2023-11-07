@@ -162,7 +162,7 @@ internal static class ConsoleCommands
                     continue;
                 }
 
-                SObject item = new(SObjectPatches.GrassStarterIndex, 1);
+                SObject item = new(SObjectPatches.GrassStarterId, 1);
                 item.modData?.SetInt(SObjectPatches.ModDataKey, (int)possibleGrass);
                 if (!Game1.player.addItemToInventoryBool(item))
                 {
@@ -184,7 +184,7 @@ internal static class ConsoleCommands
         }
 
         {
-            SObject item = new(SObjectPatches.GrassStarterIndex, 1);
+            SObject item = new(SObjectPatches.GrassStarterId, 1);
             item.modData?.SetInt(SObjectPatches.ModDataKey, (int)grassIndex);
             if (!Game1.player.addItemToInventoryBool(item))
             {

@@ -1,0 +1,35 @@
+{
+    "Changes":[
+    {
+        "Action": "EditData",
+        "LogName": "Lewis base",
+        "Target": "Characters/Dialogue/Lewis",
+        "Entries": {
+            "{{TaxDay}}": "{{i18n:lewis-tax-day.00}}#$e#{{i18n:lewis-tax-day.01}}",
+
+            "CommunityCenter_55_6": "{{i18n: lewis-cc-vault.{{season}}.{{YearModulus}} }}", // in front of vault.
+            "CommunityCenter_47_5": "{{i18n: lewis-cc-filing.{{season}}.{{YearModulus}} }}", // in front of the filing cabinet.
+            "CommunityCenter_51_4": "{{i18n: lewis-cc-desk.{{season}}.{{YearModulus}} }}", // next to the desk.
+            "CommunityCenter_47_13": "{{i18n: lewis-cc-bulletin.{{season}}.{{YearModulus}} }}", // next to the bulletin board
+            "CommunityCenter_33_9": "{{i18n: lewis-cc-fireplace.{{season}}.{{YearModulus}} }}", // in front of the fire place.
+
+            // pre-festival
+            "summer_10{{YearRemainder}}": "{{i18n: luau-prelude-lewis.{{IsJojaMartComplete}}.{{Random:00,01,02}} }}",
+            "fall_15{{YearRemainder}}": "{{i18n:fair-prelude-lewis.{{Random:00,01,02}} }}$h"
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Lewis strings",
+        "Target": "Strings/schedules/Lewis",
+        "Entries": {
+            "Tue.000": "{{i18n: lewis-shopping.{{Season}}.{{Random:00,01,02}} }}",
+
+            "1.000": "{{i18n: lewis-willy.{{Season}}.{{Random:00,01,02}} }}",
+            "6.000": "{{i18n: lewis-clint.{{Season}}.{{Random:00,01,02}} }}",
+            "15.000": "{{i18n: lewis-robin.{{Season}}.{{Random:00,01,02}} }}"
+
+            // TODO: Marnie (3.000) and library (6.001) both of which require more conditional edits?
+        }
+    }
+]}

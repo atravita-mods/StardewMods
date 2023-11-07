@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <Name>NPC arrows</Name>
+    <Name>NPC Arrows</Name>
     <Description>Draws little arrows pointing out NPCs on your current map.</Description>
     <Version>0.1.0</Version>
     <UpdateKeys>-1</UpdateKeys>

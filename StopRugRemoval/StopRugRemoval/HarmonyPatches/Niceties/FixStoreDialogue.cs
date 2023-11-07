@@ -1,9 +1,14 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
+
 using AtraCore.Framework.ReflectionManager;
+
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
+
 using HarmonyLib;
+
 using StardewValley.Locations;
 
 namespace StopRugRemoval.HarmonyPatches.Niceties;
@@ -12,38 +17,20 @@ namespace StopRugRemoval.HarmonyPatches.Niceties;
 /// <summary>
 /// Please, for the love of god, stop trying to feed your family stuff that isn't edible, Pierre.
 /// </summary>
-[HarmonyPatch(typeof(SeedShop))]
+[HarmonyPatch(typeof(ShopLocation))]
 internal static class FixStoreDialogue
 {
     private static bool IsObjectVaguelyEdible(SObject? obj)
         => obj is not null && obj.Edibility > 0;
 
-    [HarmonyPatch(nameof(SeedShop.getPurchasedItemDialogueForNPC))]
-    [SuppressMessage("SMAPI.CommonErrors", "AvoidNetField:Avoid Netcode types when possible", Justification = "Used for matching only.")]
+    [HarmonyPatch(nameof(ShopLocation.getPurchasedItemDialogueForNPC))]
     private static IEnumerable<CodeInstruction>? Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
     {
         try
         {
             ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);
-            helper.FindNext(new CodeInstructionWrapper[]
-            {
-                new(OpCodes.Ldarg_1),
-                new(OpCodes.Ldfld, typeof(SObject).GetCachedField(nameof(SObject.quality), ReflectionCache.FlagTypes.InstanceFlags)),
-                new(OpCodes.Call), // this is an op_implicit
-                new(OpCodes.Ldc_I4_2),
-                new(OpCodes.Beq_S),
-            })
-            .Advance(1)
-            .ReplaceInstruction(OpCodes.Callvirt, typeof(SObject).GetCachedProperty(nameof(SObject.Quality), ReflectionCache.FlagTypes.InstanceFlags).GetGetMethod(), keepLabels: true)
-            .Advance(1)
-            .Remove(1)
-            .Advance(1);
 
-            Label? label = (Label)helper.CurrentInstruction.operand;
-
-            helper.ReplaceInstruction(OpCodes.Bge_S, label, keepLabels: true);
-
-            // Now find the part where Pierre talks.
+            // Find the part where Pierre talks.
             helper.FindNext(new CodeInstructionWrapper[]
             {
                 new(SpecialCodeInstructionCases.LdLoc),
@@ -72,8 +59,7 @@ internal static class FixStoreDialogue
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Ran into error transpiling {original.FullDescription()}.\n\n{ex}", LogLevel.Error);
-            original?.Snitch(ModEntry.ModMonitor);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }

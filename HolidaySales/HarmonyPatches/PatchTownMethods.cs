@@ -41,12 +41,12 @@ internal static class PatchTownMethods
             ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);
             helper.AdjustIsFestivalCallForTown();
 
+            // helper.Print();
             return helper.Render();
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod crashed while transpiling {original.GetFullName()}\n\n{ex}", LogLevel.Error);
-            original.Snitch(ModEntry.ModMonitor);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }

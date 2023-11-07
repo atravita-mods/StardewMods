@@ -1,0 +1,73 @@
+{"Changes":[
+    {
+        "Action": "EditData",
+        "LogName": "Divorced From Maru",
+        "Target": "Characters/Dialogue/Robin",
+        "When": {
+            "Relationship: Maru": "Divorced",
+            "Relationship: Sebastian|contains=Married, Engaged": false
+        },
+        "Entries": {
+            "ScienceHouse": "{{i18n: robin-divorced-from-maru-a}}$s",
+            "Mountain": "{{i18n: robin-divorced-from-maru-b}}$s",
+            "Town": "{{i18n: divorced-from-family-generic}}$s",
+            "Tue": "{{i18n:divorced-from-family-generic-b}}$a"
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Divorced From Sebastian",
+        "Target": "Characters/Dialogue/Robin",
+        "When": {
+            "Relationship: Sebastian": "Divorced",
+            "Relationship: Maru|contains=Married, Engaged": false
+        },
+        "Entries": {
+            "ScienceHouse": "{{i18n: robin-divorced-from-sebastian-a}}$s",
+            "Mountain": "{{i18n: robin-divorced-from-sebastian-b}}$s",
+            "Tue": "{{i18n: divorced-from-family-generic-home}}$a"
+        }
+    },
+    {
+        "LogName": "Robin - after upgrades",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Robin",
+        "When": {"Query: {{FarmhouseUpgrade}} > 2": true},
+        "Entries": {
+            "winter_Mon": "{{i18n:robin-winter-mon}}"
+        }
+    },
+    {
+        "LogName": "Robin - has any hearts with Sebastian",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Robin",
+        "When": {"Query: {{Hearts:Sebastian}} > 2": true},
+        "Entries":{
+            "Fri": "{{i18n:robin-fri}}$s"
+        }
+    },
+    {
+        "LogName": "Robin - Sebby is married.",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Robin",
+        "When": {
+            "Query: {{Spouse:anyPlayer|contains=Sebastian}} OR {{Relationship:Sebastian|contains=Married, Engaged}}": true
+        },
+        "Entries":{
+            "Fri": "{{i18n:robin-fri-sebby-married}}$h"
+        }
+    },
+    {
+        "LogName": "Robin - expecting grandchild",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Robin",
+        "When":{
+            "HavingChild": "@{{playerName}}",
+            "Spouse": "Maru, Sebastian",
+            "DialogueRandom": "alpha"
+        },
+        "Entries": {
+            "ScienceHouse": "{{i18n:robin-expecting-grandchild}}$h"
+        }
+    }
+]}

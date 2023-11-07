@@ -1,0 +1,68 @@
+{"Changes":[
+    {
+        "LogName": "Lewis movies - CC",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Lewis",
+        "When": {"MovieStatus": "CC"},
+        "Entries": {
+            "12{{YearRemainder}}": "Between you and I, @, I'm not sure we would have a movie theater in town at all if the building didn't just show up one day.#$b#Even as is I'm not sure how they turn a profit.",
+            "winter_Mon10": "I hear Joja left %place too, because the workers at their warehouse there wanted to unionize..."
+        }
+    },
+    {
+        "LogName": "Lewis mid-hearts - Joja",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Lewis",
+        "When": { "IsJojaMartComplete": true },
+        "Entries": {
+            "12{{YearRemainder}}": "With Joja here, with all the tax breaks we have to give to Joja, we get a lot less tax revenue.#$b#Makes everything so much more difficult.",
+            "13{{YearRemainder}}": "Sometimes I just think of how much data Joja has on you and I, and I wonder if it was worth it.",
+            "26{{YearRemainder}}": "It's really a race to the bottom, isn't it?#$b#All these little towns competing with tax breaks, trying to lure in big companies.#$b#It's a game I don't want to play anymore.$s",
+            "27{{YearRemainder}}": "Joja's just so much of commerce these days, I wonder when the government'll get around to filing an antitrust suit against them.",
+        }
+    },
+    {
+        "LogName": "Lewis mid-hearts",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Lewis",
+        "When": {"YearModulus": "1"},
+        "Entries": {
+            // specific days
+            "summer_10{{YearRemainder}}": "The Governor will be here tomorrow! We have to impress him.",
+
+            "8{{YearRemainder}}": "Between you and I, @, I'm so glad a no pill mill has decided to set up shop here."
+        }
+    },
+    {
+        "LogName": "Lewis mid-hearts - Y3",
+        "Action":"EditData",
+        "Target": "Characters/Dialogue/Lewis",
+        "When": {"YearModulus": "3"},
+        "Entries": {
+            "12_2": "Ugh, the stock market is going insane right now, I have to keep myself from looking too much at my portfolio.#$b#I try to remind myself that buying and holding is the best strategy, but it's hard sometimes.",
+            
+            "16_2": "It's surprisingly hard to get a grant to get things repaired.#$b#Politicians like new shiny things with their names on it, upkeep isn't as...popular.$s",
+            "17_2": "Maybe we should pivot our economy to focus more on tourism?",
+            "18_2": "Just waiting for the new jobs report to drop...gosh, I'm hoping for good news."
+        }
+    },
+    {
+        "LogName": "Lewis mid-hearts - Y4",
+        "Action":"EditData",
+        "Target": "Characters/Dialogue/Lewis",
+        "When": {"YearModulus": "4"},
+        "Entries": {
+            "12_2": "One of our neighboring small towns resorted to inviting in a...let's say, undesirable industry in. Because they promised jobs.#$b#Now they're difficult to get rid of without tanking their local economy.$s",
+            "14_2": "Governor's been talking to me about setting up a desalination plant here.#$b#We get plenty of rainfall, but inland, well. It's a lot drier.#$e#It's worth a bit of money if we sign up for it."
+        }
+    },
+    {
+        "LogName": "Lewis mid-hearts - Y5",
+        "Action":"EditData",
+        "Target": "Characters/Dialogue/Lewis",
+        "When": {"YearModulus": "0"},
+        "Entries": {
+            "14_2": "Accel is looking for a new place to for one of their campuses.#$b#They're...well, they pay well, so having one of them is definitely an economic boon.#$b#But the tax breaks they expect..."
+        }
+    }
+]}

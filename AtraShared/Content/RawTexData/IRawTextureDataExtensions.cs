@@ -3,6 +3,9 @@ using Microsoft.Xna.Framework;
 
 namespace AtraShared.Content.RawTexData;
 
+/// <summary>
+/// Extension methods for <see cref="IRawTextureData"/>.
+/// </summary>
 public static class IRawTextureDataExtensions
 {
     public static void PatchImage(

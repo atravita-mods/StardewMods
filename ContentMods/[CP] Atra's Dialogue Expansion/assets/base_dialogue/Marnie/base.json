@@ -1,0 +1,42 @@
+{"Changes":[
+    {
+        "LogName": "Marnie - winter Y1",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Marnie",
+        "When": {
+            "Year": "1",
+            "Relationship: Shane|contains=Divorced": false
+        },
+        "Entries": {
+            "summer_12": "{{i18n:marnie-summer-12}}$h", 
+            "fall_27": "{{i18n:marnie-fall-27}}"
+        }
+    },
+    {
+        // This block is to remove vanilla Marnie lines that no longer make sense past Y1.
+        "LogName": "Marnie base dialogue - past Y1",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Marnie",
+        "When": {
+            "Year|contains=1": false,
+            "Relationship: Shane|contains=Divorced": false
+        },
+        "Entries": {
+            "{{TaxDay}}": "%{{i18n:marnie-tax-day.00}}#$b#{{i18n:marnie-tax-day.01}}#$e#{{i18n:marnie-tax-day.02}}",
+            // block off her vanilla line about Shane **just** moving in after Y1
+            "Tue": "{{i18n:marnie-tue}}$h",
+            "Tue_inlaw_Shane": "{{i18n:marnie-tue-inlaw-shane-{{Query: {{Hearts:Shane}} > 8}} }}"
+        }
+    },
+    {
+        "LogName": "Marnie - divorced from Shane lines",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Marnie",
+        "When": {"Relationship: Shane": "Divorced"},
+        "Entries": {
+            "AnimalHouse": "{{i18n:marnie-divorced-from-shane}}$s",
+            "Town": "{{i18n: divorced-from-family-generic}}$a",
+            "Tue": "{{i18n: marnie-divorced-from-shane-tue}}$s"
+        }
+    }
+]}

@@ -1,5 +1,8 @@
-﻿using AtraShared.Utils.Extensions;
+﻿using AtraShared.ConstantsAndEnums;
+using AtraShared.Utils.Extensions;
+
 using HarmonyLib;
+
 using MoreFertilizers.Framework;
 
 namespace MoreFertilizers.HarmonyPatches.FishFood;
@@ -8,11 +11,11 @@ namespace MoreFertilizers.HarmonyPatches.FishFood;
 /// Resets the water color to the fed fish color if needed.
 /// </summary>
 [HarmonyPatch(typeof(GameLocation))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class GameLocationResetWater
 {
     [UsedImplicitly]
     [HarmonyPatch("resetForPlayerEntry")]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention")]
     private static void Postfix(GameLocation __instance)
     {
         try
@@ -24,7 +27,7 @@ internal static class GameLocationResetWater
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Error in adjusting water color at location {__instance.NameOrUniqueName}:\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError($"adjusting water color at location {__instance.NameOrUniqueName}", ex);
         }
     }
 }

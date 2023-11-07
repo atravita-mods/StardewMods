@@ -1,0 +1,25 @@
+{
+    "Changes": [
+        {
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Demetrius",
+            "When": {
+                "EnableFor": "Demetrius",
+                "Query: {{Hearts:Sebastian}} >= 10": true
+            },
+            "Entries": {
+                "summer_Fri10_inlaw_Sebastian": "{{i18n:demetrius-sebastian-summer-fri10-a}}#$b#{{i18n:demetrius-sebastian-summer-fri10-b}}#$b#{{i18n:demetrius-sebastian-summer-fri10-c}}"
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/MarriageDialogueSebastian",
+            "When": {
+                "DialogueRandom": "bravo, charlie"
+            },
+            "Entries": {
+                "summer_2": "{{i18n: sebby-marriage-summer-2a}}#$b#{{i18n: sebby-marriage-summer-2b}}$s"
+            }
+        }
+    ]
+}

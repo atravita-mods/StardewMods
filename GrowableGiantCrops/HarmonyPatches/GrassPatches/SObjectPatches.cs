@@ -7,6 +7,7 @@ using AtraBase.Toolkit.Reflection;
 
 using AtraCore.Framework.ReflectionManager;
 
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 
@@ -31,8 +32,8 @@ namespace GrowableGiantCrops.HarmonyPatches.GrassPatches;
 [HarmonyPatch(typeof(SObject))]
 [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "Reviewed.")]
 [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1311:Static readonly fields should begin with upper-case letter", Justification = "Reviewed.")]
-[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Named for Harmony.")]
 [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1623:Property summary documentation should match accessors", Justification = "Reviewed.")]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class SObjectPatches
 {
     /// <summary>
@@ -41,9 +42,14 @@ internal static class SObjectPatches
     internal const string ModDataKey = "atravita.GrowableGiantCrop.GrassType";
 
     /// <summary>
-    /// The ParentSheetIndex of a grass starter.
+    /// The unqualified item ID of a grass starter.
     /// </summary>
-    internal const int GrassStarterIndex = 297;
+    internal const string GrassStarterId = "297";
+
+    /// <summary>
+    /// The qualified item ID of a grass starter.
+    /// </summary>
+    internal const string GrassStarterQualId = $"{ItemRegistry.type_object}{GrassStarterId}";
 
     private static readonly Api Api = new();
 
@@ -86,7 +92,7 @@ internal static class SObjectPatches
     /// </summary>
     internal static Func<int, SObject>? InstantiateMoreGrassStarter => instantiateMoreGrassStarter.Value;
 
-    private static Lazy<Func<Grass, bool>?> isMoreGrassGrass = new(() =>
+    private static readonly Lazy<Func<Grass, bool>?> isMoreGrassGrass = new(() =>
     {
         Type? moreGrass = AccessTools.TypeByName("MoreGrassStarters.CustomGrass");
         if (moreGrass is null)
@@ -104,7 +110,7 @@ internal static class SObjectPatches
     /// </summary>
     internal static Func<Grass, bool>? IsMoreGrassGrass => isMoreGrassGrass.Value;
 
-    private static Lazy<Func<int, Grass>?> instantiateMoreGrassGrass = new(() =>
+    private static readonly Lazy<Func<int, Grass>?> instantiateMoreGrassGrass = new(() =>
     {
         Type? moreGrass = AccessTools.TypeByName("MoreGrassStarters.CustomGrass");
         if (moreGrass is null)
@@ -124,7 +130,7 @@ internal static class SObjectPatches
     /// </summary>
     internal static Func<int, Grass>? InstantiateMoreGrassGrass => instantiateMoreGrassGrass.Value;
 
-    private static Lazy<Func<SObject, int?>?> getMoreGrassStarterIndex = new(() =>
+    private static readonly Lazy<Func<SObject, int?>?> getMoreGrassStarterIndex = new(() =>
     {
         Type? moreGrass = AccessTools.TypeByName("MoreGrassStarters.GrassStarterItem");
         if (moreGrass is null)
@@ -158,8 +164,7 @@ internal static class SObjectPatches
 
     #region draw patches
 
-    private static AssetHolder? texture;
-    private static Dictionary<string, int> offsets = new()
+    private static readonly Dictionary<string, int> offsets = new()
     {
         ["spring"] = 0,
         ["summer"] = 20,
@@ -172,12 +177,14 @@ internal static class SObjectPatches
         ["6"] = 140,
     };
 
+    private static AssetHolder? texture;
+
     [MethodImpl(TKConstants.Hot)]
     private static bool GetDrawParts(SObject obj, [NotNullWhen(true)] out Texture2D? tex, out int offset)
     {
         tex = null;
         offset = 0;
-        if (obj.ParentSheetIndex != GrassStarterIndex || obj.modData?.TryGetValue(ModDataKey, out string? idx) != true)
+        if (obj.QualifiedItemId != GrassStarterQualId || obj.modData?.TryGetValue(ModDataKey, out string? idx) != true)
         {
             return false;
         }
@@ -192,7 +199,7 @@ internal static class SObjectPatches
         if (idx == "1")
         {
             GameLocation loc = Game1.currentLocation;
-            idx = loc is not Desert && loc is not IslandLocation && loc.IsOutdoors ? Game1.GetSeasonForLocation(loc) : "spring";
+            idx = loc is not Desert && loc is not IslandLocation && loc.IsOutdoors ? loc.GetSeasonKey() : "spring";
         }
 
         return offsets.TryGetValue(idx, out offset);
@@ -246,7 +253,7 @@ internal static class SObjectPatches
             origin: Vector2.Zero,
             scale: 4f,
             effects: SpriteEffects.None,
-            layerDepth: Math.Max(0f, (f.getStandingY() + 3) / 10000f));
+            layerDepth: Math.Max(0f, (f.StandingPixel.Y + 3) / 10000f));
 
         return false;
     }
@@ -316,8 +323,7 @@ internal static class SObjectPatches
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod crashed while transpiling {original.FullDescription()}:\n\n{ex}", LogLevel.Error);
-            original.Snitch(ModEntry.ModMonitor);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }

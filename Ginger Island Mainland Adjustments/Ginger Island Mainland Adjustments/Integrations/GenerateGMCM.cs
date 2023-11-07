@@ -68,7 +68,12 @@ internal static class GenerateGMCM
                 setValue: static value => Globals.Config.Capacity = value,
                 tooltip: I18n.Config_Capacity_Description,
                 min: 0,
-                max: 12)
+                max: 15)
+            .AddBoolOption(
+                name: I18n.Config_Stage_Title,
+                getValue: static () => Globals.Config.StageFarNpcsAtSaloon,
+                setValue: static value => Globals.Config.StageFarNpcsAtSaloon = value,
+                tooltip: I18n.Config_Stage_Description)
             .AddNumberOption(
                 name: I18n.Config_GroupChance_Title,
                 getValue: static () => Globals.Config.GroupChance,
@@ -132,9 +137,9 @@ internal static class GenerateGMCM
         foreach ((string k, ScheduleStrictness v) in Globals.Config.ScheduleStrictness)
         {
             helper.AddEnumOption(
-                () => NPCCache.GetByVillagerName(k)?.displayName ?? k,
-                () => Globals.Config.ScheduleStrictness.TryGetValue(k, out ScheduleStrictness val) ? val : ScheduleStrictness.Default,
-                (value) => Globals.Config.ScheduleStrictness[k] = value);
+                name: () => NPCCache.GetByVillagerName(k)?.displayName ?? k,
+                getValue: () => Globals.Config.ScheduleStrictness.TryGetValue(k, out ScheduleStrictness val) ? val : ScheduleStrictness.Default,
+                setValue: (value) => Globals.Config.ScheduleStrictness[k] = value);
         }
 
         Globals.Helper.AsyncWriteConfig(Globals.ModMonitor, Globals.Config);

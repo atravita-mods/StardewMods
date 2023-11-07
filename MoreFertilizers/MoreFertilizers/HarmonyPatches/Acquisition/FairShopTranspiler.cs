@@ -53,7 +53,7 @@ internal static class FairShopTranspiler
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod somehow failed while adding to shop stock?\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("adding to fair shop stock", ex);
         }
         return shopStock;
     }
@@ -99,8 +99,7 @@ internal static class FairShopTranspiler
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod crashed while transpiling {original.FullDescription()}:\n\n{ex}", LogLevel.Error);
-            original.Snitch(ModEntry.ModMonitor);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }

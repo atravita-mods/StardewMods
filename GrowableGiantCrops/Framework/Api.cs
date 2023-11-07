@@ -1,4 +1,6 @@
-﻿using AtraShared.Utils.Extensions;
+﻿// Ignore Spelling: loc Api
+
+using AtraShared.Utils.Extensions;
 
 using GrowableGiantCrops.Framework.Assets;
 using GrowableGiantCrops.Framework.InventoryModels;
@@ -337,7 +339,7 @@ public sealed class Api : IGrowableGiantCropsAPI
             {
                 inventoryGiantCrop.modData?.CopyModDataFrom(giant.modData);
             }
-            inventoryGiantCrop.TileLocation = giant.tile.Value;
+            inventoryGiantCrop.TileLocation = giant.Tile;
             return inventoryGiantCrop;
         }
         return null;
@@ -427,7 +429,7 @@ public sealed class Api : IGrowableGiantCropsAPI
         }
         if (inventoryTree is not null)
         {
-            inventoryTree.TileLocation = tree.currentTileLocation;
+            inventoryTree.TileLocation = tree.Tile;
         }
         return inventoryTree;
     }
@@ -517,7 +519,7 @@ public sealed class Api : IGrowableGiantCropsAPI
         }
         if (inventoryTree is not null)
         {
-            inventoryTree.TileLocation = tree.currentTileLocation;
+            inventoryTree.TileLocation = tree.Tile;
         }
         return inventoryTree;
     }
@@ -565,7 +567,7 @@ public sealed class Api : IGrowableGiantCropsAPI
         if (loc.terrainFeatures?.TryGetValue(tile, out TerrainFeature? terrain) == true
             && terrain is FruitTree tree && this.CanPickUpFruitTree(tree, placedOnly) is not null)
         {
-            tree.shake(tile, true, loc);
+            tree.shake(tile, true);
             SObject? inventoryTree = this.GetMatchingFruitTree(tree);
             if (inventoryTree is InventoryFruitTree)
             {
@@ -584,7 +586,7 @@ public sealed class Api : IGrowableGiantCropsAPI
     /// <inheritdoc />
     public Grass? GetMatchingGrass(SObject starter)
     {
-        if (starter.ParentSheetIndex != SObjectPatches.GrassStarterIndex)
+        if (starter.QualifiedItemId != SObjectPatches.GrassStarterQualId)
         {
             return null;
         }
@@ -595,10 +597,6 @@ public sealed class Api : IGrowableGiantCropsAPI
             return SObjectPatches.InstantiateMoreGrassGrass?.Invoke(moreGrassIdx);
         }
 
-        if (starter.GetType() != typeof(SObject))
-        {
-            return null;
-        }
         if (starter.modData?.GetInt(SObjectPatches.ModDataKey) is not int idx)
         {
             return new Grass(Grass.springGrass, 4);
@@ -622,7 +620,7 @@ public sealed class Api : IGrowableGiantCropsAPI
         {
             starter = SObjectPatches.InstantiateMoreGrassStarter?.Invoke(grass.grassType.Value);
         }
-        starter ??= new(SObjectPatches.GrassStarterIndex, 1);
+        starter ??= new(SObjectPatches.GrassStarterId, 1);
         if (ModEntry.Config.PreserveModData)
         {
             starter.modData?.CopyModDataFrom(grass.modData);

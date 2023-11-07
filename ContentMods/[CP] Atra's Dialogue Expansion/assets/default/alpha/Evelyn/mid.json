@@ -1,3 +1,8 @@
+// Evelyn likes Harvey far more than George does, lol. 
+// She'll mother the guy a bit.
+
+// Let's make her a secretary/phone operator? for Accel.
+
 {"Changes":[
     {
         "LogName": "Evelyn mid-hearts",
@@ -5,15 +10,65 @@
         "Target": "Characters/Dialogue/Evelyn",
         "Entries": {
             "movieTheater": "@, there's a movie theater in town again! I can't wait to take George out, he used to love movies.#$b#Action movies were his absolute favorite, he loved the %name Smith series.$h",
-            "winter_7{{YearRemainder}}": "@, it's almost the Feast of the Winter Star! I'm always looking forward to the Feast around this time of year."
+            "spring_7{{YearRemainder}}": "Leeks are George's favorite. Won't you bring us any you find, dearie?%revealtasteGeorge20",
+            "spring_23{{YearRemainder}}": "I've been busy planting flowers for the flower dance! I hope you enjoy this year's flowers.$h",
+            "winter_7{{YearRemainder}}": "@, it's almost the Feast of the Winter Star! I'm always looking forward to the Feast around this time of year.",
+            "winter_9{{YearRemainder}}": "Oh, I should bring the good doctor a casserole, shouldn't I? The man works so hard, he doesn't take care of himself.",
+
+            "summer_Tue10": "Ah, @, don't the flowers in the town gardens smell so lovely?$h",
+            "fall_Wed10": "Penny helps me with the gardens when she can.#$b#She doesn't have that much free time, though, since she's responsible for teaching Jas and Vincent.",
+            "winter_Tue6": "Make sure to eat well, dearie! You need your strength to farm.",
+
+            "JoshHouse_Entry": "George, I'm home!"
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Alex - not taken.",
+        "Target": "Characters/Dialogue/Evelyn",
+        "When": {
+            "Query: {{Spouse:anyPlayer|contains=Alex}} OR {{Relationship:Alex|contains=Married, Dating, Engaged}}": false
+        },
+        "Entries": {
+            "4{{YearRemainder}}": "I wonder when Alex'll get married and start a family of his own..."
         }
     },
     {
         "Action": "EditData",
         "Target": "Characters/Dialogue/Evelyn",
+        "When": {"YearModulus": "1"},
         "Entries": {
-            "15_2": "Honey, I just made some cookies. Please have one, dearie. [223]$h"
+            "fall_Tue10": "Penny's like a granddaughter to me. She's a super sweet girl.",
+
+            "15{{YearRemainder}}": "I worry about Alex sometimes.#$b#My darling boy wants to go pro, but he never really wants to make any steps towards that.",
+            "16{{YearRemainder}}": "We didn't get a microwave until fairly late. I never trusted those. Not sure if they're safe, the way they zap your food."
+        }
+    },
+    {
+        "LogName": "Evelyn mid-hearts - y2",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Evelyn",
+        "When": {"YearModulus": "2"},
+        "Entries": {
+            "Mon10": "Oh, it's a lovely spring, isn't it, @#$e#Perfect weather for planting tulips! They're my favorite flower.[427]$h",
+            "summer_Mon10": "Summer spangles are Caroline's favorite flowers. I make sure to grow some in the community gardens every year.%revealtasteCaroline593",
+            "fall_Mon10": "Penny loves poppies. I always make sure to have a few around this time of year for her.%revealtastePenny376",
+            "winter_Mon10": "@, did you grow any fairy roses? They're Jas's favorite flower.$h%revealtasteJas595",
+
+            "15_2": "Honey, I just made some cookies. Please have one, dearie.[223]$h",
+            "16_2": "George bought me a washing machine for our tenth anniversary. I can't believe we used to wash all our clothing by hand!",
+            "17_2": "When I was your age, @, we didn't have all this technology.#$b#Frankly, I'm not sure it really makes our lives better...",
+            "18_2": "Alex is talking less about going pro these days...#$b#I've gotta get my grandson something to do with his life.",
         },
-        "When": {"YearModulus": "2"}
+    },
+    {
+        "LogName": "Evelyn mid-hearts - y4",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Evelyn",
+        "When": {"YearModulus": "4"},
+        "Entries": {
+            "15_2": "Ugh, we might have to cut back to a smaller cable package.$s",
+            "16_2": "I do wish George would go outside more often, that would be better for him than watching that TV all the time.$s"
+        }
     }
 ]}

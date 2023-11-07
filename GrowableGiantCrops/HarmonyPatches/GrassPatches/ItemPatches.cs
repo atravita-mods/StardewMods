@@ -1,4 +1,5 @@
-﻿using AtraShared.Utils.Extensions;
+﻿using AtraShared.ConstantsAndEnums;
+using AtraShared.Utils.Extensions;
 
 using HarmonyLib;
 
@@ -8,14 +9,14 @@ namespace GrowableGiantCrops.HarmonyPatches.GrassPatches;
 /// Adds patches against Item.
 /// </summary>
 [HarmonyPatch(typeof(Item))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class ItemPatches
 {
     [HarmonyPrefix]
     [HarmonyPatch(nameof(Item.canStackWith))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
     private static bool PrefixCanStackWith(Item __instance, ISalable other, ref bool __result)
     {
-        if (other is null || __instance.ParentSheetIndex != SObjectPatches.GrassStarterIndex)
+        if (other is null || __instance.QualifiedItemId != SObjectPatches.GrassStarterQualId)
         {
             return true;
         }
@@ -38,7 +39,7 @@ internal static class ItemPatches
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed in overwriting stacking behavior:\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("overwriting stacking behavior", ex);
         }
 
         return true;

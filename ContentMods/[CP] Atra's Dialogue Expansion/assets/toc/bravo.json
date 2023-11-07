@@ -1,0 +1,93 @@
+{"Changes":[
+    {
+        "Action": "Include",
+        "LogName": "Clint - mid hearts",
+        "FromFile": "{{FirstValidFile: assets/{{language}}/bravo/Clint/mid.json, assets/default/bravo/Clint/mid.json}}",
+        "When": {
+            "EnableFor": "Clint",
+            "Query: {{Hearts:Clint}} >= 6": true
+        }
+    },
+    {
+        "Action": "Include",
+        "LogName": "Emily - mid hearts",
+        "FromFile": "{{FirstValidFile: assets/{{language}}/bravo/Emily/mid.json, assets/default/bravo/Emily/mid.json}}",
+        "When": {
+            "EnableFor": "Emily",
+            "Query: {{Hearts:Emily}} >= 6": true
+        }
+    },
+    {
+        "Action": "Include",
+        "LogName": "Haley - mid hearts",
+        "FromFile": "{{FirstValidFile: assets/{{language}}/bravo/Haley/mid.json, assets/default/bravo/Haley/mid.json}}",
+        "When": {
+            "EnableFor": "Haley",
+            "Query: {{Hearts:Haley}} >= 6": true
+        }
+    },
+    {
+        "Action": "Include",
+        "LogName": "Haley - high hearts",
+        "FromFile": "{{FirstValidFile: assets/{{language}}/bravo/Haley/high.json, assets/default/bravo/Haley/high.json}}",
+        "When": {
+            "EnableFor": "Haley",
+            "Query: {{Hearts:Haley}} >= 8": true
+        }
+    },
+    {
+        "Action": "Include",
+        "LogName": "Harvey - mid hearts",
+        "FromFile": "{{FirstValidFile: assets/{{language}}/bravo/Harvey/mid.json, assets/default/bravo/Harvey/mid.json}}",
+        "When": {
+            "EnableFor": "Harvey",
+            "Query: {{Hearts:Harvey}} >= 6": true
+        }
+    },
+    {
+        "Action": "Include",
+        "LogName": "Harvey - mid hearts, realism",
+        "FromFile": "{{FirstValidFile: assets/{{language}}/bravo/Harvey/mid_realism.json, assets/default/bravo/Harvey/mid_realism.json}}",
+        "When": {
+            "EnableFor": "Harvey",
+            "Query: {{Hearts:Harvey}} >= 6": true,
+            "IncreasedRealism": true
+        }
+    },
+    {
+        "Action": "Include",
+        "LogName": "Jodi - mid hearts",
+        "FromFile": "{{FirstValidFile: assets/{{language}}/bravo/Jodi/mid.json, assets/default/bravo/Jodi/mid.json}}",
+        "When": {
+            "EnableFor": "Jodi",
+            "Query: {{Hearts:Jodi}} >= 6": true
+        }
+    },
+    {
+        "Action": "Include",
+        "LogName": "Kent - mid hearts",
+        "FromFile": "{{FirstValidFile: assets/{{language}}/bravo/Kent/mid.json, assets/default/bravo/Kent/mid.json}}",
+        "When": {
+            "EnableFor": "Kent",
+            "Query: {{Hearts:Kent}} >= 6": true
+        }
+    },
+    {
+        "Action": "Include",
+        "LogName": "Linus - mid hearts",
+        "FromFile": "{{FirstValidFile: assets/{{language}}/bravo/Linus/mid.json, assets/default/bravo/Linus/mid.json}}",
+        "When": {
+            "EnableFor": "Linus",
+            "Query: {{Hearts:Linus}} >= 6": true
+        }
+    },
+    {
+        "Action": "Include",
+        "LogName": "Vincent - mid hearts",
+        "FromFile": "{{FirstValidFile: assets/{{language}}/bravo/Vincent/mid.json, assets/default/bravo/Vincent/mid.json}}",
+        "When": {
+            "EnableFor": "Vincent",
+            "Query: {{Hearts:Vincent}} >= 6": true
+        }
+    }
+]}

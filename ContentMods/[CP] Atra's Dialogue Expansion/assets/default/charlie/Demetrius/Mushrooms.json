@@ -1,0 +1,24 @@
+{"Changes":[
+    {
+        "LogName": "Demetrius mid-hearts, Y2, mushrooms",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Demetrius",
+        "Entries": {
+            "7_2": "There's nothing like a nice ripe, juicy peach in the summer, right?%revealtasteRobin636#$b#Robin and I used to go down to the local farmers market and buy them by the box, back when we lived in the city.#$e#Here, I've got an extra, do you want it?[636]",
+
+            "12_2": "The mushrooms we see and eat? That's just the fruiting body.#$e#There's actually a lot more to the mushroom, just under the surface.$h"
+
+        },
+        "When": { "YearModulus": "2"}
+    },
+    {
+        "LogName": "Demetrius mid-hearts, Y3, mushrooms",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Demetrius",
+        "Entries": {
+            "7_2": "Mushrooms are actually closer to animals than plants!",
+            "8_2": "There are a few species of mushroom that are even bioluminescent!#$e#I've always wanted to cultivate a few around our house, so we can see at night.$h"
+        },
+        "When": { "YearModulus": "3"}
+    }
+]}

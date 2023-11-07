@@ -1,4 +1,6 @@
-﻿using HarmonyLib;
+﻿using AtraBase.Toolkit.Extensions;
+
+using HarmonyLib;
 using Netcode;
 using StardewValley.Locations;
 
@@ -15,7 +17,7 @@ internal static class VolcanoDungeonChest
     [HarmonyPatch(nameof(VolcanoDungeon.PopulateChest))]
     private static void PostfixPopulateChest(NetObjectList<Item> items, Random chest_random, int chest_type)
     {
-        if (chest_random.Next(3) == 0)
+        if (chest_random.RollDice(3))
         {
             int fertilizerToDrop = Game1.player.miningLevel.Value.GetRandomFertilizerFromLevel();
             if (fertilizerToDrop != -1)
@@ -23,14 +25,14 @@ internal static class VolcanoDungeonChest
                 items.Add(new SObject(fertilizerToDrop, Game1.random.Next(1, 4)));
             }
         }
-        else if (chest_type == 1 && chest_random.Next(2) == 0)
+        else if (chest_type == 1 && chest_random.OfChance(0.4))
         {
             if (ModEntry.MiraculousBeveragesID != -1)
             {
                 items.Add(new SObject(ModEntry.MiraculousBeveragesID, Game1.random.Next(2, 5)));
             }
         }
-        else if (chest_random.Next(2) == 0)
+        else if (chest_random.OfChance(0.5))
         {
             if (ModEntry.SeedyFertilizerID != -1)
             {
@@ -38,7 +40,7 @@ internal static class VolcanoDungeonChest
             }
         }
 
-        if (ModEntry.SecretJojaFertilizerID != -1 && chest_random.Next(1024) == 0)
+        if (ModEntry.SecretJojaFertilizerID != -1 && chest_random.RollDice(1024))
         {
             items.Add(new SObject(ModEntry.SecretJojaFertilizerID, 1));
         }

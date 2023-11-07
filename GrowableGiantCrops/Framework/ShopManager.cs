@@ -8,6 +8,7 @@ using AtraBase.Toolkit.Extensions;
 using AtraCore.Framework.Caches;
 
 using AtraShared.Caching;
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Menuing;
 using AtraShared.Utils;
 using AtraShared.Utils.Extensions;
@@ -24,6 +25,8 @@ using Microsoft.Xna.Framework;
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
 
+using StardewValley.Extensions;
+using StardewValley.GameData.Objects;
 using StardewValley.Menus;
 
 namespace GrowableGiantCrops.Framework;
@@ -33,6 +36,7 @@ namespace GrowableGiantCrops.Framework;
 /// </summary>
 [HarmonyPatch(typeof(Utility))]
 [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1214:Readonly fields should appear before non-readonly fields", Justification = "Reviewed.")]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class ShopManager
 {
     private const string BUILDING = "Buildings";
@@ -49,12 +53,12 @@ internal static class ShopManager
     #region shop state
 
     // giant crop shop state.
-    private static readonly PerScreen<Dictionary<int, int>?> Stock = new();
-    private static WeightedManager<int>? weighted;
+    private static readonly PerScreen<Dictionary<string, int>?> Stock = new();
+    private static WeightedManager<string>? weighted;
 
     // node shop state.
-    private static readonly PerScreen<Dictionary<int, int>?> NodeStock = new();
-    private static int[] nodes = null!;
+    private static readonly PerScreen<Dictionary<string, int>?> NodeStock = new();
+    private static string[] nodes = null!;
 
     #endregion
 
@@ -79,22 +83,19 @@ internal static class ShopManager
         robinHouse = parser.ParseAssetName("Maps/ScienceHouse");
         witchHouse = parser.ParseAssetName("Maps/WitchHut");
         mail = parser.ParseAssetName("Data/mail");
-        dataObjectInfo = parser.ParseAssetName("Data/ObjectInformation");
+        dataObjectInfo = parser.ParseAssetName("Data/Objects");
 
         stringUtils = new(ModEntry.ModMonitor);
 
-        HashSet<int> nodesList = new();
-        foreach ((int index, string data) in Game1.objectInformation)
+        List<string> nodesList = new();
+        foreach ((string index, ObjectData? data) in Game1.objectData)
         {
-            if (index == 390)
+            if (index == "390")
             {
                 continue;
             }
-            ReadOnlySpan<char> name = data.GetNthChunk('/');
-            if (name.Equals("Stone", StringComparison.OrdinalIgnoreCase)
-                || name.Equals("Weeds", StringComparison.OrdinalIgnoreCase)
-                || name.Equals("Twig", StringComparison.OrdinalIgnoreCase)
-                || name.Equals("SupplyCrate", StringComparison.OrdinalIgnoreCase))
+
+            if (data.Category == SObject.litterCategory)
             {
                 nodesList.Add(index);
             }
@@ -181,7 +182,7 @@ internal static class ShopManager
                 interval = 50000f,
                 totalNumberOfLoops = 9999,
                 scale = 4f,
-                layerDepth = (((tile.Y - 0.5f) * Game1.tileSize) / 10000f) + 0.01f, // a little offset so it doesn't show up on the floor.
+                layerDepth = MathF.BitIncrement((((tile.Y - 0.5f) * Game1.tileSize) / 10000f) + 0.01f), // a little offset so it doesn't show up on the floor.
                 id = 777f,
             });
         }
@@ -218,8 +219,12 @@ internal static class ShopManager
             return;
         }
 
+        int x = (int)e.Cursor.GrabTile.X;
+        int y = (int)e.Cursor.GrabTile.Y;
+
         if (Game1.currentLocation.Name == "ScienceHouse"
-            && Game1.currentLocation.doesTileHaveProperty((int)e.Cursor.GrabTile.X, (int)e.Cursor.GrabTile.Y, "Action", BUILDING) == RESOURCE_SHOP_NAME
+            && (Game1.currentLocation.doesTileHaveProperty(x, y, "Action", BUILDING) == RESOURCE_SHOP_NAME
+                || Game1.currentLocation.doesTileHaveProperty(x, y + 1, "Action", BUILDING) == RESOURCE_SHOP_NAME)
             && Game1.player.hasOrWillReceiveMail(RESOURCE_SHOP_NAME))
         {
             input.SurpressClickInput();
@@ -237,7 +242,8 @@ internal static class ShopManager
             Game1.activeClickableMenu = shop;
         }
         else if (Game1.currentLocation.Name == "WitchHut"
-            && Game1.currentLocation.doesTileHaveProperty((int)e.Cursor.GrabTile.X, (int)e.Cursor.GrabTile.Y, "Action", BUILDING) == GIANT_CROP_SHOP_NAME)
+            && (Game1.currentLocation.doesTileHaveProperty(x, y, "Action", BUILDING) == GIANT_CROP_SHOP_NAME
+            || Game1.currentLocation.doesTileHaveProperty(x, y, "Action", BUILDING) == GIANT_CROP_SHOP_NAME))
         {
             input.SurpressClickInput();
 
@@ -251,10 +257,15 @@ internal static class ShopManager
     /// <summary>
     /// Clears the shop state.
     /// </summary>
-    internal static void Reset()
+    /// <param name="toTitle">Whether or not this is a return to the title screen.</param>
+    internal static void Reset(bool toTitle = false)
     {
         Stock.Value = null;
         NodeStock.Value = null;
+        if (toTitle)
+        {
+            HaveSentAllRobinMail.ResetAllScreens();
+        }
     }
 
     /// <inheritdoc cref="IGameLoopEvents.DayEnding"/>
@@ -307,17 +318,17 @@ internal static class ShopManager
                 Stock.Value[crop.ParentSheetIndex] = remaining;
             }
         }
-        else if (salable.GetType() == typeof(SObject) && salable is SObject obj && !obj.bigCraftable.Value
-            && NodeStock.Value?.TryGetValue(obj.ParentSheetIndex, out int remainder) == true)
+        else if (salable is SObject obj && obj.HasTypeObject()
+            && NodeStock.Value?.TryGetValue(obj.ItemId, out int remainder) == true)
         {
             remainder -= count;
             if (remainder <= 0)
             {
-                NodeStock.Value.Remove(obj.ParentSheetIndex);
+                NodeStock.Value.Remove(obj.ItemId);
             }
             else
             {
-                NodeStock.Value[obj.ParentSheetIndex] = remainder;
+                NodeStock.Value[obj.ItemId] = remainder;
             }
         }
         return false; // do not want to yeet the menu.
@@ -330,7 +341,6 @@ internal static class ShopManager
     /// </summary>
     /// <param name="__result">shop inventory to add to.</param>
     [HarmonyPatch(nameof(Utility.getAllFurnituresForFree))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
     private static void Postfix(Dictionary<ISalable, int[]> __result)
     {
         try
@@ -339,7 +349,7 @@ internal static class ShopManager
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed while trying to add grass to the catalogue\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("adding grass to the catalogue", ex);
         }
     }
 
@@ -391,7 +401,7 @@ internal static class ShopManager
                 continue;
             }
 
-            SObject grassStarter = new(SObjectPatches.GrassStarterIndex, 1);
+            SObject grassStarter = new(SObjectPatches.GrassStarterId, 1);
             grassStarter.modData?.SetInt(SObjectPatches.ModDataKey, (int)grass);
             _ = sellables.TryAdd(grassStarter, new[] { cheaper ? 100 : 500, ShopMenu.infiniteStock });
         }
@@ -468,7 +478,7 @@ internal static class ShopManager
     private static Dictionary<int, int>? GenerateNodeShop()
     {
         Dictionary<int, int> chosen = new(4);
-        ShuffledYielder<int> shuffler = new(nodes);
+        ShuffledYielder<string> shuffler = new(nodes);
         int total = 4;
         while (shuffler.MoveNext() && total-- > 0)
         {
@@ -509,7 +519,7 @@ internal static class ShopManager
 
         for (int i = 0; i < totalCount; i++)
         {
-            Option<int> picked = weighted.GetValue();
+            Option<string> picked = weighted.GetValue();
             if (picked.IsNone)
             {
                 continue;
@@ -527,24 +537,23 @@ internal static class ShopManager
         return chosen;
     }
 
-    private static int? GetPriceOfProduct(int idx)
+    private static int? GetPriceOfProduct(string idx)
     {
-        if (Game1Wrappers.ObjectInfo.TryGetValue(idx, out string? info)
-            && int.TryParse(info.GetNthChunk('/', SObject.objectInfoPriceIndex), out int price))
+        if (Game1Wrappers.ObjectData.TryGetValue(idx, out var info))
         {
             // qi fruit exception
-            if (idx == 890)
+            if (idx == "890")
             {
                 return 150;
             }
-            return price;
+            return info.Price;
         }
         return null;
     }
 
-    private static int? PriceNode(int idx)
-        => Game1Wrappers.ObjectInfo.TryGetValue(idx, out string? info)
-            ? info.GetNthChunk('/').Equals("Stone", StringComparison.OrdinalIgnoreCase) ? 2_750 : 1_000
+    private static int? PriceNode(string idx)
+        => Game1Wrappers.ObjectData.TryGetValue(idx, out var info)
+            ? info.Name.Equals("Stone", StringComparison.OrdinalIgnoreCase) ? 2_750 : 1_000
             : null;
 
     #endregion

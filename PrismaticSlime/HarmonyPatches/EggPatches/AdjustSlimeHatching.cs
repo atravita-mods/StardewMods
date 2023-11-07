@@ -5,6 +5,8 @@ using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
+
+using StardewValley.Extensions;
 using StardewValley.Monsters;
 
 namespace PrismaticSlime.HarmonyPatches.EggPatches;
@@ -16,7 +18,7 @@ namespace PrismaticSlime.HarmonyPatches.EggPatches;
 internal static class AdjustSlimeHatching
 {
     private static bool IsPrismaticSlimeEgg(SObject obj)
-        => ModEntry.PrismaticSlimeEgg != -1 && obj.ParentSheetIndex == ModEntry.PrismaticSlimeEgg;
+        => obj.HasTypeObject() && obj.ItemId == ModEntry.PrismaticSlimeEgg;
 
     private static GreenSlime MakePrismaticSlime(Vector2 position)
     {
@@ -93,8 +95,7 @@ internal static class AdjustSlimeHatching
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Ran into error transpiling {original.FullDescription()}.\n\n{ex}", LogLevel.Error);
-            original.Snitch(ModEntry.ModMonitor);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }

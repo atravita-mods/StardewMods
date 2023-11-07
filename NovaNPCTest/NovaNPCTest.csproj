@@ -7,21 +7,15 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <Name>Nova NPC Test</Name>
-    <Description>Adds museum rewards to a store.</Description>
+    <Name>Eli and Dylan Code</Name>
+    <Description>Code unit for Eli and Dylan.</Description>
     <UpdateKeys>-1</UpdateKeys>
-    <Version>0.1.0</Version>
-    <BaseManifest>..\base_dependencies.json</BaseManifest>
+    <Version>0.1.2</Version>
   </PropertyGroup>
 
   <PropertyGroup>
     <TranslationClassBuilder_AddGetByKey>true</TranslationClassBuilder_AddGetByKey>
   </PropertyGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\AtraCore\AtraCore.csproj" Private="false" />
-    <ProjectReference Include="..\Pintail\Pintail\Pintail.csproj" Private="false" />
-  </ItemGroup>
 
   <ItemGroup>
     <Using Include="StardewValley" />

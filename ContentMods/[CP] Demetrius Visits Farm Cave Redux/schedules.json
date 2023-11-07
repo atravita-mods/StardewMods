@@ -1,0 +1,37 @@
+{
+    "Changes": [
+        {
+            "LogName": "Add farm cave visit schedule",
+            "Action": "EditData",
+            "Target": "Characters/schedules/Demetrius",
+            "Entries": {
+                "{{DemetriusVisitDay}}": "0 FarmCave {{XPosition}} {{YPosition}} 1/610 FarmCave {{XPosition}} {{YPosition}} 1 demetrius_notes"
+            },
+        },
+        {
+            "LogName": "Override rain schedule",
+            "Action": "EditData",
+            "Target": "Characters/schedules/Demetrius",
+            "Entries": {
+                "rain": "GOTO {{DemetriusVisitDay}}",
+                "rain2": null,
+            },
+            "When": {
+                "Weather:valley": "rain, storm",
+                "Query: '{{DayOfWeek}}' LIKE '{{DemetriusVisitDay}}*'": true
+            }
+        },
+        { // Prevent Demetrius from going on vacation
+            "Action": "EditData",
+            "Target": "Data/Characters",
+            "Fields": {
+                "Demetrius": {
+                    "CanVisitIslandCondition": "FALSE"
+                }
+            },
+            "When": {
+                "Query: '{{Day}}' LIKE '{{DemetriusVisitDay}}' OR '{{DayOfWeek}}' LIKE '{{DemetriusVisitDay}}*'": true
+            }
+        }
+    ]
+}

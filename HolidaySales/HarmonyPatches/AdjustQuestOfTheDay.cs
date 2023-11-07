@@ -1,5 +1,5 @@
-﻿using HarmonyLib;
-
+﻿using AtraShared.Utils.Extensions;
+using HarmonyLib;
 using AtraUtils = AtraShared.Utils.Utils;
 
 namespace HolidaySales.HarmonyPatches;
@@ -30,9 +30,9 @@ internal static class AdjustQuestOfTheDay
                 }
 
                 // else, check if today or tomorrow is a festival day for vanilla locations.
-                if (!HSUtils.IsFestivalDayForMap(Game1.dayOfMonth, Game1.currentSeason, "Town"))
+                if (!HSUtils.IsFestivalDayForMap(Game1.dayOfMonth, Game1.season, "Town"))
                 {
-                    (string season, int day) = AtraUtils.GetTomorrow(Game1.currentSeason, Game1.dayOfMonth);
+                    (var season, int day) = AtraUtils.GetTomorrow(Game1.season, Game1.dayOfMonth);
                     if (!HSUtils.IsFestivalDayForMap(day, season, "Town"))
                     {
                         Game1.questOfTheDay = Utility.getQuestOfTheDay();
@@ -42,7 +42,7 @@ internal static class AdjustQuestOfTheDay
             }
             catch (Exception ex)
             {
-                ModEntry.ModMonitor.Log($"Mod failed while adjusting Daily Quest\n\n{ex}", LogLevel.Error);
+                ModEntry.ModMonitor.LogError("adjusting Daily Quest", ex);
             }
         }
         return true;

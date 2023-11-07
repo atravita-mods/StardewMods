@@ -33,4 +33,6 @@
     <Folder Include="assets\textures\" />
   </ItemGroup>
 
+  <ProjectExtensions><VisualStudio><UserProperties manifest_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
+
 </Project>

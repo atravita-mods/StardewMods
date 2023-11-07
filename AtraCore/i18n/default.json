@@ -4,5 +4,20 @@
   "IllFormatedConfig": "Config file seems ill-formated, using default. Please use Generic Mod Config Menu to configure.",
 
   "api-not-found": "{{APIID}} not found, integration disabled.",
-  "api-too-old": "Please update {{apiName}}({{APIID}}) to at least version {{minversion}}. Current version {{currentversion}}. Integration disabled."
+  "api-too-old": "Please update {{apiName}}({{APIID}}) to at least version {{minversion}}. Current version {{currentversion}}. Integration disabled.",
+
+  // ring text
+  "current-effects": "Current Effects",
+  "emits-light": "Emits light",
+  "restores-stamina": "{{amount}} Stamina/s",
+  "restores-health": "{{amount}} Health/s",
+  "ring-precision": "{0} Weapon Precision",
+  "glows": "Glows",
+  "knockback": "{{amount}} Knockback",
+  "weapon-precision": "{{amount}} Weapon Precision",
+  "weapon-speed": "{{amount}} Weapon Speed",
+  "defense": "{{amount}} Defense",
+  "immunity": "{{amount}} Immunity",
+  "critchance": "{{amount}} Crit. Chance",
+  "critpower": "{{amount}} Crit. Power"
 }

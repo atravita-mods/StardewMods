@@ -40,13 +40,11 @@ internal class GenerateCPTokens
         api.RegisterToken(manifest, "Musician", () => GIScheduler.Musician is null ? null : new[] { GIScheduler.Musician.displayName });
         api.RegisterToken(manifest, "Islanders", () =>
         {
-            if (Context.IsWorldReady)
+            if (Context.IsWorldReady && Game1.netWorldState.Value.IslandVisitors.Count != 0)
             {
-                List<string> islanders = Islanders.Get();
-                if (islanders.Count > 0)
-                {
-                    return islanders.ToArray();
-                }
+                string[] ret = Game1.netWorldState.Value.IslandVisitors.ToArray();
+                Array.Sort(ret, StringComparer.Ordinal);
+                return ret;
             }
             return null;
         });

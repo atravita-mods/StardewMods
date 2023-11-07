@@ -105,7 +105,7 @@ internal static class AssetManager
     {
         DataMail = parser.ParseAssetName("Data/mail");
         CropName = parser.ParseAssetName("Data/Crops");
-        objectInfoName = parser.ParseAssetName("Data/ObjectInformation");
+        objectInfoName = parser.ParseAssetName("Data/Objects");
         accessLists = parser.ParseAssetName("Mods/atravita.LastDayToPlantRedux/AccessControl");
     }
 

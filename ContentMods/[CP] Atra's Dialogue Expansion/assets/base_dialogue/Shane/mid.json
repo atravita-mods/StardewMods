@@ -1,0 +1,14 @@
+{"Changes":[
+    {
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Shane",
+        "LogName": "Shane Base - sports room.",
+        "Entries": {
+            "Sun8": "{{i18n:shane-sports-sun|first = {{FirstSportsTeam}} | second = {{SecondSportsTeam}} }}$h#$b#{{i18n:shane-sports-sun.{{Random:01, 02, 03, 04}} }}",
+            "Mon8": "{{i18n:shane-sports-mon|reaction = {{i18n: {{Random:great, incredible, exciting}} }} }}$h"
+        },
+        "When": {
+            "HasReadLetter": "saloonSportsRoom"
+        }
+    }
+]}

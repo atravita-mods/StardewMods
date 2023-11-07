@@ -9,7 +9,7 @@
   <PropertyGroup>
     <Name>Revive Dead Crops</Name>
     <Description>Lets you revive dead crops.</Description>
-    <Version>0.1.0</Version>
+    <Version>0.2.0</Version>
     <UpdateKeys>Nexus:15005</UpdateKeys>
     <BaseManifest>..\base_dependencies.json</BaseManifest>
   </PropertyGroup>

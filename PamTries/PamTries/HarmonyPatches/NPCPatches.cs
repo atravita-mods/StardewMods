@@ -1,4 +1,8 @@
-﻿using HarmonyLib;
+﻿using AtraShared.ConstantsAndEnums;
+using AtraShared.Utils.Extensions;
+
+using HarmonyLib;
+
 using Microsoft.Xna.Framework;
 
 namespace PamTries.HarmonyPatches;
@@ -7,6 +11,7 @@ namespace PamTries.HarmonyPatches;
 /// Class that holds patches against NPC so Pam can fish.
 /// </summary>
 [HarmonyPatch(typeof(NPC))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class NPCPatches
 {
     /// <summary>
@@ -17,7 +22,6 @@ internal static class NPCPatches
     [UsedImplicitly]
     [HarmonyPostfix]
     [HarmonyPatch("startRouteBehavior")]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Convention set by Harmony.")]
     private static void StartFishBehavior(NPC __instance, string __0)
     {
         try
@@ -26,17 +30,17 @@ internal static class NPCPatches
             {
                 __instance.extendSourceRect(0, 32);
                 __instance.Sprite.tempSpriteHeight = 64;
-                __instance.drawOffset.Value = new Vector2(0f, 96f);
+                __instance.drawOffset = new Vector2(0f, 96f);
                 __instance.Sprite.ignoreSourceRectUpdates = false;
                 if (Utility.isOnScreen(Utility.Vector2ToPoint(__instance.Position), 64, __instance.currentLocation))
                 {
-                    __instance.currentLocation.playSoundAt("slosh", __instance.getTileLocation());
+                    __instance.currentLocation.playSound("slosh", __instance.Tile);
                 }
             }
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed to adjust startRouteBehavior for Pam\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("adjusting startRouteBehavior for Pam", ex);
         }
     }
 
@@ -48,7 +52,6 @@ internal static class NPCPatches
     [UsedImplicitly]
     [HarmonyPostfix]
     [HarmonyPatch("finishRouteBehavior")]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Convention set by Harmony.")]
     private static void EndFishBehavior(NPC __instance, string __0)
     {
         try
@@ -59,14 +62,14 @@ internal static class NPCPatches
                 __instance.Sprite.SpriteWidth = 16;
                 __instance.Sprite.SpriteHeight = 32;
                 __instance.Sprite.UpdateSourceRect();
-                __instance.drawOffset.Value = Vector2.Zero;
+                __instance.drawOffset = Vector2.Zero;
                 __instance.Halt();
                 __instance.movementPause = 1;
             }
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed to adjust finishRouteBehavior for Pam\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("adjusting finishRouteBehavior for Pam", ex);
         }
     }
 }

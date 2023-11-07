@@ -1,12 +1,13 @@
 ﻿using AtraBase.Toolkit.Extensions;
 
 using AtraShared.Caching;
-using AtraShared.Utils.Extensions;
 
 using Microsoft.Xna.Framework.Graphics;
 
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
+
+using StardewValley.GameData.WildTrees;
 
 namespace StopRugRemoval;
 
@@ -18,12 +19,11 @@ internal static class AssetEditor
 {
     private static IAssetName saloonEvents = null!;
     private static IAssetName betIconsPath = null!;
+    private static IAssetName wildTrees = null!;
     private static Lazy<Texture2D> betIconLazy = new(static () => Game1.content.Load<Texture2D>(betIconsPath.BaseName));
 
     private static readonly PerScreen<TickCache<bool>> HasSeenSaloonEvent = new(
-        () => new (static () => Game1.player?.eventsSeen?.Contains(40) == true));
-
-    private static IAssetName weapons = null!;
+        () => new (static () => Game1.player?.eventsSeen?.Contains("40") == true));
 
     #region birdiequest
 
@@ -46,7 +46,7 @@ internal static class AssetEditor
     {
         saloonEvents = parser.ParseAssetName("Data/Events/Saloon");
         betIconsPath = parser.ParseAssetName("Mods/atravita_StopRugRemoval_BetIcons");
-        weapons = parser.ParseAssetName("Data/weapons");
+        wildTrees = parser.ParseAssetName("Data/WildTrees");
 
         const string dialogue = "Characters/Dialogue/";
         BirdieQuest.Add(parser.ParseAssetName($"{dialogue}Kent"), 864);
@@ -95,7 +95,7 @@ internal static class AssetEditor
                     if (!data.ContainsKey(key))
                     {
                         string character = e.NameWithoutLocale.BaseName.GetNthChunk('/', 2).ToString();
-                        ModEntry.ModMonitor.LogOnce($"Found NPC {character} missing Birdie quest dialogue key {key}. This is likely because you installed an older dialogue mod that is replacing all of this charcter's dialogue. This may cause issues.", LogLevel.Warn);
+                        ModEntry.ModMonitor.LogOnce($"Found NPC {character} missing Birdie quest dialogue key {key}. This is likely because you installed an older dialogue mod that is replacing all of this character's dialogue. This may cause issues.", LogLevel.Warn);
                         contentManager ??= new(Game1.content.ServiceProvider, Game1.content.RootDirectory);
                         try
                         {
@@ -116,39 +116,7 @@ internal static class AssetEditor
                 },
                 AssetEditPriority.Late + 1000);
         }
-        else if (e.NameWithoutLocale.IsEquivalentTo(weapons))
-        {
-            e.Edit(
-                static (asset) =>
-                {
-                    ModEntry.ModMonitor.DebugOnlyLog("Checking weapons");
-                    IDictionary<int, string> data = asset.AsDictionary<int, string>().Data;
-
-                    // check golden scythe and infinity gavel.
-                    if (!data.ContainsKey(53) || !data.ContainsKey(63))
-                    {
-                        ModEntry.ModMonitor.LogOnce("Missing weapons detected, are you using a weapons mod made before 1.5?", LogLevel.Error);
-                        contentManager ??= new(Game1.content.ServiceProvider, Game1.content.RootDirectory);
-                        try
-                        {
-                            Dictionary<int, string> original = contentManager.LoadBase<Dictionary<int, string>>(asset.NameWithoutLocale.BaseName);
-                            foreach ((int key, string value) in original)
-                            {
-                                if (data.TryAdd(key, value))
-                                {
-                                    ModEntry.ModMonitor.LogOnce($"Restoring missing weapon: {key}", LogLevel.Info);
-                                }
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            ModEntry.ModMonitor.Log($"Could not find original weapons file:\n\n{ex}");
-                        }
-                    }
-                },
-                AssetEditPriority.Late + 1000);
-        }
-        else if (Context.IsWorldReady && e.NameWithoutLocale.IsEquivalentTo(betIconsPath))
+        else if (e.NameWithoutLocale.IsEquivalentTo(betIconsPath))
         { // The BET1k/10k icons have to be localized, so they're in the i18n folder.
             string filename = "BetIcons.png";
 
@@ -158,7 +126,7 @@ internal static class AssetEditor
                 LocalizedContentManager.LanguageCode locale = Game1.content.GetCurrentLanguage();
                 if (locale != LocalizedContentManager.LanguageCode.mod)
                 {
-                    localeFilename = $"BetIcons.{Game1.content.LanguageCodeString(locale)}.png";
+                    localeFilename = $"BetIcons.{LocalizedContentManager.LanguageCodeString(locale)}.png";
                 }
                 else
                 {
@@ -171,7 +139,35 @@ internal static class AssetEditor
             }
             e.LoadFromModFile<Texture2D>(Path.Combine("i18n", filename), AssetLoadPriority.Low);
         }
+        else if (ModEntry.Config.GoldenCoconutsOffIsland && e.NameWithoutLocale.IsEquivalentTo(wildTrees))
+        {
+            e.Edit(EditWildTrees);
+        }
     }
+
+    #region wild trees
+
+    private static void EditWildTrees(IAssetData data)
+    {
+        var editor = data.AsDictionary<string, WildTreeData>().Data;
+        EditCoconut(editor, "6");
+        EditCoconut(editor, "9");
+    }
+
+    private static void EditCoconut(IDictionary<string, WildTreeData> editor, string id)
+    {
+        if (editor.TryGetValue(id, out var bigPalm)
+            && bigPalm.SeedDropItems.FirstOrDefault(item => item.Id == "GoldenCoconut") is { } entry && entry.Condition is not null)
+        {
+            entry.Condition = entry.Condition.Replace("LOCATION_CONTEXT Target Island", "WORLD_STATE_FIELD GoldenCoconutCracked true");
+        }
+        else
+        {
+            ModEntry.ModMonitor.Log($"Can't find small palm tree.");
+        }
+    }
+
+    #endregion
 
     /// <inheritdoc cref="IContentEvents.AssetRequested"/>
     /// <remarks>

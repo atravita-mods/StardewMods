@@ -4,6 +4,8 @@ using AtraShared.Utils.Extensions;
 using GingerIslandMainlandAdjustments.Utils;
 using StardewModdingAPI.Utilities;
 
+using StardewValley.Pathfinding;
+
 namespace GingerIslandMainlandAdjustments.CustomConsoleCommands;
 
 /// <summary>
@@ -120,7 +122,7 @@ internal static class ConsoleCommands
                 return;
             }
         }
-        if (Game1.netWorldState.Value.IslandVisitors.TryGetValue(npc.Name, out bool atIsland) && atIsland)
+        if (Game1.netWorldState.Value.IslandVisitors.Contains(npc.Name))
         {
             Globals.ModMonitor.Log('\t' + I18n.DisplaySchedule_ToIsland(npc.Name), level);
             if (IslandSchedules.TryGetValue(npc.Name, out string? schedulestring))
@@ -180,7 +182,8 @@ internal static class ConsoleCommands
                 continue;
             }
             int expectedRouteTime = schedulePathDescription.GetExpectedRouteTime();
-            sb.Append('\t').Append(key).Append(": ");
+            sb.Append('\t').Append(key).Append(' ')
+                .Append(schedulePathDescription.targetLocationName).Append(' ').Append(schedulePathDescription.targetTile).Append(": ");
             sb.AppendJoin(", ", schedulePathDescription.route).AppendLine();
             sb.Append("\t\t").Append(I18n.DisplaySchedule_ExpectedTime()).Append(expectedRouteTime).AppendLine(I18n.DisplaySchedule_ExpectedTime_Minutes());
             sb.Append("\t\t").Append(I18n.DisplaySchedule_ExpectedArrival()).AppendLine(Utility.ModifyTime(key, expectedRouteTime).ToString());
@@ -235,22 +238,27 @@ internal static class ConsoleCommands
         {
             return;
         }
-        if (Globals.ReflectionHelper.GetField<List<List<string>>>(typeof(NPC), "routesFromLocationToLocation").GetValue() is not List<List<string>> locations)
+        if (Globals.ReflectionHelper.GetField<Dictionary<string, List<LocationWarpRoute>>>(typeof(WarpPathfindingCache), "Routes").GetValue() is not { } routes)
         {
-            Globals.ModMonitor.Log(I18n.GetLocations_NoneFound(), LogLevel.Info);
+            ModEntry.ModMonitor.Log($"Routes not found.", LogLevel.Warn);
             return;
         }
+
         HashSet<string> locations_to_find = new(args, StringComparer.OrdinalIgnoreCase);
         if (args.Length > 0)
         {
             Globals.ModMonitor.Log($"Looking for {string.Join(", ", args)} in routesFromLocationToLocation", LogLevel.Info);
         }
-        Func<List<string>, bool> filter = args.Length == 0 ? (_) => true : (List<string> loclist) => locations_to_find.Intersect(loclist, StringComparer.OrdinalIgnoreCase).Any();
-        foreach (List<string>? loclist in locations)
+        Func<string[], bool> filter = args.Length == 0 ? (_) => true : (string[] loclist) => loclist.Any(a => locations_to_find.Contains(a));
+        foreach (List<LocationWarpRoute> locations in routes.Values)
         {
-            if (loclist is not null && filter(loclist))
+            foreach (LocationWarpRoute locationWarpRoute in locations)
             {
-                Globals.ModMonitor.Log(string.Join(", ", loclist), LogLevel.Info);
+                string[]? loclist = locationWarpRoute.LocationNames;
+                if (loclist is not null && filter(loclist))
+                {
+                    Globals.ModMonitor.Log(string.Join(", ", loclist), LogLevel.Info);
+                }
             }
         }
     }

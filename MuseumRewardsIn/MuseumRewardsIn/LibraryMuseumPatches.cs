@@ -1,12 +1,12 @@
-﻿using AtraShared.Utils.Extensions;
+﻿namespace MuseumRewardsIn;
+
+using AtraShared.Utils.Extensions;
 
 using HarmonyLib;
 
 using StardewModdingAPI.Events;
 
 using StardewValley.Locations;
-
-namespace MuseumRewardsIn;
 
 /// <summary>
 /// Holds patches against LibraryMuseum.
@@ -30,15 +30,15 @@ internal static class LibraryMuseumPatches
             {
                 item.modData.Remove(MUSEUM_MARKER);
                 item.specialItem = false;
-                ModEntry.ModMonitor.DebugOnlyLog($"Removing special flag from {item.Name}");
+                ModEntry.ModMonitor.DebugOnlyLog($"Removing special flag from {item.QualifiedItemId}.");
             }
         }
     }
 
-    [HarmonyPatch(nameof(LibraryMuseum.collectedReward))]
+    [HarmonyPatch(nameof(LibraryMuseum.OnRewardCollected))]
     private static void Postfix(Item item)
     {
-        if (item.specialItem == true)
+        if (item.specialItem)
         {
             item.modData?.SetBool(MUSEUM_MARKER, true);
         }

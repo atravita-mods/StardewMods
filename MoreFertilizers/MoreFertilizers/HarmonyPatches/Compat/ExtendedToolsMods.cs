@@ -1,5 +1,8 @@
 ﻿using System.Reflection;
+
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
+
 using HarmonyLib;
 
 namespace MoreFertilizers.HarmonyPatches.Compat;
@@ -10,6 +13,7 @@ namespace MoreFertilizers.HarmonyPatches.Compat;
 /// scarecrows function in a prefix that's quite out of date.
 /// </summary>
 /// <remarks>This is why atra doesn't like prefixing false unnecessarily, guys.</remarks>
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class ExtendedToolsMods
 {
     /// <summary>
@@ -38,7 +42,6 @@ internal static class ExtendedToolsMods
         }
     }
 
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
     private static bool Prefix(ref bool __result)
     {
         ModEntry.ModMonitor.DebugOnlyLog("Disabling addCrows prefix for Prismatic Tools and Radioactive tools", LogLevel.Info);

@@ -1,4 +1,8 @@
-﻿using AtraShared.ConstantsAndEnums;
+﻿using AtraBase.Toolkit.Extensions;
+
+using AtraCore;
+
+using AtraShared.ConstantsAndEnums;
 
 using Microsoft.Xna.Framework;
 
@@ -17,7 +21,7 @@ internal static class MiraculousFertilizerHandler
     /// </summary>
     internal static void Initialize()
     {
-        keg = new SObject(Vector2.Zero, (int)VanillaMachinesEnum.Keg);
+        keg = new SObject(Vector2.Zero, "12");
     }
 
     /// <summary>
@@ -25,7 +29,7 @@ internal static class MiraculousFertilizerHandler
     /// </summary>
     /// <param name="objindex">The index of the crop.</param>
     /// <returns>The beverage, if any.</returns>
-    internal static SObject? GetBeverage(int objindex)
+    internal static SObject? GetBeverage(string objindex)
         => GetBeverage(new SObject(objindex, 999));
 
     /// <summary>
@@ -49,7 +53,7 @@ internal static class MiraculousFertilizerHandler
         keg.heldObject.Value = null;
         keg.performObjectDropInAction(item, false, Game1.player);
         SObject? heldobj = keg.heldObject.Value;
-        if (heldobj?.getOne() is SObject returnobj && Game1.random.NextDouble() < (25.0 + Game1.player.LuckLevel) / Math.Max(heldobj.Price, 150))
+        if (heldobj?.getOne() is SObject returnobj && Random.Shared.OfChance((25.0 + Game1.player.LuckLevel) / Math.Max(heldobj.Price, 200)))
         {
             return returnobj;
         }

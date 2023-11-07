@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using AtraBase.Toolkit;
 using AtraBase.Toolkit.Reflection;
 
+using AtraCore;
 using AtraCore.Framework.ReflectionManager;
 
 using AtraShared.ConstantsAndEnums;
@@ -42,24 +43,6 @@ internal sealed class ModEntry : Mod
             harmony.Patch(
                 original: typeof(FarmAnimal).GetCachedMethod("findTruffle", ReflectionCache.FlagTypes.InstanceFlags),
                 transpiler: new(typeof(ModEntry).GetCachedMethod(nameof(Transpiler), ReflectionCache.FlagTypes.StaticFlags)));
-
-            if (this.Helper.ModRegistry.Get("Paritee.BetterFarmAnimalVariety") is IModInfo bfav
-                && bfav.Manifest.Version.IsNewerThan("3.2.3"))
-            {
-                this.Monitor.Log("Patching bfav for compat", LogLevel.Info);
-
-                Type? patch = AccessTools.TypeByName("BetterFarmAnimalVariety.Framework.Patches.FarmAnimal.FindTruffle");
-                if (patch is not null)
-                {
-                    harmony.Patch(
-                        original: patch.StaticMethodNamed("ShouldStopFindingProduce"),
-                        transpiler: new(typeof(ModEntry).GetCachedMethod(nameof(BFAVTranspiler), ReflectionCache.FlagTypes.StaticFlags)));
-                }
-                else
-                {
-                    this.Monitor.Log("BFAV could not be patched for compat, this mod will probably not work.", LogLevel.Warn);
-                }
-            }
         }
         catch (Exception ex)
         {
@@ -89,10 +72,10 @@ internal sealed class ModEntry : Mod
         }
         catch (Exception ex)
         {
-            modMonitor.Log($"Failed while trying to generate random for pig {id}:\n\n{ex}", LogLevel.Error);
+            modMonitor.LogError($"generating random for pig {id}", ex);
         }
 
-        return Game1.random;
+        return Random.Shared;
     }
 
     private static IEnumerable<CodeInstruction>? Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
@@ -105,13 +88,13 @@ internal sealed class ModEntry : Mod
             { // find the creation of the random and replace it with our own.
                 OpCodes.Ldarg_0,
                 (OpCodes.Ldfld, typeof(FarmAnimal).GetCachedField(nameof(FarmAnimal.myID), ReflectionCache.FlagTypes.InstanceFlags)),
-                OpCodes.Call, // this is an op_Impl
-                OpCodes.Conv_I4,
+                OpCodes.Callvirt,
+                OpCodes.Conv_R8,
             })
             .Advance(1)
-            .RemoveUntil(new CodeInstructionWrapper[]
+            .RemoveIncluding(new CodeInstructionWrapper[]
             {
-                (OpCodes.Callvirt, typeof(Random).GetCachedMethod(nameof(Random.NextDouble), ReflectionCache.FlagTypes.InstanceFlags, Type.EmptyTypes)),
+                (OpCodes.Call, typeof(Utility).GetCachedMethod(nameof(Utility.CreateRandom), ReflectionCache.FlagTypes.StaticFlags)),
             })
             .Insert(new CodeInstruction[]
             {
@@ -121,15 +104,15 @@ internal sealed class ModEntry : Mod
 #if DEBUG
             helper.FindNext(new CodeInstructionWrapper[]
             {
-                OpCodes.Ldc_I4_M1,
-                (OpCodes.Callvirt, typeof(Netcode.NetFieldBase<int, Netcode.NetInt>).GetCachedProperty("Value", ReflectionCache.FlagTypes.InstanceFlags).GetSetMethod()),
+                OpCodes.Ldnull,
+                (OpCodes.Callvirt, typeof(Netcode.NetFieldBase<string, Netcode.NetString>).GetCachedProperty("Value", ReflectionCache.FlagTypes.InstanceFlags).GetSetMethod()),
             })
             .Advance(2)
             .Insert(new CodeInstruction[]
             {
                 new(OpCodes.Ldsfld, typeof(ModEntry).GetCachedField(nameof(modMonitor), ReflectionCache.FlagTypes.StaticFlags)),
                 new(OpCodes.Ldstr, "Truffles Over"),
-                new(OpCodes.Ldc_I4_1),
+                new(OpCodes.Ldc_I4_1), // LogLevel.Debug
                 new(OpCodes.Callvirt, typeof(IMonitor).GetCachedMethod(nameof(IMonitor.Log), ReflectionCache.FlagTypes.InstanceFlags)),
             });
 #endif
@@ -139,43 +122,7 @@ internal sealed class ModEntry : Mod
         }
         catch (Exception ex)
         {
-            modMonitor.Log($"Ran into error transpiling {original.FullDescription()}\n\n{ex}", LogLevel.Error);
-            original.Snitch(modMonitor);
-        }
-        return null;
-    }
-
-    private static IEnumerable<CodeInstruction>? BFAVTranspiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
-    {
-        try
-        {
-            ILHelper helper = new(original, instructions, modMonitor, gen);
-            Type farmAnimal = AccessTools.TypeByName("BetterFarmAnimalVariety.Framework.Decorators.FarmAnimal")
-                                ?? ReflectionThrowHelper.ThrowMethodNotFoundException<Type>("BFAV farm animal");
-
-            helper.FindNext(new CodeInstructionWrapper[]
-            { // find the creation of the random and replace it with our own.
-                OpCodes.Ldarg_0,
-                OpCodes.Ldind_Ref,
-                (OpCodes.Callvirt, farmAnimal.GetCachedMethod("GetUniqueId", ReflectionCache.FlagTypes.InstanceFlags)),
-            })
-            .Advance(3)
-            .RemoveUntil(new CodeInstructionWrapper[]
-            {
-                (OpCodes.Callvirt, typeof(Random).GetCachedMethod(nameof(Random.NextDouble), ReflectionCache.FlagTypes.InstanceFlags, Type.EmptyTypes)),
-            })
-            .Insert(new CodeInstruction[]
-            {
-                new(OpCodes.Call, typeof(ModEntry).GetCachedMethod<long>(nameof(GetRandom), ReflectionCache.FlagTypes.StaticFlags)),
-            });
-
-            // helper.Print();
-            return helper.Render();
-        }
-        catch (Exception ex)
-        {
-            modMonitor.Log($"Ran into error transpiling {original.FullDescription()}\n\n{ex}", LogLevel.Error);
-            original.Snitch(modMonitor);
+            modMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }

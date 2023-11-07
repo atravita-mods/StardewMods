@@ -1,0 +1,124 @@
+{"Changes":[
+    {
+        "Action": "Include",
+        "LogName": "Demetrius - mid hearts",
+        "FromFile": "{{FirstValidFile: assets/{{language}}/charlie/Demetrius/mid.json, assets/default/charlie/Demetrius/mid.json}}",
+        "When": {
+            "EnableFor": "Demetrius",
+            "Query: {{Hearts:Demetrius}} >= 6": true
+        }
+    },
+    {
+        "Action": "Include",
+        "LogName": "Demetrius - mid hearts",
+        "FromFile": "assets/{{language}}/charlie/Demetrius/{{FarmCave}}.json",
+        "When": {
+            "EnableFor": "Demetrius",
+            "Query: {{Hearts:Demetrius}} >= 6": true,
+            "HasFile:{{FromFile}}": true
+        }
+    },
+    {
+        "Action": "Include",
+        "LogName": "Demetrius - mid hearts",
+        "FromFile": "assets/default/charlie/Demetrius/{{FarmCave}}.json",
+        "When": {
+            "EnableFor": "Demetrius",
+            "Query: {{Hearts:Demetrius}} >= 6": true,
+            "HasFile:{{FromFile}}": true,
+            "HasFile:assets/{{language}}/charlie/Demetrius/{{FarmCave}}.json": false
+        }
+    },
+    {
+        "Action": "Include",
+        "LogName": "Leah - mid hearts",
+        "FromFile": "{{FirstValidFile: assets/{{language}}/charlie/Leah/mid.json, assets/default/charlie/Leah/mid.json}}",
+        "When": {
+            "EnableFor": "Leah",
+            "Query: {{Hearts:Leah}} >= 6": true
+        }
+    },
+    {
+        "Action": "Include",
+        "LogName": "Leah - high hearts",
+        "FromFile": "{{FirstValidFile: assets/{{language}}/charlie/Leah/high.json, assets/default/charlie/Leah/high.json}}",
+        "When": {
+            "EnableFor": "Leah",
+            "Query: {{Hearts:Leah}} >= 8": true
+        }
+    },
+    {
+        "Action": "Include",
+        "LogName": "Lewis - mid hearts",
+        "FromFile": "{{FirstValidFile: assets/{{language}}/charlie/Lewis/mid.json, assets/default/charlie/Lewis/mid.json}}",
+        "When": {
+            "EnableFor": "Lewis",
+            "Query: {{Hearts:Lewis}} >= 6": true
+        }
+    },
+    {
+        "Action": "Include",
+        "LogName": "Lewis - mid hearts",
+        "FromFile": "{{FirstValidFile: assets/{{language}}/charlie/Lewis/mid_realism.json, assets/default/charlie/Lewis/mid_realism.json}}",
+        "When": {
+            "EnableFor": "Lewis",
+            "Query: {{Hearts:Lewis}} >= 6": true,
+            "IncreasedRealism": true
+        }
+    },
+    {
+        "Action": "Include",
+        "LogName": "Maru - mid hearts",
+        "FromFile": "{{FirstValidFile: assets/{{language}}/charlie/Maru/mid.json, assets/default/charlie/Maru/mid.json}}",
+        "When": {
+            "EnableFor": "Maru",
+            "Query: {{Hearts:Maru}} >= 6": true
+        }
+    },
+    {
+        "Action": "Include",
+        "LogName": "Maru - mid hearts",
+        "FromFile": "{{FirstValidFile: assets/{{language}}/charlie/Maru/mid_realism.json, assets/default/charlie/Maru/mid_realism.json}}",
+        "When": {
+            "EnableFor": "Maru",
+            "Query: {{Hearts:Maru}} >= 6": true,
+            "IncreasedRealism": true
+        }
+    },
+    {
+        "Action": "Include",
+        "LogName": "Robin - mid hearts",
+        "FromFile": "{{FirstValidFile: assets/{{language}}/charlie/Robin/mid.json, assets/default/charlie/Robin/mid.json}}",
+        "When": {
+            "EnableFor": "Robin",
+            "Query: {{Hearts:Robin}} >= 6": true
+        }
+    },
+    {
+        "Action": "Include",
+        "LogName": "Robin - mid hearts",
+        "FromFile": "{{FirstValidFile: assets/{{language}}/charlie/Robin/high.json, assets/default/charlie/Robin/high.json}}",
+        "When": {
+            "EnableFor": "Robin",
+            "Query: {{Hearts:Robin}} >= 9": true
+        }
+    },
+    {
+        "Action": "Include",
+        "LogName": "Sam - mid hearts",
+        "FromFile": "{{FirstValidFile: assets/{{language}}/charlie/Sam/mid.json, assets/default/charlie/Sam/mid.json}}",
+        "When": {
+            "EnableFor": "Sam",
+            "Query: {{Hearts:Sam}} >= 6": true
+        }
+    },
+    {
+        "Action": "Include",
+        "LogName": "Willy - mid hearts",
+        "FromFile": "{{FirstValidFile: assets/{{language}}/charlie/Willy/mid.json, assets/default/charlie/Willy/mid.json}}",
+        "When": {
+            "EnableFor": "Willy",
+            "Query: {{Hearts:Willy}} >= 6": true
+        }
+    }
+]}

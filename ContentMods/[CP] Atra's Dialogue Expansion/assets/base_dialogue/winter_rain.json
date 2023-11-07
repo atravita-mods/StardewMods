@@ -1,0 +1,26 @@
+{
+    "Changes": [
+        {
+            "LogName": "Rain -- during winter - Elliott.",
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/rainy",
+            "When": {
+                "EnableFor": "Elliott"
+            },
+            "Entries": {
+                "Elliott": "{{i18n: elliott-winter-rain.00}}#$e#{{i18n: elliott-winter-rain.01}}#$e#{{i18n:elliott-winter-rain.02}}"
+            }
+        },
+        {
+            "LogName": "Rain -- during winter - Evelyn.",
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/rainy",
+            "When": {
+                "EnableFor": "Evelyn"
+            },
+            "Entries": {
+                "Evelyn": "{{i18n:evelyn-winter-rain.00}}$s#$e#{{i18n:evelyn-winter-rain.01}}$s"
+            }
+        },
+    ]
+}

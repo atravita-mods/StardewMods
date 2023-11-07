@@ -1,6 +1,10 @@
-﻿using AtraShared.ConstantsAndEnums;
-using AtraShared.Integrations.GMCMAttributes;
+﻿using AtraShared.Integrations.GMCMAttributes;
+
+using HighlightEmptyMachines.Legacy;
+
 using Microsoft.Xna.Framework;
+
+using StardewValley.GameData.Machines;
 
 namespace HighlightEmptyMachines;
 
@@ -14,18 +18,6 @@ public sealed class ModConfig
     /// </summary>
     public ModConfig()
     {
-        this.VanillaMachines = new();
-        foreach (VanillaMachinesEnum machine in Enum.GetValues<VanillaMachinesEnum>())
-        {
-            this.VanillaMachines.Add(machine, true);
-        }
-        this.VanillaMachines[VanillaMachinesEnum.SeedMaker] = false;
-        this.VanillaMachines[VanillaMachinesEnum.RecyclingMachine] = false;
-        this.VanillaMachines[VanillaMachinesEnum.CharcoalKiln] = false;
-        this.VanillaMachines[VanillaMachinesEnum.Incubator] = false;
-        this.VanillaMachines[VanillaMachinesEnum.SlimeIncubator] = false;
-        this.VanillaMachines[VanillaMachinesEnum.OstrichIncubator] = false;
-
         // Set invalid to be just a little transparent.
         Color invalid = Color.Gray;
         invalid.A = 200;
@@ -46,9 +38,10 @@ public sealed class ModConfig
 
     /// <summary>
     /// Gets or sets a mapping that sets whether coloration of vanilla machines should be enabled.
+    /// Mapping is between qualified item ids->whether or not it should be enabled.
     /// </summary>
     [GMCMDefaultIgnore]
-    public Dictionary<VanillaMachinesEnum, bool> VanillaMachines { get; set; }
+    public Dictionary<string, bool> VanillaMachines { get; set; } = new();
 
     /// <summary>
     /// Gets or sets a mapping that sets whether coloration of PFM machines should be enabled.
@@ -60,4 +53,12 @@ public sealed class ModConfig
     /// Gets or sets a value indicating whether or not machine pulsing should be disabled.
     /// </summary>
     public bool DisablePulsing { get; set; } = false;
+
+    internal void Populate()
+    {
+        foreach (var (machine, data) in Game1.content.Load<Dictionary<string, MachineData>>("Data\\Machines"))
+        {
+            this.VanillaMachines.TryAdd(machine, !data.IsIncubator);
+        }
+    }
 }

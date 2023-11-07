@@ -1,13 +1,18 @@
-﻿using HarmonyLib;
+﻿namespace TrashDoesNotConsumeBait.HarmonyPatches;
+
+using AtraShared.ConstantsAndEnums;
+using AtraShared.Utils.Extensions;
+
+using HarmonyLib;
+
 using StardewValley.Menus;
 using StardewValley.Tools;
-
-namespace TrashDoesNotConsumeBait.HarmonyPatches;
 
 /// <summary>
 /// Class that holds patches against the tool bar.
 /// </summary>
 [HarmonyPatch(typeof(Toolbar))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class ToolbarPatches
 {
     /***********
@@ -16,7 +21,6 @@ internal static class ToolbarPatches
      * *********/
     [HarmonyPostfix]
     [HarmonyPatch(nameof(Toolbar.receiveRightClick))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention")]
     private static void PostfixRightClick(List<ClickableComponent> ___buttons, int x, int y)
     {
         try
@@ -67,7 +71,7 @@ internal static class ToolbarPatches
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Patch failed while trying to swap out bait or tackle...\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("swapping out bait or tackle", ex);
         }
     }
 }

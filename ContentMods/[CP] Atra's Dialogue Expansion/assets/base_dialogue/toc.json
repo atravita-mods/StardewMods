@@ -1,0 +1,228 @@
+{
+    "Changes": [
+        {
+            "Action": "Include",
+            "LogName": "Misc items",
+            "FromFile": "assets/base_dialogue/misc.json",
+            "When": {
+                "Random: true, true, false": true,
+                "EnableGeneric": true
+            }
+        },
+        {
+            "Action": "Include",
+            "LogName": "Abigail - adventurer",
+            "FromFile": "assets/base_dialogue/Abigail/adventurer.json",
+            "When": {
+                "HasReadLetter": "beenToWoods",
+                "EnableFor": "Abigail"
+            }
+        },
+        {
+            "Action": "Include",
+            "LogName": "Alex - base",
+            "FromFile": "assets/base_dialogue/Alex/base.json",
+            "When": {
+                "EnableFor": "Alex"
+            }
+        },
+        {
+            "Action": "Include",
+            "LogName": "Alex - mid",
+            "FromFile": "assets/base_dialogue/Alex/mid.json",
+            "When": {
+                "EnableFor": "Alex",
+                "Query: {{Hearts:Alex}} >= 4": true
+            }
+        },
+        {
+            "Action": "Include",
+            "LogName": "Caroline - base",
+            "FromFile": "assets/base_dialogue/Caroline/base.json",
+            "When": {
+                "EnableFor": "Caroline"
+            }
+        },
+        {
+            "Action": "Include",
+            "LogName": "Clint - mid hearts",
+            "FromFile": "assets/base_dialogue/Clint/mid.json",
+            "When": {
+                "EnableFor": "Clint",
+                "Query: {{Hearts:Clint}} >= 4": true
+            }
+        },
+        {
+            "Action": "Include",
+            "LogName": "Demetrius - base",
+            "FromFile": "assets/base_dialogue/Demetrius/base.json",
+            "When": {"EnableFor": "Demetrius"}
+        },
+        {
+            "Action": "Include",
+            "LogName": "Emily - mid",
+            "FromFile": "assets/base_dialogue/Emily/mid.json",
+            "When": {
+                "EnableFor": "Emily",
+                "Query: {{Hearts:Emily}} >= 4": true
+            }
+        },
+        {
+            "Action": "Include",
+            "LogName": "Evelyn - base",
+            "FromFile": "assets/base_dialogue/Evelyn/base.json",
+            "When": {
+                "EnableFor": "Evelyn"
+            }
+        },
+        {
+            "Action": "Include",
+            "LogName": "George - base",
+            "FromFile": "assets/base_dialogue/George/mid.json",
+            "When": {
+                "EnableFor": "George",
+                "Query: {{Hearts:George}} >= 6": true
+            }
+        },
+        {
+            "Action": "Include",
+            "LogName":  "Gus",
+            "FromFile": "assets/base_dialogue/Gus/base.json",
+            "When": {
+                "EnableFor": "Gus"
+            }
+        },
+        {
+            "Action": "Include",
+            "LogName": "Harvey - base",
+            "FromFile": "assets/base_dialogue/Harvey/mid.json",
+            "When": {
+                "EnableFor": "Harvey",
+                "Query: {{Hearts:Harvey}} >= 4": true,
+                "DialogueRandom": "alpha, charlie"
+            }
+        },
+        {
+            "Action": "Include",
+            "LogName": "Jodi - base",
+            "FromFile": "assets/base_dialogue/Jodi/base.json",
+            "When": {
+                "EnableFor": "Jodi"
+            }
+        },
+        {
+            "Action": "Include",
+            "LogName": "Leah - base",
+            "FromFile": "assets/base_dialogue/Leah/mid.json",
+            "When": {
+                "EnableFor": "Leah",
+                "Query: {{Hearts:Leah}} >= 4": true
+            }
+        },
+        {
+            "Action": "Include",
+            "LogName": "Lewis - base",
+            "FromFile": "assets/base_dialogue/Lewis/mid.json",
+            "When": {
+                "EnableFor": "Lewis"
+            }
+        },
+        {
+            "Action": "Include",
+            "LogName": "Marnie - base",
+            "FromFile": "assets/base_dialogue/Marnie/base.json",
+            "When": {"EnableFor": "Marnie"}
+        },
+        {
+            "Action": "Include",
+            "LogName": "Maru - base",
+            "FromFile": "assets/base_dialogue/Maru/base.json",
+            "When": {"EnableFor": "Maru"}
+        },
+        {
+            "Action": "Include",
+            "LogName":  "Pam",
+            "FromFile": "assets/base_dialogue/Pam/base.json",
+            "When": {
+                "EnableFor": "Pam"
+            }
+        },
+        {
+            "Action": "Include",
+            "LogName":  "Penny",
+            "FromFile": "assets/base_dialogue/Penny/base.json",
+            "When": {
+                "EnableFor": "Penny"
+            }
+        },
+        {
+            "Action": "Include",
+            "LogName": "Pierre - base",
+            "FromFile": "assets/base_dialogue/Pierre/base.json",
+            "When": {"EnableFor": "Pierre"}
+        },
+        {
+            "Action": "Include",
+            "LogName": "Robin - base",
+            "FromFile": "assets/base_dialogue/Robin/base.json",
+            "When": {"EnableFor": "Robin"}
+        },
+        {
+            "Action": "Include",
+            "LogName": "Sandy - base",
+            "FromFile": "assets/base_dialogue/Sandy/base.json",
+            "When": {"EnableFor": "Sandy"}
+        },
+        {
+            "Action": "Include",
+            "LogName": "Shane - base",
+            "FromFile": "assets/base_dialogue/Shane/mid.json",
+            "When": {
+                "EnableFor": "Shane",
+                "Query: {{Hearts:Shane}} >= 6": true
+            }
+        },
+        {
+            "Action": "Include",
+            "LogName": "Sebastian - base",
+            "FromFile": "assets/base_dialogue/Sebastian/mid.json",
+            "When": {
+                "EnableFor": "Sebastian",
+                "Query: {{Hearts:Sebastian}} >= 4": true
+            }
+        },
+        {
+            "Action": "Include",
+            "LogName": "Vincent - base",
+            "FromFile": "assets/base_dialogue/Vincent/mid.json",
+            "When": {
+                "EnableFor": "Vincent",
+                "Query: {{Hearts:Vincent}} >= 6": true
+            },
+        },
+        {
+            "Action": "Include",
+            "LogName": "Willy - base",
+            "FromFile": "assets/base_dialogue/Willy/base.json",
+            "When": {
+                "EnableFor": "Willy"
+            }
+        },
+        {
+            "Action": "Include",
+            "LogName": "Spouse lines",
+            "FromFile": "assets/base_dialogue/spouse_toc.json",
+            "When": {
+                "HasValue: {{Spouse}}": true
+            }
+        },
+        {
+            "Action": "Include",
+            "LogName": "Winter rain",
+            "FromFile": "assets/base_dialogue/winter_rain.json",
+            "When": {
+                "Season": "winter"
+            }
+        }
+    ]
+}

@@ -7,6 +7,8 @@ using Microsoft.Xna.Framework;
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
 
+using StardewValley.Pathfinding;
+
 namespace GingerIslandMainlandAdjustments.ScheduleManager;
 
 /// <summary>
@@ -52,10 +54,9 @@ internal static class MidDayScheduleEditor
         { // skip after 9AM, or if is not the main player, or if the fancy scheduler is on.
             return;
         }
-        foreach (string name in Game1.netWorldState.Value.IslandVisitors.Keys)
+        foreach (string name in Game1.netWorldState.Value.IslandVisitors)
         {
             if (name.Equals("Gus", StringComparison.OrdinalIgnoreCase) // Gus runs saloon, skip.
-                || !Game1.netWorldState.Value.IslandVisitors[name]
                 || (ScheduleAltered.TryGetValue(name, out bool hasbeenaltered) && hasbeenaltered))
             {
                 continue;
@@ -103,12 +104,15 @@ internal static class MidDayScheduleEditor
         keys.Sort();
         if (keys.Count == 0 || keys[^1] != GIEndTime)
         {
-            Globals.ModMonitor.DebugOnlyLog($"Recieved {npc.Name} to adjust but last schedule key is not {GIEndTime}");
+            Globals.ModMonitor.DebugOnlyLog($"Received {npc.Name} to adjust but last schedule key is not {GIEndTime}");
             return false;
         }
-        string? schedule = ScheduleUtilities.FindProperGISchedule(npc, SDate.Now());
-        Dictionary<int, SchedulePathDescription>? remainderSchedule = ParseGIRemainderSchedule(schedule, npc);
+        if (ScheduleUtilities.FindProperGISchedule(npc, SDate.Now(), out string? key) is not string schedule || key is null)
+        {
+            return false;
+        }
 
+        Dictionary<int, SchedulePathDescription>? remainderSchedule = ParseGIRemainderSchedule(key, schedule, npc);
         if (remainderSchedule is not null)
         {
             npc.Schedule.Update(remainderSchedule);
@@ -120,11 +124,12 @@ internal static class MidDayScheduleEditor
     /// Gets the SchedulePathDescription schedule for the schedule string,
     /// assumes a 1800 start on Ginger Island.
     /// </summary>
+    /// <param name="scheduleKey">The schedule key used.</param>
     /// <param name="schedule">Raw schedule string.</param>
     /// <param name="npc">NPC.</param>
     /// <returns>null if the schedule could not be parsed, a schedule otherwise.</returns>
     [ContractAnnotation("schedule:null => null")]
-    internal static Dictionary<int, SchedulePathDescription>? ParseGIRemainderSchedule(string? schedule, NPC npc)
+    internal static Dictionary<int, SchedulePathDescription>? ParseGIRemainderSchedule(string scheduleKey, string? schedule, NPC npc)
     {
         if (schedule is null)
         {
@@ -134,6 +139,6 @@ internal static class MidDayScheduleEditor
         Point lastStop = npc.Schedule[GIEndTime].route.Peek();
         int lasttime = GIEndTime - 10;
 
-        return Globals.UtilitySchedulingFunctions.ParseSchedule(schedule, npc, GIMap, lastStop, lasttime, Globals.Config.EnforceGITiming);
+        return Globals.UtilitySchedulingFunctions.ParseSchedule(scheduleKey, schedule, npc, GIMap, lastStop, lasttime, Globals.Config.EnforceGITiming);
     }
 }

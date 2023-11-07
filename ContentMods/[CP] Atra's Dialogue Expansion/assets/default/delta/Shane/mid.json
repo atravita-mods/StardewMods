@@ -4,7 +4,38 @@
         "Action": "EditData",
         "Target": "Characters/Dialogue/Shane",
         "Entries": {
-            "movieTheater": "Oh, heya @. Have you heard? We've got a new movie theater.#$b#I used to love going to the movies when I was a kid...$s"
+            "movieTheater": "Oh, heya @. Have you heard? We've got a new movie theater.#$b#I used to love going to the movies when I was a kid...$s",
+
+            "spring_23{{YearRemainder}}": "Between you and I, @, I really don't want to go to the flower dance tomorrow.$s",
+
+            "fall_15{{YearRemainder}}": "Heya @, you ready for the fair tomorrow? We've been preparing for weeks!$h"
+        }
+    },
+    {
+        "LogName": "Shane - strings",
+        "Action": "EditData",
+        "Target": "Strings/schedules/Shane",
+        "Entries": {
+            "marriage_Sun.000": "Go {{Random: {{FirstSportsTeam}}, {{SecondSportsTeam}} }}!#$b#$c .5#Look, @, isn't that a great play?#Oh come on, ref, that's unfair!"
+        }
+    },
+    {
+        // This removes a line that talks about drinking.
+        "LogName": "Shane - post six heart - marriage.",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/MarriageDialogueShane",
+        "When": {"HasSeenEvent": 3910975},
+        "Entries": {
+            "summer_Shane": "Ugh, I'm no fan of the summer heat. And no, sparkling water is NOT the same.$s#$b#Maybe I'll go get some ice to put on my neck...$s",
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Shane - mid - y1",
+        "When": {"YearModulus": "1"},
+        "Target": "Characters/Dialogue/Shane",
+        "Entries": {
+            "1{{YearRemainder}}": "Gosh, I don't have any energy today. Maybe I should go grab a pizza from Gus's?$s"
         }
     }
 ]}

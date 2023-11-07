@@ -2,6 +2,9 @@
 
 using AtraBase.Toolkit;
 
+using AtraShared.ConstantsAndEnums;
+using AtraShared.Utils.Extensions;
+
 using GrowableGiantCrops.Framework;
 using GrowableGiantCrops.Framework.InventoryModels;
 
@@ -14,9 +17,10 @@ using StardewValley.TerrainFeatures;
 namespace GrowableGiantCrops.HarmonyPatches;
 
 /// <summary>
-/// Holds patches that lets npcs trample bushes.
+/// Holds patches that lets NPCs trample resource clumps.
 /// </summary>
 [HarmonyPatch(typeof(Character))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class CharacterTramplePatches
 {
     private static readonly Api Api = new();
@@ -24,7 +28,6 @@ internal static class CharacterTramplePatches
     [MethodImpl(TKConstants.Hot)]
     [HarmonyPriority(Priority.HigherThanNormal)]
     [HarmonyPatch(nameof(Character.MovePosition))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
     private static void Prefix(Character __instance, GameLocation currentLocation)
     {
         if (__instance is not NPC npc || !npc.isVillager()
@@ -39,7 +42,7 @@ internal static class CharacterTramplePatches
             for (int i = currentLocation.resourceClumps.Count - 1; i >= 0; i--)
             {
                 ResourceClump clump = currentLocation.resourceClumps[i];
-                if (!clump.getBoundingBox(clump.tile.Value).Contains(nextPosition))
+                if (!clump.getBoundingBox().Contains(nextPosition))
                 {
                     continue;
                 }
@@ -67,7 +70,7 @@ internal static class CharacterTramplePatches
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed in trying to trample a resource clump.:\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("trampling a resource clump", ex);
         }
     }
 }

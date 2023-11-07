@@ -2,11 +2,18 @@
 
 using System.Reflection;
 using System.Reflection.Emit;
+
+using AtraBase.Toolkit.Extensions;
 using AtraBase.Toolkit.Reflection;
+
+using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 using AtraShared.Wrappers;
 
 using HarmonyLib;
+
+using StardewValley.Extensions;
+using StardewValley.GameData.Objects;
 using StardewValley.Locations;
 
 namespace StopRugRemoval.HarmonyPatches.Beverages;
@@ -17,16 +24,13 @@ namespace StopRugRemoval.HarmonyPatches.Beverages;
 [HarmonyPatch(typeof(BeachNightMarket))]
 internal static class ReplaceBeverage
 {
-    private static readonly Lazy<List<int>> LazyBeverages = new(GetBeverageIDs);
+    private static readonly Lazy<List<string>> LazyBeverages = new(GetBeverageIDs);
 
     /// <summary>
     /// Gets the item ID of a random beverage.
     /// </summary>
     /// <returns>int ID of beverage.</returns>
-    public static int GetRandomBeverageId()
-    {
-        return Utility.GetRandom(LazyBeverages.Value);
-    }
+    public static string GetRandomBeverageId() => ItemRegistry.type_object + Random.Shared.ChooseFrom(LazyBeverages.Value);
 
     [HarmonyPatch(nameof(BeachNightMarket.getFreeGift))]
     private static IEnumerable<CodeInstruction>? Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
@@ -36,29 +40,24 @@ internal static class ReplaceBeverage
             ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);
             helper.FindNext(new CodeInstructionWrapper[]
                     {
-                        new(OpCodes.Ldc_I4, 395),
-                        new(OpCodes.Ldc_I4_1),
-                        new(OpCodes.Ldc_I4_0),
-                        new(OpCodes.Ldc_I4_M1),
-                        new(OpCodes.Ldc_I4_0),
+                        new(OpCodes.Ldstr, "(O)395"),
                     })
-                .ReplaceInstruction(new(OpCodes.Call, typeof(ReplaceBeverage).StaticMethodNamed(nameof(ReplaceBeverage.GetRandomBeverageId))), keepLabels: true);
+                .ReplaceInstruction(new(OpCodes.Call, typeof(ReplaceBeverage).StaticMethodNamed(nameof(GetRandomBeverageId))), keepLabels: true);
             return helper.Render();
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Transpiler for Night Market Beverages failed with error {ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }
 
-    private static List<int> GetBeverageIDs()
+    private static List<string> GetBeverageIDs()
     {
-        List<int> beverageIds = new();
-        foreach ((int key, string value) in Game1Wrappers.ObjectInfo)
+        List<string> beverageIds = new();
+        foreach ((string key, ObjectData? value) in Game1Wrappers.ObjectData)
         {
-            string[] splitvals = value.Split('/');
-            if (splitvals.Length > 6 && splitvals[6].Contains("drink", StringComparison.OrdinalIgnoreCase))
+            if (value.IsDrink)
             {
                 beverageIds.Add(key);
             }

@@ -1,0 +1,37 @@
+{
+    "Changes": [
+        {
+            "Action": "EditData",
+            "When": {"HasSeenEvent": "503180"}, // House event.
+            "Target": "Characters/Dialogue/Penny",
+            "Entries": {
+                "fall_Mon4": "{{i18n: penny-home-unmarried}}$h",
+                "7{{YearRemainder}}": "{{i18n: penny-teaching-unmarried}}$s",
+                "Resort_Leaving_2": "{{i18n: penny-resort-leaving-2}}$h",
+                "Resort_Entering_2": "{{i18n: penny-resort-entering-2}}"
+            }
+        },
+        {
+            "Action": "EditData",
+            "When": {
+                "Query: {{Spouse:anyPlayer|contains=Penny}} OR {{Relationship:Penny|contains=Married}}": true
+            },
+            "Target": "Characters/Dialogue/Penny",
+            "Entries": {
+                "fall_Mon4": "{{i18n: penny-home-married}}$h",
+                "7{{YearRemainder}}": "{{i18n: penny-teaching-married}}$h"
+            }
+        },
+        {
+            "Action": "EditData",
+            "When": {
+                "HasSeenEvent|contains=99210002": false, // Pam rehab event.
+                "Query: {{Hearts:Penny}} > 8": true
+            },
+            "Target": "Characters/Dialogue/Penny",
+            "Entries": {
+                "5{{YearRemainder}}": "{{i18n:penny-addiction-reading.00}}#$b#{{i18n:penny-addiction-reading.01}}"
+            }
+        }
+    ]
+}

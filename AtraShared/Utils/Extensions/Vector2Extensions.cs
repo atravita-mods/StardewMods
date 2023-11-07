@@ -9,6 +9,7 @@ namespace AtraShared.Utils.Extensions;
 /// </summary>
 public static class Vector2Extensions
 {
+    #region distance
     /// <summary>
     /// Finds the Manhattan (taxicab) distance between two vectors.
     /// </summary>
@@ -26,6 +27,27 @@ public static class Vector2Extensions
     /// <returns>Chessboard distance.</returns>
     public static float ChessboardDistance(this Vector2 self, Vector2 other)
         => Math.Max(Math.Abs(self.X - other.X), Math.Abs(self.Y - other.Y));
+    #endregion
+
+    /// <summary>
+    /// Rotates a vector by a specified angle.
+    /// </summary>
+    /// <param name="self">Vector to rotate.</param>
+    /// <param name="rad">Radians to rotate by.</param>
+    /// <returns>new vector.</returns>
+    public static Vector2 Rotate(this Vector2 self, float rad)
+    {
+#if NET6_0_OR_GREATER
+        (float sin, float cos) = MathF.SinCos(rad);
+#else
+        float sin = MathF.Sin(rad);
+        float cos = MathF.Cos(rad);
+#endif
+
+        return new(
+            (self.X * cos) - (self.Y * sin),
+            (self.X * sin) + (self.Y * cos));
+    }
 
     /// <summary>
     /// Finds the midpoint between two vectors.
@@ -35,6 +57,8 @@ public static class Vector2Extensions
     /// <returns>Midpoint.</returns>
     public static Vector2 Midpoint(this Vector2 self, Vector2 other)
         => new(self.X + ((other.X - self.X) / 2), self.Y + ((other.Y - self.Y) / 2));
+
+    #region parsing
 
     /// <summary>
     /// Tries to parse a vector2 from a string.
@@ -63,4 +87,6 @@ public static class Vector2Extensions
         vector = default;
         return false;
     }
+
+    #endregion
 }

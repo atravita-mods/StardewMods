@@ -1,11 +1,16 @@
 ﻿using System.Reflection;
+
 using AtraBase.Toolkit.Reflection;
 
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
 using AtraShared.Integrations.Interfaces;
+using AtraShared.Utils.Extensions;
 
 using HarmonyLib;
+
 using Microsoft.Xna.Framework;
+
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 
@@ -15,6 +20,7 @@ namespace StopRugRemoval.HarmonyPatches;
 /// Class to hold patches to place grass.
 /// </summary>
 [HarmonyPatch]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class PlantGrassUnder
 {
     private static Func<bool>? isSmartBuildingInBuildMode = null;
@@ -48,7 +54,6 @@ internal static class PlantGrassUnder
     /// <param name="__2">The farmer doing the placing.</param>
     /// <param name="__result">The result to substitute in.</param>
     [HarmonyPostfix]
-    [SuppressMessage("StyleCop", "SA1313", Justification = "Style preferred by Harmony")]
     public static void PostfixPerformObjectDropInAction(SObject __instance, Item __0, bool __1, Farmer __2, ref bool __result)
     {
         if (__result // Placed something already
@@ -65,7 +70,7 @@ internal static class PlantGrassUnder
             if (__0 is SObject starter && !(isSmartBuildingInBuildMode?.Invoke() == true))
             {
                 Grass? grass = null;
-                if (Utility.IsNormalObjectAtParentSheetIndex(starter, 297))
+                if (starter.QualifiedItemId == "(O)297")
                 {
                     grass ??= growableGiantCropsAPI?.GetMatchingGrass(starter) ?? new Grass(Grass.springGrass, 4);
                 }
@@ -91,32 +96,40 @@ internal static class PlantGrassUnder
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Rain into errors attempting to place grass under object at {__instance.TileLocation}.\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError($"placing grass under object at {__instance.TileLocation}", ex);
         }
     }
 
     /// <summary>
     /// Grabs a reference to Smart Building's CurrentlyInBuildMode.
     /// </summary>
+    /// <param name="translation">Translation helper.</param>
     /// <param name="registry">ModRegistry.</param>
     internal static void GetSmartBuildingBuildMode(ITranslationHelper translation, IModRegistry registry)
     {
-        if (registry.Get("DecidedlyHuman.SmartBuilding") is not IModInfo info || info.Manifest.Version.IsOlderThan("1.3.2"))
+        try
         {
-            ModEntry.ModMonitor.Log("SmartBuilding not installed, no need to adjust for that", LogLevel.Trace);
+            if (registry.Get("DecidedlyHuman.SmartBuilding") is not IModInfo info || info.Manifest.Version.IsOlderThan("1.3.2"))
+            {
+                ModEntry.ModMonitor.Log("SmartBuilding not installed, no need to adjust for that", LogLevel.Trace);
+            }
+            else if (Type.GetType("SmartBuilding.HarmonyPatches.Patches, SmartBuilding") is Type type
+                && AccessTools.DeclaredPropertyGetter(type, "CurrentlyInBuildMode") is MethodInfo method)
+            {
+                ModEntry.ModMonitor.Log("SmartBuilding found! " + method.FullDescription(), LogLevel.Trace);
+                isSmartBuildingInBuildMode = method.CreateDelegate<Func<bool>>();
+            }
+            else
+            {
+                ModEntry.ModMonitor.Log("SmartBuilding is installed BUT compat unsuccessful. You may see issues, please bring this log to atravita!", LogLevel.Info);
+            }
         }
-        else if (Type.GetType("SmartBuilding.HarmonyPatches.Patches, SmartBuilding") is Type type
-            && AccessTools.DeclaredPropertyGetter(type, "CurrentlyInBuildMode") is MethodInfo method)
+        catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log("SmartBuilding found! " + method.FullDescription(), LogLevel.Trace);
-            isSmartBuildingInBuildMode = method.CreateDelegate<Func<bool>>();
-        }
-        else
-        {
-            ModEntry.ModMonitor.Log("SmartBuilding is installed BUT compat unsuccessful. You may see issues, please bring this log to atravita!", LogLevel.Info);
+            ModEntry.ModMonitor.LogError("grabbing SmartBuilding's CurrentlyInBuildMode", ex);
         }
 
-        var helper = new IntegrationHelper(ModEntry.ModMonitor, translation, registry, LogLevel.Trace);
+        IntegrationHelper helper = new(ModEntry.ModMonitor, translation, registry, LogLevel.Trace);
 
         _ = helper.TryGetAPI("atravita.GrowableGiantCrops", null, out growableGiantCropsAPI)
             || helper.TryGetAPI("spacechase0.MoreGrassStarters", "1.2.2", out moreGrassStartersAPI);

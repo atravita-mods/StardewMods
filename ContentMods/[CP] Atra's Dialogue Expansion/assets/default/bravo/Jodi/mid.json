@@ -4,19 +4,81 @@
     // On one hand, she enjoys parts of homemaking, and takes a **lot** of pride in setting up a good home.
     // On the other, she gets tired of being The Homemaker.
 
+    // did at some point want to be a journalist.
     {
         "Action": "EditData",
-        "LogName": "Jodi mid-hearts",
+        "LogName": "Jodi mid-hearts - Y1",
         "Target": "Characters/Dialogue/Jodi",
+        "When": { "YearModulus": "1" },
         "Entries": {
+            "Resort_Approach_HouseWives": "Yoba, I've been looking forward to this vacation all week!$h",
+
+            "1{{YearRemainder}}": "Kent was gone for long periods of time when Sam was young. Without this community, I'm not sure how I could have raised him.",
             "2{{YearRemainder}}": "Sometimes I feel like all I do is cook and clean.$s",
             "7{{YearRemainder}}": "Sam left the laundry in the washer the other day, and it started smelling of mildew.$s#$b#As much as I love my boys, I wonder if I babied them too much...",
             "9{{YearRemainder}}": "I found an interesting recipe in last week's edition of Homemaker's Weekly, but I'm not sure it's something I can get Vincent to eat.",
             "11{{YearRemainder}}": "Between you and I, @, sometimes I wish I could just serve leftovers sometimes.#$b#I feel like I spend all my time cooking and cleaning.",
-            "13{{YearRemainder}}": "So, @, why did you decide to move to such a small town?"
-        },
-        "When": {
-            "YearModulus": "1"
+            "13": "So, @, why did you decide to move to such a small town?",
+            "13_2": "You've been here for a while, @, do you regret moving to such a tiny little town?",
+            "14{{YearRemainder}}": "Ugh, I really don't feel like cooking dinner tonight.#$b#And the dishes, I'll probably end up doing the dishes too.$s",
+            "15{{YearRemainder}}": "I wish I could get the boys to eat veggies more often...",
+            "16{{YearRemainder}}": "If we had a bit more money, I'd love to get one of those little robot vacuums."
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Jodi mid-hearts",
+        "Target": "Characters/Dialogue/Jodi",
+        "When": { "YearModulus": "2" },
+        "Entries": {
+            "2_2": "I started knitting a scarf. Emily thought it'd be a good idea.#$b#I'm not very good, though.",
+            "3_2": "Vincent isn't doing particularly well in his classes.#$b#He's still very young though, it's more important he has fun at his age.",
+            "5_2": "Let's see....what still needs doing?",
+            "6_2": "I'm so glad Kent is back with us.",
+            "8_2": "I've got so much cleaning I need to do...#$b#Frankly some days I feel like I don't do anything but clean.",
+
+            // GIMA extras
+            "Resort_Approach_HouseWives": "@, Caroline and I are off to the island today! You want to come with?$h",
+            "Resort_Pier": "Blue water, white sand, what could be better?"
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Jodi - Y3",
+        "Target": "Characters/Dialogue/Jodi",
+        "When": {"Year": "3" },
+        "Entries": {
+            "winter_Sun10": "Kent's been back for about a year now...#$b#I think he's...slowly getting better.",
+
+            "Resort_Approach_HouseWives": "Oh, @! The girls and I are headed off to Ginger Island today.$h",
+
+            "2_2": "Ugh, Kent's pension doesn't go nearly as far as it used to.$s",
+            "7_2": "I'd like to get some new houseplants, but online shipping is so much more expensive than it was this time last year.$s",
+            "8_2": "Why are eggs suddenly so much more expensive...#$b#Say, @, you're not getting paid any more for your eggs, right? Who's taking the extra money, then?$a",
+            "9_2": "I try my best to cook everything from fresh ingredients.#$b#I spend a lot of time in the kitchen.$s",
+            "22_2": "There are so many chores I need to do...$s#$b#It's like chores never end...",
+            "25_2": "When I was young? I wanted to be a journalist.#$b#Actually went to college for that, but dropped out after two years to raise Sam.",
+            "26_2": "Sometimes I feel like all I do is cook and clean.#$b#At least the lentil soup is easy to put together."
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Jodi - Y2",
+        "Target": "Characters/Dialogue/Jodi",
+        "When": {"Year": "3", "Day|contains=25,26,27,28": false},
+        "Entries": {
+            "winter_Fri10": "It's almost Winter Star. Kent's first Winter Star back.#$b#It's...bittersweet.$s"
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Jodi mid-hearts",
+        "Target": "Characters/Dialogue/Jodi",
+        "When": { "YearModulus": "4"},
+        "Entries": {
+            "2_2": "We're testing out a new budgeting system. Hopefully it works better for us.",
+            "4_2": "Ugh, we didn't get our cost-of-living adjustment this year.$s",
+            "22_2": "Am I getting more wrinkles? I think I'm getting more wrinkles.$s"
         }
     }
 ]}

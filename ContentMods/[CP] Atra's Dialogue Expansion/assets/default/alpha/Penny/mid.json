@@ -1,13 +1,72 @@
 {"Changes":[
     // Dreams of a better life, is a bit caught up in books.
+    // Channel 1950s domestic housewife angel except she's a terrible cook.
+
+    // Her English should be perfect, unless she gets emotional, in which case she'll back into using a Pam-like dialect.
+    {
+        "LogName": "Penny - Base Marriage",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/MarriageDialoguePenny",
+        "Entries": {
+            "summer_10": "@, hot days like this make me wonder what sleeping outside under the stars would be like...",
+
+            "funLeave_Penny": "I'll be headed to town today, going to do some visiting.#$b#Might see how my mother's doing."
+        }
+    },
+    {
+        "LogName": "Penny - Base",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Penny",
+        "Entries": {
+            "Mon4": "@, you've got any interesting books you want to read?",
+
+            "summer_Mon8": "Ma wasn't around much when I was young. She was always driving that big truck.#$b#$c .5#Mrs. Mullner would take care of me.#I'd ride around with her sometimes, though.",
+            "fall_Tue8": "Dad was never good at holding down a job. Then one day he just up and left...",
+
+            // pre-festival
+            "spring_12{{YearRemainder}}": "It's going to be the Egg Festival tomorrow! The kids always love it.$h",
+            "spring_23{{YearRemainder}}": "@, what if no one wants to dance with me tomorrow?$s",
+
+            "winter_27{{YearRemainder}}": "@, do you have any resolutions for the new year?"
+        }
+    },
     {
         "LogName": "Penny - Y2",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Penny",
         "When": {"YearModulus": "2"},
         "Entries": {
-            "Mon4": "@, you've got any interesting books you want to read?",
-            "1_2": "I'd love to decorate more, but Mum doesn't approve.#$b#She thinks it's spending money we don't have."
+            "1_2": "I'd love to decorate more, but Mum doesn't approve.#$b#She thinks it's spending money we don't have.",
+            "2_2": "Back when Mom used to drive that truck around, she'd bring me soup from a small restaurant near one of the truck stops she frequented.%revealtastePenny218#$b#Tom Kha soup, I still love that.",
+            "3_2": "I hate how big companies can abuse bankruptcy to get themselves out of lawsuits.$s",
+            "6_2": "One of the things I truly love about the library is the interlibrary loan system.#$b#We can borrow books from any library within the state, and they'll just ship the book to our library!$h"
+        }
+    },
+    {
+        "LogName": "Penny - Marriage Y2",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/MarriageDialoguePenny",
+        "When" : {"YearModulus": "2"},
+        "Entries": {
+            "patio_Penny": "Just doing a little reading outside, %endearment. The weather is lovely today!",
+            "Indoor_Night_1": "Mmmm, might take my hair down early tonight.#$b#There's a bobby pin stabbing me.$s",
+            "Bad_0": "@, are we doing poorly financially? Should I take a job in Grampleton?$s",
+
+            "fall_6": "Gotta order new textbooks for the kiddos...I hope the town will have enough funds...$s"
+        }
+    },
+    {
+        "LogName": "Penny - Marriage Y3",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/MarriageDialoguePenny",
+        "When" : {"YearModulus": "3"},
+        "Entries": {
+            "patio_Penny": "Just enjoying a good book outside today, @!#$b#Is there anything that needs doing?",
+
+            "Rainy_Night_1": "@, to be honest, I'm glad I'm no longer living with my mother.#$b#As much as I love her, I now get that I can't save her.",
+
+            "TwoKids_0": "I can't wait to start teaching %kid1 and %kid2!$h",
+            "Good_0": "To be honest, @, there's some days I'm still surprised that you picked me, of all the girls in town.#$e#I love you.$l"
         }
     }
 ]}

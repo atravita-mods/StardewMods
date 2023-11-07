@@ -1,12 +1,21 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
+
+using AtraBase.Toolkit.Extensions;
 using AtraBase.Toolkit.Reflection;
+
+using AtraCore;
 using AtraCore.Framework.ReflectionManager;
+
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
+
 using HarmonyLib;
+
 using MoreFertilizers.Framework;
+
 using Netcode;
+
 using StardewValley.TerrainFeatures;
 
 namespace MoreFertilizers.HarmonyPatches.FruitTreePatches;
@@ -17,40 +26,20 @@ namespace MoreFertilizers.HarmonyPatches.FruitTreePatches;
 [HarmonyPatch(typeof(FruitTree))]
 internal static class FruitTreeDayUpdateTranspiler
 {
-    /// <summary>
-    /// Applies the fruit tree update patch to DGA too.
-    /// </summary>
-    /// <param name="harmony">Harmony instance.</param>
-    internal static void ApplyDGAPatch(Harmony harmony)
-    {
-        try
-        {
-            Type dgaFruitTree = AccessTools.TypeByName("DynamicGameAssets.Game.CustomFruitTree")
-                ?? ReflectionThrowHelper.ThrowMethodNotFoundException<Type>("DGA Fruit Trees");
-            harmony.Patch(
-                original: dgaFruitTree.GetCachedMethod("dayUpdate", ReflectionCache.FlagTypes.InstanceFlags),
-                transpiler: new HarmonyMethod(typeof(FruitTreeDayUpdateTranspiler), nameof(Transpiler)));
-        }
-        catch (Exception ex)
-        {
-            ModEntry.ModMonitor.Log($"Mod crashed while transpiling DGA. Integration may not work correctly.\n\n{ex}", LogLevel.Error);
-        }
-    }
-
     private static int CalculateExtraGrowth(FruitTree tree)
     {
         try
         {
             if (tree.modData?.GetInt(CanPlaceHandler.FruitTreeFertilizer) is int result
-                && Game1.random.NextDouble() <= 0.15 * result)
+                && Random.Shared.OfChance(0.15 * result))
             {
-                ModEntry.ModMonitor.LogIfVerbose(() => $"Speeding up fruit tree at {tree.currentTileLocation}");
+                ModEntry.ModMonitor.LogIfVerbose($"Speeding up fruit tree at {tree.Tile}");
                 return 1;
             }
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.LogOnce($"Crash while calculating extra growth for fruit trees!\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError($"calculating extra growth for fruit trees", ex);
         }
         return 0;
     }
@@ -93,7 +82,7 @@ internal static class FruitTreeDayUpdateTranspiler
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod crashed while transpiling FruitTree.DayUpdate:\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }

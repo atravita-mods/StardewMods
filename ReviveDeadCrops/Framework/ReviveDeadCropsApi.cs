@@ -1,12 +1,14 @@
-﻿using AtraBase.Toolkit.Extensions;
+﻿// Ignore Spelling: Api loc
+
+using AtraBase.Toolkit.Extensions;
 using AtraBase.Toolkit.Reflection;
 
 using AtraCore.Framework.ReflectionManager;
-using AtraCore.Utilities;
 
 using AtraShared.Utils.Extensions;
 
 using Microsoft.Xna.Framework;
+
 using StardewValley.TerrainFeatures;
 
 namespace ReviveDeadCrops.Framework;
@@ -19,7 +21,7 @@ public class ReviveDeadCropsApi : IReviveDeadCropsApi
     /// </summary>
     internal const string REVIVED_PLANT_MARKER = "atravita.RevivedPlant";
 
-    private const int FAIRY_DUST = 872;
+    private const string FAIRY_DUST = "(O)872";
 
     private static readonly Lazy<Action<FruitTree, float>> ShakeTimerSetter = new(
     () => typeof(FruitTree)
@@ -42,7 +44,7 @@ public class ReviveDeadCropsApi : IReviveDeadCropsApi
     /// <inheritdoc />
     public bool CanApplyDust(GameLocation loc, Vector2 tile, SObject obj)
     {
-        if (!Utility.IsNormalObjectAtParentSheetIndex(obj, FAIRY_DUST))
+        if (obj.QualifiedItemId != FAIRY_DUST)
         {
             return false;
         }
@@ -96,26 +98,13 @@ public class ReviveDeadCropsApi : IReviveDeadCropsApi
     {
         // it's alive!
         crop.dead.Value = false;
-        if (crop.rowInSpriteSheet.Value != Crop.rowOfWildSeeds && crop.netSeedIndex.Value == -1)
-        {
-            crop.InferSeedIndex();
-        }
-
-        int seedIndex = crop.rowInSpriteSheet.Value != Crop.rowOfWildSeeds ? crop.netSeedIndex.Value : crop.whichForageCrop.Value;
-
-        Dictionary<int, string> cropData = Game1.content.Load<Dictionary<int, string>>("Data\\Crops");
 
         // make sure that the raised value is set again.
-        if (cropData.TryGetValue(seedIndex, out string? data))
+        if (crop.GetData()?.IsRaised == true)
         {
-            ReadOnlySpan<char> segment = data.GetNthChunk('/', 7);
-            if (segment.Trim().Equals("true", StringComparison.OrdinalIgnoreCase))
-            {
-                crop.raisedSeeds.Value = true;
-            }
+            crop.raisedSeeds.Value = true;
         }
 
-        // grow it completely.
         crop.growCompletely();
     }
 
@@ -124,7 +113,7 @@ public class ReviveDeadCropsApi : IReviveDeadCropsApi
     {
         if (tree.struckByLightningCountdown.Value > 0)
         {
-            tree.performUseAction(tree.currentTileLocation, Game1.currentLocation ?? tree.currentLocation);
+            tree.performUseAction(tree.Tile);
             tree.struckByLightningCountdown.Value = 0;
         }
         if (tree.stump.Value)
@@ -148,7 +137,7 @@ public class ReviveDeadCropsApi : IReviveDeadCropsApi
             numberOfLoops: 0,
             position: tile * 64f,
             flicker: false,
-            flipped: Game1.random.NextDouble() < 0.5,
+            flipped: Random.Shared.OfChance(0.5),
             layerDepth: 1f,
             alphaFade: 0.01f,
             color: Color.White,
@@ -159,6 +148,6 @@ public class ReviveDeadCropsApi : IReviveDeadCropsApi
         {
             light = true,
         };
-        MultiplayerHelpers.GetMultiplayer().broadcastSprites(loc, tas);
+        Game1.Multiplayer.broadcastSprites(loc, tas);
     }
 }

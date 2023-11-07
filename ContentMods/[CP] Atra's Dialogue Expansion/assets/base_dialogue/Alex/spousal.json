@@ -1,0 +1,48 @@
+{
+    "Changes": [
+        {
+            "LogName": "Base Alex Spousal",
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Alex",
+            "Entries": {
+                "JoshHouse_Entry": "{{i18n: alex-greet-Evelyn}}"
+            }
+        },
+        {
+            "LogName": "Evelyn - inlaw - childless",
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Evelyn",
+            "When": {
+                "EnableFor": "Evelyn",
+                "ChildStatus": "None"
+            },
+            "Entries": {
+                "Fri8_inlaw_Alex": "{{i18n:evelyn-alex-childless}}"
+            }
+        },
+        {
+            "LogName": "Evelyn - inlaw - children",
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Evelyn",
+            "When": {
+                "EnableFor": "Evelyn",
+                "ChildStatus": "Multiple"
+            },
+            "Entries": {
+                "summer_Fri8_inlaw_Alex": "{{i18n:evelyn-alex-summer-fri8}}"
+            }
+        },
+        {
+            "LogName": "Alex - minor fixes",
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/MarriageDialogueAlex",
+            "When": {
+                "Season|contains=winter": false
+            },
+            "Entries": {
+                // vanilla line claims you can't run in rain, which is flat wrong.
+                "Rainy_Day_2": "{{i18n:alex-married-nonwinter-rain}}"
+            }
+        },
+    ]
+}

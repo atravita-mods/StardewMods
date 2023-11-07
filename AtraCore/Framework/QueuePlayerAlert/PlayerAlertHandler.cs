@@ -10,12 +10,17 @@ public static class PlayerAlertHandler
 {
     private static readonly PerScreen<Queue<(HUDMessage message, string? soundCue)>> QueuedMessages = new(() => new());
 
+    /// <summary>
+    /// Queues up a HUD message with no sound.
+    /// </summary>
+    /// <param name="message">Message to queue.</param>
     public static void AddMessage(HUDMessage message) => AddMessage(message, null);
 
     /// <summary>
     /// Queues up a HUD message.
     /// </summary>
     /// <param name="message">Message to queue.</param>
+    /// <param name="soundCue">The sound cue to play.</param>
     public static void AddMessage(HUDMessage message, string? soundCue)
     {
         Guard.IsNotNull(message);
@@ -30,7 +35,7 @@ public static class PlayerAlertHandler
     internal static void DisplayFromQueue(int count = 3)
     {
         int i = 0;
-        while (++i < count && QueuedMessages.Value.TryDequeue(out (HUDMessage message, string? soundCue) tuple))
+        while (++i <= count && QueuedMessages.Value.TryDequeue(out (HUDMessage message, string? soundCue) tuple))
         {
             Game1.addHUDMessage(tuple.message);
             if (tuple.soundCue is not null)

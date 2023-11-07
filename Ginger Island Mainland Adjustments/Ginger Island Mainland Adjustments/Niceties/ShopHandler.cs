@@ -1,8 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
+
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
+
 using StardewValley.Locations;
-using StardewValley.Menus;
+
 using AtraUtils = AtraShared.Utils.Utils;
 
 namespace GingerIslandMainlandAdjustments.Niceties;
@@ -23,32 +25,26 @@ internal static class ShopHandler
     /// <param name="e">Button pressed event arguments.</param>
     internal static void HandleSandyShop(ButtonPressedEventArgs e)
     {
-        if (HandlingShop.Value || !(Game1.currentLocation?.Name?.Equals("SandyHouse", StringComparison.OrdinalIgnoreCase) == true))
+        if (HandlingShop.Value || Game1.currentLocation?.Name != "SandyHouse")
         {
             return;
         }
         GameLocation sandyHouse = Game1.currentLocation;
         if (!Game1.IsVisitingIslandToday("Sandy") || sandyHouse.getCharacterFromName("Sandy") is not null // Sandy has not left the building.
-            || !AtraUtils.YieldSurroundingTiles(Globals.Helper.Input.GetCursorPosition().GrabTile).Any((Point v) => sandyHouse.doesTileHaveProperty(v.X, v.Y, "Action", "Buildings")?.Contains("Buy") == true))
+            || !AtraUtils.YieldSurroundingTiles(Globals.Helper.Input.GetCursorPosition().GrabTile).Any(predicate: (Point v) => sandyHouse.doesTileHaveProperty(v.X, v.Y, "Action", "Buildings")?.Contains("Buy") == true))
         {
             return;
         }
-        IReflectedMethod? onSandyShop = Globals.ReflectionHelper.GetMethod(sandyHouse, "onSandyShopPurchase");
-        IReflectedMethod? getSandyStock = Globals.ReflectionHelper.GetMethod(sandyHouse, "sandyShopStock");
-        if (onSandyShop is not null && getSandyStock is not null)
+
+        HandlingShop.Value = true; // Do not want to intercept any more clicks until shop menu is finished.
+        Globals.InputHelper.Suppress(e.Button);
+        Game1.player.FacingDirection = Game1.up;
+        Game1.drawObjectDialogue(I18n.SandyAwayShopMessage());
+        Game1.afterDialogues = () =>
         {
-            HandlingShop.Value = true; // Do not want to intercept any more clicks until shop menu is finished.
-            Globals.InputHelper.Suppress(e.Button);
-            Game1.player.FacingDirection = Game1.up;
-            Game1.drawObjectDialogue(I18n.SandyAwayShopMessage());
-            Game1.afterDialogues = () =>
-            {
-                Game1.activeClickableMenu = new ShopMenu(
-                        itemPriceAndStock: getSandyStock.Invoke<Dictionary<ISalable, int[]>>(),
-                        on_purchase: (ISalable sellable, Farmer who, int amount) => onSandyShop.Invoke<bool>(sellable, who, amount));
-                HandlingShop.Value = false;
-            };
-        }
+            Utility.OpenShopMenu("Sandy", sandyHouse, forceOpen: true);
+            HandlingShop.Value = false;
+        };
     }
 
     /// <summary>
@@ -73,7 +69,7 @@ internal static class ShopHandler
         Game1.drawObjectDialogue(I18n.WillyAwayShopMessage());
         Game1.afterDialogues = () =>
         {
-            Game1.activeClickableMenu = new ShopMenu(itemPriceAndStock: Utility.getFishShopStock(Game1.player));
+            Utility.OpenShopMenu("FishShop", fishShop, forceOpen: true);
             HandlingShop.Value = false;
         };
     }
@@ -107,10 +103,10 @@ internal static class ShopHandler
                 sourceRectStartingPos = new Vector2(129f, 210f),
                 interval = 50000f,
                 totalNumberOfLoops = 9999,
-                position = (new Vector2(tile.X, tile.Y - 1) * Game1.tileSize) + (new Vector2(3f, 0f) * 4f),
+                position = (new Vector2(tile.X, tile.Y - 1) * Game1.tileSize) + new Vector2(12f, 0f),
                 scale = 4f,
-                layerDepth = (((tile.Y - 0.5f) * Game1.tileSize) / 10000f) + 0.01f, // a little offset so it doesn't show up on the floor.
-                id = 777f,
+                layerDepth = MathF.BitIncrement(((tile.Y - 0.5f) * Game1.tileSize / 10000f) + 0.01f), // a little offset so it doesn't show up on the floor.
+                id = 777,
             });
         }
     }

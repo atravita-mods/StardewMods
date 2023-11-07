@@ -20,26 +20,6 @@ namespace MoreFertilizers.HarmonyPatches.FruitTreePatches;
 internal static class FruitTreeDrawTranspiler
 {
     /// <summary>
-    /// Applies this patch to DGA.
-    /// </summary>
-    /// <param name="harmony">Harmony instance.</param>
-    internal static void ApplyDGAPatch(Harmony harmony)
-    {
-        try
-        {
-            Type dgaFruitTree = AccessTools.TypeByName("DynamicGameAssets.Game.CustomFruitTree")
-                ?? ReflectionThrowHelper.ThrowMethodNotFoundException<Type>("DGA Fruit Trees");
-            harmony.Patch(
-                original: dgaFruitTree.GetCachedMethod("draw", ReflectionCache.FlagTypes.InstanceFlags),
-                transpiler: new HarmonyMethod(typeof(FruitTreeDrawTranspiler), nameof(Transpiler)));
-        }
-        catch (Exception ex)
-        {
-            ModEntry.ModMonitor.Log($"Mod crashed while transpiling DGA. Integration may not work correctly.\n\n{ex}", LogLevel.Error);
-        }
-    }
-
-    /// <summary>
     /// Applies this patch to AT.
     /// </summary>
     /// <param name="harmony">Harmony instance.</param>
@@ -55,7 +35,7 @@ internal static class FruitTreeDrawTranspiler
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod crashed while transpiling AT. Integration may not work correctly.\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("transpiling AT", ex);
         }
     }
 
@@ -75,7 +55,8 @@ internal static class FruitTreeDrawTranspiler
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.LogOnce($"Crash while drawing fruit trees!\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("recoloring fruit trees", ex);
+            ModEntry.Config.RecolorFruitTrees = false;
         }
         return prevcolor;
     }
@@ -109,8 +90,7 @@ internal static class FruitTreeDrawTranspiler
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod crashed while transpiling {original.FullDescription()}:\n\n{ex}", LogLevel.Error);
-            original?.Snitch(ModEntry.ModMonitor);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }

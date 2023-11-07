@@ -4,11 +4,24 @@
         "LogName": "Jodi high-hearts",
         "Target": "Characters/Dialogue/Jodi",
         "Entries": {
+            "fall_3{{YearRemainder}}": "Mmmm nothing like some pumpkin pie around this time of year.[608]",
+            "fall_5{{YearRemainder}}": "I feel like making potato gratin today...but it's so many dishes...",
+
+            "winter_12{{YearRemainder}}": "Maybe I should take up knitting. Emily makes it look so relaxing.",
+
+            "summer_Tue8": "Marnie leaves that little girl alone far more often than she should, I think.$s"
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Jodi high-hearts - y2",
+        "Target": "Characters/Dialogue/Jodi",
+        "Entries": {
             "2_2": "Hey @, I made a bunch of extra roasted hazelnuts the other day. It's Kent's favorite food.%revealtasteKent607.#$b#Here, have some.$h[607]",
             "17_2": "Made something fancy today, but neither Kent nor Vincent would eat it. Here, have some.[618]",
             "18_2": "Watching the news makes me anxious. I know I shouldn't, but I watch anyways.",
-            "fall_3_2": "Mmmm nothing like some pumpkin pie around this time of year.[608]",
-            "fall_5_2": "I feel like making potato gratin today...but it's so many dishes...",
+            "19_2": "I got a recipe for steamed salmon and broccoli from Caroline that I'm dying to try out.",
+            "20_2": "I saw a video for hand-pulled noodles, and I'm really tempted to try making them.$h#$b#They'll take so much time though, I don't know when I can do that.$s"
         },
         "When": { "YearModulus": "2" }
     },
@@ -17,8 +30,27 @@
         "LogName": "Jodi high-hearts",
         "Target": "Characters/Dialogue/Jodi",
         "Entries": {
-            "2_2": "Kent wasn't around very much when the kids were growing up. Sometimes, we regret that.$s#$e#Oh well, can't change the past now."
+            "3_2": "Kent wasn't around very much when the kids were growing up. Sometimes, we regret that.$s#$e#Oh well, can't change the past now.",
+            "5_2": "I'd love to cook some new recipes every now and then, but I'm not sure Sam or Kent would eat them...$s",
+            "7_2": "The worst part of living in a town this small is the lack of medical services.#$b#As much as I respect Dr. Harvey, he's not a specialist.",
+            "10_2": "Kent's meds are delayed. Again. I hate this mail order pharmacy.$a",
+            "18_2": "Sometimes I wish I didn't have Sam so early.#$b#I love him more than words can say, but I do wish I started having kids a little later."
         },
         "When": { "YearModulus": "3" }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Jodi high-hearts",
+        "Target": "Characters/Dialogue/Jodi",
+        "Entries": {
+            "4_2": "Between you and I, @, I wish we had a bit more money. Would make things a lot easier.",
+            "5_2": "Our range broke. I'm...I'm not sure what to do, we don't have the money for this.$s",
+            "6_2": "Kent's not getting any cost-of-living adjustments in his pension this year. I'm not sure what we're going to do.$s",
+            "17_2": "Caroline's been trying to get me to start a garden too. She thinks it might be a good way for us to save some money.",
+            "25_2": "To be honest, @, JojaOnline is so handy...being able to order anything online and getting it within two days...",
+            "26_2": "The electric bill is just so much higher this month and I don't know why...",
+            "27_2": "Caroline's got a new green drink that she swears by.#$b#Costs an arm and a leg but she says it does wonders for health."
+        },
+        "When": {"YearModulus": "4"}
     }
 ]}

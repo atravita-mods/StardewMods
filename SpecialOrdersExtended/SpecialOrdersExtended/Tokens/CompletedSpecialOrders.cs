@@ -11,7 +11,7 @@ internal class CompletedSpecialOrders : AbstractToken
         List<string>? specialOrderNames;
         if (Context.IsWorldReady)
         {
-            specialOrderNames = Game1.player.team.completedSpecialOrders.Keys.OrderBy(a => a)?.ToList();
+            specialOrderNames = Game1.player.team.completedSpecialOrders.OrderBy(a => a)?.ToList();
         }
         else
         {

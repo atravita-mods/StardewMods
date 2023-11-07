@@ -8,6 +8,8 @@ using AtraCore.Framework.ReflectionManager;
 
 using HarmonyLib;
 
+using StardewValley.SpecialOrders.Objectives;
+
 namespace SpecialOrdersExtended.HarmonyPatches;
 internal static class DebuggingPatches
 {

@@ -1,4 +1,6 @@
-﻿using System.Text.RegularExpressions;
+﻿// Ignore Spelling: Loc Qual prevtime Oschedule npc
+
+using System.Text.RegularExpressions;
 using AtraBase.Toolkit.Extensions;
 using AtraBase.Toolkit.Reflection;
 using AtraBase.Toolkit.StringHandler;
@@ -9,13 +11,14 @@ using AtraShared.Utils.Extensions;
 using Microsoft.Xna.Framework;
 using StardewModdingAPI.Utilities;
 using StardewValley.Network;
+using StardewValley.Pathfinding;
 
 namespace AtraShared.Schedules;
 
 /// <summary>
 /// Holds a map + location.
 /// </summary>
-public class QualLoc
+internal sealed class QualLoc
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="QualLoc"/> class.
@@ -64,13 +67,6 @@ public class ScheduleUtilityFunctions
         options: RegexOptions.CultureInvariant | RegexOptions.Compiled,
         matchTimeout: TimeSpan.FromMilliseconds(250));
 
-    /// <summary>
-    /// Stardew's NPC::pathfindToNextScheduleLocation method.
-    /// </summary>
-    private static readonly PathFinderDelegate PathFindMethod = typeof(NPC)
-        .GetCachedMethod("pathfindToNextScheduleLocation", ReflectionCache.FlagTypes.InstanceFlags)
-        .CreateDelegate<PathFinderDelegate>();
-
     private readonly IMonitor monitor;
     private readonly ITranslationHelper translation;
 
@@ -86,18 +82,6 @@ public class ScheduleUtilityFunctions
         this.monitor = monitor;
         this.translation = translation;
     }
-
-    private delegate SchedulePathDescription PathFinderDelegate(
-        NPC npc,
-        string startMap,
-        int startX,
-        int startY,
-        string endMap,
-        int endX,
-        int endY,
-        int facing,
-        string? animation,
-        string? message);
 
     /// <summary>
     /// Given a raw schedule string, returns a new raw schedule string, after following the GOTO/MAIL/NOT friendship keys in the game.
@@ -128,19 +112,19 @@ public class ScheduleUtilityFunctions
                 // GOTO season
                 if (newKey.Equals("Season", StringComparison.OrdinalIgnoreCase))
                 {
-                    newKey = date.Season.ToLowerInvariant();
+                    newKey = date.SeasonKey.ToLowerInvariant();
                 }
 
                 // GOTO newKey
                 if (npc.hasMasterScheduleEntry(newKey))
                 {
-                    string newscheduleKey = npc.getMasterScheduleEntry(newKey);
-                    if (newscheduleKey.Equals(rawData, StringComparison.Ordinal))
+                    string newScheduleKey = npc.getMasterScheduleEntry(newKey);
+                    if (newScheduleKey.Equals(rawData, StringComparison.Ordinal))
                     {
                         this.monitor.Log(this.translation.Get("GOTO_INFINITE_LOOP").Default("Infinite loop detected, skipping this schedule."), LogLevel.Warn);
                         return false;
                     }
-                    return this.TryFindGOTOschedule(npc, date, newscheduleKey, out scheduleString);
+                    return this.TryFindGOTOschedule(npc, date, newScheduleKey, out scheduleString);
                 }
                 else
                 {
@@ -201,6 +185,7 @@ public class ScheduleUtilityFunctions
     /// <summary>
     /// Handles parsing a schedule for a schedule string already stripped of GOTO/MAIL/NOT.
     /// </summary>
+    /// <param name="scheduleKey">The schedule key</param>
     /// <param name="schedule">Raw schedule string.</param>
     /// <param name="npc">NPC.</param>
     /// <param name="prevMap">Map NPC starts on.</param>
@@ -211,6 +196,7 @@ public class ScheduleUtilityFunctions
     /// <exception cref="MethodNotFoundException">Reflection to get game methods failed.</exception>
     /// <remarks>Does NOT set NPC.daySchedule - still need to set that manually if that's wanted.</remarks>
     public Dictionary<int, SchedulePathDescription>? ParseSchedule(
+        string scheduleKey,
         string? schedule,
         NPC npc,
         string? prevMap = null,
@@ -279,8 +265,8 @@ public class ScheduleUtilityFunctions
                     Dictionary<string, string> animationData = Game1.content.Load<Dictionary<string, string>>("Data\\animationDescriptions");
                     string? sleepanimation = npc.Name.ToLowerInvariant() + "_sleep";
                     sleepanimation = animationData.ContainsKey(sleepanimation) ? sleepanimation : null;
-                    SchedulePathDescription path2bed = PathFindMethod(
-                        npc,
+                    SchedulePathDescription path2bed = npc.pathfindToNextScheduleLocation(
+                        scheduleKey,
                         previousMap,
                         lastx,
                         lasty,
@@ -289,7 +275,7 @@ public class ScheduleUtilityFunctions
                         (int)npc.DefaultPosition.Y / 64,
                         Game1.up,
                         sleepanimation,
-                        null); // no message.
+                        null);
                     string originaltime;
                     int spaceloc = schedulepoint.IndexOf(' ');
                     if (spaceloc == -1)
@@ -409,8 +395,8 @@ public class ScheduleUtilityFunctions
                 matchDict.TryGetValue("animation", out string? animation);
                 matchDict.TryGetValue("message", out string? message);
 
-                SchedulePathDescription newpath = PathFindMethod(
-                    npc,
+                SchedulePathDescription newpath = npc.pathfindToNextScheduleLocation(
+                    scheduleKey,
                     previousMap,
                     lastx,
                     lasty,
@@ -482,7 +468,7 @@ public class ScheduleUtilityFunctions
             lastPoint = rawSchedule.AsSpan(slashloc + 1);
         }
 
-        if (lastPoint.TrySplitOnce(' ', out var first, out var second))
+        if (lastPoint.TrySplitOnce(' ', out _, out ReadOnlySpan<char> second))
         {
             return second;
         }

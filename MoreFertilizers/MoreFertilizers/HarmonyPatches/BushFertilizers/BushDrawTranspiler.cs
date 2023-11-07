@@ -51,21 +51,16 @@ internal static class BushDrawTranspiler
         }
         else if (bush.size.Value == Bush.mediumBush)
         {
-#warning - fix this to be less dumb in 1.6
             if (bush.modData?.GetBool(CanPlaceHandler.BountifulBush) == true)
             {
-                string season = (bush.overrideSeason.Value == -1)
-                    ? Game1.GetSeasonForLocation(bush.currentLocation)
-                    : Utility.getSeasonNameFromNumber(bush.overrideSeason.Value);
+                var season = bush.IsSheltered() ? Season.Spring : bush.Location.GetSeason();
 
-                if (season.Equals("spring", StringComparison.OrdinalIgnoreCase))
+                return season switch
                 {
-                    return Color.LawnGreen;
-                }
-                else if (season.Equals("fall", StringComparison.OrdinalIgnoreCase))
-                {
-                    return Color.Goldenrod;
-                }
+                    Season.Spring => Color.LawnGreen,
+                    Season.Fall => Color.Goldenrod,
+                    _ => prevColor
+                };
             }
         }
         return prevColor;
@@ -99,8 +94,7 @@ internal static class BushDrawTranspiler
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod crashed while transpiling {original.FullDescription()}:\n\n{ex}", LogLevel.Error);
-            original.Snitch(ModEntry.ModMonitor);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }

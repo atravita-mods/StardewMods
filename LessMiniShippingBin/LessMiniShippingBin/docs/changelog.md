@@ -1,6 +1,9 @@
 ﻿Changelog
 ===============
 
+### Version 0.3.3
+* Now option for drawing the first item in a fridge or chest over it.
+
 ### Version 0.3.2
 * Fix up translations, how did I not notice.
 

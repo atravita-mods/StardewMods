@@ -5,6 +5,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI.Utilities;
 
+using StardewValley.GameData.Machines;
+
 namespace AtraShared.Utils;
 
 /// <summary>
@@ -43,12 +45,13 @@ public static class Utils
         {
             return helper.ReadConfig<T>();
         }
-        catch
+        catch (Exception ex)
         {
             monitor.Log(
                 helper.Translation.Get("IllFormatedConfig")
                     .Default("Config file seems ill-formated, using default. Please use Generic Mod Config Menu to configure."),
                 LogLevel.Warn);
+            monitor.Log(ex.ToString());
             return new();
         }
     }
@@ -129,7 +132,7 @@ public static class Utils
     {
         try
         {
-            return new CultureInfo(Game1.content.LanguageCodeString(Game1.content.GetCurrentLanguage()));
+            return new CultureInfo(LocalizedContentManager.LanguageCodeString(Game1.content.GetCurrentLanguage()));
         }
         catch (CultureNotFoundException)
         {
@@ -146,14 +149,13 @@ public static class Utils
     {
         foreach (NPC npc in NPCHelpers.GetNPCs())
         {
-            if (npc is not null && npc.isBirthday(day.Season, day.Day))
+            if (npc is not null && npc.Birthday_Season == day.SeasonKey && npc.Birthday_Day == day.Day)
             {
                 yield return npc;
             }
         }
     }
 
-#warning - fix in Stardew 1.6
     /// <summary>
     /// Gets the next day, given the specific season and day.
     /// </summary>
@@ -170,7 +172,7 @@ public static class Utils
                 "summer" => ("fall", 1),
                 "fall" => ("winter", 1),
                 "winter" => ("spring", 1),
-                _ => ThrowHelper.ThrowArgumentException<ValueTuple<string, int>>($"Unexpected season {season}!"),
+                _ => ThrowHelper.ThrowArgumentException<(string, int)>($"Unexpected season {season}!"),
             };
         }
         else
@@ -178,4 +180,34 @@ public static class Utils
             return (season, day + 1);
         }
     }
+
+    /// <summary>
+    /// Gets the next day, given the specific season and day.
+    /// </summary>
+    /// <param name="season">Season as enum.</param>
+    /// <param name="day">Day as int.</param>
+    /// <returns>ValueTuple containing the next day.</returns>
+    public static (Season season, int day) GetTomorrow(Season season, int day)
+    {
+        if (season < Season.Spring || season > Season.Winter)
+        {
+            return ThrowHelper.ThrowArgumentException<(Season, int)>($"Unexpected season {season}!");
+        }
+        if (day == 28)
+        {
+            Season nextSeason = season + 1;
+            if (nextSeason > Season.Winter)
+            {
+                nextSeason = Season.Spring;
+            }
+            return (nextSeason, 1);
+        }
+        else
+        {
+            return (season, day + 1);
+        }
+    }
+
+    public static Dictionary<string, MachineData> GetMachineData()
+        => Game1.content.Load<Dictionary<string, MachineData>>("Data\\Machines");
 }

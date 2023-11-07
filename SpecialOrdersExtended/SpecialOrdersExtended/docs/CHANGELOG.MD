@@ -17,6 +17,10 @@ Changelog
 1. Somehow limit the kill objective to just monsters on a certain (few?) maps. (Perhaps a custom objective, perhaps a Special Rule).
 <!-- Handle WoL professions? -->
 
+#### Version 1.2.0
+* `atravita_addSpecialOrder` command now no longer adds duplicate orders by default.
+* Refactored tag checking. Of note: Previously, "extra" data near the end would be ignored. That will no longer be the case.
+
 #### Version 1.1.2
 * Fix accidental case sensitivity in some tags.
 

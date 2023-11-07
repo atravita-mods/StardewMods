@@ -3,5 +3,6 @@
   "Price": 50,
   "Category": -19,
   "Edibility": -300,
-  "TranslationKey": "prismatic-fertilizer"
+  "TranslationKey": "prismatic-fertilizer",
+  "ContextTags": [ "color_prismatic" ]
 }

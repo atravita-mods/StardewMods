@@ -1,7 +1,12 @@
 ﻿using AtraBase.Toolkit.Reflection;
+
 using AtraCore.Framework.ReflectionManager;
+
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
+
 using HarmonyLib;
+
 using StardewValley.TerrainFeatures;
 
 namespace MoreFertilizers.HarmonyPatches.Compat;
@@ -11,6 +16,7 @@ namespace MoreFertilizers.HarmonyPatches.Compat;
 /// This way MultiFertlizer doesn't clear us...
 /// </summary>
 [HarmonyPatch]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class HoeDirtPatcher
 {
     /// <summary>
@@ -44,7 +50,6 @@ internal static class HoeDirtPatcher
 
     [HarmonyPrefix]
     [HarmonyPatch(typeof(HoeDirt), nameof(HoeDirt.plant))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention")]
     private static bool PrefixCanPlant(HoeDirt __instance, int index, bool isFertilizer, ref bool __result)
     {
         if (isFertilizer && ModEntry.PlantableFertilizerIDs.Contains(index) && __instance.fertilizer.Value == index)
@@ -57,7 +62,6 @@ internal static class HoeDirtPatcher
         return true;
     }
 
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention")]
     private static void PrefixMulti(HoeDirt __instance, out int? __state)
     {
         if (ModEntry.PlantableFertilizerIDs.Contains(__instance.fertilizer.Value))
@@ -71,7 +75,6 @@ internal static class HoeDirtPatcher
         }
     }
 
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention")]
     private static void PostfixMulti(HoeDirt __instance, int? __state)
     {
         if (__state is not null)

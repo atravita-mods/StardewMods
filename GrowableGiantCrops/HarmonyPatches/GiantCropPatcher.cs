@@ -1,4 +1,7 @@
-﻿using GrowableGiantCrops.Framework;
+﻿using AtraShared.ConstantsAndEnums;
+using AtraShared.Utils.Extensions;
+
+using GrowableGiantCrops.Framework;
 using GrowableGiantCrops.Framework.InventoryModels;
 using HarmonyLib;
 
@@ -12,11 +15,11 @@ namespace GrowableGiantCrops.HarmonyPatches;
 /// Holds patches to remove the tapper before the big crop is destroyed.
 /// </summary>
 [HarmonyPatch(typeof(GiantCrop))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class GiantCropPatcher
 {
     [HarmonyPriority(Priority.High)]
     [HarmonyPatch(nameof(GiantCrop.performToolAction))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
     private static bool Prefix(GiantCrop __instance, Tool t)
     {
         if (t is not ShovelTool)
@@ -27,13 +30,13 @@ internal static class GiantCropPatcher
         // make sure to pop off tap giant crop's tapper!
         try
         {
-            for (int x = (int)__instance.tile.X; x < (int)__instance.tile.X + __instance.width.Value; x++)
+            for (int x = (int)__instance.Tile.X; x < (int)__instance.Tile.X + __instance.width.Value; x++)
             {
-                for (int y = (int)__instance.tile.Y; y < (int)__instance.tile.Y + __instance.width.Value; y++)
+                for (int y = (int)__instance.Tile.Y; y < (int)__instance.Tile.Y + __instance.width.Value; y++)
                 {
                     Vector2 tile = new(x, y);
                     if (Game1.currentLocation.objects.TryGetValue(tile, out SObject? obj)
-                        && obj.Name.Contains("Tapper", StringComparison.OrdinalIgnoreCase))
+                        && obj.IsTapper())
                     {
                         if (obj.readyForHarvest.Value && obj.heldObject.Value is SObject held)
                         {
@@ -43,7 +46,7 @@ internal static class GiantCropPatcher
                         obj.readyForHarvest.Value = false;
 
                         InventoryGiantCrop.ShakeGiantCrop(__instance);
-                        obj.performRemoveAction(obj.TileLocation, Game1.currentLocation);
+                        obj.performRemoveAction();
                         Game1.createItemDebris(obj, tile * 64f, -1);
                         Game1.currentLocation.objects.Remove(tile);
                         return false;
@@ -53,7 +56,7 @@ internal static class GiantCropPatcher
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed while popping the tapper off {ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("popping the tapper off", ex);
         }
         return true;
     }

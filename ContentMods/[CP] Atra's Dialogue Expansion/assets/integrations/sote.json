@@ -1,0 +1,70 @@
+{
+    "Changes": [
+        {
+            "LogName": "Alex - special orders dialogue",
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Alex",
+            "Entries": {
+                "Evelyn_Completed": "{{i18n:alex-leeks-special-order}}$h"
+            },
+            "When": {"EnableFor": "Alex"}
+        },
+        {
+            "LogName": "Demetrius - special orders dialogue",
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Demetrius",
+            "When": {"EnableFor": "Demetrius"},
+            "Entries": {
+                "Demetrius_Completed": "{{i18n:demetrius-specific-fish-special-order}}$h"
+            }
+        },
+        {
+            "LogName": "Evelyn - special orders dialogue",
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Evelyn",
+            "Entries": {
+                "Evelyn_Completed": "{{i18n:evelyn-leeks-special-order}}$h"
+            },
+            "When": {"EnableFor": "Evelyn"}
+        },
+        {
+            "LogName": "Gus - special order dialogue",
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Gus",
+            "Entries": {
+                "Evelyn_Completed": "{{i18n:gus-leeks-special-order}}$h",
+                "Gus_Completed": "{{i18n:gus-omelet-special-order}}$h"
+            },
+            "When": {"EnableFor": "Gus"}
+        },
+        {
+            "LogName": "Pierre - special order dialogue",
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Pierre",
+            "Entries": {
+                "Pierre_Completed": "{{i18n:pierre-special-order}}$h",
+            }
+        },
+        {
+            "LogName": "Robin - special order dialogue",
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Robin",
+            "When": {
+                "HasSeenEvent|contains=1053978": false,
+                "EnableFor": "Robin"
+            },
+            "Entries": {
+                "Robin_Completed": "{{i18n:robin-bed-special-order-before}}$h"
+            }
+        },
+        {
+            "LogName": "Willy - special orders dialogue",
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Willy",
+            "When": {"EnableFor": "Willy"},
+            "Entries": {
+                "Willy_Completed": "{{i18n:willy-bait-special-order.00}}#$b#{{i18n: willy-bait-special.order.01}}$h"
+            }
+        }
+    ]
+}

@@ -2,6 +2,7 @@
 
 using AtraShared.ConstantsAndEnums;
 
+using StardewValley.Extensions;
 using StardewValley.Objects;
 
 namespace CatGiftsRedux.Framework.Pickers;
@@ -16,12 +17,10 @@ internal static class RingPicker
     /// </summary>
     /// <param name="random">Random instance to use.</param>
     /// <returns>A random ring.</returns>
-    internal static Ring? Pick(Random random)
+    internal static Item? Pick(Random random)
     {
-        List<int>? possibilities = DataToItemMap.GetAll(ItemTypeEnum.Ring).ToList();
+        string? id = random.Choose(AssetManager.Rings);
 
-        int id = possibilities[random.Next(possibilities.Count)];
-
-        return new Ring(id);
+        return id is not null ? ItemRegistry.Create($"{ItemRegistry.type_object}{id}") as Ring : null;
     }
 }

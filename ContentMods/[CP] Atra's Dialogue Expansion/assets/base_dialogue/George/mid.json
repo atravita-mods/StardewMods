@@ -1,0 +1,27 @@
+{
+    "Changes": [
+        {
+            "LogName": "George mid-hearts - post sports",
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/George",
+            "Entries": {
+                "JoshHouse_Entry": "{{i18n:george-homecoming}}",
+                "IslandSouth_Entry": "{{i18n:george-vacation-bubbles}}"
+            }
+        },
+        {
+            "LogName": "George mid-hearts - post sports",
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/George",
+            "When": {
+                "HasReadLetter": "saloonSportsRoom"
+            },
+            "Entries": {
+                "Sun6": "{{i18n:george-sports.sun|first= {{FirstSportsTeam}} | second= {{SecondSportsTeam}} }}",
+                "Mon6": "{{i18n:george-sports.mon|reaction = {{i18n: {{Random:great, incredible, absurd, boring}} }} }}",
+
+                "summer_19": "{{i18n:george-sports-specific}}$h",
+            }
+        }
+    ]
+}

@@ -8,6 +8,7 @@ using AtraBase.Toolkit.Reflection;
 
 using AtraCore.Framework.ReflectionManager;
 
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 
@@ -21,13 +22,18 @@ namespace GrowableGiantCrops.HarmonyPatches.Compat;
 /// <summary>
 /// Compat for Slime Produce.
 /// </summary>
-[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Named for Harmony.")]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class SlimeProduceCompat
 {
     /// <summary>
     /// The moddata string to mark slimeballs from when they're picked up to when they go back to the ground.
     /// </summary>
     internal const string SlimeBall = "atravita.PickedUpSlimeball";
+
+    /// <summary>
+    /// The qualified item id of a slime ball.
+    /// </summary>
+    internal const string SlimeBallQualId = "(BC)56";
 
     /// <summary>
     /// Applies these patches.
@@ -51,7 +57,7 @@ internal static class SlimeProduceCompat
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed to patch Slime Produce.\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("patching Slime Produce", ex);
         }
 
         Type? slimeEntry = AccessTools.TypeByName("SlimeProduce.ModEntry");
@@ -70,7 +76,7 @@ internal static class SlimeProduceCompat
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed to patch Slime Produce.\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("patching Slime Produce", ex);
         }
 
         try
@@ -92,7 +98,7 @@ internal static class SlimeProduceCompat
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed to patch SObject.drawInMenu for SlimeProduce.\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("patching SObject.drawInMenu for SlimeProduce", ex);
         }
     }
 
@@ -105,7 +111,7 @@ internal static class SlimeProduceCompat
     [MethodImpl(TKConstants.Hot)]
     internal static Color ReplaceDrawColorForSlimeEgg(Color prevColor, SObject item)
     {
-        if (prevColor == Color.White && item.Name == "Slime Ball" && item.orderData?.Value is not null
+        if (prevColor == Color.White && item.QualifiedItemId == SlimeBallQualId && item.orderData?.Value is not null
             && uint.TryParse(item.orderData.Value.GetNthChunk('/'), out uint packed))
         {
             return new(packed);
@@ -130,7 +136,7 @@ internal static class SlimeProduceCompat
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed while prevent SlimeProduce from dropping extra drops. Please report bugs to me, not them!", LogLevel.Error);
+            ModEntry.ModMonitor.Log($"Failed while preventing SlimeProduce from dropping extra drops. Please report bugs to me, not them!", LogLevel.Error);
             ModEntry.ModMonitor.Log(ex.ToString());
         }
     }
@@ -147,13 +153,12 @@ internal static class SlimeProduceCompat
             })
             .Remove(1);
 
-            helper.Print();
+            // helper.Print();
             return helper.Render();
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod crashed while transpiling {original.FullDescription()}:\n\n{ex}", LogLevel.Error);
-            original.Snitch(ModEntry.ModMonitor);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }
@@ -182,8 +187,7 @@ internal static class SlimeProduceCompat
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod crashed while transpiling {original.GetFullName()}\n\n{ex}", LogLevel.Error);
-            original.Snitch(ModEntry.ModMonitor);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }

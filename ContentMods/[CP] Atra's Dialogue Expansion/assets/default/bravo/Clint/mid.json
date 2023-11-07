@@ -15,6 +15,18 @@
         }
     },
     {
+        "LogName":"Clint mid-hearts",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Clint",
+        "Entries": {
+            "summer_Fri8": "Gosh, it's so hot out...$s",
+            "winter_Thu8": "Something about winter just feels so..depressing.#$b#My doctor says it might be seasonal...something something?$s",
+
+            // before the stardew valley fair
+            "fall_15{{YearRemainder}}": "I'm so ready for the Stardew Fair, @, I've been working on my grange display for weeks!$h",
+        }
+    },
+    {
         "Action": "EditData",
         "Target": "Characters/Dialogue/Clint",
         "Entries": {
@@ -28,23 +40,55 @@
         "LogName": "Clint mid-hearts",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Clint",
+        "When": {"YearModulus": 1},
         "Entries": {
-            "6_2": "Got a commission from %place for a pile of swords. That'll be nice for the ole' balance sheet.",
-            "8_2": "What would I've done if I didn't become a blacksmith? Err, @, I'm not sure actually.$s#$b#Didn't really have an idea of what I wanted to become as a kid. Just followed my father's footsteps.",
-            "10_2": "My family has been blacksmiths in this here town for as long as I can remember....",
-            "12_2": "We used to have a lot more coal coming out of that mine. It's been dryin' up lately, I feel.",
-        },
-        "When": {"YearModulus": 2}
+            "winter_Wed6": "Between you and I, @, I'm glad how toasty this place is in winter.#$e#Pretty cold when I have to brave the elements to go to the saloon, though.",
+            "fall_Tue6": "Feel free to bring your geodes to me, I'll crack them open for a small fee...",
+            "fall_Wed8": "Sometimes, when I'm lying in bed awake at night, I wonder what happens to all the swords I make.$s",
+
+            "6{{YearRemainder}}": "I'd consider moving elsewhere, but I'm not sure I could afford the rent.#$e#My family has owned this building for as long as I can remember. Helps a lot with my expenses.",
+            "7{{YearRemainder}}": "I've got a cousin in Grampleton who's a glassblower.#$e#He's attached to one of the local universities, he does custom glassware for them. Cushy job, somehow.",
+            "8{{YearRemainder}}": "I sell ore, too, if you need it.#$b#It's not too expensive, I can order in bulk, but my suppliers aren't exactly giving it away either.",
+            "9{{YearRemainder}}": "My doctor says I should go outside more. I'm not quite sure what I'd do with myself outside, though.",
+
+            // Additional Ginger Island
+            "Resort_Wander": "Wow, @, this place is beautiful...if a little too hot.",
+            "Resort_Pier": "@, do you think that's a shark?",
+        }
     },
     {
         "LogName": "Clint mid-hearts",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Clint",
+        "When": {"YearModulus": 2},
+        "Entries": {
+            "winter_Wed10": "I've got a cousin in Grampleton who makes hard candies now, the old fashioned way. Made him his cooling table, his candy cutters, and, of course, the candy hook.$h",
+            "6_2": "Got a commission from %place for a pile of swords. That'll be nice for the ole' balance sheet.",
+            "8_2": "What would I've done if I didn't become a blacksmith? Err, @, I'm not sure actually.$s#$b#Didn't really have an idea of what I wanted to become as a kid. Just followed my father's footsteps.",
+            "10_2": "My family has been blacksmiths in this here town for as long as I can remember....",
+            "12_2": "We used to have a lot more coal coming out of that mine. It's been dryin' up lately, I feel.",
+            "14_2": "Heya, @, what have you been up to?#$b#Me? Just the same old, same old.",
+            "16_2": "Got any tools you'd like me to upgrade?",
+            "18_2": "It's important to temper your swords correctly. If you don't, they may shatter when you strike things.",
+            "22_2": "Marlon just placed another order for swords.$h#$b#I hope he'll be satisfied with the ones I make!",
+            "23_2": "What should I have for dinner...should I go to the Saloon?",
+            "24_2": "My doctor says I should take up a hobby, but I'm not sure what.#$b#Maybe I'll start knitting, like Emily...#$b#Or maybe I should make jewelery?"
+        }
+    },
+    {
+        "LogName": "Clint mid-hearts",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Clint",
+        "When": {"YearModulus": 3},
         "Entries": {
             "6_2": "%Clint is mumbling to himself.#$b#Gosh, this economy doesn't help matters...$s#$e#Oh, what? It's nothing.",
             "12_2": "I've really only left Pelican Town for long enough to do an apprenticeship in Grampleton. This's where I've been all my life.$s",
-            "14_2": "I'm really hoping I can drum up some more commissions, I need the money.$s"
+            "14_2": "I'm really hoping I can drum up some more commissions, I need the money.$s",
+            "16_2": "Thing about downturns...people want less bespoke work, makes it hard for artisans like me.",
+            "18_2": "If I could start my life over? I...I don't know what I would do, @.",
+            "19_2": "Some days I wish I was braver, but the mines scare me so much.$s",
+            "24_2": "If I could start my life over...what would I be...#$b#You know, @, I'm not sure...$s",
+            "25_2": "Junimo Kart...no, that's not really my type of thing, sorry.#$b#Lewis is pretty good though, he might be able to give you a few pointers."
         },
-        "When": {"YearModulus": 3}
     }
 ]}

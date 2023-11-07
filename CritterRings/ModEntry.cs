@@ -1,4 +1,7 @@
-﻿using AtraCore.Utilities;
+﻿namespace CritterRings;
+
+using AtraCore.Framework.Internal;
+using AtraCore.Utilities;
 
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
@@ -8,7 +11,6 @@ using AtraShared.Utils.Extensions;
 
 using CritterRings.Framework;
 using CritterRings.Framework.Managers;
-using CritterRings.Models;
 
 using HarmonyLib;
 
@@ -16,25 +18,21 @@ using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
 
 using StardewValley.BellsAndWhistles;
+using StardewValley.Buffs;
 using StardewValley.Locations;
 
 using AtraUtils = AtraShared.Utils.Utils;
 
-namespace CritterRings;
-
 /// <inheritdoc />
 [HarmonyPatch]
 [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "Reviewed.")]
-internal sealed class ModEntry : Mod
+internal sealed class ModEntry : BaseMod<ModEntry>
 {
     /// <summary>
     /// A buff corresponding to the bunny ring.
     /// </summary>
-    internal const int BunnyBuffId = 2731247;
+    internal const string BunnyBuffId = "atravita.CritterRings_BunnyBuff";
 
-    private const string SAVEKEY = "item_ids";
-
-    private static IJsonAssetsAPI? jsonAssets;
     private MigrationManager? migrator;
 
     /// <summary>
@@ -43,11 +41,9 @@ internal sealed class ModEntry : Mod
     internal static ModConfig Config { get; private set; } = null!;
 
     /// <summary>
-    /// Gets the logger for this mod.
+    /// Gets the API for CameraPan.
     /// </summary>
-    internal static IMonitor ModMonitor { get; private set; } = null!;
-
-    internal static ICameraAPI? cameraAPI { get; private set; } = null;
+    internal static ICameraAPI? CameraAPI { get; private set; } = null;
 
     #region managers
 
@@ -61,92 +57,37 @@ internal sealed class ModEntry : Mod
     internal static JumpManager? CurrentJumper => JumpManagers.Value;
     #endregion
 
-    #region JA ids
-
-    private static int bunnyRing = -1;
+    #region ItemConsts
 
     /// <summary>
-    /// Gets the integer Id of the Bunny Ring. -1 if not found/not loaded yet.
+    /// The unique ID of this mod.
     /// </summary>
-    internal static int BunnyRing
-    {
-        get
-        {
-            if (bunnyRing == -1)
-            {
-                bunnyRing = jsonAssets?.GetObjectId("atravita.BunnyRing") ?? -1;
-            }
-            return bunnyRing;
-        }
-    }
-
-    private static int butterflyRing = -1;
+    internal const string UniqueID = "atravita.CritterRings";
 
     /// <summary>
-    /// Gets the integer Id of the Butterfly Ring. -1 if not found/not loaded yet.
+    /// The <see cref="Item.ItemId"/> of the bunny ring.
     /// </summary>
-    internal static int ButterflyRing
-    {
-        get
-        {
-            if (butterflyRing == -1)
-            {
-                butterflyRing = jsonAssets?.GetObjectId("atravita.ButterflyRing") ?? -1;
-            }
-            return butterflyRing;
-        }
-    }
-
-    private static int fireflyRing = -1;
+    internal const string BunnyRing = $"{UniqueID}_BunnyRing";
 
     /// <summary>
-    /// Gets the integer Id of the FireFly Ring. -1 if not found/not loaded yet.
+    /// The <see cref="Item.ItemId"/> of the butterfly ring.
     /// </summary>
-    internal static int FireFlyRing
-    {
-        get
-        {
-            if (fireflyRing == -1)
-            {
-                fireflyRing = jsonAssets?.GetObjectId("atravita.FireFlyRing") ?? -1;
-            }
-            return fireflyRing;
-        }
-    }
-
-    private static int frogRing = -1;
+    internal const string ButterflyRing = $"{UniqueID}_ButterflyRing";
 
     /// <summary>
-    /// Gets the integer Id of the Frog Ring. -1 if not found/not loaded yet.
+    /// The <see cref="Item.ItemId"/> of the firefly ring.
     /// </summary>
-    internal static int FrogRing
-    {
-        get
-        {
-            if (frogRing == -1)
-            {
-                frogRing = jsonAssets?.GetObjectId("atravita.FrogRing") ?? -1;
-            }
-            return frogRing;
-        }
-    }
-
-    private static int owlRing = -1;
+    internal const string FireFlyRing = $"{UniqueID}_FireFlyRing";
 
     /// <summary>
-    /// Gets the integer Id of the Owl Ring. -1 if not found/not loaded yet.
+    /// The <see cref="Item.ItemId"/> of the frog ring.
     /// </summary>
-    internal static int OwlRing
-    {
-        get
-        {
-            if (owlRing == -1)
-            {
-                owlRing = jsonAssets?.GetObjectId("atravita.OwlRing") ?? -1;
-            }
-            return owlRing;
-        }
-    }
+    internal const string FrogRing = $"{UniqueID}_FrogRing";
+
+    /// <summary>
+    /// The <see cref="Item.ItemId"/> of the owl ring.
+    /// </summary>
+    internal const string OwlRing = $"{UniqueID}_OwlRing";
 
     #endregion
 
@@ -156,11 +97,10 @@ internal sealed class ModEntry : Mod
     public override void Entry(IModHelper helper)
     {
         I18n.Init(helper.Translation);
-        ModMonitor = this.Monitor;
+        base.Entry(helper);
         Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
 
-        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
         AssetManager.Initialize(helper.GameContent);
     }
@@ -168,16 +108,6 @@ internal sealed class ModEntry : Mod
     /// <inheritdoc cref="IGameLoopEvents.GameLaunched"/>
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
     {
-        {
-            IntegrationHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, LogLevel.Warn);
-            if (!helper.TryGetAPI("spacechase0.JsonAssets", "1.10.3", out jsonAssets))
-            {
-                this.Monitor.Log("Packs could not be loaded! This mod will probably not function.", LogLevel.Error);
-                return;
-            }
-            jsonAssets.LoadAssets(Path.Combine(this.Helper.DirectoryPath, "assets", "json-assets"), this.Helper.Translation);
-        }
-
         this.Helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
         this.Helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
         this.Helper.Events.GameLoop.TimeChanged += this.OnTimeChanged;
@@ -203,7 +133,7 @@ internal sealed class ModEntry : Mod
             IntegrationHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, LogLevel.Trace);
             if (helper.TryGetAPI("atravita.CameraPan", "0.1.1", out ICameraAPI? api))
             {
-                cameraAPI = api;
+                CameraAPI = api;
             }
         }
     }
@@ -232,9 +162,11 @@ internal sealed class ModEntry : Mod
         {
             return;
         }
+
+        // Frog ring.
         if (!Game1.player.UsingTool && !Game1.player.isEating && Game1.player.yJumpOffset == 0
             && Config.MaxFrogJumpDistance > 0 && Config.FrogRingButton.Keybinds.FirstOrDefault(k => k.GetState() == SButtonState.Pressed) is Keybind keybind
-            && FrogRing > 0 && Game1.player.isWearingRing(FrogRing))
+            && Game1.player.isWearingRing(FrogRing))
         {
             if (JumpManagers.Value?.IsValid(out _) == true)
             {
@@ -255,17 +187,22 @@ internal sealed class ModEntry : Mod
             }
         }
 
-        if (Config.BunnyRingBoost > 0 && Config.BunnyRingButton.JustPressed() && BunnyRing > 0
+        // Bunny ring.
+        if (Config.BunnyRingBoost > 0 && Config.BunnyRingButton.JustPressed()
             && Game1.player.isWearingRing(BunnyRing) && !Game1.player.hasBuff(BunnyBuffId))
         {
             if (Game1.player.Stamina >= Config.BunnyRingStamina && !Game1.player.exhausted.Value)
             {
-                Buff buff = BuffEnum.Speed.GetBuffOf(Config.BunnyRingBoost, 20, "atravita.BunnyRing", I18n.BunnyRing_Name());
-                buff.which = BunnyBuffId;
-                buff.description = I18n.BunnyBuff_Description(Config.BunnyRingBoost);
-                buff.sheetIndex = 1;
+                Buff buff = new(
+                    id: BunnyBuffId,
+                    displayName: I18n.BunnyRing_Name(),
+                    description: I18n.BunnyBuff_Description(Config.BunnyRingBoost),
+                    iconTexture: AssetManager.BuffTexture,
+                    iconSheetIndex: 1,
+                    duration: 20 * Game1.realMilliSecondsPerGameMinute, // 20 in game minutes
+                    effects: new BuffEffects() { Speed = { Config.BunnyRingBoost } });
+                Game1.player.applyBuff(buff);
 
-                Game1.buffsDisplay.addOtherBuff(buff);
                 Game1.player.Stamina -= Config.BunnyRingStamina;
             }
             else
@@ -274,6 +211,8 @@ internal sealed class ModEntry : Mod
             }
         }
     }
+
+    #region critter spawning
 
     /// <inheritdoc cref="IPlayerEvents.Warped"/>
     [EventPriority(EventPriority.Low)]
@@ -300,16 +239,16 @@ internal sealed class ModEntry : Mod
         }
         if (Game1.isDarkOut())
         {
-            if (FireFlyRing > 0 && Game1.player.isWearingRing(FireFlyRing))
+            if (Game1.player.isWearingRing(FireFlyRing))
             {
                 CRUtils.SpawnFirefly(critters, 5);
             }
         }
-        else if (e.NewLocation.ShouldSpawnButterflies() && ButterflyRing > 0 && Game1.player.isWearingRing(ButterflyRing))
+        else if (e.NewLocation.ShouldSpawnButterflies() && Game1.player.isWearingRing(ButterflyRing))
         {
-            CRUtils.SpawnButterfly(critters, 3);
+            CRUtils.SpawnButterfly(e.NewLocation, critters, 3);
         }
-        if (BunnyRing > 0 && e.NewLocation is not Caldera && Game1.player.isWearingRing(BunnyRing))
+        if (e.NewLocation is not Caldera && Game1.player.isWearingRing(BunnyRing))
         {
             if (BunnyManagers.Value?.IsValid() == false)
             {
@@ -317,14 +256,14 @@ internal sealed class ModEntry : Mod
                 BunnyManagers.Value = null;
             }
             BunnyManagers.Value ??= new(this.Monitor, Game1.player, this.Helper.Events.Player);
-            CRUtils.AddBunnies(critters, 5, BunnyManagers.Value.GetTrackedBushes());
+            CRUtils.AddBunnies(critters, 5, BunnyManagers.Value.GetTrackedBushes(), e.NewLocation);
         }
-        if (FrogRing > 0 && Game1.player.isWearingRing(FrogRing) && e.NewLocation.ShouldSpawnFrogs())
+        if (Game1.player.isWearingRing(FrogRing) && e.NewLocation.ShouldSpawnFrogs())
         {
             CRUtils.SpawnFrogs(e.NewLocation, critters, 5);
         }
 
-        if (OwlRing > 0 && Game1.player.isWearingRing(OwlRing) && e.NewLocation.ShouldSpawnOwls())
+        if (Game1.player.isWearingRing(OwlRing) && e.NewLocation.ShouldSpawnOwls())
         {
             CRUtils.SpawnOwls(e.NewLocation, critters, 1);
         }
@@ -344,26 +283,23 @@ internal sealed class ModEntry : Mod
         }
         if (Game1.isDarkOut())
         {
-            if (FireFlyRing > 0)
-            {
-                CRUtils.SpawnFirefly(critters, Game1.player.GetEffectsOfRingMultiplier(FireFlyRing));
-            }
+            CRUtils.SpawnFirefly(critters, Game1.player.GetEffectsOfRingMultiplier(FireFlyRing));
         }
-        else if (ButterflyRing > 0 && Game1.currentLocation.ShouldSpawnButterflies())
+        else if (Game1.currentLocation.ShouldSpawnButterflies())
         {
-            CRUtils.SpawnButterfly(critters, Game1.player.GetEffectsOfRingMultiplier(ButterflyRing));
+            CRUtils.SpawnButterfly(Game1.currentLocation, critters, Game1.player.GetEffectsOfRingMultiplier(ButterflyRing));
         }
-        if (FrogRing > 0 && Game1.currentLocation.ShouldSpawnFrogs())
+        if (Game1.currentLocation.ShouldSpawnFrogs())
         {
             CRUtils.SpawnFrogs(Game1.currentLocation, critters, Game1.player.GetEffectsOfRingMultiplier(FrogRing));
         }
 
-        if (OwlRing > 0 && Game1.player.isWearingRing(OwlRing) && Game1.currentLocation.ShouldSpawnOwls())
+        if (Game1.player.isWearingRing(OwlRing) && Game1.currentLocation.ShouldSpawnOwls())
         {
             CRUtils.SpawnOwls(Game1.currentLocation, critters, Game1.player.GetEffectsOfRingMultiplier(OwlRing));
         }
 
-        if (BunnyRing > 0 && Game1.currentLocation is not Caldera)
+        if (Game1.currentLocation is not Caldera)
         {
             if (BunnyManagers.Value?.IsValid() == false)
             {
@@ -374,6 +310,8 @@ internal sealed class ModEntry : Mod
             CRUtils.AddBunnies(critters, Game1.player.GetEffectsOfRingMultiplier(BunnyRing), BunnyManagers.Value.GetTrackedBushes());
         }
     }
+
+    #endregion
 
     /// <inheritdoc cref="IGameLoopEvents.SaveLoaded"/>
     private void OnSaveLoaded(object? sender, SaveLoadedEventArgs e)
@@ -389,13 +327,6 @@ internal sealed class ModEntry : Mod
         {
             this.migrator = null;
         }
-
-        if (Context.IsMainPlayer)
-        {
-            // hook event to save Ids so future migrations are possible.
-            this.Helper.Events.GameLoop.Saving -= this.OnSaving;
-            this.Helper.Events.GameLoop.Saving += this.OnSaving;
-        }
     }
 
     /// <summary>
@@ -406,13 +337,6 @@ internal sealed class ModEntry : Mod
     [EventPriority(EventPriority.High)]
     private void OnReturnedToTitle(object? sender, ReturnedToTitleEventArgs e)
     {
-        // reset JA ids. No clue why but JA does this.
-        bunnyRing = -1;
-        butterflyRing = -1;
-        fireflyRing = -1;
-        frogRing = -1;
-        owlRing = -1;
-
         // reset and yeet managers.
         foreach ((_, JumpManager? value) in JumpManagers.GetActiveValues())
         {
@@ -427,53 +351,6 @@ internal sealed class ModEntry : Mod
     }
 
     #region migration
-
-    /// <inheritdoc cref="IGameLoopEvents.Saving"/>
-    private void OnSaving(object? sender, SavingEventArgs e)
-    {
-        this.Helper.Events.GameLoop.Saving -= this.OnSaving;
-        if (Context.IsMainPlayer)
-        {
-            DataModel data = this.Helper.Data.ReadSaveData<DataModel>(SAVEKEY) ?? new();
-            bool changed = false;
-
-            if (data.BunnyRing != BunnyRing)
-            {
-                data.BunnyRing = BunnyRing;
-                changed = true;
-            }
-
-            if (data.ButterflyRing != ButterflyRing)
-            {
-                data.ButterflyRing = ButterflyRing;
-                changed = true;
-            }
-
-            if (data.FireFlyRing != FireFlyRing)
-            {
-                data.FireFlyRing = FireFlyRing;
-                changed = true;
-            }
-
-            if (data.FrogRing != FrogRing)
-            {
-                data.FrogRing = FrogRing;
-                changed = true;
-            }
-
-            if (data.OwlRing != OwlRing)
-            {
-                data.OwlRing = OwlRing;
-                changed = true;
-            }
-
-            if (changed)
-            {
-                ModMonitor.Log("Writing ids into save.");
-                this.Helper.Data.WriteSaveData("item_ids", data);
-            }
-        }
-    }
 
     /// <inheritdoc cref="IGameLoopEvents.Saved"/>
     /// <remarks>

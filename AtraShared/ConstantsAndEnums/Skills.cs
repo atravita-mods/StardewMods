@@ -1,4 +1,4 @@
-using System.Reflection;
+using AtraBase.Toolkit;
 
 using CommunityToolkit.Diagnostics;
 
@@ -9,15 +9,21 @@ using static System.Numerics.BitOperations;
 namespace AtraShared.ConstantsAndEnums;
 
 /// <summary>
-/// Wallet items as flags....
+/// Skills as flags....
 /// </summary>
 [Flags]
 [EnumExtensions]
-[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1602:Enumeration items should be documented", Justification = "Should be obvious.")]
+[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1602:Enumeration items should be documented", Justification = StyleCopErrorConsts.SelfEvident)]
 public enum Skills
 {
+    /// <summary>
+    /// No skills.
+    /// </summary>
     None = 0,
 
+    /// <summary>
+    /// Farming.
+    /// </summary>
     Farming = 0b1 << Farmer.farmingSkill,
     Mining = 0b1 << Farmer.miningSkill,
     Fishing = 0b1 << Farmer.fishingSkill,
@@ -34,12 +40,12 @@ public static partial class SkillsExtensions
     private static readonly Skills[] _all = GetValues().Where(a => PopCount((uint)a) == 1).ToArray();
 
     /// <summary>
-    /// Gets a span containing all wallet items.
+    /// Gets a span containing all vanilla skills.
     /// </summary>
     public static ReadOnlySpan<Skills> All => new(_all);
 
     /// <summary>
-    /// Checks if this specific farmer has a specific skill level
+    /// Checks if this specific farmer has a specific skill level.
     /// </summary>
     /// <param name="farmer">Farmer to check.</param>
     /// <param name="skills">Skill to check for.</param>

@@ -1,6 +1,10 @@
-﻿#if DEBUG
+﻿namespace HighlightEmptyMachines;
+
+#if DEBUG
 using System.Diagnostics;
 #endif
+
+using AtraCore.Framework.Internal;
 
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
@@ -15,19 +19,12 @@ using StardewModdingAPI.Events;
 
 using AtraUtils = AtraShared.Utils.Utils;
 
-namespace HighlightEmptyMachines;
-
 /// <inheritdoc />
-internal sealed class ModEntry : Mod
+internal sealed class ModEntry : BaseMod<ModEntry>
 {
     private MigrationManager? migrator;
 
     private GMCMHelper? gmcmHelper = null;
-
-    /// <summary>
-    /// Gets the logger for this mod.
-    /// </summary>
-    internal static IMonitor ModMonitor { get; private set; } = null!;
 
     /// <summary>
     /// Gets the config instance for this mod.
@@ -43,24 +40,24 @@ internal sealed class ModEntry : Mod
     public override void Entry(IModHelper helper)
     {
         I18n.Init(helper.Translation);
-        ModMonitor = this.Monitor;
+        base.Entry(helper);
         TranslationHelper = helper.Translation;
 
-        Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
-
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
-        helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
-        helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
-
-        helper.Events.GameLoop.DayStarted += static (_, _) => BeehouseHandler.UpdateStatus(Game1.currentLocation);
-        helper.Events.Player.Warped += static (_, e) => BeehouseHandler.UpdateStatus(e.NewLocation);
-
-        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
     }
 
     [EventPriority(EventPriority.Low)]
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
     {
+        Config = AtraUtils.GetConfigOrDefault<ModConfig>(this.Helper, this.Monitor);
+        Config.Populate();
+
+        this.Helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
+        this.Helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
+
+        this.Helper.Events.GameLoop.DayStarted += static (_, _) => BeehouseHandler.UpdateStatus(Game1.currentLocation);
+        this.Helper.Events.Player.Warped += static (_, e) => BeehouseHandler.UpdateStatus(e.NewLocation);
+
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
 
         PFMMachineHandler.TryGetAPI(this.Helper.ModRegistry);
@@ -127,6 +124,7 @@ internal sealed class ModEntry : Mod
                     reset: static () =>
                     {
                         Config = new();
+                        Config.Populate();
                         PFMMachineHandler.RefreshValidityList(Game1.currentLocation);
                         BeehouseHandler.UpdateStatus(Game1.currentLocation);
                     },
@@ -159,10 +157,10 @@ internal sealed class ModEntry : Mod
                 tooltip: I18n.IndividualMachines_Description,
                 pageTitle: I18n.IndividualMachines_Title);
 
-            foreach (VanillaMachinesEnum machine in Config.VanillaMachines.Keys)
+            foreach (string machine in Config.VanillaMachines.Keys)
             {
                 this.gmcmHelper.AddBoolOption(
-                    name: () => machine.GetBestTranslatedString(),
+                    name: () => ItemRegistry.GetData(machine).DisplayName ?? $"ERROR - {machine}",
                     getValue: () => Config.VanillaMachines[machine],
                     setValue: (bool val) => Config.VanillaMachines[machine] = val);
             }
@@ -194,14 +192,15 @@ internal sealed class ModEntry : Mod
 #if DEBUG
             Stopwatch sw = Stopwatch.StartNew();
 #endif
+            /*
 
             PFMMachineHandler.ProcessPFMRecipes();
             bool changed = false;
 
             // Pre-populate the machine list.
-            foreach (int machineID in PFMMachineHandler.ConditionalPFMMachines.Concat(PFMMachineHandler.UnconditionalPFMMachines))
+            foreach (string machineID in PFMMachineHandler.ConditionalPFMMachines.Concat(PFMMachineHandler.UnconditionalPFMMachines))
             {
-                changed |= Config.ProducerFrameworkModMachines.TryAdd(machineID.GetBigCraftableName(), true);
+                changed |= Config.ProducerFrameworkModMachines.TryAdd(machineID, true);
             }
 
             if (this.gmcmHelper?.HasGottenAPI == true)
@@ -223,9 +222,10 @@ internal sealed class ModEntry : Mod
             {
                 this.Helper.AsyncWriteConfig(this.Monitor, Config);
             }
+            */
 #if DEBUG
             sw.Stop();
-            this.Monitor.Log($"PFM compat took {sw.ElapsedMilliseconds} ms.");
+            this.Monitor.LogTimespan("PFM compat", sw);
 #endif
         }
         else

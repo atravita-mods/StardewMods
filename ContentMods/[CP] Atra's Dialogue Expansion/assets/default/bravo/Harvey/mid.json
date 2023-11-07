@@ -1,49 +1,143 @@
-{"Changes":[
-// Lean into rural doctor difficulties.
-// Harvey's not making too much money, he has to deal with "insurers", he has substandard equipment, and he has student loans.
+{
+    "Changes": [
+        // Lean into rural doctor difficulties.
+        // Harvey's not making too much money, he has to deal with "insurers", he has substandard equipment, and he has student loans.
+        {
+            "LogName": "Harvey marriage",
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/MarriageDialogueHarvey",
+            "Entries": {
+                "Indoor_Day_3": "@, would you like me to help you with your sunscreen before you go out today?",
+                "Indoor_Night_3": "Oh, @, let me give you a foot rub tonight.#$b#You must be tired, working all day outside..."
+            }
+        },
+        {
+            "LogName": "Harvey mid-hearts",
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Harvey",
+            "Entries": {
+                // specific days.
+                "spring_12{{YearRemainder}}": "Looking forward to the Egg Festival tomorrow, @?",
+                "summer_10{{YearRemainder}}": "Oh, right, the luau's tomorrow. Guess I'll go, maybe.#$b#Last year I got sunburned...$s",
+                "summer_27{{YearRemainder}}": "It's almost the end of summer, @. To be honest, I won't miss the heat.",
+                "fall_15{{YearRemainder}}": "Tomorrow's the Stardew Fair, when tourists from everywhere will be pouring in...",
+                "winter_26{{YearRemainder}}": "Evelyn bought me some new coffee this year. I'm so excited to try it.$h%revealtasteHarvey395",
 
-    {
-        "LogName": "Harvey mid-hearts",
-        "Action": "EditData",
-        "Target": "Characters/Dialogue/Harvey",
-        "Entries": {
-            "6_2": "My practice is barely scraping by. Not sure how I can see more patients in a town as small as this, though.$s",
-            "7_2": "Sorry if I'm grumpy, I was up all night entering data into the electronic medical record.$s#$b#Say, @, would you happen to have a spare coffee?",
-            "9_2": "Stay safe out there, @. Don't get hurt too often.",
-            "22_2": "Saw a new study from %place Biologics, their new chemotherapy agent doubled the five-year survival rate for non-alcoholic primary hepatic malignancy.",
-            "26_2": "I don't eat as well as I should. Often I don't have enough time or energy after a long workday to do anything but toss a frozen meal into the microwave.#$b#And then there's all the charting I still need to do.",
-            "28_2": "One of the difficult things of practicing medicine in a small town is the lack of equipment.#$b#We've got an x-ray machine and an ultrasound. That's it.#$e#Sometimes I worry I provide substandard care because I can't get access to a CT machine.$s"
+                // base extra seasonal lines
+                "summer_Wed8": "Make sure to stay hydrated with this heat!",
+                "winter_Wed8": "When it's so cold and dry outside, our nasal passages help hydrate and heat the air for our lungs."
+            }
         },
-        "When": { "YearModulus": "2" }
-    },
-    {
-        "LogName": "Harvey mid-hearts",
-        "Action": "EditData",
-        "Target": "Characters/Dialogue/Harvey",
-        "Entries": {
-            "6_2": "I got into medicine because I wanted to help people. But these days I feel like I'm doing more paperwork than anything else...$s",
-            "8_2": "Between you and I, I get nightmares sometimes.#$b#I'm always terrified that someone here might have an emergency beyond my abilities to treat.#$b#We're so far from the nearest hospital.",
-            "9_2": "I also take care of everyone's teeth. This town isn't large enough to have both a dentist and a doctor.#$b#Say, how good are your teeth?$h",
-            "11_2": "I came out here because I wanted a slower pace of life.#$b#In the city, the money-men lean on us to see so many patients in a day, it's hard to connect with anyone.#$e#Of course, I wouldn't be able to afford the move if the government didn't have programs to help me with medical school debt.#$e#Sometimes, still, I feel like the clinic is barely hanging on, financially."
+        {
+            "LogName": "Harvey mid-hearts - Y1",
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Harvey",
+            "When": { "YearModulus": "1"},
+            "Entries": {
+                "winter_Thu8": "Brr, it's cold out, isn't it! Try to avoid catching a cold!",
+
+                "1{{YearRemainder}}": "I'm always incredibly amazed by how the human body works, @. Just...how everything comes together to make us work.$h",
+                "2{{YearRemainder}}": "Did you know there's a muscle in the arm that not everyone has?#$b#It's called the palmaris longus muscle, and about fourteen percent of the population just doesn't have it anymore.",
+                "3{{YearRemainder}}": "One thing I miss from working in the city - I can't just send bloodwork downstairs and get it within a few hours anymore.$s",
+                "4{{YearRemainder}}": "While I do have some medication samples on hand, I can't dispense medications normally. If you need anything that I don't carry, you'll need to get in contact with a mail-order pharmacy.",
+                "5{{YearRemainder}}": "Hey, @! Growing any interesting veggies these days?",
+                "6{{YearRemainder}}": "%Harvey looks distracted.#$b#Oh, hi, @! I was just thinking about a paper I read this morning on the factors that increase a patient's chance to develop dementia.",
+                "7{{YearRemainder}}": "We're not sure if people catch more colds in the winter because it's cold, or simply because they spend more time indoors with other people.",
+                "winter_26{{YearRemainder}}": "Emily bought me some posh pickles from %place. They certainly seem...quite interesting.%revealtasteHarvey342",
+            }
         },
-        "When": { "YearModulus": "3" }
-    },
-    {
-        "LogName": "Harvey mid-hearts y3 with pet",
-        "Action": "EditData",
-        "Target": "Characters/Dialogue/Harvey",
-        "Entries": {
-            "12_2": "You know, if %pet gets sick, I could probably take care of them too!"
+        {
+            "LogName": "Harvey mid-hearts - y2",
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Harvey",
+            "Entries": {
+                "winter_Thu8": "Emily made me a lovely sweater last year...I should do something nice for her this Feast of Winter Star...",
+
+                "5_2": "I really do prefer reading papers on paper still, even if it's less convenient.#$b#I'll go back and annotate on the computer afterwards, but it feels like I get more out of reading from an actual paper.",
+                "6_2": "My practice is barely scraping by. Not sure how I can see more patients in a town as small as this, though.$s",
+                "7_2": "Sorry if I'm grumpy, I was up all night entering data into the electronic medical record.$s#$b#Say, @, would you happen to have a spare coffee?",
+                "9_2": "Stay safe out there, @. Don't get hurt too often.",
+                "11_2": "Alex came to me the other day, asked me if I'd teach him anatomy. Says he's thinking of becoming a personal trainer.#$b#You know, @, that might be a good career for him.",
+                "14_2": "Do you think I should put an ad out in the newspaper? To try to get more patients?",
+                "22_2": "Saw a new study from %place Biologics, their new chemotherapy agent doubled the five-year survival rate for non-alcoholic primary hepatic malignancy.",
+                "26_2": "I don't eat as well as I should. Often I don't have enough time or energy after a long workday to do anything but toss a frozen meal into the microwave.#$b#And then there's all the charting I still need to do.",
+                "28_2": "One of the difficult things of practicing medicine in a small town is the lack of equipment.#$b#We've got an x-ray machine and an ultrasound. That's it.#$e#Sometimes I worry I provide substandard care because I can't get access to a CT machine.$s"
+            },
+            "When": {
+                "YearModulus": "2"
+            }
         },
-        "When":{"YearModulus": "3", "HasPet": true}
-    },
-    {
-        "LogName": "Rain -- during winter.",
-        "Action": "EditData",
-        "Target": "Characters/Dialogue/rainy",
-        "When": {"Season": "winter"},
-        "Entries":{
-            "Harvey": "#$c .9#A cup of coffee would be quite nice right now.#Here. Have a cup of coffee. It's important to stay warm on a day like this.[395]"
+        {
+            "LogName": "Harvey mid-hearts",
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Harvey",
+            "Entries": {
+                "summer_Mon8": "Be careful, when you're working out there, to not get sunburned.#$e#You are wearing sunscreen, right?",
+                "fall_Tue8": "I'd love to go to aerobics more, but I always feel so awkward...$s",
+
+                "6_2": "I got into medicine because I wanted to help people. But these days I feel like I'm doing more paperwork than anything else...$s",
+                "8_2": "Between you and I, I get nightmares sometimes.#$b#I'm always terrified that someone here might have an emergency beyond my abilities to treat.#$b#We're so far from the nearest hospital.",
+                "9_2": "I also take care of everyone's teeth. This town isn't large enough to have both a dentist and a doctor.#$b#Say, how good are your teeth?$h",
+                "10_2": "The last doc who was here....well, he was a company doc. Worked for the mines, took care of the miners.#$b#Frankly, @, I'm glad I'm not on anyone's payroll anymore.",
+                "11_2": "I came out here because I wanted a slower pace of life.#$b#In the city, the money-men lean on us to see so many patients in a day, it's hard to connect with anyone.#$e#Of course, I wouldn't be able to afford the move if the government didn't have programs to help me with medical school debt.#$e#Sometimes, still, I feel like the clinic is barely hanging on, financially.",
+                "12_2": "To be honest, @, if Mrs. Mueller didn't give me casseroles so often, I'm not quite sure what I'd eat.",
+                "13_2": "I really should get a new coffee maker...my current one seems to be on the brink of breaking...$s"
+            },
+            "When": {
+                "YearModulus": "3"
+            }
+        },
+        {
+            "LogName": "Harvey mid-hearts y3 with pet",
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Harvey",
+            "Entries": {
+                "12_2": "You know, if %pet gets sick, I could probably take care of them too!"
+            },
+            "When": {
+                "YearModulus": "3",
+                "HasPet": true
+            }
+        },
+        {
+            "LogName": "Harvey mid-hearts y4",
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Harvey",
+            "Entries": {
+                "summer_Tue8": "Oh, is it an election year? Is anyone running against the Governor?#$b#Yeah, I didn't think so.",
+
+                "11_2": "I've been looking at those pod coffee machines. The ones with the little single use pods.#$b#They're really expensive, though.$s",
+                "14_2": "I always feel like I should be exercising more often.$s",
+                "15_2": "We can't support many specialist services here, so often we have to travel into the city for, say, glasses."
+            },
+            "When": {
+                "YearModulus": "4",
+            }
+        },
+        {
+            "LogName": "Harvey mid-hearts y5",
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Harvey",
+            "Entries": {
+                "12_2": "I enjoy doing the crosswords in the paper, when I have the time to do them.",
+                "13_2": "I went into medicine to help people, not stare at an electronic medical record all day.$s#$b#I wish someone would make a software that works better.",
+                "15_2": "How is Mayor Lewis so good at Junimo Kart? I can't get past the first level.$s",
+                "26_2": "Gosh, @, I try to avoid thinking of myself as old, but sometimes my back disagrees.$s"
+            },
+            "When": {
+                "YearModulus": "0",
+            }
+        },
+        {
+            "LogName": "Rain -- during winter.",
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/rainy",
+            "When": {
+                "Season": "winter"
+            },
+            "Entries": {
+                "Harvey": "#$c .9#A cup of coffee would be quite nice right now.#Here. Have a cup of coffee. It's important to stay warm on a day like this.[395]"
+            }
         }
-    }
-]}
+    ]
+}

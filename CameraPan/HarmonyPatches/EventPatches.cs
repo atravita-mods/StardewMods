@@ -13,7 +13,7 @@ internal static class EventPatches
     private static IEnumerable<MethodBase> TargetMethods()
     {
         yield return AccessTools.Method(typeof(Game1), nameof(Game1.eventFinished));
-        yield return AccessTools.Method(typeof(Event), nameof(Event.endBehaviors));
+        yield return AccessTools.Method(typeof(Event), nameof(Event.endBehaviors), new[] { typeof(string[]), typeof(GameLocation) });
     }
 
     [HarmonyPostfix]
@@ -22,7 +22,6 @@ internal static class EventPatches
         DelayedAction.functionAfterDelay(
             () =>
             {
-                var pos = Game1.player.getStandingXY();
                 ModEntry.Reset();
                 ModEntry.SnapOnNextTick = true;
             },

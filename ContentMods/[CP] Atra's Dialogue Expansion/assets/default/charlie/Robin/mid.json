@@ -1,10 +1,31 @@
+// Really should have lines interaction with Leah!
+
 {"Changes":[
     {
         "LogName": "Robin Movies",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Robin",
+        "When": {"MovieStatus|contains=None": false},
         "Entries": {
-            "movieTheater": "Oh, @, did you hear? We've got a new movie theater! Demetrius and I used to go out and watch movies in a little drive-in theater all the time when we were dating...$h"
+            "movieTheater": "Oh, @, did you hear? We've got a new movie theater! Demetrius and I used to go out and watch movies in a little drive-in theater all the time when we were dating...$h",
+            "summer_Fri10": "Hmmm, @, do you think I could get Demetrius to take me to the movie theater sometime?#$b#He's a big fan of nature documentaries...",
+            "winter_Fri6": "Demetrius and I used to go out for a movie on Friday nights."
+        }
+    },
+    {
+        "LogName": "Robin speech bubbles",
+        "Action": "EditData",
+        "Target": "Strings/SpeechBubbles",
+        "Entries": {
+            "ScienceHouse_Robin_CloseFriends": "Heya, @, whatcha need?"
+        }
+    },
+    {
+        "LogName": "Robin extra",
+        "Action": "EditData",
+        "Target": "Data/ExtraDialogue",
+        "Entries": {
+            "Robin_Instant": "Oh, your new {0} is a prefab, so it's already done!$h"
         }
     },
     {
@@ -12,10 +33,91 @@
         "LogName": "Robin mid-hearts, Y1",
         "Target": "Characters/Dialogue/Robin",
         "Entries": {
-            "2": "Welcome to the valley, @! How have you been settling in?$h"
+            // specific days
+            "fall_25{{YearRemainder}}": "It's almost winter, isn't it? Gotta make sure everyone's prepared, we get harsh winters around here...",
+            "winter_20{{YearRemainder}}": "Oh, what should I get Demetrius for Winter Star this year? Hmmm, maybe a pair of socks?",
+
+            "2": "Welcome to the valley, @! How have you been settling in?$h",
+            "2_2": "Many of the houses in town are quite old, and thus take a considerable amount of work to maintain.",
+            "3{{YearRemainder}}": "I also handle the plumbing and the electrical work!#$b#Don't worry, I'm fully licensed!$h",
+            "4{{YearRemainder}}": "I didn't build most of the buildings in the valley, but I do maintain them now.",
+            "5{{YearRemainder}}": "It's a lot of work to construct a building, but I love looking at what my hands have created.$h",
+            "6{{YearRemainder}}": "Have you seen Leah around? I've got some new tools I've been dying to show off.",
+            "7{{YearRemainder}}": "It's so quiet, living up here in the mountains.$h",
+            "8{{YearRemainder}}": "I love taking walks around here.#$b#When Demetrius and I were first dating, we'd take long walks around the lake we were living by. I miss those days.$s",
+            "9{{YearRemainder}}": "Sometimes I wish Demetrius was better at lab safety.$s",
+            "10{{YearRemainder}}": "To be honest, I'm not actually quite sure what my husband studies...",
+            "11{{YearRemainder}}": "Demetrius and I used to walk out to the farmers market all the time when we were dating. There was a vendor who sold the best goat cheese...%revealtasteRobin426",
+            "12{{YearRemainder}}": "Growing up here, there were always plenty of dogs around...I miss having a dog.$s",
+            "13{{YearRemainder}}": "If I weren't a carpenter...You know, @, I've wanted to be a carpenter most of my life.#$b#I just really enjoy building things, you know?$h",
+            "15": "So, are you enjoying this little town? It's a lot quieter out here.",
+            "15_2": "Urgh, I need to vacuum so badly, but my shop vacuum is broken and we're waiting for parts to arrive.",
+            "16{{YearRemainder}}": "I've always got new ideas for furniture in my head.$h"
         },
         "When": {
             "YearModulus": "1"
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Robin mid-hearts, Y2",
+        "Target": "Characters/Dialogue/Robin",
+        "Entries": {
+            "winter_Tue10": "Hey, @, any repairs that I could do for you?",
+
+            "2_2": "Lewis was talking about possibly damming up the river, to create a more consistent water supply and possibly produce some electricity.#$b#I'm not sure. Demetrius is against it, he says it'll disturb our fragile ecology.",
+            "3_2": "There's nothing like the smell of freshly cut wood...#$b#Now, the smell of varnish...that one I can do without.",
+            "4_2": "When I have free time, I like to do a bit of woodworking as well.#$e#Leah comes up to visit sometimes, we work on projects together.",
+            "5_2": "I do see Penny as a foster daughter of sorts. It's not her fault her mother, well...$s#$b#But Penny's a great girl, very responsible. I'm glad Maru found her as a friend.",
+            "6_2": "My biggest regret in life is that I couldn't provide a college education for my children.#$b#We just...couldn't afford it, after all the debt my first husband left us in.",
+            "7_2": "I wish Demetrius and Sebastian got along better, but I'm not sure how to fix their relationship now...$s",
+            "8_2": "Maru helps Demetrius out in the lab sometimes. I'm glad those two work well together.$h",
+            "9_2": "I'm glad Demetrius doesn't have to work with strong acids as often as he did at the start of his career.$h",
+            "10_2": "I'd love to own a dog, but that just isn't feasible with my husband's lab in the house.$s",
+            "15_2": "Surprisingly, charcuterie boards sell quite well! I make quite a few of those to sell.",
+            "16_2": "That lab of Demetrius's - I designed it, we did have to run it past the safety department of the university he's associated with though.",
+            "17_2": "*sigh*. As smart as my husband is, I wish he would leave the mains electrical work to me.",
+
+            "Resort_Bar_2": "Mmmm, there's nothing like a pina colada on the beach.$h"
+        },
+        "When": {
+            "YearModulus": "2"
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Robin mid-hearts, Y3",
+        "Target": "Characters/Dialogue/Robin",
+        "Entries": {
+            "spring_Mon10": "Ah, finally, warm weather again!$h",
+
+            "2_2": "Sometimes I wonder if Sebastian would be happier living in the city.#$b#There would probably be more job opportunities there, but the rent is quite steep.#$b#Of course, I'd help him to the best of my ability.",
+            "3_2": "Penny is a very nice young woman. I'm proud of what she's accomplished, all things considering.",
+            "5_2": "Demetrius cooked up an excellent fresh salmon the other day.#$b#He's definitely the better cook between the two of us.",
+            "6_2": "When we were first dating, Demetrius would take me out dancing all the time.#$b$We still try to dance together every Friday night.$h",
+            "7_2": "@, do you sometimes just get a craving for a specific food and it won't go away?#$b#There's a little noodle place just around the corner from where Demetrius and I lived when we lived in the city. I still miss it.",
+            "15_2": "I do regret not building more skylights or natural light systems for Sebastian.",
+            "17_2": "Sometimes I wonder if I should make more of an effort to make friends with Clint.#$e#I've got some furniture ideas that'd look better with a little ironwork..."
+        },
+        "When": {
+            "YearModulus": "3"
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Robin mid-hearts, Y4",
+        "Target": "Characters/Dialogue/Robin",
+        "Entries": {
+            "summer_Fri10": "Gosh, @, is it another election year already? Feels like the last election just ended.#$b#I swear, these politicians start campaigning again immediately after they get elected.",
+            "fall_Thu10": "I enjoy being able to work for myself, to be able to take on projects I'm interested in.$h",
+            "fall_Fri10": "I wish I could have provided better for Sebastian.#$b#It's just...we thought programmers would be less credentialist than academics, and I guess...yes, but not as much as we hoped.$s",
+
+            "2_2": "The economic downturn isn't good for Demetrius. The first thing the government tries to cut is the budget for science.",
+            "15_2": "Demetrius's lab might look simple, but there's a lot of ventilation built in to keep it a safe space for him to work.",
+            "16_2": "Maybe if Demetrius wasn't so busy all the time, we could go hiking in the mountains more often..."
+        },
+        "When": {
+            "YearModulus": "4"
         }
     }
 ]}

@@ -1,4 +1,6 @@
-﻿using System.Reflection;
+﻿namespace TrashDoesNotConsumeBait.HarmonyPatches;
+
+using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 
@@ -16,8 +18,6 @@ using HarmonyLib;
 using Netcode;
 
 using StardewValley.Tools;
-
-namespace TrashDoesNotConsumeBait.HarmonyPatches;
 
 /// <summary>
 /// Applies the harmony patch against DoDoneFishing that consumes the bait/tackle.
@@ -51,7 +51,7 @@ internal static class DoConsumePatch
                     {
                         continue;
                     }
-                    else if (Utility.IsNormalObjectAtParentSheetIndex(obj, original.ParentSheetIndex))
+                    else if (obj.QualifiedItemId == original.QualifiedItemId)
                     {
                         replacementIndex = i;
                         break;
@@ -64,7 +64,7 @@ internal static class DoConsumePatch
                 if (replacementIndex is not null && Game1.player.Items[replacementIndex.Value] is SObject returnObj)
                 {
                     Game1.player.Items[replacementIndex.Value] = null;
-                    Game1.showGlobalMessage(original.ParentSheetIndex == returnObj.ParentSheetIndex
+                    Game1.showGlobalMessage(original.QualifiedItemId == returnObj.QualifiedItemId
                         ? I18n.BaitReplacedSame(original.DisplayName)
                         : I18n.BaitReplaced(original.DisplayName, returnObj.DisplayName));
                     return returnObj;
@@ -74,7 +74,7 @@ internal static class DoConsumePatch
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod failed while trying to replace bait.\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("replacing bait", ex);
         }
         return null;
     }
@@ -99,7 +99,7 @@ internal static class DoConsumePatch
                     {
                         continue;
                     }
-                    else if (Utility.IsNormalObjectAtParentSheetIndex(obj, original.ParentSheetIndex))
+                    else if (obj.QualifiedItemId == original.QualifiedItemId)
                     {
                         replacementIndex = i;
                         break;
@@ -112,7 +112,7 @@ internal static class DoConsumePatch
                 if (replacementIndex is not null && Game1.player.Items[replacementIndex.Value] is SObject returnObj)
                 {
                     Game1.player.Items[replacementIndex.Value] = null;
-                    Game1.showGlobalMessage(original.ParentSheetIndex == returnObj.ParentSheetIndex
+                    Game1.showGlobalMessage(original.QualifiedItemId == returnObj.QualifiedItemId
                         ? I18n.TackleReplacedSame(original.DisplayName)
                         : I18n.TackleReplaced(original.DisplayName, returnObj.DisplayName));
                     return returnObj;
@@ -122,7 +122,7 @@ internal static class DoConsumePatch
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod failed while trying to replace tackle.\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("replacing tackle", ex);
         }
         return null;
     }
@@ -154,8 +154,6 @@ internal static class DoConsumePatch
             CodeInstruction stloc = ILHelper.GetStLoc(index);
             helper.FindNext(new CodeInstructionWrapper[]
             {
-                OpCodes.Ldarg_0,
-                OpCodes.Ldfld,
                 (OpCodes.Callvirt, typeof(Farmer).GetCachedProperty(nameof(Farmer.IsLocalPlayer), ReflectionCache.FlagTypes.InstanceFlags).GetGetMethod()),
                 OpCodes.Brfalse,
             })
@@ -172,15 +170,18 @@ internal static class DoConsumePatch
             })
             .ReplaceInstruction(new(OpCodes.Call, typeof(DoConsumePatch).GetCachedMethod(nameof(DoConsumePatch.GetPreservingChance), ReflectionCache.FlagTypes.StaticFlags)), keepLabels: true)
             .FindNext(new CodeInstructionWrapper[]
-            {
+            { // var bait = this.GetBait();
                 OpCodes.Ldarg_0,
-                (OpCodes.Ldfld, typeof(Tool).GetCachedField(nameof(Tool.attachments), ReflectionCache.FlagTypes.InstanceFlags)),
-                OpCodes.Ldc_I4_0,
-                OpCodes.Callvirt,
+                (OpCodes.Call, typeof(FishingRod).GetCachedMethod(nameof(FishingRod.GetBait), ReflectionCache.FlagTypes.InstanceFlags)),
+                SpecialCodeInstructionCases.StLoc,
+            })
+            .FindNext(new CodeInstructionWrapper[]
+            { // if (bait is not null)
+                SpecialCodeInstructionCases.LdLoc,
                 OpCodes.Brfalse_S,
             })
             .Push()
-            .Advance(4)
+            .Advance(1)
             .StoreBranchDest()
             .AdvanceToStoredLabel()
             .DefineAndAttachLabel(out Label label)
@@ -254,8 +255,7 @@ internal static class DoConsumePatch
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod crashed while transpiling {original.FullDescription()}:\n\n{ex}", LogLevel.Error);
-            original.Snitch(ModEntry.ModMonitor);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }

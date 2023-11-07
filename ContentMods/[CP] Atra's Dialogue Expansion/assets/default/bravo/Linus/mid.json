@@ -1,0 +1,12 @@
+{
+    "Changes": [
+        {
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Linus",
+            "Entries": {
+                "summer_Tue8": "I don't like seeing things going to waste unnecessarily.#$b#The earth does so much to sustain us, we shouldn't waste her efforts.",
+                "fall_Sun10": "Sometimes, if the weather is amiable, I'll go noodling for catfish."
+            }
+        }
+    ]
+}

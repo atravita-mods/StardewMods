@@ -1,15 +1,25 @@
-﻿using AtraBase.Toolkit;
+﻿// Ignore Spelling: Perscreened
+
+using AtraBase.Toolkit;
+
 using AtraCore.Framework.DialogueManagement;
+
 using AtraShared;
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
+
 using SpecialOrdersExtended.DataModels;
+
 using StardewModdingAPI.Utilities;
+
+using StardewValley.SpecialOrders;
 
 namespace SpecialOrdersExtended.Managers;
 
 /// <summary>
-/// Static. Handles logic, patches, and console commands related to the special order dialogues.
+/// Static. Handles logic, patches, and console commands related to the special order dialogue.
 /// </summary>
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal class DialogueManager
 {
     /// <summary>
@@ -20,7 +30,7 @@ internal class DialogueManager
     /// <summary>
     /// Gets the current perscreened dialogue log.
     /// </summary>
-    public static DialogueLog? PerscreenedDialogueLog
+    internal static DialogueLog? PerscreenedDialogueLog
         => InternalDialogueLog.Value;
 
     /// <summary>
@@ -249,13 +259,20 @@ internal class DialogueManager
         {
             return;
         }
-        foreach (string dialogueKey in PerscreenedDialogueLog.SeenDialogues.Keys)
+        try
         {
-            if (dialogueKey.Contains(specialOrderKey))
+            foreach (string dialogueKey in PerscreenedDialogueLog.SeenDialogues.Keys)
             {
-                ModEntry.ModMonitor.DebugOnlyLog($"Removing key {dialogueKey}");
-                PerscreenedDialogueLog.SeenDialogues.Remove(dialogueKey);
+                if (dialogueKey.Contains(specialOrderKey))
+                {
+                    ModEntry.ModMonitor.DebugOnlyLog($"Removing key {dialogueKey}");
+                    PerscreenedDialogueLog.SeenDialogues.Remove(dialogueKey);
+                }
             }
+        }
+        catch (Exception ex)
+        {
+            ModEntry.ModMonitor.LogError("removing dialogue for failed orders", ex);
         }
     }
 
@@ -266,8 +283,6 @@ internal class DialogueManager
     /// <param name="__instance">NPC in question.</param>
     /// <param name="__0">NPC heart level.</param>
     /// <param name="__1">NoPreface in vanilla code - to preface with season or not.</param>
-    /// <exception cref="UnexpectedEnumValueException{SpecialOrder.QuestState}">Recieved unexpected enum value.</exception>
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Convention used by Harmony")]
     internal static void PostfixCheckDialogue(ref bool __result, ref NPC __instance, int __0, bool __1)
     {
         try
@@ -289,10 +304,10 @@ internal class DialogueManager
                 string baseKey = __1 ? specialOrder.questKey.Value : Game1.currentSeason + specialOrder.questKey.Value;
                 baseKey += specialOrder.questState.Value switch
                 {
-                    SpecialOrder.QuestState.InProgress => "_InProgress",
-                    SpecialOrder.QuestState.Failed => "_Failed",
-                    SpecialOrder.QuestState.Complete => "_Completed",
-                    _ => throw new UnexpectedEnumValueException<SpecialOrder.QuestState>(specialOrder.questState.Value),
+                    SpecialOrderStatus.InProgress => "_InProgress",
+                    SpecialOrderStatus.Failed => "_Failed",
+                    SpecialOrderStatus.Complete => "_Completed",
+                    _ => throw new UnexpectedEnumValueException<SpecialOrderStatus>(specialOrder.questState.Value),
                 };
                 __result = FindBestDialogue(baseKey, __instance, __0);
                 if (__result)
@@ -301,7 +316,7 @@ internal class DialogueManager
                 }
 
                 // Handle repeat orders!
-                if (specialOrder.questState.Value == SpecialOrder.QuestState.InProgress && Game1.player.team.completedSpecialOrders.ContainsKey(specialOrder.questKey.Value))
+                if (specialOrder.questState.Value == SpecialOrderStatus.InProgress && Game1.player.team.completedSpecialOrders.Contains(specialOrder.questKey.Value))
                 {
                     __result = FindBestDialogue((__1 ? specialOrder.questKey.Value : Game1.currentSeason + specialOrder.questKey.Value) + "_RepeatOrder", __instance, __0);
                     if (__result)
@@ -327,7 +342,7 @@ internal class DialogueManager
             // Handle available order dialogue.
             if (SpecialOrder.IsSpecialOrdersBoardUnlocked())
             {
-                HashSet<string> currentOrders = Game1.player.team.specialOrders.Where(s => s?.questKey is not null).Select((SpecialOrder s) => s.questKey.Value).ToHashSet();
+                HashSet<string> currentOrders = Game1.player.team.specialOrders.Where(s => s?.questKey is not null).Select(static (SpecialOrder s) => s.questKey.Value).ToHashSet();
                 foreach (SpecialOrder specialOrder in Game1.player.team.availableSpecialOrders)
                 {
                     if (specialOrder?.questKey is null)
@@ -348,7 +363,7 @@ internal class DialogueManager
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"{I18n.Dialogue_ErrorInPatchedFunction(__instance.Name)}\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError($"checking for new current dialogue for {__instance.Name}", ex);
         }
     }
 
@@ -365,11 +380,17 @@ internal class DialogueManager
         {// I have already said this dialogue
             return false;
         }
+        Dialogue? dialogue = npc.TryGetDialogue(dialogueKey);
+        if (dialogue is null)
+        {
+            return false;
+        }
+        dialogue.removeOnNextMove = true;
 
         QueuedDialogueManager.PushCurrentDialogueToQueue(npc);
 
         // Push my dialogue onto their stack.
-        npc.CurrentDialogue.Push(new Dialogue(npc.Dialogue[dialogueKey], npc) { removeOnNextMove = true });
+        npc.CurrentDialogue.Push(dialogue);
         if (ModEntry.Config.Verbose)
         {
             ModEntry.ModMonitor.Log(I18n.Dialogue_FoundKey(dialogueKey), LogLevel.Debug);

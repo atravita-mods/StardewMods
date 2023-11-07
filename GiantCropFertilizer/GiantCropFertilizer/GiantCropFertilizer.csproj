@@ -11,7 +11,7 @@
     <Description>Adds a fertilizer that forces giant crops.</Description>
     <UpdateKeys>Nexus:11620</UpdateKeys>
     <Version>0.2.2</Version>
-    <BaseManifest>..\..\ja_dependencies.json</BaseManifest>
+    <BaseManifest>..\..\base_dependencies.json</BaseManifest>
   </PropertyGroup>
 
   <ItemGroup>

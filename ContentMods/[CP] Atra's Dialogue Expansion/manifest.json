@@ -1,23 +1,29 @@
 {
     "$schema": "https://smapi.io/schemas/manifest.json",
-   "Name": "[CP] Atra's Dialogue Expansion",
-   "Author": "atravita",
-   "Version": "0.1.0",
-   "Description": "More dialogue for everyone.",
-   "UniqueID": "atravita.CP.DialogueExpansion",
-   "MinimumApiVersion": "3.15",
-   "UpdateKeys": [ "Nexus:-1" ],
-   "ContentPackFor": {
-      "UniqueID": "Pathoschild.ContentPatcher",
+    "Name": "[CP] Atra's Dialogue Expansion",
+    "Author": "atravita",
+    "Version": "0.1.0",
+    "Description": "More dialogue for everyone.",
+    "UniqueID": "atravita.CP.DialogueExpansion",
+    "MinimumApiVersion": "3.15",
+    "UpdateKeys": [
+        "Nexus:-1"
+    ],
+    "ContentPackFor": {
+        "UniqueID": "Pathoschild.ContentPatcher",
     },
     "Dependencies": [
-    {
-        "UniqueID": "gizzymo.canonfriendlyexpansion",
-        "IsRequired": false
-    },
-    {
-        "UniqueID": "iss.immersivespouses",
-        "IsRequired": false,
-    }
+        {
+            "UniqueID": "gizzymo.canonfriendlyexpansion",
+            "IsRequired": false
+        },
+        {
+            "UniqueID": "iss.immersivespouses",
+            "IsRequired": false,
+        },
+        {
+            "UniqueID": "atravita.CP.GingerIslandMainlandAdjustments",
+            "IsRequired": false
+        }
     ]
 }

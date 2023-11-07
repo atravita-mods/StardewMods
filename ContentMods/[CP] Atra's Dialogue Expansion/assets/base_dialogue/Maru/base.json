@@ -1,0 +1,33 @@
+{
+    "Changes": [
+        {
+            "Action": "EditData",
+            "LogName": "Base Maru",
+            "Target": "Characters/Dialogue/Maru",
+            "When": {"Query: {{Hearts:Maru}} >=6": true},
+            "Entries": {
+                "{{TaxDay}}": "{{i18n:maru-tax-day}}$s#$c .5#{{i18n: maru-tax-day-a}}$s#{{i18n: maru-tax-day-b}}$s#"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Divorced From Sebastian",
+            "Target": "Characters/Dialogue/Maru",
+            "When": {"Relationship: Sebastian": "Divorced"},
+            "Entries": {
+                "ScienceHouse": "{{i18n: maru-divorced-from-sebastian-a}}$s",
+                "Mountain": "{{i18n: maru-divorced-from-sebastian-b}}$s",
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Divorced From Penny",
+            "Target": "Characters/Dialogue/Maru",
+            "When": {"Relationship: Penny": "Divorced"},
+            "Entries": {
+                "ScienceHouse": "{{i18n: maru-divorced-from-penny-a}}$s",
+                "Mountain": "{{i18n: maru-divorced-from-penny-b}}$s",
+            }
+        }
+    ]
+}

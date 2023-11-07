@@ -1,24 +1,55 @@
 {"Changes":[
     
     // Demetrius should give off eternal postdoc vibes. He tries to break out of it, but a combination of his own poor social skills + racism makes it harder for him.
+    // Also, insert random bat facts. Bats are adorable.
 
+    // Between Robin and Demetrius, they'll have a reasonable split of chores.
+
+    // he actually seems to do the cooking if you look at his schedule?
+    // he's the scientific cook, Robin is the "shoot from the hip" cook.
+    {
+        "LogName": "Demetrius mid-hearts",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Demetrius",
+        "Entries": {
+            "Mon10": "Mmmm, there's nothing like a nice fresh strawberry in spring, right?[400]$h",
+            "Tue10": "I love how the valley comes alive in spring.$h",
+            "summer_Mon10": "Hmmm, what should I cook today?",
+            "summer_Tue10": "It's so, so hot in town, but it's lovely and cool in the mountains...$h",
+            "summer_Wed10": "Robin says I should cultivate a better relationship with Sebastian.#$b#I...I'm not sure how to...",
+            "summer_Thu10": "It's my turn to cook again, and I'd like to make {{Dish}}, but maybe I should stick to something simpler.",
+            "fall_Mon10": "Argh, so much vacuuming to do...$s",
+            "fall_Tue10": "I wish the house would clean itself sometimes...",
+            "fall_Thu10": "In fall, we get so many common mushrooms fruiting. They're quite tasty![404]$h",
+            "winter_Mon10": "I don't tend to do much fieldwork in winter, because everything goes dormant.",
+            "winter_Tue10": "I have so much mopping I need to do.$s",
+            "winter_Thu10": "I'd love to take a trip on that submarine some day...",
+
+            "Resort_Pier": "Look, @, a mola mola!#$b#Despite their odd appearance, they're actually quite new to the seas, evolving only about seventy million years ago!",
+        }
+    },
     {
         "LogName": "Demetrius Volcano",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Demetrius",
-        "When": { "HasFlag": "Island_FirstParrot" },
-        "Entries":
-        {
-            "Resort": "The mushrooms around here are extraordinary!$h#$e#I have never seen any mushrooms like these!"
+        "When": { "HasReadLetter": "Island_FirstParrot" },
+        "Entries": {
+            "Resort": "The mushrooms around here are extraordinary!$h#$b#I have never seen any mushrooms like these!$h",
+            "Resort_Shore_2": "Octopi are among the most intelligent animals...and they only live about two years!",
+            "Resort_Pier_2": "Some of the largest organisms in the ocean eat plankton.#$b#Can you believe it, @? Both blue whales and basking sharks live off of plankton!",
+            "Resort_Pier_3": "I hear that you can see some lovely jellyfish here after dark!",
+            "19_2": "I'd love to study some of those magma caps found on Ginger Island some day. I can't believe the conditions these mushrooms can survive!%revealtasteDemetrius851"
         }
     },
     {
-        "LogName": "Rain -- during winter.",
+        // Pregnancy line!
         "Action": "EditData",
-        "Target": "Characters/Dialogue/rainy",
-        "When": {"Season": "winter"},
-        "Entries":{
-            "Demetrius": "Rare to see winter storms around here....Something in the weather seems different."
+        "Target": "Characters/Dialogue/Demetrius",
+        "Entries": {
+            "ScienceHouse6": "Oh, congratulations, @. Heard you guys are expecting!$h#$b#A child is such a responsibility.$h"
+        },
+        "When": {
+            "HavingChild": "@{{playerName}}"
         }
     },
     {
@@ -26,11 +57,25 @@
         "Action": "EditData",
         "Target": "Characters/Dialogue/Demetrius",
         "Entries": {
-            "ScienceHouse_22_20": "I've got so much data I need to analyze.$s",
-            "fallScienceHouse_22_20": "I'd love to talk, @, but I have a grant submission coming up that I need to work on.",
-            "summerScienceHouse_22_20": "I have so many measurements I need to make today...$s",
+            "ScienceHouse_Entry": "Ah, home sweet home!",
             "fallMountain_45_8": "We're lucky to have so much old growth forest around here.#$b#It takes decades for a forest to develop properly.",
-            "summer_2{{YearRemainder}}": "I better not forget our anniversary this year, Robin will really hate it if I forget again."
+
+            // specific days
+            "summer_2{{YearRemainder}}": "I better not forget our anniversary this year, Robin will really hate it if I forget again.",
+            "summer_26{{YearRemainder}}": "Jellyfish are among the oldest and simplest animals, but in their simplicity they are quite successful.",
+            "winter_7{{YearRemainder}}": "I wonder who makes the igloos at the ice festival?",
+
+            "3{{YearRemainder}}": "Joja dumped a lot of trash into the waters around here back when they were operating that mine.#$b#We're still fishing trash out of the river.",
+            "4{{YearRemainder}}": "Mining can cause quite a bit of ecological damage if not carried out carefully.#$b#Joja let quite a few dangerous chemicals leak more than a few times.",
+            "7{{YearRemainder}}": "The mines...Joja was mostly in it for the coal, I think.#$b$So was Accel before them.",
+            "8{{YearRemainder}}": "Burning coal is pretty terrible for the environment.#$b#Sulfur compounds in the coal make acid rain, which greatly weakens the trees.",
+            "9{{YearRemainder}}": "Up to the north lives a species of shark that lives for hundreds of years.#$b#It has an insanely slow metabolism, so it seems like time itself is stretched out for these animals!", // they're called Greenland sharks, unfortunately.
+            "10{{YearRemainder}}": "@, have you ever considered cultivating mushrooms?",
+            "12{{YearRemainder}}": "Maru asked me to help explain mycorrhiza to Vincent and Jas....#$b#@, I'm not very good at explaining my research to kids...$s",
+            "13{{YearRemainder}}": "I'd love to make some bread again, but we only have 350g of bread flour remaining and I need at least 400g.$s",
+            "14{{YearRemainder}}": "Did you know most of the strawberries you eat are hexaploid?#$b#In fact, plants actually quite often double all their DNA.$h",
+            "16{{YearRemainder}}": "Peanuts are excellent things to plant, since they harbor bacteria that help fix nitrogen.$h",
+            "17": "Robin grew up here, but I'm also a transplant to this little town.$h"
         },
         "When": { "YearModulus": "1" }
     },
@@ -39,39 +84,58 @@
         "Action": "EditData",
         "Target": "Characters/Dialogue/Demetrius",
         "Entries": {
+            "ScienceHouse_Entry": "Heya Robin, I'm home!",
+
+            //specific days
+            "summer_26_2": "Hmm, apparently the rate of jellyfish blooms have gone up in recent years, likely due to warming ocean waters.$s",
+            "winter_7_2": "You know, I've...never really wondered who puts that little lake there for the ice festival...$s#$#b#Seems...like a lot of work.",
+
+            "1_2": "@, did you know that banana trees aren't actually trees, but rather a monocot?#$b#Amazing what they can do despite not having lignin!",
+            "2_2": "Caffeine is actually highly toxic against insects!#$b#But it doesn't make a good agricultural insecticide, it decays in sunlight.",
+            "3_2": "Lignin is really an amazing structural protein, and is why trees can grow to the heights they do.",
+            "4_2": "I used to love taking Maru to the Zuzu City Aquarium when she was young....#$e#Sebastian? Well, he never wanted to go with us.$s",
             "6_2": "I hope my collaborator can get his edits in soon....$s",
+            "7_2": "%Demetrius looks exhausted.#$b#*Yawn*. Sorry, @, I was up all night attempting to get my typesetting software to put figure one on page one.$s",
             "16_2": "It's always reviewer two, isn't it? Always.$a",
             "18_2": "Gotta order more reagents soon, we're running low on HCl.",
+            "20_2": "Sometimes I go down to the beach to collect shells.#$b#There's no real scientific reason to do so, they're just pretty.#$e#$c .2#Here, I found this one the other day.[394 393]#Summer, especially, a lot of shells wash up.#",
+            "21_2": "I made some extra coffee this morning. Here, have some![395]$h",
+            "22_2": "Robin is usually pretty practical, but she does like some frilly things sometimes...",
+            "23_2": "Sebastian? He's a grown adult now, he can take care of himself.#$e#I do wish we had a better relationship, but I think Robin can be proud of the man he's become.",
+            "24_2": "Maru was helping me with minipreps the other day. Lab work is so much more fun when you're working with someone.$h",
 
+            // in front of the kitchen.
+            "ScienceHouse_27_9": "Let's see, what should I cook...what ingredients do I have...",
 
-            "ScienceHouse_22_20": "I'm so sorry, @, I've got so much work I need to get done before next Monday.",
-            "summerScienceHouse_22_20": "Just need to gather a little more data for a proposal.",
-            "fallScienceHouse_22_20": "Sometimes I feel like I spend more time writing proposals than anything else.$s",
+            // standing next to the mountains.
+            "summerMountain_45_8": "Oh, look, @, a butterfly!",
             "fallMountain_45_8": "Some of these trees are more than a hundred years old. I hope you weren't planning on cutting them down."
         },
         "When": { "YearModulus": "2" }
-    },
-    {
-        "LogName": "Demetrius mid-hearts, Y2, mushrooms",
-        "Action": "EditData",
-        "Target": "Characters/Dialogue/Demetrius",
-        "Entries": {
-            "7_2": "There's nothing like a nice ripe, juicy peach in the summer, right?%revealtasteRobin636#$b#Robin and I used to go down to the local farmers market and buy them by the box, back when we lived in the city.#$e#Here, I've got an extra, do you want it?[636]",
-        },
-        "When": { "YearModulus": "2", "FarmCave": "Mushrooms"}
     },
     {
         "LogName": "Demetrius mid-hearts, Y3",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Demetrius",
         "Entries": {
-            "fall_1_2": "Now that it's fall, I think I'll try growing some pumpkins for Robin again.%revealtasteRobin276#$b#They're her favorite vegetable. Here, I have a few extra seeds, want them? [490]#$e#Tried growing them a few years ago, I'm not the best gardener. Think I overwatered them.",
+            "ScienceHouse_Entry": "Honey, I'm home!",
+
+            //specific days
+            "summer_26_2": "Mola mola are a significant predator of jellyfish, capable of following jellyfish down to the depths of the ocean as the jellies engage in the Diel vertical migration.",
+            "fall_1_2": "Now that it's fall, I think I'll try growing some pumpkins for Robin again.%revealtasteRobin276#$b#They're her favorite vegetable. Here, I have a few extra seeds, want them? [490]#$e#Tried growing them a few years ago, I'm not the best gardener. Think I over-watered them.",
+
             "6_2": "Did you see that paper by the %name group out of %place University? Amazing, isn't it?$h",
+            "8_2": "I know one of Robin's biggest regrets was that we couldn't afford to send Sebastian to college...$s",
+            "10_2": "You know, vampires aren't really realistic, blood isn't actually that calorically dense.#$b#Every species that drinks blood has to get rid of the excess liquid in blood while they drink somehow.",
             "16_2": "Sometimes I wonder what I could have done to be more successful in my career...$s",
             "18_2": "Between you and I, @, writing proposals is the worst part of my job.",
+            "19_2": "I really need to order more miniprep kits.$s",
             "20_2": "Tree fertilizer can make trees grow much faster, but I wonder if it affects the quality of their wood.#$b#Generally fast-growing trees can't produce as dense of wood.",
-            "fallScienceHouse_22_20": "Got a conference coming up, @, hoping I can get myself a talk.",
-            "winterScienceHouse_22_20": "My collaborator claims his equipment is broken again.#$b#We're far closer to the submission deadline for this paper than I'd like..."
+            "22_2": "Sometimes, I come across interesting artifacts.#$b#I wonder what civilizations lived here before we did?",
+            "23_2": "Some plants are insectivorous; they get their nitrogen by eating insects and spiders because the soil they grow in is very low in nitrogen.",
+            "24_2": "%Demetrius seems pre-occupied.#$b#Why do things keep on evolving into crabs, actually?",
+
+            "fallMountain_45_8": "Funding has been a lot tighter this year than it was last year.#$b#I didn't even get my inflation adjustment. I'm making less actual money this year than last.$s"
         },
         "When": { "YearModulus": "3"}
     },
@@ -79,9 +143,41 @@
         "LogName": "Demetrius mid-hearts, Y4",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Demetrius",
+        "When": { "YearModulus": "4"},
         "Entries": {
-            "2_2": "Before Pelican Town was a mining town, it was a forestry.#$b#But that was a long time ago, and the forest has had a bit of a chance to recover.",
-        },
-        "When": { "YearModulus": "4"}
+            // specific day.
+            "summer_26_2": "Every time I look into what siphonophores are, I just get more and more confused.$s",
+
+            "2_2": "Before Pelican Town was a mining town, it was a forestry town.#$b#But that was a long time ago, and the forest has had a bit of a chance to recover.",
+            "3_2": "It's very important to practice sustainable logging.#$b#Forests take a long time to recover after they've been improperly logged.",
+            "5_2": "One good thing about Joja - at least they don't engage in open pit mining.",
+            "7_2": "That mine...it was economically good for the town, but Accel and then Joja definitely allowed more runoff than they should have.$s",
+            "8_2": "Maru was telling me about dark matter the other day.#$e#That's not my field, so I'm not quite sure I followed everything she was talking about, but if it makes her happy, it makes me happy.",
+
+            "14_2": "It's really weird we celebrate romantic holidays with the cut off reproductive organs of plants, isn't it?",
+            "18_2": "@, did you know that the oldest mushrooms are more than two thousand years old?",
+            "20_2": "My dad used to take us out fishing when I was very young. I was never any good, though.$s",
+            "21_2": "There are plenty of fish that live in this mountain lake! Fish are a very important part of the ecosystem.$h",
+            "22_2": "Many fish rely on swim bladders to maintain neutral buoyancy with the water, but this restricts them to only a small depth range.",
+            "23_2": "Seahorses are, amazingly enough, very evolutionarily new, dating from only about thirteen million years ago.",
+            "24_2": "In college, I used to love to go hiking all the time. We'd go out into nearby mountains and collect sharks teeth.#$b#Maybe I should start doing more of that.",
+            "25_2": "Many of our food crops are pollinated by bees, so the decline of bee populations is very worrisome.",
+            "26_2": "There is life everywhere on our planet, from the tops of mountains to the deepest part of the oceans. Isn't that amazing?",
+
+            "winter_Mon10": "There are only a few plants that flower during winter, but crocus is one of them.[418]",
+            "winter_Tue10": "In general, animals who live in colder climates are larger, since that allows them a lower surface-area-to-volume ratio.#$b#This lets them better conserve heat.$h"
+        }
+    },
+    {
+        "LogName": "Demetrius mid-hearts, Y5",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Demetrius",
+        "When": { "YearModulus": "0"},
+        "Entries": {
+            "2_2": "Leaf slugs are quite adorable little animals that steal the chloroplasts from the algae they eat.#$b#They then use those chloroplasts to photosynthesize.#$e#Isn't biology cool?$h",
+            "3_2": "These days, I've been watching documentaries on the deep sea before I go to bed.#$e#It's so different from the science I usually do, so it's so fascinating!$h",
+            "10_2": "Most of my lab supplies come in kits these days.#$b#They can be kinda expensive but they're so much more convenient.",
+            "28_2": "Some snakes are capable of gliding a little between tall trees. They flatten their ribs to present the biggest cross section they can.#$b#We call them flying snakes, and they can cover more than ten meters horizontally."
+        }
     }
 ]}

@@ -4,7 +4,7 @@ namespace AtraShared.Integrations.Interfaces;
 
 /// <summary>
 /// The bits of the GrowableGiantCrops API I use.
-/// Copy from https://github.com/atravita-mods/StardewMods/blob/main/GrowableGiantCrops/IGrowableGiantCropsAPI.cs 
+/// Copy from https://github.com/atravita-mods/StardewMods/blob/main/GrowableGiantCrops/IGrowableGiantCropsAPI.cs
 /// if you want the full thing.
 /// </summary>
 public interface IGrowableGiantCrops

@@ -1,10 +1,9 @@
-﻿using System.Diagnostics;
+﻿namespace LastDayToPlantRedux.Framework;
 
-using Microsoft.Xna.Framework;
+using System.Diagnostics;
 
 using StardewValley.TerrainFeatures;
 
-namespace LastDayToPlantRedux.Framework;
 
 /// <summary>
 /// A subclass of Hoedirt that nixes all the location specific stuff.
@@ -17,18 +16,16 @@ internal class DummyHoeDirt : HoeDirt
     /// Initializes a new instance of the <see cref="DummyHoeDirt"/> class.
     /// </summary>
     /// <param name="fertilizer">Fertilizer to use.</param>
-    public DummyHoeDirt(int fertilizer)
+    public DummyHoeDirt(string? fertilizer)
+        : base(HoeDirt.dry, Game1.getFarm())
     {
-        this.currentLocation = Game1.getFarm();
         this.fertilizer.Value = fertilizer;
     }
 
     /// <summary>
     /// nop'ed.
     /// </summary>
-    /// <param name="environment">location.</param>
-    /// <param name="tileLocation">tile.</param>
-    public override void dayUpdate(GameLocation environment, Vector2 tileLocation)
+    public override void dayUpdate()
     {
     }
 
@@ -37,10 +34,7 @@ internal class DummyHoeDirt : HoeDirt
     /// </summary>
     /// <param name="onLoad">irrelevant.</param>
     /// <returns>always false.</returns>
-    public override bool seasonUpdate(bool onLoad)
-    {
-        return false;
-    }
+    public override bool seasonUpdate(bool onLoad) => false;
 
     /// <summary>
     /// Calculates how long it takes for a specific crop to grow with a given farmer.

@@ -1,6 +1,16 @@
-﻿using HarmonyLib;
+﻿using AtraBase.Toolkit.Extensions;
+
+using AtraCore;
+
+using AtraShared.ConstantsAndEnums;
+using AtraShared.Utils.Extensions;
+
+using HarmonyLib;
+
 using Microsoft.Xna.Framework;
+
 using StardewModdingAPI.Utilities;
+
 using StardewValley.Monsters;
 using StardewValley.Objects;
 
@@ -10,6 +20,7 @@ namespace MoreFertilizers.HarmonyPatches.Acquisition;
 /// Holds patches against GameLocation so monsters on farm drop fertilizer.
 /// </summary>
 [HarmonyPatch(typeof(GameLocation))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class GameLocationPatches
 {
 #pragma warning disable SA1310 // Field names should not contain underscore. Reviewed.
@@ -24,10 +35,10 @@ internal static class GameLocationPatches
     internal static void Reinitialize() => DropChance.Value = DEFAULT_DROP_CHANCE;
 
     [HarmonyPatch(nameof(GameLocation.monsterDrop))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention")]
     private static void Postfix(GameLocation __instance, Monster monster, int x, int y, Farmer who)
     {
-        if(__instance is not Farm || who is null || Game1.random.NextDouble() > ((monster is RockGolem ? 2.5 : 1 ) * DropChance.Value) || monster.MaxHealth < MIN_MONSTER_HEALTH)
+        if(__instance is not Farm || who is null || monster.MaxHealth < MIN_MONSTER_HEALTH
+          || !Random.Shared.OfChance((monster is RockGolem ? 2.5 : 1 ) * DropChance.Value))
         {
             return;
         }
@@ -46,7 +57,7 @@ internal static class GameLocationPatches
                             new Debris(
                                 item: new SObject(
                                     parentSheetIndex: fertilizerToDrop,
-                                    initialStack: Game1.random.Next(1, Math.Clamp(monster.MaxHealth / MIN_MONSTER_HEALTH, 1, 4))),
+                                    initialStack: Random.Shared.Next(1, Math.Clamp(monster.MaxHealth / MIN_MONSTER_HEALTH, 1, 4))),
                                 debrisOrigin: new Vector2(x, y),
                                 targetLocation: who.Position)));
                 }
@@ -55,7 +66,7 @@ internal static class GameLocationPatches
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod failed while adding additional monster drops!\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("adding additional monster drops", ex);
         }
     }
 }

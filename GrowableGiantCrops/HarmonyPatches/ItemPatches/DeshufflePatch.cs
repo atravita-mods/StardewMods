@@ -4,6 +4,8 @@ using AtraCore.Framework.ItemManagement;
 using AtraCore.Framework.ReflectionManager;
 
 using AtraShared.ConstantsAndEnums;
+using AtraShared.Utils.Extensions;
+
 using GrowableGiantCrops.Framework.InventoryModels;
 using HarmonyLib;
 
@@ -12,6 +14,7 @@ namespace GrowableGiantCrops.HarmonyPatches.ItemPatches;
 /// <summary>
 /// Patches JA to also deshuffle inventory giant crops.
 /// </summary>
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class DeshufflePatch
 {
     /// <summary>
@@ -35,7 +38,7 @@ internal static class DeshufflePatch
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed to patch JA to deshuffle inventory giant crops.\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("patching JA to deshuffle inventory giant crops", ex);
         }
     }
 
@@ -45,7 +48,6 @@ internal static class DeshufflePatch
     /// <param name="item">The item to deshuffle.</param>
     /// <param name="__result">true to delete it, false to keep it.</param>
     /// <returns>true to continue to ja's method, false to not do that.</returns>
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
     private static bool Prefix(Item item, ref bool __result)
     {
         if (item is InventoryGiantCrop giantCrop)
@@ -74,7 +76,7 @@ internal static class DeshufflePatch
             }
             catch (Exception ex)
             {
-                ModEntry.ModMonitor.Log($"Failed to deshuffle {giantCrop.Name}:\n\n{ex}", LogLevel.Error);
+                ModEntry.ModMonitor.LogError($"deshuffling {giantCrop.Name}", ex);
             }
         }
 
@@ -104,7 +106,7 @@ internal static class DeshufflePatch
             }
             catch (Exception ex)
             {
-                ModEntry.ModMonitor.Log($"Failed to deshuffle {fruitTree.Name}:\n\n{ex}", LogLevel.Error);
+                ModEntry.ModMonitor.LogError($"deshuffling {fruitTree.Name}", ex);
             }
             return true;
         }

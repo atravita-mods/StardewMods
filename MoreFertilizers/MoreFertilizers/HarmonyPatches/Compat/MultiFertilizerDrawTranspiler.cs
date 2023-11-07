@@ -1,17 +1,23 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
+
 using AtraBase.Toolkit.Reflection;
+
 using AtraCore.Framework.ReflectionManager;
+
+using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+
 using StardewValley.TerrainFeatures;
 
 namespace MoreFertilizers.HarmonyPatches.Compat;
 
 /// <summary>
-/// Paches MultiFertilzer's Draw to draw my fertilizer, goddammit.
+/// Patches MultiFertilzer's Draw to draw my fertilizer, goddammit.
 /// </summary>
 internal static class MultiFertilizerDrawTranspiler
 {
@@ -48,7 +54,7 @@ internal static class MultiFertilizerDrawTranspiler
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod crashed while transpiling MultiFertilizer's Hoedirt.Draw:\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }
@@ -76,7 +82,7 @@ internal static class MultiFertilizerDrawTranspiler
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod failed while trying to draw fertlizer in MultiFertilizer compat patch!\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("drawing fertilizer in MultiFertilizer compat patch", ex);
         }
     }
 }

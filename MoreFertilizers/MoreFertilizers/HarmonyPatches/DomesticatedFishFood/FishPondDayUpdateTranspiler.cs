@@ -29,7 +29,7 @@ internal static class FishPondDayUpdateTranspiler
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Error in speeding up fish growth in fish ponds!\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("speeding up fish growth in fish ponds", ex);
         }
         return 1;
     }
@@ -73,8 +73,7 @@ internal static class FishPondDayUpdateTranspiler
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod crashed while transpiling {original.FullDescription()}:\n\n{ex}", LogLevel.Error);
-            original.Snitch(ModEntry.ModMonitor);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }

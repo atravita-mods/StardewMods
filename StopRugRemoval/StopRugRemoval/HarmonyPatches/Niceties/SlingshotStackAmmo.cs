@@ -1,4 +1,8 @@
-﻿using HarmonyLib;
+﻿using AtraShared.ConstantsAndEnums;
+using AtraShared.Utils.Extensions;
+
+using HarmonyLib;
+
 using StardewValley.Tools;
 
 namespace StopRugRemoval.HarmonyPatches.Niceties;
@@ -7,6 +11,7 @@ namespace StopRugRemoval.HarmonyPatches.Niceties;
 /// Holds patches against Slingshot.
 /// </summary>
 [HarmonyPatch(typeof(Slingshot))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class SlingshotStackAmmo
 {
     /// <summary>
@@ -18,7 +23,6 @@ internal static class SlingshotStackAmmo
     /// <param name="__result">Any remaining object, return to inventory.</param>
     /// <returns>True to continue to the vanilla function, false otherwise.</returns>
     [HarmonyPatch(nameof(Slingshot.attach))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
     private static bool Prefix(Slingshot __instance, SObject o, ref Item? __result)
     {
         try
@@ -41,7 +45,7 @@ internal static class SlingshotStackAmmo
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed in overriding Slingshot.{nameof(Slingshot.attach)}\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError($"overriding Slingshot.{nameof(Slingshot.attach)}", ex);
         }
         return true;
     }

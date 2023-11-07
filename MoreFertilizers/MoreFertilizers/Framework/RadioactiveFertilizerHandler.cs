@@ -39,7 +39,7 @@ internal static class RadioactiveFertilizerHandler
     internal static void Initialize(IGameContentHelper parser, IModRegistry registry, ITranslationHelper translation)
     {
         crops = parser.ParseAssetName("Data/Crops");
-        objects = parser.ParseAssetName("Data/ObjectInformation");
+        objects = parser.ParseAssetName("Data/Objects");
 
         IntegrationHelper helper = new(ModEntry.ModMonitor, translation, registry);
         _ = helper.TryGetAPI("atravita.LastDayToPlantRedux", null, out api);
@@ -93,20 +93,20 @@ internal static class RadioactiveFertilizerHandler
 
         Dictionary<int, string>? cropData = Game1.content.Load<Dictionary<int, string>>(crops.BaseName);
 
-        Utility.ForAllLocations((location) =>
+        Utility.ForEachLocation((location) =>
         {
             if (location is null)
             {
-                return;
+                return true;
             }
 
-            string seasonstring = location.GetSeasonForLocation();
+            string seasonstring = location.GetSeasonKey();
             int season = Utility.getSeasonNumber(seasonstring);
 
             if (season < 0 || season > 3)
             {
                 ModEntry.ModMonitor.Log("Season unrecognized, skipping");
-                return;
+                return true;
             }
 
             foreach (TerrainFeature? terrain in location.terrainFeatures.Values)
@@ -124,6 +124,8 @@ internal static class RadioactiveFertilizerHandler
                     ProcessRadioactiveFertilizer(dirt, bestfarmer, bestProfession, location, season, cropData, seasonstring);
                 }
             }
+
+            return true;
         });
 
         random = null;
@@ -137,7 +139,7 @@ internal static class RadioactiveFertilizerHandler
         }
 
         random ??= RandomUtils.GetSeededRandom(9, "radioactive.fertilizer");
-        if (random.Next(4) == 0)
+        if (random.OfChance(0.25))
         {
             return;
         }
@@ -159,10 +161,10 @@ internal static class RadioactiveFertilizerHandler
         if (cropData.TryGetValue(crop, out string? data)
             && (location.SeedsIgnoreSeasonsHere() || HasSufficientTimeToGrow(profession, crop, data, seasonEnum)))
         {
-            ModEntry.ModMonitor.Log($"Replacing plant at {dirt.currentTileLocation} with {crop}.");
-            dirt.destroyCrop(dirt.currentTileLocation, false, location);
-            dirt.plant(crop, (int)dirt.currentTileLocation.X, (int)dirt.currentTileLocation.Y, farmer, false, location);
-            dirt.fertilizer.Value = HoeDirt.noFertilizer;
+            ModEntry.ModMonitor.Log($"Replacing plant at {dirt.Tile} with {crop}.");
+            dirt.destroyCrop(false);
+            dirt.plant(crop, (int)dirt.Tile.X, (int)dirt.Tile.Y, farmer, false, location);
+            dirt.fertilizer.Value = null;
         }
     }
 
@@ -179,15 +181,15 @@ internal static class RadioactiveFertilizerHandler
         return Profession.None;
     }
 
-    private static WeightedManager<int> GeneratedWeightedList(string season, Dictionary<int, string> cropData)
+    private static WeightedManager<int> GeneratedWeightedList(string season, Dictionary<string, string> cropData)
     {
         WeightedManager<int>? manager = new();
 
-        HashSet<int> denylist = AssetEditor.GetRadioactiveExclusions();
+        HashSet<string> denylist = AssetEditor.GetRadioactiveExclusions();
 
-        foreach ((int id, string data) in cropData)
+        foreach ((string id, string data) in cropData)
         {
-            if (id == 885 || denylist.Contains(id))
+            if (id == "885" || denylist.Contains(id))
             {
                 // 885 - fiber seeds.
                 continue;
@@ -200,9 +202,7 @@ internal static class RadioactiveFertilizerHandler
 
             if (data.GetNthChunk('/', 1).Contains(season, StringComparison.OrdinalIgnoreCase)
                 && int.TryParse(data.GetNthChunk('/', 3), out int obj)
-                && Game1Wrappers.ObjectInfo.TryGetValue(obj, out string? objData)
-                && int.TryParse(objData.GetNthChunk('/', SObject.objectInfoPriceIndex), out int price)
-                && price > 0)
+                && Game1Wrappers.ObjectData.TryGetValue(obj, out var objData))
             {
                 ReadOnlySpan<char> name = objData.GetNthChunk('/', SObject.objectInfoNameIndex);
                 if (name.Contains("Qi", StringComparison.OrdinalIgnoreCase))

@@ -1,7 +1,11 @@
-﻿using AtraBase.Collections;
+﻿// Ignore Spelling: Api
+
+using AtraBase.Collections;
 using AtraBase.Models.WeightedRandom;
 using AtraBase.Toolkit.Extensions;
+using AtraBase.Toolkit.StringHandler;
 
+using AtraCore.Framework.Internal;
 using AtraCore.Framework.ItemManagement;
 
 using AtraShared.ConstantsAndEnums;
@@ -18,7 +22,10 @@ using Microsoft.Xna.Framework;
 
 using StardewModdingAPI.Events;
 
+using StardewValley;
 using StardewValley.Characters;
+using StardewValley.Extensions;
+using StardewValley.GameData.Objects;
 using StardewValley.Objects;
 
 using AtraUtils = AtraShared.Utils.Utils;
@@ -27,7 +34,7 @@ using Utils = CatGiftsRedux.Framework.Utils;
 namespace CatGiftsRedux;
 
 /// <inheritdoc />
-internal sealed class ModEntry : Mod
+internal sealed class ModEntry : BaseMod<ModEntry>
 {
     private const string SAVEKEY = "GiftsThisWeek";
     private static int maxPrice;
@@ -38,19 +45,13 @@ internal sealed class ModEntry : Mod
     private readonly WeightedManager<Func<Random, Item?>> itemPickers = new();
 
     // User defined items.
-    private readonly DefaultDict<ItemTypeEnum, HashSet<int>> bannedItems = new();
+    private readonly HashSet<string> bannedItems = new();
     private readonly WeightedManager<ItemRecord> playerItemsManager = new();
-    private Lazy<WeightedManager<int>> allItemsWeighted = new(GenerateAllItems);
+    private Lazy<WeightedManager<string>> allItemsWeighted = new(GenerateAllItems);
 
     private IAssetName dataObjectInfo = null!;
 
     private ModConfig config = null!;
-    private IDynamicGameAssetsApi? dgaAPI;
-
-    /// <summary>
-    /// Gets the logging instance for this class.
-    /// </summary>
-    internal static IMonitor ModMonitor { get; private set; } = null!;
 
     /// <summary>
     /// Gets the string utilities for this mod.
@@ -61,11 +62,12 @@ internal sealed class ModEntry : Mod
     public override void Entry(IModHelper helper)
     {
         I18n.Init(helper.Translation);
+        base.Entry(helper);
+
         AssetManager.Initialize(helper.GameContent);
         this.config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
-        ModMonitor = this.Monitor;
         StringUtils = new(this.Monitor);
-        this.dataObjectInfo = helper.GameContent.ParseAssetName("Data/ObjectInformation");
+        this.dataObjectInfo = helper.GameContent.ParseAssetName("Data/Objects");
 
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunch;
         helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
@@ -73,8 +75,6 @@ internal sealed class ModEntry : Mod
         helper.Events.GameLoop.DayStarted += this.OnDayLaunched;
         helper.Events.Content.AssetRequested += static (_, e) => AssetManager.Apply(e);
         helper.Events.Content.AssetsInvalidated += this.OnAssetInvalidated;
-
-        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
     }
 
     /// <inheritdoc />
@@ -139,7 +139,7 @@ internal sealed class ModEntry : Mod
 
         Random random = RandomUtils.GetSeededRandom(-47, "atravita.CatGiftsRedux");
         double chance = ((pet.friendshipTowardFarmer.Value / 1000.0) * (this.config.MaxChance - this.config.MinChance)) + this.config.MinChance;
-        if (random.NextDouble() > chance)
+        if (!random.OfChance(chance))
         {
             this.Monitor.DebugOnlyLog("Failed friendship probability check");
             return;
@@ -147,12 +147,12 @@ internal sealed class ModEntry : Mod
 
         Vector2? tile = null;
 
-        if (pet is Dog)
+        if (pet.petType.Value != Pet.type_cat)
         {
             tile = farm.GetRandomTileImpl();
             if (tile is null)
             {
-                this.Monitor.Log("Failed to find a free tile.");
+                this.Monitor.DebugOnlyLog("Failed to find a free tile.");
             }
         }
 
@@ -180,14 +180,13 @@ internal sealed class ModEntry : Mod
                 }
                 catch (Exception ex)
                 {
-                    this.Monitor.Log($"Picker failed to select an item. See log for details.", LogLevel.Error);
-                    this.Monitor.Log(ex.ToString());
+                    this.Monitor.LogError("picking item", ex);
                     continue;
                 }
 
                 if (picked is null
                     || picked.salePrice() > this.config.MaxPriceForAllItems
-                    || (this.bannedItems.TryGetValue(picked.GetItemType(), out HashSet<int>? bannedItems) && bannedItems.Contains(picked.ParentSheetIndex)))
+                    || this.bannedItems.Contains(picked.QualifiedItemId))
                 {
                     continue;
                 }
@@ -210,44 +209,31 @@ internal sealed class ModEntry : Mod
             return null;
         }
 
-        if (entry.Type.HasFlag(ItemTypeEnum.DGAItem))
+        string? id = entry.Identifier;
+        if (!DataToItemMap.IsValidId(entry.Type, id))
         {
-            if (this.dgaAPI is null)
-            {
-                this.Monitor.LogOnce("DGA item requested but DGA was not installed, ignored.", LogLevel.Warn);
-            }
-
-            return this.dgaAPI?.SpawnDGAItem(entry.Identifier) as Item;
+            id = DataToItemMap.GetID(entry.Type, id);
         }
 
-        if (!int.TryParse(entry.Identifier, out int id))
-        {
-            id = DataToItemMap.GetID(entry.Type, entry.Identifier);
-        }
-
-        if (id > 0)
-        {
-            return ItemUtils.GetItemFromIdentifier(entry.Type, id);
-        }
-        return null;
+        return id is not null ? ItemUtils.GetItemFromIdentifier(entry.Type, id) : null;
     }
 
     private SObject? RandomSeasonalForage(Random random)
-        => new(Utility.getRandomBasicSeasonalForageItem(Game1.currentSeason, random.Next()), 1);
+        => new(Utility.getRandomBasicSeasonalForageItem(Game1.season, random.Next()), 1);
 
     private SObject? RandomSeasonalItem(Random random)
-        => new(Utility.getRandomPureSeasonalItem(Game1.currentSeason, random.Next()), 1);
+        => new(Utility.getRandomPureSeasonalItem(Game1.season, random.Next()), 1);
 
     private SObject? GetFromForage(Random random)
     {
         this.Monitor.DebugOnlyLog("Selected GetFromForage");
 
-        if (this.config.ForageFromMaps.Count == 0)
+        if (this.config.ForageFromMaps.Length == 0)
         {
             return null;
         }
 
-        string? map = Utility.GetRandom(this.config.ForageFromMaps);
+        string? map = Random.Shared.ChooseFrom(this.config.ForageFromMaps);
 
         GameLocation? loc = Game1.getLocationFromName(map);
         if (loc is null)
@@ -255,7 +241,7 @@ internal sealed class ModEntry : Mod
             return null;
         }
 
-        List<SObject>? forage = loc.Objects.Values.Where((obj) => !obj.bigCraftable.Value && obj.isForage(loc)).ToList();
+        List<SObject>? forage = loc.Objects.Values.Where((obj) => !obj.bigCraftable.Value && obj.isForage()).ToList();
 
         if (forage.Count == 0)
         {
@@ -276,23 +262,21 @@ internal sealed class ModEntry : Mod
         int tries = 3;
         do
         {
-            if (!this.allItemsWeighted.Value.GetValue(random).TryGetValue(out int id))
+            if (!this.allItemsWeighted.Value.GetValue(random).TryGetValue(out string? id))
             {
                 continue;
             }
 
             // confirm the item exists, ban Qi items or golden walnuts
-            if (Utils.ForbiddenFromRandomPicking(id))
+            if (id is null || Utils.ForbiddenFromRandomPicking(id))
             {
                 continue;
             }
 
-            if (DataToItemMap.IsActuallyRing(id))
+            if (ItemRegistry.Create(ItemRegistry.type_object + id, 1, 0, true) is SObject candidate)
             {
-                return new Ring(id);
+                return candidate;
             }
-
-            return new SObject(id, 1);
         }
         while (tries-- > 0);
         return null;
@@ -306,9 +290,6 @@ internal sealed class ModEntry : Mod
     /// <inheritdoc cref="IGameLoopEvents.GameLaunched"/>
     private void OnGameLaunch(object? sender, GameLaunchedEventArgs e)
     {
-        IntegrationHelper integration = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, LogLevel.Trace);
-        integration.TryGetAPI("spacechase0.DynamicGameAssets", "1.4.3", out this.dgaAPI);
-
         GMCMHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
         if (helper.TryGetAPI())
         {
@@ -341,20 +322,21 @@ internal sealed class ModEntry : Mod
         this.bannedItems.Clear();
         foreach (ItemRecord? item in this.config.Denylist)
         {
-            if (!int.TryParse(item.Identifier, out int id))
+            string? id = item.Identifier;
+            if (!DataToItemMap.IsValidId(item.Type, item.Identifier))
             {
                 id = DataToItemMap.GetID(item.Type, item.Identifier);
             }
 
-            if (id != -1)
+            if (id is not null && ItemTypeEnumExtensions.GetQualifiedId(item.Type, id) is string qualID)
             {
-                this.bannedItems[item.Type].Add(id);
+                this.bannedItems.Add(qualID);
             }
         }
 
         // Handle the player-added list.
         this.playerItemsManager.Clear();
-        if (this.config.UserDefinedItemList.Count > 0)
+        if (this.config.UserDefinedItemList.Length > 0)
         {
             this.playerItemsManager.AddRange(this.config.UserDefinedItemList.Select((item) => new WeightedItem<ItemRecord?>(item.Weight, item.Item)));
         }
@@ -370,7 +352,7 @@ internal sealed class ModEntry : Mod
             this.AddPicker(this.config.UserDefinedListWeight, this.GetUserItem);
         }
 
-        if (this.config.ForageFromMaps.Count > 0)
+        if (this.config.ForageFromMaps.Length > 0)
         {
             this.AddPicker(this.config.ForageFromMapsWeight, this.GetFromForage);
         }
@@ -397,20 +379,30 @@ internal sealed class ModEntry : Mod
     }
 
     [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1204:Static elements should appear before instance elements", Justification = "Reviewed.")]
-    private static WeightedManager<int> GenerateAllItems()
+    private static WeightedManager<string> GenerateAllItems()
     {
-        WeightedManager<int> ret = new();
+        WeightedManager<string> ret = new();
         float difficulty = Game1.player?.difficultyModifier ?? 1.0f;
 
-        foreach (int key in DataToItemMap.GetAll(ItemTypeEnum.SObject))
+        foreach ((string id, ObjectData data) in Game1.objectData)
         {
-            if (Game1.objectInformation.TryGetValue(key, out string? data)
-                && int.TryParse(data.GetNthChunk('/', SObject.objectInfoPriceIndex), out int price)
-                && price * difficulty < maxPrice
-                && !data.GetNthChunk('/', SObject.objectInfoNameIndex).Contains("Qi", StringComparison.OrdinalIgnoreCase))
+            if (ItemHelperUtils.ObjectFilter(id, data))
             {
-                ret.Add(new(maxPrice - price, key));
+                continue;
             }
+
+            if (data.Name.Contains("Qi", StringComparison.Ordinal))
+            {
+                continue;
+            }
+
+            int price = data.Price;
+            if (price * difficulty >= maxPrice)
+            {
+                continue;
+            }
+
+            ret.Add(new(maxPrice - price, id));
         }
 
         return ret;

@@ -3,40 +3,91 @@
     // In canon, she's kinda generic scientist. Leans robotics.
     // Working at Harvey's. Has probably an associates degree.
 
+    // We're probably going to lean her more biomedical engineering here.
+
     {
         "LogName": "Rain -- during winter.",
         "Action": "EditData",
         "Target": "Characters/Dialogue/rainy",
         "When": {"Season": "winter"},
         "Entries":{
-            "Maru": "Strange that it's raining in winter.$s",
+            "Maru": "#$c .5#Strange that it's raining in winter.$s#We didn't used to get rain in winter like this. Dad says this might be due to climate change.$s#"
         }
     },
     {
         "LogName": "Maru, mid hearts",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Maru",
+        "Entries": {
+            "summer_Tue6": "Gosh, a nice ripe melon would be good in this oppressive heat.",
+
+            "Resort_Pier": "Look, @, do you see an ocra?"
+        }
+    },
+    {
+        "LogName": "Maru, mid hearts - y1",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Maru",
+        "When": {"YearModulus": "1"},
+        "Entries":{
+            "summer_Mon6": "Mom wants me to drop by Pierre's and pick up some veggies for dinner.#$b#@, have you sold anything interesting to Pierre lately?",
+
+            "1": "@, why did you decide to come to Pelican Town?",
+            "1_2": "@, you've been in Pelican Town for quite a while now, haven't you? Are you glad you picked here for your new home?",
+            "2{{YearRemainder}}": "One of the difficulties of creating a good robotic limb is just power management. Batteries can be quite heavy.$s",
+            "3{{YearRemainder}}": "I wish I had a better relationship with my brother. Think of all the things we could build together!",
+            "4{{YearRemainder}}": "Penny and I spent yesterday building robots with the kids. It's a fun little science project to do with them.",
+            "5{{YearRemainder}}": "Harvey pays me pretty well, and lets me read when there isn't any other work to do.$h",
+            "6{{YearRemainder}}": "There's a lot more paperwork that goes on in a doctor's office than I would have thought when I started this job.$s",
+            "7{{YearRemainder}}": "The fax machine at work broke. Do you know how expensive it is to get someone out here to fix a fax machine?$s#$b#I would fix it myself but it's full of proprietary parts.$s",
+            "8{{YearRemainder}}": "Saw a really interesting paper out of %name group on bipedal robots the other day!#$b#They've got a new algorithm to help the robot keep its balance.",
+            "9{{YearRemainder}}": "Sometimes, I stop and think....how much of my brain is spent on just keeping my balance? It's amazing how easy this is for humans, and how hard it is for robots.$h",
+            "10{{YearRemainder}}": "%Maru is speaking to herself.#$b#Hmmm. How much torque do I need?#$e#Oh, @, I didn't see you there!",
+            "11{{YearRemainder}}": "Hmmm, think I need a bigger battery...",
+            "12{{YearRemainder}}": "Ordering spare parts from Joja is convenient, but sometimes I wish more electronic shops still remained.", // Mouser I love you and I miss you.
+            "13{{YearRemainder}}": "Man, sometimes I wish I lived somewhere less...rural. I'd love to go out dancing more.$s"
+        }
+    },
+    {
+        "LogName": "Maru, mid hearts - y2",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Maru",
         "When": {"YearModulus": "2"},
         "Entries":{
-            "1": "@, why did you decide to come to Pelican Town?",
             "1_2": "Ah, @, it's the start of a new month! What do you have planned?",
-            "8_2": "Sometimes I wonder if Sebastian would be happier living in the city.#$b#He doesn't really like living with other people though.",
+            "2_2": "Since my dad works there, I can audit classes at Grampleton University for free.#$b#It's fun taking classes in new things!",
+            "8_2": "Sometimes I wonder if Sebastian would be happier living in the city.#$b#He doesn't really like living with other people though, and the city's so expensive it's hard to get by without roommates.",
             "9_2": "I like working at the clinic. Dad says I should be doing more with my life, though.",
             "11_2": "Mom wishes she could have sent Sebastian to college. She says....no, never mind.",
             "13_2": "Say, @, you planting anything interesting on that farm of yours?",
             "14_2": "Dad? Dad's an ecologist. He's partnered with Grampleton University.",
             "15_2": "I really enjoy building things. Not sure where I'm going with my current project, but it's sure fun to just play around.",
             "17_2": "Dad bought me unleaded solder. It's really not the same.",
-            "19_2": "I wish I got along better with my brother.$s"
+            "19_2": "I wish I got along better with my brother.$s",
+            "20_2": "Do you have any fresh strawberries? Penny and I are thinking of doing a DNA extraction with the kids. Fun little kitchen science experiment.#$b#Strawberries are best because they're hexaploid, so they have a lot of DNA you can extract.$h",
+            "22_2": "I saw an owl last night when I was looking at the stars!",
         }
     },
     {
-        "LogName": "Maru -- Married Dialogue",
+        "LogName": "Maru, mid hearts - y4",
         "Action": "EditData",
-        "Target": "Characters/Dialogue/MarriageDialogueMaru",
+        "Target": "Characters/Dialogue/Maru",
+        "When": {"YearModulus": "4"},
+        "Entries":{
+            "1_2": "I know some people have floated the idea of my mother becoming mayor after Mayor Lewis retires, but, honestly, I think she loves her woodworking more.",
+            "2_2": "Owls have special feathers along the edges their wings that let them fly silently.#$b#Isn't biology cool?$h",
+            "3_2": "Dad thinks I should...uh, 'further my education'.",
+            "4_2": "Saturating math? Who makes a processor like that anymore?"
+        }
+    },
+    {
+        "LogName": "Maru, mid hearts - y5",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Maru",
+        "When": {"YearModulus": "0"},
         "Entries": {
-            "{{TheMightyAmondee.CustomTokens/AnniversarySeason}}_{{TheMightyAmondee.CustomTokens/AnniversaryDay}}": "Oh, honey, it's our anniversary today! Wanna go do something fun?$h"
-        },
-        "When": {"HasMod" :"TheMightyAmondee.CustomTokens"}
+            "1_2": "Ugh, I gotta make a trip to the post office sooner or later...$s",
+            "2_2": "I can't find my good screwdriver set.$s"
+        }
     }
 ]}

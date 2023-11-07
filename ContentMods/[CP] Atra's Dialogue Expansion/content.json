@@ -1,11 +1,14 @@
 {
     "$schema": "https://smapi.io/schemas/content-patcher.json",
-    "Format": "1.28.0",
+    "Format": "1.29.0",
     "ConfigSchema": {
+        "GenderedTitle": {
+            "AllowBlank": true,
+        },
         "EnableFor": {
-            "AllowValues": "Abigail, Alex, Caroline, Clint, Demetrius, Elliott, Emily, Evelyn, George, Gus, Haley, Harvey, Jodi, Kent, Leah, Lewis, Marnie, Maru, Pam, Penny, Pierre, Robin, Sam, Sandy, Sebastian, Shane, Vincent, Willy",
+            "AllowValues": "Abigail, Alex, Caroline, Clint, Demetrius, Elliott, Emily, Evelyn, George, Governor, Gus, Haley, Harvey, Jas, Jodi, Kent, Leah, Lewis, Leo, Linus, Marlon, Marnie, Maru, Pam, Penny, Pierre, Robin, Sam, Sandy, Sebastian, Shane, Vincent, Willy",
             "AllowMultiple": true,
-            "Default": "Abigail, Alex, Caroline, Clint, Demetrius, Elliott, Emily, Evelyn, George, Gus, Haley, Harvey, Jodi, Kent, Leah, Lewis, Marnie, Maru, Pam, Penny, Pierre, Robin, Sam, Sandy, Sebastian, Shane, Vincent, Willy",
+            "Default": "Abigail, Alex, Caroline, Clint, Demetrius, Elliott, Emily, Evelyn, George, Governor, Gus, Haley, Harvey, Jas, Jodi, Kent, Leah, Lewis, Linus, Leo, Marlon, Marnie, Maru, Pam, Penny, Pierre, Robin, Sam, Sandy, Sebastian, Shane, Vincent, Willy",
             "AllowBlank": true
         },
         "IncreasedRealism": {
@@ -15,9 +18,82 @@
         "MapStrings": {
             "AllowValues": "true, false",
             "Default": "true",
+        },
+        "EnableGeneric": {
+            "AllowValues": "true, false",
+            "Default": "true"
+        },
+        "EnableSpouseLocational": {
+            "AllowValues": "true, false",
+            "Default": "true",
+        },
+        "EnableFestival": {
+            "AllowValues": "true, false",
+            "Default": "true",
+        },
+        "EnableMail":{
+            "AllowValues": "true, false",
+            "Default": "true",
+        },
+        "ScheduleChanges":{
+            "AllowValues": "Abigail, Alex, Caroline, Clint, Demetrius, Elliott, Emily, Evelyn, George, Gus, Haley, Harvey, Jas, Jodi, Kent, Leah, Lewis, Marnie, Maru, Pam, Penny, Pierre, Robin, Sam, Sandy, Sebastian, Shane, Vincent, Willy",
+            "AllowMultiple": true,
+            "Default": "Abigail, Alex, Caroline, Clint, Demetrius, Elliott, Emily, Evelyn, George, Gus, Haley, Harvey, Jas, Jodi, Kent, Leah, Lewis, Marnie, Maru, Pam, Penny, Pierre, Robin, Sam, Sandy, Sebastian, Shane, Vincent, Willy",
+            "AllowBlank": true
         }
     },
     "DynamicTokens": [
+        // Free Love compat
+        // In "normal" files we use the generic file and allow more specific to override.
+        // but this means every spouse in a Free Love save suddenly says the same thing
+        // so we just edit the main spouse file in that case.
+        {
+            "Name": "MarriageDialoguePath",
+            "Value": "Characters/Dialogue/MarriageDialogue"
+        },
+        {
+            "Name": "MarriageDialoguePath",
+            "Value": "Characters/Dialogue/MarriageDialogue{{Spouse}}",
+            "When": {
+                "HasMod": "aedenthorn.FreeLove",
+                "HasValue: {{Spouse}}": true,
+            }
+        },
+
+        // title
+        {
+            "Name": "Title",
+            "Value": "{{i18n:miss}}",
+            "When": {"PlayerGender": "Female"}
+        },
+        {
+            "Name": "Title",
+            "Value": "{{i18n:mrs}}",
+            "When": {
+                "PlayerGender": "Female",
+                "HasValue: {{Spouse}}": true
+            }
+        },
+        {
+            "Name": "Title",
+            "Value": "{{i18n:mister}}",
+            "When": {"PlayerGender": "Male"}
+        },
+        {
+            "Name": "Title",
+            "Value": "{{Hana.GNMTokens/Title}}",
+            "When": {
+                "HasMod": "Hana.GNMTokens",
+                "HasValue: {{Hana.GNMTokens/Title}}": true
+            }
+        },
+        {
+            "Name": "Title",
+            "Value": "{{GenderedTitle}}",
+            "When": {"HasValue: {{GenderedTitle}}": true}
+        },
+
+        // taxes
         {
             "Name": "TaxDay",
             "Value": "spring_20"
@@ -29,10 +105,14 @@
                 "Year|contains=1": false,
             }
         },
+
+        // shuffle randoms.
         {
             "Name": "DialogueRandom",
             "Value": "{{Random:alpha, bravo, charlie, delta}}",
         },
+
+        // year nonsense
         {
             "Name": "YearModulus",
             "Value": "{{Query: {{Year}} % 5}}"
@@ -51,30 +131,191 @@
                 "Year|contains=1": false
             }
         },
+
+        // pet nonsense
         {
             "Name": "HasPet",
             "Value": "{{HasSeenEvent:HostPlayer|contains=1590166, 897405}}",
         },
         {
             "Name": "HasPet",
-            "Value": false,
+            "Value": "false",
             "When": {
-                "HasFlag:HostPlayer": "rejectedPet"
+                "HasReadLetter:HostPlayer": "rejectedPet"
             }
+        },
+
+        // child status
+        {
+            // no children, not pregnant
+            "Name": "ChildStatus",
+            "Value": "None",
+        },
+        {
+            // No children, expecting
+            "Name": "ChildStatus",
+            "Value": "Expecting",
+            "When": { "HavingChild": "@{{playerName}}" }
+        },
+        {
+            "Name": "ChildStatus",
+            "Value": "One",
+            "When": { "HasValue: {{ChildGenders}}": true }
+        },
+        {
+            "Name": "ChildStatus",
+            "Value": "Multiple",
+            "When": { "HasValue: {{ChildGenders|valueAt=1}}": true }
+        },
+        {
+            "Name": "ChildStatus",
+            "Value": "One",
+            "When": {
+                "HasMod": "Candidus42.LittleNPCs",
+                "HasValue: {{Candidus42.LittleNPCs/FirstLittleNPCName}}": true,
+                "HasValue: {{ChildGenders}}": false
+            }
+        },
+        {
+            "Name": "ChildStatus",
+            "Value": "Multiple",
+            "When": {
+                "HasMod": "Candidus42.LittleNPCs",
+                "HasValue: {{Candidus42.LittleNPCs/FirstLittleNPCName}}": true,
+                "HasValue: {{ChildGenders}}": true
+            }
+        },
+        {
+            "Name": "ChildStatus",
+            "Value": "Multiple",
+            "When": {
+                "HasMod": "Candidus42.LittleNPCs",
+                "HasValue: {{Candidus42.LittleNPCs/SecondLittleNPCName}}": true,
+            }
+        },
+
+        // movies!
+        {
+            "Name": "MovieStatus",
+            "Value": "None",
+        },
+        {
+            "Name": "MovieStatus",
+            "Value": "CC",
+            "When": {"HasReadLetter:hostPlayer": "ccMovieTheater"}
+        },
+        {
+            "Name": "MovieStatus",
+            "Value": "Joja",
+            "When": {"HasReadLetter:hostPlayer": "ccMovieTheaterJoja"}
+        },
+
+        // Marnie relationship status
+        {
+            "Name": "MarnieStatus",
+            "Value": "Unknown"
+        },
+        {
+            "Name": "MarnieStatus",
+            "Value": "Known",
+            "When": {
+                "HasSeenEvent": "639373" // town event
+            }
+        },
+        {
+            "Name": "MarnieStatus",
+            "Value": "Better",
+            "When": {
+                "HasMod": "IMS.CP.MarnieDeservesBetter, nraittanna.LifeCycleMarnieLewis",
+                "HasSeenEvent": "59020016, 639373" // the Life Cycle event OR the town event.
+            }
+        },
+
+        // random sports shuffling
+        {
+            "Name": "FirstSportsTeam",
+            "Value": "{{i18n:sports.team.{{Random:01, 02, 03, 04, 05, 06, 07, 08|key=sports_team}} }}"
+        },
+        {
+            "Name": "SecondSportsTeam",
+            "Value": "{{i18n:sports.team.{{Random:02, 03, 04, 05, 06, 07, 08, 01|key=sports_team}} }}"
+        },
+        {
+            // 50% chance of being offset two instead.
+            "Name": "SecondSportsTeam",
+            "Value": "{{i18n:sports.team.{{Random: 03, 04, 05, 06, 07, 08, 01, 02|key=sports_team}} }}",
+            "When": {
+                "Random: true, false": true
+            }
+        },
+
+        // Random dishes
+        {
+            "Name": "Dish",
+            "Value": "{{i18n:dishes.adult.{{Random:01, 02, 03, 04, 05, 06, 07, 08, 10}} }}"
+        },
+        {
+            "Name": "Restaurant",
+            "Value": "{{i18n:restaurant.{{Random:01, 02, 03, 04, 05, 06}} }}"
+        },
+
+        // Random video game
+        {
+            "Name": "VideoGame",
+            "Value": "{{i18n:video.game.{{Random:01, 02, 03, 04, 05, 06, 07, 08, 09}} }}"
         }
     ],
     "Changes": [
         {
             "Action": "Include",
-            "LogName": "Dialogue Changes: base",
-            "FromFile": "{{FirstValidFile: assets/{{language}}/base.json, assets/default/base.json}}",
+            "LogName": "GIMA",
+            "When": {"HasMod": "atravita.GingerIslandMainlandAdjustments"},
+            "FromFile": "assets/integrations/gima.json"
+        },
+        {
+            "Action": "Include",
+            "LogName": "SOTE",
+            "When": {"HasMod": "atravita.SpecialOrdersExtended"},
+            "FromFile": "assets/integrations/sote.json"
+        },
+        {
+            "Action": "Include",
+            "LogName": "Festival Changes",
+            "FromFile": "assets/festival_dialogue/{{Season}}{{Day}}.json",
+            "When": {
+                "HasValue: {{DayEvent}}": true,
+                "HasFile: {{FromFile}}": true,
+            }
+        },
+        {
+            "Action": "Include",
+            "LogName": "Basic Dialogue",
+            "FromFile": "assets/base_dialogue/toc.json",
             "When": {"Day|contains=0": false}
         },
         {
             "Action": "Include",
             "LogName": "Dialogue Changes: Randomized",
-            "FromFile": "{{FirstValidFile: assets/{{language}}/{{DialogueRandom}}/toc.json, assets/default/{{DialogueRandom}}/toc.json}}",
+            "FromFile": "assets/toc/{{DialogueRandom}}.json",
             "When": {"Day|contains=0": false}
+        },
+        {
+            "Action": "Include",
+            "LogName": "MapStrings",
+            "When": {"MapStrings": true},
+            "FromFile": "assets/mapstrings.json"
+        },
+        {
+            "Action": "Include",
+            "LogName": "Mail",
+            "When": {"EnableMail": true, "Year|contains=1": false},
+            "FromFile": "assets/mail.json",
+        },
+        {
+            "Action": "Include",
+            "LogName": "ScheduleChanges",
+            "When": { "HasValue: {{ScheduleChanges}}": true },
+            "FromFile": "assets/schedules/toc.json"
         },
         {
             "Action": "EditData",
@@ -84,13 +325,8 @@
             "Entries": {
                 "atravitaDialogueLeahBeach": "null",
                 "atravitaGusNewYear": "null",
+                "atravitaGusExpectingGift": "null",
             }
         },
-        {
-            "Action": "Include",
-            "LogName": "MapStrings",
-            "When": {"MapStrings": true},
-            "FromFile": "assets/mapstrings.json"
-        }
     ],
 }

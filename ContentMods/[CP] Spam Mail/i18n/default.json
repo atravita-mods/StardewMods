@@ -1,0 +1,78 @@
+{
+    /*********
+    * Mail
+    **********/
+
+    "CircusMail.Title": "The Greatest Show On Earth",
+    "CircusMail.Text": "Two weeks only, the Cirque de La Lune's in town! Featuring death-defying acrobatics, ferocious tamed lions, mind-bending magic shows, and, of course, clowns! Visit us in Zuzu City while we're here!",
+
+    "Aquarium.Title": "Zuzu City Aquarium Presents: Denizens of the Deep!",
+    "Aquarium.Text": "Ever interested in the crazy weird creatures that inhabit the depths of the ocean! Now you have an opportunity to meet them! For two weeks only, our Denizens of the Deep exhibit will let you see anglerfish, rattails, and even vampire squid!",
+
+    // zoo?
+
+    // anyone else remember Medieval Times? 
+    "Castle.Title": "Jousting, Knights, and Festivities!",
+    "Castle.Text": "Come see an unique attraction in Castle Town! Featuring dynamic jousts, expert horsemanship, and a feast fit for kings! Only 1000$ per person!",
+
+    // Joja mail
+    "JojaMail.Summer.Title": "It's Summer!",
+    "JojaMail.Summer.Text.1": "Summer's the best, isn't it? Pools, ice cream, and, best of all, NO SCHOOL. Come to Joja for our Galactic Ice Cream (limited edition!), freezy pops, and edible pool noodles!",
+
+    "JojaMail.Fall.Title": "Back to School!",
+    "JojaMail.Fall.Text.1": "Get all the school supplies your child needs cheap from Joja! Loose leaf paper, binders, and new spirals all around!",
+
+    "JojaMail.Winter.Title": "Hot Chocolate For All!",
+    "JojaMail.Winter.Text.1": "Come in to your local JojaMart, get a free cup of hot cocoa on us!",
+    "JojaMail.Winter.Text.2": "Required minimum 2000$ purchase to qualify for free hot cocoa.",
+
+    // Medications, because WTF America
+    "SkinImplants.Title": "Fix Your Jawline!",
+    "SkinImplants.Text.1": "Ever thought your jawline needed a little work? Well, come by Doctor Hendricks today for our patented jawline injection! This is the only outpatient procedure guaranteed to firm up those jowls and sharpen that jawline. 30% off for the next two weeks!",
+    "SkinImplants.Text.2": "There is a small risk the needle may puncture a vein, which may lead to numbness, blindness, or even death.",
+
+    // vacation
+    "IslandVacation.Title": "Take off to a Tropical Paradise",
+    "IslandVacation.Text.1": "Enjoy a nice pina colada on the white sandy beaches of Ginger Island! Just 1000$ for a ticket!",
+    "IslandVacation.Text.2": "Departs daily from the Pelican Town Beach.",
+
+    // Casino
+    "Casino.Title": "Come Try Your Luck",
+    "Casino.Text.00": "Come try your luck at the Calico Desert's Casino! Featuring blackjack and many slot machines!",
+    "Casino.Text.01": "Adults only, open all hours.",
+
+    // composter
+    "Composter.Title": "Kitchen Countertop Composter - Cheap and Easy!",
+    "Composter.Text.1": "Tired of food scraps stinking up your kitchen? Just buy our patented Electric Kitchen Countertop Composter. With just nine payments of 1000$, you can create compost in hours!",
+
+    // clothing?
+    "Clothing.Title": "Half-off Bridal!",
+    "Clothing.Text.1": "Starting from now to the end of the year, all bridal gowns are half-off! Including all Diane's, all Les Dames, and all Bridal-Gear-For-Less!",
+    "Clothing.Text.2": "Does not include the skirt.",
+
+    // VPN
+    "VPN.Title": "Protect Your Privacy!",
+    "VPN.Text": "Did you know that when you're browsing online, every website tracks you! Well, they do! Let us help you hide from them.",
+
+    // pizza
+    "Pizza.Title": "Enjoy our new fully-stuffed-crust pizza!",
+    "Pizza.Text.00": "You've enjoyed our classic mozzarella-stuffed crust for years! But what if we bought the cheese throughout the whole crust!",
+    "Pizza.Text.01": "Introducing the new Pizza Cabin Fully-Stuffed-Crust Pizza, with a layer of cheese under the whoooollllleeee pizza!",
+
+    // energy drinks?
+    "EnergyDrink.Title": "You've Got It, Athlete.",
+    "EnergyDrink.Text.00": "All you need is a single sip of our patented Bungle Blaster and you'll run faster than you've ever in your life!",
+    "EnergyDrink.Text.01": "Not recommended for pregnant women or anyone with heart issues.",
+
+    // Tools Shop
+    "ToolsShop.Title": "Air Compressors For Less",
+    "ToolsShop.Text.00": "Introducing our new Black and Yellow Air Compressor, perfect for small tasks! Buy yours, thirty percent off, today!",
+    "ToolsShop.Text.01": "Home Improvement has never been easier!",
+
+    "GoldShop.Title": "The World's Ending!",
+    "GoldShop.Text.00": "You can't trust the financial system, so trust us instead! Buy gold from us, we promise we aren't overcharging you! Just 500$/bar.",
+
+    /*********
+    * Dialogue
+    *********/
+}

@@ -61,7 +61,7 @@ internal static class RemoveSeasonCheck
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod failed while patching theft of the winter star. Integration may not work.\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("patching theft of the winter star", ex);
         }
     }
 
@@ -130,8 +130,7 @@ internal static class RemoveSeasonCheck
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod crashed while transpiling {original.FullDescription()}:\n\n{ex}", LogLevel.Error);
-            original.Snitch(ModEntry.ModMonitor);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }
@@ -186,8 +185,7 @@ internal static class RemoveSeasonCheck
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod crashed while transpiling {original.FullDescription()}:\n\n{ex}", LogLevel.Error);
-            original.Snitch(ModEntry.ModMonitor);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }
@@ -226,8 +224,7 @@ internal static class RemoveSeasonCheck
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod crashed while transpiling {original.FullDescription()}:\n\n{ex}", LogLevel.Error);
-            original.Snitch(ModEntry.ModMonitor);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }

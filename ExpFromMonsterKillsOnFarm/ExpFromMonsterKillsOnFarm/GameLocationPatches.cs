@@ -1,44 +1,46 @@
-﻿using AtraShared.Utils.Extensions;
-using HarmonyLib;
-using StardewValley.Monsters;
+﻿namespace ExpFromMonsterKillsOnFarm;
 
-namespace ExpFromMonsterKillsOnFarm;
+using AtraShared.ConstantsAndEnums;
+using AtraShared.Utils.Extensions;
+
+using HarmonyLib;
+
+using StardewValley.Monsters;
+using StardewValley.SpecialOrders;
 
 /// <summary>
 /// Patches on the GameLocation class.
 /// </summary>
 [HarmonyPatch(typeof(GameLocation))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal class GameLocationPatches
 {
     /// <summary>
     /// Appends EXP gain to monsterDrop.
     /// </summary>
     /// <param name="__instance">Game location.</param>
-    /// <param name="__0">Monster killed.</param>
-    /// <param name="__1">X location of monster killed.</param>
-    /// <param name="__2">Y location of monster killed.</param>
-    /// <param name="__3">Farmer who killed monster.</param>
+    /// <param name="monster">Monster killed.</param>
+    /// <param name="who">Farmer who killed monster.</param>
     /// <remarks>This function is always called when a monster dies.</remarks>
     [HarmonyPostfix]
-    [HarmonyPatch(nameof(GameLocation.monsterDrop))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
-    public static void AppendMonsterDrop(GameLocation __instance, Monster __0, int __1, int __2, Farmer __3)
+    [HarmonyPatch("onMonsterKilled")]
+    private static void AppendMonsterDrop(GameLocation __instance, Monster monster, Farmer who)
     {
         try
         {
-            if (__3 is null || !__instance.IsFarm)
+            if (who is null || !__instance.IsFarm)
             {
                 return;
             }
             if (ModEntry.Config.GainExp)
             {
-                __3.gainExperience(Farmer.combatSkill, __0.ExperienceGained);
-                ModEntry.ModMonitor.DebugOnlyLog($"Granting {__3.Name} {__0.ExperienceGained} combat XP for monster kill on farm");
+                who.gainExperience(Farmer.combatSkill, monster.ExperienceGained);
+                ModEntry.ModMonitor.DebugOnlyLog($"Granting {who.Name} {monster.ExperienceGained} combat XP for monster kill on farm");
             }
             if (ModEntry.Config.QuestCompletion)
             {
-                __3.checkForQuestComplete(null, 1, 1, null, __0.Name, 4);
-                ModEntry.ModMonitor.DebugOnlyLog($"Granting {__3.Name} one kill of {__0.Name} towards billboard.");
+                who.checkForQuestComplete(null, 1, 1, null, monster.Name, 4);
+                ModEntry.ModMonitor.DebugOnlyLog($"Granting {who.Name} one kill of {monster.Name} towards billboard.");
             }
             if (ModEntry.Config.SpecialOrderCompletion && Game1.player.team.specialOrders is not null)
             {
@@ -46,15 +48,15 @@ internal class GameLocationPatches
                 {
                     if (order.onMonsterSlain is not null)
                     {
-                        order.onMonsterSlain(Game1.player, __0);
-                        ModEntry.ModMonitor.DebugOnlyLog($"Granting {__3.Name} one kill of {__0.Name} towards special order {order.questKey}");
+                        order.onMonsterSlain(Game1.player, monster);
+                        ModEntry.ModMonitor.DebugOnlyLog($"Granting {who.Name} one kill of {monster.Name} towards special order {order.questKey}");
                     }
                 }
             }
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed in granting combat xp on farm\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("granting combat ex on farm", ex);
         }
     }
 }

@@ -1,11 +1,19 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
+
+using AtraBase.Toolkit.Extensions;
 using AtraBase.Toolkit.Reflection;
+
+using AtraCore;
 using AtraCore.Framework.ReflectionManager;
+
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
+
 using HarmonyLib;
+
 using MoreFertilizers.Framework;
+
 using StardewValley.Characters;
 
 namespace MoreFertilizers.HarmonyPatches.Compat;
@@ -32,7 +40,7 @@ internal static class MultiYieldCropsCompat
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod crashed while transpiling MultiYieldCrops. Integration may not work correctly.\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("transpiling MultiYieldCrops", ex);
         }
     }
 
@@ -66,7 +74,7 @@ internal static class MultiYieldCropsCompat
             }
             else if (fertilizer == ModEntry.DeluxeJojaFertilizerID)
             {
-                obj.Quality = Game1.random.NextDouble() < 0.2 ? 2 : 1;
+                obj.Quality = Random.Shared.OfChance(0.2) ? 2 : 1;
                 obj.modData?.SetBool(CanPlaceHandler.Joja, true);
                 obj.MarkContextTagsDirty();
             }
@@ -79,13 +87,13 @@ internal static class MultiYieldCropsCompat
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed in adjusting MultiYieldCrop or PFMAutomate item.\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("adjusting MultiYieldCrop or PFMAutomate item", ex);
         }
         return obj;
     }
 
     private static bool IsBountifulFertilizer(int fertilizer)
-        => fertilizer != -1 && fertilizer == ModEntry.BountifulFertilizerID && Game1.random.NextDouble() < 0.1;
+        => fertilizer != -1 && fertilizer == ModEntry.BountifulFertilizerID && Random.Shared.OfChance(0.1);
 
 #pragma warning disable SA1116 // Split parameters should start on line after declaration
     private static IEnumerable<CodeInstruction>? Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
@@ -159,7 +167,7 @@ internal static class MultiYieldCropsCompat
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod crashed while transpiling MultiYieldCrops:\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }

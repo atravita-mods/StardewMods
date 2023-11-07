@@ -15,10 +15,23 @@ internal static class FruitTreePatches
     [HarmonyPatch(nameof(FruitTree.dayUpdate))]
     private static void PostfixDayUpdate(FruitTree __instance)
     {
-        if (!__instance.stump.Value && __instance.fruitsOnTree.Value <= 0 && __instance.growthStage.Value == FruitTree.treeStage
+        if (!__instance.stump.Value && __instance.fruit.Count <= 0 && __instance.growthStage.Value == FruitTree.treeStage
+            && !__instance.GreenHouseTree
             && __instance.modData?.GetBool(CanPlaceHandler.EverlastingFruitTreeFertilizer) == true)
         {
-            __instance.fruitsOnTree.Value = 1;
+            try
+            {
+                __instance.GreenHouseTree = true;
+                __instance.TryAddFruit();
+            }
+            catch (Exception ex)
+            {
+                ModEntry.ModMonitor.LogError("adding fruit to fruit tree", ex);
+            }
+            finally
+            {
+                __instance.GreenHouseTree = false;
+            }
         }
     }
 }

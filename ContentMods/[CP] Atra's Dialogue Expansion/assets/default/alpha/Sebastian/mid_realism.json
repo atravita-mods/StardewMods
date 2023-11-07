@@ -1,0 +1,18 @@
+{"Changes":[
+    {
+        "Action": "EditData",
+        "Target": "Characters/dialogue/Sebastian",
+        "When": {"YearModulus": "1"},
+        "Entries": {
+            "4{{YearRemainder}}": "@, I wish my job would give me more interesting work to do.$s"
+        }
+    },
+    {
+        "Action": "EditData",
+        "Target": "Characters/dialogue/Sebastian",
+        "When": {"YearModulus": "4"},
+        "Entries": {
+            "4_2": "I always feel like I keep on getting passed over for people who have more credentials than I do...$s"
+        }
+    }
+]}

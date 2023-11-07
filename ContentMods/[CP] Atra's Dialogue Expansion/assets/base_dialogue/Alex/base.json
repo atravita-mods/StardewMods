@@ -1,0 +1,21 @@
+{"Changes":[
+    {
+        "LogName": "Alex - older",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Alex",
+        "When": {
+            "Year|contains = 1,2": false,
+            "EnableFor": "Alex"
+        },
+        "Entries": {
+            // Slowly remove references to "going pro"
+            "Mon8": "{{i18n:alex-mon8}}",
+            "summer_Wed": "{{i18n:alex-summer-wed}}$h",
+            "fall_Mon": "{{i18n:alex-fall-mon}}$s",
+            "fall_Mon2": "{{i18n:alex-fall-mon2}}$s",
+
+            "winter_Wed8": "{{i18n:alex-winter-wed8.00}}#$b#{{i18n:alex-winter-wed8.01}}$s",
+            "Resort_Towel_3": "{{i18n:alex-resort-towel-3}}$h",
+        }
+    }
+]}

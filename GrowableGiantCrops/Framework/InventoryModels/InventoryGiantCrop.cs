@@ -1,4 +1,6 @@
-﻿using System.Runtime.CompilerServices;
+﻿namespace GrowableGiantCrops.Framework.InventoryModels;
+
+using System.Runtime.CompilerServices;
 using System.Xml.Serialization;
 
 using AtraBase.Toolkit;
@@ -18,10 +20,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using Netcode;
 
-using StardewValley;
 using StardewValley.TerrainFeatures;
-
-namespace GrowableGiantCrops.Framework.InventoryModels;
 
 // NOTE: remember that the lower left corner is the placement corner!
 
@@ -45,6 +44,9 @@ public sealed class InventoryGiantCrop : SObject
     /// </summary>
     internal const string GiantCropTweaksModDataKey = "leclair.giantcroptweaks/Id";
 
+    /// <summary>
+    /// The mod data key used to mark giant crops.
+    /// </summary>
     internal const string ModDataKey = $"{InventoryGiantCropPrefix}Id";
 
     /// <summary>
@@ -60,11 +62,19 @@ public sealed class InventoryGiantCrop : SObject
     #endregion
 
     /// <summary>
-    /// The string id, used to distinguish GiantCropTweaks giant crops.
+    /// The qualified object ID of the product of the giant crop.
     /// </summary>
     [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:Fields should be private", Justification = "Public for serializer.")]
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1307:Accessible fields should begin with upper-case letter", Justification = "Reviewed.")]
-    public readonly NetString stringID = new(string.Empty);
+    public readonly NetString productID = new(string.Empty);
+
+    /// <summary>
+    /// Legacy string id, formerly used to distinguish GiantCropTweaks giant crops.
+    /// </summary>
+    [Obsolete("Originally used to support GiantCropTweaks")]
+    [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:Fields should be private", Justification = "Public for serializer.")]
+    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1307:Accessible fields should begin with upper-case letter", Justification = "Reviewed.")]
+    public string stringID = string.Empty;
 
     #region drawfields
     [XmlIgnore]
@@ -84,7 +94,7 @@ public sealed class InventoryGiantCrop : SObject
     public InventoryGiantCrop()
         : base()
     {
-        this.NetFields.AddField(this.stringID);
+        this.NetFields.AddField(this.productID);
         this.Category = GiantCropCategory;
         this.Price = 0;
         this.CanBeSetDown = true;
@@ -100,7 +110,7 @@ public sealed class InventoryGiantCrop : SObject
     public InventoryGiantCrop(string stringID, int intID, int initialStack)
         : this(intID, initialStack)
     {
-        this.stringID.Value = stringID;
+        this.stringID = stringID;
         this.Category = GiantCropTweaksCategory;
     }
 
@@ -115,6 +125,8 @@ public sealed class InventoryGiantCrop : SObject
         this.ParentSheetIndex = intID;
         this.Name = InventoryGiantCropPrefix + GGCUtils.GetNameOfSObject(intID);
         this.Stack = initialStack;
+
+        this.modData?.SetInt(ModDataKey, this.ParentSheetIndex);
     }
 
     #region reflection
@@ -428,16 +440,13 @@ public sealed class InventoryGiantCrop : SObject
                 origin: Vector2.Zero,
                 scale: 4f,
                 effects: SpriteEffects.None,
-                layerDepth: Math.Max(0f, (f.getStandingY() + 3) / 10000f));
+                layerDepth: Math.Max(0f, (f.StandingPixel.Y + 3) / 10000f));
         }
     }
 
-    private float GetScaleSize()
-    {
-        this.PopulateTileSize();
-        return 3.5f / Math.Max(1, this.tileSize.X);
-    }
-
+    /// <summary>
+    /// Gets the tile size of this giant crop.
+    /// </summary>
     private void PopulateTileSize()
     {
         if (this.tileSize == default)
@@ -452,6 +461,12 @@ public sealed class InventoryGiantCrop : SObject
                 this.tileSize = new(3, 3);
             }
         }
+    }
+
+    private float GetScaleSize()
+    {
+        this.PopulateTileSize();
+        return 3.5f / Math.Max(1, this.tileSize.X);
     }
 
     /// <summary>
@@ -496,8 +511,7 @@ public sealed class InventoryGiantCrop : SObject
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed in attempting to acquire texture and boundaries for {this.Name} - {this.ParentSheetIndex}, see log for details.", LogLevel.Error);
-            ModEntry.ModMonitor.Log(ex.ToString());
+            ModEntry.ModMonitor.LogError($"acquiring texture and boundaries for {this.Name} - {this.ParentSheetIndex}", ex);
         }
     }
 
@@ -516,13 +530,11 @@ public sealed class InventoryGiantCrop : SObject
     #region misc
 
     /// <inheritdoc />
-    public override Item getOne()
+    protected override Item GetOneNew()
     {
-        InventoryGiantCrop crop = string.IsNullOrEmpty(this.stringID.Value)
-            ? new(this.ParentSheetIndex, 1)
-            : new(this.stringID.Value, this.ParentSheetIndex, 1);
-        crop._GetOneFrom(this);
-        return crop;
+        return string.IsNullOrEmpty(this.stringID.Value)
+            ? new InventoryGiantCrop(this.ParentSheetIndex, 1)
+            : new InventoryGiantCrop(this.stringID.Value, this.ParentSheetIndex, 1);
     }
 
     /// <inheritdoc />
@@ -538,7 +550,7 @@ public sealed class InventoryGiantCrop : SObject
     public override bool canBeTrashed() => true;
 
     /// <inheritdoc />
-    public override bool isForage(GameLocation location) => false;
+    public override bool isForage() => false;
 
     /// <inheritdoc />
     public override string getCategoryName() => I18n.GiantCropCategory();
@@ -548,9 +560,6 @@ public sealed class InventoryGiantCrop : SObject
 
     /// <inheritdoc />
     public override bool isPlaceable() => true;
-
-    /// <inheritdoc />
-    public override bool canBePlacedInWater() => false;
 
     /// <inheritdoc />
     public override bool canStackWith(ISalable other)
@@ -577,20 +586,11 @@ public sealed class InventoryGiantCrop : SObject
         tags.Add("category_inventory_giant_crop");
         tags.Add($"id_inventoryGiantCrop_{this.ParentSheetIndex}");
         tags.Add("quality_none");
-        tags.Add("item_" + this.SanitizeContextTag(this.Name));
+        tags.Add("item_" + ItemContextTagManager.SanitizeContextTag(this.Name));
     }
 
     private string GetProductDisplayName()
-    {
-        if (Game1Wrappers.ObjectInfo.TryGetValue(this.ParentSheetIndex, out string? data))
-        {
-            return data.GetNthChunk('/', objectInfoDisplayNameIndex).ToString();
-        }
-        else
-        {
-            return "UNKNOWN";
-        }
-    }
+        => Game1Wrappers.ObjectData.GetValueOrGetDefault(this.ItemId)?.DisplayName?.ParseTokens() ?? "UNKOWN";
     #endregion
 
     #region helpers

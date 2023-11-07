@@ -24,7 +24,7 @@ public static class SMAPIHelperExtensions
                         monitor.Log("Configuration written successfully!");
                         break;
                     case TaskStatus.Faulted:
-                        monitor.Log($"Configuration failed to write {t.Exception}", LogLevel.Error);
+                        monitor.LogError("writing config file", t.Exception!);
                         break;
                 }
             });

@@ -1,12 +1,61 @@
 {"Changes":[
     {
+        "LogName": "Harvey mid-hearts - Y1",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Harvey",
+        "When": { "YearModulus": "1" },
+        "Entries": {
+            "7{{YearRemainder}}": "I'm so sick of these pushy pharmaceutical reps.#$b#If they wanted me to prescribe their stuff, they need to make it more affordable.$a",
+            "10{{YearRemainder}}": "I hate how scientific studies aren't properly vetted these days by the journals, and how it's so hard to get information about retractions."
+        }
+    },
+    {
+        "LogName":"Harvey mid-hearts - Y2",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Harvey",
+        "When": { "YearModulus": "2" },
+        "Entries": {
+            "8_2": "Ugh, I've got so much continuing education to do, and I'm not sure when I'll have the time...",
+            "18_2": "I wish advertisements were more honest about what people actually look like.#$b#Maintaining such a low body fat percentage for any real amount of time is terrible for your health.",
+            "19_2": "%Harvey looks dejected.#$b#*sigh*. @, my own A1c is a tad bit higher than I'd like.#$b#I really need to start taking better care of myself, but with what time?$s"
+        }
+    },
+    {
+        "LogName":"Harvey mid-hearts - Y3",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Harvey",
+        "When": { "YearModulus": "3" },
+        "Entries": {
+            "5_2": "I really wanted to partner with a telehealth agency to offer services I'm not trained for, like counseling, but then I found out they sold patient data.$s#$e#Money ruins everything, doesn't it?$s",
+            "12_2": "Every time a new weight loss drug comes out, I'm always afraid it's too good to be true.",
+            "15_2": "I always worry so much about whether or not my patients can afford the medications I prescribe them.$s"
+        }
+    },
+    {
         "LogName": "Harvey mid-hearts - Y4",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Harvey",
+        "When": { "YearModulus": "4" },
         "Entries": {
             "6_2": "%Harvey looks exhausted.#$e#Oh, hi @! I'm sorry, I was up late yesterday arguing with the preapprover.#$b#I wish they'd let doctors doctor and stop trying to micromanage us.$s",
-            "10_2": "Nutritional studies always confuse me, @. First, a paper comes out saying milk is good for you. Next, a paper claims milk is bad.#$b#I'm not sure what I should believe anymore.$s"
-        },
-        "When": { "YearModulus": "4" }
+            "7_2": "The preapprovers are getting even more tight-fisted. Now they only want to reimburse for the first fifteen minutes of a checkup.$a",
+            "10_2": "Nutritional studies always confuse me, @. First, a paper comes out saying milk is good for you. Next, a paper claims milk is bad.#$b#I'm not sure what I should believe anymore.$s",
+            "13_2": "One of my friends from med school is now taking pilot lessons. Wants to fly planes as a hobby.#$b#It's a lot more expensive than what I expected...$s#$b#He's a big city doctor, though, he's pulling in the big bucks.",
+            "15_2": "Is alcohol good or bad for the heart? I feel like the studies say different things every year.$s",
+            "22_2": "I'd complain about how many faxes I still have to send but frankly all our computer systems also only barely work.$s#$e#One day someone will come out with an electronic health record system that's actually good, hopefully.",
+            "23_2": "%place Biologics just came out with a new medication for type 1 diabetes. 20,000g an infusion. Who can afford that?",
+            "24_2": "I like taking walks around town whenever I can. I think it's good for one's mental health.$h"
+        }
+    },
+    {
+        "LogName": "Harvey mid-hearts - Y5",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Harvey",
+        "When": { "YearModulus": "0" },
+        "Entries": {
+            "13_2": "That friend of mine, the one who's taking pilot lessons? He had to make a crash landing in a field the other day.#$b#Engine failed, it was pretty scary.",
+            "16_2": "One of my friends from medical school is now a company doc.#$e#He says the pay is stable but he always has to be careful what he says.#$b#Company doesn't want to admit that it has asbestos surrounding its buried lines.#$e#Oh, I shouldn't have said that!", // see: https://cwa-union.org/news/entry/working_with_exposure_to_asbestos-containing_materials
+            "19_2": "We've got these new lateral flow virus detectors, but boy are they expensive.#$b#They'll tell you the difference between respiratory syncytial virus and the flu in fifteen minutes, but cost nearly 500g a pop."
+        }
     }
 ]}

@@ -1,0 +1,45 @@
+{"Changes":[
+    {
+        "LogName": "Demetrius mid-hearts, Y1, bats",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Demetrius",
+        "Entries": {
+            "9": "If you want, our local mountains are excellent places to forage for mushrooms! Just be careful, some species are poisonous."
+        },
+        "When": { "YearModulus": "1"}
+    },
+    {
+        "LogName": "Demetrius mid-hearts, Y2, bats",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Demetrius",
+        "Entries": {
+            "7_2": "Many people don't like bats because they're vectors of disease.#$b#But they're very important to the ecosystem.#$e#Also, bats are adorable.$h",
+            "8_2": "About one fifth of mammalian species are bats! They're the only mammals that can fly.$h",
+            "9_2": "Bats are exceptionally long-lived for mammals. They'll often live three times longer than other similarly-sized mammals.$h",
+            "10_2": "Sometimes I find these mushrooms when I explore around these mountains.[420]"
+        },
+        "When": { "YearModulus": "2"}
+    },
+    {
+        "LogName": "Demetrius mid-hearts, Y3, bats",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Demetrius",
+        "Entries": {
+            "7_2": "In order to support the respiratory demands of flight, bats can actually exchange carbon dioxide for oxygen through their wings.$h#$e#Birds have evolved an extraordinary respiratory system, bats breathe through their wings. Isn't this marvelous?$h",
+            "10_2": "Bat guano is commonly used as fertilizer! It's quite rich in nitrogen.",
+            "12_2": "Bats help reduce the use of pesticides because they'll eat agricultural pests.$h",
+            "14_2": "%Demetrius looks very tired.#$b#*Yawn*. Oh, hi, @, I was up late last night observing the bats in our local caves!"
+        },
+        "When": { "YearModulus": "3"}
+    },
+    {
+        "LogName": "Demetrius mid-hearts, Y4, bats",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Demetrius",
+        "When": { "YearModulus": "4"},
+        "Entries": {
+            "7_2": "Compared to most mammals of their size, bats are incredibly long lived. I've always wondered how they managed.",
+            "15_2": "Bats are far, far more capable of fighting off viruses than humans are.#$b#From rabies to coronaviruses, they seem far more capable of handling viruses than we are.",
+        }
+    }
+]}

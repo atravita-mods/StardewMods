@@ -1,13 +1,55 @@
-{"Changes":[
-    {
-        "LogName": "Pam - Y2",
-        "Action": "EditData",
-        "Target": "Characters/Dialogue/Pam",
-        "When": { "YearRemainder": "2"},
-        "Entries": {
-            "6_2": "A tasteless TV dinner tonight, or something I can't afford from the saloon? Choices, choices....",
-            "18_2": "Gus gets up at dawn to bake bread for the Saloon. Then he's up until late bartending. I wish had even half of that man's energy and dedication.",
-            "22_2": "I wish I could have been a better mother for Penny.$s"
+{
+    "Changes": [
+        {
+            "LogName": "Pam - Y2",
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Pam",
+            "When": {
+                "YearModulus": "2"
+            },
+            "Entries": {
+                "Mon10": "A tasteless TV dinner tonight, or something I can't afford from the saloon? Choices, choices....",
+                "Tue10": "There's nothing like a nice fresh parsnip.$h",
+                "Wed10": "Got a hankering for some hashbrowns from the saloon, but not sure I've got the cash for that.$s",
+                "Thu10": "Hey @, you any good at checkers? I used to be.",
+                "Fri10": "Ugh, @, I really wish I could afford a dishwasher.$s",
+                "summer_Tue10": "Gus gets up at dawn to bake bread for the Saloon. Then he's up until late bartending. I wish had even half of that man's energy and dedication.",
+                "fall_Tue10": "Penny thinks I should take up playing chess or something. Find something to occupy me.",
+                "winter_Tue10": "I wish I could have been a better mother for Penny.$s"
+            }
+        },
+        {
+            "LogName": "Pam - Y2, before rehab",
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Pam",
+            "When": {
+                "HasSeenEvent|contains=99210002": false,
+                "YearModulus": 2
+            },
+            "Entries": {
+                "winter_Mon10": "Hmmm....boxed red wine or boxed white wine for tonight?"
+            }
+        },
+        {
+            "LogName": "Pam - Y3",
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Pam",
+            "When": {
+                "YearModulus": "3"
+            },
+            "Entries": {
+                "Mon10": "Bus has been making weird rattling sounds lately.#$e#As they say...good enough for government work...Hrmph.$s",
+                "Tue10": "Penny would rather stay home and read a book than go out.#$b#I wasn't like that when I was her age. Maybe she's got the better idea.",
+                "Wed10": "Laundry, laundry, why is there always more laundry to do?",
+
+                "fall_Tue10": "Pappy used to buy these canned glazed yams.%revealtastePam208#$e#Hey, don't knock it until you've tried it, it's better than you'd think.",
+                "winter_Tue10": "Nice thing about being employed by the government...my job security is pretty good.",
+                "winter_Wed10": "My biggest regret in life is that I couldn't provide a good life for my dearest Penny.$s#$b#It's probably too late now, too.$s",
+                "winter_Thu10": "These old bones don't move as well as they used to.$s",
+
+                "2_2": "Huh, Accel might be going bankrupt. Well, that's the end of an era...",
+                "5_2": "Those politicians, they're all corrupt."
+            }
         }
-    }
-]}
+    ]
+}

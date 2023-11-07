@@ -1,6 +1,6 @@
 ﻿namespace IdentifiableCombinedRings.DataModels;
 
-internal readonly record struct RingPair(int first, int second);
+internal readonly record struct RingPair(string first, string second);
 
 /// <summary>
 /// The data model used for rings.

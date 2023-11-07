@@ -1,3 +1,5 @@
+using AtraBase.Toolkit;
+
 using CommunityToolkit.Diagnostics;
 
 using NetEscapades.EnumGenerators;
@@ -11,7 +13,7 @@ namespace AtraShared.ConstantsAndEnums;
 /// </summary>
 [Flags]
 [EnumExtensions]
-[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1602:Enumeration items should be documented", Justification = "Should be obvious.")]
+[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1602:Enumeration items should be documented", Justification = StyleCopErrorConsts.SelfEvident)]
 public enum WalletItems
 {
     /// <summary>
@@ -27,6 +29,9 @@ public enum WalletItems
     SpringOnion = 0b1 << 5,
     TranslationGuide = 0b1 << 6,
     TownKey = 0b1 << 7,
+    MagicInk = 0b1 << 8,
+    MagnifyingGlass = 0b1 << 9,
+    DarkTalisman = 0b1 << 10,
 }
 
 /// <summary>
@@ -51,27 +56,20 @@ public static partial class WalletItemsExtensions
     {
         Guard.IsEqualTo(PopCount((uint)items), 1);
 
-        switch (items)
+        return items switch
         {
-            case WalletItems.BearsKnowledge:
-                return farmer.eventsSeen.Contains(2120303);
-            case WalletItems.ClubCard:
-                return farmer.hasClubCard;
-            case WalletItems.RustyKey:
-                return farmer.hasRustyKey;
-            case WalletItems.SkullKey:
-                return farmer.hasSkullKey;
-            case WalletItems.SpecialCharm:
-                return farmer.hasSpecialCharm;
-            case WalletItems.SpringOnion:
-                return farmer.eventsSeen.Contains(3910979);
-            case WalletItems.TranslationGuide:
-                return farmer.canUnderstandDwarves;
-            case WalletItems.TownKey:
-                return farmer.HasTownKey;
-        }
-
-        ThrowHelper.ThrowArgumentOutOfRangeException($"{items.ToStringFast()} does not correspond to a single wallet item!");
-        return false;
+            WalletItems.BearsKnowledge => farmer.eventsSeen.Contains("2120303"),
+            WalletItems.ClubCard => farmer.hasClubCard,
+            WalletItems.RustyKey => farmer.hasRustyKey,
+            WalletItems.SkullKey => farmer.hasSkullKey,
+            WalletItems.SpecialCharm => farmer.hasSpecialCharm,
+            WalletItems.SpringOnion => farmer.eventsSeen.Contains("3910979"),
+            WalletItems.TranslationGuide => farmer.canUnderstandDwarves,
+            WalletItems.TownKey => farmer.HasTownKey,
+            WalletItems.MagicInk => farmer.hasMagicInk,
+            WalletItems.MagnifyingGlass => farmer.hasMagnifyingGlass,
+            WalletItems.DarkTalisman => farmer.hasDarkTalisman,
+            _ => ThrowHelper.ThrowArgumentOutOfRangeException<bool>($"{items.ToStringFast()} does not correspond to a single wallet item!"),
+        };
     }
 }

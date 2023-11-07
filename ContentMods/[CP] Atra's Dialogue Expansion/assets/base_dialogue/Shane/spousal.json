@@ -1,0 +1,28 @@
+{
+    "Changes": [
+        {
+            "LogName": "Marnie - inlaw dialogue",
+            "Target": "Characters/Dialogue/Marnie",
+            "When": {
+                "EnableFor": "Marnie",
+                "Query: {{Hearts: Shane}} >= 10": true,
+            },
+            "Entries": {
+                "summer_Fri4_inlaw_Shane": "{{i18n:marnie-shane-summer-fri4}}$h",
+                "fall_Fri4_inlaw_Shane": "{{i18n:marine-shane-fall-fri4}}"
+            }
+        },
+        {
+            "LogName": "Jas - inlaw dialogue",
+            "Target": "Characters/Dialogue/Jas",
+            "When": {
+                "EnableFor": "Jas",
+                "Query: {{Hearts: Shane}} >= 10": true,
+            },
+            "Entries": {
+                "summer_Fri4_inlaw_Shane": "{{i18n:jas-shane-summer-fri4}}$h",
+                "fall_Fri4_inlaw_Shane": "{{i18n:jas-shane-fall-fri4}}"
+            }
+        }
+    ]
+}

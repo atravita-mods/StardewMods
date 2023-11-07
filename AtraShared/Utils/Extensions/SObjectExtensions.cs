@@ -1,10 +1,16 @@
-﻿using AtraBase.Toolkit.Extensions;
+﻿// Ignore Spelling: Craftable Impl loc
+
+using AtraBase.Toolkit.Extensions;
 
 using AtraShared.Wrappers;
 
 using CommunityToolkit.Diagnostics;
 
 using Microsoft.Xna.Framework;
+
+using StardewValley.Extensions;
+using StardewValley.ItemTypeDefinitions;
+using StardewValley.TerrainFeatures;
 
 namespace AtraShared.Utils.Extensions;
 
@@ -13,6 +19,7 @@ namespace AtraShared.Utils.Extensions;
 /// </summary>
 public static class SObjectExtensions
 {
+
     /// <summary>
     /// Creates a TAS that represents a parabolic arc.
     /// </summary>
@@ -34,11 +41,13 @@ public static class SObjectExtensions
             velocity -= MathF.Sqrt(2 * MathF.Abs(delta.Y + 80) * gravity);
         }
         float time = (MathF.Sqrt(Math.Max((velocity * velocity) + (gravity * delta.Y * 2f), 0)) / gravity) - (velocity / gravity);
+
+        ParsedItemData parsedItemDefintion = ItemRegistry.GetDataOrErrorItem(obj.QualifiedItemId);
         mp.broadcastSprites(
             loc,
             new TemporaryAnimatedSprite(
-                textureName: Game1.objectSpriteSheetName,
-                sourceRect: Game1.getSourceRectForStandardTileSheet(Game1.objectSpriteSheet, obj.ParentSheetIndex, 16, 16),
+                textureName: parsedItemDefintion.GetTextureName(),
+                sourceRect: parsedItemDefintion.GetSourceRect(0, obj.ParentSheetIndex),
                 position: start,
                 flipped: false,
                 alphaFade: 0f,
@@ -61,78 +70,24 @@ public static class SObjectExtensions
     /// <param name="obj">SObject to check.</param>
     /// <returns>true if it's a trash item, false otherwise.</returns>
     public static bool IsTrashItem(this SObject obj)
-        => obj is not null && !obj.bigCraftable.Value && (obj.ParentSheetIndex >= 168 && obj.ParentSheetIndex < 173);
+        => obj.HasTypeObject() && Utility.IsLegacyIdBetween(obj.ItemId, 168, 172);
 
     /// <summary>
-    /// Returns true for an item that would be considered alcohol.
+    /// Gets whether or not an SObject is a bomb.
+    /// </summary>
+    /// <param name="obj">SObject to check.</param>
+    /// <returns>true if it's a bomb, false otherwise.</returns>
+    public static bool IsBomb(this SObject obj)
+        => obj.HasTypeObject() && Utility.IsLegacyIdBetween(obj.ItemId, 286, 288);
+
+    /// <summary>
+    /// Returns true for an item that would be considered alcohol. Taken from <see cref="SObject.GetFoodOrDrinkBuffs"/>.
     /// </summary>
     /// <param name="obj">SObject.</param>
     /// <returns>True if alcohol.</returns>
     public static bool IsAlcoholItem(this SObject obj)
-    {
-        return obj.HasContextTag("alcohol_item") || obj.Name.Contains("Beer") || obj.Name.Contains("Wine") || obj.Name.Contains("Mead") || obj.Name.Contains("Pale Ale");
-    }
-
-    /// <summary>
-    /// Gets the category number corresponding to an SObject's index.
-    /// </summary>
-    /// <param name="sObjectInd">Index of the item to check.</param>
-    /// <returns>The category index if found, or 0 otherwise.</returns>
-    public static int GetCategoryFromIndex(this int sObjectInd)
-    {
-        if (!Game1Wrappers.ObjectInfo.TryGetValue(sObjectInd, out string? data))
-        {
-            return 0;
-        }
-
-        ReadOnlySpan<char> cat = data.GetNthChunk('/', SObject.objectInfoTypeIndex);
-
-        int index = cat.IndexOf(' ');
-        if (index < 0)
-        {
-            return 0;
-        }
-
-        return int.TryParse(cat[(index + 1)..], out int categoryIndex) && categoryIndex < 0
-            ? categoryIndex
-            : 0;
-    }
-
-    /// <summary>
-    /// Gets the public name of a bigcraftable.
-    /// </summary>
-    /// <param name="bigCraftableIndex">Bigcraftable.</param>
-    /// <returns>public name if found.</returns>
-    public static string GetBigCraftableName(this int bigCraftableIndex)
-    {
-        if (Game1.bigCraftablesInformation.TryGetValue(bigCraftableIndex, out string? value))
-        {
-            int index = value.IndexOf('/');
-            if (index >= 0)
-            {
-                return value[..index];
-            }
-        }
-        return "ERROR - big craftable not found!";
-    }
-
-    /// <summary>
-    /// Gets the translated name of a bigcraftable.
-    /// </summary>
-    /// <param name="bigCraftableIndex">Index of the bigcraftable.</param>
-    /// <returns>Name of the bigcraftable.</returns>
-    public static string GetBigCraftableTranslatedName(this int bigCraftableIndex)
-    {
-        if (Game1.bigCraftablesInformation?.TryGetValue(bigCraftableIndex, out string? value) == true)
-        {
-            int index = value.LastIndexOf('/');
-            if (index >= 0 && index < value.Length - 1)
-            {
-                return value[(index + 1)..];
-            }
-        }
-        return "ERROR - big craftable not found!";
-    }
+        => obj.HasContextTag("alcohol_item") || obj.QualifiedItemId is "(O)346" or "(O)348" or "(O)459" or "(O)303"
+            || Game1Wrappers.ObjectData.GetValueOrGetDefault(obj.ItemId)?.Buff?.BuffId == "17";
 
     /// <summary>
     /// Consumes a recipe by teaching the player the recipe.
@@ -161,5 +116,28 @@ public static class SObjectExtensions
                 : Game1.player.craftingRecipes.TryAdd(recipeName, 0);
         }
         return false;
+    }
+
+    /// <summary>
+    /// Gets the speed multiplier associated with the tapper, or null if it's not a tapper.
+    /// </summary>
+    /// <param name="obj">Object to check.</param>
+    /// <returns>Speed multiplier for a tapper, or null if not a tapper.</returns>
+    /// <remarks>Derived from <see cref="Tree.UpdateTapperProduct"/>.</remarks>
+    public static float? GetTapperMultiplier(this SObject obj)
+    {
+        if (obj.IsTapper())
+        {
+            const string tapperPrefix = "tapper_multiplier_";
+            foreach (string contextTag in obj.GetContextTags())
+            {
+                if (contextTag.StartsWith(tapperPrefix) && float.TryParse(contextTag.AsSpan(tapperPrefix.Length), out float multiplier))
+                {
+                    return multiplier;
+                }
+            }
+            return 1f;
+        }
+        return null;
     }
 }

@@ -2,6 +2,17 @@
     // Always be sellin', insufficiently appreciative of all of Caroline's work.
     // Raised in poverty and terrified of being poor.
     // QUITE conservative.
+
+    // I wonder if his secret stash is just, like, comics or something. Anyways, soft spot for action movies.
+    {
+        "LogName": "Pierre speech bubbles",
+        "Action": "EditData",
+        "Target": "Strings/SpeechBubbles",
+        "Entries": {
+            "SeedShop_Pierre_Winter": "Need Winter Star gifts?",
+            "SeedShop_Pierre_NotWinter": "Need seeds?"
+        }
+    },
     {
         "LogName": "Pierre mid-hearts",
         "Action": "EditData",
@@ -9,58 +20,202 @@
         "Entries": {
             "movieTheater": "@, have you heard? We've got a movie theater now! Think I'll take Caroline out on a date...",
             "winter_7{{YearRemainder}}": "Gotta start stocking Winter Star gifts soon. It's the busiest retail season of the year...$h",
-            "Resort_Chair": "Ah, a chance to rest my feet!$h"
+            "Resort_Chair": "Ah, a chance to rest my feet!$h",
+            "Resort_Pier": "Gosh, the water's so blue here...",
+
+            "spring_12{{YearRemainder}}": "Oh, I've gotta remember to get some flower seeds for Evelyn, so she can plant the flowers for the flower dance!$h",
+
+            // day before the flower dance
+            "spring_23{{YearRemainder}}": "Sorry, @, can't talk now, I'm getting ready for the flower dance tomorrow.#$b#We make pretty good money doing souvenirs for the festivals.",
+
+            // day before the stardew valley fair.
+            "fall_15{{YearRemainder}}": "I'm so ready for the grange display tomorrow.#$b#@, may the best grange display win.$h",
+
+            // Day before Spirit's Eve.
+            "fall_26{{YearRemainder}}": "It's gonna be winter soon, @. Always my hardest season, financially.$s",
+
+            // lead up to the winter star.
+            "winter_19{{YearRemainder}}": "I've got so many winter star gifts stocked!$h#$e#Maybe I'll pull some market share from the Night Market this year...",
+
+            // additional heart lines
+            "summer_Fri6": "Have you seen the new action flick, {{i18n:action.movie{{Random:01,02,03,04,05,06,07,08,09}} }}, starring %name Anderson?#$b#Maybe I can convince Caroline to come watch it with me...",
+            "summer_Sat6": "There's nothing nicer than fresh veggies in a good salad dressing.#$b#Caroline makes an vinaigrette that's to die for.$h",
+            "fall_Sun8": "@, do you think I should start offering, say, complementary tea?#$b#Might help bring people in..."
         }
+    },
+    {
+        "LogName": "Pierre, Joja completed",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Pierre",
+        "When": {
+            "IsJojaMartComplete": true
+        },
+        "Entries": {
+            "summer_Thu8": "Well, @, worst comes to worst, I guess I can always try my luck elsewhere.#$b#But where can I find a place without a JojaMart?$s",
+            "fall_Thu8": "Gosh, @, I don't know how long I can stay afloat, with this town turning into a Joja town.$s",
+            "winter_Wed8": "You know, @, I...sometimes wonder if I should try moving back to Zuzu City, see if I can find better markets there.",
+            "winter_Thu8": "You think Abby's been looking a bit pale lately?",
+            "winter_Thu8_inlaw_Abigail": "I'm so glad Abby married you, @. I'm not sure I could have financially supported her for much longer...",
+
+            "4": "Gosh, money is just so, so tight these days.",
+
+            // just before not-halloween.
+            "fall_26{{YearRemainder}}": "I can't talk right now, I need to prepare for the festival.#$e#We absolutely need to make more money.$s",
+            "winter_7{{YearRemainder}}": "Mayor Lewis doesn't want me running a booth during tomorrow's Festival.#$b#I wish I could, festival booths are a pretty good slice of our income.",
+            "winter_19{{YearRemainder}}": "Gosh, @, the pre-Winter-Star period is usually a good time for the store, but right now I'm not sure.#$e#I really, really don't want to close this store but I might have to, the way this is going...$s",
+        }
+    },
+    {
+        "LogName": "Pierre, CC completed",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Pierre",
+        "When": {"IsCommunityCenterComplete": true},
+        "Entries": {
+            "Thu6": "Without Joja here, I feel like finally I've got a chance.$h"
+        }
+    },
+    {
+        "LogName": "Pierre - Movie theater",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Pierre",
+        "When": { "MovieStatus": "CC" },
+        "Entries": {
+            "fall_Sat8": "Heya, @? Anything interesting at the movie theater recently?#$b#Been thinking I should treat Caroline to a night out sometime...",
+        }
+    },
+    {
+        "LogName": "Pierre mid-hearts, Y1",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Pierre",
+        "Entries": {
+            "1{{YearRemainder}}": "I'd love to travel more, but we haven't got that type of money.$s",
+            "2": "I'm glad we've got a new farmer around, I'm sure we'll have a good working relationship.$h",
+            "3{{YearRemainder}}": "When I was young, I really thought I'd be able to become fabulously wealthy by running my own store.#$b#Sadly, places like Joja are sucking away the entire market.",
+            "5{{YearRemainder}}": "I...feel like I've got no energy these days.#$b#I just get up and run this store. That's all I do.$s",
+
+            "6": "If you ever need some spare cash, I'll buy anything you forage around here.#$e#We've got lovely woods full of things you can forage around here.$h",
+            "6_2": "Abby really enjoys hiking in the woods. She goes as often as she can.",
+            
+            "7{{YearRemainder}}": "Ugh, what should I cook for dinner?#$b#Let's see, what of our stock is most likely to go bad first?"
+        },
+        "When": { "YearModulus": "1" }
     },
     {
         "LogName": "Pierre mid-hearts, Y2",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Pierre",
         "Entries": {
+            "Thu6": "I wish Abigail was more serious about her studies.$s",
+            "summer_Thu6": "My, isn't it a hot day today! Wish we stocked more ice cream, that'd sell like crazy on a day like this.",
+            "summer_Fri6": "It's Friday, @! Looking forward to the weekend?#$b#Me? Of course I am, I get the most customers on weekends.$h",
+
+            "1_2": "I wish Abby had more ambition in her life.$s",
+            "2_2": "Abby bought some hot sauce from Zuzu City and now I really want to carry it.",
             "6_2": "My father? He really wasn't ever in my life.$s#$b#It was just me, my mother, and my sister, in a tiny apartment in Zuzu City.",
-            "8_2": "I worked for a Joja grocery store, back when we lived in Zuzu.$#b#Clerked for them, on the night shift. Am so glad I no longer have that job.#$e#Managing this store is hard work but at least I get to keep all my earnings.",
-            "10_2": "I wish Abigail was more serious about her studies.$s",
-            "11_2": "Harvey says I've gotta do something about my blood pressure, it keeps creeping up way too high.#$e#He thinks I should start taking medication for it, but I don't want to.",
-            "17_2": "I grew up poor. I wouldn't ever want that for my family.$s#$b#Caroline thinks I work too much, but we need to keep the store running.",
-            "19_2": "We used to have a lot more farmers down in the valley. Unfortunately, our soil isn't the best.#$b#Say, could I interest you in one of my fertilizers?",
+            "8_2": "I worked for a Joja grocery store, back when we lived in Zuzu.#$b#Clerked for them, on the night shift. Am so glad I no longer have that job.#$e#Managing this store is hard work but at least I get to keep all my earnings.",
+            "11_2": "Dr. Harvey says I've gotta do something about my blood pressure, it keeps creeping up way too high.#$e#He thinks I should start taking medication for it, but I don't want to.",
+            "12_2": "When we were young, Caroline and I would catch the afternoon matinee all the time.#$b#Cheaper, and it worked better with my schedule.",
+            "17_2": "I grew up poor. I wouldn't ever want that for my family.$s#$b#Caroline thinks I work too much, but we need to keep the store running.$s",
+            "19_2": "We used to have a lot more farmers down in the valley. Unfortunately, our soil isn't the best, and a lot blows away each year.#$b#Say, could I interest you in one of my fertilizers?",
             "21_2": "Got a good deal on rent in our place. Helps that this town's pretty small.$h#$b#That does mean I don't get many customers, though.",
             "22_2": "Joja squeezes their suppliers hard. One of the reasons why they can have such low prices.",
             "24_2": "We moved to Pelican Town after we had Caroline. The place we were living in before...it wasn't a good place to raise children. And we couldn't afford better.",
             "26_2": "It's almost the end of the season, @. Got an idea of what you'll be planting next?",
+            "27_2": "There's a small laundromat in the basement of this building, for the villagers who need that type of thing.",
             "28_2": "Ugh, it's my turn to cook dinner tonight....#$b#Maybe I'll just defrost some of these frozen quiche we've just started carrying..."
         },
         "When": { "YearModulus": "2" }
+    },
+    {
+        "LogName": "Pierre mid-hearts, Y2",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Pierre",
+        "Entries": {
+            "3_2": "It's a lot easier to run this shop without Joja open.$h",
+            "4_2": "That Joja shop also was a fulfillment center for online orders. One of the reasons why they built that there, we're in a good spot to supply both Zuzu City and %place.#$b#Our rent is pretty cheap too.",
+            "7_2": "I wonder if Abigail would be better off with a different major? She doesn't really like her current one.$s",
+        },
+        "When": {
+            "YearModulus": "2",
+            "IsCommunityCenterComplete": true,
+        }
     },
     {
         "LogName": "Pierre mid-hearts, Y3",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Pierre",
         "Entries": {
+            // specific days
+            "spring_11_2": "Hey @, you looking forward to the egg hunt tomorrow? Abigail says she's gonna destroy you this year!$h",
+            
             "3_2": "Everything's harder when the economy goes bad like this.#$b#Government'll bail out the big guys and there's welfare payments for the poor, but people like me get squeezed.",
             "5_2": "My suppliers want to raise their prices...#$b#I can't pass on price increases though...",
             "7_2": "Before I moved to Pelican Town? I was a night manager at a gas station in Zuzu City.#$e#Dangerous work, and definitely a young man's job.#$b#I hated having to work nights. It takes more out of you than what most people expect.$s",
-            "9_2": "I met Caroline when she was in college and I was working nights at a grocery store.#$b#Working for Joja let me save up enough money to buy this place...",
-            "11_2": "Ugh, the prices of everything's going up, especially fuel.",
+            "9_2": "I met Caroline when she was in college and I was working nights at a little grocery store.#$b#Working for Joja let me save up enough money to buy this place...",
+            "10_2": "I wonder if I should push Abigail a bit more...#$b#That probably won't do much good, though.",
+            "11_2": "Ugh, the prices of everything's going up, especially fuel.$s",
+            "12_2": "@, I'm trying my best not to pass on price increases at the moment, but it's hard, it's really hard.$s",
             "13_2": "My worst nightmare would be losing this store.#$b#All our savings are tied up in this place. If it goes under we're done for.",
             "15_2": "I used to be an amateur boxer, back when we lived in Zuzu City.#$b#Was great fun, never made much money from it.#$b#Kept me in excellent shape though. My left hook is still pretty good.",
-            "17_2": "Maybe I should take Caroline out for dinner.She'll probably like {{i18n:restaurant.{{Random:01, 02, 03, 04, 05, 06}} }}, right?"
+            "17_2": "Maybe I should take Caroline out for dinner.She'll probably like {{i18n:restaurant.{{Random:01, 02, 03, 04, 05, 06}} }}, right?",
+            "18_2": "Heya @, got any nice produce to sell to me?",
+            "19_2": "I think Abby got most of her musical talents from Caroline.",
+            "20_2": "Sometimes Leah brings me a few mushrooms to sell. I pay her what I can for them, of course.",
+            "21_2": "Emily came in the other day and asked if we carried quinoa.#$b#I can't carry everything everyone wants, since most products have a shelf-life, but I try to."
         },
         "When": { "YearModulus": "3"}
-    }
-    ,
+    },
+    {
+        "LogName": "Pierre, Joja completed - Y3",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Pierre",
+        "When": {
+            "YearModulus": "3",
+            "IsJojaMartComplete": true
+        },
+        "Entries": {
+            "winter_Wed10": "You know, next year is an election year. Maybe it's time to get a new Governor...",
+            "22_2": "Monopolies really can get away with raising prices in times like these, eh."
+        }
+    },
     {
         "LogName": "Pierre mid-hearts, Y4",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Pierre",
         "Entries": {
+            "summer_Thu6": "If I hear one more campaign ad I'm going to go insane.",
+            
             "3_2": "I grew up poor, @, and I wouldn't wish that on anyone.",
             "5_2": "Maybe I should carry more boxed meals? They're certainly more convenient than cooking...",
             "7_2": "I know Caroline would like it if I cooked more often. But I'm always so busy with the store.#$b#I do the dishes for her, though, when it's not Abigail's turn to do them.",
             "9_2": "Ugh, I think the store has a leak. I'm not very handy, so we're probably gonna have to get Robin to take a look at it.",
+            "11_2": "How much of my life have I spent behind the counter?$s",
+            "12_2": "Mayor Lewis wants to bring in some windmills, says Zuzu Electric is willing to pay top dollar to rent land for theirs.#$b#Protecting the environment AND making money? Of course I'm in!$h",
             "17_2": "I suspect we have a leak in the ceiling.#$b#Between you and I, @, I'm not good at dealing with things like this.#$e#Guess I should get Robin to look at my roof...",
             "19_2": "@, I just want you to know, you'll never find better seeds that the ones I sell. Never.",
-            "21_2": "Have you considered buying any of my fertilizers?"
+            "21_2": "#$c .9#Have you considered buying any of my fertilizers?#Heyyy, @, have you considered buying any of my fertilizers? Here's a free sample![368]"
         },
         "When": { "YearModulus": "4"}
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Pierre mid-hearts, Y4, post stocklist",
+        "Target": "Characters/Dialogue/Pierre",
+        "Entries": {
+            "15_2": "You know, @, maybe I should carry a more limited selection of items. Just things guaranteed to turn a profit.$s"
+        },
+        "When": {
+            "YearModulus": "4",
+            "HasReadLetter": "PierreStocklist"
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName":"Pierre mid-hearts, Y5",
+        "Target": "Characters/Dialogue/Pierre",
+        "Entries": {
+            "1_2": "@! Don't be afraid to let me know if there's something else you think I should carry!"
+        },
+        "When": {"YearModulus": "0"}
     }
 ]}

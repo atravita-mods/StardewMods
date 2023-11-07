@@ -1,5 +1,9 @@
 ﻿using AtraBase.Models.Result;
+using AtraBase.Toolkit.Extensions;
 
+using AtraCore;
+
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
 
 using HarmonyLib;
@@ -13,13 +17,16 @@ namespace StopRugRemoval.HarmonyPatches.Niceties;
 /// Fixes the secret note spawning code.
 /// </summary>
 [HarmonyPatch(typeof(GameLocation))]
-[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class FixSecretNotes
 {
     // we're doing this as an internal optimization and intentionally not saving it in ModData
     // so it's refreshed every time the game is launched.
     private static readonly PerScreen<bool> HasSeenAllSecretNotes = new(() => false);
     private static readonly PerScreen<bool> HasSeenAllJournalScraps = new(() => false);
+
+    private static readonly ThreadLocal<HashSet<int>> Seen = new(() => new());
+    private static readonly ThreadLocal<HashSet<int>> Unseen = new(() => new());
 
     #region asset fussing
 
@@ -57,7 +64,7 @@ internal static class FixSecretNotes
         try
         {
             __result = null;
-            Option<SObject?> option = __instance.GetLocationContext() == GameLocation.LocationContext.Island
+            Option<SObject?> option = __instance.InIslandContext()
                        ? TryGenerateJournalScrap(who)
                        : TryGenerateSecretNote(who);
 
@@ -73,7 +80,7 @@ internal static class FixSecretNotes
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed while trying to generate a secret note:\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("generating a secret note", ex);
         }
 
         return true;
@@ -86,41 +93,64 @@ internal static class FixSecretNotes
             return Option<SObject?>.None;
         }
 
-        const string secreteNoteName = "Secret Note #";
+        const string secretNoteName = "Secret Note #";
         Dictionary<int, string> secretNoteData = Game1.content.Load<Dictionary<int, string>>(noteLoc.BaseName);
 
         // Get list of seen notes and add notes in inventory.
-        HashSet<int> seenNotes = who.secretNotesSeen.Where(id => id < GameLocation.JOURNAL_INDEX).ToHashSet();
+        Seen.Value ??= new();
+        Seen.Value.Clear();
+
+        foreach (int id in who.secretNotesSeen)
+        {
+            if (id < GameLocation.JOURNAL_INDEX)
+            {
+                Seen.Value.Add(id);
+            }
+        }
+
         foreach (Item? item in who.Items)
         {
-            if (item is not null && item.Name.StartsWith(secreteNoteName) && int.TryParse(item.Name.AsSpan(secreteNoteName.Length).Trim(), out int idx))
+            if (item is not null && item.Name.StartsWith(secretNoteName) && int.TryParse(item.Name.AsSpan(secretNoteName.Length).Trim(), out int idx))
             {
-                seenNotes.Add(idx);
+                Seen.Value.Add(idx);
             }
         }
 
         // find a note that the farmer has not seen.
-        HashSet<int> unseenNotes = secretNoteData.Keys.Where(id => id < GameLocation.JOURNAL_INDEX && !seenNotes.Contains(id)).ToHashSet();
+        Unseen.Value ??= new();
+        Unseen.Value.Clear();
+        foreach (int id in secretNoteData.Keys)
+        {
+            if (id < GameLocation.JOURNAL_INDEX && !Seen.Value.Contains(id))
+            {
+                Unseen.Value.Add(id);
+            }
+        }
 
-        ModEntry.ModMonitor.DebugOnlyLog($"{unseenNotes.Count} notes unseen: {string.Join(", ", unseenNotes.Select(x => x.ToString()))}", LogLevel.Info);
-        if (unseenNotes.Count == 0)
+        ModEntry.ModMonitor.DebugOnlyLog($"{Unseen.Value.Count} notes unseen: {string.Join(", ", Unseen.Values.Select(x => x.ToString()))}", LogLevel.Info);
+        if (Unseen.Value.Count == 0)
         {
             HasSeenAllSecretNotes.Value = true;
+            Unseen.Value.Clear();
+            Seen.Value.Clear();
+
             return Option<SObject?>.None;
         }
 
         // copied from game code.
-        double fractionOfNotesRemaining = (unseenNotes.Count - 1) / Math.Max(1f, unseenNotes.Count + seenNotes.Count - 1);
+        double fractionOfNotesRemaining = (Unseen.Value.Count - 1) / Math.Max(1f, Unseen.Value.Count + Seen.Value.Count - 1);
         double chanceForNewNote = ModEntry.Config.MinNoteChance + ((ModEntry.Config.MaxNoteChance - ModEntry.Config.MinNoteChance) * fractionOfNotesRemaining);
-        if (Game1.random.NextDouble() >= chanceForNewNote)
+        if (!Random.Shared.OfChance(chanceForNewNote))
         {
             return new(null);
         }
 
-        int noteID = unseenNotes.ElementAt(Game1.random.Next(unseenNotes.Count));
-        SObject note = new(79, 1);
+        int noteID = Unseen.Value.ElementAt(Random.Shared.Next(Unseen.Value.Count));
+        SObject note = new("79", 1);
         note.Name += " #" + noteID;
 
+        Unseen.Value.Clear();
+        Seen.Value.Clear();
         return new(note);
     }
 
@@ -135,37 +165,62 @@ internal static class FixSecretNotes
         Dictionary<int, string> secretNoteData = Game1.content.Load<Dictionary<int, string>>(noteLoc.BaseName);
 
         // get seen notes and add any note the farmer has in their inventory.
-        HashSet<int> seenScraps = who.secretNotesSeen.Where(id => id >= GameLocation.JOURNAL_INDEX).ToHashSet();
+        Seen.Value ??= new();
+        Seen.Value.Clear();
+
+        foreach (int id in who.secretNotesSeen)
+        {
+            if (id >= GameLocation.JOURNAL_INDEX)
+            {
+                Seen.Value.Add(id);
+            }
+        }
+
         foreach (Item? item in who.Items)
         {
             if (item is not null && item.Name.StartsWith(journalName) && int.TryParse(item.Name.AsSpan(journalName.Length).Trim(), out int idx))
             {
-                seenScraps.Add(idx + GameLocation.JOURNAL_INDEX);
+                Seen.Value.Add(idx);
             }
         }
 
         // find a scrap that the farmer has not seen.
-        HashSet<int> unseenScraps = secretNoteData.Keys.Where(id => id >= GameLocation.JOURNAL_INDEX && !seenScraps.Contains(id)).ToHashSet();
+        Unseen.Value ??= new();
+        Unseen.Value.Clear();
+        foreach (int id in secretNoteData.Keys)
+        {
+            if (id >= GameLocation.JOURNAL_INDEX && !Seen.Value.Contains(id))
+            {
+                Unseen.Value.Add(id);
+            }
+        }
 
-        ModEntry.ModMonitor.DebugOnlyLog($"{unseenScraps.Count} scraps unseen: {string.Join(", ", unseenScraps.Select(x => x.ToString()))}", LogLevel.Info);
-        if (unseenScraps.Count == 0)
+        ModEntry.ModMonitor.DebugOnlyLog($"{Unseen.Value.Count} scraps unseen: {string.Join(", ", Unseen.Value.Select(x => x.ToString()))}", LogLevel.Info);
+        if (Unseen.Value.Count == 0)
         {
             HasSeenAllJournalScraps.Value = true;
+
+            Unseen.Value.Clear();
+            Seen.Value.Clear();
             return Option<SObject?>.None;
         }
 
         // copied from game code.
-        double fractionOfNotesRemaining = (unseenScraps.Count - 1) / Math.Max(1f, unseenScraps.Count + seenScraps.Count - 1);
+        double fractionOfNotesRemaining = (Unseen.Value.Count - 1) / Math.Max(1f, Unseen.Value.Count + Seen.Value.Count - 1);
         double chanceForNewNote = ModEntry.Config.MinNoteChance + ((ModEntry.Config.MaxNoteChance - ModEntry.Config.MinNoteChance) * fractionOfNotesRemaining);
-        if (Game1.random.NextDouble() >= chanceForNewNote)
+        if (!Random.Shared.OfChance(chanceForNewNote))
         {
+            Unseen.Value.Clear();
+            Seen.Value.Clear();
             return new (null);
         }
 
-        int scrapID = unseenScraps.Min();
-        SObject note = new(842, 1);
+        int scrapID = Unseen.Value.Min();
+        SObject note = new("842", 1);
         note.Name += " #" + (scrapID - GameLocation.JOURNAL_INDEX);
 
+        Unseen.Value.Clear();
+        Seen.Value.Clear();
         return new(note);
     }
 

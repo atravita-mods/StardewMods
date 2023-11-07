@@ -1,7 +1,12 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
+
 using AtraBase.Toolkit.Reflection;
+
+using AtraShared.ConstantsAndEnums;
+using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
+
 using HarmonyLib;
 
 namespace PamTries.HarmonyPatches;
@@ -10,13 +15,13 @@ namespace PamTries.HarmonyPatches;
 /// Patches on events to hide Pam while she's at rehab.
 /// </summary>
 [HarmonyPatch(typeof(Event))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class EventPatches
 {
     private static bool ShouldHidePam() => Game1.player.activeDialogueEvents.ContainsKey("PamTriesRehab");
 
     [HarmonyPostfix]
     [HarmonyPatch(nameof(Event.tryToLoadFestival))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention.")]
     private static void PostfixSetup(Event __instance)
     {
         if (ShouldHidePam())
@@ -49,9 +54,9 @@ internal static class EventPatches
                 new(OpCodes.Ldarg_0),
                 new(OpCodes.Ldstr, "Elliott"),
             })
-            .DefineAndAttachLabel(out var jumppoint)
+            .DefineAndAttachLabel(out Label jumppoint)
             .Pop()
-            .GetLabels(out var labelsToMove)
+            .GetLabels(out IList<Label>? labelsToMove)
             .Insert(new CodeInstruction[]
             {
                 new(OpCodes.Call, typeof(EventPatches).StaticMethodNamed(nameof(ShouldHidePam))),
@@ -70,7 +75,7 @@ internal static class EventPatches
             .StoreBranchDest()
             .Push()
             .AdvanceToStoredLabel()
-            .DefineAndAttachLabel(out var jumppass)
+            .DefineAndAttachLabel(out Label jumppass)
             .Pop()
             .Advance(1)
             .Insert(new CodeInstruction[]
@@ -84,7 +89,7 @@ internal static class EventPatches
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Ran into error transpiliing GameLocation.UpdateWhenCurrentLocation when substituting new driver:\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }

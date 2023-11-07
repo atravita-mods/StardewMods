@@ -1,11 +1,14 @@
 ﻿Changelog
 ============
 
-#### Version 0.2.4
+#### Version 0.3.0
+* Assemblies are now signed.
 * Color parser is now case invariant and includes rebeccapurple.
+* Adds profession enum.
+* Adds [event commands](./eventcommands.md).
 
 #### Version 0.2.3
-* Adds a skill enum and wallet items enum. <!--TODO profession enum -->
+* Adds a skill enum and wallet items enum.
 
 #### Version 0.2.2
 * Adds direction enum.

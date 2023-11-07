@@ -1,4 +1,6 @@
 {"Changes":[
+    // Hit yourself on the head with a thesaurus before trying to write this man.
+
     {
         "LogName": "Elliott - mid hearts",
         "Action": "EditData",
@@ -14,7 +16,8 @@
         "When": {"YearModulus": "2"},
         "Entries": {
             "4_2": "I'm not quite sure how to get my characters out of this bind...",
-            "6_2": "@, when you were young, what did you want to be?"
+            "6_2": "@, when you were young, what did you want to be?",
+            "7_2": "I wrote a thousand words yesterday, and today I deleted them all.",
         }
     }
 ]}

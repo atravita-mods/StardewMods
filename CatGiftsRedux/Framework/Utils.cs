@@ -1,6 +1,5 @@
 ﻿using AtraBase.Toolkit.Extensions;
 
-using AtraCore.Framework.ItemManagement;
 using AtraCore.Framework.QueuePlayerAlert;
 
 using AtraShared.Caching;
@@ -11,7 +10,8 @@ using AtraShared.Wrappers;
 using Microsoft.Xna.Framework;
 
 using StardewValley.Characters;
-using StardewValley.Objects;
+using StardewValley.Extensions;
+using StardewValley.GameData.Objects;
 
 namespace CatGiftsRedux.Framework;
 
@@ -32,15 +32,46 @@ internal static class Utils
     /// <summary>
     /// Check if the object should not be given by a random picker. Basically, no golden walnuts (73), qi gems (858), Qi beans or fruit unless the special order is active.
     /// 289 = ostrich egg, 928 is a golden egg.
-    /// Or something that doesn't exist in Data/ObjectInformation.
+    /// Or something that doesn't exist in Data/Objects.
+    /// Or quest items.
     /// </summary>
-    /// <param name="id">int id of the item to check.</param>
+    /// <param name="itemID">itemID of the item to check.</param>
     /// <returns>true to forbid it.</returns>
-    internal static bool ForbiddenFromRandomPicking(int id)
-        => !Game1Wrappers.ObjectInfo.TryGetValue(id, out string? objectData) || id == 73 || id == 858
-        || (id is 289 or 928 && !isPerfectFarm.GetValue())
-        || (!islandUnlocked.GetValue() && id is 69 or 91 or 829 or 835 or 886 or 903)
-        || (!isQiQuestActive.GetValue() && objectData.GetNthChunk('/', SObject.objectInfoNameIndex).Contains("Qi", StringComparison.OrdinalIgnoreCase));
+    internal static bool ForbiddenFromRandomPicking(string? itemID)
+    {
+        if (itemID is null)
+        {
+            return true;
+        }
+        switch (itemID)
+        {
+            case "73":
+            case "858":
+                return true;
+            case "289":
+            case "928":
+                return !isPerfectFarm.GetValue();
+            case "69":
+            case "91":
+            case "829":
+            case "835":
+            case "886":
+            case "903":
+                return !islandUnlocked.GetValue();
+        }
+
+        if (!Game1Wrappers.ObjectData.TryGetValue(itemID, out ObjectData? data))
+        {
+            return true;
+        }
+
+        if (data.Type == "Quest")
+        {
+            return true;
+        }
+
+        return !isQiQuestActive.GetValue() && data.Name.Contains("Qi", StringComparison.Ordinal);
+    }
 
     /// <summary>
     /// Gets a random empty tile on a map.
@@ -81,18 +112,10 @@ internal static class Utils
         ModEntry.ModMonitor.DebugOnlyLog($"Placing {item.DisplayName} at {location.NameOrUniqueName} - {tile}");
 
         PlayerAlertHandler.AddMessage(
-            message: new PetHudMessage(I18n.PetMessage(pet.Name, item.DisplayName), Color.PaleGreen, 2000, true, item, pet is Cat),
-            soundCue: pet is Cat ? "Cowboy_Footstep" : "dog_pant");
+            message: new PetHudMessage(I18n.PetMessage(pet.Name, item.DisplayName), 2000, true, item, pet),
+            soundCue: pet.GetPetData()?.ContentSound ?? "Cowboy_Footstep");
 
-        if (item is SObject @object && !@object.bigCraftable.Value
-            && DataToItemMap.IsActuallyRing(item.ParentSheetIndex)
-            && item.GetType() == typeof(SObject))
-        {
-            ModEntry.ModMonitor.Log($"Fixing {item.Name} to be an actual ring.");
-            item = new Ring(item.ParentSheetIndex);
-        }
-
-        if (item.GetType() == typeof(SObject) && !location.Objects.ContainsKey(tile))
+        if (item.HasTypeObject() && !location.Objects.ContainsKey(tile))
         {
             SObject obj = (item as SObject)!;
             if (!obj.bigCraftable.Value)
@@ -102,7 +125,7 @@ internal static class Utils
 
             location.Objects[tile] = obj;
 
-            if (pet is Dog)
+            if (pet.petType.Value == Pet.type_dog)
             {
                 location.makeHoeDirt(tile, ignoreChecks: false);
             }

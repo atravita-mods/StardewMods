@@ -1,0 +1,38 @@
+{
+    "Changes": [
+        {
+            "LogName": "Emily base",
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Emily",
+            "When": {
+                "Relationship:Haley|contains=Divorced": false
+            },
+            "Entries": {
+                "{{TaxDay}}": "{{i18n:emily-tax-day.00}}#$b#{{i18n: emily-tax-day.01}}"
+            }
+        },
+        {
+            "LogName": "Emily - divorced from Haley",
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Emily",
+            "When": {
+                "Relationship:Haley": "Divorced",
+                "Relationship:Emily|contains=Dating, Engaged, Married": false
+            },
+            "Entries": {
+                "Saloon": "{{i18n:emily-divorced-from-haley}}$h"
+            }
+        },
+        {
+            "LogName": "Emily - Haley unmarried",
+            "Action": "EditData",
+            "When": {
+                "Query: {{Spouse:anyPlayer|contains=Haley}} OR {{Relationship:Haley|contains=Dating, Married, Engaged, Divorced}}": false
+            },
+            "Target": "Characters/Dialogue/Emily",
+            "Entries": {
+                "3{{YearRemainder}}": "{{i18n:emily-haley-unmarried-3}}$s"
+            }
+        },
+    ]
+}

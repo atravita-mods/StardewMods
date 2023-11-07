@@ -1,0 +1,28 @@
+{
+    "Changes": [
+        {
+            "Action": "EditData",
+            "LogName": "Demetrius - inlaw - high hearts with Maru.",
+            "Target": "Characters/Dialogue/Demetrius",
+            "When": {
+                "EnableFor": "Demetrius",
+                "Query: {{Hearts:Maru}} >= 10": true
+            },
+            "Entries": {
+                "spring_Mon10_inlaw_Maru": "{{i18n:demetrius-maru-spring-mon10}}$h"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Sebastian - inlaw - high hearts with Maru.",
+            "Target": "Characters/Dialogue/Sebastian",
+            "When": {
+                "EnableFor": "Sebastian",
+                "Query: {{Hearts:Maru}} >= 10": true
+            },
+            "Entries": {
+                "fall_Sun8_inlaw_Maru": "{{i18n:sebastian-maru-fall-sun10-a}}#$b#{{i18n:sebastian-maru-fall-sun10-b}}"
+            }
+        }
+    ]
+}

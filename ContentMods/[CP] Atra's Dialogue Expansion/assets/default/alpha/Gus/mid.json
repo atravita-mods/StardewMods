@@ -5,7 +5,39 @@
         "Target": "Characters/Dialogue/Gus",
         "Entries": {
             "movieTheater": "Looks like I have competition now.$s#$b#Something new for people to do on a Friday night.#$e#Would be nice to see a movie sometime...$h",
-            "SeedShop_Entry": "Whatcha got, Pierre?/Anything particularly nice today?/Where's my grocery list..."
+            "SeedShop_Entry": "Whatcha got, Pierre?/Anything particularly nice today?/Where's my grocery list...",
+
+            // additional seasonal lines
+            "summer_Fri10": "Weather like this makes me want to go make some piña coladas...and getting caught in the rain...$h",
+            "summer_Sat10": "I believe that with all the lovely food our planet gives us, no one should go hungry.",
+            "winter_Mon10": "Emily says I should consider selling my candy canes online.#$b#I don't know, I guess that's another way I can make money...#$e#Maybe Sebastian will help me set up a website?",
+
+            // specific days
+            "spring_12{{YearRemainder}}": "The Egg Festival is tomorrow! I've got so much cooking I need to do.$h",
+            "summer_4{{YearRemainder}}": "Gotta get ready for inspections...",
+            "summer_10{{YearRemainder}}": "I've been working on the buffet for the luau all week!#$b#Make sure to bring something tasty for the soup tomorrow!",
+            "winter_19{{YearRemainder}}": "The Feast of the Winter Star's coming up, so I've got a lot to get ready!$h",
+            "winter_20{{YearRemainder}}": "I've got so many candy canes I need to make, my entire shop smells so strongly of peppermint.",
+
+            // null out the high priority location dialogue
+            "Saloon": null,
+            "Saloon4": null,
+            "Saloon8": null,
+            "Saloon_Tue": null,
+            "Saloon_Thu": null,
+            "Saloon_Fri": null
+        }
+    },
+    {
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Gus",
+        "When": {"IsCommunityCenterComplete": true},
+        "Entries": {
+            "11{{YearRemainder}}": "The community center used to be the heart of town. Sometimes, I wish it was used more.$s",
+            "12{{YearRemainder}}": "Sometimes I take the extra food we have and place it in the pantry of the community center, in case someone needs it.",
+
+            // specific days
+            "summer_9{{YearRemainder}}": "Lewis always wants us to butter up the Governor a little bit.#$b#He says that if we do well, the state government is more likely to give us grants."
         }
     },
     {
@@ -13,7 +45,7 @@
         "Target": "Characters/Dialogue/Gus",
         "Entries": {
             "Town4": "Oh, @! Heard you're having a kid soon. You excited?",
-            "Saloon_Fri": "Oh, @! How have you been? Heard on the grapevine you're having a kiddo soon. Here, take this.[236]$h.#$b#I hear parenting takes a lot out of you..."
+            "Saloon_Fri": "$1 atravitaGusExpectingGift#Oh, @! How have you been? Heard on the grapevine you're having a kiddo soon. Here, take this.[236]$h#$e#@, you lookin' forward to having a new kiddo?#$b#I hear parenting takes a lot out of you..."
         },
         "When": { "HavingChild": "@{{playerName}}"}
     },
@@ -27,24 +59,127 @@
         }
     },
     {
+        "LogName": "Gus Y1",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Gus",
+        "When": { "YearModulus": "1"},
+        "Entries": {
+            "1": "I've been living in Pelican Town for...nearly twelve years now?#$b#Boy, it's been a long time...$h",
+            "1_2": "There's really nothing like fresh bread in the morning, isn't there?",
+
+            "2{{YearRemainder}}": "There's plenty of dishes I'd love to try on the menu some day, if I ever have the time to develop them properly.",
+            "3{{YearRemainder}}": "Try a nice Stardew red with my house spaghetti! There's no better pairing than that.",
+            "5{{YearRemainder}}": "Good food, good wine, is there anything better in life?",
+            "6{{YearRemainder}}": "I like good, hearty home-style food. Pasta, pizza, things that will fill your heart and soul.",
+            "7{{YearRemainder}}": "I've been working on a new pasta recipe, hoping to debut that soon...",
+            "8{{YearRemainder}}": "Friend of mine from culinary school is now working at this fancy dinner place in Zuzu city.#$b#Very highly reviewed restaurant.#$e#But personally, @, I prefer a homey place like this.$h",
+            "9{{YearRemainder}}": "Some of the best food I've ever had was from street food vendors in %place.#$b#All you need to cook well is love for the craft.",
+            "10{{YearRemainder}}": "Emily is actually quite a decent chef too! Sometimes she'll help me develop a recipe or two.",
+            "11{{YearRemainder}}": "I've never been married, this restaurant is my first and only love.$h",
+            "13{{YearRemainder}}": "I've never had the instinct for mixology some people have.#$b#To be honest, I'm more comfortable in the kitchen, but booze has a higher profit margin.",
+            "14{{YearRemainder}}": "As I've always said, if you have time to lean, you have time to clean.$h#$b#Always got more work to do in the restaurant!",
+            "15{{YearRemainder}}": "I should go pick up some more farm-fresh cheese from Marnie.$h",
+            "16{{YearRemainder}}": "We're not directly off the highway, so there's not much external traffic here, but sometimes I get a tourist or two.",
+            "17{{YearRemainder}}": "I do make quite a bit of money each year catering the various festivals.#$b#It's good, steady income that helps keep the Saloon open.$h",
+            "18{{YearRemainder}}": "Our little town is famous for its fresh fish.$h#$e#I try to cook with what ingredients we produce.",
+            "19{{YearRemainder}}": "Mayor Lewis usually hires me to cater our local festivals.#$b#Cooking at that scale is quite fun, and I won't turn down the money.$h",
+            "20{{YearRemainder}}": "I get most of my ingredients as fresh as possible. Fish from Willy, eggs from Marnie, and it makes a difference in how my dishes taste!$h"
+        }
+    },
+    {
         "LogName": "Gus Y2",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Gus",
-        "When": { "YearRemainder": "2"},
+        "When": { "YearModulus": "2"},
         "Entries": {
             "SeedShop6": "Ah, @, nice seeing you here! Just picking up some fresh produce. Nothing but the best for my family spaghetti recipe!$h",
             "summerSeedShop6": "@, have you cooked anything interesting recently? Our little valley has so many nice ingredients just out for the taking, if you're willing to forage.$h",
             "fallSeedShop6": "Let's see, where did I put my grocery list?",
-            "1_2": "I've always dreamed of owning a restaurant.$h"
+
+            // winter star
+            "winter_23_2": "Let's see, I've gotta make my famous cinnamon eggnog for the Feast of the Winter Star.$h",
+
+            "1_2": "I've always dreamed of owning a restaurant.$h",
+            "2_2": "Have you ever tried my spaghetti? I'm told it's to die for.$h",
+            "3_2": "I spent many years as a line cook at a middling restaurant in Zuzu City. They mostly did pizzas.%revealtasteGus206",
+            "4_2": "Bread is a lot of work, but incredibly rewarding.#$b#There's nothing like the smell of freshly baked bread.$h",
+            "5_2": "There's nothing like a nicely aged local wine with a well-cooked meal, eh?",
+            "6_2": "The place I used to work for was...pretentious in a way that was pleasant.#$b#I'm glad I'm my own boss now.",
+            "7_2": "Some people believe that in order to be a chef, you have to own the best equipment and the best knives.#$b#That's not true. All you really need is to love cooking.$h",
+            "8_2": "One of the friends I made back in culinary school opened a new restaurant over in %place. I've been meaning to go there at some point.",
+            "9_2": "Emily? She's a great girl, a very hard worker, very very kind. I couldn't have asked for a better waitress.$h",
+            "10_2": "Between you and I, there's nothing better than a nice glass of orange juice in the morning.",
+            "11_2": "I get up very early in the morning to proof the dough for bread.#$b#But there's nothing better than freshly baked bread, so it's definitely worth it.$h",
+            "12_2": "I've been developing a new recipe. Chili with cornbread, something Mayor Lewis might like...",
+            "13_2": "Waiting on a new shipment of beer. Been thinking of branching out a bit, serving a few more local brews.#$b#Hey, @, you've got anything?",
+            "14_2": "One of the nice things of living so close to the ocean, we get excellent seafood.%revealtasteGus213#$b#My fish tacos are to die for, @. You should try one sometime.",
+            "15_2": "I love branching out, cooking things from cultures that aren't my own.",
+            "16_2": "If I had more money...I'd love to travel more. See the world a little more, taste all the different dishes people make...",
+            "17_2": "I don't believe anyone should ever have to go hungry, @.#$b#Look at all the bounties our world produces, and tell me we can't share that.",
+            "18_2": "A little anchovy really helps bring out the flavor for many tomato-based sauces.",
+            "19_2": "A friend sent me some dried algae. It's surprisingly good!",
+            "20_2": "I love that every day I get to wake up and run my restaurant."
         }
     },
     {
         "LogName": "Gus Y3",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Gus",
-        "When": { "YearRemainder": "3"},
+        "When": { "YearModulus": "3"},
         "Entries": {
-            "fall_15_2": "Hey, @, any fall dishes you're looking forward to cooking?#$e#Made some excellent stuffing the other day. Here, have some![239]"
+            "fall_Sun10": "Between you and I, @, my least favorite kitchen chore is cleaning the deep fryers.#$b#But it has to be done...#$b#Of course I'm not going to make Emily do a chore I hate.",
+            "summer_Tue10": "Sometimes Leah brings in mushrooms for me, and I'll use them.#$b#Freshly foraged mushrooms...",
+
+            "2_2": "I couldn't ask for a better employee than Emily. She's so sweet all the time, and so efficient at serving.",
+            "3_2": "If you want, go put a new track on on the jukebox some time.",
+            "12_2": "Maybe I should get some live music sometimes...Sam might be interested...",
+            "13_2": "Been thinking of adding some gumbo to the menu, or perhaps some red beans and rice...",
+            "14_2": "I'm the last surviving restaurant in this here town, and business isn't easy.#$b#Many people cut back on eating out when the economy goes bad.$s",
+            "17_2": "I wanted to make my restaurant a place that would feel like home. A place people could gather and relax.#$b#I'm very proud of the place I built.$h",
+            "18_2": "When cooking, ingredients matter so, so much. You're not going to make a good dish with bad produce.",
+            "19_2": "I'm not going to spread gossip from this bar, @, what kind of bartender do you take me for?",
+            "20_2": "I'll make sure Emily is paid before I take money for myself. She's at the start of her life, she could do so much.#$b#Also, I live simply, I don't need much.$h",
+            "22_2": "White wine and some escargot, is there anything better?",
+            "23_2": "High alcohol wines don't tend to go well with spicy dishes, I always make sure to have something sweet and drinkable on the menu.",
+            "24_2": "Brioche doughs are quite difficult to make, but very, very worth your time to do.#$b#A good brioche is rich but so, so light.$h",
+            "25_2": "There are some days where I want little more than a nice, fresh salad from all our lovely local ingredients.",
+            "26_2": "I hope we'll see you around the Saloon more often, @!$h",
+            "27_2": "I've got some new glassware for the Saloon.#$b#Glassware is incredibly important for presentation, of course.",
+
+            "fall_15_2": "Hey, @, any fall dishes you're looking forward to cooking?#$e#Made some excellent stuffing the other day. Here, have some![239]",
+            "fall_16_2": "Hmmm, this feels like a great time of year for glazed yams...%revealtasteGus208"
+        }
+    },
+    {
+        "LogName": "Gus Y4",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Gus",
+        "When": { "YearModulus": "4"},
+        "Entries": {
+            "fall_Sun10": "Between you and I, @, my least favorite kitchen chore is cleaning the deep fryers.#$b#But it has to be done...#$b#Of course I'm not going to make Emily do a chore I hate.",
+            "3_2": "There's nothing that reminds people of home more than the food they ate as a kid.",
+            "5_2": "It's a bartender's responsibility to never overserve their guests.#$b#It's not about plying the customers with as much alcohol as possible.",
+            "14_2": "Today feels like an excellent day to cook some curry...",
+            "15_2": "The one dish I truly, truly dislike is coleslaw. My mother used to make that all the time when I was growing up.%revealtasteGus648",
+            "16_2": "When cooking vegetables, it's important to avoid cooking them to death.#$b#Veggies have a certain crispness and freshness that's important to preserve",
+            "17_2": "I'm making a few adjustments to my spaghetti recipe. Of course, I'm always making adjustments, gotta make everything to the best of my ability.$h",
+            "23_2": "Let's see, I need to make some more stock, and buy more beer, and make more simple syrup...",
+            "24_2": "Maybe I should swing by Willy's and pick up some fresh fish...",
+            "25_2": "There's nothing like local, fresh ingredients when it comes to making good food.$h"
+        }
+    },
+    {
+        "LogName": "Gus Y5",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Gus",
+        "When": { "YearModulus": "0"},
+        "Entries": {
+            "1_2": "I've been reconsidering my wine and alcohol list, and I think I want to focus more on locally-produced brews.#$b#Say, @, you producing anything interesting?",
+            "2_2": "I've always wanted to own one of those places that feels like a second home, you know? A place where anyone can come to relax.",
+            "3_2": "I don't think I do enough business to really justify beer on tap, but I do wish sometimes I could have one of those systems. Just to play with.",
+            "15_2": "I do some sales at lunchtime, but the bulk of my customers come by mostly for dinner.",
+            "16_2": "Friend of mine who went to culinary school with me just opened a new bar over in Zuzu City. He's making bank.",
+            "17_2": "Escargot...I do enjoy a good plat of escargot sometimes.$h%revealtasteGus729"
         }
     }
 ]}

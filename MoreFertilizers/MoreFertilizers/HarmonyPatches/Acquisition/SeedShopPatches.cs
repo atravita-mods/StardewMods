@@ -1,5 +1,10 @@
-﻿using HarmonyLib;
+﻿using AtraShared.ConstantsAndEnums;
+using AtraShared.Utils.Extensions;
+
+using HarmonyLib;
+
 using Microsoft.Xna.Framework;
+
 using StardewValley.Locations;
 using StardewValley.Menus;
 
@@ -9,11 +14,11 @@ namespace MoreFertilizers.HarmonyPatches.Acquisition;
 /// Patches against Locations.SeedShop.
 /// </summary>
 [HarmonyPatch(typeof(SeedShop))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class SeedShopPatches
 {
     [HarmonyPostfix]
     [HarmonyPatch(nameof(SeedShop.shopStock))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention.")]
     private static void PostfixSeedShop(Dictionary<ISalable, int[]> __result)
     {
         try
@@ -27,7 +32,7 @@ internal static class SeedShopPatches
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed in adding to seedShop!{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("adding to seedShop", ex);
         }
     }
 }

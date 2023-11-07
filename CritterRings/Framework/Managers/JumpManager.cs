@@ -108,7 +108,7 @@ internal sealed class JumpManager : IDisposable
             _ => Vector2.UnitX,
         };
 
-        this.startTile = this.openTile = farmer.getTileLocation();
+        this.startTile = this.openTile = farmer.Tile;
         this.RecalculateTiles(farmer, Game1.currentLocation);
 
         farmer.completelyStopAnimatingOrDoingAction();
@@ -219,7 +219,7 @@ internal sealed class JumpManager : IDisposable
         // Thanks for the viewport movement code, DecidedlyHuman!
         if (this.state != State.Inactive && ModEntry.Config.ViewportFollowsTarget && Game1.currentLocation?.forceViewportPlayerFollow == false)
         {
-            Vector2 position = new(Game1.player.getStandingX(), Game1.player.getStandingY());
+            Vector2 position = new(Game1.player.StandingPixel.X, Game1.player.StandingPixel.Y);
             Vector2 target = this.openTile * Game1.tileSize;
             Vector2 midpoint = Game1.player.FacingDirection switch
             {
@@ -444,7 +444,7 @@ internal sealed class JumpManager : IDisposable
             else if (this.needsBigJump == NeedsBigJump.IfPastBig)
             {
                 this.needsBigJump = NeedsBigJump.Medium;
-            };
+            }
         }
         else
         {
@@ -468,7 +468,7 @@ internal sealed class JumpManager : IDisposable
                 farmer.forceTimePass = this.forceTimePass;
                 if (disposing)
                 {
-                    Game1.moveViewportTo(farmer.Position, 5f, 60, null, ModEntry.cameraAPI is null ? null : ModEntry.cameraAPI.Reset);
+                    Game1.moveViewportTo(farmer.Position, 7.5f, 60, ModEntry.CameraAPI is null ? null : ModEntry.CameraAPI.Reset);
                 }
                 farmer.completelyStopAnimatingOrDoingAction();
             }

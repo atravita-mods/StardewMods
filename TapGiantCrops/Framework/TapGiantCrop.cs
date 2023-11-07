@@ -1,18 +1,23 @@
-﻿using AtraBase.Toolkit.Extensions;
+﻿// Ignore Spelling: loc
+
+namespace TapGiantCrops.Framework;
+
+using AtraBase.Toolkit.Extensions;
 using AtraBase.Toolkit.Reflection;
 
 using AtraCore.Framework.ReflectionManager;
 
-using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.Shims;
-using AtraShared.Wrappers;
 
 using CommunityToolkit.Diagnostics;
-using Microsoft.Xna.Framework;
-using StardewValley.TerrainFeatures;
 
-namespace TapGiantCrops.Framework;
+using Microsoft.Xna.Framework;
+
+using StardewValley.GameData.GiantCrops;
+using StardewValley.Internal;
+using StardewValley.ItemTypeDefinitions;
+using StardewValley.TerrainFeatures;
 
 /// <summary>
 /// API class for Tap Giant Crops.
@@ -33,7 +38,7 @@ public sealed class TapGiantCrop : ITapGiantCropsAPI
     /// <summary>
     /// A method that shakes a giant crop.
     /// </summary>
-    /// <param name="crop">Crop to shake</param>
+    /// <param name="crop">Crop to shake.</param>
     internal static void ShakeGiantCrop(GiantCrop crop)
     {
         GiantCropSetShake(crop, 100f);
@@ -49,15 +54,11 @@ public sealed class TapGiantCrop : ITapGiantCropsAPI
     {
         Guard.IsNotNull(loc);
         Guard.IsNotNull(obj);
-        if (loc.objects.ContainsKey(tile))
+        if (loc.objects.ContainsKey(tile) || !obj.IsTapper())
         {
             return false;
         }
-        if (obj.Name.Contains("Tapper", StringComparison.OrdinalIgnoreCase))
-        {
-            return GetGiantCropAt(loc, tile) is not null;
-        }
-        return false;
+        return GetGiantCropAt(loc, tile) is not null;
     }
 
     /// <inheritdoc />
@@ -103,64 +104,102 @@ public sealed class TapGiantCrop : ITapGiantCropsAPI
     [Pure]
     public (SObject obj, int days)? GetTapperProduct(GiantCrop giantCrop, SObject tapper)
     {
-        if (DynamicGameAssetsShims.IsDGAGiantCrop?.Invoke(giantCrop) == true || giantCrop.parentSheetIndex?.Value is null)
+        GiantCropData? data = giantCrop.GetData();
+
+        SObject? returnobj = null;
+        OverrideObject? @override = null;
+        if (data?.HarvestItems is { } items)
         {
-            return null;
-        }
-
-        int giantCropIndx = giantCrop.parentSheetIndex.Value;
-
-        SObject? returnobj = AssetManager.GetOverrideItem(giantCropIndx);
-
-        if (returnobj is null)
-        {
-            // find a keg output.
-            SObject crop = new(giantCropIndx, 999);
-            this.keg.heldObject.Value = null;
-            this.keg.performObjectDropInAction(crop, false, Game1.player);
-            SObject? heldobj = this.keg.heldObject.Value;
-            this.keg.heldObject.Value = null;
-            if (heldobj?.getOne() is SObject obj)
+            ItemQueryContext context = new(giantCrop.Location, Game1.player, Random.Shared);
+            foreach (GiantCropHarvestItemData? drop in items)
             {
-                returnobj = obj;
-            }
-        }
+                // derived from GiantCrop.TryGetDrop
+                if (!Random.Shared.OfChance(drop.Chance))
+                {
+                    continue;
+                }
+                if (drop.Condition != null && !GameStateQuery.CheckConditions(drop.Condition, giantCrop.Location))
+                {
+                    return null;
+                }
 
-        // special case: giant flowers make honey
-        // this makes no sense.
-        if (returnobj is null && giantCropIndx.GetCategoryFromIndex() == SObject.flowersCategory)
-        {
-            string flowerdata = Game1Wrappers.ObjectInfo[giantCropIndx];
-            returnobj = new SObject(340, 1); // honey index.
-            string honeyName = $"{flowerdata.GetNthChunk('/', 0).ToString()} Honey";
+                Item item = ItemQueryResolver.TryResolveRandomItem(
+                    data: drop,
+                    context,
+                    logError: static (string query, string error) =>
+                {
+                    ModEntry.ModMonitor.Log($"Failed parsing {query}: {error}", LogLevel.Info);
+                });
 
-            returnobj.Name = honeyName;
-            if (int.TryParse(flowerdata.GetNthChunk('/', SObject.objectInfoPriceIndex), out int price))
-            {
-                returnobj.Price += 2 * price;
+                if (item is not SObject dropIn)
+                {
+                    continue;
+                }
+
+                @override = AssetManager.GetOverrideItem(dropIn.QualifiedItemId);
+                returnobj = @override?.obj?.getOne() as SObject;
+
+                if (returnobj is not null)
+                {
+                    break;
+                }
+
+                // reset override
+                @override = null;
+
+                // find a keg output.
+                SObject? heldobj = null;
+
+                try
+                {
+                    this.keg.heldObject.Value = null;
+                    this.keg.performObjectDropInAction(dropIn, false, Game1.player);
+                    heldobj = this.keg.heldObject.Value;
+                    this.keg.heldObject.Value = null;
+                }
+                catch (Exception ex)
+                {
+                    ModEntry.ModMonitor.LogError($"producing keg item with {dropIn.Name}", ex);
+                }
+                if (heldobj?.getOne() is SObject obj)
+                {
+                    returnobj = obj;
+                    break;
+                }
+
+                if (dropIn.Category == SObject.flowersCategory)
+                {
+                    returnobj = (ItemRegistry.GetTypeDefinition("(O)") as ObjectDataDefinition)?.CreateFlavoredHoney(dropIn);
+                    if (returnobj is not null)
+                    {
+                        break;
+                    }
+                }
             }
-            returnobj.preservedParentSheetIndex.Value = giantCropIndx;
         }
 
         if (returnobj is not null)
         {
-            int days = returnobj.Price / (25 * giantCrop.width.Value * giantCrop.height.Value);
-            if (tapper.ParentSheetIndex == 264)
+            int days = @override?.duration is int overrideDuration
+                ? overrideDuration
+                : returnobj.Price / (25 * giantCrop.width.Value * giantCrop.height.Value);
+            if (AssetManager.GetTapperMultiplier(tapper.ItemId) is float multiplier)
             {
-                days /= 2;
+                days = (int)(days / multiplier);
             }
+
             return (returnobj, Math.Max(1, days));
         }
 
         // fallback - return sap.
-        return (new SObject(92, 20), 2);
+        return (new SObject("92", 20), 2);
     }
 
     /// <summary>
     /// Initializes the API (gets the keg instance used to find the output).
     /// </summary>
     internal void Init()
-        => this.keg = new(Vector2.Zero, (int)VanillaMachinesEnum.Keg);
+        => this.keg = new(Vector2.Zero, "12");
 
     private static GiantCrop? GetGiantCropAt(GameLocation loc, Vector2 tile)
     {
@@ -168,12 +207,12 @@ public sealed class TapGiantCrop : ITapGiantCropsAPI
         {
             foreach (ResourceClump? clump in loc.resourceClumps)
             {
-                if (clump is GiantCrop crop && !(DynamicGameAssetsShims.IsDGAGiantCrop?.Invoke(crop) == true))
+                if (clump is GiantCrop crop)
                 {
                     Vector2 offset = tile;
                     offset.Y -= crop.height.Value - 1;
                     offset.X -= crop.width.Value / 2;
-                    if (crop.tile.Value.X.WithinMargin(offset.X) && crop.tile.Value.Y.WithinMargin(offset.Y))
+                    if (crop.Tile.X.WithinMargin(offset.X) && crop.Tile.Y.WithinMargin(offset.Y))
                     {
                         return crop;
                     }
@@ -183,13 +222,12 @@ public sealed class TapGiantCrop : ITapGiantCropsAPI
         if (FarmTypeManagerShims.GetEmbeddedResourceClump is not null && loc.largeTerrainFeatures is not null)
         {
             LargeTerrainFeature terrain = loc.getLargeTerrainFeatureAt((int)tile.X, (int)tile.Y);
-            if (terrain is not null && FarmTypeManagerShims.GetEmbeddedResourceClump(terrain) is GiantCrop crop
-                && !(DynamicGameAssetsShims.IsDGAGiantCrop?.Invoke(crop) == true))
+            if (terrain is not null && FarmTypeManagerShims.GetEmbeddedResourceClump(terrain) is GiantCrop crop)
             {
                 Vector2 offset = tile;
                 offset.Y -= crop.height.Value - 1;
                 offset.X -= crop.width.Value / 2;
-                if (crop.tile.Value.X.WithinMargin(offset.X) && crop.tile.Value.Y.WithinMargin(offset.Y))
+                if (crop.Tile.X.WithinMargin(offset.X) && crop.Tile.Y.WithinMargin(offset.Y))
                 {
                     return crop;
                 }

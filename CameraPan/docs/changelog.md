@@ -1,7 +1,10 @@
 ﻿Changelog
 ==============
 
-## Version 0.1.4
+## Version 0.2.0
+* Update for Stardew 1.6
+
+## Version 0.1.3
 * More ui scaling fixes
 * The camera will now keep up better if you have a slow config speed but a farmer with a lot of speed buff.
 * Fix being able to keybind toggle with another menu open.

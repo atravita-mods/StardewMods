@@ -77,7 +77,7 @@ internal sealed class PlayerTeamWatcher : IDisposable
         }
     }
 
-    private void OnValueAdded(string key, bool value)
+    private void OnValueAdded(string key)
     {
         if (key is not null && !this.removed.Remove(key))
         {
@@ -85,7 +85,7 @@ internal sealed class PlayerTeamWatcher : IDisposable
         }
     }
 
-    private void OnValueRemoved(string key, bool value)
+    private void OnValueRemoved(string key)
     {
         if (key is not null && !this.added.Remove(key))
         {

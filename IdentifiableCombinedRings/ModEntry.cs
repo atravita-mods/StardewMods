@@ -1,4 +1,6 @@
-﻿using AtraShared.ConstantsAndEnums;
+﻿using AtraCore.Framework.Internal;
+
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
 using AtraShared.Utils.Extensions;
 
@@ -12,7 +14,7 @@ using AtraUtils = AtraShared.Utils.Utils;
 namespace IdentifiableCombinedRings;
 
 /// <inheritdoc />
-public class ModEntry : Mod
+public class ModEntry : BaseMod<ModEntry>
 {
     /// <summary>
     /// Gets the config instance for this mod.
@@ -22,13 +24,11 @@ public class ModEntry : Mod
     /// <inheritdoc/>
     public override void Entry(IModHelper helper)
     {
+        base.Entry(helper);
         I18n.Init(this.Helper.Translation);
-        Globals.Initialize(helper, this.Monitor);
 
         Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
-
-        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
 
         AssetManager.Initialize(helper.GameContent);
         helper.Events.Content.AssetRequested += static (_, e) => AssetManager.OnAssetRequested(e);
@@ -47,7 +47,7 @@ public class ModEntry : Mod
         }
         catch (Exception ex)
         {
-            Globals.ModMonitor.Log(string.Format(ErrorMessageConsts.HARMONYCRASH, ex), LogLevel.Error);
+            this.Monitor.Log(string.Format(ErrorMessageConsts.HARMONYCRASH, ex), LogLevel.Error);
         }
         harmony.Snitch(this.Monitor, harmony.Id, transpilersOnly: true);
     }

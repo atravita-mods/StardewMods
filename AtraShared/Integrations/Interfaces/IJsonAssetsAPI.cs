@@ -109,7 +109,7 @@ public interface IJsonAssetsAPI
     /// <summary>
     /// Gets the giant crops JA recognizes.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>Array of giant crop indexes.</returns>
     int[] GetGiantCropIndexes();
 
     /// <summary>
@@ -118,4 +118,16 @@ public interface IJsonAssetsAPI
     /// <param name="item">Item to fix.</param>
     /// <returns>True if the item is to be removed, false otherwise.</returns>
     bool FixIdsInItem(Item item);
+
+    /// <summary>
+    /// Gets all the clothing IDs.
+    /// </summary>
+    /// <returns>Clothing IDs.</returns>
+    IDictionary<string, int> GetAllClothingIds();
+
+    /// <summary>
+    /// Gets all the hat Ids.
+    /// </summary>
+    /// <returns>Hat Ids.</returns>
+    IDictionary<string, int> GetAllHatIds();
 }

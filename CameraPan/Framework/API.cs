@@ -5,7 +5,7 @@ namespace CameraPan.Framework;
 /// <inheritdoc />
 public sealed class API : ICameraAPI
 {
-    private string callerUniqueID;
+    private readonly string callerUniqueID;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="API"/> class.
@@ -41,6 +41,7 @@ public sealed class API : ICameraAPI
     {
         ModEntry.ModMonitor.Log($"{this.callerUniqueID} hard resetting.");
         ModEntry.Reset();
+        ModEntry.SnapOnNextTick = true;
     }
 
     /// <inheritdoc />
@@ -48,6 +49,5 @@ public sealed class API : ICameraAPI
     {
         ModEntry.ModMonitor.Log($"{this.callerUniqueID} resetting.");
         ModEntry.Reset();
-        ModEntry.SnapOnNextTick = true;
     }
 }

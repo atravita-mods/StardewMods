@@ -7,6 +7,8 @@ using AtraShared.Utils.Extensions;
 
 using Microsoft.Xna.Framework;
 
+using StardewValley.Extensions;
+using StardewValley.GameData.Crops;
 using StardewValley.Objects;
 
 namespace CatGiftsRedux.Framework.Pickers;
@@ -20,9 +22,7 @@ internal static class SeasonalCropPicker
     {
         ModEntry.ModMonitor.DebugOnlyLog("Picked Seasonal Crops");
 
-        List<KeyValuePair<int, string>>? content = Game1.content.Load<Dictionary<int, string>>("Data/Crops")
-                                   .Where((kvp) => kvp.Value.GetNthChunk('/', 1).Contains(Game1.currentSeason, StringComparison.OrdinalIgnoreCase))
-                                   .ToList();
+        var content = Game1.cropData.Values.Where(static crop => crop.Seasons.Contains(Game1.season)).ToList();
 
         if (content.Count == 0)
         {
@@ -32,53 +32,28 @@ internal static class SeasonalCropPicker
         int tries = 3;
         do
         {
-            KeyValuePair<int, string> entry = content[random.Next(content.Count)];
+            var entry = content[random.Next(content.Count)];
+            var id = entry.HarvestItemId;
 
-            if (!Utils.IsQiQuestActive && entry.Value.GetNthChunk('/', SObject.objectInfoNameIndex).Contains("Qi", StringComparison.OrdinalIgnoreCase))
+            // confirm the item exists.
+            if (Utils.ForbiddenFromRandomPicking(id))
             {
-                return null;
+                continue;
             }
 
-            if (int.TryParse(entry.Value.GetNthChunk('/', 3), out int id) && id > 0)
+            if (entry.TintColors?.Count > 0)
             {
-                // confirm the item exists.
-                if (Utils.ForbiddenFromRandomPicking(id))
+                Color? color = Utility.StringToColor(random.ChooseFrom(entry.TintColors));
+                if (color is not null)
                 {
-                    continue;
+                    return new ColoredObject(id, 1, color.Value);
                 }
+            }
 
-                if (DataToItemMap.IsActuallyRing(id))
-                {
-                    return new Ring(id);
-                }
-
-                ReadOnlySpan<char> colored = entry.Value.GetNthChunk('/', 8);
-                if (colored.StartsWith("true", StringComparison.Ordinal))
-                {
-                    StreamSplit stream = colored.StreamSplit();
-                    _ = stream.MoveNext(); // the original "true"
-
-                    byte[] colorarray = new byte[3];
-                    int index = 0;
-                    foreach (SpanSplitEntry c in stream)
-                    {
-                        if (byte.TryParse(c, out byte colorbit))
-                        {
-                            colorarray[index++] = colorbit;
-                            if (index >= 3)
-                            {
-                                break;
-                            }
-                        }
-                        else
-                        {
-                            // can't parse the color, just return a noncolored object and hope for the best.
-                            return new SObject(id, 1);
-                        }
-                    }
-                    return new ColoredObject(id, 1, new Color(colorarray[0], colorarray[1], colorarray[2]));
-                }
-                return new SObject(id, 1);
+            var candidate = ItemRegistry.Create(ItemRegistry.type_object + id);
+            if (candidate is not null)
+            {
+                return candidate;
             }
         }
         while (tries-- > 0);

@@ -1,17 +1,19 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
+
 using AtraBase.Toolkit;
-using AtraBase.Toolkit.Extensions;
-using AtraBase.Toolkit.Reflection;
 
 using AtraCore.Framework.ItemManagement;
+using AtraCore.Framework.Models;
 using AtraCore.Framework.ReflectionManager;
-using AtraCore.Models;
+
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
+
 using HarmonyLib;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -27,10 +29,13 @@ namespace AtraCore.HarmonyPatches.DrawPrismaticPatches;
 /// Draws things with a prismatic tint or overlay.
 /// </summary>
 [HarmonyPatch]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class DrawPrismatic
 {
-    private static readonly SortedList<ItemTypeEnum, Dictionary<int, Lazy<Texture2D>>> PrismaticMasks = new();
-    private static readonly SortedList<ItemTypeEnum, HashSet<int>> PrismaticFull = new();
+    private static readonly SortedList<ItemTypeEnum, Dictionary<string, Lazy<Texture2D>>> PrismaticMasks = new();
+    private static readonly SortedList<ItemTypeEnum, HashSet<string>> PrismaticFull = new();
+
+    private static readonly Harmony harmony = new("atravita.AtraCore.PrismaticDraw");
 
     #region LOADDATA
 
@@ -51,71 +56,81 @@ internal static class DrawPrismatic
 
         foreach (DrawPrismaticModel? model in models.Values)
         {
-            if (!int.TryParse(model.Identifier, out int id))
+            string? id = DataToItemMap.IsValidId(model.ItemType, model.Identifier) ? model.Identifier : DataToItemMap.GetID(model.ItemType, model.Identifier);
+
+            if (id is null)
             {
-                id = DataToItemMap.GetID(model.ItemType, model.Identifier);
-                if (id == -1)
-                {
-                    ModEntry.ModMonitor.Log($"Could not resolve {model.ItemType}, {model.Identifier}, skipping.", LogLevel.Warn);
-                    continue;
-                }
+                ModEntry.ModMonitor.Log($"Could not resolve {model.ItemType}, {model.Identifier}, skipping.", LogLevel.Warn);
+                continue;
             }
 
             // Handle the full prismatics.
             if (string.IsNullOrWhiteSpace(model.Mask))
             {
-                if (!PrismaticFull.TryGetValue(model.ItemType, out HashSet<int>? set))
+                if (!PrismaticFull.TryGetValue(model.ItemType, out HashSet<string>? set))
                 {
-                    set = new();
+                    PrismaticFull[model.ItemType] = set = new();
                 }
                 set.Add(id);
-                PrismaticFull[model.ItemType] = set;
             }
             else
             {
                 // handle the ones that have masks.
-                if (!PrismaticMasks.TryGetValue(model.ItemType, out Dictionary<int, Lazy<Texture2D>>? masks))
+                if (!PrismaticMasks.TryGetValue(model.ItemType, out Dictionary<string, Lazy<Texture2D>>? masks))
                 {
-                    masks = new();
+                    PrismaticMasks[model.ItemType] = masks = new();
                 }
                 if (!masks.TryAdd(id, new(() => Game1.content.Load<Texture2D>(model.Mask))))
                 {
                     ModEntry.ModMonitor.Log($"{model.ItemType} - {model.Identifier} appears to be a duplicate, ignoring", LogLevel.Warn);
                 }
-                PrismaticMasks[model.ItemType] = masks;
             }
         }
     }
     #endregion
 
     #region Helpers
-    [MethodImpl(TKConstants.Hot)]
-    private static bool ShouldDrawAsFullColored(this Item item)
-    => item.GetItemType() is ItemTypeEnum type && PrismaticFull.TryGetValue(type, out HashSet<int>? set)
-        && set.Contains(item.ParentSheetIndex);
+
+    /// <summary>
+    /// Untracks a specific item from the prismatic draw code.
+    /// </summary>
+    /// <param name="item">Item to untrack.</param>
+    /// <returns>True if successful, false otherwise.</returns>
+    internal static bool TryUntrack(Item item)
+    {
+        try
+        {
+            if (item.GetItemType() is ItemTypeEnum type)
+            {
+                return (PrismaticFull.TryGetValue(type, out HashSet<string>? set) && set.Remove(item.ItemId))
+                    | (PrismaticMasks.TryGetValue(type, out Dictionary<string, Lazy<Texture2D>>? maskSet) && maskSet.Remove(item.ItemId));
+            }
+        }
+        catch (Exception ex)
+        {
+            ModEntry.ModMonitor.LogError($"trying to untrack item {item.Name} from prismatic draw.", ex);
+        }
+        return false;
+    }
 
     [MethodImpl(TKConstants.Hot)]
-    private static bool ShouldDrawAsFullColored(this Ring ring)
-        => PrismaticFull.TryGetValue(ItemTypeEnum.Ring, out HashSet<int>? set)
-            && set.Contains(ring.indexInTileSheet.Value);
+    private static bool ShouldDrawAsFullColored(this Item item)
+    => item.GetItemType() is ItemTypeEnum type && PrismaticFull.TryGetValue(type, out HashSet<string>? set)
+        && set.Contains(item.ItemId);
 
     [MethodImpl(TKConstants.Hot)]
     private static Color ReplaceDrawColorForItem(Color prevcolor, Item item)
         => item.ShouldDrawAsFullColored() ? Utility.GetPrismaticColor() : prevcolor;
 
     [MethodImpl(TKConstants.Hot)]
-    private static Color ReplaceDrawColorForItem(Color prevcolor, ItemTypeEnum type, int parentSheetIndex)
-        => PrismaticFull.TryGetValue(type, out HashSet<int>? set) && set.Contains(parentSheetIndex) ? Utility.GetPrismaticColor() : prevcolor;
+    private static Color ReplaceDrawColorForItem(Color prevcolor, ItemTypeEnum type, string itemId)
+        => PrismaticFull.TryGetValue(type, out HashSet<string>? set) && set.Contains(itemId) ? Utility.GetPrismaticColor() : prevcolor;
 
     [MethodImpl(TKConstants.Hot)]
     private static Texture2D? GetColorMask(this Item item)
-        => item.GetItemType() is ItemTypeEnum type && PrismaticMasks.TryGetValue(type, out Dictionary<int, Lazy<Texture2D>>? masks)
-            && masks.TryGetValue(item.ParentSheetIndex, out Lazy<Texture2D>? mask) ? mask.Value : null;
+        => item.GetItemType() is ItemTypeEnum type && PrismaticMasks.TryGetValue(type, out Dictionary<string, Lazy<Texture2D>>? masks)
+            && masks.TryGetValue(item.ItemId, out Lazy<Texture2D>? mask) ? mask?.Value : null;
 
-    [MethodImpl(TKConstants.Hot)]
-    private static Texture2D? GetColorMask(this Ring ring)
-    => PrismaticMasks.TryGetValue(ItemTypeEnum.Ring, out Dictionary<int, Lazy<Texture2D>>? masks)
-        && masks.TryGetValue(ring.indexInTileSheet.Value, out Lazy<Texture2D>? mask) ? mask.Value : null;
 
     [MethodImpl(TKConstants.Hot)]
     private static void DrawColorMask(Item item, SpriteBatch b, Rectangle position, float drawDepth)
@@ -130,14 +145,14 @@ internal static class DrawPrismatic
                 rotation: 0f,
                 origin: Vector2.Zero,
                 effects: SpriteEffects.None,
-                layerDepth: drawDepth + 0.001f);
+                layerDepth: MathF.BitIncrement(drawDepth));
         }
     }
 
     [MethodImpl(TKConstants.Hot)]
-    private static void DrawColorMask(ItemTypeEnum type, int parentSheetIndex, SpriteBatch b, int x, int y, float drawDepth)
+    private static void DrawColorMask(ItemTypeEnum type, string itemID, SpriteBatch b, int x, int y, float drawDepth)
     {
-        if (PrismaticMasks.TryGetValue(type, out Dictionary<int, Lazy<Texture2D>>? masks) && masks.TryGetValue(parentSheetIndex, out Lazy<Texture2D>? mask))
+        if (PrismaticMasks.TryGetValue(type, out Dictionary<string, Lazy<Texture2D>>? masks) && masks.TryGetValue(itemID, out Lazy<Texture2D>? mask))
         {
             b.Draw(
                 texture: mask.Value,
@@ -148,7 +163,7 @@ internal static class DrawPrismatic
                 origin: Vector2.Zero,
                 scale: 4f,
                 effects: SpriteEffects.None,
-                layerDepth: drawDepth + 0.001f);
+                layerDepth: MathF.BitIncrement(drawDepth));
         }
     }
 
@@ -171,7 +186,7 @@ internal static class DrawPrismatic
         b.Draw(texture, position, sourceRectangle, color, rotation, origin, scale, effects, layerDepth);
         if (obj.GetColorMask() is Texture2D tex)
         {
-            b.Draw(tex, position, null, Utility.GetPrismaticColor(), rotation, origin, scale, effects, layerDepth + 0.001f);
+            b.Draw(tex, position, null, Utility.GetPrismaticColor(), rotation, origin, scale, effects, MathF.BitIncrement(layerDepth));
         }
     }
     #endregion
@@ -187,7 +202,6 @@ internal static class DrawPrismatic
     [HarmonyPrefix]
     [MethodImpl(TKConstants.Hot)]
     [HarmonyPatch(typeof(SObject), nameof(SObject.drawInMenu))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention.")]
     private static void PrefixSObjectDrawInMenu(SObject __instance, ref Color color)
     {
         try
@@ -199,36 +213,16 @@ internal static class DrawPrismatic
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed in drawing prismatic item\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError($"drawing prismatic item", ex);
+            TryUntrack(__instance);
         }
         return;
-    }
-
-    [UsedImplicitly]
-    [HarmonyTranspiler]
-    [HarmonyPatch(typeof(SObject), nameof(SObject.drawInMenu))]
-    private static IEnumerable<CodeInstruction>? TranspileSObjectDrawInMenu(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
-    {
-        try
-        {
-            ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);
-            helper.AdjustUtilityTextColor();
-
-            return helper.Render();
-        }
-        catch (Exception ex)
-        {
-            ModEntry.ModMonitor.Log($"Mod crashed while transpiling {original.GetFullName()}\n\n{ex}", LogLevel.Error);
-            original.Snitch(ModEntry.ModMonitor);
-        }
-        return null;
     }
 
     [UsedImplicitly]
     [HarmonyPostfix]
     [MethodImpl(TKConstants.Hot)]
     [HarmonyPatch(typeof(SObject), nameof(SObject.drawInMenu))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention.")]
     private static void PostfixSObjectDrawInMenu(
         SObject __instance,
         SpriteBatch spriteBatch,
@@ -250,12 +244,13 @@ internal static class DrawPrismatic
                     origin: new Vector2(8f, 8f) * scaleSize,
                     scale: scaleSize * 4f,
                     effects: SpriteEffects.None,
-                    layerDepth: layerDepth + 0.01f);
+                    layerDepth: MathF.BitIncrement(layerDepth));
             }
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed in drawing prismatic mask\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("drawing prismatic mask", ex);
+            TryUntrack(__instance);
         }
         return;
     }
@@ -331,8 +326,7 @@ internal static class DrawPrismatic
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod crashed while transpiling {original.GetFullName()}\n\n{ex}", LogLevel.Error);
-            original.Snitch(ModEntry.ModMonitor);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }
@@ -375,8 +369,7 @@ internal static class DrawPrismatic
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod crashed while transpiling {original.GetFullName()}\n\n{ex}", LogLevel.Error);
-            original.Snitch(ModEntry.ModMonitor);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }
@@ -384,7 +377,7 @@ internal static class DrawPrismatic
     [UsedImplicitly]
     [HarmonyTranspiler]
     [HarmonyBefore("Digus.ProducerFrameworkMod")]
-    [SuppressMessage("SMAPI.CommonErrors", "AvoidNetField:Avoid Netcode types when possible", Justification = "Used for matching only.")]
+    [SuppressMessage("SMAPI.CommonErrors", "AvoidNetField:Avoid Netcode types when possible", Justification = StyleCopConstants.UsedForMatchingOnly)]
     [HarmonyPatch(typeof(SObject), nameof(SObject.draw), new[] { typeof(SpriteBatch), typeof(int), typeof(int), typeof(float) } )]
     private static IEnumerable<CodeInstruction>? TranspileSObjectDraw(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
     {
@@ -519,8 +512,7 @@ internal static class DrawPrismatic
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod crashed while transpiling {original.GetFullName()}\n\n{ex}", LogLevel.Error);
-            original.Snitch(ModEntry.ModMonitor);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }
@@ -533,7 +525,6 @@ internal static class DrawPrismatic
     [HarmonyPrefix]
     [MethodImpl(TKConstants.Hot)]
     [HarmonyPatch(typeof(Ring), nameof(Ring.drawInMenu))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention.")]
     private static void PrefixRingDrawInMenu(Ring __instance, ref Color color)
     {
         try
@@ -545,7 +536,8 @@ internal static class DrawPrismatic
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed in drawing prismatic ring\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("drawing prismatic ring", ex);
+            TryUntrack(__instance);
         }
         return;
     }
@@ -554,7 +546,6 @@ internal static class DrawPrismatic
     [HarmonyPostfix]
     [MethodImpl(TKConstants.Hot)]
     [HarmonyPatch(typeof(Ring), nameof(Ring.drawInMenu))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention.")]
     private static void PostfixRingDrawInMenu(
         Ring __instance,
         SpriteBatch spriteBatch,
@@ -576,12 +567,13 @@ internal static class DrawPrismatic
                     origin: new Vector2(8f, 8f) * scaleSize,
                     scale: scaleSize * 4f,
                     effects: SpriteEffects.None,
-                    layerDepth: layerDepth + 0.001f);
+                    layerDepth: MathF.BitIncrement(layerDepth));
             }
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed in drawing prismatic mask\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("drawing prismatic mask", ex);
+            TryUntrack(__instance);
         }
         return;
     }
@@ -594,7 +586,6 @@ internal static class DrawPrismatic
     [HarmonyPrefix]
     [MethodImpl(TKConstants.Hot)]
     [HarmonyPatch(typeof(Boots), nameof(Boots.drawInMenu))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention.")]
     private static void PrefixBootsDrawInMenu(Boots __instance, ref Color color)
     {
         try
@@ -606,7 +597,8 @@ internal static class DrawPrismatic
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed in drawing prismatic boots\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("drawing prismatic boots", ex);
+            TryUntrack(__instance);
         }
         return;
     }
@@ -615,7 +607,6 @@ internal static class DrawPrismatic
     [HarmonyPostfix]
     [MethodImpl(TKConstants.Hot)]
     [HarmonyPatch(typeof(Boots), nameof(Boots.drawInMenu))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention.")]
     private static void PostfixBootsDrawInMenu(
         Ring __instance,
         SpriteBatch spriteBatch,
@@ -637,12 +628,13 @@ internal static class DrawPrismatic
                     origin: new Vector2(8f, 8f) * scaleSize,
                     scale: scaleSize * 4f,
                     effects: SpriteEffects.None,
-                    layerDepth: layerDepth + 0.001f);
+                    layerDepth: MathF.BitIncrement(layerDepth));
             }
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed in drawing prismatic mask\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("drawing prismatic mask", ex);
+            TryUntrack(__instance);
         }
         return;
     }

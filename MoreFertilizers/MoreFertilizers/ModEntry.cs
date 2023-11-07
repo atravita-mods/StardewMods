@@ -1,4 +1,6 @@
-﻿#if DEBUG
+﻿// Ignore Spelling: Api
+
+#if DEBUG
 using System.Diagnostics;
 #endif
 using System.Runtime.CompilerServices;
@@ -41,7 +43,6 @@ using AtraUtils = AtraShared.Utils.Utils;
 namespace MoreFertilizers;
 
 /// <inheritdoc />
-[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1124:Do not use regions", Justification = "Reviewed.")]
 internal sealed class ModEntry : Mod
 {
     private const string SavedIDKey = "MFSavedObjectID";
@@ -496,7 +497,7 @@ internal sealed class ModEntry : Mod
         ModContentHelper = helper.ModContent;
         ModMonitor = this.Monitor;
         DIRPATH = helper.DirectoryPath;
-        UNIQUEID = this.ModManifest.UniqueID;
+        UNIQUEID = string.Intern(this.ModManifest.UniqueID);
         Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
 
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
@@ -535,7 +536,7 @@ internal sealed class ModEntry : Mod
                 }
                 else if (terrainFeature is FruitTree fruitTree)
                 {
-                    this.Monitor.Log($"{e.Cursor.Tile} is on {fruitTree.treeType.Value} with {fruitTree.daysUntilMature.Value}.", LogLevel.Info);
+                    this.Monitor.Log($"{e.Cursor.Tile} is on {fruitTree.treeId.Value} with {fruitTree.daysUntilMature.Value}.", LogLevel.Info);
                 }
                 else if (terrainFeature is Tree tree)
                 {
@@ -551,7 +552,8 @@ internal sealed class ModEntry : Mod
                     this.Monitor.Log($"{e.Cursor.Tile} has {fertilizer} fertilizer.", LogLevel.Info);
                 }
             }
-            if (Game1.currentLocation?.modData?.GetInt(CanPlaceHandler.FishFood) is > 0)
+            if (Game1.currentLocation?.isWaterTile((int)e.Cursor.Tile.X, (int)e.Cursor.Tile.Y) == true
+                && Game1.currentLocation.modData?.GetInt(CanPlaceHandler.FishFood) is > 0)
             {
                 this.Monitor.Log($"FishFood: Remaining time: {Game1.currentLocation?.modData?.GetInt(CanPlaceHandler.FishFood)}", LogLevel.Info);
             }
@@ -677,8 +679,6 @@ internal sealed class ModEntry : Mod
                 && dga.Manifest.Version.IsNewerThan("1.4.1"))
             {
                 this.Monitor.Log("Found Dynamic Game Assets, applying compat patches", LogLevel.Info);
-                FruitTreeDayUpdateTranspiler.ApplyDGAPatch(harmony);
-                FruitTreeDrawTranspiler.ApplyDGAPatch(harmony);
                 CropHarvestTranspiler.ApplyDGAPatch(harmony);
                 SObjectPatches.ApplyDGAPatch(harmony);
                 CropNewDayTranspiler.ApplyDGAPatches(harmony);
@@ -741,7 +741,7 @@ internal sealed class ModEntry : Mod
         harmony.Snitch(this.Monitor, harmony.Id, transpilersOnly: true);
 #if DEBUG
         sw.Stop();
-        this.Monitor.Log($"took {sw.ElapsedMilliseconds} ms to apply harmony patches", LogLevel.Info);
+        this.Monitor.LogTimespan("Applying harmony patches", sw);
 #endif
     }
 
@@ -1201,7 +1201,7 @@ internal sealed class ModEntry : Mod
         }
         catch (Exception ex)
         {
-            this.Monitor.Log($"Failed while attempting to deshuffle in SF buildings:\n\n{ex}", LogLevel.Error);
+            this.Monitor.LogError("deshuffling in SF buildings", ex);
         }
         this.idmap = null;
         this.solidFoundationsAPI = null;
@@ -1242,7 +1242,7 @@ internal sealed class ModEntry : Mod
             }
             catch (Exception ex)
             {
-                this.Monitor.Log($"Failed while attempting to run migrations.\n\n{ex}");
+                this.Monitor.LogError("attempting to run migrations", ex);
             }
         }
         else

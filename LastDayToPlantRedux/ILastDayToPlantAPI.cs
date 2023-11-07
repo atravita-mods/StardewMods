@@ -1,18 +1,22 @@
 ﻿using AtraShared.ConstantsAndEnums;
 
 namespace LastDayToPlantRedux;
+
+/// <summary>
+/// The API for this mod.
+/// </summary>
 public interface ILastDayToPlantAPI
 {
     /// <summary>
     /// Gets the days needed for a specific crop for to grow.
     /// </summary>
     /// <param name="profession">Profession.</param>
-    /// <param name="fertilizer">Int ID of fertilizer.</param>
+    /// <param name="fertilizer">ID of fertilizer.</param>
     /// <param name="crop">crop ID.</param>
     /// <param name="season">The season to check for.</param>
     /// <returns>number of days, or null for no entry.</returns>
     /// <remarks>This is not calculated until a Low priority DayStarted. You'll need an even lower priority.</remarks>
-    public int? GetDays(Profession profession, int fertilizer, int crop, StardewSeasons season);
+    public int? GetDays(Profession profession, string fertilizer, string crop, StardewSeasons season);
 
     /// <summary>
     /// Gets all the data associated with a specific condition.

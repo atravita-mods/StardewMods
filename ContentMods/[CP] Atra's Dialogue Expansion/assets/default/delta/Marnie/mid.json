@@ -15,6 +15,18 @@
         }
     },
     {
+        // Pregnancy line!
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Marnie",
+        "Entries": {
+            "Town6": "Oh, @, heard on the grapevine you're expecting a kid! Have you picked a name yet?",
+            "AnimalShop6": "Hey, @, I've heard the good news. When're you expecting the new kid?"
+        },
+        "When": {
+            "HavingChild": "@{{playerName}}"
+        }
+    },
+    {
         "LogName": "Marnie mid-hearts",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Marnie",
@@ -34,7 +46,12 @@
 
             // GIMA
             "Resort_Pier": "Look, @! Look how clear the water is!$h",
+            "Resort_Pier_2": "Oh, @, do you think that's a shark?",
             
+            // specific day lines
+            "spring_12{{YearRemainder}}": "Oh, @, I've been so busy lately, getting ready for the egg hunt!#$e#Our hens are working so hard producing all the yummy eggs we need!",
+            "summer_10{{YearRemainder}}": "Oh, the luau is tomorrow, isn't it? Mayor Lewis will want us to impress the Governor.$s",
+
             // Base daily lines.
             "4{{YearRemainder}}": "Our hoof trimmer is going to be stopping by in the next few days. Do you want me to see if he has time for you?",
             "10{{YearRemainder}}": "I've got so much work to do...$s",
@@ -44,7 +61,34 @@
         }
     },
     {
-        "LogName": "Marnie mid-hearts",
+        "LogName": "Marnie mid-hearts - Joja",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Marnie",
+        "When": {"IsJojaMartComplete": true},
+        "Entries": {
+            "summer_Mon8": "With poor little me trapped between the arg companies, I can barely make any money.$s",
+            "fall_Mon8": "They sell you their equipment but forbid you from trying to fix it. How is that fair?$s"
+        }
+    },
+    {
+        "LogName": "Marnie mid-hearts Y1",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Marnie",
+        "When": {"YearModulus": "1"},
+        "Entries": {
+            // additional Ginger island lines
+            "Resort_Bar": "Maybe I should get a nice Long Island Iced Tea?",
+            "Resort_Wander": "@, you've definitely done well here, this place is lovely!$h",
+            "Resort_Wander_2": "Gosh, @, this sand is so clean.$h",
+
+            "IslandSouth_Entry": "Yay, vacation!",
+
+            "10{{YearRemainder}}": "The cows, they need to be milked every day. It makes it hard for ranchers to take any time off.$s",
+            "11{{YearRemainder}}": "I wonder...I wonder how long I can wake up at four AM like this...",
+        }
+    },
+    {
+        "LogName": "Marnie mid-hearts Y2",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Marnie",
         "When": { "YearModulus": "2" },
@@ -52,6 +96,7 @@
             "Resort_Bar": "Ah, nothing like a nice relaxing day on the beach.$h",
 
             "1_2": "I try to keep my cows outdoors as much as possible. Keeping them in the pasture is so much better for them.$h",
+            "5_2": "There's nothing like nice fresh cows milk in your coffee every morning.$h",
             "8_2": "Animals will always prefer to eat fresh grass from outside, but they'll eat hay if they can't get grass.",
             "9_2": "Shane actually mucked out the cows' pen without me having to remind him yesterday.#$b#I hope that means he's feeling better?$h",
             "11_2": "The Saloon is the only real social activity we have in these parts. Maybe that's not a good thing.$s",
@@ -60,7 +105,11 @@
             "17_2": "My weekends are Mondays and Tuesdays, mostly. You'll find me behind my counter most other days!",
             "19_2": "With the cost of feed going up like this, I'm not sure how I'll stay in business.$s",
             "22_2": "I mainly raise cows for milk, but I also raise baby animals for sale to other farmers.$h#$b#It's a lot of work, but it's worth it!",
-            "23_2": "For cows, I usually raise Braunvieh or Holsteins. But I'm open to raising other breeds!$h" // Braunvieh is the precursor to the Brown Swiss, they're kinda cute. Holstein is the stereotypical white/black cow. Also cute.
+            "23_2": "For cows, I usually raise Braunvieh or Holsteins. But I'm open to raising other breeds!$h", // Braunvieh is the precursor to the Brown Swiss, they're kinda cute. Holstein is the stereotypical white/black cow. Also cute.
+            "25_2": "Most of my milk I process into cheese. Artisan cheese can fetch a pretty good price these days.$h",
+            "26_2": "Back when the town was bigger, we had more ranchers in this here valley too.#$b#The old mayor, the mayor before Lewis, he was also a rancher. Had two hundred head of cattle over yonder.",
+            "27_2": "I wasn't much of a girly girl growing up. You really can't be, growing up on a ranch like I did. Too much muck.",
+            "28_2": "I found a nice jazz record the last time I was in Grampleton. Should I give it to...no, maybe not...",
         }
     },
     {
@@ -69,11 +118,26 @@
         "Target": "Characters/Dialogue/Marnie",
         "When": { "YearModulus": "3" },
         "Entries": {
+            "Resort_Bar": "Mmmm, what should I have? I'm in the mood for something fruity and fun!$h",
 
-            "1_2": "This farm has been in my family for five generations. I'm very proud to be running it.#$e#I'm not sure who'll run it after me.",
+            "1_2": "This farm has been in my family for five generations. I'm very proud to be running it.#$e#I'm not sure who'll run this ranch after me.$s",
+            "7_2": "There's no eggs better than farm-fresh eggs!$h",
             "18_2": "Cost of feed's going up, but I ain't getting paid any more for my eggs or milk.#$b#@, I think there's collusion going on.$s#$e#Not sure what to do, it's just little old me against all the ag companies.$s",
             "19_2": "I make quite a bit of cheese as well, on my farm.#$b#There's nothing like farm fresh cheese!",
-            "22_2": "%Marnie looks tired.#$b#*Yawn*. Oh, @, hi! Just had to get up very early this morning to herd some cows back into their pen."
+            "22_2": "%Marnie looks tired.#$b#*Yawn*. Oh, @, hi! Just had to get up very early this morning to herd some cows back into their pen.",
+            "23_2": "Tried to make some {{Dish}} the other day.#$b#Made a mess of the kitchen and burned it though.$s"
+        }
+    },
+    {
+        "LogName": "Marnie mid-hearts",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Marnie",
+        "When": { "YearModulus": "4" },
+        "Entries": {
+            "summer_Mon8": "Oh, is it another election year already?#$b#Does it really matter if we vote? The Governor's always going to win his election no matter what we do.",
+
+            "2_2": "I do supply some restaurants directly, they prize the fresh eggs and farmmade-cheese.#$b#Of course, I also sell direct to Gus sometimes.",
+            "27_2": "Maybe I should pick up some {{i18n: dishes.child.{{Random:01,02,03,04,05,06,07,08}} }} for Jas?"
         }
     }
 ]}

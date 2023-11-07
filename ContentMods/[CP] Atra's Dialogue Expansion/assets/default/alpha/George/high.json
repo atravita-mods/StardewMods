@@ -3,10 +3,51 @@
         "Action": "EditData",
         "Target": "Characters/Dialogue/George",
         "Entries": {
+            "summer_Mon10": "Doc's not gonna like how swollen my ankles are, nosiree.$s",
+        },
+        "When": {
+            "HasSeenEvent": "18" // event where George tells you about his accident
+        }
+    },
+    {
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/George",
+        "Entries": {
+            // specific days
+            "fall_15_2": "Gonna be the Stardew Fair tomorrow, @.#$b#Me, participating? Nah. Not something I want to do anymore.",
+
+            "2_2": "Take care of your knees when you've still got them.$s",
             "15_2": "It's nice that Alex is still livin' with us. I need more help than what my dear wife Evelyn can provide some days.",
-            "19_2": "I remember when the mines were first being developed. The town was so happy. We needed the economic activity.#$b#Didn't consider how polluting they'd be.",
-            "21_2": "We didn't have these new electric devices when we were kids. Had to go out and kick a ball about for our entertainment."
+            "19_2": "I remember when the mines were first being developed. The town was so happy. We needed the economic activity.#$b#Didn't consider how polluting they'd be.$s",
+            "21_2": "We didn't have these new electric devices when we were kids. Had to go out and kick a ball about for our entertainment.",
+            "22_2": "Pretty sure doc's had me on these meds before and they weren't no help last time...$s"
         },
         "When": {"YearModulus": "2"}
+    },
+    {
+        "Action":"EditData",
+        "Target":"Characters/Dialogue/George",
+        "Entries":{
+            "2_2": "Evelyn says I've become more hard of hearing lately.#$e#Lifetime of working in the mines have damaged my ears.",
+            "3_2": "I know the young kiddos think they'll replace us old miners with their newfangled technology, but until they've got it I don't believe them.",
+            "4_2": "Now doc wants me to cut back on the sodium.#$b#Doc, I'm getting old, does it really matter anymore?",
+            "5_2": "When you're my age, all the kids think they can tell you what to do.",
+            "6_2": "Ugh, I'm really feeling my age today, @.#$b#Just want to go back to bed.",
+            "7_2": "I remember the first TV we bought. Heavy as heck and the images were so blurry. But we watched that thing every night at dinner for years.$h",
+            "15_2": "Doc says I might need hearing aids.$s",
+        },
+        "When": {"YearModulus": "3"}
+    },
+    {
+        "Action":"EditData",
+        "Target":"Characters/Dialogue/George",
+        "Entries":{
+            "2_2": "Doc says I might need cataract surgery. @, I'm...I'm not sure.#$b#Does the idea of surgery scare you too?",
+            "3_2": "My eyesight isn't what it used to be, @.$s",
+            "6_2": "Ugh, I might need cataract surgery...but when?$s",
+            "17_2": "%George is grumbling to himself.#$b#'d think your pension would be guaranteed, but it looks like the money men can even screw that up.$s",
+            "19_2": "Doc now wants me to stop drinking entirely. *grumbles*.$s"
+        },
+        "When": {"YearModulus": "4"}
     }
 ]}

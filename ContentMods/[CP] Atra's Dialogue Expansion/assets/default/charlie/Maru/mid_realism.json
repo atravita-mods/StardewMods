@@ -1,0 +1,31 @@
+{
+    "Changes":[
+        {
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Maru",
+            "When": {"YearModulus": 2},
+            "Entries": {
+                "23_2": "Was helping Marnie with some of her machines the other day...#$b#She had a crowd gate that wasn't holding pressure correctly..."
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Maru",
+            "When": {"YearModulus": 3},
+            "Entries": {
+                "23_2": "Autograbbers are such an interesting piece of technology, aren't they?",
+                "24_2": "Single instruction multiple data? Sounds like something Sebastian might find interesting, but most of the microprocessors I use don't support things like that."
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Maru",
+            "When": {"YearModulus": "4"},
+            "Entries": {
+                "23_2": "I swear, it feels like every third day there's a new article about longer-lasting batteries but none of them have made it to market.$s",
+                "24_2": "Nanorobotics always amazes me. Just, the sheer scale at which they must work at, how much control they need.",
+                "25_2": "Computers have been improving so fast for so long, I wonder how long this streak will continue..."
+            }
+        }
+    ]
+}

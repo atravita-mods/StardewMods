@@ -29,6 +29,7 @@ public static class ASThrowHelper
     [DoesNotReturn]
     [DebuggerHidden]
     [MethodImpl(MethodImplOptions.NoInlining)]
+    [StackTraceHidden]
     public static void ThrowSaveNotLoaded()
     {
         throw new SaveNotLoadedError();
@@ -43,6 +44,7 @@ public static class ASThrowHelper
     [DoesNotReturn]
     [DebuggerHidden]
     [MethodImpl(MethodImplOptions.NoInlining)]
+    [StackTraceHidden]
     public static T ThrowSaveNotLoaded<T>()
     {
         throw new SaveNotLoadedError();

@@ -1,0 +1,29 @@
+{
+    "Changes": [
+        {
+            "Action": "Include",
+            "FromFile": "schedules.json",
+            "When": {
+                "Query: NOT({{OnlyIfRainingOrWinter}}) OR {{Weather:valley|contains=rain, storm}} OR {{Season|contains=winter}}": true
+            },
+        },
+        {
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Demetrius",
+            "Entries": {
+                "FarmCave": "{{i18n:demetrius.{{DialogueVariant}}.{{Season}}.{{Random:00,01,02,03,04,05,06,07,08,09,10}} }}"
+            },
+            "When": {
+                "EnableDialogue": true
+            }
+        },
+        {
+            // Demetrius will destroy mushie boxes if he's allowed to walk around without nondestructive NPCs.
+            "Action": "Include",
+            "FromFile": "movement.json",
+            "When": {
+                "HasMod": "MadaraUchiha.NonDestructiveNPCs",
+            }
+        }
+    ]
+}

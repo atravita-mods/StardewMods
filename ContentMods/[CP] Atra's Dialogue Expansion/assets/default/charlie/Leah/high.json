@@ -1,0 +1,32 @@
+{"Changes":[
+    {
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Leah",
+        "When": {"YearModulus": 1},
+        "Entries": {
+            "17": "Be careful when picking mushrooms! Some can be quite poisonous.#$b#My father taught me how to identify good mushrooms.",
+            "28{{YearRemainder}}": "I grew up in poverty, so I'm perfectly used to living on small amounts of money.#$e#My father taught me how to forage.$h",
+
+            // specific days
+            "winter_24{{YearRemainder}}": "Oh, gosh, I still have Winter Star gifts I need to pick up.$s"
+        }
+    },
+    {
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Leah",
+        "When": {"YearModulus": 2},
+        "Entries": {
+            "14_2": "$1 atravitaLeahStickers#A friend asked me if I sold posters or stickers of my work. I...currently don't, but I could?#$e#Well, I've started making stickers of my work, and they sell far more than I expected!$h",
+            "25_2": "I was the first person in my family who went to college. Couldn't have done it without scholarships."
+        }
+    },
+    {
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Leah",
+        "When": {"YearModulus": 3},
+        "Entries": {
+            "14_2": "In general, my paintings sell better than my sculptures, but I prefer working on sculptures.",
+            "25_2": "My father was always so supportive of everything I wanted to do. I appreciate him far more than words can say.$h"
+        }
+    }
+]}

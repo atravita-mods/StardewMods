@@ -2,10 +2,11 @@
 
 using AtraCore.Framework.ReflectionManager;
 
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
 
 using GrowableBushes.Framework;
-
+using GrowableBushes.Framework.Items;
 using HarmonyLib;
 
 using StardewValley.TerrainFeatures;
@@ -16,7 +17,7 @@ namespace GrowableBushes.HarmonyPatches;
 /// Patches on bushes.
 /// </summary>
 [HarmonyPatch(typeof(Bush))]
-[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class BushPatches
 {
     #region delegates
@@ -49,7 +50,7 @@ internal static class BushPatches
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed while attempting to override bush blooming\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("overriding bush blooming", ex);
         }
     }
 
@@ -69,7 +70,7 @@ internal static class BushPatches
             }
             catch (Exception ex)
             {
-                ModEntry.ModMonitor.Log($"Failed while attempting to override bush destroyability\n\n{ex}", LogLevel.Error);
+                ModEntry.ModMonitor.LogError("overriding bush destroyability", ex);
             }
         }
     }
@@ -98,7 +99,7 @@ internal static class BushPatches
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed while attempting to prevent shaking of walnut bush\n\n{ex}");
+            ModEntry.ModMonitor.LogError("preventing shaking of walnut bush", ex);
         }
 
         return true;
@@ -134,7 +135,7 @@ internal static class BushPatches
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed while overriding tileSheetOffset for specific bushes.\n\n{ex}");
+            ModEntry.ModMonitor.LogError("overriding tileSheetOffset for specific bushes", ex);
         }
     }
 
@@ -174,7 +175,7 @@ internal static class BushPatches
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed while overriding tileSheetOffset for specific bushes.\n\n{ex}");
+            ModEntry.ModMonitor.LogError("overriding tileSheetOffset for specific bushes", ex);
         }
     }
 }

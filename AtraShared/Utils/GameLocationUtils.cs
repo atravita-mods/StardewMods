@@ -1,12 +1,16 @@
-﻿using System.Buffers;
-using CommunityToolkit.Diagnostics;
-using Microsoft.Xna.Framework;
-using StardewValley.Buildings;
-using StardewValley.Locations;
+﻿// Ignore Spelling: xstart yend xend ystart loc tileloc Utils
 
 namespace AtraShared.Utils;
 
-// TODO: Remove checks for BuildableGameLocation in 1.6.
+using System.Buffers;
+
+using AtraBase.Toolkit.Extensions;
+
+using CommunityToolkit.Diagnostics;
+
+using Microsoft.Xna.Framework;
+
+using StardewValley.Buildings;
 
 /// <summary>
 /// Utility for gamelocations.
@@ -14,6 +18,13 @@ namespace AtraShared.Utils;
 [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1124:Do not use regions", Justification = "Reviewed")]
 public static class GameLocationUtils
 {
+    #region random
+
+    private static readonly ThreadLocal<Random> _random = new(() => new());
+
+    private static Random Random => _random.Value!;
+    #endregion
+
     #region Animations
 
     /// <summary>
@@ -25,7 +36,10 @@ public static class GameLocationUtils
     /// <param name="mp">Multiplayer instance - used to broadcast sprites.</param>
     public static void ExplodeBomb(GameLocation loc, int whichBomb, Vector2 tileloc, Multiplayer mp)
     {
-        int bombID = Game1.random.Next();
+        Guard.IsNotNull(loc);
+        Guard.IsNotNull(mp);
+
+        int bombID = Random.Next();
         loc.playSound("thudStep");
         TemporaryAnimatedSprite tas_bomb = new(
             initialParentTileIndex: whichBomb,
@@ -119,6 +133,9 @@ public static class GameLocationUtils
     /// <remarks>Mostly copied from FishPond.showObjectThrownIntoPondAnimation.</remarks>
     public static void DrawWaterSplash(GameLocation loc, Vector2 nonTileLocation, Multiplayer mp, int delayTime)
     {
+        Guard.IsNotNull(loc);
+        Guard.IsNotNull(mp);
+
         mp.broadcastSprites(
             loc,
             new TemporaryAnimatedSprite(
@@ -144,7 +161,7 @@ public static class GameLocationUtils
                 numberOfLoops: 0,
                 position: nonTileLocation,
                 flicker: false,
-                flipped: Game1.random.NextDouble() < 0.5,
+                flipped: Random.OfChance(0.5),
                 layerDepth: (nonTileLocation.Y + 1f) / 10000f,
                 alphaFade: 0.01f,
                 color: Color.White,
@@ -164,9 +181,9 @@ public static class GameLocationUtils
                 animationInterval: 65f,
                 animationLength: 8,
                 numberOfLoops: 0,
-                position: nonTileLocation + new Vector2(Game1.random.Next(-32, 32), Game1.random.Next(-16, 32)),
+                position: nonTileLocation + new Vector2(Random.Next(-32, 32), Random.Next(-16, 32)),
                 flicker: false,
-                flipped: Game1.random.NextDouble() < 0.5,
+                flipped: Random.OfChance(0.5),
                 layerDepth: (nonTileLocation.Y + 1f) / 10000f,
                 alphaFade: 0.01f,
                 color: Color.White,
@@ -186,9 +203,9 @@ public static class GameLocationUtils
                 animationInterval: 75f,
                 animationLength: 8,
                 numberOfLoops: 0,
-                position: nonTileLocation + new Vector2(Game1.random.Next(-32, 32), Game1.random.Next(-16, 32)),
+                position: nonTileLocation + new Vector2(Random.Next(-32, 32), Random.Next(-16, 32)),
                 flicker: false,
-                flipped: Game1.random.NextDouble() < 0.5,
+                flipped: Random.OfChance(0.5),
                 layerDepth: (nonTileLocation.Y + 1f) / 10000f,
                 alphaFade: 0.01f,
                 color: Color.White,
@@ -264,12 +281,9 @@ public static class GameLocationUtils
         foreach (GameLocation location in Game1.locations)
         {
             yield return location;
-            if (location is BuildableGameLocation buildableloc)
+            foreach (GameLocation loc in YieldInteriorLocations(location))
             {
-                foreach (GameLocation loc in YieldInteriorLocations(buildableloc))
-                {
-                    yield return loc;
-                }
+                yield return loc;
             }
         }
     }
@@ -282,42 +296,36 @@ public static class GameLocationUtils
     {
         foreach (GameLocation? loc in Game1.locations)
         {
-            if (loc is BuildableGameLocation buildable)
+            foreach (Building? building in GetBuildings(loc))
             {
-                foreach (Building? building in GetBuildings(buildable))
-                {
-                    yield return building;
-                }
+                yield return building;
             }
         }
     }
 
-    private static IEnumerable<GameLocation> YieldInteriorLocations(BuildableGameLocation loc)
+    private static IEnumerable<GameLocation> YieldInteriorLocations(GameLocation loc)
     {
         foreach (Building building in loc.buildings)
         {
             if (building.indoors?.Value is GameLocation indoorloc)
             {
                 yield return indoorloc;
-                if (indoorloc is BuildableGameLocation buildableIndoorLoc)
+                foreach (GameLocation nestedLocation in YieldInteriorLocations(indoorloc))
                 {
-                    foreach (GameLocation nestedLocation in YieldInteriorLocations(buildableIndoorLoc))
-                    {
-                        yield return nestedLocation;
-                    }
+                    yield return nestedLocation;
                 }
             }
         }
     }
 
-    private static IEnumerable<Building> GetBuildings(BuildableGameLocation loc)
+    private static IEnumerable<Building> GetBuildings(GameLocation loc)
     {
         foreach (Building building in loc.buildings)
         {
             yield return building;
-            if (building.indoors?.Value is BuildableGameLocation buildable)
+            if (building.indoors?.Value is GameLocation interiorLoc)
             {
-                foreach (Building interiorBuilding in GetBuildings(buildable))
+                foreach (Building interiorBuilding in GetBuildings(interiorLoc))
                 {
                     yield return interiorBuilding;
                 }

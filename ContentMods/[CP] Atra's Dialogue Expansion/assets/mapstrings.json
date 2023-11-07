@@ -8,7 +8,18 @@
         },
         "When": {
             "EnableFor|contains=Haley": true,
-            "EnableFor|Contains=Emily": true
+            "EnableFor|contains=Emily": true
+        }
+    },
+    {
+        "LogName": "Haley map strings",
+        "Action": "EditData",
+        "Target": "Strings/StringsFromMaps",
+        "Entries": {
+            "HaleyHouse.13": "{{i18n: haley-photography.{{YearModulus}} }}",
+        },
+        "When": {
+            "EnableFor": "Haley",
         }
     },
     {
@@ -16,10 +27,60 @@
         "Action": "EditData",
         "Target": "Strings/StringsFromMaps",
         "Entries": {
+            "HarveyRoom.7": "{{i18n:harvey-radio.{{Season}} }}",
+            "HarveyRoom.8": "{{i18n:harvey-medical.{{Season}}.{{Random:00,01,02}} }}",
             "HarveyRoom.12": "{{i18n:harvey-fridge.{{Season}} }}",
+            "HarveyRoom.13": "{{i18n:harvey-table.{{Season}} }}",
+            "HarveyRoom.14": "{{i18n: harvey-tele.start}}{{i18n:harvey-tele.{{Season}}.{{Random: 00,01,02}} }}"
         },
         "When": {
-            "EnableFor|Contains=Harvey": true,
+            "EnableFor": "Harvey",
+            "Year|contains=1": false
+        }
+    },
+    {
+        "LogName": "Marnie map strings",
+        "Action": "EditData",
+        "Target": "Strings/StringsFromMaps",
+        "When": {
+            "EnableFor": "Marnie"
+        },
+        "Entries": {
+            "AnimalShop.19": "{{i18n:animalshop-sink.{{Season}}.{{Random: 00, 01, 02}} }}"
+        }
+    },
+    {
+        "LogName": "Penny map strings",
+        "Action": "EditData",
+        "Target": "Strings/StringsFromMaps",
+        "Entries": {
+            "Trailer.1": "{{i18n:penny-teaching.{{Season}}.{{YearModulus}} }}"
+        },
+        "When": {
+            "EnableFor": "Penny"
+        }
+    },
+    {
+        "LogName": "Sam map strings",
+        "Action": "EditData",
+        "Target": "Strings/StringsFromMaps",
+        "When": {
+            "EnableFor": "Sam"
+        },
+        "Entries": {
+            "SamHouse.11": "{{i18n:sam-computer-initial}} {{i18n:sam-computer-videogame.{{season}}|videogame = {{VideoGame}} }}."
+        }
+    },
+    {
+        "LogName": "Shane Video Game",
+        "Action": "EditData",
+        "Target": "Strings/StringsFromMaps",
+        "When": {
+            "EnableFor": "Shane",
+            "Random: 1,2": 1
+        },
+        "Entries":{
+            "AnimalShop.10": "{{i18n: shane-videogame.{{season}}|game = {{i18n:video.game.{{Random:01, 02, 03, 04, 05, 06, 07, 08, 09}} }}}}"
         }
     }
 ]}

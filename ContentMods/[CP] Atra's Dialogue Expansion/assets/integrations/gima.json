@@ -1,0 +1,24 @@
+{ "Changes":[
+    {
+        "LogName": "GIMA changes",
+        "Action": "EditData",
+        "Target": "Mods/atravita_Ginger_Island_Adjustments_groups",
+        "Entries": {
+            "HouseWives": "Jodi, Caroline",
+            "CraftingFriends": "Leah, Robin, Emily"
+        },
+        "When": {
+            "Year|contains=1": false
+        }
+    },
+    // additional GIMA dialogue
+    {
+        "LogName": "Alex - GIMA",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Alex",
+        "When": {"EnableFor": "Alex"},
+        "Entries": {
+            "Resort_Pier": "{{i18n:alex-resort-pier}}$h"
+        }
+    }
+]}

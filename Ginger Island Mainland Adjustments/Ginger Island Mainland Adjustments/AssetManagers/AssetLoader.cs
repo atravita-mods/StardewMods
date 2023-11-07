@@ -242,7 +242,7 @@ internal static class AssetLoader
             Globals.ModMonitor.DebugOnlyLog($"Kent is home, adding Kent");
             defaultgroups["JodiFamily"] = val + ", Kent";
         }
-        if (defaultgroups.TryGetValue("barfolk", out string? value) && Game1.getAllFarmers().Any((Farmer farmer) => farmer.eventsSeen.Contains(99210002)))
+        if (defaultgroups.TryGetValue("barfolk", out string? value) && Game1.getAllFarmers().Any((Farmer farmer) => farmer.eventsSeen.Contains("99210002")))
         {
             defaultgroups["barfolk"] = value + ", Pam"; // A little Pam Tries tie-in?
         }

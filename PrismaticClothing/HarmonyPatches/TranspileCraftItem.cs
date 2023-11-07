@@ -1,10 +1,13 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
-using AtraBase.Toolkit.Extensions;
+
 using AtraCore.Framework.ReflectionManager;
+
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
+
 using HarmonyLib;
+
 using StardewValley.Menus;
 
 namespace PrismaticClothing.HarmonyPatches;
@@ -40,10 +43,11 @@ internal static class TranspileCraftItem
 
             helper.GetLabels(out IList<Label>? labelsToMove)
             .Insert(new CodeInstruction[]
-            { // and insert if (right_item is prismatic shard, skip past that previous block).
+            { // and insert if (right_item.QualifiedItemId == "(O)74" )
                 arg,
-                new(OpCodes.Ldc_I4, 74), // prismatic shard
-                new(OpCodes.Call, typeof(Utility).GetCachedMethod(nameof(Utility.IsNormalObjectAtParentSheetIndex), ReflectionCache.FlagTypes.StaticFlags)),
+                new(OpCodes.Callvirt, typeof(Item).GetCachedProperty(nameof(Item.QualifiedItemId), ReflectionCache.FlagTypes.InstanceFlags).GetGetMethod()),
+                new(OpCodes.Ldstr, "(O)74"), // prismatic shard
+                new(OpCodes.Call, typeof(string).GetCachedMethod("op_Equality", ReflectionCache.FlagTypes.StaticFlags)),
                 new(OpCodes.Brtrue, label),
             }, withLabels: labelsToMove);
 
@@ -52,8 +56,7 @@ internal static class TranspileCraftItem
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod crashed while transpiling {original.GetFullName()}\n\n{ex}", LogLevel.Error);
-            original?.Snitch(ModEntry.ModMonitor);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }

@@ -1,6 +1,13 @@
 ﻿Changelog
 ==============
 
+## Version 0.2.0
+* Update for Stardew 1.6
+
+## Version 0.1.5
+* Fix bunny poof showing up when it really shouldn't in multiplayer.
+* Fix touch actions still firing when the player is jumping.
+
 ## Version 0.1.4
 * More y-velocity fiddling
 * Integration with my camera panning mod.

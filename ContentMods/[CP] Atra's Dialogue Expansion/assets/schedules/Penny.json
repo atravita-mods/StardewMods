@@ -1,0 +1,38 @@
+{
+    "Changes": [
+        {
+            "Action": "EditData",
+            "Target": "Characters/schedules/Penny",
+            "Entries": {
+                // restore Penny going to the night market.
+                "marriage_winter_15": "1030 CommunityCenter 23 17 2 penny_read/1500 CommunityCenter 46 13 0/1600 Beach 35 36 2 \"Strings\\schedules\\Penny:winter_15.000\"/2350 bed",
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Characters/schedules/Penny",
+            "When": {"Season": "summer"},
+            "Entries": {
+                // keep the Maru visit even if she's married.
+                "marriage_Sun": "800 Town 96 18 3/1200 ScienceHouse 8 5 2 penny_sit_down/1900 bed"
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Characters/schedules/Penny",
+            "When": {"Weather:valley": "Rain, Storm"},
+            "Entries": {
+                "marriageJob": "810 Town 104 89 2 \"Strings\\schedules\\Penny:rain2.000\"/1200 ArchaeologyHouse 20 5 0/1600 bed"
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Characters/schedules/Penny",
+            "When": {"Weather:valley": "Rain, Storm", "Season":"winter"},
+            "Entries": {
+                // Penny hates the cold.
+                "marriageJob": "GOTO NO_SCHEDULE"
+            }
+        }
+    ]
+}

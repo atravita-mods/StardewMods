@@ -27,9 +27,9 @@ internal static class BusStopPatch
     private static bool ShouldAllowBus(GameLocation loc)
     {
         Vector2 bustile = new(11f, 10f);
-        foreach(NPC npc in loc.getCharacters())
+        foreach(NPC npc in loc.characters)
         {
-            if (npc.isVillager() && npc.getTileLocation().Equals(bustile))
+            if (npc.isVillager() && npc.Tile.Equals(bustile))
             {
                 ModEntry.ModMonitor.DebugOnlyLog($"Subbing in {npc.Name} as the bus driver.", LogLevel.Info);
                 return true;
@@ -77,14 +77,13 @@ internal static class BusStopPatch
                 .Insert(new CodeInstruction[]
                 {
                     new (OpCodes.Ldarg_0),
-                    new (OpCodes.Call, typeof(BusStopPatch).GetCachedMethod(nameof(BusStopPatch.ShouldAllowBus), ReflectionCache.FlagTypes.StaticFlags)),
+                    new (OpCodes.Call, typeof(BusStopPatch).GetCachedMethod(nameof(ShouldAllowBus), ReflectionCache.FlagTypes.StaticFlags)),
                 });
             return helper.Render();
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed when trying to apply transpiler for {original.FullDescription()}\n\n{ex}", LogLevel.Error);
-            original.Snitch(ModEntry.ModMonitor);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
             return null;
         }
     }

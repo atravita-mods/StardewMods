@@ -1,4 +1,8 @@
-﻿using AtraShared.Schedules.DataModels;
+﻿using System.Text;
+
+using AtraBase.Toolkit.Extensions;
+
+using AtraShared.Schedules.DataModels;
 using AtraShared.Utils.Extensions;
 using GingerIslandMainlandAdjustments.CustomConsoleCommands;
 using Microsoft.Xna.Framework;
@@ -11,29 +15,33 @@ namespace GingerIslandMainlandAdjustments.ScheduleManager.DataModels;
 /// </summary>
 internal static class IslandNorthScheduler
 {
+    #region points
+
     /// <summary>
     /// IslandNorth points for the adventurous.
     /// </summary>
-    private static readonly List<Point> CloseAdventurousPoint = new()
+    private static readonly Point[] CloseAdventurousPoint = new[]
     {
         new Point(33, 83),
         new Point(36, 81),
         new Point(39, 83),
     };
 
-    private static readonly List<Point> TentAdventurousPoint = new()
+    private static readonly Point[] TentAdventurousPoint = new[]
     {
         new Point(44, 51),
         new Point(47, 49),
         new Point(50, 51),
     };
 
-    private static readonly List<Point> VolcanoAdventurousPoint = new()
+    private static readonly Point[] VolcanoAdventurousPoint = new[]
     {
         new Point(46, 29),
         new Point(48, 26),
         new Point(51, 28),
     };
+
+    #endregion
 
     /// <summary>
     /// Makes schedules for the.
@@ -43,20 +51,18 @@ internal static class IslandNorthScheduler
     /// <param name="explorergroup">The name of the explorer group.</param>
     internal static void Schedule(Random random, HashSet<NPC> explorers, string explorergroup)
     {
-        if (explorers.Any())
+        if (explorers.Count > 0)
         {
-            bool whichFarpoint = random.NextDouble() < 0.5;
-            List<Point> farPoints = whichFarpoint ? TentAdventurousPoint : VolcanoAdventurousPoint;
+            bool whichFarpoint = random.OfChance(0.5);
+            Point[] farPoints = whichFarpoint ? TentAdventurousPoint : VolcanoAdventurousPoint;
             string whichDialogue = whichFarpoint ? "Tent" : "Volcano";
-            List<NPC> explorerList = explorers.ToList();
-            Dictionary<NPC, List<SchedulePoint>> schedules = new();
+            NPC[] explorerList = explorers.ToArray();
+            Dictionary<NPC, StringBuilder> schedules = new();
             int explorerIndex = 0;
 
             foreach (NPC explorer in explorers)
             {
-                schedules[explorer] = new List<SchedulePoint>()
-                {
-                    new SchedulePoint(
+                SchedulePoint firstPoint = new(
                     random: random,
                     npc: explorer,
                     map: "IslandNorth",
@@ -65,15 +71,16 @@ internal static class IslandNorthScheduler
                     isarrivaltime: true,
                     basekey: "Resort_Adventure",
                     varKey: $"Resort_Adventure_{explorergroup}",
-                    direction: explorerIndex), // this little hackish thing makes them face in different directions.
-                };
+                    direction: explorerIndex); // this little hackish thing makes them face in different directions.
+                schedules[explorer] = firstPoint.AppendToStringBuilder(new());
             }
 
             explorerIndex = 0;
             Utility.Shuffle(random, explorerList);
             foreach (NPC explorer in explorerList)
             {
-                schedules[explorer].Add(new SchedulePoint(
+                schedules[explorer].Append('/');
+                new SchedulePoint(
                     random: random,
                     npc: explorer,
                     map: "IslandNorth",
@@ -81,14 +88,16 @@ internal static class IslandNorthScheduler
                     point: farPoints[explorerIndex++],
                     basekey: $"Resort_{whichDialogue}",
                     varKey: $"Resort_{whichDialogue}_{explorergroup}",
-                    direction: explorerIndex));
+                    direction: explorerIndex).AppendToStringBuilder(schedules[explorer]);
             }
 
             explorerIndex = 0;
             Utility.Shuffle(random, explorerList);
             foreach (NPC explorer in explorerList)
             {
-                schedules[explorer].Add(new SchedulePoint(
+                StringBuilder sb = schedules[explorer];
+                sb.Append('/');
+                new SchedulePoint(
                     random: random,
                     npc: explorer,
                     map: "IslandNorth",
@@ -97,19 +106,20 @@ internal static class IslandNorthScheduler
                     basekey: "Resort_AdventureReturn",
                     varKey: $"Resort_AdventureReturn_{explorergroup}",
                     isarrivaltime: true,
-                    direction: explorerIndex));
+                    direction: explorerIndex).AppendToStringBuilder(sb);
 
-                string renderedSchedule = string.Join("/", schedules[explorer]) + '/'
-                    + (ScheduleUtilities.FindProperGISchedule(explorer, SDate.Now())
-                    // Child2NPC NPCs don't understand "bed", must send them to the bus stop spouse dropoff.
-                    ?? (Globals.IsChildToNPC?.Invoke(explorer) == true ? "1800 BusStop -1 23 3" : "1800 bed"));
+                sb.Append('/')
+                  .AppendCorrectRemainderSchedule(explorer, out _);
 
-                Globals.ModMonitor.DebugOnlyLog($"Calculated island north schedule for {explorer.Name}");
+                string renderedSchedule = sb.ToString();
+                sb.Clear();
+
+                Globals.ModMonitor.DebugOnlyLog($"Calculated island north schedule for {explorer.Name}: {renderedSchedule}");
                 explorer.islandScheduleName.Value = "island";
 
-                if (ScheduleUtilities.ParseMasterScheduleAdjustedForChild2NPC(explorer, renderedSchedule))
+                if (ScheduleUtilities.ParseMasterScheduleAdjustedForChild2NPC(explorer, "island", renderedSchedule))
                 {
-                    Game1.netWorldState.Value.IslandVisitors[explorer.Name] = true;
+                    Game1.netWorldState.Value.IslandVisitors.Add(explorer.Name);
                     ConsoleCommands.IslandSchedules[explorer.Name] = renderedSchedule;
                 }
             }

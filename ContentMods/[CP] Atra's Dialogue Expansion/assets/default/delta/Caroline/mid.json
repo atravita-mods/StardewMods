@@ -4,12 +4,15 @@
     // Used to be young and fun, a little anxious about getting old.
 
     // Parents raised horses.
+    // Grew up in Stardew, moved away for college, moved back. (Pierre did not originate from the area.)
     {
         "LogName": "Rain - SeedShop",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Caroline",
         "When": {"Weather: valley": "Rain, Storm"},
-        "Entries": {"SeedShop_Entry": "Oh, it's really pouring out there"}
+        "Entries": {
+            "SeedShop_Entry": "Oh, it's really pouring out there."
+        }
     },
     {
         "LogName": "Rain -- during winter.",
@@ -25,17 +28,54 @@
         "Action": "EditData",
         "Target": "Characters/Dialogue/Caroline",
         "Entries": {
+            "Resort_Pier": "Mmm. You know, I could retire here...",
+
+            // before fair
+            "fall_15{{YearRemainder}}": "Pierre has been working on his grange display for weeks. Let's see how we fare against you tomorrow!$h",
+
+            "winter_28{{YearRemainder}}": "You ready for a new year, @? What are you planning on achieving?"
+        }
+    },
+    {
+        "LogName": "Caroline: mid hearts - CC",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Caroline",
+        "When": {"IsCommunityCenterComplete": true},
+        "Entries": {
+            "24{{YearRemainder}}": "Now that Joja's gone, I hope Pierre'll be able to relax a bit more. All this stress isn't good for him.",
+
+            // specific days
+            "winter_26{{YearRemainder}}": "Oh, I must have had too much eggnog yesterday.$s",
+            "summer_20{{YearRemainder}}": "@, I've been thinking of growing more flowers in my greenhouse. What should I grow?"
+        }
+    },
+    {
+        "LogName": "Caroline: mid hearts - Y1",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Caroline",
+        "When": {"YearModulus": "1"},
+        "Entries": {
             "Resort_Entering": "Ah, a nice day of rest and relaxation!$h",
             "Resort_Bar_2": "I could do with a Long Island Iced Tea right about now",
+
+            // before egg hunt
+            "spring_12{{YearRemainder}}": "Abby's been training so hard for the egg hunt, I rarely see her train harder.",
+            
+            // before flower dance
+            "spring_23{{YearRemainder}}": "Oh, @, it's the flower dance tomorrow! Will you be dancing?#$e#Personally, I greatly enjoyed it when I was young. I had few opportunities to put on a pretty dress.#$e#It's not really Abby's thing, though.",
+
+            "1{{YearRemainder}}": "My parents used to raise horses here when I was young.#$e#No lack of land around here!",
+            "6{{YearRemainder}}": "I do miss riding horses. I had a lot more time for stuff like that when I was young.#$b#Also, horses can be quite expensive to maintain.",
             "9{{YearRemainder}}": "Gosh, @, I was up way too late last night trying to balance the books.#$b#Apologies if I don't feel like chatting.",
             "11{{YearRemainder}}": "Think I might order some new tea...Let's see, what have I not had recently?",
-            "13{{YearRemainder}}": "Wonder if any of our supplies is carrying a new tea?",
+            "13{{YearRemainder}}": "Wonder if any of our suppliers is carrying a new tea?",
             "15{{YearRemainder}}": "Wish I had more time to garden, but running a small business is a lot of work.",
             "19{{YearRemainder}}": "Did you see the {{i18n:clothing.brand.{{Random:01, 02, 03, 04, 05, 06, 07, 08}} }} dress Haley was wearing?#$b#I would never when I was her age!",
             "25{{YearRemainder}}": "%Caroline is muttering to herself.#$b#I wonder if we should get Abigail some therapy or something...#$e#What? Oh, it's nothing.",
-            "28{{YearRemainder}}": "I grew up here in this valley. Only really left once, to go to college in Zuzu City.#$b#I love it here. It's my home."
-        },
-        "When": {"YearModulus": "1"}
+            "28{{YearRemainder}}": "I grew up here in this valley. Only really left once, to go to college in Zuzu City.#$b#I love it here. It's my home.",
+
+            "Resort_Approach": "@, I'm gonna go catch some sun over at Ginger Island today.$h"
+        }
     },
     {
         "LogName": "Caroline: mid hearts. Y1, CC",
@@ -50,12 +90,12 @@
             "fall_Mon6": "Think I'll take a walk around. Maybe head out to the woods.",
             "winter_Mon6": "There's nothing like fresh tea from a plant you've grown yourself.",
 
-            "1{{YearRemainder}}": "Hey, @, how have you been? Join me for a cup of tea?[614]",
+            "2{{YearRemainder}}": "Hey, @, how have you been? Join me for a cup of tea?[614]",
             "4{{YearRemainder}}": "Ugh, @, I wish I had more time to garden.$s#$e#Say, take these and plant them for me? I haven't the time to do much gardening myself lately.[770]",
             "17{{YearRemainder}}": "Ever since Pierre decided that the shop should be open seven days a week, I've felt like I've always been at work.$s#$b#Wish I could just get a little time to drink a nice cup of tea.",
             "21{{YearRemainder}}": "Used to enjoy going out to the forest to gather mushrooms. We would sometimes sell them, helped when we needed the money.",
             "23{{YearRemainder}}": "Lewis handles most of the good export out of this county, and we're now handling most of the imports.$h",
-            "27{{YearRemainder}}": "I wonder if I can convince Pierre to take me to {{i18n:restaurant.{{Random:01, 02, 03, 04, 05, 06}} }}. I hear their {{i18n:dishes.adult.{{Random:01, 02, 03, 04, 05, 06, 07, 08, 09}} }} is to die for."
+            "27{{YearRemainder}}": "I wonder if I can convince Pierre to take me to {{Restaurant}}. I hear their {{Dish}} is to die for."
         }
     },
     {
@@ -69,11 +109,23 @@
             "Mon4": "I love helping Evelyn out with the town gardens.$h",
             "winter_Mon4": "Gotta help Evelyn prepare the flower garden for next year, it'll be glorious!$h",
 
+            // specific day lines
+            // before egg hunt
+            "spring_12_2": "It'll be the egg hunt tomorrow! I wonder what interesting egg dishes Gus will put together this year?",
+
+            // GIMA lines
+            "Resort_Bar_2": "Mmmmmm. I wonder what's in this?$h",
+
+            // Per-day lines.
             "1_2": "@, I feel so old and out of touch these days. I have no clue what the young people want anymore.",
             "3_2": "We would have supported Abigail if she wanted to  leave home to go to college, but that wasn't what she wanted to do.",
             "7_2": "I can't believe how much has changed since I was young...#$e#When I was Abby's age, we'd go hitchhike all the time. Wasn't the wisest idea, in hindsight...$s",
             "9_2": "When I was young, my mother would raise horses in this valley.#$b#She taught me how to ride when I was just six years old.",
             "11_2": "Economically, the town seems to be doing better now.#$b#A lot of people had to move away during the last recession.$s#$e#Land's cheap out here, but it's hard to find a job, and everything is so much more expensive.#$b#To be honest, I'm not sure what Abigail will do.",
+            "13_2": "I should see if Evelyn needs more help with those gardens, I do love working on them with her.$h",
+            "19_2": "Abby has a test she's cramming for, so I'm trying to find some of her favorite snacks.",
+            "20_2": "Jodi's always been a much better cook than I could ever be.",
+            "28_2": "@, what else do you think we should carry?"
         }
     },
     {
@@ -82,15 +134,82 @@
         "Target": "Characters/Dialogue/Caroline",
         "When": {
             "YearModulus": "2",
-            "HasFlag": "carolineSO"
+            "HasReadLetter": "carolineSO"
         },
         "Entries": {
             "5_2": "I miss being young and free-spirited.$s#$b#And here I am, trying to get Abigail to behave more like an adult.$s",
+            "6_2": "@! I got a little extra fertilizer. Would you like some?[368]$h",
             "13_2": "Gosh, I wish I wasn't so busy all the time running the shop.#$b#Would love to go vacation more often.",
+            "15_2": "@, come enjoy a cup of tea with me![614]$h",
+            "17_2": "Jodi gave me a recipe for {{Dish}}! She says it's great.",
+            "18_2": "Argh, I'm not sure I want to spend the energy trying to convince Abby to do the dishes tonight.#$b#Frankly, @, it's sometimes easier to just do them myself.",
 
             // GIMA lines.
-            "Resort_Approach": "@, I'm so excited to be going on vacation today!",
-            "Resort_Bar_2": "Mmmmmm. I wonder what's in this?$h"
+            "Resort_2": "Heya, @, what're you up to today? Planning to take a nice day off?",
+            "Resort_Bar_3": "Oh, hey, @! How's the sun and shore treating you?#$b#*hic* I'm really enjoying this place!$h",
+            "Resort_Approach": "@, I'm so excited to be going on vacation today!"
+        }
+    },
+    {
+        "LogName": "Caroline: mid hearts. Y3",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Caroline",
+        "When": { "YearModulus": "3" },
+        "Entries": {
+            "winter_Mon8": "The winter's been horrid this year. Maybe I should check in on George and Evelyn?",
+
+            "1_2": "Inflation's been pretty bad this year, everything's getting more expensive.#$b#Most of our suppliers have raised their prices. And fuel's gone up by a lot.",
+            "3_2": "I remember growing up in this valley. Pelican Town was bigger back then, we had three separate restaurants!#$b#It's shrunk over time after the mines closed and economic opportunities left.#$e#But with your farm here, and Leah and Elliott, maybe the town's growing again?#$b#Maybe we'll get another restaurant!",
+            "11_2": "Maybe Abby would be more interested in music as a major? She does love playing her flute...",
+            "12_2": "We could consider trying to get Abby enrolled in a conservatory. Being a musician is hard work, but if it's what she loves...",
+            "13_2": "I wish I could get Pierre to join us for aerobics club sometimes. But he always says he's too busy.#$b#Think some exercise would do him good...",
+            "14_2": "Some days I wish we could have a cat or a dog, but Pierre's allergic.#$e#I grew up with cats around, you know. You gotta have them out here, they take care of the mice.",
+            "15_2": "Sometimes we do sell some of the produce I produce in my garden, but usually we just eat that.",
+            "16_2": "Pierre's the type of guy who wants steak and potatoes on the dinner table every evening. That can't be good for his blood pressure.$s",
+            "17_2": "Picked some beans yesterday for dinner. Nothing's really like fresh veggies you grew yourself, right?",
+            "18_2": "Ugh, keeping this place clean is so much work, it's so big.$s",
+
+            // Ginger Island lines.
+            "Resort_Bar_2": "I wonder if Gus'll sell a boozy iced tea if I asked about it?$h"
+        }
+    },
+    {
+        "LogName": "Caroline: mid hearts Y3 post SO",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Caroline",
+        "When": {
+            "YearModulus": "3",
+            "HasReadLetter": "carolineSO"
+        },
+        "Entries": {
+            "5_2": "@, I made some bruschetta the other day. Do you want to try some?[618]",
+        }
+    },
+    {
+        "LogName": "Caroline: mid hearts. Y3",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Caroline",
+        "When": {
+            "YearModulus": "3",
+            "Relationship: Abigail|contains = Friendly, Unmet, Divorced": true,
+        },
+        "Entries": {
+            "7_2": "Was talking to Robin the other day.#$b#You know, @, we'd try our best to support Abigail if she wanted to move out. I'm not sure she wants to, though.",
+            "9_2": "I asked Abby last night if she'd be happier living in the city.#$b#I'd miss her if she moved out, of course, but maybe it's necessary.$s"
+        }
+    },
+    {
+        "LogName": "Caroline: mid hearts. Y4",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Caroline",
+        "When": { "YearModulus": "4" },
+        "Entries": {
+            "1_2": "Sometimes, I feel like we're pushing Abby to grow up too quickly.#$b#I had her when I was fairly young. That type of responsibility really makes you grow up fast.",
+            "3_2": "I was a pretty decent pianist when I was young. Nothing like Abigail's talent, of course.",
+            "4_2": "Pierre actually has a quite decent singing voice, although he doesn't like performing for other people.",
+            "5_2": "That weird band Pierre likes so much is going to be playing in Grampleton next Friday. Maybe I should get him some tickets...#$b#Not sure that fits in the budget though.",
+            "6_2": "Pierre gets up at five in the morning to make sure the store is in good shape.",
+            "7_2": "Ugh, @, if we had the money for it, I'd love to buy a robot to clean for us.$s"
         }
     }
 ]}

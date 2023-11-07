@@ -2,42 +2,53 @@
     // Sebastian is a contractor mostly working on javascript mobile games. He lacks a college degree and 
     // feels that people don't respect him because of that. He also finds it harder to find employment (probably true)
 
-    
+    // note: SVE makes Sebby's bio father really abusive. I really don't want to take that route.
+
     {
-        "LogName": "Sebastian mid-hearts",
+        "LogName": "Sebastian raise",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Sebastian",
+        "Entries": {
+            "winter_15_2": "@, I got a five percent raise this year! Biggest one they've ever given me!$h"
+        },
+        "When": {"YearModulus|contains=4": false}
+    },
+    {
+        "LogName": "Sebastian mid-hearts - y2",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Sebastian",
         "Entries": {
             "6_2": "Why is it every time I have to work with a Java team, they've done something weird with their architecture?$a",
             "8_2": "Hey @, have you ever played {{i18n:video.game.{{Random:01, 02, 03, 04, 05, 06, 07, 08, 09}} }}? It's so good, isn't it?",
-            "SebastianRoom_9_4": "%Sebastian seems to be on a call.#$b#Jane, I needed this reviewed last week! Could you please help me convince everyone to help keep things moving?",
-            "summerSebastianRoom_9_4": "Sorry, @, I'm working and need to focus right now.",
-            "fallSebastianRoom_9_4": "Work? Nah, @, I can implement A-star in my sleep.",
-            "winterSebastianRoom_9_4": "Sorry, @, I need to work on my performance report. Why do they make me do this every year?$s"
+            "9_2": "The word 'trie' really doesn't look like a word anymore.#$b#Not that it...really ever looked like a word in the first place.",
+            "10_2": "Apparently Mayor Lewis wants to start a square dance club? What decade does he live in, the fifties?",
+            "11_2": "Heya @, you wanna go see {{i18n:action.movie.{{Random:01, 02, 03, 04, 05, 06, 07, 08, 09}} }} with me and Sam some day?"
         },
         "When": {
             "YearModulus": "2"
         }
     },
     {
-        "LogName": "Sebastian mid-hearts",
+        "LogName": "Sebastian mid-hearts - y3",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Sebastian",
         "Entries": {
-            "winter_15_2": "@, I got a five percent raise this year! Biggest one they've ever given me!$h",
-            "SebastianRoom_9_4": "%Sebastian seems to be on a call.#$b#I saw your email; is there anything in particular we could change?",
-            "summerSebastianRoom_9_4": "I have so much work I need to do, @. Sorry, but I don't have time to chat today.#$e#What, @, I have a performance review coming up, I need to focus$a."
+            "3_2": "Did you hear of the story of the printer that wouldn't print on Tuesdays?#$b#Man, there's always interesting bugs in the world.",
+            "4_2": "Why is everyone obsessed over functional programming languages?",
+            "10_2": "All my coworkers are like, have you heard of this new programming language? It has so much more static analysis, apparently.#$b#Frankly, I'm tired of hearing about it.",
+            "12_2": "Twenty-four commits, a hundred thousand lines added, fifty thousand lines removed, god I hate this place."
         },
         "When": {
             "YearModulus": "3"
         }
     },
     {
-        "LogName": "Sebastian mid-hearts",
+        // NOTE: y4 is Sebastian's job hunt year.
+        "LogName": "Sebastian mid-hearts - y4",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Sebastian",
         "Entries": {
-            "SebastianRoom_9_4": "%Sebastian seems to be on a call.#$b#I'm not sure I understand the third requirement.#$b#Exactly what hardware are we expected to support here?"
+            "8_2": "Did you see the story about the guy who couldn't send an email with a distance greater than 500 miles? That one was amusing.$h"
         },
         "When": {
             "YearModulus": "4"

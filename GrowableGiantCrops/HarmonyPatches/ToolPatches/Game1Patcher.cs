@@ -19,6 +19,7 @@ internal static class Game1Patcher
     /// <param name="f">Farmer.</param>
     /// <param name="currentToolIndex">the current tool index.</param>
     /// <returns>true to continue on to the vanilla method, false to skip.</returns>
+    [HarmonyPriority(Priority.VeryHigh)] // slot in in front of mods that add tool tiers since I handle this.
     [HarmonyPatch(nameof(Game1.drawTool), new[] { typeof(Farmer), typeof(int) })]
     private static bool Prefix(Farmer f, int currentToolIndex)
     {
@@ -30,27 +31,7 @@ internal static class Game1Patcher
         int xindex = (currentToolIndex * 16) % shovel.GetTexture().Width;
         Rectangle sourceRectangleForTool = new(xindex, shovel.UpgradeLevel * 32, 16, 32);
         Vector2 fPosition = f.getLocalPosition(Game1.viewport) + f.jitter + f.armOffset;
-        float tool_draw_layer_offset = 0f;
-        if (f.FacingDirection == Game1.up)
-        {
-            tool_draw_layer_offset = -0.002f;
-        }
-
-        if (Game1.pickingTool)
-        {
-            int yLocation = (int)fPosition.Y - 128;
-            Game1.spriteBatch.Draw(
-                texture: shovel.GetTexture(),
-                new Vector2(fPosition.X, yLocation),
-                sourceRectangle: sourceRectangleForTool,
-                color: Color.White,
-                rotation: 0f,
-                origin: Vector2.Zero,
-                scale: 1f,
-                effects: SpriteEffects.None,
-                layerDepth: Math.Max(0f, tool_draw_layer_offset + ((f.getStandingY() + 32) / 10000f)));
-            return false;
-        }
+        float tool_draw_layer_offset = f.FacingDirection == Game1.up ? -0.002f : 0f;
 
         shovel.draw(Game1.spriteBatch);
 
@@ -130,7 +111,7 @@ internal static class Game1Patcher
                         position = Utility.snapToInt(new Vector2(fPosition.X, fPosition.Y - 60f));
                         break;
                     default:
-                        return true;
+                        return false;
                 }
                 break;
             case Game1.left:

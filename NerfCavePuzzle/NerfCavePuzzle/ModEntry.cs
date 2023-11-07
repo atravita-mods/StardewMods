@@ -1,9 +1,15 @@
-﻿using AtraCore.Utilities;
+﻿using AtraCore.Framework.Internal;
+using AtraCore.Utilities;
+
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
 using AtraShared.MigrationManager;
 using AtraShared.Utils.Extensions;
+
 using HarmonyLib;
+
 using NerfCavePuzzle.HarmonyPatches;
+
 using StardewModdingAPI.Events;
 
 using AtraUtils = AtraShared.Utils.Utils;
@@ -11,14 +17,9 @@ using AtraUtils = AtraShared.Utils.Utils;
 namespace NerfCavePuzzle;
 
 /// <inheritdoc />
-internal sealed class ModEntry : Mod
+internal sealed class ModEntry : BaseMod<ModEntry>
 {
     private MigrationManager? migrator = null;
-
-    /// <summary>
-    /// Gets the logger for this file.
-    /// </summary>
-    internal static IMonitor ModMonitor { get; private set; } = null!;
 
     /// <summary>
     /// Gets the data helper for this mod.
@@ -49,13 +50,12 @@ internal sealed class ModEntry : Mod
     public override void Entry(IModHelper helper)
     {
         I18n.Init(helper.Translation);
-        ModMonitor = this.Monitor;
+        base.Entry(helper);
+
         DataHelper = helper.Data;
         MultiplayerHelper = helper.Multiplayer;
         InputHelper = helper.Input;
-        UniqueID = this.ModManifest.UniqueID;
-
-        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
+        UniqueID = string.Intern(this.ModManifest.UniqueID);
 
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
         helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
@@ -126,7 +126,7 @@ internal sealed class ModEntry : Mod
         }
         catch (Exception ex)
         {
-            ModMonitor.Log($"Mod failed while applying patches:\n{ex}", LogLevel.Error);
+            ModMonitor.Log(string.Format(ErrorMessageConsts.HARMONYCRASH, ex), LogLevel.Error);
         }
         harmony.Snitch(this.Monitor, UniqueID, transpilersOnly: true);
     }

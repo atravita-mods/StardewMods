@@ -1,0 +1,15 @@
+{"Changes":[
+    {
+        "LogName": "Anniversary lines!",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/MarriageDialogue{{Spouse}}",
+        "Entries": {
+            "{{TheMightyAmondee.CustomTokens/AnniversarySeason}}_{{TheMightyAmondee.CustomTokens/AnniversaryDay}}": "{{i18n: anniversary-day.{{spouse}}.{{YearModulus}} | default={{i18n:anniversary-day.{{spouse}} | default = {{i18n: anniversary-day.generic}} }} }}$h"
+        },
+        "When": {
+            "HasMod": "TheMightyAmondee.CustomTokens",
+            "HasValue: {{Spouse}}": true,
+            "Query: {{Hearts: {{Spouse}} }} >= 12": true
+        }
+    }
+]}

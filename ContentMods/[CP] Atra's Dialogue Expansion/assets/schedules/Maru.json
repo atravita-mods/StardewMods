@@ -1,0 +1,36 @@
+{
+    "Changes": [
+        {
+            "Action": "EditData",
+            "Target": "Characters/schedules/Maru",
+            "Entries": {
+                // casing issue in vanilla cause these two to never appear. They're cute, so we'll keep them.
+                "summer_Mon": "800 ScienceHouse 5 6 1 maru_tinker/1000 ScienceHouse 19 18 0/1310 Town 64 16 3/1830 ScienceHouse 5 6 1 maru_tinker/2300 bed",
+                "summer_Sun": "800 ScienceHouse 5 6 1 maru_tinker/1000 ScienceHouse 19 18 0/1230 ScienceHouse 7 6 1/1810 ScienceHouse 5 6 1 maru_tinker/2300 bed",
+
+                // restore Maru going to the night market
+                // her day is a Tuesday, so she still has to go to work :(
+                "marriage_winter_16": "730 Hospital 6 15 2 \"Strings\\schedules\\Maru:marriageJob.000\"/1400 Hospital 9 15 3 \"Strings\\schedules\\Maru:marriageJob.001\"/1540 Beach 11 33 3 \"Strings\\schedules\\Maru:winter_16.000\"/2330 bed",
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Characters/schedules/Maru",
+            "When": {"Season": "summer"},
+            "Entries": {
+                // keep the Penny visit even if she's married.
+                "marriage_Sun": "800 Town 63 15 2 maru_sit_down/1200 ScienceHouse 5 6 1 maru_tinker/1900 bed"
+            }
+        },
+        {
+            // disable Maru's rain schedules on the days she works.
+            "Action": "EditData",
+            "When": {"DayOfWeek": "Tuesday, Thursday"},
+            "Target": "Characters/schedules/Maru",
+            "Entries": {
+                "rain": null,
+                "rain2": null,
+            }
+        }
+    ]
+}

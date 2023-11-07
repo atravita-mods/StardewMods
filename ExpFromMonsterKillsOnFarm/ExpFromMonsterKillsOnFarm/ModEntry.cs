@@ -1,4 +1,6 @@
-﻿using AtraShared.Integrations;
+﻿using AtraCore.Framework.Internal;
+
+using AtraShared.Integrations;
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
 using StardewModdingAPI.Events;
@@ -8,13 +10,8 @@ using AtraUtils = AtraShared.Utils.Utils;
 namespace ExpFromMonsterKillsOnFarm;
 
 /// <inheritdoc />
-internal sealed class ModEntry : Mod
+internal sealed class ModEntry : BaseMod<ModEntry>
 {
-    /// <summary>
-    /// Gets logger for this mod.
-    /// </summary>
-    internal static IMonitor ModMonitor { get; private set; } = null!;
-
     /// <summary>
     /// Gets or sets an instance of the configuration class for this mod.
     /// </summary>
@@ -23,11 +20,10 @@ internal sealed class ModEntry : Mod
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
     {
-        ModMonitor = this.Monitor;
         I18n.Init(helper.Translation);
+        base.Entry(helper);
 
         Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
-        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
         helper.Events.GameLoop.GameLaunched += this.SetUpConfig;
     }
@@ -47,7 +43,7 @@ internal sealed class ModEntry : Mod
     /// Generates the GMCM for this mod by looking at the structure of the config class.
     /// </summary>
     /// <param name="sender">Unknown, expected by SMAPI.</param>
-    /// <param name="e">Arguments for eevnt.</param>
+    /// <param name="e">Arguments for event.</param>
     /// <remarks>To add a new setting, add the details to the i18n file. Currently handles: bool.</remarks>
     private void SetUpConfig(object? sender, GameLaunchedEventArgs e)
     {

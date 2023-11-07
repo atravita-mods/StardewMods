@@ -1,8 +1,15 @@
-﻿using HarmonyLib;
+﻿using AtraShared.ConstantsAndEnums;
+using AtraShared.Utils.Extensions;
+
+using HarmonyLib;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
+
+using StardewValley.Enchantments;
 using StardewValley.Menus;
 
 namespace ForgeMenuChoice.HarmonyPatches;
@@ -12,6 +19,7 @@ namespace ForgeMenuChoice.HarmonyPatches;
 /// </summary>
 /// <remarks>Also used to patch SpaceCore's forge menu.</remarks>
 [HarmonyPatch(typeof(ForgeMenu))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class ForgeMenuPatches
 {
     private static readonly PerScreen<List<BaseEnchantment>> PossibleEnchantmentPerscreen = new(() => new());
@@ -81,13 +89,12 @@ internal static class ForgeMenuPatches
     [HarmonyPrefix]
     [HarmonyPriority(Priority.High)]
     [HarmonyPatch(nameof(ForgeMenu.IsValidCraft))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention")]
     internal static bool PrefixIsValidCraft(Item __0, Item __1, ref bool __result)
     {
         try
         {
             // 74 - prismatic shard.
-            if (__0 is Tool tool && Utility.IsNormalObjectAtParentSheetIndex(__1, 74))
+            if (__0 is Tool tool && __1.QualifiedItemId == "(O)74")
             {
                 PossibleEnchantments.Clear();
                 HashSet<Type> enchants = tool.enchantments.Select((a) => a.GetType()).ToHashSet();
@@ -110,7 +117,7 @@ internal static class ForgeMenuPatches
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Error in postfixing IsValidCraft:\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("postfixing IsValidCraft", ex);
         }
         return true;
     }

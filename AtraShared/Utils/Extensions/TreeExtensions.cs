@@ -13,5 +13,5 @@ public static class TreeExtensions
     /// <param name="tree">Tree to check.</param>
     /// <returns>True if palm tree, false otherwise.</returns>
     public static bool IsPalmTree(this Tree? tree)
-        => tree is not null && (tree.treeType.Value == Tree.palmTree || tree.treeType.Value == Tree.palmTree2);
+        => tree is not null && (tree.treeType.Value is Tree.palmTree or Tree.palmTree2);
 }

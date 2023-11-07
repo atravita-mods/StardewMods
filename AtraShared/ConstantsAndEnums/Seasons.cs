@@ -1,4 +1,8 @@
-﻿using System.Numerics;
+﻿// Ignore Spelling: loc
+
+using System.Numerics;
+
+using AtraBase.Toolkit;
 
 using CommunityToolkit.Diagnostics;
 using NetEscapades.EnumGenerators;
@@ -98,9 +102,8 @@ public static partial class SeasonExtensions
     /// </summary>
     /// <param name="loc">GameLocation.</param>
     /// <returns>Season.</returns>
-#warning - need to fix in Stardew 1.6.
     public static StardewSeasons GetSeasonFromGame(GameLocation? loc)
-        => GetSeasonFromIndex(Utility.getSeasonNumber(Game1.GetSeasonForLocation(loc)));
+        => ConvertFromGameSeason((loc ?? Game1.getFarm()).GetSeason());
 
     /// <summary>
     /// Gets the season enum matching the game's season index.
@@ -115,6 +118,21 @@ public static partial class SeasonExtensions
             2 => StardewSeasons.Fall,
             3 => StardewSeasons.Winter,
             _ => StardewSeasons.None,
+        };
+
+    /// <summary>
+    /// Gets the season enum matching the game's season.
+    /// </summary>
+    /// <param name="season">season.</param>
+    /// <returns>my season enum.</returns>
+    public static StardewSeasons ConvertFromGameSeason(Season season)
+        => season switch
+        {
+            Season.Spring => StardewSeasons.Spring,
+            Season.Summer => StardewSeasons.Summer,
+            Season.Fall => StardewSeasons.Fall,
+            Season.Winter => StardewSeasons.Winter,
+            _ => TKThrowHelper.ThrowUnexpectedEnumValueException<Season, StardewSeasons>(season)
         };
 
     /// <summary>

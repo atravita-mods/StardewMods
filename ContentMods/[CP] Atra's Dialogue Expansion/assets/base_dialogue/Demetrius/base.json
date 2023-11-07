@@ -1,0 +1,68 @@
+{
+    "Changes":[
+        {
+            "LogName": "Rain -- during winter.",
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/rainy",
+            "When": {"Season": "winter"},
+            "Entries":{
+                "Demetrius": "{{i18n:demetrius-winter-rain}}"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Demetrius - base dialogue",
+            "Target": "Characters/Dialogue/Demetrius",
+            "Entries": {
+                "{{TaxDay}}": "{{i18n:demetrius-tax-day}}$s",
+
+                // lines that don't make sense.
+                "Fri4": "{{i18n:demetrius-fri4.00}}#$e#{{i18n:demetrius-fri4.01}}$u",
+                "winter_Sat": "{{i18n:demetrius-winter-sat.00}}#$e#{{i18n:demetrius-winter-sat.01}}#$e#{{i18n:demetrius-winter-sat.02}}$u",
+
+                // headed into the moonlight jellies festival. 
+                "summer_25{{YearRemainder}}": "{{i18n:demetrius-summer-end.{{YearModulus}} }}",
+                "summer_27{{YearRemainder}}": "{{i18n: demetrius-jellies-pre.01}}#$b#{{i18n: demetrius-jellies-pre.02}}",
+
+                "ScienceHouse_Entry": "{{i18n:demetrius-homecoming}}",
+
+                // some CTs
+                "movieTheater": "{{i18n:demetrius-movie-start}}#$e#$c 0.5#{{i18n:demetrius-movie-a}}#{{i18n:demetrius-movie-b}}",
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Demetrius - higher hearts dialogue",
+            "Target": "Characters/Dialogue/Demetrius",
+            "When": {
+                "Query: {{Hearts:Demetrius}} > 5": true,
+                "Relationship: Maru|contains=Divorced": false,
+                "Relationship: Sebastian|contains=Divorced": false
+            },
+            "Entries": {
+                // base locational - in his lab.
+                "ScienceHouse_22_20": "{{i18n: demetrius-work-home.{{Season}}.{{Random: 00,01,02,03,04}} }}"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Divorced From Maru",
+            "Target": "Characters/Dialogue/Demetrius",
+            "When": {"Relationship: Maru": "Divorced"},
+            "Entries": {
+                "ScienceHouse": "{{i18n: demetrius-divorced-from-maru-a}}$s",
+                "Mountain": "{{i18n: demetrius-divorced-from-maru-b}}$s"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Divorced From Sebastian",
+            "Target": "Characters/Dialogue/Demetrius",
+            "When": {"Relationship: Sebastian": "Divorced"},
+            "Entries": {
+                "ScienceHouse": "{{i18n: demetrius-divorced-from-sebastian-a}}$s",
+                "Mountain": "{{i18n: demetrius-divorced-from-sebastian-b}}$s"
+            }
+        }
+    ]
+}

@@ -1,4 +1,7 @@
-﻿using HarmonyLib;
+﻿using AtraShared.ConstantsAndEnums;
+using AtraShared.Utils.Extensions;
+
+using HarmonyLib;
 
 using Microsoft.Xna.Framework;
 
@@ -11,18 +14,18 @@ namespace StopRugRemoval.HarmonyPatches.Niceties.CrashHandling;
 /// Returns escaped children.
 /// </summary>
 [HarmonyPatch(typeof(Child))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class EscapedChildFixer
 {
     [HarmonyPriority(Priority.Last)]
     [HarmonyPatch(nameof(Child.dayUpdate))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Named For Harmony.")]
     private static bool Prefix(Child __instance)
     {
         try
         {
             if (__instance.currentLocation is not FarmHouse)
             {
-                ModEntry.ModMonitor.Log($"Child {__instance.Name} seems to have escaped the farmhouse, sending them back.", LogLevel.Trace);
+                ModEntry.ModMonitor.Log($"Child {__instance.Name} seems to have escaped the farmhouse, sending them back. Current location {__instance.currentLocation?.NameOrUniqueName}", LogLevel.Debug);
 
                 Farmer parent = Game1.MasterPlayer;
 
@@ -53,7 +56,7 @@ internal static class EscapedChildFixer
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed while trying to return child to farmhouse:\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("returning child to farmhouse", ex);
         }
 
         return true;

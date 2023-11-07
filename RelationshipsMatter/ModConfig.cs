@@ -22,6 +22,9 @@ internal sealed class ModConfig
 
     private float friendshipLossFactor = 1.0f;
 
+    /// <summary>
+    /// Gets or sets a value indicating how much friendship loss will be affected.
+    /// </summary>
     [GMCMRange(0.01, 20)]
     public float FriendshipLossFactor
     {
@@ -31,6 +34,9 @@ internal sealed class ModConfig
 
     private int minRelativeHeartLevel = 5;
 
+    /// <summary>
+    /// Gets or sets a value indicating how much friendship you need with relatives to marry an NPC.
+    /// </summary>
     [GMCMRange(0, 8)]
     public int MinRelativeHeartLevel
     {

@@ -1,14 +1,39 @@
 {"Changes":[
     {
-        "LogName": "Sandy mid-hearts",
+        "LogName": "Sandy mid-hearts - y2",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Sandy",
+        "When": { "YearModulus": "2"},
+        "Entries": {
+            "summer_Tue10": "It's so hot and dry outside, I'm glad I have air conditioning in here...$h",
+
+            "6_2": "Ohh, @, did you do something new with your hair?",
+            "7_2": "@, do you think I should start carrying some snacks or something like that?",
+            "8_2": "I found this coconut this morning, before I opened up the store. Here, you take it.[88]$h",
+        }
+    },
+    {
+        "LogName": "Sandy mid-hearts - Y3",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Sandy",
+        "When": { "YearModulus": "3"},
         "Entries": {
             "6_2": "My shops not in a great location for business but at least I can afford the rent.",
             "8_2": "About twenty years back this was a bustling truck stop. But we've haven't had that much traffic for a long time.$s",
             "9_2": "Emily and I were thinking of hitting up {{i18n:restaurant.{{Random:01, 02, 03, 04, 05, 06}} }} sometime soon. You interested?$h",
-            "11_2": "Someone came in the other day and went into the back room over there. Didn't come out for hours.#$b#Sometimes I worry about what's going on back there."
-        },
-        "When": { "YearModulus": "3"}
-    }
+            "11_2": "Someone came in the other day and went into the back room over there. Didn't come out for hours.#$b#Sometimes I worry about what's going on back there.",
+            "12_2": "I grew up in Pelican Town, but I came out here to run my shop since business used to be really good around here.#$b#Lots of truckers stopping by, lots of hikers...",
+            "13_2": "@, what do you think about going hiking?#$b#It's too hot for me, but I used to see so many people hiking in this area...",
+            "14_2": "Those mines...those mines didn't used to be so overrun with monsters...$s#$b#Back when the mine was more actively developed, the monsters would stay away more."
+        }
+    },
+    {
+        "LogName": "Sandy mid-hearts - y4",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Sandy",
+        "When": { "YearModulus": "4"},
+        "Entries": {
+            "6_2": "I hear the cliffs around here are good for bouldering, but I haven't personally tried myself.",
+        }
+    },
 ]}

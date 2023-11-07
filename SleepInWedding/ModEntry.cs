@@ -65,7 +65,7 @@ internal sealed class ModEntry : Mod
             else
             {
                 spouse.CurrentDialogue.Clear();
-                spouse.CurrentDialogue.Push(new(I18n.WeddingGreeting(), spouse));
+                spouse.CurrentDialogue.Push(new(spouse, null, I18n.WeddingGreeting()));
             }
         }
     }
@@ -114,7 +114,7 @@ internal sealed class ModEntry : Mod
 
         if (Context.IsMainPlayer && Config.TryRecoverWedding)
         {
-            if (!Game1.canHaveWeddingOnDay(Game1.dayOfMonth, Game1.currentSeason))
+            if (!Game1.canHaveWeddingOnDay(Game1.dayOfMonth, Game1.season))
             {
                 return;
             }
@@ -249,7 +249,7 @@ internal sealed class ModEntry : Mod
             api.RegisterToken(
                 mod: this.ModManifest,
                 name: "IsCurrentlyWedding",
-                getValue: () => new[] { (Game1.CurrentEvent is Event evt && evt.id == Event.weddingEventId).ToString() });
+                getValue: () => new[] { (Game1.CurrentEvent is Event evt && evt.isWedding).ToString() });
         }
     }
 }

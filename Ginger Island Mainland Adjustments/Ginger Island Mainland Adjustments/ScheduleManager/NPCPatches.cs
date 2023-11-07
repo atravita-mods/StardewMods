@@ -3,6 +3,9 @@
 using AtraBase.Toolkit;
 using AtraBase.Toolkit.Extensions;
 
+using AtraShared.ConstantsAndEnums;
+using AtraShared.Utils.Extensions;
+
 using HarmonyLib;
 using Microsoft.Xna.Framework;
 using StardewValley.Locations;
@@ -13,6 +16,7 @@ namespace GingerIslandMainlandAdjustments.ScheduleManager;
 /// Handles patches on the NPC class to allow beach fishing.
 /// </summary>
 [HarmonyPatch(typeof(NPC))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class NPCPatches
 {
     /// <summary>
@@ -38,11 +42,12 @@ internal static class NPCPatches
         {
             if (npcRef.TryGetTarget(out NPC? npc))
             {
-                npc.Sprite.SpriteHeight = 32;
-                npc.Sprite.SpriteWidth = 16;
+                StardewValley.GameData.Characters.CharacterData? data = npc.GetData();
+                npc.Sprite.SpriteHeight = data?.Size.Y ?? 32;
+                npc.Sprite.SpriteWidth = data?.Size.X ?? 16;
                 npc.Sprite.ignoreSourceRectUpdates = false;
                 npc.Sprite.UpdateSourceRect();
-                npc.drawOffset.Value = Vector2.Zero;
+                npc.drawOffset = Vector2.Zero;
                 count++;
             }
             else
@@ -62,7 +67,6 @@ internal static class NPCPatches
     /// <param name="__0">animation key.</param>
     [HarmonyPostfix]
     [HarmonyPatch("startRouteBehavior")]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Convention set by Harmony")]
     private static void StartFishBehavior(NPC __instance, string __0)
     {
         try
@@ -71,18 +75,18 @@ internal static class NPCPatches
             {
                 __instance.extendSourceRect(0, 32);
                 __instance.Sprite.tempSpriteHeight = 64;
-                __instance.drawOffset.Value = new Vector2(0f, 96f);
+                __instance.drawOffset = new Vector2(0f, 96f);
                 __instance.Sprite.ignoreSourceRectUpdates = false;
                 if (Utility.isOnScreen(Utility.Vector2ToPoint(__instance.Position), 64, __instance.currentLocation))
                 {
-                    __instance.currentLocation.playSoundAt("slosh", __instance.getTileLocation());
+                    __instance.currentLocation.playSound("slosh", __instance.Tile);
                 }
                 Fishers.Add(new WeakReference<NPC>(__instance));
             }
         }
         catch (Exception ex)
         {
-            Globals.ModMonitor.Log($"Ran into errors in postfix for startRouteBehavior\n\n{ex}", LogLevel.Error);
+            Globals.ModMonitor.LogError("postfixing startRouteBehavior", ex);
         }
     }
 
@@ -94,7 +98,6 @@ internal static class NPCPatches
     /// <remarks>Force the reset no matter which map the NPC is currently on.</remarks>
     [HarmonyPostfix]
     [HarmonyPatch("finishRouteBehavior")]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Convention set by Harmony")]
     private static void EndFishBehavior(NPC __instance, string __0)
     {
         try
@@ -102,17 +105,18 @@ internal static class NPCPatches
             if (IsBeachFishAnimation(__instance, __0))
             {
                 __instance.reloadSprite();
-                __instance.Sprite.SpriteWidth = 16;
-                __instance.Sprite.SpriteHeight = 32;
+                StardewValley.GameData.Characters.CharacterData? data = __instance.GetData();
+                __instance.Sprite.SpriteWidth = data?.Size.X ?? 16;
+                __instance.Sprite.SpriteHeight = data?.Size.Y ?? 32;
                 __instance.Sprite.UpdateSourceRect();
-                __instance.drawOffset.Value = Vector2.Zero;
+                __instance.drawOffset = Vector2.Zero;
                 __instance.Halt();
                 __instance.movementPause = 1;
             }
         }
         catch (Exception ex)
         {
-            Globals.ModMonitor.Log($"Ran into errors in postfix for endRouteBehavior\n\n{ex}", LogLevel.Error);
+            Globals.ModMonitor.LogError("postfixing finishRouteBehavior", ex);
         }
     }
 

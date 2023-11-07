@@ -1,10 +1,6 @@
-﻿using AtraBase.Toolkit.Extensions;
+﻿using AtraShared.Utils.Extensions;
 
-using AtraCore.Framework.ItemManagement;
-
-using AtraShared.Utils.Extensions;
-using AtraShared.Wrappers;
-
+using StardewValley.Extensions;
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 
@@ -36,21 +32,16 @@ internal static class OnFarmCropPicker
         int tries = 3;
         do
         {
-            Crop? crop = Utility.GetRandom(hoedirt, random).crop;
+            Crop? crop = random.ChooseFrom(hoedirt).crop;
 
             if (Utils.ForbiddenFromRandomPicking(crop.indexOfHarvest.Value))
             {
                 continue;
             }
 
-            if (DataToItemMap.IsActuallyRing(crop.indexOfHarvest.Value))
-            {
-                return new Ring(crop.indexOfHarvest.Value);
-            }
-
             return crop.programColored.Value
                 ? new ColoredObject(crop.indexOfHarvest.Value, 1, crop.tintColor.Value)
-                : new SObject(crop.indexOfHarvest.Value, 1);
+                : ItemRegistry.Create(ItemRegistry.type_object + crop.indexOfHarvest.Value);
         }
         while (tries-- > 0);
         return null;

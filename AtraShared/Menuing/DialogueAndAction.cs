@@ -9,7 +9,7 @@ namespace AtraShared.Menuing;
 /// </summary>
 public sealed class DialogueAndAction : DialogueBox
 {
-    private readonly List<Action?> actions;
+    private readonly Action?[] actions;
 
     private readonly IInputHelper inputHelper;
 
@@ -20,7 +20,7 @@ public sealed class DialogueAndAction : DialogueBox
     /// <param name="responses">List of responses.</param>
     /// <param name="actions">List of associated actions.</param>
     /// <param name="inputHelper">SMAPI's input helper.</param>
-    public DialogueAndAction(string dialogue, List<Response> responses, List<Action?> actions, IInputHelper inputHelper)
+    public DialogueAndAction(string dialogue, Response[] responses, Action?[] actions, IInputHelper inputHelper)
         : base(dialogue, responses)
     {
         this.actions = actions;
@@ -39,11 +39,11 @@ public sealed class DialogueAndAction : DialogueBox
         {
             return;
         }
-        for (int i = 0; i < this.responses.Count; i++)
+        for (int i = 0; i < this.responses.Length; i++)
         {
             if (this.responses[i].hotkey == key)
             {
-                if (i < this.actions.Count)
+                if (i < this.actions.Length)
                 {
                     this.inputHelper.Suppress(key.ToSButton());
                     this.actions[i]?.Invoke();
@@ -63,7 +63,7 @@ public sealed class DialogueAndAction : DialogueBox
     [UsedImplicitly]
     public override void receiveLeftClick(int x, int y, bool playSound = true)
     {
-        if (this.safetyTimer <= 0 && this.selectedResponse >= 0 && this.selectedResponse < this.actions.Count)
+        if (this.safetyTimer <= 0 && this.selectedResponse >= 0 && this.selectedResponse < this.actions.Length)
         {
             this.actions[this.selectedResponse]?.Invoke();
         }

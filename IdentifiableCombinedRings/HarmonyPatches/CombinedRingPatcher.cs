@@ -2,6 +2,9 @@
 
 using AtraBase.Toolkit;
 
+using AtraShared.ConstantsAndEnums;
+using AtraShared.Utils.Extensions;
+
 using HarmonyLib;
 
 using IdentifiableCombinedRings.DataModels;
@@ -20,6 +23,7 @@ namespace IdentifiableCombinedRings.HarmonyPatches;
 /// Holds patches on combined rings.
 /// </summary>
 [HarmonyPatch(typeof(CombinedRing))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal class CombinedRingPatcher
 {
     /// <inheritdoc cref="CombinedRing.drawInMenu(SpriteBatch, Vector2, float, float, float, StackDrawType, Color, bool)"/>
@@ -28,7 +32,6 @@ internal class CombinedRingPatcher
     [HarmonyPriority(Priority.Low)]
     [MethodImpl(TKConstants.Hot)]
     [HarmonyPatch(nameof(CombinedRing.drawInMenu))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention")]
     public static bool PrefixGetDisplayName(
         CombinedRing __instance,
         SpriteBatch spriteBatch,
@@ -53,12 +56,10 @@ internal class CombinedRingPatcher
                 return true;
             }
 
-            int first = combinedRings[0].ParentSheetIndex;
-            int second = combinedRings[1].ParentSheetIndex;
+            string first = combinedRings[0].ItemId;
+            string second = combinedRings[1].ItemId;
 
-            RingPair pair = first > second ? new(second, first) : new(first, second);
-
-            if (AssetManager.GetOverrideTexture(pair) is Texture2D texture)
+            if (AssetManager.GetOverrideTexture(first, second) is Texture2D texture)
             {
                 spriteBatch.Draw(
                     texture,
@@ -67,20 +68,38 @@ internal class CombinedRingPatcher
                     color * transparency,
                     0f,
                     new Vector2(8f, 8f) * scaleSize,
-                    scaleSize * 4f,
+                    scaleSize * Game1.pixelZoom,
                     SpriteEffects.None,
                     layerDepth);
                 return false;
             }
 
-            combinedRings[0].drawInMenu(spriteBatch, location + new Vector2(8f, 0f), scaleSize * .8f, transparency, layerDepth, drawStackNumber, color, drawShadow);
-            combinedRings[1].drawInMenu(spriteBatch, location + new Vector2(-16f, 12f), scaleSize * .8f, transparency, layerDepth, drawStackNumber, color, drawShadow);
+            const float scaleAdjustment = 0.8f;
+
+            combinedRings[0].drawInMenu(
+                spriteBatch,
+                location + new Vector2(8f, 0f),
+                scaleSize * scaleAdjustment,
+                transparency,
+                layerDepth,
+                drawStackNumber,
+                color,
+                drawShadow);
+            combinedRings[1].drawInMenu(
+                spriteBatch,
+                location + new Vector2(-16f, 12f),
+                scaleSize * scaleAdjustment,
+                transparency,
+                MathF.BitIncrement(layerDepth),
+                drawStackNumber,
+                color,
+                drawShadow);
 
             return false;
         }
         catch (Exception ex)
         {
-            Globals.ModMonitor.Log($"Failed while overriding drawing for combined ring:\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("overriding drawing for combined ring", ex);
         }
 
         return true;

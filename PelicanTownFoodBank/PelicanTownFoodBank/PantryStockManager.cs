@@ -116,11 +116,11 @@ internal static class PantryStockManager
         return neededIngredients;
     }
 
-    private static (List<int> cookingIngredients, List<int> cookedItems) GetOtherSellables()
+    private static (List<string> cookingIngredients, List<string> cookedItems) GetOtherSellables()
     {
-        List<int> cookingIngredients = new(24);
-        List<int> cookedItems = new(24);
-        foreach ((int index, string data) in Game1Wrappers.ObjectInfo)
+        List<string> cookingIngredients = new(24);
+        List<string> cookedItems = new(24);
+        foreach ((var index, var data) in Game1Wrappers.ObjectData)
         {
             SpanSplit splits = data.SpanSplit('/');
             SpanSplit typesandcategory = splits[3].SpanSplit();
@@ -138,6 +138,7 @@ internal static class PantryStockManager
                 }
             }
         }
+
         return (cookingIngredients, cookedItems);
     }
 }

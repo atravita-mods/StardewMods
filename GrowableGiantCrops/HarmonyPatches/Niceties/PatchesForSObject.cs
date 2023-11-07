@@ -1,4 +1,5 @@
-﻿using AtraShared.Utils.Extensions;
+﻿using AtraShared.ConstantsAndEnums;
+using AtraShared.Utils.Extensions;
 
 using GrowableGiantCrops.Framework;
 using GrowableGiantCrops.Framework.InventoryModels;
@@ -17,6 +18,7 @@ namespace GrowableGiantCrops.HarmonyPatches.Niceties;
 /// Holds patches on SObject for misc stuff.
 /// </summary>
 [HarmonyPatch(typeof(SObject))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class PatchesForSObject
 {
     /// <summary>
@@ -26,66 +28,73 @@ internal static class PatchesForSObject
 
     private const string ModDataKey = "atravita.GrowableGiantCrops.PlacedSlimeBall";
 
+    private static bool IsSmallTerrainObject(this SObject obj) => obj.IsBreakableStone() || obj.IsWeeds() || obj.IsTwig();
+
     [HarmonyPostfix]
     [HarmonyPatch(nameof(SObject.placementAction))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
     private static void PostfixPlacement(SObject __instance, GameLocation location, int x, int y)
     {
-        if (__instance?.bigCraftable?.Value == true
-            && location.Objects.TryGetValue(new Vector2(x / Game1.tileSize, y / Game1.tileSize), out SObject? placed))
+        try
         {
-            if (__instance.Name == "Slime Ball")
+            if (__instance?.bigCraftable?.Value == true
+                && location.Objects.TryGetValue(new Vector2(x / Game1.tileSize, y / Game1.tileSize), out SObject? placed))
             {
-                placed.modData.Remove(SlimeProduceCompat.SlimeBall);
-                placed.modData.SetBool(ModDataKey, true);
-                placed.TileLocation = new Vector2(x / Game1.tileSize, y / Game1.tileSize);
-            }
-            else if (__instance.Name == "Mushroom Box")
-            {
-                placed.modData?.SetBool(ModDataMiscObject, true);
-                placed.TileLocation = new Vector2(x / Game1.tileSize, y / Game1.tileSize);
-                placed.Fragility = SObject.fragility_Removable;
-            }
-            else if (__instance.ParentSheetIndex == 78)
-            {
-                placed.modData?.SetBool(ModDataMiscObject, true);
-                placed.Fragility = SObject.fragility_Removable;
-            }
-        }
-        else if (__instance?.bigCraftable?.Value == false)
-        {
-            if (SObject.isWildTreeSeed(__instance.ParentSheetIndex)
-                && location.terrainFeatures.TryGetValue(new Vector2(x / Game1.tileSize, y / Game1.tileSize), out TerrainFeature? terrain)
-                && terrain is Tree tree)
-            {
-                tree.modData?.SetEnum(InventoryTree.ModDataKey, (TreeIndexes)tree.treeType.Value);
-            }
-            if (InventoryFruitTree.IsValidFruitTree(__instance.ParentSheetIndex)
-                && location.terrainFeatures.TryGetValue(new Vector2(x / Game1.tileSize, y / Game1.tileSize), out TerrainFeature? feature)
-                && feature is FruitTree fruitTree)
-            {
-                fruitTree.modData?.SetInt(InventoryFruitTree.ModDataKey, __instance.ParentSheetIndex);
-            }
-            if (__instance.Name == "Stone" || __instance.Name.Contains("Weeds") || __instance.Name.Contains("Twig"))
-            {
-                __instance.modData?.SetBool(ModDataMiscObject, true);
-                __instance.TileLocation = new Vector2(x / Game1.tileSize, y / Game1.tileSize);
-
-                if (location is MineShaft shaft && __instance.Name == "Stone")
+                if (__instance.Name == "Slime Ball")
                 {
-                    int stonesLeft = ShovelTool.MineRockCountGetter.Value(shaft);
-                    stonesLeft++;
-                    ModEntry.ModMonitor.DebugOnlyLog($"{stonesLeft} stones left on floor {shaft.mineLevel}", LogLevel.Info);
-                    ShovelTool.MineRockCountSetter.Value(shaft, stonesLeft);
+                    placed.modData.Remove(SlimeProduceCompat.SlimeBall);
+                    placed.modData.SetBool(ModDataKey, true);
+                    placed.TileLocation = new Vector2(x / Game1.tileSize, y / Game1.tileSize);
+                }
+                else if (__instance.Name == "Mushroom Box")
+                {
+                    placed.modData?.SetBool(ModDataMiscObject, true);
+                    placed.TileLocation = new Vector2(x / Game1.tileSize, y / Game1.tileSize);
+                    placed.Fragility = SObject.fragility_Removable;
+                }
+                else if (__instance.ParentSheetIndex == 78)
+                {
+                    placed.modData?.SetBool(ModDataMiscObject, true);
+                    placed.Fragility = SObject.fragility_Removable;
                 }
             }
+            else if (__instance?.bigCraftable?.Value == false)
+            {
+                if (SObject.isWildTreeSeed(__instance.ItemId)
+                    && location.terrainFeatures.TryGetValue(new Vector2(x / Game1.tileSize, y / Game1.tileSize), out TerrainFeature? terrain)
+                    && terrain is Tree tree)
+                {
+                    tree.modData?.SetEnum(InventoryTree.ModDataKey, (TreeIndexes)tree.treeType.Value);
+                }
+                if (InventoryFruitTree.IsValidFruitTree(__instance.ParentSheetIndex)
+                    && location.terrainFeatures.TryGetValue(new Vector2(x / Game1.tileSize, y / Game1.tileSize), out TerrainFeature? feature)
+                    && feature is FruitTree fruitTree)
+                {
+                    fruitTree.modData?.SetInt(InventoryFruitTree.ModDataKey, __instance.ParentSheetIndex);
+                }
+                if (__instance.IsSmallTerrainObject())
+                {
+                    __instance.modData?.SetBool(ModDataMiscObject, true);
+                    __instance.TileLocation = new Vector2(x / Game1.tileSize, y / Game1.tileSize);
+
+                    if (location is MineShaft shaft && __instance.Name == "Stone")
+                    {
+                        int stonesLeft = ShovelTool.MineRockCountGetter.Value(shaft);
+                        stonesLeft++;
+                        ModEntry.ModMonitor.DebugOnlyLog($"{stonesLeft} stones left on floor {shaft.mineLevel}", LogLevel.Info);
+                        ShovelTool.MineRockCountSetter.Value(shaft, stonesLeft);
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            ModEntry.ModMonitor.LogError("adjusting placement logic", ex);
         }
     }
 
     [HarmonyPrefix]
     [HarmonyPriority(Priority.VeryHigh)]
     [HarmonyPatch(nameof(SObject.checkForAction))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
     private static bool PrefixSlimeBall(SObject __instance, ref bool __result)
     {
         if (!ModEntry.Config.CanSquishPlacedSlimeBalls
@@ -100,7 +109,6 @@ internal static class PatchesForSObject
 
     [HarmonyPostfix]
     [HarmonyPatch(nameof(SObject.isPlaceable))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
     private static void PostfixIsPlaceable(SObject __instance, ref bool __result)
     {
         if (__result)
@@ -113,7 +121,7 @@ internal static class PatchesForSObject
             if (!__instance.bigCraftable.Value && __instance.GetType() == typeof(SObject))
             {
                 if (__instance.ParentSheetIndex == 590 // artifact spot
-                    || __instance.Name == "Stone" || __instance.Name.Contains("Weeds") || __instance.Name.Contains("Twig"))
+                    || __instance.IsSmallTerrainObject())
                 {
                     __result = true;
                     return;
@@ -122,8 +130,7 @@ internal static class PatchesForSObject
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed while trying to make certain things placeable, see log for details.", LogLevel.Error);
-            ModEntry.ModMonitor.Log(ex.ToString());
+            ModEntry.ModMonitor.LogError("making small terrain items placeable", ex);
         }
     }
 }

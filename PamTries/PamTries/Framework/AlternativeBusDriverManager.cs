@@ -1,10 +1,13 @@
-﻿using AtraBase.Toolkit.Extensions;
+﻿using AtraBase.Toolkit;
+using AtraBase.Toolkit.Extensions;
+
 using AtraShared.Utils.Extensions;
+
 using StardewModdingAPI.Events;
 
 namespace PamTries.Framework;
 
-[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "StyleCop doesn't understand records.")]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopErrorConsts.IsRecord)]
 public sealed record ScheduleData(int TimesPamDrivenThisWeek);
 
 /// <summary>
@@ -12,14 +15,14 @@ public sealed record ScheduleData(int TimesPamDrivenThisWeek);
 /// </summary>
 internal static class AlternativeBusDriverManager
 {
-    private static readonly HashSet<string> busdrivers = new(StringComparer.OrdinalIgnoreCase);
+    private static readonly HashSet<string> Busdrivers = new(StringComparer.OrdinalIgnoreCase);
 
     /// <summary>
     /// Gets a random bus driver from the alternative bus drivers list.
     /// </summary>
     /// <returns>Name of a possible bus driver.</returns>
     internal static string GetRandomBusDriver()
-        => busdrivers.Count == 0 ? "Pam" : busdrivers.ElementAt(Game1.random.Next(busdrivers.Count));
+        => Busdrivers.Count == 0 ? "Pam" : Busdrivers.ElementAt(Random.Shared.Next(Busdrivers.Count));
 
     /// <summary>
     /// Listens to AssetReady to find valid bus drivers.
@@ -37,14 +40,14 @@ internal static class AlternativeBusDriverManager
             }
             if (Game1.content.Load<Dictionary<string, string>>(e.Name.ToString()).ContainsKey("bus"))
             {
-                if (busdrivers.Add(name.ToString()))
+                if (Busdrivers.Add(name.ToString()))
                 {
                     ModEntry.ModMonitor.DebugOnlyLog($"Adding {name.ToString()} to possible bus drivers.", LogLevel.Debug);
                 }
             }
             else
             {
-                if (busdrivers.Remove(name.ToString()))
+                if (Busdrivers.Remove(name.ToString()))
                 {
                     ModEntry.ModMonitor.DebugOnlyLog($"Removing {name.ToString()} from possible bus drivers.", LogLevel.Debug);
                 }

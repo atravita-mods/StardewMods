@@ -72,6 +72,8 @@ public sealed class InventoryResourceClump : SObject
         this.Price = 0;
         this.Category = ResourceClump;
         this.bigCraftable.Value = true;
+
+        this.modData?.SetEnum(ResourceModdata, idx);
     }
 
     /// <summary>
@@ -327,7 +329,7 @@ public sealed class InventoryResourceClump : SObject
                 origin: Vector2.Zero,
                 scale: 4f,
                 effects: SpriteEffects.None,
-                layerDepth: Math.Max(0f, (f.getStandingY() + 3) / 10000f));
+                layerDepth: Math.Max(0f, (f.StandingPixel.Y + 3) / 10000f));
         }
     }
 
@@ -338,11 +340,9 @@ public sealed class InventoryResourceClump : SObject
     #region misc
 
     /// <inheritdoc />
-    public override Item getOne()
+    protected override Item GetOneNew()
     {
-        InventoryResourceClump clump = new((ResourceClumpIndexes)this.ParentSheetIndex, 1);
-        clump._GetOneFrom(this);
-        return clump;
+        return new InventoryResourceClump((ResourceClumpIndexes)this.ParentSheetIndex, 1);
     }
 
     /// <inheritdoc />
@@ -367,10 +367,7 @@ public sealed class InventoryResourceClump : SObject
     public override bool isPlaceable() => true;
 
     /// <inheritdoc />
-    public override bool isForage(GameLocation location) => false;
-
-    /// <inheritdoc />
-    public override bool canBePlacedInWater() => false;
+    public override bool isForage() => false;
 
     /// <inheritdoc />
     public override bool canStackWith(ISalable other)
@@ -415,7 +412,7 @@ public sealed class InventoryResourceClump : SObject
         tags.Add("category_inventory_resource_clump");
         tags.Add($"id_inventoryResourceClump_{this.ParentSheetIndex}");
         tags.Add("quality_none");
-        tags.Add("item_" + this.SanitizeContextTag(this.Name));
+        tags.Add("item_" + ItemContextTagManager.SanitizeContextTag(this.Name));
     }
 
     #endregion

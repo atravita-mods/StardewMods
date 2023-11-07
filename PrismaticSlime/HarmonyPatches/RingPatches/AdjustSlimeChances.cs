@@ -17,11 +17,7 @@ internal static class AdjustSlimeChances
 {
     private static double AdjustChanceForPrismaticRing(double chance, Farmer player)
     {
-        if (ModEntry.PrismaticSlimeRing == -1 || player is null)
-        {
-            return chance;
-        }
-        else if (player.isWearingRing(ModEntry.PrismaticSlimeRing))
+        if (player?.isWearingRing(ModEntry.PrismaticSlimeRing) == true)
         {
             return Math.Clamp(chance * 5, 0, 1);
         }
@@ -69,8 +65,7 @@ internal static class AdjustSlimeChances
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Ran into error transpiling {original.FullDescription()}.\n\n{ex}", LogLevel.Error);
-            original.Snitch(ModEntry.ModMonitor);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }

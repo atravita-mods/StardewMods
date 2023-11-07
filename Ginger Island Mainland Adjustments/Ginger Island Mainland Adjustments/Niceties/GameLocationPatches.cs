@@ -1,13 +1,19 @@
-﻿using HarmonyLib;
-using Microsoft.Xna.Framework;
-using StardewValley.Locations;
+﻿namespace GingerIslandMainlandAdjustments.Niceties;
 
-namespace GingerIslandMainlandAdjustments.Niceties;
+using AtraShared.ConstantsAndEnums;
+using AtraShared.Utils.Extensions;
+
+using HarmonyLib;
+
+using Microsoft.Xna.Framework;
+
+using StardewValley.Locations;
 
 /// <summary>
 /// Holds patches against GameLocation to prevent trampling of objects on IslandWest.
 /// </summary>
 [HarmonyPatch(typeof(GameLocation))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal class GameLocationPatches
 {
     /// <summary>
@@ -17,19 +23,15 @@ internal class GameLocationPatches
     /// <returns>True to continue to original function, false to skip original function.</returns>
     [HarmonyPrefix]
     [HarmonyPatch(nameof(GameLocation.characterTrampleTile), new Type[] { typeof(Vector2) })]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention")]
     private static bool PrefixCharacterTrample(GameLocation __instance)
     {
         try
         {
-            if (__instance is IslandWest)
-            {
-                return false;
-            }
+            return __instance is not IslandWest;
         }
         catch (Exception ex)
         {
-            Globals.ModMonitor.Log($"Crashed while trying to prevent trampling at {__instance.NameOrUniqueName},\n\n{ex}", LogLevel.Error);
+            Globals.ModMonitor.LogError($"preventing trampling at {__instance.NameOrUniqueName}", ex);
         }
         return true;
     }
@@ -41,19 +43,15 @@ internal class GameLocationPatches
     /// <returns>True to continue to original function, false to skip original function.</returns>
     [HarmonyPrefix]
     [HarmonyPatch(nameof(GameLocation.characterDestroyObjectWithinRectangle), new Type[] { typeof(Rectangle), typeof(bool) })]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention")]
     private static bool PrefixCharacterDestroy(GameLocation __instance)
     {
         try
         {
-            if (__instance is IslandWest)
-            {
-                return false;
-            }
+            return __instance is not IslandWest;
         }
         catch (Exception ex)
         {
-            Globals.ModMonitor.Log($"Crashed while trying to prevent trampling at {__instance.NameOrUniqueName},\n\n{ex}", LogLevel.Error);
+            Globals.ModMonitor.LogError($"preventing trampling at {__instance.NameOrUniqueName}", ex);
         }
         return true;
     }

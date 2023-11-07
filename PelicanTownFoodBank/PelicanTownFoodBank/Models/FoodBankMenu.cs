@@ -48,13 +48,13 @@ internal class FoodBankMenu : ShopMenu
     private static Action<ShopMenu, bool> ScrollingSetter => ScrollingSetterLazy.Value;
 
     public FoodBankMenu(Dictionary<ISalable, int[]> itemPriceAndStock, HashSet<ISalable> buyBacks)
-        : base(itemPriceAndStock, currency: 0, who: null, on_purchase: null, on_sell: null, context: null)
+        : base(itemPriceAndStock, currency: 0, who: null, on_purchase: null, on_sell: null)
     {
         this.Setup(buyBacks);
     }
 
     public FoodBankMenu(List<ISalable> itemsForSale, HashSet<ISalable> buyBacks)
-        : base(itemsForSale, currency: 0, who: null, on_purchase: null, on_sell: null, context: null)
+        : base(itemsForSale, currency: 0, who: null, on_purchase: null, on_sell: null)
     {
         this.Setup(buyBacks);
     }

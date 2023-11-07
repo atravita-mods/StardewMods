@@ -1,6 +1,9 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
 
+using AtraBase.Toolkit.Extensions;
+
+using AtraCore;
 using AtraCore.Framework.ReflectionManager;
 
 using AtraShared.Utils.Extensions;
@@ -22,10 +25,15 @@ internal static class SObjectPlacementTranspiler
 {
     private static void AdjustPlantedObject(HoeDirt? dirt, SObject obj)
     {
-        if (dirt?.fertilizer?.Value == HoeDirt.noFertilizer
+        if (dirt is null)
+        {
+            return;
+        }
+
+        if (dirt.fertilizer.Value is null
             && ModEntry.OrganicFertilizerID != -1
             && obj.modData?.GetBool(CanPlaceHandler.Organic) == true
-            && Game1.random.Next(2) == 0)
+            && Random.Shared.OfChance(0.5))
         {
             dirt.fertilizer.Value = ModEntry.OrganicFertilizerID;
         }
@@ -70,7 +78,7 @@ internal static class SObjectPlacementTranspiler
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod crashed while transpiling {original.FullDescription()}:\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }

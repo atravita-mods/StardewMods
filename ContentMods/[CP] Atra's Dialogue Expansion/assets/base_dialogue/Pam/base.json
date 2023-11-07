@@ -1,0 +1,12 @@
+{
+    "Changes": [
+        {
+            "LogName": "Pam base dialogue",
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Pam",
+            "Entries": {
+                "{{TaxDay}}": "{{i18n:pam-tax-day}}"
+            }
+        }
+    ]
+}

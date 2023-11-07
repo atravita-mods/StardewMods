@@ -1,5 +1,5 @@
-﻿using System.Reflection;
-using AtraBase.Toolkit.Reflection;
+﻿using AtraCore;
+using AtraCore.Framework.EventCommands;
 using AtraCore.Framework.ReflectionManager;
 using AtraCore.Utilities;
 
@@ -15,9 +15,11 @@ using HarmonyLib;
 using SpecialOrdersExtended.HarmonyPatches;
 using SpecialOrdersExtended.Managers;
 using SpecialOrdersExtended.Niceties;
+
 using StardewModdingAPI.Events;
 
-using StardewValley.GameData;
+using StardewValley.GameData.SpecialOrders;
+using StardewValley.SpecialOrders;
 
 using AtraUtils = AtraShared.Utils.Utils;
 
@@ -63,14 +65,6 @@ internal sealed class ModEntry : Mod
     /// </summary>
     internal static ModConfig Config { get; private set; } = null!;
 
-    [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "Field kept near accessors.")]
-    private static readonly Lazy<Func<string, bool>> CheckTagLazy = new(
-        typeof(SpecialOrder)
-            .GetCachedMethod("CheckTag", ReflectionCache.FlagTypes.StaticFlags)
-            .CreateDelegate<Func<string, bool>>);
-
-    private static Func<string, bool> CheckTagDelegate => CheckTagLazy.Value;
-
     [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "Reviewed.")]
     private MigrationManager? migrator;
 
@@ -98,10 +92,6 @@ internal sealed class ModEntry : Mod
             name: "check_tag",
             documentation: I18n.CheckTag_Description(),
             callback: this.ConsoleCheckTag);
-        helper.ConsoleCommands.Add(
-            name: "list_available_stats",
-            documentation: I18n.ListAvailableStats_Description(),
-            callback: StatsManager.ConsoleListProperties);
         helper.ConsoleCommands.Add(
             name: "special_orders_dialogue",
             documentation: $"{I18n.SpecialOrdersDialogue_Description()}\n\n{I18n.SpecialOrdersDialogue_Example()}\n    {I18n.SpecialOrdersDialogue_Usage()}\n    {I18n.SpecialOrdersDialogue_Save()}",
@@ -134,7 +124,7 @@ internal sealed class ModEntry : Mod
         }
         catch (Exception ex)
         {
-            ModMonitor.Log($"Failed to patch NPC::checkForNewCurrentDialogue for Special Orders Dialogue. Dialogue will be disabled\n\n{ex}", LogLevel.Error);
+            ModMonitor.LogError("patching NPC::checkForNewCurrentDialogue for Special Orders Dialogue", ex);
         }
 
         if (ModsThatHandleTheBoard.All(uniqueID => !this.Helper.ModRegistry.IsLoaded(uniqueID)))
@@ -177,17 +167,11 @@ internal sealed class ModEntry : Mod
 
         // Bind SpaceCore API
         IntegrationHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, LogLevel.Trace);
-        if (helper.TryGetAPI("spacechase0.SpaceCore", "1.5.10", out spaceCoreAPI))
+        _ = helper.TryGetAPI("spacechase0.SpaceCore", "1.5.10", out spaceCoreAPI);
+
+        if (!EventCommandManager.Add(new AddSpecialOrderCommand("atravita_addSpecialOrder", this.Monitor)))
         {
-            MethodInfo eventcommand = typeof(EventCommands).StaticMethodNamed(nameof(EventCommands.AddSpecialOrder));
-            spaceCoreAPI.AddEventCommand(EventCommands.ADD_SPECIAL_ORDER, eventcommand);
-        }
-        else
-        {
-            this.Monitor.Log("SpaceCore not detected, handling event commands myself", LogLevel.Info);
-            harmony.Patch(
-                original: typeof(Event).GetCachedMethod(nameof(Event.tryEventCommand), ReflectionCache.FlagTypes.InstanceFlags),
-                prefix: new HarmonyMethod(typeof(EventCommands), nameof(EventCommands.PrefixTryGetCommand)));
+            this.Monitor.Log($"Custom event command could not be added?", LogLevel.Warn);
         }
 
         if (helper.TryGetAPI("Pathoschild.ContentPatcher", "1.20.0", out IContentPatcherAPI? api))
@@ -233,7 +217,7 @@ internal sealed class ModEntry : Mod
         }
         catch (Exception ex)
         {
-            this.Monitor.Log($"Failed in loading temporary files:\n\n{ex}", LogLevel.Error);
+            this.Monitor.LogError("loading temporary files", ex);
         }
     }
 
@@ -246,7 +230,7 @@ internal sealed class ModEntry : Mod
         }
         catch (Exception ex)
         {
-            this.Monitor.Log($"Failed in saving temporary files:\n\n{ex}", LogLevel.Error);
+            this.Monitor.LogError("saving temporary files", ex);
         }
     }
 
@@ -308,9 +292,8 @@ internal sealed class ModEntry : Mod
             }
         }
 
-        StatsManager.ClearProperties(); // clear property cache, repopulate at next use
         RecentSOManager.GrabNewRecentlyCompletedOrders();
-        RecentSOManager.DayUpdate(Game1.stats.daysPlayed);
+        RecentSOManager.DayUpdate(Game1.stats.DaysPlayed);
         RecentSOManager.Save();
     }
 
@@ -377,7 +360,7 @@ internal sealed class ModEntry : Mod
             {
                 base_tag = span.ToString();
             }
-            ModMonitor.Log($"{tag}: {(match == CheckTagDelegate(base_tag) ? I18n.True() : I18n.False())}", LogLevel.Debug);
+            ModMonitor.Log($"{tag}: {(match == SpecialOrder.CheckTag(base_tag) ? I18n.True() : I18n.False())}", LogLevel.Debug);
         }
     }
 
@@ -406,7 +389,7 @@ internal sealed class ModEntry : Mod
             {
                 ModMonitor.DebugOnlyLog($"\t{key} is valid");
                 validkeys.Add(key);
-                if (!Game1.MasterPlayer.team.completedSpecialOrders.ContainsKey(key))
+                if (!Game1.MasterPlayer.team.completedSpecialOrders.Contains(key))
                 {
                     unseenkeys.Add(key);
                 }
@@ -422,7 +405,7 @@ internal sealed class ModEntry : Mod
         ModMonitor.Log($"{I18n.Analyzing()} {key}", LogLevel.Debug);
         try
         {
-            SpecialOrder? specialOrder = SpecialOrder.GetSpecialOrder(key, Game1.random.Next());
+            SpecialOrder? specialOrder = SpecialOrder.GetSpecialOrder(key, Random.Shared.Next());
             if (specialOrder is not null)
             {
                 ModMonitor.Log($"\t{key} {I18n.Parsable()}", LogLevel.Debug);
@@ -443,8 +426,8 @@ internal sealed class ModEntry : Mod
             return false;
         }
 
-        bool seen = Game1.MasterPlayer.team.completedSpecialOrders.ContainsKey(key);
-        if (order.Repeatable != "True" && seen)
+        bool seen = Game1.MasterPlayer.team.completedSpecialOrders.Contains(key);
+        if (!order.Repeatable && seen)
         {
             ModMonitor.Log($"\t{I18n.Nonrepeatable()}", LogLevel.Debug);
             return false;
@@ -453,7 +436,7 @@ internal sealed class ModEntry : Mod
         {
             ModMonitor.Log($"\t{I18n.RepeatableSeen()}", LogLevel.Debug);
         }
-        if (Game1.dayOfMonth >= 16 && order.Duration == "Month")
+        if (Game1.dayOfMonth >= 16 && order.Duration == QuestDuration.Month)
         {
             ModMonitor.Log($"\t{I18n.MonthLongLate(cutoff: 16)}");
             return false;
@@ -479,7 +462,7 @@ internal sealed class ModEntry : Mod
                     trimmed_tag = tag;
                 }
 
-                if (CheckTagDelegate(trimmed_tag) != match)
+                if (SpecialOrder.CheckTag(trimmed_tag) != match)
                 {
                     ModMonitor.Log($"\t\t{I18n.TagFailed()}: {tag}", LogLevel.Debug);
                 }
@@ -518,7 +501,7 @@ internal sealed class ModEntry : Mod
             {
                 if (overrides.Contains(specialOrder.questKey.Value) && specialOrder.GetDaysLeft() < 50)
                 {
-                    this.Monitor.Log($"Overriding duration of untimed special order {specialOrder.questKey.Value}");
+                    this.Monitor.Log($"Overriding duration of un-timed special order {specialOrder.questKey.Value}");
                     specialOrder.dueDate.Value = date.TotalDays + 99;
                 }
             }

@@ -1,22 +1,42 @@
 {
+    // is apparently a tea nerd.
     "Changes": [
         {
-            "LogName": "Lewis Movies",
+            "LogName": "Lewis - Base randomized",
             "Action": "EditData",
             "Target": "Characters/Dialogue/Lewis",
             "Entries": {
                 "movieTheater": "@! A movie theater seems to have appeared in the valley!$h#$e#$c 0.3#Here's a ticket![809]#It's nice to have more entertainment options available in the valley#$e#",
                 "dumped_Guys": "I can't believe you'd be so cruel, dating all of them like that.$s",
-                "Saloon_Entry": "Heya, Gus! Whatcha got?"
+                "Saloon_Entry": "Heya, Gus! Whatcha got?",
+
+                // Resort lines
+                "Resort_Chair": "Ahhhh, a nice chance to rest my old tired feet.$h",
+                "Resort_Pier": "You know, I could retire here happily.$h",
+
+                // specific days
+                "summer_13{{YearRemainder}}": "We absolutely need the Governor's goodwill, he controls the budget for the state.",
+
+                "winter_20{{YearRemainder}}": "The Feast of the Winter Star has been a tradition here for as long as I can remember.$h"
             }
         },
         {
             "Action": "EditData",
             "Target": "Characters/Dialogue/Lewis",
             "Entries": {
-                "Town4": "@! I hear you're going to have a child soon! Have you picked out a name yet?"
+                "Town4": "@! I hear you're going to have a child soon! Have you picked out a name yet?",
+                "ManorHouse4": "Oh, @, I hear you're going to have a kid soon. Are you excited?$h"
             },
             "When": { "HavingChild": "@{{playerName}}"}
+        },
+        {
+            "LogName": "Lewis movies - CC",
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Lewis",
+            "When": {"MovieStatus": "CC"},
+            "Entries": {
+                "14{{YearRemainder}}": "Hmmm, maybe I should go watch a movie at the theater at some point? Gotta check up on how every business in this town is doing, of course.#$b#And %name Anderson has a new movie out, {{i18n: action.movie.{{Random:01, 02, 03, 04, 05, 06, 07, 08, 09}} }}!$h"
+            }
         },
         {
             "LogName": "Lewis: mid hearts, y1",
@@ -24,9 +44,85 @@
             "Target": "Characters/Dialogue/Lewis",
             "When": {"YearModulus": "1"},
             "Entries": {
-                "1{{YearRemainder}}": "Neighboring town lowered its property taxes to try to get more young professionals to move in.#$b#Young remote professionals make a lot of money and are good for the tax base.",
+                "winter_Tue4": "@, you've got any good ideas of how to improve our town?#$b#I've been looking into telecommunications grants. We could do with better internet coverage.",
+                "winter_Wed8": "@, I'm glad you've come to Pelican Town. With you here, our exports have been doing better than ever!",
+                "winter_Thu8": "Picked up quite a bit of cheese from Marnie's last night. She does produce some excellent cheese, if I may say so myself.$h",
+                "winter_Fri8": "Winter is hard on my old bones. But I'll still be by to pick up your shipping!$h",
+
+                "1{{YearRemainder}}": "Neighboring town lowered its property taxes to try to get more young professionals to move in.#$b#See, young remote professionals make a lot of money and are good for the tax base.",
                 "2{{YearRemainder}}": "It's not easy, being mayor of a small town. We're so small that we're economically quite fragile.",
                 "3{{YearRemainder}}": "I've been talking to a green energy company recently. They're thinking about renting out some land 'round these parts for windmills.#$b#What do you think? You've got some land to rent to them?",
+                "4": "Swing by the saloon for Gus's spaghetti some time. If you've never had it, you're missing out.",
+                "4_2": "I really don't talk to Demetrius much. I think he's a scientist, affiliated with Grampleton University?#$b#Never quite understood the research that man was doing.",
+                "10{{YearRemainder}}": "Before I moved here? I was an accountant at an auditing firm.",
+                "15": "@! How have you been settling in?",
+                "15_2": "I think we're finally doing better financially, as a town.#$b#It's so difficult, with more and more economic power concentrating in cities.",
+                "16{{YearRemainder}}": "This is a quiet little town. We really don't get much crime around here.$h",
+
+                "Saloon_Entry": "Hmmm, what's for dinner tonight?",
+                "IslandSouth_Entry": "Vacation time!",
+                "CommunityCenter_Entry": "Anyone around?"
+            }
+        },
+        {
+            "LogName": "Lewis: mid hearts, y2",
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Lewis",
+            "When": {"YearModulus": "2"},
+            "Entries":{
+                "fall_Fri10": "Mmm, in fall Gus sometimes carries my favorite dish, the autumn's bounty!%revealtasteLewis235$h",
+                "winter_Fri8": "Economically we're still a lot more fragile than I'd like.",
+
+                "1_2": "Leah sometimes asks me to ship some of the forage she collects. She's a talented forager!",
+                "4_2": "@, do you think we should invest in some table tennis for the Community Center?",
+                "5_2": "To be honest @, I'm a terrible cook. I usually get most of my meals from the saloon.#$b#Gus's prices are more than fair.",
+
+                "10_2": "It's important to me for this town to be economically diverse. I don't want to rely on a single industry, like the way we used to rely on those mines.",
+                "12_2": "Tourism could be a nice way to make money. We've got good hiking trails nearby.",
+                "14_2": "@, have you ever considered holding apple picking sessions on your farm? They're more lucrative than I expected!$h",
+                "16_2": "We used to be a major flower exporter. Our climate is excellent for them.$h",
+                "17_2": "I read that the best grapes for wine are always kept a little stressed.",
+                "18_2": "Pelican Town is an excellent location for wine production!$h",
+                "20_2": "@, do you produce truffle oil? I hear it's quite lucrative.$h",
+                "22_2": "There's nothing like a nice cup of tea to start the day.$h%revealtasteLewis614",
+                "23_2": "Planning festivals is only a small part of my day.$h",
+                "24_2": "I used to really enjoy going to musicals back when I lived in the city...#$b#@, what do you miss most about the city?",
+
+                "Saloon_Entry": "Anything new on the menu?/Whatcha got?",
+                "IslandSouth_Entry": "Mmmm, sun!",
+                "ManorHouse_Entry": "Ah, home sweet home!",
+                "CommunityCenter_Entry": "Anything happening?"
+            }
+        },
+        {
+            "LogName": "Lewis: mid hearts, y3",
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Lewis",
+            "When": {"YearModulus": "3"},
+            "Entries":{
+                "summer_Mon10": "Blueberries are my favorite fruit, and summer is the best season to plant them. Think I'm gonna try my hand at it this year![481]",
+
+                "1_2": "We're lucky in that we have good foraging opportunities around here. I guess if things get really bad that's at least something.",
+                "2_2": "Hmmm, there's a new musical playing in %place. Maybe I should see if Marnie has a chance to go?",
+                "10_2": "The mayor before me? He was an old cattle farmer. Ran a dairy across from Marnie's.#$b#He retired, though, sold his place and went off to live in the city. Felt like he was getting too old for that type of work.",
+                "13_2": "There's a lot we can do to modernize this here town without losing our small-town charm.#$b#For example, we've only recently gotten off single-wire earth return.",
+                "15_2": "@, I'm thinking of heading down to the city to see a play.#$b#Hmmm, maybe I could convince...no, she's probably too busy...",
+                "18_2": "Would I ever want to become Governor?#$b#Well, when I was younger, @, I had ambitions like that. But that's not really what I want to do anymore.",
+                "19_2": "We're actually in a great location for hydro power. Maybe I can convince a hydro plant to come out here?",
+
+                "IslandSouth_Entry": "Oh, vacation!",
+                "CommunityCenter_Entry": "Heya, anything up?"
+            }
+        },
+        {
+            "LogName": "Lewis mid-hearts - Y4",
+            "Action":"EditData",
+            "Target": "Characters/Dialogue/Lewis",
+            "When": {"YearModulus": "4"},
+            "Entries": {
+                "13_2": "I've never been married. My first priority has been this town for a very long time.",
+    
+                "CommunityCenter_Entry": "Anyone here?"
             }
         }
     ]

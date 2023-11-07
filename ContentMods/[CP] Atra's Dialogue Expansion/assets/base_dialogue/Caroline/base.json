@@ -1,0 +1,43 @@
+{"Changes":[
+    {
+        "LogName": "Caroline base dialogue",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Caroline",
+        "When": {
+            "Relationship:Abigail|contains=Divorced": false
+        },
+        "Entries": {
+            "{{TaxDay}}": "{{i18n:caroline-tax-day.00}}$s#$b#{{i18n:caroline-tax-day.01}}",
+
+            "spring_25{{YearRemainder}}": "{{i18n:caroline-birthday-pierre-a}}%revealtastePierre202#$b#{{i18n:caroline-birthday-pierre-b}}",
+            "winter_7{{YearRemainder}}": "$d cc#{{i18n:caroline-birthday-self}}$s|{{i18n:caroline-birthday-self-CC}}$h",
+            "fall_6{{YearRemainder}}": "$d cc#{{i18n:caroline-abby-birthday-pre}}$h|{{i18n:caroline-abby-birthday-pre-CC|videogame={{VideoGame}} }}",
+
+            "winter_18{{YearRemainder}}": "{{i18n:caroline-flowers}}$h"
+        }
+    },
+    {
+        "LogName": "Caroline post-CC dialogue",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Caroline",
+        "Entries": {
+            "summer_Mon": "{{i18n:caroline-summer-mon.00}}#$b#{{i18n:caroline-summer-mon.01}}",
+            "Tue": "{{i18n:caroline-tue}}$h"
+        },
+        "When": {
+            "IsCommunityCenterComplete": true
+        }
+    },
+    {
+        "LogName": "Caroline - divorced from Abby",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Caroline",
+        "Entries": {
+            "SeedShop": "{{i18n:caroline-divorced-from-abby}}$s",
+            "Town": "{{i18n:caroline-divorced-from-abby-b}}$a"
+        },
+        "When": {
+            "Relationship:Abigail": "Divorced"
+        }
+    }
+]}

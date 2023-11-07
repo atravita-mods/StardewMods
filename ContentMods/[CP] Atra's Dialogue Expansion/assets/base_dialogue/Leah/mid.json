@@ -1,0 +1,16 @@
+{
+    "Changes": [
+        {
+            "LogName": "Leah - base",
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Leah",
+            "Entries":{
+                "{{TaxDay}}": "{{i18n:leah-tax-day}}$s",
+
+                // birthday
+                "winter_23{{YearRemainder}}": "{{i18n:leah-birthday-self.{{Random: 00,01,02}} }}$h",
+                "winter_24{{YearRemainder}}": "{{i18n:leah-xmas.pre.{{Random: 00,01,02}} }}$h"
+            }
+        }
+    ]
+}

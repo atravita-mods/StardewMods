@@ -10,8 +10,8 @@
     <Name>Critter Rings</Name>
     <Description>Just some rings that spawn critters.</Description>
     <UpdateKeys>Nexus:15557</UpdateKeys>
-    <Version>0.1.4</Version>
-    <BaseManifest>..\ja_dependencies.json</BaseManifest>
+    <Version>0.2.0</Version>
+    <BaseManifest>..\base_dependencies.json</BaseManifest>
   </PropertyGroup>
   
   <ItemGroup>
@@ -27,6 +27,10 @@
     <Using Alias="NotNullAttribute" Include="System.Diagnostics.CodeAnalysis.NotNullAttribute" />
     <Using Alias="Object" Include="System.Object" />
     <Using Alias="SObject" Include="StardewValley.Object" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Models\" />
   </ItemGroup>
 
 </Project>

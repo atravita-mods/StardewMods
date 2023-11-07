@@ -1,7 +1,13 @@
-﻿using AtraCore.Utilities;
+﻿namespace GingerIslandMainlandAdjustments;
+
+using AtraCore.Framework.Internal;
+using AtraCore.Utilities;
+
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Menuing;
 using AtraShared.MigrationManager;
 using AtraShared.Utils.Extensions;
+
 using GingerIslandMainlandAdjustments.AssetManagers;
 using GingerIslandMainlandAdjustments.CustomConsoleCommands;
 using GingerIslandMainlandAdjustments.DialogueChanges;
@@ -9,17 +15,18 @@ using GingerIslandMainlandAdjustments.Integrations;
 using GingerIslandMainlandAdjustments.MultiplayerHandler;
 using GingerIslandMainlandAdjustments.Niceties;
 using GingerIslandMainlandAdjustments.ScheduleManager;
+
 using HarmonyLib;
+
 using StardewModdingAPI.Events;
 
 using StardewValley.BellsAndWhistles;
 using StardewValley.Locations;
-
-namespace GingerIslandMainlandAdjustments;
+using StardewValley.Objects;
 
 /// <inheritdoc />
 [UsedImplicitly]
-internal sealed class ModEntry : Mod
+internal sealed class ModEntry : BaseMod<ModEntry>
 {
     private bool haveFixedSchedulesToday = false;
 
@@ -28,17 +35,18 @@ internal sealed class ModEntry : Mod
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
     {
+        base.Entry(helper);
+
         I18n.Init(helper.Translation);
         Globals.Initialize(helper, this.Monitor, this.ModManifest);
         AssetEditor.Initialize(helper.GameContent);
-        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
 
         ConsoleCommands.Register(this.Helper.ConsoleCommands);
 
         // Register events
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
         helper.Events.GameLoop.TimeChanged += this.OnTimeChanged;
-        helper.Events.GameLoop.DayStarted += MarriageDialogueHandler.OnDayStart;
+        helper.Events.GameLoop.DayStarted += static (_, _) => MarriageDialogueHandler.OnDayStart();
         helper.Events.GameLoop.DayEnding += this.OnDayEnding;
         helper.Events.GameLoop.ReturnedToTitle += this.ReturnedToTitle;
         helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
@@ -83,8 +91,8 @@ internal sealed class ModEntry : Mod
         if (Game1.getLocationFromName("IslandSouth") is IslandSouth islandSouth)
         {
             this.Monitor.DebugOnlyLog("Found IslandSouth.", LogLevel.Info);
-            ParrotUpgradePerch? perch = islandSouth.parrotUpgradePerches.FirstOrDefault(perch => perch.tilePosition.X == 17 && perch.tilePosition.Y == 22);
-            if (perch is not null && perch.currentState.Value != ParrotUpgradePerch.UpgradeState.Complete)
+            if (islandSouth.parrotUpgradePerches.FirstOrDefault(perch => perch.tilePosition.X == 17 && perch.tilePosition.Y == 22) is ParrotUpgradePerch perch
+                && perch.currentState.Value != ParrotUpgradePerch.UpgradeState.Complete)
             {
                 this.Monitor.DebugOnlyLog("Found perch, applying watching.", LogLevel.Info);
                 IslandSouthWatcher southWatcher = new(this.Helper.GameContent);
@@ -184,7 +192,7 @@ internal sealed class ModEntry : Mod
         }
         catch (Exception ex)
         {
-            Globals.ModMonitor.Log($"{I18n.HarmonyCrash()} {Globals.GithubLocation}{Environment.NewLine}{ex}", LogLevel.Error);
+            Globals.ModMonitor.Log(string.Format(ErrorMessageConsts.HARMONYCRASH, ex), LogLevel.Error);
         }
 
         harmony.Snitch(Globals.ModMonitor, this.ModManifest.UniqueID, transpilersOnly: true);
@@ -199,6 +207,9 @@ internal sealed class ModEntry : Mod
     {
         // Applies harmony patches.
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
+
+        // Add Pam's phone call
+        Phone.PhoneHandlers.Add(new PamPhoneHandler());
 
         // Generate the GMCM for this mod.
         GenerateGMCM.Initialize(this.ModManifest, this.Helper.Translation);

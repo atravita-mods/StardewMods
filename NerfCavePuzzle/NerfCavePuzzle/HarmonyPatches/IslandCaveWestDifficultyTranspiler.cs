@@ -4,8 +4,10 @@ using System.Reflection.Emit;
 using AtraBase.Toolkit.Extensions;
 using AtraBase.Toolkit.Reflection;
 
+using AtraCore;
 using AtraCore.Framework.ReflectionManager;
 
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Menuing;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
@@ -50,6 +52,7 @@ public sealed class DataModel
 /// Transpilers! Yay.
 /// </summary>
 [HarmonyPatch(typeof(IslandWestCave1))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class IslandCaveWestDifficultyTranspiler
 {
     private const string SAVEKEY = "CAVE_FAILED_TIMES";
@@ -103,7 +106,7 @@ internal static class IslandCaveWestDifficultyTranspiler
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed in trying to save the failure count.\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("saving the failure count", ex);
         }
     }
 
@@ -128,7 +131,7 @@ internal static class IslandCaveWestDifficultyTranspiler
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed while trying to read failure count.\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("reading the failure count", ex);
             return 0;
         }
     }
@@ -154,13 +157,13 @@ internal static class IslandCaveWestDifficultyTranspiler
         {
             if (ModEntry.Config.PauseBetweenRounds && localPhase != 0)
             {
-                Game1.showGlobalMessage(I18n.GetByKey($"PauseBetweenRounds_{Game1.random.Next(6)}"));
+                Game1.showGlobalMessage(I18n.GetByKey($"PauseBetweenRounds_{Random.Shared.Next(6)}"));
                 return DELAYVALUE;
             }
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed while trying to set a different phase\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("setting a different phase", ex);
         }
         return IslandWestCave1.PHASE_PLAY_SEQUENCE;
     }
@@ -234,8 +237,7 @@ internal static class IslandCaveWestDifficultyTranspiler
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Ran into errors transpiling IslandWestCave1.UpdateWhenCurrentLocation.\n\n{ex}", LogLevel.Error);
-            original?.Snitch(ModEntry.ModMonitor);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }
@@ -243,7 +245,6 @@ internal static class IslandCaveWestDifficultyTranspiler
 
     [HarmonyPostfix]
     [HarmonyPatch(nameof(IslandWestCave1.performAction))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention")]
     private static void PostFixPerformAction(IslandWestCave1 __instance, string action, Farmer who)
     {
         try
@@ -272,14 +273,14 @@ internal static class IslandCaveWestDifficultyTranspiler
                     {
                         if (ModEntry.Config.AllowReAsks && Game1.activeClickableMenu is null)
                         {
-                            List<Response> responses = new(__instance.createYesNoResponses());
-                            List<Action?> actions = new()
+                            Response[] responses = __instance.createYesNoResponses();
+                            Action?[] actions = new[]
                             {
                                 () =>
                                 {
-                                __instance.currentCrystalSequenceIndex.Value = 0;
-                                __instance.currentPlaybackCrystalSequenceIndex = 0;
-                                __instance.netPhase.Value = IslandWestCave1.PHASE_PLAY_SEQUENCE;
+                                    __instance.currentCrystalSequenceIndex.Value = 0;
+                                    __instance.currentPlaybackCrystalSequenceIndex = 0;
+                                    __instance.netPhase.Value = IslandWestCave1.PHASE_PLAY_SEQUENCE;
                                 },
                             };
 
@@ -292,7 +293,7 @@ internal static class IslandCaveWestDifficultyTranspiler
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed while postfixing PerformAction in the cave...{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("postfixing PerformAction in the cave", ex);
         }
     }
 
@@ -330,8 +331,7 @@ internal static class IslandCaveWestDifficultyTranspiler
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Ran into errors transpiling IslandWestCave1.enterValue.\n\n{ex}", LogLevel.Error);
-            original?.Snitch(ModEntry.ModMonitor);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }

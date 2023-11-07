@@ -1,9 +1,16 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
+
+using AtraBase.Toolkit.Extensions;
+
+using AtraCore;
 using AtraCore.Framework.ReflectionManager;
+
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
+
 using HarmonyLib;
+
 using StardewValley.Tools;
 
 namespace MoreFertilizers.HarmonyPatches.Acquisition;
@@ -16,12 +23,12 @@ internal static class FishingTreasureTranspiler
 {
     private static SObject? GetPossibleRandomFertilizer()
     {
-        if (Game1.random.NextDouble() < 0.10)
+        if (Random.Shared.OfChance(0.1))
         {
             int fertilizerToDrop = Game1.player.fishingLevel.Value.GetRandomFertilizerFromLevel();
             if (fertilizerToDrop != -1)
             {
-                return new SObject(fertilizerToDrop, Game1.random.Next(1, 4 + (int)(Game1.player.DailyLuck * 20)));
+                return new SObject(fertilizerToDrop, Random.Shared.Next(1, 4 + (int)(Game1.player.DailyLuck * 20)));
             }
         }
         return null;
@@ -68,8 +75,7 @@ internal static class FishingTreasureTranspiler
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod crashed while transpiling FishingRod.openTreasureMenuEndFunction:\n\n{ex}", LogLevel.Error);
-            original?.Snitch(ModEntry.ModMonitor);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }

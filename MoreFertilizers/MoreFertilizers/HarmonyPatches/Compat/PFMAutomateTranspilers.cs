@@ -37,7 +37,7 @@ internal static class PFMAutomateTranspilers
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod failed while transpiling PFMautomate. Integration may not work.\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("transpiling PFMautomate", ex);
         }
     }
 
@@ -134,8 +134,7 @@ internal static class PFMAutomateTranspilers
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod crashed while transpiling PFM for PFMAutomate:\n\n{ex}", LogLevel.Error);
-            original?.Snitch(ModEntry.ModMonitor);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }
@@ -164,7 +163,7 @@ internal static class PFMAutomateTranspilers
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod crashed while transpiling PFM for PFMAutomate:\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }

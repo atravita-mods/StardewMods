@@ -1,6 +1,8 @@
 ﻿using AtraCore.Framework.Caches;
+using AtraCore.Framework.Internal;
 using AtraCore.Utilities;
 
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
 using AtraShared.Integrations.Interfaces.ContentPatcher;
 using AtraShared.MigrationManager;
@@ -22,33 +24,33 @@ using StardewModdingAPI.Events;
 namespace PamTries;
 
 /// <inheritdoc />
-internal sealed class ModEntry : Mod
+internal sealed class ModEntry : BaseMod<ModEntry>
 {
+    private const string PAM_REHAB_EVENT = "99210002";
     private static readonly string[] SyncedConversationTopics = new string[2] { "PamTriesRehab", "PamTriesRehabHoneymoon" };
-    private Random? random;
-    private PamMood mood = PamMood.neutral;
-    private MigrationManager? migrator;
+    private static PamMood mood = PamMood.neutral;
 
-    /// <summary>
-    /// Gets the logger for this mod.
-    /// </summary>
-    internal static IMonitor ModMonitor { get; private set; } = null!;
+    private Random? random;
+    private MigrationManager? migrator;
 
     /// <summary>
     /// Gets the scheduling tools for this mod.
     /// </summary>
     internal static ScheduleUtilityFunctions ScheduleUtilityFunctions { get; private set; } = null!;
 
+    /// <summary>
+    /// Gets the value of Pam's mood.
+    /// </summary>
+    internal static PamMood PamMood => mood;
+
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
     {
+        base.Entry(helper);
+
         I18n.Init(helper.Translation);
         ScheduleUtilityFunctions = new(this.Monitor, this.Helper.Translation);
         AssetManager.Initialize(helper.GameContent);
-
-        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
-
-        ModMonitor = this.Monitor;
 
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunch;
         helper.Events.GameLoop.DayStarted += this.DayStarted;
@@ -65,14 +67,11 @@ internal sealed class ModEntry : Mod
     {
         try
         {
-#if DEBUG
-            BusDriverTranspile.ApplyPatch(harmony);
-#endif
             harmony.PatchAll(typeof(ModEntry).Assembly);
         }
         catch (Exception ex)
         {
-            ModMonitor.Log($"Mod crashed while applying Harmony patches.\n\n{ex}", LogLevel.Error);
+            ModMonitor.Log(string.Format(ErrorMessageConsts.HARMONYCRASH, ex), LogLevel.Error);
         }
         harmony.Snitch(this.Monitor, uniqueID: harmony.Id, transpilersOnly: true);
     }
@@ -109,8 +108,8 @@ internal sealed class ModEntry : Mod
 
         if (Context.IsMainPlayer)
         {
-            if (Game1.getLocationFromName("Trailer_Big") is GameLocation bigtrailer && bigtrailer.Objects.TryGetValue(new Vector2(26, 9), out var sign)
-                && sign.bigCraftable.Value && sign.ParentSheetIndex == 34)
+            if (Game1.getLocationFromName("Trailer_Big") is GameLocation bigtrailer && bigtrailer.Objects.TryGetValue(new Vector2(26, 9), out SObject? sign)
+                && sign.QualifiedItemId == "(BC)34" && sign.Fragility != SObject.fragility_Indestructable)
             {
                 this.Monitor.Log($"Preventing player from stealing Pam's Yoba shrine.");
                 sign.Fragility = SObject.fragility_Indestructable;
@@ -173,7 +172,7 @@ internal sealed class ModEntry : Mod
             {
                 if (Context.IsWorldReady)
                 {
-                    return new[] { this.mood.ToStringFast() };
+                    return new[] { mood.ToStringFast() };
                 }
                 return null;
             });
@@ -202,7 +201,7 @@ internal sealed class ModEntry : Mod
             moodchances[0] = 0.1;
             moodchances[1] = 0.5;
         }
-        else if (Game1.MasterPlayer.eventsSeen.Contains(99210002))
+        else if (Game1.MasterPlayer.eventsSeen.Contains(PAM_REHAB_EVENT))
         {// rehab event
             moodchances[0] = 0.2;
             moodchances[1] = 0.6;
@@ -216,15 +215,15 @@ internal sealed class ModEntry : Mod
         double chance = this.random.NextDouble();
         if (chance < moodchances[0])
         {
-            this.mood = PamMood.bad;
+            mood = PamMood.bad;
         }
         else if (chance < moodchances[1])
         {
-            this.mood = PamMood.neutral;
+            mood = PamMood.neutral;
         }
         else
         {
-            this.mood = PamMood.good;
+            mood = PamMood.good;
         }
     }
 
@@ -251,7 +250,7 @@ internal sealed class ModEntry : Mod
             pam.Sprite.SpriteWidth = 16;
             pam.Sprite.ignoreSourceRectUpdates = false;
             pam.Sprite.UpdateSourceRect();
-            pam.drawOffset.Value = Vector2.Zero;
+            pam.drawOffset = Vector2.Zero;
             pam.IsInvisible = false;
 
             if (Game1.player.activeDialogueEvents.TryGetValue("PamTriesRehab", out int days) && days > 1)
@@ -285,19 +284,19 @@ internal sealed class ModEntry : Mod
         {
             foreach (Farmer farmer in Game1.getAllFarmers())
             {
-                if (!farmer.eventsSeen.Contains(99210001))
+                if (!farmer.eventsSeen.Contains("99210001"))
                 {
-                    farmer.eventsSeen.Add(99210001);
+                    farmer.eventsSeen.Add("99210001");
                 }
             }
         }
-        if (Game1.getAllFarmers().Any((Farmer farmer) => farmer.eventsSeen.Contains(99210002)))
+        if (Game1.getAllFarmers().Any((Farmer farmer) => farmer.eventsSeen.Contains(PAM_REHAB_EVENT)))
         {
             foreach (Farmer farmer in Game1.getAllFarmers())
             {
-                if (!farmer.eventsSeen.Contains(99210002))
+                if (!farmer.eventsSeen.Contains(PAM_REHAB_EVENT))
                 {
-                    farmer.eventsSeen.Add(99210002);
+                    farmer.eventsSeen.Add(PAM_REHAB_EVENT);
                 }
             }
         }

@@ -3,7 +3,6 @@
 using AtraBase.Toolkit.Extensions;
 
 using AtraShared.Utils.Extensions;
-using AtraShared.Wrappers;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -71,7 +70,7 @@ public sealed class InventoryFruitTree : SObject
     public InventoryFruitTree()
         : base()
     {
-        this.NetFields.AddFields(this.daysUntilMature, this.struckByLightning, this.growthStage);
+        this.NetFields.AddField(this.daysUntilMature).AddField(this.struckByLightning).AddField(this.growthStage);
         this.Category = InventoryTreeCategory;
         this.Price = 0;
         this.CanBeSetDown = true;
@@ -87,23 +86,22 @@ public sealed class InventoryFruitTree : SObject
     /// <param name="growthStage">Growth stage of the tree.</param>
     /// <param name="daysUntilMature">Number of days until the tree is mature.</param>
     /// <param name="struckByLightning">Whether or not the tree has been struck by lightning.</param>
-    public InventoryFruitTree(int saplingIndex, int initialStack, int growthStage,  int daysUntilMature, int struckByLightning)
+    public InventoryFruitTree(string saplingIndex, int initialStack, int growthStage,  int daysUntilMature, int struckByLightning)
         : this()
     {
         if (!IsValidFruitTree(saplingIndex))
         {
-            Dictionary<int, string> data = Game1.content.Load<Dictionary<int, string>>(@"Data\fruitTrees");
-            int replacement = data.Keys.FirstOrDefault();
-            ModEntry.ModMonitor.Log($"Tree {saplingIndex} doesn't seem to be a valid tree. Setting to default: {replacement}", LogLevel.Error);
-            saplingIndex = replacement;
+            saplingIndex = "ERROR ITEM";
         }
 
-        this.ParentSheetIndex = saplingIndex;
+        this.ItemId = saplingIndex;
         this.daysUntilMature.Value = daysUntilMature;
         this.struckByLightning.Value = struckByLightning;
         this.growthStage.Value = growthStage;
         this.Stack = initialStack;
         this.Name = InventoryTreePrefix + GGCUtils.GetNameOfSObject(saplingIndex);
+
+        this.modData?.SetInt(ModDataKey, this.ParentSheetIndex);
     }
 
     /// <summary>
@@ -171,11 +169,9 @@ public sealed class InventoryFruitTree : SObject
             return false;
         }
 
-        FruitTree fruitTree = new(this.ParentSheetIndex, this.growthStage.Value)
+        FruitTree fruitTree = new(this.ItemId, this.growthStage.Value)
         {
-            GreenHouseTree = location.IsGreenhouse || ((this.ParentSheetIndex == 69 || this.ParentSheetIndex == 835) && location is IslandWest),
             GreenHouseTileTree = location.doesTileHavePropertyNoNull((int)placementTile.X, (int)placementTile.Y, "Type", "Back") == "Stone",
-            currentTileLocation = placementTile,
         };
         fruitTree.struckByLightningCountdown.Value = this.struckByLightning.Value;
         fruitTree.daysUntilMature.Value = this.daysUntilMature.Value;
@@ -183,9 +179,9 @@ public sealed class InventoryFruitTree : SObject
         {
             fruitTree.modData.CopyModDataFrom(this.modData);
         }
-        fruitTree.modData?.SetInt(ModDataKey, this.ParentSheetIndex);
+        fruitTree.modData[ModDataKey] = this.ItemId;
 
-        fruitTree.shake(placementTile, true, location);
+        fruitTree.shake(placementTile, true);
         location.terrainFeatures[placementTile] = fruitTree;
         location.playSound("dirtyHit");
         DelayedAction.playSoundAfterDelay("coin", 100);
@@ -322,7 +318,7 @@ public sealed class InventoryFruitTree : SObject
                 origin: Vector2.Zero,
                 scale: 4f,
                 effects: SpriteEffects.None,
-                layerDepth: Math.Max(0f, (f.getStandingY() + 3) / 10000f));
+                layerDepth: Math.Max(0f, (f.StandingPixel.Y + 3) / 10000f));
         }
     }
 
@@ -333,16 +329,14 @@ public sealed class InventoryFruitTree : SObject
     #region misc
 
     /// <inheritdoc />
-    public override Item getOne()
+    protected override Item GetOneNew()
     {
-        InventoryFruitTree fruitTree = new(
-            saplingIndex: this.ParentSheetIndex,
+        return new InventoryFruitTree(
+            saplingIndex: this.ItemId,
             initialStack: 1,
             growthStage: this.growthStage.Value,
             daysUntilMature: this.daysUntilMature.Value,
             struckByLightning: this.struckByLightning.Value);
-        fruitTree._GetOneFrom(this);
-        return fruitTree;
     }
 
     /// <inheritdoc />
@@ -367,9 +361,6 @@ public sealed class InventoryFruitTree : SObject
     public override bool isPlaceable() => true;
 
     /// <inheritdoc />
-    public override bool canBePlacedInWater() => false;
-
-    /// <inheritdoc />
     public override bool canStackWith(ISalable other)
     {
         if (other is not InventoryFruitTree otherFruitTree)
@@ -384,7 +375,7 @@ public sealed class InventoryFruitTree : SObject
     }
 
     /// <inheritdoc />
-    public override bool isForage(GameLocation location) => false;
+    public override bool isForage() => false;
 
     /// <inheritdoc />
     protected override string loadDisplayName() => I18n.FruitTree_Name(this.GetSaplingDisplayName());
@@ -398,20 +389,9 @@ public sealed class InventoryFruitTree : SObject
         tags.Add("category_inventory_fruit_tree");
         tags.Add($"id_inventoryFruitTree_{this.ParentSheetIndex}");
         tags.Add("quality_none");
-        tags.Add("item_" + this.SanitizeContextTag(this.Name));
+        tags.Add("item_" + ItemContextTagManager.SanitizeContextTag(this.Name));
     }
 
-    private string GetSaplingDisplayName()
-    {
-        if (Game1Wrappers.ObjectInfo.TryGetValue(this.ParentSheetIndex, out string? data))
-        {
-            return data.GetNthChunk('/', objectInfoDisplayNameIndex).ToString();
-        }
-        else
-        {
-            return "UNKNOWN";
-        }
-    }
     #endregion
 
     #region helpers
@@ -421,19 +401,7 @@ public sealed class InventoryFruitTree : SObject
     /// </summary>
     /// <param name="saplingIndex">The index of the sapling.</param>
     /// <returns>True if it corresponds to a key in Data\fruitTrees, false otherwise.</returns>
-    internal static bool IsValidFruitTree(int saplingIndex)
-    {
-        try
-        {
-            Dictionary<int, string> data = Game1.content.Load<Dictionary<int, string>>(@"Data\fruitTrees");
-            return data.ContainsKey(saplingIndex);
-        }
-        catch (Exception ex)
-        {
-            ModEntry.ModMonitor.Log($"Failed to load fruit tree asset\n\n{ex}", LogLevel.Error);
-        }
-        return false;
-    }
+    internal static bool IsValidFruitTree(string saplingIndex) => Game1.fruitTreeData.ContainsKey(saplingIndex);
 
     /// <summary>
     /// resets the source rectangle, used to transition between maps of different seasons.
@@ -458,15 +426,25 @@ public sealed class InventoryFruitTree : SObject
             return;
         }
 
-        Dictionary<int, string> data = Game1.content.Load<Dictionary<int, string>>(@"Data\fruitTrees");
-        if (!data.TryGetValue(this.ParentSheetIndex, out string? treeInfo)
-            || !int.TryParse(treeInfo.GetNthChunk('/'), out int treeIndex))
+        int treeIndex;
+
+        try
         {
+            Dictionary<int, string> data = Game1.content.Load<Dictionary<int, string>>(@"Data\fruitTrees");
+            if (!data.TryGetValue(this.ParentSheetIndex, out string? treeInfo)
+                || !int.TryParse(treeInfo.GetNthChunk('/'), out treeIndex))
+            {
+                return;
+            }
+        }
+        catch (Exception ex)
+        {
+            ModEntry.ModMonitor.LogError("looking up fruittree data", ex);
             return;
         }
 
         // derived from FruitTree.draw
-        int season = Utility.getSeasonNumber(loc is Desert or MineShaft ? "spring" : Game1.GetSeasonForLocation(loc));
+        int season = (int)(loc is Desert or MineShaft ? Season.Spring : Game1.GetSeasonForLocation(loc));
 
         const int HEIGHT = 80;
         const int WIDTH = 48;

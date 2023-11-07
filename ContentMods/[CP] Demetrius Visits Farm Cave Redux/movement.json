@@ -1,0 +1,30 @@
+{
+    "Changes":[
+        {
+            "Action": "EditMap",
+            "Target": "Maps/FarmCave",
+            "LogName": "Add NPC Warp to cave",
+            "MapProperties": {
+                "NPCWarp": "{{XWarp}} {{YWarp}} BusStop 0 23"
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Characters/schedules/Demetrius",
+            "TextOperations": [
+                {
+                    "Operation": "Append",
+                    "Target": [
+                        "Entries",
+                        "{{DemetriusVisitDay}}"
+                    ],
+                    "Value": "{{DemetriusRemainderSchedule}}",
+                    "Delimiter": "/"
+                }
+            ],
+            "When": {
+                "Query: NOT({{OnlyIfRainingOrWinter}}) OR {{Weather:valley|contains=rain, storm}} OR {{Season|contains=winter}}": true
+            }
+        }
+    ]
+}

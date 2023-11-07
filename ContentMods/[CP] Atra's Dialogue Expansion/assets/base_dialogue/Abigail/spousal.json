@@ -1,0 +1,27 @@
+{
+    "Changes": [
+        {
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Pierre",
+            "When": {
+                "EnableFor": "Pierre",
+                "Query: {{Hearts:Abigail}} >= 10": true
+            },
+            "Entries": {
+                "fall_Mon10_inlaw_Abigail": "{{i18n: pierre-abigail-fall-mon10-a}}$h#$b#{{i18n: pierre-abigail-fall-mon10-b}}",
+                "winter_Sat10_inlaw_Abigail": "{{i18n: pierre-abigail-winter-sat10}}$h"
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Caroline",
+            "When": {
+                "EnableFor": "Caroline",
+                "Query: {{Hearts:Abigail}} >= 10": true
+            },
+            "Entries": {
+                "fall_Mon10_inlaw_Abigail": "{{i18n: caroline-abigail-fall-mon10-a}}$h#$e#{{i18n: caroline-abigail-fall-mon10-b}}"
+            }
+        }
+    ]
+}

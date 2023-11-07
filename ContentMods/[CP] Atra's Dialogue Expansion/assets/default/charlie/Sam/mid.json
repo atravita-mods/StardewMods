@@ -1,15 +1,29 @@
 {"Changes":[
     {
-        "LogName": "Sam, mid hearts",
+        "LogName": "Sam, mid hearts - y1",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Sam",
+        "When": {"YearModulus": "1"},
         "Entries":{
+            "summer_Mon8": "Ugh, I wish I could go to the beach today...",
+
             "1{{YearRemainder}}": "Ugh, it's laundry day again. I wish I didn't have to do the laundry.$s",
+            "2{{YearRemainder}}": "I'd love to save up some money, take Vincent on a nice trip someday...",
             "7{{YearRemainder}}": "Just wanna go skateboarding today...not sure I have the time for it though.",
             "8{{YearRemainder}}": "Sebastian showed me a video game the other day that looked super fun. {{i18n:video.game.{{Random:01, 02, 03, 04, 05, 06, 07, 08, 09}} }}, have you heard of it?",
             "10{{YearRemainder}}": "Soooo, @, what do you usually do for fun?",
             "12{{YearRemainder}}": "Thinking of going skateboarding tomorrow, if it doesn't rain.",
-            "14{{YearRemainder}}": "Alex and I got up early today to go running.#$e#Guess you don't need to do structured exercise, with all the farm work you have to do."
+            "14{{YearRemainder}}": "Alex and I got up early today to go running.#$e#Guess you don't need to do structured exercise, with all the farm work you have to do.",
+            "15{{YearRemainder}}": "I heard a great song on the radio the other day.#$e#Can't remember what song it was anymore, though.$s"
+        }
+    },
+    {
+        "LogName": "Sam, mid hearts - y2",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Sam",
+        "When": {"YearModulus": "2"},
+        "Entries":{
+            "1_2": "Ugh, is it just me or do all the songs on the radio sound the same these days?"
         }
     },
     {

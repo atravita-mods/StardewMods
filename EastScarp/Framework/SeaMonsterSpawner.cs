@@ -43,7 +43,8 @@ internal static class SeaMonsterSpawner
             int x = Random.Shared.Next(area.X, area.Right + 1);
             int y = Random.Shared.Next(area.Y, Math.Min(area.Bottom + 1, maxHeight));
 
-            // confirm sea monster can swim off screen.
+            // confirm sea monster can swim off screen.I can honest
+
             for (int dy = maxHeight - 1; dy >= y; dy--)
             {
                 if (!location.isWaterTile(x, dy) || !location.isWaterTile(x - 1, y) || !location.isWaterTile(x + 1, y))

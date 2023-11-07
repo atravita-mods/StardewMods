@@ -23,6 +23,7 @@ public sealed class ModEntry : Mod
     private Node tree = new("base", new());
     private Node? workingNode;
     private string? currentEventId;
+    private HashSet<string> seenResponses = new();
 
     // I keep on clicking the stupid dialogues twice. Agh. Don't allow that.
     private readonly ConditionalWeakTable<DialogueBox, object> _seen = new();
@@ -102,7 +103,7 @@ public sealed class ModEntry : Mod
         }
         else
         {
-            foreach (var location in Game1.locations)
+            foreach (GameLocation? location in Game1.locations)
             {
                 if (filter(location.Name))
                 {
@@ -116,7 +117,7 @@ public sealed class ModEntry : Mod
 
     private void PushEvents(GameLocation location, Stack<(string location, string eventKey)> evts)
     {
-        if (!location.TryGetLocationEvents(out _, out var events))
+        if (!location.TryGetLocationEvents(out _, out Dictionary<string, string>? events))
         {
             this.Monitor.Log($"{location.Name} appears to lack events, skipping.");
             return;
@@ -126,12 +127,12 @@ public sealed class ModEntry : Mod
 
         foreach (string key in events.Keys)
         {
-            if (!int.TryParse(key, out var _) && key.IndexOf('/') == -1)
+            if (!int.TryParse(key, out int _) && key.IndexOf('/') == -1)
             {
                 this.Monitor.Log($"{key} is likely a fork, skipping...");
                 continue;
             }
-            foreach (var segment in key.Split('/'))
+            foreach (string segment in key.Split('/'))
             {
                 if (segment.StartsWith("x "))
                 {
@@ -149,7 +150,7 @@ Outer: ;
         if (!Context.IsWorldReady) return;
 
         // Run 3 times a second for speeed
-        if (!e.IsMultipleOf(20)) return;
+        if (!e.IsMultipleOf(15)) return;
 
         if (this.IterationstoSkip-- > 0) return;
 
@@ -164,12 +165,20 @@ Outer: ;
                 db.finishTyping();
                 db.safetyTimer = 0;
 
+                if (db.transitioningBigger)
+                {
+                    db.transitionX = db.x;
+                    db.transitionY = db.y;
+                    db.transitionWidth = db.width;
+                    db.transitionHeight = db.height;
+                }
+
                 if (db.isQuestion && db.selectedResponse == -1 && !this._seen.TryGetValue(db, out _))
                 {
                     this._seen.AddOrUpdate(db, new());
                     string currentCommand = Game1.CurrentEvent.GetCurrentCommand();
                     this.Monitor.Log($"{currentCommand}");
-                    this.Monitor.Log($"Asked a question with {db.responses.Length} options", LogLevel.Info);
+                    this.Monitor.Log($"Asked a question with {db.responses.Length} options: {db.characterDialoguesBrokenUp.FirstOrDefault() ?? string.Empty}", LogLevel.Info);
                     this.Monitor.Log(JsonConvert.SerializeObject(db.responses), LogLevel.Trace);
 
                     if (Game1.CurrentEvent.id != this.currentEventId)
@@ -188,7 +197,7 @@ Outer: ;
                     if (currentCommand.StartsWith("question null"))
                     {
                         this.Monitor.Log($"Meaningless choice, skipping.");
-                        db.selectedResponse = 0;
+                        db.selectedResponse = Game1.random.Next(db.responses.Length);
 
                         if (this.Monitor.IsVerbose)
                             this.Monitor.Log("Clicking on the dialogue box");
@@ -198,13 +207,13 @@ Outer: ;
 
                     if (currentCommand.StartsWith("speak "))
                     {
-                        var responseDialogues = db.characterDialogue?.speaker?.Dialogue;
+                        Dictionary<string, string>? responseDialogues = db.characterDialogue?.speaker?.Dialogue;
                         bool isTrivial = true;
                         if (responseDialogues is not null)
                         {
-                            foreach (var r in db.responses)
+                            foreach (Response? r in db.responses)
                             {
-                                if (responseDialogues.TryGetValue(r.responseKey, out var data))
+                                if (responseDialogues.TryGetValue(r.responseKey, out string? data))
                                 {
                                     this.Monitor.Log($"speak fork - response {r.responseKey} is {data}.");
                                     if (data.Contains("%fork"))
@@ -218,7 +227,7 @@ Outer: ;
                         if (isTrivial)
                         {
                             this.Monitor.Log($"Meaningless choice, skipping.");
-                            db.selectedResponse = 0;
+                            db.selectedResponse = Game1.random.Next(db.responses.Length);
 
                             if (this.Monitor.IsVerbose)
                                 this.Monitor.Log("Clicking on the dialogue box");
@@ -228,10 +237,17 @@ Outer: ;
 
                     }
 
-                    // TODO: speak <talker> "$q", need to figure out how to detect this.
+                    // todo - merge back quickquestions?
+                    bool isMergeBackQuickQuestion = false;
                     if (currentCommand.StartsWith("quickQuestion"))
                     {
-                        var splits = currentCommand.Split("(break)");
+                        isMergeBackQuickQuestion = true;
+                        if (currentCommand.Contains("switchEvent") || currentCommand.Contains("fork") || currentCommand.Contains("$q"))
+                        {
+                            isMergeBackQuickQuestion = false;
+                        }
+
+                        string[] splits = currentCommand.Split("(break)");
                         bool mismatchFound = false;
                         for (int i = 2; i < splits.Length; i++)
                         {
@@ -245,7 +261,7 @@ Outer: ;
                         if (!mismatchFound)
                         {
                             this.Monitor.Log($"Meaningless choice, skipping.");
-                            db.selectedResponse = 0;
+                            db.selectedResponse = Game1.random.Next(db.responses.Length);
 
                             if (this.Monitor.IsVerbose)
                                 this.Monitor.Log("Clicking on the dialogue box");
@@ -260,9 +276,42 @@ Outer: ;
                         {
                             this.workingNode.Children.AddRange(db.responses.Select(static response => new Node(response.responseKey, new())));
                             this.Monitor.Log($"First visit, selecting choice 0. {db.responses[0].responseText}", LogLevel.Debug);
+                            if (isMergeBackQuickQuestion)
+                            {
+                                this.Monitor.Log($"This appears to be a simple quickQuestion, blue-ing extra children.");
+                                for (int i = 1; i < this.workingNode.Children.Count; i++)
+                                {
+                                    this.workingNode.Children[i].Color = Color.Blue;
+                                }
+                            }
+                            else
+                            {
+                                for (int i = 0; i < db.responses.Length; i++)
+                                {
+                                    string text = db.responses[i].responseText;
+                                    if (text.Length > 4 && !this.seenResponses.Add(text))
+                                    {
+                                        this.Monitor.Log($"Text response {text} seems to have been seen before, marking blue.");
+                                        this.workingNode.Children[i].Color = Color.Blue;
+                                    }
+                                }
+                            }
+
                             db.selectedResponse = 0;
                             this.workingNode.Color = Color.Grey;
                             this.workingNode = this.workingNode.Children.First();
+                            break;
+                        }
+                        case Color.Blue:
+                        {
+                            this.Monitor.Log($"Reached blue node, queue only single child.");
+                            Node blue = new(db.responses[0].responseKey, new());
+                            blue.Color = Color.Blue;
+                            this.workingNode.Children.Add(blue);
+
+                            db.selectedResponse = 0;
+                            this.workingNode.Color = Color.Grey;
+                            this.workingNode = blue;
                             break;
                         }
                         case Color.Grey:
@@ -294,8 +343,10 @@ Outer: ;
                         }
                         case Color.Black:
                         {
-                            Game1.CurrentEvent.endBehaviors();
+                            // todo - better cleanup.
+                            Game1.CurrentEvent.skipEvent();
                             this.Monitor.Log($"How did I get here?", LogLevel.Warn);
+                            this.Monitor.Log(JsonConvert.SerializeObject(this.tree), LogLevel.Trace);
                             this.current = null;
                             break;
                         }
@@ -326,7 +377,7 @@ Outer: ;
         // re-launch the SAME event with the next set of choices.
         if (this.current is not null)
         {
-            foreach (var node in this.tree.Children)
+            foreach (Node node in this.tree.Children)
             {
                 switch (node.Color)
                 {
@@ -357,8 +408,9 @@ Outer: ;
         this.current = null;
         this.tree = new("base", new());
         this.workingNode = this.tree;
+        this.seenResponses.Clear();
 
-        if (this.evts.TryPop(out var pair))
+        if (this.evts.TryPop(out (string location, string eventKey) pair))
         {
             this.LaunchEvent(pair);
             return;
@@ -383,13 +435,13 @@ Outer: ;
             return;
         }
 
-        if (!actual.TryGetLocationEvents(out var assetName, out var evtDict))
+        if (!actual.TryGetLocationEvents(out string? assetName, out Dictionary<string, string>? evtDict))
         {
             this.Monitor.Log($"Evts file for {actual.Name} now missing, what.", LogLevel.Warn);
             return;
         }
 
-        var id = pair.eventKey.GetNthChunk('/').ToString();
+        string id = pair.eventKey.GetNthChunk('/').ToString();
         this.current = pair;
         this.currentEventId = id;
 
@@ -416,6 +468,8 @@ Outer: ;
             {
                 Game1.forceSnapOnNextViewportUpdate = true;
                 Game1.currentLocation.startEvent(new Event(evtDict[pair.eventKey], assetName, id));
+                this.current = pair;
+                this.currentEventId = id;
                 Game1.globalFadeToClear();
             });
         }
@@ -431,6 +485,7 @@ Outer: ;
             {
                 case Color.Black:
                     return true;
+                case Color.Blue:
                 case Color.White:
                     return false;
             }
@@ -440,6 +495,7 @@ Outer: ;
                 switch (child.Color)
                 {
                     case Color.White:
+                    case Color.Blue:
                         return false;
                     case Color.Black:
                         continue;
@@ -459,9 +515,25 @@ Outer: ;
 
     private enum Color
     {
+        /// <summary>
+        /// This node has not been visited before and has not queued its children.
+        /// </summary>
         White,
+
+        /// <summary>
+        /// This node has queued its children, but has not been fully visited.
+        /// </summary>
         Grey,
+
+        /// <summary>
+        /// This node is fully visited.
+        /// </summary>
         Black,
+
+        /// <summary>
+        /// This node has not been visited before, but should only queue a single (also blue) child.
+        /// </summary>
+        Blue,
     }
 }
 

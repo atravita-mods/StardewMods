@@ -7,9 +7,10 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <Name>Event tester</Name>
+    <Name>SinZ's Event Tester</Name>
+    <Authors>SinZ and atravita</Authors>
     <Description>event tester</Description>
-    <Version>0.0.1</Version>
+    <Version>0.0.2</Version>
     <UpdateKeys>-1</UpdateKeys>
   </PropertyGroup>
 

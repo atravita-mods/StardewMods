@@ -1,6 +1,4 @@
-﻿using System.Linq;
-
-namespace SinZsEventTester;
+﻿namespace SinZsEventTester;
 
 using System.Runtime.CompilerServices;
 
@@ -16,11 +14,11 @@ public sealed class ModEntry : Mod
     bool hooked = false;
 
     // keep track of the current events.
-    private readonly Stack<(string location, string eventKey)> evts = new();
-    private (string location, string eventKey)? current;
+    private readonly Stack<EventRecord> evts = new();
+    private EventRecord? current;
 
     // keep track of the dialogue responses given.
-    private Node tree = new("base", new());
+    private readonly Node tree = new("base", 0,new());
     private Node? workingNode;
     private string? currentEventId;
     private HashSet<string> seenResponses = new();
@@ -28,17 +26,29 @@ public sealed class ModEntry : Mod
     // I keep on clicking the stupid dialogues twice. Agh. Don't allow that.
     private readonly ConditionalWeakTable<DialogueBox, object> _seen = new();
 
-    private HashSet<(string location, string eventKey)> completed = new();
+    private HashSet<EventRecord> completed = new();
 
-    private int IterationstoSkip = 0;
+    private int iterationstoSkip = 0;
+
+    private ModConfig config = null!;
 
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
     {
+        try
+        {
+            this.config = this.Helper.ReadConfig<ModConfig>();
+        }
+        catch (Exception ex)
+        {
+            this.Monitor.Log($"Failed to deserialize config, see errors: {ex}.", LogLevel.Error);
+            this.config = new();
+        }
+
         helper.ConsoleCommands.Add(
             "sinz.playevents",
             "Auto plays events in the current location. If arguments are given is treated as a specific, or all if location is 'ALL'",
-            this.QueueEvents);
+            this.QueueLocations);
         helper.ConsoleCommands.Add(
             "sinz.empty_event_queue",
             "Clears the event queue.",
@@ -47,6 +57,14 @@ public sealed class ModEntry : Mod
                 this.current = null;
                 this.evts.Clear();
             });
+        helper.ConsoleCommands.Add(
+            "sinz.forget_event",
+            "Forgets events",
+            this.ForgetEvents);
+        helper.ConsoleCommands.Add(
+            "sinz.forget_mail",
+            "Forgets mail",
+            this.ForgetMail);
     }
 
     private void Hook()
@@ -64,7 +82,7 @@ public sealed class ModEntry : Mod
         this.Helper.Events.GameLoop.UpdateTicked -= this.GameLoop_UpdateTicked;
     }
 
-    private void QueueEvents(string cmd, string[] args)
+    private void QueueLocations(string cmd, string[] args)
     {
         this.evts.Clear();
 
@@ -96,9 +114,12 @@ public sealed class ModEntry : Mod
 
         if (filter is null)
         {
-            if (Utility.fuzzyLocationSearch(arg) is GameLocation location)
+            foreach (string candidate in args)
             {
-                this.PushEvents(location, this.evts);
+                if (!string.IsNullOrEmpty(candidate) && Utility.fuzzyLocationSearch(candidate) is GameLocation location)
+                {
+                    this.PushEvents(location, this.evts);
+                }
             }
         }
         else
@@ -115,19 +136,19 @@ public sealed class ModEntry : Mod
         this.Hook();
     }
 
-    private void PushEvents(GameLocation location, Stack<(string location, string eventKey)> evts)
+    private void PushEvents(GameLocation location, Stack<EventRecord> evts)
     {
-        if (!location.TryGetLocationEvents(out _, out Dictionary<string, string>? events))
+        if (!location.TryGetLocationEvents(out _, out Dictionary<string, string>? events) || events.Count == 0)
         {
             this.Monitor.Log($"{location.Name} appears to lack events, skipping.");
             return;
         }
 
-        this.Monitor.Log($"Location {location.Name} has {events.Count} events", LogLevel.Info);
+        this.Monitor.Log($"Location {location.Name} has {events.Count} entries.", LogLevel.Info);
 
         foreach (string key in events.Keys)
         {
-            if (!int.TryParse(key, out int _) && key.IndexOf('/') == -1)
+            if (!int.TryParse(key, out int _) && key.IndexOf('/') < 0)
             {
                 this.Monitor.Log($"{key} is likely a fork, skipping...");
                 continue;
@@ -140,7 +161,7 @@ public sealed class ModEntry : Mod
                     goto Outer;
                 }
             }
-            evts.Push((location.Name, key));
+            evts.Push(new(location.Name, key));
 Outer: ;
         }
     }
@@ -149,10 +170,24 @@ Outer: ;
     {
         if (!Context.IsWorldReady) return;
 
-        // Run 3 times a second for speeed
-        if (!e.IsMultipleOf(15)) return;
+        // try to run events faster.
+        try
+        {
+            int count = this.config.EventSpeedRatio - 1;
+            for (int i = 0; i < count; i++)
+            {
+                Game1.CurrentEvent?.Update(Game1.currentLocation, Game1.currentGameTime);
+            }
+        }
+        catch (Exception ex)
+        {
+            this.Monitor.Log($"Whoops, speeding up events may have been unwise. {ex}", LogLevel.Error);
+        }
 
-        if (this.IterationstoSkip-- > 0) return;
+        // Run 6 times a second for speeed
+        if (!e.IsMultipleOf(10)) return;
+
+        if (this.iterationstoSkip-- > 0) return;
 
         if (Game1.CurrentEvent is not null || Game1.eventUp)
         {
@@ -161,17 +196,7 @@ Outer: ;
 
             if (Game1.activeClickableMenu is DialogueBox db)
             {
-                // speed up the boxen.
-                db.finishTyping();
-                db.safetyTimer = 0;
-
-                if (db.transitioningBigger)
-                {
-                    db.transitionX = db.x;
-                    db.transitionY = db.y;
-                    db.transitionWidth = db.width;
-                    db.transitionHeight = db.height;
-                }
+                db.SpeedUp();
 
                 if (db.isQuestion && db.selectedResponse == -1 && !this._seen.TryGetValue(db, out _))
                 {
@@ -181,27 +206,18 @@ Outer: ;
                     this.Monitor.Log($"Asked a question with {db.responses.Length} options: {db.characterDialoguesBrokenUp.FirstOrDefault() ?? string.Empty}", LogLevel.Info);
                     this.Monitor.Log(JsonConvert.SerializeObject(db.responses), LogLevel.Trace);
 
-                    if (Game1.CurrentEvent.id != this.currentEventId)
+                    if (Game1.CurrentEvent.id != this.currentEventId || this.workingNode is null)
                     {
                         this.Monitor.Log($"Hey, {Game1.CurrentEvent.id} not an event I launched! Running it to completion.", LogLevel.Info);
-                        db.selectedResponse = 0;
-
-                        if (this.Monitor.IsVerbose)
-                            this.Monitor.Log("Clicking on the dialogue box");
-                        db.receiveLeftClick(0, 0);
+                        this.TrivialResponse(db);
                         return;
                     }
 
-                    this.IterationstoSkip = 1;
+                    this.iterationstoSkip = 1;
 
-                    if (currentCommand.StartsWith("question null"))
+                    if (currentCommand == "cave" || currentCommand.StartsWith("question null"))
                     {
-                        this.Monitor.Log($"Meaningless choice, skipping.");
-                        db.selectedResponse = Game1.random.Next(db.responses.Length);
-
-                        if (this.Monitor.IsVerbose)
-                            this.Monitor.Log("Clicking on the dialogue box");
-                        db.receiveLeftClick(0, 0);
+                        this.TrivialResponse(db);
                         return;
                     }
 
@@ -226,12 +242,7 @@ Outer: ;
                         }
                         if (isTrivial)
                         {
-                            this.Monitor.Log($"Meaningless choice, skipping.");
-                            db.selectedResponse = Game1.random.Next(db.responses.Length);
-
-                            if (this.Monitor.IsVerbose)
-                                this.Monitor.Log("Clicking on the dialogue box");
-                            db.receiveLeftClick(0, 0);
+                            this.TrivialResponse(db);
                             return;
                         }
 
@@ -260,12 +271,7 @@ Outer: ;
 
                         if (!mismatchFound)
                         {
-                            this.Monitor.Log($"Meaningless choice, skipping.");
-                            db.selectedResponse = Game1.random.Next(db.responses.Length);
-
-                            if (this.Monitor.IsVerbose)
-                                this.Monitor.Log("Clicking on the dialogue box");
-                            db.receiveLeftClick(0, 0);
+                            this.TrivialResponse(db);
                             return;
                         }
                     }
@@ -274,7 +280,13 @@ Outer: ;
                     {
                         case Color.White:
                         {
-                            this.workingNode.Children.AddRange(db.responses.Select(static response => new Node(response.responseKey, new())));
+                            for (int i = 0; i < db.responses.Length; i++)
+                            {
+                                Node node = new (db.responses[i].responseKey, i, new ());
+
+                                this.workingNode.Children.Add(node);
+                            }
+
                             this.Monitor.Log($"First visit, selecting choice 0. {db.responses[0].responseText}", LogLevel.Debug);
                             if (isMergeBackQuickQuestion)
                             {
@@ -305,7 +317,7 @@ Outer: ;
                         case Color.Blue:
                         {
                             this.Monitor.Log($"Reached blue node, queue only single child.");
-                            Node blue = new(db.responses[0].responseKey, new());
+                            Node blue = new (db.responses[0].responseKey, 0, new ());
                             blue.Color = Color.Blue;
                             this.workingNode.Children.Add(blue);
 
@@ -316,9 +328,8 @@ Outer: ;
                         }
                         case Color.Grey:
                         {
-                            for (int i = 0; i < this.workingNode.Children.Count; i++)
+                            foreach (Node? child in this.workingNode.Children)
                             {
-                                Node? child = this.workingNode.Children[i];
                                 switch (child.Color)
                                 {
                                     case Color.Black:
@@ -334,8 +345,8 @@ Outer: ;
                                     }
                                 }
 
-                                this.Monitor.Log($"Now selecting response {i}. {db.responses[i].responseText}", LogLevel.Debug);
-                                db.selectedResponse = i;
+                                this.Monitor.Log($"Now selecting response {child.ResponsePosition}. {db.responses[child.ResponsePosition].responseText}", LogLevel.Debug);
+                                db.selectedResponse = child.ResponsePosition;
                                 this.workingNode = child;
                                 break;
                             }
@@ -359,7 +370,7 @@ Outer: ;
             }
             else if (Game1.activeClickableMenu is NamingMenu nm)
             {
-                // Hope doing this at 3tps isn't a problem
+                // Hope doing this at 4tps isn't a problem
                 nm.receiveLeftClick(nm.doneNamingButton.bounds.Center.X, nm.doneNamingButton.bounds.Center.Y);
             }
             return;
@@ -406,12 +417,18 @@ Outer: ;
         }
 
         this.current = null;
-        this.tree = new("base", new());
+        this.tree.Children.Clear();
         this.workingNode = this.tree;
         this.seenResponses.Clear();
 
-        if (this.evts.TryPop(out (string location, string eventKey) pair))
+        while (this.evts.TryPop(out EventRecord pair))
         {
+            if (this.completed.Contains(pair))
+            {
+                this.Monitor.Log($"Already seen {pair} before this session.", LogLevel.Info);
+                continue;
+            }
+
             this.LaunchEvent(pair);
             return;
         }
@@ -421,7 +438,22 @@ Outer: ;
         this.Helper.Data.WriteGlobalData("finished-events", this.completed);
     }
 
-    private void LaunchEvent((string location, string eventKey) pair)
+    /// <summary>Marks a response as trivial.</summary>
+    private void TrivialResponse(DialogueBox db)
+    {
+        this.Monitor.Log($"Meaningless choice, skipping.");
+        db.selectedResponse = Game1.random.Next(db.responses.Length);
+
+        if (this.Monitor.IsVerbose)
+        {
+            this.Monitor.Log("Clicking on the dialogue box");
+        }
+
+        db.receiveLeftClick(0, 0);
+    }
+
+    [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:Split parameters should start on line after declaration", Justification = "Reviewed.")]
+    private void LaunchEvent(EventRecord pair)
     {
         // Burn the players inventory every event to make sure space exists
         for (int i = Game1.player.Items.Count - 1; i >= 0; i--)
@@ -446,7 +478,7 @@ Outer: ;
         this.currentEventId = id;
 
         this.Monitor.Log($"Playing {id}, {this.evts.Count} events remaining.");
-        this.IterationstoSkip = 8;
+        this.iterationstoSkip = 8;
 
         if (pair.location != Game1.currentLocation.Name)
         {
@@ -464,18 +496,21 @@ Outer: ;
         }
         else
         {
-            Game1.globalFadeToBlack(() =>
+            Game1.globalFadeToBlack(afterFade: () =>
             {
                 Game1.forceSnapOnNextViewportUpdate = true;
                 Game1.currentLocation.startEvent(new Event(evtDict[pair.eventKey], assetName, id));
                 this.current = pair;
                 this.currentEventId = id;
-                Game1.globalFadeToClear();
-            });
+                Game1.globalFadeToClear(null, 0.05f);
+            },
+            fadeSpeed: 0.05f);
         }
     }
 
-    private record Node(string responseKey, List<Node> Children)
+    #region tree types
+
+    private record Node(string ResponseKey, int ResponsePosition, List<Node> Children)
     {
         internal Color Color { get; set; } = Color.White;
 
@@ -535,7 +570,35 @@ Outer: ;
         /// </summary>
         Blue,
     }
+
+    #endregion
+
+    #region helpers
+    private void ForgetEvents(string command, string[] evts)
+    {
+        foreach (var evt in evts)
+        {
+            if (Game1.player.eventsSeen.Remove(evt))
+            {
+                this.Monitor.Log($"Forgetting {evt} for {Game1.player.Name}", LogLevel.Debug);
+            }
+        }
+    }
+
+    private void ForgetMail(string command, string[] mails)
+    {
+        foreach (var mail in mails)
+        {
+            if (Game1.player.mailReceived.Remove(mail))
+            {
+                this.Monitor.Log($"Forgetting {mail} for {Game1.player.Name}", LogLevel.Debug);
+            }
+        }
+    }
+    #endregion
 }
+
+public readonly record struct EventRecord(string location, string eventKey);
 
 file static class Extensions
 {
@@ -573,5 +636,23 @@ file static class Extensions
             }
         }
         return str.AsSpan()[start..ind];
+    }
+
+    /// <summary>
+    /// Speeds up dialogue boxes.
+    /// </summary>
+    /// <param name="db">the dialogue box to speed up.</param>
+    public static void SpeedUp(this DialogueBox db)
+    {
+        db.finishTyping();
+        db.safetyTimer = 0;
+
+        if (db.transitioningBigger)
+        {
+            db.transitionX = db.x;
+            db.transitionY = db.y;
+            db.transitionWidth = db.width;
+            db.transitionHeight = db.height;
+        }
     }
 }

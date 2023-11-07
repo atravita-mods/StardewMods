@@ -2,11 +2,15 @@
 
 using System.Runtime.CompilerServices;
 
+using Microsoft.Xna.Framework.Input;
+
 using Newtonsoft.Json;
 
 using StardewModdingAPI.Events;
 
+using StardewValley.BellsAndWhistles;
 using StardewValley.Menus;
+using StardewValley.Minigames;
 
 /// <inheritdoc />
 public sealed class ModEntry : Mod
@@ -50,6 +54,10 @@ public sealed class ModEntry : Mod
             "Auto plays events in the current location. If arguments are given is treated as a specific, or all if location is 'ALL'",
             this.QueueLocations);
         helper.ConsoleCommands.Add(
+            "sinz.eventbyid",
+            "Plays a specific event id at speed, including all branches.",
+            this.EventById);
+        helper.ConsoleCommands.Add(
             "sinz.empty_event_queue",
             "Clears the event queue.",
             (_, _) =>
@@ -82,16 +90,41 @@ public sealed class ModEntry : Mod
         this.Helper.Events.GameLoop.UpdateTicked -= this.GameLoop_UpdateTicked;
     }
 
+    private void EventById(string cmd, string[] args)
+    {
+        foreach (var candidate in args)
+        {
+            foreach (var location in Game1.locations)
+            {
+                if (!location.TryGetLocationEvents(out _, out var events) || events.Count == 0)
+                {
+                    continue;
+                }
+
+                foreach (string? key in events.Keys)
+                {
+                    if (key.GetNthChunk('/').Equals(candidate, StringComparison.OrdinalIgnoreCase))
+                    {
+                        EventRecord record = new (location.Name, key);
+                        this.completed.Remove(record);
+                        this.evts.Push(record);
+                    }
+                }
+            }
+        }
+
+        if (this.evts.Count > 0)
+        {
+            this.Hook();
+        }
+    }
+
+
     private void QueueLocations(string cmd, string[] args)
     {
-        this.evts.Clear();
-
         Func<string, bool>? filter = null;
-        if (!ArgUtility.TryGetOptionalRemainder(args, 0, out string arg) || arg is null)
-        {
-            filter = static (_) => true;
-        }
-        else if (arg.Equals("current", StringComparison.OrdinalIgnoreCase))
+        if (!ArgUtility.TryGetOptionalRemainder(args, 0, out string arg) || arg is null
+            || arg.Equals("current", StringComparison.OrdinalIgnoreCase))
         {
             this.PushEvents(Game1.currentLocation, this.evts);
             this.Hook();
@@ -177,6 +210,10 @@ Outer: ;
             for (int i = 0; i < count; i++)
             {
                 Game1.CurrentEvent?.Update(Game1.currentLocation, Game1.currentGameTime);
+                Game1.currentMinigame?.tick(Game1.currentGameTime);
+
+                ScreenFade? fade = this.Helper.Reflection.GetField<ScreenFade>(typeof(Game1), "screenFade")?.GetValue();
+                fade?.UpdateFade(Game1.currentGameTime);
             }
         }
         catch (Exception ex)
@@ -189,10 +226,25 @@ Outer: ;
 
         if (this.iterationstoSkip-- > 0) return;
 
+        // advance the abby minigame if it's up.
+        if (Game1.currentMinigame is AbigailGame abbyGame && AbigailGame.onStartMenu)
+        {
+            abbyGame.receiveKeyPress(Keys.Space);
+        }
+
         if (Game1.CurrentEvent is not null || Game1.eventUp)
         {
             // if (!Game1.game1.IsActive) return;
-            if (Game1.CurrentEvent is null) return;
+            if (Game1.CurrentEvent is not Event current)
+            {
+                return;
+            }
+
+            if (!string.IsNullOrEmpty(current.playerControlSequenceID))
+            {
+                this.Monitor.Log($"Clicking tile {current.playerControlTargetTile}", LogLevel.Debug);
+                Game1.CurrentEvent.receiveActionPress(current.playerControlTargetTile.X, current.playerControlTargetTile.Y);
+            }
 
             if (Game1.activeClickableMenu is DialogueBox db)
             {
@@ -202,9 +254,12 @@ Outer: ;
                 {
                     this._seen.AddOrUpdate(db, new());
                     string currentCommand = Game1.CurrentEvent.GetCurrentCommand();
+                    this.Monitor.Log($"Asked a question with {db.responses.Length} options: {db.characterDialoguesBrokenUp.FirstOrDefault() ?? db.dialogues.FirstOrDefault() ?? string.Empty}", LogLevel.Info);
                     this.Monitor.Log($"{currentCommand}");
-                    this.Monitor.Log($"Asked a question with {db.responses.Length} options: {db.characterDialoguesBrokenUp.FirstOrDefault() ?? string.Empty}", LogLevel.Info);
-                    this.Monitor.Log(JsonConvert.SerializeObject(db.responses), LogLevel.Trace);
+                    if (this.Monitor.IsVerbose)
+                    {
+                        this.Monitor.Log(JsonConvert.SerializeObject(db.responses), LogLevel.Trace);
+                    }
 
                     if (Game1.CurrentEvent.id != this.currentEventId || this.workingNode is null)
                     {
@@ -259,6 +314,8 @@ Outer: ;
                         }
 
                         string[] splits = currentCommand.Split("(break)");
+
+                        // check to see if it's just the same command repeated
                         bool mismatchFound = false;
                         for (int i = 2; i < splits.Length; i++)
                         {
@@ -270,6 +327,23 @@ Outer: ;
                         }
 
                         if (!mismatchFound)
+                        {
+                            this.TrivialResponse(db);
+                            return;
+                        }
+
+                        // if this quickquestion is just used to add a different dialoguebox, skip.
+                        bool isTrivial = true;
+                        for (int i = 1; i < splits.Length; i++)
+                        {
+                            var subcommand = splits[i];
+                            if (!subcommand.StartsWith("speak ") || subcommand.IndexOf('\\') != -1 || subcommand.Contains("%fork"))
+                            {
+                                isTrivial = false;
+                            }
+                        }
+
+                        if (isTrivial)
                         {
                             this.TrivialResponse(db);
                             return;
@@ -378,6 +452,13 @@ Outer: ;
 
         if (!Game1.game1.IsActive) return;
 
+        if (Game1.activeClickableMenu is { } menu)
+        {
+            menu.emergencyShutDown();
+            menu.exitThisMenu();
+            return;
+        }
+
         // event ended, mark last node as black.
         if (this.workingNode is not null)
         {
@@ -418,6 +499,7 @@ Outer: ;
 
         this.current = null;
         this.tree.Children.Clear();
+        this.tree.Color = Color.White;
         this.workingNode = this.tree;
         this.seenResponses.Clear();
 
@@ -458,7 +540,11 @@ Outer: ;
         // Burn the players inventory every event to make sure space exists
         for (int i = Game1.player.Items.Count - 1; i >= 0; i--)
         {
-            Game1.player.Items[i] = null;
+            var item = Game1.player.Items[i];
+            if (item is not null)
+            {
+                Game1.player.Items[i] = null;
+            }
         }
 
         // copied out of Game1.PlayEvent

@@ -218,8 +218,8 @@ internal static class AssetManager
         const int RING_COST = 2_500;
         const int LATE_RING_COST = 5_000;
 
-        const string HasSkullKey = "atravita.AtraCore_HAS_WALLET_ITEM Current SkullKey";
-        const string HasMagicInk = $"{HasSkullKey}, atravita.AtraCore_HAS_WALLET_ITEM Current MagicInk";
+        const string HasSkullKey = "PLAYER_HAS_READ_LETTER Current HasSkullKey";
+        const string HasMagicInk = $"{HasSkullKey}, PLAYER_HAS_READ_LETTER Current HasMagicInk";
 
         shop.Items.Add(new()
         {

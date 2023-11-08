@@ -23,8 +23,13 @@ internal static class AssetManager
 
     private static IAssetName equipData = null!;
     private static IAssetName equipBuffIcons = null!;
+
     private static IAssetName musicOverride = null!;
+    
     private static IAssetName prismatic = null!;
+
+    private static IAssetName dataObjects = null!;
+    private static IAssetName categoryExtensions = null!;
 
     private static Lazy<Dictionary<string, EquipmentExtModel>> _ringData = new(
         static () => Game1.content.Load<Dictionary<string, EquipmentExtModel>>(AtraCoreConstants.EquipData));
@@ -45,8 +50,13 @@ internal static class AssetManager
     {
         equipData = parser.ParseAssetName(AtraCoreConstants.EquipData);
         equipBuffIcons = parser.ParseAssetName("Mods/atravita/EquipBuffIcons");
+
         musicOverride = parser.ParseAssetName(AtraCoreConstants.MusicNameOverride);
         prismatic = parser.ParseAssetName(AtraCoreConstants.PrismaticMaskData);
+
+        // category extensions.
+        dataObjects = parser.ParseAssetName("Data/Objects");
+        categoryExtensions = parser.ParseAssetName("Mods/atravita/CategoryExtensions");
 
         // check and populate the event locations.
         foreach (string? location in new[] { "AdventureGuild", "Blacksmith", "WitchHut", "WitchSwamp", "Summit" })

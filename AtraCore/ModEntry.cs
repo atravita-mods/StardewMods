@@ -16,7 +16,6 @@ using AtraCore.Framework.EventCommands;
 using AtraCore.Framework.EventCommands.AllowRepeatCommand;
 using AtraCore.Framework.EventCommands.RelationshipCommands;
 using AtraCore.Framework.EventPreconditions;
-using AtraCore.Framework.GameStateQueries;
 using AtraCore.Framework.Internal;
 using AtraCore.Framework.ItemManagement;
 using AtraCore.Framework.QueuePlayerAlert;
@@ -114,17 +113,6 @@ internal sealed class ModEntry : BaseMod<ModEntry>
 
         // actions
         GameLocation.RegisterTileAction("atravita.Teleport", TeleportPlayer.ApplyCommand);
-
-        // add GSQ
-        const string WALLET_ITEM = "atravita.AtraCore_HAS_WALLET_ITEM";
-        if (GameStateQuery.Exists(WALLET_ITEM))
-        {
-            this.Monitor.Log($"{WALLET_ITEM} seems to exist already as a GSQ, what.", LogLevel.Warn);
-        }
-        else
-        {
-            GameStateQuery.Register(WALLET_ITEM, WalletItemsQuery.CheckWalletItem);
-        }
     }
 
     /// <inheritdoc cref="IGameLoopEvents.SaveLoaded"/>

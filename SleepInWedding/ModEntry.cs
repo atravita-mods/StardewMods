@@ -54,7 +54,7 @@ internal sealed class ModEntry : Mod
     /// <inheritdoc cref="IGameLoopEvents.DayStarted"/>
     private void OnDayStart(object? sender, DayStartedEventArgs e)
     {
-        if (Game1.player.HasWeddingToday() && NPCCache.GetByVillagerName(Game1.player.spouse) is NPC spouse)
+        if (Game1.player.HasWeddingToday() && Game1.player.spouse is not null && NPCCache.GetByVillagerName(Game1.player.spouse) is NPC spouse)
         {
             spouse.currentMarriageDialogue.Clear();
 

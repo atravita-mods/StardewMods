@@ -15,37 +15,6 @@ namespace StopRugRemoval.HarmonyPatches.Niceties;
 [HarmonyPatch(typeof(FruitTree))]
 internal static class FruitTreesAvoidHoe
 {
-    /// <summary>
-    /// Applies late patches.
-    /// </summary>
-    /// <param name="harmony">Harmony instance.</param>
-    /// <param name="registry">Mod registry.</param>
-    internal static void ApplyPatches(Harmony harmony, IModRegistry registry)
-    {
-        if (registry.Get("spacechase0.DynamicGameAssets") is null)
-        {
-            return;
-        }
-        try
-        {
-            if (AccessTools.TypeByName("DynamicGameAssets.Game.CustomFruitTree") is Type dgaTree)
-            {
-                ModEntry.ModMonitor.Log("Transpiling DGA to remove damage to fruit trees from hoes", LogLevel.Info);
-                harmony.Patch(
-                    original: dgaTree.GetCachedMethod("performToolAction", ReflectionCache.FlagTypes.InstanceFlags),
-                    transpiler: new HarmonyMethod(typeof(FruitTreesAvoidHoe), nameof(FruitTreesAvoidHoe.Transpiler)));
-            }
-            else
-            {
-                ModEntry.ModMonitor.Log("Cannot find dga fruit trees; they will still be affected by hoes.", LogLevel.Info);
-            }
-        }
-        catch (Exception ex)
-        {
-            ModEntry.ModMonitor.LogError("transpiling DGA to make fruit trees avoid hoes.", ex);
-        }
-    }
-
     [HarmonyPatch(nameof(FruitTree.performToolAction))]
     private static IEnumerable<CodeInstruction>? Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
     {
@@ -72,6 +41,7 @@ internal static class FruitTreesAvoidHoe
                 new(OpCodes.Brfalse_S),
             })
             .Remove(5);
+
             return helper.Render();
         }
         catch (Exception ex)

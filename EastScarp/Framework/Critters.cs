@@ -25,7 +25,7 @@ internal static class Critters
                 continue;
             }
 
-
+            var area = spawn.Area;
 
         }
     }

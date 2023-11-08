@@ -15,7 +15,7 @@ using StardewValley.Minigames;
 /// <inheritdoc />
 public sealed class ModEntry : Mod
 {
-    bool hooked = false;
+    private bool hooked = false;
 
     // keep track of the current events.
     private readonly Stack<EventRecord> evts = new();
@@ -73,6 +73,17 @@ public sealed class ModEntry : Mod
             "sinz.forget_mail",
             "Forgets mail",
             this.ForgetMail);
+        helper.ConsoleCommands.Add(
+            "sinz.skip_event",
+            "If currently in an event, skip it.",
+            (_,_) =>
+            {
+                if (Game1.CurrentEvent is Event evt)
+                {
+                    evt.skipEvent();
+                    this.Monitor.Log($"Skipping {evt.id}", LogLevel.Info);
+                }
+            });
     }
 
     private void Hook()
@@ -118,7 +129,6 @@ public sealed class ModEntry : Mod
             this.Hook();
         }
     }
-
 
     private void QueueLocations(string cmd, string[] args)
     {
@@ -253,7 +263,7 @@ Outer: ;
                 if (db.isQuestion && db.selectedResponse == -1 && !this._seen.TryGetValue(db, out _))
                 {
                     this._seen.AddOrUpdate(db, new());
-                    string currentCommand = Game1.CurrentEvent.GetCurrentCommand();
+                    string currentCommand = Game1.CurrentEvent.GetCurrentCommand() ?? string.Empty;
                     this.Monitor.Log($"Asked a question with {db.responses.Length} options: {db.characterDialoguesBrokenUp.FirstOrDefault() ?? db.dialogues.FirstOrDefault() ?? string.Empty}", LogLevel.Info);
                     this.Monitor.Log($"{currentCommand}");
                     if (this.Monitor.IsVerbose)
@@ -450,7 +460,7 @@ Outer: ;
             return;
         }
 
-        if (!Game1.game1.IsActive) return;
+        if (!Game1.game1.IsActive || Game1.newDay || Game1.gameMode != Game1.playingGameMode) return;
 
         if (Game1.activeClickableMenu is { } menu)
         {
@@ -540,7 +550,7 @@ Outer: ;
         // Burn the players inventory every event to make sure space exists
         for (int i = Game1.player.Items.Count - 1; i >= 0; i--)
         {
-            var item = Game1.player.Items[i];
+            Item? item = Game1.player.Items[i];
             if (item is not null)
             {
                 Game1.player.Items[i] = null;
@@ -563,7 +573,7 @@ Outer: ;
         this.current = pair;
         this.currentEventId = id;
 
-        this.Monitor.Log($"Playing {id}, {this.evts.Count} events remaining.");
+        this.Monitor.Log($"Playing {pair.eventKey}, {this.evts.Count} events remaining.", LogLevel.Info);
         this.iterationstoSkip = 8;
 
         if (pair.location != Game1.currentLocation.Name)
@@ -598,6 +608,7 @@ Outer: ;
 
     private record Node(string ResponseKey, int ResponsePosition, List<Node> Children)
     {
+        [JsonProperty]
         internal Color Color { get; set; } = Color.White;
 
         internal bool ChildrenFinished()

@@ -1,0 +1,32 @@
+{
+    "Changes": [
+        {
+            "Action": "EditData",
+            "Target": "Data/hats",
+            "Entries": {
+                "atravita.CP.ScienceFamily_LabGoggles": "atravita.CP.ScienceFamily_LabGoggles/{{i18n:goggle-description}}/false/true//{{i18n:goggle-name}}/0/Mods\\atravita\\ScienceFamilyHats",
+            }
+        },
+        {
+            "Action": "Load",
+            "Target": "Mods\\atravita\\ScienceFamilyHats",
+            "FromFile": "assets/items/goggles.png"
+        },
+        {
+            "Action": "EditData",
+            "Target": "Mods/atravita/EquipData",
+            "Entries": {
+                "(H)atravita.CP.ScienceFamily_LabGoggles": {
+                    "Effects": [
+                        {
+                            "Trigger": "OnEquip",
+                            "BaseEffects": {
+                                "Immunity": 4,
+                            }
+                        }
+                    ]
+                }
+            }
+        }
+    ]
+}

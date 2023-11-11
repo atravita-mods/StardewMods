@@ -21,7 +21,7 @@ public static class ColorHandler
         Dictionary<string, XNAColor>? colors = new(StringComparer.InvariantCultureIgnoreCase);
 
         foreach (PropertyInfo? color in typeof(SKColors).GetProperties(BindingFlags.Static | BindingFlags.Public)
-                      .Where((prop) => prop.PropertyType == typeof(SKColor)))
+                      .Where(static (prop) => prop.PropertyType == typeof(SKColor)))
         {
             colors[color.Name] = ((SKColor)color.GetValue(null)!).ToXNAColor();
         }
@@ -109,7 +109,7 @@ public static class ColorHandler
         }
 
         // Try to split and process it that way?
-        SpanSplit splits = colorname.SpanSplit(new[] { '/', ',', ';' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries, 4);
+        SpanSplit splits = colorname.SpanSplit(new[] { '/', ',', ';', ' ' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries, 4);
         if (!splits.TryGetAtIndex(2, out _))
         {
             goto ColorParseFail;

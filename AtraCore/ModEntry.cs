@@ -62,6 +62,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
 
         helper.Events.Content.AssetRequested += this.OnAssetRequested;
+        helper.Events.Content.LocaleChanged += static (_, _) => AssetManager.OnLocaleChange();
 
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
         helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;

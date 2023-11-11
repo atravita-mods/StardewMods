@@ -111,7 +111,7 @@ internal sealed class ModEntry : Mod
     /// <inheritdoc cref="IGameLoopEvents.OneSecondUpdateTicked"/>
     private void OnUpdateTicked(object? sender, OneSecondUpdateTickedEventArgs e)
     {
-        if (this.FrameRateCounter is not null && this.FramerateGetter?.Invoke(this.FrameRateCounter) is int value && Game1.game1.IsActive)
+        if (Game1.game1.IsActive && this.FrameRateCounter is not null && this.FramerateGetter?.Invoke(this.FrameRateCounter) is int value)
         {
             this.Monitor.Log($"Current framerate on {Game1.ticks} is {value}", value < 30 ? LogLevel.Warn : LogLevel.Trace);
         }
@@ -121,6 +121,9 @@ internal sealed class ModEntry : Mod
     private void OnRenderedHud(object? sender, RenderedHudEventArgs e)
     {
         this.FrameRateCounter?.Update(Game1.currentGameTime);
-        this.FrameRateCounter?.Draw(Game1.currentGameTime);
+        if (!Game1.game1.takingMapScreenshot)
+        {
+            this.FrameRateCounter?.Draw(Game1.currentGameTime);
+        }
     }
 }

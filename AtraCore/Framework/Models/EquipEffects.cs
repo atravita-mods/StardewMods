@@ -354,10 +354,10 @@ public sealed class BuffModel : ObjectBuffAttributesData
     });
 
     /// <inheritdoc cref="BuffEffects.CombatLevel"/>
-    public int CombatLevel { get; set; } = 0;
+    public float CombatLevel { get; set; } = 0;
 
     /// <inheritdoc cref="BuffEffects.Immunity"/>
-    public int Immunity { get; set; } = 0;
+    public float Immunity { get; set; } = 0;
 
     /// <inheritdoc cref="BuffEffects.AttackMultiplier" />
     public float AttackMultiplier { get; set; } = 0f;

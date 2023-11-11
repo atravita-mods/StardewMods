@@ -42,7 +42,7 @@ internal static class ShopHandler
         Game1.drawObjectDialogue(I18n.SandyAwayShopMessage());
         Game1.afterDialogues = () =>
         {
-            Utility.OpenShopMenu("Sandy", sandyHouse, forceOpen: true);
+            Utility.TryOpenShopMenu("Sandy", sandyHouse, forceOpen: true);
             HandlingShop.Value = false;
         };
     }
@@ -69,7 +69,7 @@ internal static class ShopHandler
         Game1.drawObjectDialogue(I18n.WillyAwayShopMessage());
         Game1.afterDialogues = () =>
         {
-            Utility.OpenShopMenu("FishShop", fishShop, forceOpen: true);
+            Utility.TryOpenShopMenu("FishShop", fishShop, forceOpen: true);
             HandlingShop.Value = false;
         };
     }

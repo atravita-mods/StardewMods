@@ -1,0 +1,12 @@
+{
+    "Changes": [
+        {
+            "LogName": "Base additional dialogue, Demetrius.",
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Demetrius",
+            "Entries": {
+
+            }
+        }
+    ]
+}

@@ -4,6 +4,7 @@ using AtraBase.Collections;
 using AtraBase.Toolkit.Extensions;
 
 using AtraCore.Framework.Models;
+using AtraCore.HarmonyPatches;
 
 using AtraShared.Utils.Extensions;
 
@@ -79,23 +80,6 @@ internal static class AssetManager
         ModEntry.ModMonitor.Log($"Checked event data, adding {eventLocations.Count}");
     }
 
-    /// <summary>
-    /// Gets the prismatic models data asset.
-    /// </summary>
-    /// <returns>The prismatic models data asset.</returns>
-    internal static Dictionary<string, DrawPrismaticModel>? GetPrismaticModels()
-    {
-        try
-        {
-            return Game1.temporaryContent.Load<Dictionary<string, DrawPrismaticModel>>(AtraCoreConstants.PrismaticMaskData);
-        }
-        catch (Exception ex)
-        {
-            ModEntry.ModMonitor.LogError("loading prismatic mask data", ex);
-        }
-        return null;
-    }
-
     /// <inheritdoc cref="IContentEvents.AssetRequested"/>
     internal static void Apply(AssetRequestedEventArgs e)
     {
@@ -114,6 +98,10 @@ internal static class AssetManager
         else if (e.NameWithoutLocale.IsEquivalentTo(prismatic))
         {
             e.LoadFrom(EmptyContainers.GetEmptyDictionary<string, DrawPrismaticModel>, AssetLoadPriority.Exclusive);
+        }
+        else if (e.NameWithoutLocale.IsEquivalentTo(categoryExtensions))
+        {
+            e.LoadFrom(EmptyContainers.GetEmptyDictionary<int, CategoryExtension>, AssetLoadPriority.Exclusive);
         }
         else if (e.NameWithoutLocale.StartsWith(dataEvents, false, false))
         {
@@ -142,6 +130,31 @@ internal static class AssetManager
                 _ringTextures = new(static () => Game1.content.Load<Texture2D>(equipBuffIcons.BaseName));
             }
         }
+
+        if (assets is null || assets.Contains(dataObjects) || assets.Contains(categoryExtensions))
+        {
+            CategoryPatches.Reset();
+        }
+    }
+
+    /// <inheritdoc cref="IContentEvents.LocaleChanged"/>
+    internal static void OnLocaleChange() => CategoryPatches.Reset();
+
+    /// <summary>
+    /// Gets the prismatic models data asset.
+    /// </summary>
+    /// <returns>The prismatic models data asset.</returns>
+    internal static Dictionary<string, DrawPrismaticModel>? GetPrismaticModels()
+    {
+        try
+        {
+            return Game1.temporaryContent.Load<Dictionary<string, DrawPrismaticModel>>(AtraCoreConstants.PrismaticMaskData);
+        }
+        catch (Exception ex)
+        {
+            ModEntry.ModMonitor.LogError("loading prismatic mask data", ex);
+        }
+        return null;
     }
 
     /// <summary>
@@ -151,4 +164,7 @@ internal static class AssetManager
     /// <returns>The ring data, if it exists.</returns>
     internal static EquipmentExtModel? GetEquipData(string ringID)
         => _ringData.Value.GetValueOrDefault(ringID);
+
+    internal static CategoryExtension? GetCategoryExtension(int category)
+        => Game1.content.Load<Dictionary<int, CategoryExtension>>(categoryExtensions.BaseName).GetValueOrDefault(category);
 }

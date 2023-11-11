@@ -2,9 +2,14 @@
     "$schema": "https://smapi.io/schemas/content-patcher.json",
     "Format": "1.29.0",
     "Changes": [
+        // items.
         {
             "Action": "Include",
             "FromFile": "assets/items/hats.json"
+        },
+        {
+            "Action": "Include",
+            "FromFile": "assets/dialogue/Demetrius.json"
         }
     ]
 }

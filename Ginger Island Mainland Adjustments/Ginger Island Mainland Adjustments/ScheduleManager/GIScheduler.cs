@@ -27,6 +27,7 @@ using StardewModdingAPI.Utilities;
 
 using StardewValley.Extensions;
 using StardewValley.Locations;
+using StardewValley.Pathfinding;
 
 namespace GingerIslandMainlandAdjustments.ScheduleManager;
 
@@ -35,14 +36,6 @@ namespace GingerIslandMainlandAdjustments.ScheduleManager;
 /// </summary>
 internal static class GIScheduler
 {
-    #region delegates
-
-    private static readonly Lazy<Func<NPC, string, string, List<string>>> GetLocationRouteLazy = new(() =>
-        typeof(NPC).GetCachedMethod("getLocationRoute", ReflectionCache.FlagTypes.InstanceFlags)
-        .CreateDelegate<Func<NPC, string, string, List<string>>>());
-
-    #endregion
-
     private static readonly int[] TIMESLOTS = new int[] { 1200, 1400, 1600 };
 
     /// <summary>
@@ -482,8 +475,8 @@ internal static class GIScheduler
             {
                 try
                 {
-                    List<string>? maplist = GetLocationRouteLazy.Value(visitor, visitor.DefaultMap, "IslandSouth");
-                    if (maplist is null || maplist.Count > 8)
+                    string[]? maplist = WarpPathfindingCache.GetLocationRoute(visitor.DefaultMap, "IslandSouth", visitor.Gender);
+                    if (maplist is null || maplist.Length > 8)
                     {
                         Globals.ModMonitor.Log($"{visitor.Name} has a long way to travel, so staging them at the Saloon.");
                         new SchedulePoint(

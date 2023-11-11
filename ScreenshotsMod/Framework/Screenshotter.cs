@@ -38,7 +38,7 @@ internal sealed class Screenshotter
     }
 
     // derived from Game1.takeMapScreenshot
-    internal SKSurface? TakeScreenshot(float scale = 1f)
+    internal SKSurface? TakeScreenshot(float scale = 1f, bool overrideAmbience = false)
     {
         if (Game1.currentLocation is not GameLocation current)
         {
@@ -116,6 +116,11 @@ internal sealed class Screenshotter
         Game1.options.baseZoomLevel = 1f;
         RenderTarget2D? cached_lightmap = this._lightMapGetter();
         this._lightMapSetter(null);
+        Color old_ambience = Game1.ambientLight;
+        if (overrideAmbience)
+        {
+            Game1.ambientLight = Color.White;
+        }
 
         Color[]? buffer = null;
         RenderTarget2D? render_target = null;
@@ -222,6 +227,7 @@ internal sealed class Screenshotter
             Game1.game1.takingMapScreenshot = false;
             Game1.displayHUD = old_display_hud;
             Game1.viewport = old_viewport;
+            Game1.ambientLight = old_ambience;
         }
     }
 

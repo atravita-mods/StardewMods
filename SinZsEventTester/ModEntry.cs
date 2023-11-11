@@ -103,18 +103,33 @@ public sealed class ModEntry : Mod
 
     private void EventById(string cmd, string[] args)
     {
-        foreach (var candidate in args)
+        foreach (string candidate in args)
         {
-            foreach (var location in Game1.locations)
+            Func<string, bool> filter;
+            if (candidate.Contains('/'))
             {
-                if (!location.TryGetLocationEvents(out _, out var events) || events.Count == 0)
+                filter = (key) => key.Equals(candidate, StringComparison.OrdinalIgnoreCase);
+            }
+            else if (candidate.EndsWith('*'))
+            {
+                string startsWidth = candidate[..^1];
+                filter = (key) => key.GetNthChunk('/').StartsWith(startsWidth, StringComparison.OrdinalIgnoreCase);
+            }
+            else
+            {
+                filter = (key) => key.GetNthChunk('/').Equals(candidate, StringComparison.OrdinalIgnoreCase);
+            }
+
+            foreach (GameLocation? location in Game1.locations)
+            {
+                if (!location.TryGetLocationEvents(out _, out Dictionary<string, string>? events) || events.Count == 0)
                 {
                     continue;
                 }
 
                 foreach (string? key in events.Keys)
                 {
-                    if (key.GetNthChunk('/').Equals(candidate, StringComparison.OrdinalIgnoreCase))
+                    if (filter(key))
                     {
                         EventRecord record = new (location.Name, key);
                         this.completed.Remove(record);
@@ -346,7 +361,7 @@ Outer: ;
                         bool isTrivial = true;
                         for (int i = 1; i < splits.Length; i++)
                         {
-                            var subcommand = splits[i];
+                            string subcommand = splits[i];
                             if (!subcommand.StartsWith("speak ") || subcommand.IndexOf('\\') != -1 || subcommand.Contains("%fork"))
                             {
                                 isTrivial = false;
@@ -673,7 +688,7 @@ Outer: ;
     #region helpers
     private void ForgetEvents(string command, string[] evts)
     {
-        foreach (var evt in evts)
+        foreach (string evt in evts)
         {
             if (Game1.player.eventsSeen.Remove(evt))
             {
@@ -684,7 +699,7 @@ Outer: ;
 
     private void ForgetMail(string command, string[] mails)
     {
-        foreach (var mail in mails)
+        foreach (string mail in mails)
         {
             if (Game1.player.mailReceived.Remove(mail))
             {
@@ -695,8 +710,16 @@ Outer: ;
     #endregion
 }
 
+/// <summary>
+/// A record that represents an event in a location.
+/// </summary>
+/// <param name="location">Name of the location.</param>
+/// <param name="eventKey">The event's key.</param>
 public readonly record struct EventRecord(string location, string eventKey);
 
+/// <summary>
+/// The extension methods for this file.
+/// </summary>
 file static class Extensions
 {
     /// <summary>

@@ -41,15 +41,16 @@ internal static class FileNameParser
 
         loweredToken = loweredToken[..copiedCount];
 
+        GameLocation currentLocation = Game1.currentLocation;
         return loweredToken switch
         {
             "default" => Game1.game1.GetScreenshotFolder(false),
-            "location" => Game1.currentLocation.DisplayName,
+            "location" => currentLocation.isStructure.Value ? currentLocation.Name : currentLocation.DisplayName,
             "save" => $"{Game1.player.farmName.Value}_{Game1.uniqueIDForThisGame}",
             "farm" => Game1.player.farmName.Value,
             "name" => Game1.player.Name,
             "date" => $"{Game1.year:D2}_{Game1.seasonIndex:D2}_{Game1.dayOfMonth:D2}", // year_month_day for sorting
-            "weather" => Game1.currentLocation.GetWeather().Weather,
+            "weather" => currentLocation.GetWeather().Weather,
             "time" => Game1.timeOfDay.ToString(),
             "timestamp" => $"{DateTime.Now:yyyy.MM.dd HH-mm-ss}",
             _ => match.Value,

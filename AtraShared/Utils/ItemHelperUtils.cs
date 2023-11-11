@@ -29,6 +29,12 @@ public static class ItemHelperUtils
             return true;
         }
 
+        // block artifact spots :(
+        if (id == SObject.artifactSpotID)
+        {
+            return true;
+        }
+
         switch (data.Name)
         {
             case "Stone" when id != "390":

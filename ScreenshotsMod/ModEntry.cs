@@ -50,7 +50,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
 
     private void OnButtonPressed(object? sender, ButtonPressedEventArgs e)
     {
-        if (!Context.IsWorldReady || Game1.currentLocation is null || !this.config.Keybind.JustPressed())
+        if (!Context.IsWorldReady || Game1.currentLocation is null || !this.config.KeyBind.JustPressed())
         {
             return;
         }
@@ -81,6 +81,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         Stopwatch stopwatch = Stopwatch.StartNew();
 #endif
         SKSurface? surface = this.screenshotter.TakeScreenshot(scale);
+        this.Monitor.LogTimespan("preparing screenshot", stopwatch);
         if (surface is not null)
         {
             Task.Run(() =>

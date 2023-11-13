@@ -1,6 +1,6 @@
 ﻿using AtraShared.ConstantsAndEnums;
 
-namespace ScreenshotsMod.Framework;
+namespace ScreenshotsMod.Framework.UserModels;
 
 /// <summary>
 /// Represents a possible trigger for a screenshot. This is the userland data model.
@@ -15,7 +15,7 @@ public sealed class UserTrigger
     /// <summary>
     /// Gets or sets the season for which this trigger should apply.
     /// </summary>
-    public StardewSeasons Seasons { get; set; } = StardewSeasons.All;
+    public string[] Seasons { get; set; } = ["Any"];
 
     /// <summary>
     /// Gets or sets the days for which this trigger should apply.
@@ -47,7 +47,7 @@ public sealed class TimeRange
     public int StartTime
     {
         get => this.startTime;
-        set => this.startTime = Math.Clamp(value - (value % 10), 600, 2600);
+        set => this.startTime = Math.Clamp(value - value % 10, 600, 2600);
     }
 
     /// <summary>
@@ -56,7 +56,7 @@ public sealed class TimeRange
     public int EndTime
     {
         get => this.endTime;
-        set => this.endTime = Math.Clamp(value - (value % 10), 600, 2600);
+        set => this.endTime = Math.Clamp(value - value % 10, 600, 2600);
     }
 }
 

@@ -1,5 +1,9 @@
 ﻿namespace ScreenshotsMod.Framework;
 
+using AtraShared.Integrations.GMCMAttributes;
+
+using ScreenshotsMod.Framework.UserModels;
+
 using StardewModdingAPI.Utilities;
 
 /// <summary>
@@ -21,9 +25,10 @@ public sealed class ModConfig
     /// <summary>
     /// Gets or sets the keybind to use to take screenshots.
     /// </summary>
-    public KeybindList Keybind { get; set; } = KeybindList.ForSingle(SButton.Multiply);
+    public KeybindList KeyBind { get; set; } = KeybindList.ForSingle(SButton.Multiply);
 
     private string keyBindFileName;
+    private float keyBindScale = 1f;
 
     /// <summary>
     /// Gets or sets the (tokenized) file name to save keybind screenshots at.
@@ -35,9 +40,22 @@ public sealed class ModConfig
         set => this.keyBindFileName = SanitizePath(value);
     }
 
-    public float KeyBindScale { get; set; } = 1f;
-
+    /// <summary>
+    /// The scale of the image to use for a keybind screenshot.
+    /// </summary>
+    [GMCMInterval(0.1)]
+    [GMCMRange(0.01, 1)]
+    public float KeyBindScale
+    {
+        get => this.keyBindScale;
+        set => this.keyBindScale = Math.Clamp(value, 0.01f, 1f);
+    }
     #endregion
+
+    public Dictionary<string, UserRule> Rules { get; set; } = new()
+    {
+        ["Default"] = new()
+    };
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ModConfig"/> class.

@@ -28,7 +28,6 @@ internal static class JukeboxesEverywhere
             || location is Cellar || location.IsFarm || location.IsGreenhouse || location is IslandWest;
 
     [HarmonyPatch(nameof(MiniJukebox.checkForAction))]
-    [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:Split parameters should start on line after declaration", Justification = "Reviewed.")]
     private static IEnumerable<CodeInstruction>? Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
     {
         try
@@ -51,7 +50,8 @@ internal static class JukeboxesEverywhere
                 {
                     new (OpCodes.Call, typeof(JukeboxesEverywhere).StaticMethodNamed(nameof(JukeboxesEverywhere.ShouldPlayJukeBoxHere))),
                 });
-            helper.Print();
+
+            // helper.Print();
             return helper.Render();
         }
         catch (Exception ex)

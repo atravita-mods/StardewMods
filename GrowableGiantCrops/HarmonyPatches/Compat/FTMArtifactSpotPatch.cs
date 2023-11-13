@@ -13,6 +13,8 @@ using GrowableGiantCrops.Framework;
 
 using HarmonyLib;
 
+using StardewValley.Enchantments;
+
 namespace GrowableGiantCrops.HarmonyPatches.Compat;
 
 /// <summary>

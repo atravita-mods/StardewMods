@@ -66,7 +66,9 @@ internal sealed class ModEntry : BaseMod<ModEntry>
     private void ScreenshotQueueHandler(object? sender, UpdateTickedEventArgs e)
     {
         if (Game1.currentLocation is null)
+        {
             return;
+        }
 
         this.TakeScreenShotImpl(Path.Combine(Game1.game1.GetScreenshotFolder(), $"test-screenshot-{Game1.currentLocation.NameOrUniqueName}.png"), 1f);
 

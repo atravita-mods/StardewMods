@@ -72,6 +72,11 @@ public static partial class WeatherExtensions
         return weather;
     }
 
+    /// <summary>
+    /// Counts the number of individual weathers this weather enum represents.
+    /// </summary>
+    /// <param name="weather">The weather enum.</param>
+    /// <returns>Number of distinct weathers.</returns>
     public static int CountWeathers(this StardewWeather weather)
         => BitOperations.PopCount((uint)weather);
 }

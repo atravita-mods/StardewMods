@@ -16,7 +16,7 @@ public static class ColorHandler
     /// Reflect for all the colors defined by Skia, XNA, and Microsoft.
     /// </summary>
     /// <remarks>There's probably a lot of repeats, but hey, this runs once.</remarks>
-    private static readonly Lazy<Dictionary<string, XNAColor>> colors = new(() =>
+    private static readonly Lazy<Dictionary<string, XNAColor>> colors = new(static () =>
     {
         Dictionary<string, XNAColor>? colors = new(StringComparer.InvariantCultureIgnoreCase);
 

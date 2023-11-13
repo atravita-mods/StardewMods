@@ -8,7 +8,7 @@ using System.Text.RegularExpressions;
 internal static class FileNameParser
 {
     [RegexPattern]
-    private static Regex _parser = new(@"{{([a-zA-Z]+)}}", RegexOptions.Compiled);
+    private static readonly Regex _parser = new(@"{{([a-zA-Z]+)}}", RegexOptions.Compiled, TimeSpan.FromSeconds(20));
 
     /// <summary>
     /// Gets the filename associated with a tokenized string.
@@ -45,11 +45,11 @@ internal static class FileNameParser
         return loweredToken switch
         {
             "default" => Game1.game1.GetScreenshotFolder(false),
-            "location" => currentLocation.isStructure.Value ? currentLocation.Name : currentLocation.DisplayName,
+            "location" => currentLocation.Name,
             "save" => $"{Game1.player.farmName.Value}_{Game1.uniqueIDForThisGame}",
             "farm" => Game1.player.farmName.Value,
             "name" => Game1.player.Name,
-            "date" => $"{Game1.year:D2}_{Game1.seasonIndex:D2}_{Game1.dayOfMonth:D2}", // year_month_day for sorting
+            "date" => $"{Game1.year:D2}_{Game1.seasonIndex + 1:D2}_{Game1.dayOfMonth:D2}", // year_month_day for sorting
             "weather" => currentLocation.GetWeather().Weather,
             "time" => Game1.timeOfDay.ToString(),
             "timestamp" => $"{DateTime.Now:yyyy.MM.dd HH-mm-ss}",

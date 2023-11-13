@@ -37,7 +37,7 @@
 
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Diagnostics" Version="8.0.0" />
-    <PackageReference Include="FastExpressionCompiler.LightExpression" Version="3.3.3" />
+    <PackageReference Include="FastExpressionCompiler.LightExpression" Version="4.0.0" />
     <PackageReference Include="LinqFasterer" Version="2.1.0" />
     <PackageReference Include="morelinq" Version="4.0.0" />
     <PackageReference Include="Microsoft.IO.RecyclableMemoryStream" Version="2.3.2" />

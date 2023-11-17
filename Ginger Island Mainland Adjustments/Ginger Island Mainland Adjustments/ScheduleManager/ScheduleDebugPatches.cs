@@ -66,7 +66,7 @@ internal static class ScheduleDebugPatches
         Exception __exception,
         ref SchedulePathDescription __result)
     {
-        Globals.ModMonitor.Log($"Checking schedule point for {__instance.Name} at map {startingLocation} {startingX} {startingY}");
+        Globals.ModMonitor.VerboseLog($"Checking schedule point for {__instance.Name} at map {startingLocation} {startingX} {startingY}");
         if (__exception is not null)
         {
             Globals.ModMonitor.Log($"Encountered error parsing schedule for {__instance.Name}, {startingLocation} {startingX} {startingY} to {endingLocation} {endingX} {endingY}.\n\n{__exception}", LogLevel.Error);

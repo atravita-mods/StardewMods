@@ -38,7 +38,7 @@ internal static class ConsoleCommandManager
 
         commandHelper.Add(
             name: $"{Prefix}get_gift_taste",
-            documentation: "Gets the gift taste for a specific item (as calculated by this mod.",
+            documentation: "Gets the gift taste for a specific item (as calculated by this mod.)",
             callback: GetGiftTasteFor);
     }
 

@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 using Microsoft.Xna.Framework.Input;
 
 using Newtonsoft.Json;
-
+using SinZsEventTester.Framework;
 using StardewModdingAPI.Events;
 
 using StardewValley.BellsAndWhistles;
@@ -13,6 +13,7 @@ using StardewValley.Menus;
 using StardewValley.Minigames;
 
 /// <inheritdoc />
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1309:Field names should not begin with underscore", Justification = "Preference.")]
 public sealed class ModEntry : Mod
 {
     private bool hooked = false;
@@ -22,10 +23,10 @@ public sealed class ModEntry : Mod
     private EventRecord? current;
 
     // keep track of the dialogue responses given.
-    private readonly Node tree = new("base", 0,new());
+    private readonly Node tree = new("base", 0, new());
     private Node? workingNode;
     private string? currentEventId;
-    private HashSet<string> seenResponses = new();
+    private readonly HashSet<string> seenResponses = new();
 
     // I keep on clicking the stupid dialogues twice. Agh. Don't allow that.
     private readonly ConditionalWeakTable<DialogueBox, object> _seen = new();
@@ -304,10 +305,17 @@ Outer: ;
                                     if (data.Contains("%fork"))
                                     {
                                         isTrivial = false;
-                                        break;
                                     }
                                 }
+                                else
+                                {
+                                    this.Monitor.Log($"Missing dialogue key {r.responseKey} for {db.characterDialogue!.speaker.Name}", LogLevel.Warn);
+                                }
                             }
+                        }
+                        else
+                        {
+                            this.Monitor.Log($"Could not find dialogue file for {db.characterDialogue?.speaker?.Name ?? "unknown speaker"}, this might be a problem.", LogLevel.Warn);
                         }
                         if (isTrivial)
                         {
@@ -405,8 +413,10 @@ Outer: ;
                         case Color.Blue:
                         {
                             this.Monitor.Log($"Reached blue node, queue only single child.");
-                            Node blue = new (db.responses[0].responseKey, 0, new ());
-                            blue.Color = Color.Blue;
+                            Node blue = new(db.responses[0].responseKey, 0, new())
+                            {
+                                Color = Color.Blue
+                            };
                             this.workingNode.Children.Add(blue);
 
                             db.selectedResponse = 0;
@@ -452,8 +462,7 @@ Outer: ;
                     }
                 }
 
-                if (this.Monitor.IsVerbose)
-                    this.Monitor.Log("Clicking on the dialogue box");
+                this.Monitor.VerboseLog("Clicking on the dialogue box");
                 db.receiveLeftClick(0, 0);
             }
             else if (Game1.activeClickableMenu is NamingMenu nm)
@@ -464,6 +473,9 @@ Outer: ;
             return;
         }
 
+        // do I need to kill end of night menus?
+
+        // can't queue new events if the game is trying to save/doing night stuff.
         if (!Game1.game1.IsActive || Game1.newDay || Game1.gameMode != Game1.playingGameMode) return;
 
         if (Game1.activeClickableMenu is { } menu)
@@ -540,11 +552,7 @@ Outer: ;
         this.Monitor.Log($"Meaningless choice, skipping.");
         db.selectedResponse = Game1.random.Next(db.responses.Length);
 
-        if (this.Monitor.IsVerbose)
-        {
-            this.Monitor.Log("Clicking on the dialogue box");
-        }
-
+        this.Monitor.VerboseLog("Clicking on the dialogue box.");
         db.receiveLeftClick(0, 0);
     }
 

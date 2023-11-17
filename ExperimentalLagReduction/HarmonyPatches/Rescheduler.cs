@@ -1,4 +1,4 @@
-﻿// #define TRACELOG
+﻿#define TRACELOG
 
 namespace ExperimentalLagReduction.HarmonyPatches;
 
@@ -39,6 +39,8 @@ internal static class Rescheduler
     private static readonly ThreadLocal<HashSet<string>> _visited = new(static () => new(capacity: 32));
 
     private static readonly ThreadLocal<Queue<MacroNode>> _queue = new(static () => new(capacity: 32));
+
+    private static readonly ThreadLocal<HashSet<string>> _dedup = new(static () => new());
 
 #if DEBUG
     private static readonly ThreadLocal<Stopwatch> _stopwatch = new(() => new(), trackAllValues: true);
@@ -277,13 +279,13 @@ internal static class Rescheduler
 
             // seed with initial
             MacroNode startNode = new(start.Name, null, GetGenderConstraint(start.Name));
-            _visited.Value.Add(start.Name);
             string[]? ret = null;
 
             FindWarpsFrom(startNode, start, _visited.Value, startNode.GenderConstraint, _queue.Value);
 
             while (_queue.Value.TryDequeue(out MacroNode? node))
             {
+                _visited.Value.Add(node.Name);
                 if (Game1.getLocationFromName(node.Name) is not GameLocation current)
                 {
                     ModEntry.ModMonitor.LogOnce($"A warp references {node.Name} which could not be found.", LogLevel.Warn);
@@ -598,14 +600,16 @@ internal static class Rescheduler
             return;
         }
 
+        _dedup.Value ??= new();
+        _dedup.Value.Clear();
         if (location.warps?.Count is not null and not 0)
         {
             foreach (Warp? warp in location.warps)
             {
-                if (GetActualLocation(warp.TargetName) is string name)
+                if (GetActualLocation(warp.TargetName) is string name && _dedup.Value.Add(name) && !visited.Contains(name))
                 {
                     Gender genderConstraint = GetTightestGenderConstraint(gender, GetGenderConstraint(name));
-                    if (genderConstraint != Gender.Invalid && visited.Add(name))
+                    if (genderConstraint != Gender.Invalid)
                     {
                         queue.Enqueue(new(name, start, genderConstraint));
                     }
@@ -617,10 +621,10 @@ internal static class Rescheduler
         {
             foreach (string? door in location.doors.Values)
             {
-                if (GetActualLocation(door) is string name)
+                if (GetActualLocation(door) is string name && _dedup.Value.Add(name) && !visited.Contains(name))
                 {
                     Gender genderConstraint = GetTightestGenderConstraint(gender, GetGenderConstraint(name));
-                    if (genderConstraint != Gender.Invalid && visited.Add(name))
+                    if (genderConstraint != Gender.Invalid)
                     {
                         queue.Enqueue(new(name, start, genderConstraint));
                     }

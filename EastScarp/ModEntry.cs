@@ -6,6 +6,8 @@ using EastScarp.Models;
 
 using HarmonyLib;
 
+using Microsoft.Xna.Framework;
+
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
 
@@ -36,7 +38,7 @@ internal sealed class ModEntry : Mod
         helper.Events.Content.AssetReady += static (_, e) => CustomEmoji.Ready(e);
         helper.Events.Content.AssetsInvalidated += static (_, e) => CustomEmoji.Reset(e.NamesWithoutLocale);
 
-        this.ApplyPatches(new(this.ModManifest.UniqueID));
+        this.ApplyPatches(new (this.ModManifest.UniqueID));
     }
 
     private void ApplyPatches(Harmony harmony)
@@ -116,11 +118,11 @@ internal sealed class ModEntry : Mod
         this._activeModel.Value = data;
 
         // check for valid water color.
-        foreach (var color in data.WaterColor)
+        foreach (WaterColor color in data.WaterColor)
         {
             if (color.CheckCondition(e.NewLocation, e.Player))
             {
-                var c = Utility.StringToColor(color.Color);
+                Color? c = Utility.StringToColor(color.Color);
                 if (c is not null)
                 {
                     this.Monitor.VerboseLog($"Assigning {c.Value} to water color at {e.NewLocation}");

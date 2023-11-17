@@ -674,7 +674,7 @@ internal static class ItemPatcher
                     currentPlayer.currentLocation.debris.Add(new Debris(incremented, currentPlayer.Position, Color.Green, 1f, currentPlayer));
                 }
             }
-            if (health_regen > 0 && currentPlayer.health < currentPlayer.maxHealth)
+            if (health_regen > 0 && currentPlayer.health < currentPlayer.maxHealth - 1)
             {
                 float amount = Math.Min(health_regen + _healthRemainder.Value, currentPlayer.maxHealth - currentPlayer.health);
                 int toAdd = (int)amount;

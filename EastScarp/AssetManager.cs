@@ -4,6 +4,8 @@ using EastScarp.Models;
 
 using StardewModdingAPI.Events;
 
+using StardewValley.GameData.Characters;
+
 /// <summary>
 /// Manages assets for this mod.
 /// </summary>
@@ -47,10 +49,26 @@ internal static class AssetManager
         {
             e.LoadFromModFile<Dictionary<string, EmojiData>>("assets/emoji_data.json", AssetLoadPriority.Exclusive);
         }
-        else if (e.Name.IsEquivalentTo(durationOverride))
+        else if (e.NameWithoutLocale.IsEquivalentTo(durationOverride))
         {
             e.LoadFromModFile<Dictionary<string, string>>("assets/duration_override.json", AssetLoadPriority.Exclusive);
         }
+#if DEBUG
+        else if (e.NameWithoutLocale.IsEquivalentTo("Data/Characters"))
+        {
+            e.Edit(static asset =>
+            {
+                var editor = asset.AsDictionary<string, CharacterData>().Data;
+                if (!editor.TryGetValue("Lewis", out var data))
+                {
+                    ModEntry.ModMonitor.Log($"Huh, where's Lewis");
+                    return;
+                }
+
+                data.CustomFields["EastScarpe.NPCScale"] = "0.75";
+            });
+        }
+#endif
     }
 
     /// <inheritdoc cref="IContentEvents.AssetsInvalidated"/>

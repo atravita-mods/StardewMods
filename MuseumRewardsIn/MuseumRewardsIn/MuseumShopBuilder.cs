@@ -137,7 +137,7 @@ internal static class MuseumShopBuilder
             items.Add(new(ItemRegistry.Create(item)));
         }
 
-        if (count is null || count.Value <= items.Count)
+        if (count is null || count.Value >= items.Count)
         {
             return items;
         }

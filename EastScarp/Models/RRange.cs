@@ -15,6 +15,15 @@ public struct RRange
         this.Max = max;
     }
 
+    /// <summary>
+    /// The minimum value.
+    /// </summary>
     int Min { get; set; } = 1;
+
+    /// <summary>
+    /// The maximum value.
+    /// </summary>
     int Max { get; set; } = 1;
+
+    internal int Get() => Random.Shared.Next(this.Min, Math.Max(this.Min, this.Max) + 1);
 }

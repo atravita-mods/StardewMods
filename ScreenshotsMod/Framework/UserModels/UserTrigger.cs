@@ -10,7 +10,7 @@ public sealed class UserTrigger
     /// <summary>
     /// Gets or sets the maps for which this trigger should apply.
     /// </summary>
-    public string[] Maps { get; set; } = Array.Empty<string>();
+    public string[] Maps { get; set; } = ["Farm"];
 
     /// <summary>
     /// Gets or sets the season for which this trigger should apply.

@@ -12,8 +12,6 @@ using StardewModdingAPI.Utilities;
 [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "Fields kept near accessors.")]
 public sealed class ModConfig
 {
-    internal const string DEFAULT_FILENAME = @"{{Default}}/{{Save}}/{{Location}}/{{Date}}.png";
-
     #region general
     public bool ScreenFlash { get; set; } = true;
 
@@ -37,7 +35,7 @@ public sealed class ModConfig
     {
         get => this.keyBindFileName;
         [MemberNotNull(nameof(keyBindFileName))]
-        set => this.keyBindFileName = SanitizePath(value);
+        set => this.keyBindFileName = FileNameParser.SanitizePath(value);
     }
 
     /// <summary>
@@ -54,7 +52,7 @@ public sealed class ModConfig
 
     public Dictionary<string, UserRule> Rules { get; set; } = new()
     {
-        ["Default"] = new()
+        ["Default"] = new(),
     };
 
     /// <summary>
@@ -62,22 +60,6 @@ public sealed class ModConfig
     /// </summary>
     public ModConfig()
     {
-        this.KeyBindFileName = DEFAULT_FILENAME;
-    }
-
-    /// <summary>
-    /// Sanitizes a given path.
-    /// </summary>
-    /// <param name="value">Path to sanitize.</param>
-    /// <returns>Sanitized (hopefully) path.</returns>
-    internal static string SanitizePath(string value)
-    {
-        var proposed = PathUtilities.NormalizePath(value);
-        var ext = Path.GetExtension(proposed);
-        if (!ext.Equals(".png", Constants.TargetPlatform is GamePlatform.Linux or GamePlatform.Android ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase))
-        {
-            proposed += ".png";
-        }
-        return proposed;
+        this.KeyBindFileName = FileNameParser.DEFAULT_FILENAME;
     }
 }

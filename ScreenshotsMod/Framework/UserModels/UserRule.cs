@@ -10,13 +10,13 @@ public sealed class UserRule
     {
         get => this.path;
         [MemberNotNull(nameof(this.path))]
-        set => this.path = ModConfig.SanitizePath(value);
+        set => this.path = FileNameParser.SanitizePath(value);
     }
 
     public float Scale { get; set; } = 0.25f;
 
     public UserRule()
     {
-        this.Path = ModConfig.DEFAULT_FILENAME;
+        this.Path = FileNameParser.DEFAULT_FILENAME;
     }
 }

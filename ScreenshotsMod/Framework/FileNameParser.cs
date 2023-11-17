@@ -2,13 +2,33 @@
 
 using System.Text.RegularExpressions;
 
+using StardewModdingAPI.Utilities;
+
 /// <summary>
 /// Parses tokens out of the filename.
 /// </summary>
 internal static class FileNameParser
 {
+    internal const string DEFAULT_FILENAME = @"{{Default}}/{{Save}}/{{Location}}/{{Date}}.png";
+
     [RegexPattern]
     private static readonly Regex _parser = new(@"{{([a-zA-Z]+)}}", RegexOptions.Compiled, TimeSpan.FromSeconds(20));
+
+    /// <summary>
+    /// Sanitizes a given path.
+    /// </summary>
+    /// <param name="value">Path to sanitize.</param>
+    /// <returns>Sanitized (hopefully) path.</returns>
+    internal static string SanitizePath(string value)
+    {
+        var proposed = PathUtilities.NormalizePath(value);
+        var ext = Path.GetExtension(proposed);
+        if (!ext.Equals(".png", Constants.TargetPlatform is GamePlatform.Linux or GamePlatform.Android ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase))
+        {
+            proposed += ".png";
+        }
+        return proposed;
+    }
 
     /// <summary>
     /// Gets the filename associated with a tokenized string.

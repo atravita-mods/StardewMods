@@ -2,7 +2,7 @@
 
 using StardewModdingAPI.Utilities;
 
-namespace NPCArrows.Framework;
+namespace NPCArrows.Framework.NPCs;
 
 /// <summary>
 /// Gets the data to draw for a specific NPC.
@@ -34,7 +34,7 @@ internal sealed class NPCData
 
 internal static class NPCDataManager
 {
-    private static readonly PerScreen<Dictionary<string, NPCData>> npcData = new(() => new ());
+    private static readonly PerScreen<Dictionary<string, NPCData>> npcData = new(() => new());
 
-    private static readonly PerScreen<Dictionary<SObject, NPCData>> giftCache = new(() => new ());
+    private static readonly PerScreen<Dictionary<SObject, NPCData>> giftCache = new(() => new());
 }

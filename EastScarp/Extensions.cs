@@ -4,8 +4,17 @@ using System.Diagnostics;
 
 using Microsoft.Xna.Framework;
 
+/// <summary>
+/// The extensions for this mod.
+/// </summary>
 internal static class Extensions
 {
+    /// <summary>
+    /// Given a Rectangle area, clamps it to the current map.
+    /// </summary>
+    /// <param name="rectangle"></param>
+    /// <param name="location"></param>
+    /// <returns></returns>
     internal static Rectangle ClampMap(this Rectangle rectangle, GameLocation location)
     {
         if (location?.Map?.GetLayer("Back") is not { } layer)

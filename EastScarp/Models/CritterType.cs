@@ -1,5 +1,6 @@
 ﻿namespace EastScarp.Models;
 
+[NetEscapades.EnumGenerators.EnumExtensions]
 public enum CritterType
 {
     // these can spawn off the map

@@ -73,17 +73,6 @@ public sealed class ModEntry : Mod
             "sinz.forget_mail",
             "Forgets mail",
             this.ForgetMail);
-        helper.ConsoleCommands.Add(
-            "sinz.skip_event",
-            "If currently in an event, skip it.",
-            (_,_) =>
-            {
-                if (Game1.CurrentEvent is Event evt)
-                {
-                    evt.skipEvent();
-                    this.Monitor.Log($"Skipping {evt.id}", LogLevel.Info);
-                }
-            });
     }
 
     private void Hook()

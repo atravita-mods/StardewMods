@@ -30,20 +30,6 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         this.screenshotter = new();
         this.config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
 
-        helper.ConsoleCommands.Add(
-            "av.screenshot",
-            "Takes a screenshot of the current map",
-            (_,_) =>
-            {
-                SKSurface? surface = this.screenshotter.TakeScreenshot();
-                if (surface is not null)
-                    Task.Run(() =>
-                    {
-                        Screenshotter.WriteBitmap(surface, Path.Combine(Game1.game1.GetScreenshotFolder(), "test-screenshot.png"));
-                        surface.Dispose();
-                    });
-            });
-
         helper.Events.Player.Warped += this.OnWarp;
         helper.Events.Input.ButtonPressed += this.OnButtonPressed;
     }
@@ -60,39 +46,56 @@ internal sealed class ModEntry : BaseMod<ModEntry>
 
     private void OnWarp(object? sender, WarpedEventArgs e)
     {
+        // it's possible for this event to be raised for a "false warp".
+        if (e.NewLocation is null || ReferenceEquals(e.NewLocation, e.OldLocation) || !e.IsLocalPlayer || e.NewLocation.IsTemporary)
+        {
+            return;
+        }
+
         this.Helper.Events.GameLoop.UpdateTicked += this.ScreenshotQueueHandler;
     }
 
     private void ScreenshotQueueHandler(object? sender, UpdateTickedEventArgs e)
     {
-        if (Game1.currentLocation is null)
+        if (Game1.currentLocation is not { } current)
         {
             return;
         }
 
-        this.TakeScreenShotImpl(Path.Combine(Game1.game1.GetScreenshotFolder(), $"test-screenshot-{Game1.currentLocation.NameOrUniqueName}.png"), 1f);
+#if TRACELOG
+        Stopwatch stopwatch = Stopwatch.StartNew();
+#endif
 
+        var width = current.map.DisplayWidth;
+        var height = current.map.DisplayHeight;
+
+        if (width > 32 || height > 32)
+        {
+            this.TakeScreenShotImpl(Path.Combine(Game1.game1.GetScreenshotFolder(), $"test-screenshot-{Game1.currentLocation.NameOrUniqueName}.png"), 1f);
+        }
+        else
+        {
+            this.Monitor.DebugOnlyLog($"simplified screenshot - {width}x{height}");
+            this.screenshotter.TakeScreenshotSimplifed(Path.Combine(Game1.game1.GetScreenshotFolder(), $"test-screenshot-{Game1.currentLocation.NameOrUniqueName}.png"), 1f, true);
+        }
         this.Helper.Events.GameLoop.UpdateTicked -= this.ScreenshotQueueHandler;
+
+#if TRACELOG
+        this.Monitor.LogTimespan("taking screenshot", stopwatch);
+#endif
     }
 
     private void TakeScreenShotImpl(string filename, float scale = 1f)
     {
-#if DEBUG
-        Stopwatch stopwatch = Stopwatch.StartNew();
-#endif
-        SKSurface? surface = this.screenshotter.TakeScreenshot(scale);
-        this.Monitor.LogTimespan("preparing screenshot", stopwatch);
+
+        SKSurface? surface = this.screenshotter.TakeScreenshot(scale, true);
         if (surface is not null)
         {
             Task.Run(() =>
             {
-                Screenshotter.WriteBitmap(surface,  filename);
+                Screenshotter.WriteBitmap(surface, filename);
                 surface.Dispose();
             });
         }
-
-#if DEBUG
-        this.Monitor.LogTimespan("taking screenshot", stopwatch);
-#endif
     }
 }

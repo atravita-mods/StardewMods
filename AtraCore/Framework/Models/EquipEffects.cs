@@ -218,6 +218,7 @@ public sealed class EquipEffects
 /// </summary>
 public sealed class BuffModel : ObjectBuffAttributesData
 {
+    // merges the model data with the given buff effects.
     private static readonly Lazy<Action<BuffEffects, BuffModel>> _merger = new(() =>
     {
         ParameterExpression effects = Expression.ParameterOf<BuffEffects>("effects");
@@ -232,23 +233,26 @@ public sealed class BuffModel : ObjectBuffAttributesData
             switch (member)
             {
                 case FieldInfo asField:
-                    if (CheckTypeMatch(asField.FieldType, field.FieldType))
+                {
+                    if (AsBaseType(asField.FieldType) is { } type)
                     {
                         MemberExpression netField = Expression.Field(effects, asField);
                         MemberExpression value = Expression.Property(netField, asField.FieldType.GetCachedProperty("Value", ReflectionCache.FlagTypes.InstanceFlags));
-                        BinaryExpression assign = Expression.Assign(value, Expression.Add(value, getter));
+                        BinaryExpression assign = Expression.Assign(value, Expression.Add(value, Expression.Convert(getter, type)));
                         expressions.Add(assign);
                     }
-
                     break;
+                }
                 case PropertyInfo asProperty:
-                    if (CheckTypeMatch(asProperty.PropertyType, field.FieldType))
+                {
+                    if (AsBaseType(asProperty.PropertyType) is { } type)
                     {
                         MemberExpression netField = Expression.Property(effects, asProperty);
                         MemberExpression value = Expression.Property(netField, asProperty.PropertyType.GetCachedProperty("Value", ReflectionCache.FlagTypes.InstanceFlags));
-                        BinaryExpression assign = Expression.Assign(value, Expression.Add(value, getter));
+                        BinaryExpression assign = Expression.Assign(value, Expression.Add(value, Expression.Convert(getter, type)));
                     }
                     break;
+                }
                 default:
                     ReflectionThrowHelper.ThrowMethodNotFoundException(field.Name);
                     break;
@@ -263,23 +267,26 @@ public sealed class BuffModel : ObjectBuffAttributesData
             switch (member)
             {
                 case FieldInfo asField:
-                    if (CheckTypeMatch(asField.FieldType, property.PropertyType))
+                {
+                    if (AsBaseType(asField.FieldType) is { } type)
                     {
                         MemberExpression netField = Expression.Field(effects, asField);
                         MemberExpression value = Expression.Property(netField, asField.FieldType.GetCachedProperty("Value", ReflectionCache.FlagTypes.InstanceFlags));
-                        BinaryExpression assign = Expression.Assign(value, Expression.Add(value, getter));
+                        BinaryExpression assign = Expression.Assign(value, Expression.Add(value, Expression.Convert(getter, type)));
                         expressions.Add(assign);
                     }
-
                     break;
+                }
                 case PropertyInfo asProperty:
-                    if (CheckTypeMatch(asProperty.PropertyType, property.PropertyType))
+                {
+                    if (AsBaseType(asProperty.PropertyType) is { } type)
                     {
                         MemberExpression netField = Expression.Property(effects, asProperty);
                         MemberExpression value = Expression.Property(netField, asProperty.PropertyType.GetCachedProperty("Value", ReflectionCache.FlagTypes.InstanceFlags));
-                        BinaryExpression assign = Expression.Assign(value, Expression.Add(value, getter));
+                        BinaryExpression assign = Expression.Assign(value, Expression.Add(value, Expression.Convert(getter, type)));
                     }
                     break;
+                }
                 default:
                     ReflectionThrowHelper.ThrowMethodNotFoundException(property.Name);
                     break;
@@ -353,6 +360,21 @@ public sealed class BuffModel : ObjectBuffAttributesData
         return lambda.CompileFast();
     });
 
+    private static Type? AsBaseType(Type netfield)
+    {
+        if (netfield == typeof(NetInt))
+        {
+            return typeof(int);
+        }
+
+        if (netfield == typeof(NetFloat))
+        {
+            return typeof(float);
+        }
+
+        return netfield.GenericTypeArguments.FirstOrDefault();
+    }
+
     /// <inheritdoc cref="BuffEffects.CombatLevel"/>
     public float CombatLevel { get; set; } = 0;
 
@@ -417,20 +439,6 @@ public sealed class BuffModel : ObjectBuffAttributesData
     /// </summary>
     /// <returns>Number of extra rows.</returns>
     internal int GetExtraRows() => _extraRows.Value(this);
-
-    private static bool CheckTypeMatch(Type buffEffectsField, Type buffModelField)
-    {
-        if (buffModelField == typeof(int) && buffEffectsField == typeof(NetInt))
-        {
-            return true;
-        }
-        if (buffModelField == typeof(float) && buffEffectsField == typeof(NetFloat))
-        {
-            return true;
-        }
-
-        return false;
-    }
 }
 
 /// <summary>

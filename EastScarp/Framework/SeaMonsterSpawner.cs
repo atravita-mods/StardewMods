@@ -9,14 +9,14 @@ internal static class SeaMonsterSpawner
 {
     internal static void SpawnMonster(List<SeaMonsterSpawn> spawns, SpawnTrigger trigger, GameLocation location, Farmer farmer)
     {
-        var maxHeight = location.Map?.GetLayer("Back")?.LayerHeight ?? 0;
+        int maxHeight = location.Map?.GetLayer("Back")?.LayerHeight ?? 0;
         if (maxHeight < 1)
         {
             ModEntry.ModMonitor.LogOnce($"Could not find 'back' layer for {location.NameOrUniqueName ?? "Unknown Location"}", LogLevel.Warn);
             return;
         }
 
-        foreach (var spawn in spawns)
+        foreach (SeaMonsterSpawn spawn in spawns)
         {
             if (!spawn.Trigger.HasFlag(trigger))
             {
@@ -33,7 +33,7 @@ internal static class SeaMonsterSpawner
                 continue;
             }
 
-            var area = spawn.Area.ClampMap(location);
+            Rectangle area = spawn.Area.ClampMap(location);
 
             if (area == Rectangle.Empty)
             {

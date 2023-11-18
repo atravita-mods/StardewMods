@@ -28,7 +28,7 @@ SOFTWARE.
  * *******************************************/
 
 // Ignore Spelling: Api
-namespace AtraShared.Integrations.Interfaces;
+namespace SinZsEventTester.Framework;
 
 /// <summary>The API which lets other mods add a config UI through Generic Mod Config Menu.</summary>
 /// <remarks>Copied from https://github.com/spacechase0/StardewValleyMods/blob/main/GenericModConfigMenu/IGenericModConfigMenuApi.cs. </remarks>

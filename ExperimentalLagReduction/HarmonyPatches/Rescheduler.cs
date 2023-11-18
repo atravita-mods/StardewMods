@@ -1,4 +1,4 @@
-﻿#define TRACELOG
+﻿// #define TRACELOG
 
 namespace ExperimentalLagReduction.HarmonyPatches;
 
@@ -666,7 +666,7 @@ internal static class Rescheduler
     /// <param name="name">Name of map.</param>
     /// <returns>Gender to restrict to.</returns>
     private static Gender GetGenderConstraint(string name)
-        => WarpPathfindingCache.GenderRestrictions.TryGetValue(name, out var gender) ? (Gender)gender : Ungendered;
+        => WarpPathfindingCache.GenderRestrictions.TryGetValue(name, out int gender) ? (Gender)gender : Ungendered;
 
     /// <summary>
     /// Given two gender constraints, return the tighter of the two.

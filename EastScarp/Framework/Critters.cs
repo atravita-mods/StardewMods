@@ -20,7 +20,7 @@ internal static class Critters
     /// <param name="farmer">The farmer instance.</param>
     internal static void SpawnCritter(List<CritterSpawn> spawns, SpawnTrigger trigger, GameLocation location, Farmer farmer)
     {
-        foreach (var spawn in spawns)
+        foreach (CritterSpawn spawn in spawns)
         {
             if (!spawn.Trigger.HasFlag(trigger))
             {
@@ -43,7 +43,7 @@ internal static class Critters
                 continue;
             }
 
-            var area = spawn.Area.ClampMap(location);
+            Rectangle area = spawn.Area.ClampMap(location);
             Vector2 center = new (
                 Random.Shared.Next(area.Left, area.Right + 1),
                 Random.Shared.Next(area.Top, area.Bottom + 1));

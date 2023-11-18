@@ -5,7 +5,9 @@ using System.Runtime.CompilerServices;
 using Microsoft.Xna.Framework.Input;
 
 using Newtonsoft.Json;
+
 using SinZsEventTester.Framework;
+
 using StardewModdingAPI.Events;
 
 using StardewValley.BellsAndWhistles;
@@ -50,6 +52,8 @@ public sealed class ModEntry : Mod
             this.config = new();
         }
 
+        helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
+
         helper.ConsoleCommands.Add(
             "sinz.playevents",
             "Auto plays events in the current location. If arguments are given is treated as a specific, or all if location is 'ALL'",
@@ -76,10 +80,28 @@ public sealed class ModEntry : Mod
             this.ForgetMail);
     }
 
+    private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
+    {
+        if (this.Helper.ModRegistry.GetApi<IGenericModConfigMenuApi>("spacechase0.GenericModConfigMenu") is IGenericModConfigMenuApi api)
+        {
+            api.Register(
+                mod: this.ModManifest,
+                reset: () => this.config = new(),
+                save: () => this.Helper.WriteConfig(this.config));
+            api.AddNumberOption(
+                mod: this.ModManifest,
+                getValue: () => this.config.EventSpeedRatio,
+                setValue: value => this.config.EventSpeedRatio = value,
+                I18n.EventSpeedRatio);
+        }
+    }
+
     private void Hook()
     {
         if (this.hooked)
+        {
             return;
+        }
 
         this.hooked = true;
         this.Helper.Events.GameLoop.UpdateTicked += this.GameLoop_UpdateTicked;
@@ -90,6 +112,8 @@ public sealed class ModEntry : Mod
         this.hooked = false;
         this.Helper.Events.GameLoop.UpdateTicked -= this.GameLoop_UpdateTicked;
     }
+
+    #region queues events.
 
     private void EventById(string cmd, string[] args)
     {
@@ -213,6 +237,8 @@ public sealed class ModEntry : Mod
 Outer: ;
         }
     }
+
+    #endregion
 
     private void GameLoop_UpdateTicked(object? sender, UpdateTickedEventArgs e)
     {
@@ -705,71 +731,4 @@ Outer: ;
         }
     }
     #endregion
-}
-
-/// <summary>
-/// A record that represents an event in a location.
-/// </summary>
-/// <param name="location">Name of the location.</param>
-/// <param name="eventKey">The event's key.</param>
-public readonly record struct EventRecord(string location, string eventKey);
-
-/// <summary>
-/// The extension methods for this file.
-/// </summary>
-file static class Extensions
-{
-    /// <summary>
-    /// Faster replacement for str.Split()[index];.
-    /// </summary>
-    /// <param name="str">String to search in.</param>
-    /// <param name="deliminator">deliminator to use.</param>
-    /// <param name="index">index of the chunk to get.</param>
-    /// <returns>a readonlyspan char with the chunk, or an empty readonlyspan for failure.</returns>
-    public static ReadOnlySpan<char> GetNthChunk(this string str, char deliminator, int index = 0)
-    {
-        int start = 0;
-        int ind = 0;
-        while (index-- >= 0)
-        {
-            ind = str.IndexOf(deliminator, start);
-            if (ind == -1)
-            {
-                // since we've previously decremented index, check against -1;
-                // this means we're done.
-                if (index == -1)
-                {
-                    return str.AsSpan()[start..];
-                }
-
-                // else, we've run out of entries
-                // and return an empty span to mark as failure.
-                return ReadOnlySpan<char>.Empty;
-            }
-
-            if (index > -1)
-            {
-                start = ind + 1;
-            }
-        }
-        return str.AsSpan()[start..ind];
-    }
-
-    /// <summary>
-    /// Speeds up dialogue boxes.
-    /// </summary>
-    /// <param name="db">the dialogue box to speed up.</param>
-    public static void SpeedUp(this DialogueBox db)
-    {
-        db.finishTyping();
-        db.safetyTimer = 0;
-
-        if (db.transitioningBigger)
-        {
-            db.transitionX = db.x;
-            db.transitionY = db.y;
-            db.transitionWidth = db.width;
-            db.transitionHeight = db.height;
-        }
-    }
 }

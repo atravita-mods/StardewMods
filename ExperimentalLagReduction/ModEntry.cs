@@ -45,13 +45,6 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         helper.Events.Content.AssetRequested += static (_, e) => AssetManager.Apply(e);
     }
 
-    [EventPriority(EventPriority.Low - 250)]
-    private void CrosscheckCache(object? sender, DayEndingEventArgs e)
-    {
-        Rescheduler.ClearNulls();
-        Rescheduler.PrePopulateCache(false);
-    }
-
     /// <inheritdoc />
     public override object? GetApi() => new API();
 
@@ -92,5 +85,12 @@ internal sealed class ModEntry : BaseMod<ModEntry>
             ModMonitor.Log(string.Format(ErrorMessageConsts.HARMONYCRASH, ex), LogLevel.Error);
         }
         harmony.Snitch(this.Monitor, harmony.Id, transpilersOnly: true);
+    }
+
+    [EventPriority(EventPriority.Low - 250)]
+    private void CrosscheckCache(object? sender, DayEndingEventArgs e)
+    {
+        Rescheduler.ClearNulls();
+        Rescheduler.PrePopulateCache(false);
     }
 }

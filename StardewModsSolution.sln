@@ -136,7 +136,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AtraBaseTests", "AtraBase\A
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SinZsEventTester", "SinZsEventTester\SinZsEventTester.csproj", "{98697A86-1709-4C62-89D2-329738B386D3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScreenshotsMod", "ScreenshotsMod\ScreenshotsMod.csproj", "{7B6527CD-6CD9-4EBF-84E7-E21B0E94DFC5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScreenshotsMod", "ScreenshotsMod\ScreenshotsMod.csproj", "{7B6527CD-6CD9-4EBF-84E7-E21B0E94DFC5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ColorfulFishingRods", "ColorfulFishingRods\ColorfulFishingRods.csproj", "{0C50674B-F3FF-4794-A36B-AC83AC3A4CA0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -368,6 +370,10 @@ Global
 		{7B6527CD-6CD9-4EBF-84E7-E21B0E94DFC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7B6527CD-6CD9-4EBF-84E7-E21B0E94DFC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7B6527CD-6CD9-4EBF-84E7-E21B0E94DFC5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C50674B-F3FF-4794-A36B-AC83AC3A4CA0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C50674B-F3FF-4794-A36B-AC83AC3A4CA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C50674B-F3FF-4794-A36B-AC83AC3A4CA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C50674B-F3FF-4794-A36B-AC83AC3A4CA0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

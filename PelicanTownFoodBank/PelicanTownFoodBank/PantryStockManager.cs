@@ -122,13 +122,12 @@ internal static class PantryStockManager
         List<string> cookedItems = new(24);
         foreach ((var index, var data) in Game1Wrappers.ObjectData)
         {
-            SpanSplit splits = data.SpanSplit('/');
-            SpanSplit typesandcategory = splits[3].SpanSplit();
-            if (typesandcategory.Count > 1 && int.TryParse(typesandcategory[1], out int result)
-                && FoodBankCategories.Contains(result)
-                && int.TryParse(splits[1], out int price ) && price < 250)
+            var cat = data.Category;
+            var price = data.Price;
+
+            if (FoodBankCategories.Contains(cat) && price < 250)
             {
-                if (result == SObject.CookingCategory)
+                if (cat == SObject.CookingCategory)
                 {
                     cookedItems.Add(index);
                 }

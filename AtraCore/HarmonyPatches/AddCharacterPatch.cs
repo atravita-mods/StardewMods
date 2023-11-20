@@ -8,14 +8,14 @@ using HarmonyLib;
 
 using StardewValley.SaveMigrations;
 
-[HarmonyPatch]
+// [HarmonyPatch]
 internal static class AddCharacterPatch
 {
     private static bool AddingNPCs;
 
     // this is immediately after SaveGame.LoadDataToLocations but I don't risk being punted to a different thread.
     [HarmonyPostfix]
-    [HarmonyPatch(typeof(Game1), nameof(Game1.updateCellarAssignments))]
+    [HarmonyPatch(typeof(SaveGame), nameof(SaveGame.loadDataToLocations))]
     private static void PostfixLoading()
     {
         if (Game1.lastAppliedSaveFix < SaveFixes.AddNpcRemovalFlags)

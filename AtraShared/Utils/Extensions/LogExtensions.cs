@@ -28,7 +28,7 @@ public static class LogExtensions
     /// <param name="sw">Stopwatch to log.</param>
     /// <param name="level">The level to log at.</param>
     [DebuggerHidden]
-    // [Conditional("TRACELOG")]
+    [Conditional("TRACELOG")]
     public static void LogTimespan(this IMonitor monitor, string action, Stopwatch sw, LogLevel level = LogLevel.Info)
     {
         monitor.Log($"{action} took {sw.Elapsed.TotalMilliseconds:F2} ms.", level);

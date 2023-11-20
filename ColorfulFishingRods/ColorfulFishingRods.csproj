@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <Import Project="..\csproj_common" />
 
   <PropertyGroup>
@@ -7,10 +7,8 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <Name>SinZ's Event Tester</Name>
-    <Authors>SinZ and atravita</Authors>
-    <UniqueId>sinZandAtravita.$(AssemblyName)</UniqueId>
-    <Description>Automated way to run events.</Description>
+    <Name>Colorful Fishing Rods</Name>
+    <Description>Lets you override the colors of fishing rods.</Description>
     <Version>0.1.0</Version>
     <UpdateKeys>-1</UpdateKeys>
   </PropertyGroup>
@@ -28,6 +26,5 @@
     <Using Alias="Object" Include="System.Object" />
     <Using Alias="SObject" Include="StardewValley.Object" />
   </ItemGroup>
-
 
 </Project>

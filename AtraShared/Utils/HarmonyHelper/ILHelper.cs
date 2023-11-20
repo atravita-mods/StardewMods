@@ -241,7 +241,7 @@ public sealed class ILHelper
             {
                 sb.Append("       <----");
             }
-            if (this.PointerStack.Contains(i))
+            if (this.PointerStack?.Contains(i) == true)
             {
                 sb.Append("       <----- stack point.");
             }

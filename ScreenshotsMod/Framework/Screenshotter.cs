@@ -74,7 +74,7 @@ internal sealed class Screenshotter
         {
             byte gray = 254;
             byte alpha = 76;
-            Game1.outdoorLight = Game1.ambientLight = Color.Transparent;
+            Game1.outdoorLight = Game1.ambientLight = Color.White;
             Game1.eveningColor = Color.White;
         }
 
@@ -206,7 +206,7 @@ internal sealed class Screenshotter
         {
             byte gray = 254;
             byte alpha = 76;
-            Game1.outdoorLight = Game1.ambientLight = Color.Transparent;
+            Game1.outdoorLight = Game1.ambientLight = Color.White;
             Game1.eveningColor = Color.White;
         }
 

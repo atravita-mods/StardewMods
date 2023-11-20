@@ -25,7 +25,7 @@ internal static class OnDamageTakenTranspiler
             ModEntry.ZeroOffset();
             ModEntry.MSHoldOffset = (Math.Max(
                     Math.Abs(Game1.viewportCenter.X - Game1.player.Position.X),
-                    Math.Abs(Game1.viewportCenter.X - Game1.player.Position.X)).ToIntFast() * 16
+                    Math.Abs(Game1.viewportCenter.Y - Game1.player.Position.Y)).ToIntFast() * 16
                 / ModEntry.Config.Speed)
                 + 50;
         }

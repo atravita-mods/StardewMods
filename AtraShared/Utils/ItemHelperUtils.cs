@@ -88,13 +88,8 @@ public static class ItemHelperUtils
         Guard.IsNotNullOrEmpty(id);
         Guard.IsNotNull(data);
 
-        // wedding ring (801) isn't a real ring.
+        // wedding ring (801) is apparently supposed to be a real ring.
         // JA rings are registered as "Basic -96"
-        if (id == "801")
-        {
-            return true;
-        }
-
-        return data.Category != -96 && data.Type != "Ring";
+        return id != "801" && data.Category != -96 && data.Type != "Ring";
     }
 }

@@ -46,8 +46,8 @@ internal sealed class Screenshotter
     /// </summary>
     /// <param name="filename">The filename to save to.</param>
     /// <param name="scale">The scale of the image.</param>
-    /// <param name="overrideAmbience">Whether or not to override <see cref="Game1.ambientLight"/>.</param>
-    internal void TakeScreenshotSimplifed(string filename, float scale = 1f, bool overrideAmbience = false)
+    /// 
+    internal void TakeScreenshotSimplifed(string filename, float scale = 1f)
     {
         if (Game1.currentLocation is not GameLocation current)
         {
@@ -67,16 +67,6 @@ internal sealed class Screenshotter
         Game1.options.baseZoomLevel = 1f;
         RenderTarget2D? cached_lightmap = this._lightMapGetter();
         this._lightMapSetter(null);
-        Color old_ambience = Game1.ambientLight;
-        Color old_outdoor = Game1.outdoorLight;
-        Color old_evening = Game1.eveningColor;
-        if (overrideAmbience)
-        {
-            byte gray = 254;
-            byte alpha = 76;
-            Game1.outdoorLight = Game1.ambientLight = Color.White;
-            Game1.eveningColor = Color.White;
-        }
 
         try
         {
@@ -136,13 +126,11 @@ internal sealed class Screenshotter
             Game1.game1.takingMapScreenshot = false;
             Game1.displayHUD = old_display_hud;
             Game1.viewport = old_viewport;
-            Game1.outdoorLight = old_outdoor;
-            Game1.eveningColor = old_evening;
         }
     }
 
     // derived from Game1.takeMapScreenshot
-    internal SKSurface? TakeScreenshot(float scale = 1f, bool overrideAmbience = false)
+    internal SKSurface? TakeScreenshot(float scale = 1f)
     {
         if (Game1.currentLocation is not GameLocation current)
         {
@@ -199,16 +187,6 @@ internal sealed class Screenshotter
         Game1.options.baseZoomLevel = 1f;
         RenderTarget2D? cached_lightmap = this._lightMapGetter();
         this._lightMapSetter(null);
-        Color old_ambience = Game1.ambientLight;
-        Color old_outdoor = Game1.outdoorLight;
-        Color old_evening = Game1.eveningColor;
-        if (overrideAmbience)
-        {
-            byte gray = 254;
-            byte alpha = 76;
-            Game1.outdoorLight = Game1.ambientLight = Color.White;
-            Game1.eveningColor = Color.White;
-        }
 
         Color[]? buffer = null;
         RenderTarget2D? render_target = null;
@@ -333,9 +311,6 @@ internal sealed class Screenshotter
             Game1.game1.takingMapScreenshot = false;
             Game1.displayHUD = old_display_hud;
             Game1.viewport = old_viewport;
-            Game1.outdoorLight = old_outdoor;
-            Game1.ambientLight = old_ambience;
-            Game1.eveningColor = old_evening;
         }
     }
 

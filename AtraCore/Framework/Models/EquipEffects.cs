@@ -181,28 +181,30 @@ public sealed class EquipEffects
     /// Adds in the health/stamina regen.
     /// </summary>
     /// <param name="farmer">The farmer to add to.</param>
-    internal void AddRegen(Farmer farmer)
-    {
-        if (this.StaminaRegen > 0 && farmer.Stamina < farmer.MaxStamina)
-        {
-            int prev = (int)farmer.Stamina;
-            float amount = Math.Min(this.StaminaRegen, farmer.MaxStamina - farmer.Stamina);
-            farmer.Stamina += amount;
+    internal void AddRegen(Farmer farmer) => HandleRegen(farmer, this.HealthRegen, this.StaminaRegen);
 
-            int incremented = (int)farmer.Stamina - prev;
+    internal static void HandleRegen(Farmer currentPlayer, float health_regen, float stamina_regen)
+    {
+        if (stamina_regen > 0 && currentPlayer.Stamina < currentPlayer.MaxStamina)
+        {
+            int prev = (int)currentPlayer.Stamina;
+            float amount = Math.Min(stamina_regen, currentPlayer.MaxStamina - currentPlayer.Stamina);
+            currentPlayer.Stamina += amount;
+
+            int incremented = (int)currentPlayer.Stamina - prev;
             if (incremented > 0)
             {
-                farmer.currentLocation.debris.Add(new Debris(incremented, farmer.Position, Color.Green, 1f, farmer));
+                currentPlayer.currentLocation.debris.Add(new Debris(incremented, currentPlayer.Position, Color.Yellow, 1f, currentPlayer));
             }
         }
-        if (this.HealthRegen > 0 && farmer.health < farmer.maxHealth)
+        if (health_regen > 0 && currentPlayer.health < currentPlayer.maxHealth - 1)
         {
-            float amount = Math.Min(this.HealthRegen + ItemPatcher.HealthRemainder, farmer.maxHealth - farmer.health);
+            float amount = Math.Min(health_regen + ItemPatcher.HealthRemainder, currentPlayer.maxHealth - currentPlayer.health);
             int toAdd = (int)amount;
             if (toAdd > 0)
             {
-                farmer.health += toAdd;
-                farmer.currentLocation.debris.Add(new Debris(toAdd, farmer.Position, Color.Green, 1f, farmer));
+                currentPlayer.health += toAdd;
+                currentPlayer.currentLocation.debris.Add(new Debris(toAdd, currentPlayer.Position, Color.Green, 1f, currentPlayer));
                 ItemPatcher.HealthRemainder = amount - toAdd;
             }
             else

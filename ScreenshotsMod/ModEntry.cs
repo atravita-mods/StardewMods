@@ -76,7 +76,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         else
         {
             this.Monitor.DebugOnlyLog($"simplified screenshot - {width}x{height}");
-            this.screenshotter.TakeScreenshotSimplifed(Path.Combine(Game1.game1.GetScreenshotFolder(), $"test-screenshot-{Game1.currentLocation.NameOrUniqueName}.png"), 1f, true);
+            this.screenshotter.TakeScreenshotSimplifed(Path.Combine(Game1.game1.GetScreenshotFolder(), $"test-screenshot-{Game1.currentLocation.NameOrUniqueName}.png"), 1f);
         }
         this.Helper.Events.GameLoop.UpdateTicked -= this.ScreenshotQueueHandler;
 
@@ -88,7 +88,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
     private void TakeScreenShotImpl(string filename, float scale = 1f)
     {
 
-        SKSurface? surface = this.screenshotter.TakeScreenshot(scale, true);
+        SKSurface? surface = this.screenshotter.TakeScreenshot(scale);
         if (surface is not null)
         {
             Task.Run(() =>

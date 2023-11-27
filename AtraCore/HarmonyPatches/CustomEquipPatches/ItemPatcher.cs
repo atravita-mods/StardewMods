@@ -662,33 +662,7 @@ internal static class ItemPatcher
                 stamina_regen += effect.StaminaRegen;
             }
 
-            if (stamina_regen > 0 && currentPlayer.Stamina < currentPlayer.MaxStamina)
-            {
-                int prev = (int)currentPlayer.Stamina;
-                float amount = Math.Min(stamina_regen, currentPlayer.MaxStamina - currentPlayer.Stamina);
-                currentPlayer.Stamina += amount;
-
-                int incremented = (int)currentPlayer.Stamina - prev;
-                if (incremented > 0)
-                {
-                    currentPlayer.currentLocation.debris.Add(new Debris(incremented, currentPlayer.Position, Color.Green, 1f, currentPlayer));
-                }
-            }
-            if (health_regen > 0 && currentPlayer.health < currentPlayer.maxHealth - 1)
-            {
-                float amount = Math.Min(health_regen + _healthRemainder.Value, currentPlayer.maxHealth - currentPlayer.health);
-                int toAdd = (int)amount;
-                if (toAdd > 0)
-                {
-                    currentPlayer.health += toAdd;
-                    currentPlayer.currentLocation.debris.Add(new Debris(toAdd, currentPlayer.Position, Color.Green, 1f, currentPlayer));
-                    _healthRemainder.Value = amount - toAdd;
-                }
-                else
-                {
-                    _healthRemainder.Value = amount;
-                }
-            }
+            EquipEffects.HandleRegen(currentPlayer, health_regen, stamina_regen);
         }
     }
 

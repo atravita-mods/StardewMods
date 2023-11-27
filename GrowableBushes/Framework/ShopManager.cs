@@ -109,7 +109,7 @@ internal static class ShopManager
                 totalNumberOfLoops = 9999,
                 scale = 4f,
                 layerDepth = MathF.BitIncrement((((tile.Y - 0.5f) * Game1.tileSize) / 10000f) + 0.01f), // a little offset so it doesn't show up on the floor.
-                id = 777f,
+                id = 777,
             });
         }
     }

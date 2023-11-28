@@ -1,4 +1,7 @@
-﻿using System.Buffers;
+﻿namespace ScreenshotsMod.Framework;
+
+using System.Buffers;
+using System.Reflection;
 
 using AtraBase.Toolkit.Reflection;
 
@@ -12,8 +15,6 @@ using Microsoft.Xna.Framework.Graphics;
 using SkiaSharp;
 
 using XRectangle = xTile.Dimensions.Rectangle;
-
-namespace ScreenshotsMod.Framework;
 
 /// <summary>
 /// Handles taking screenshots, safely.
@@ -34,7 +35,7 @@ internal sealed class Screenshotter
 
     public Screenshotter()
     {
-        var lightmap = typeof(Game1).GetCachedField("_lightmap", ReflectionCache.FlagTypes.StaticFlags);
+        FieldInfo lightmap = typeof(Game1).GetCachedField("_lightmap", ReflectionCache.FlagTypes.StaticFlags);
         this._lightMapGetter = lightmap.GetStaticFieldGetter<RenderTarget2D?>();
         this._lightMapSetter = lightmap.GetStaticFieldSetter<RenderTarget2D?>();
         this._allocateLightMap = typeof(Game1).GetCachedMethod("allocateLightmap", ReflectionCache.FlagTypes.StaticFlags).CreateDelegate<Action<int, int>>();

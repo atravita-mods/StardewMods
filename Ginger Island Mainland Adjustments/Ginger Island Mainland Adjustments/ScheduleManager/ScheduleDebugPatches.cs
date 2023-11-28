@@ -1,4 +1,6 @@
-﻿using AtraCore.Framework.ReflectionManager;
+﻿namespace GingerIslandMainlandAdjustments.ScheduleManager;
+
+using AtraCore.Framework.ReflectionManager;
 
 using AtraShared.ConstantsAndEnums;
 
@@ -6,8 +8,6 @@ using HarmonyLib;
 using Microsoft.Xna.Framework;
 
 using StardewValley.Pathfinding;
-
-namespace GingerIslandMainlandAdjustments.ScheduleManager;
 
 /// <summary>
 /// Class that handles patches for debugging schedules.
@@ -17,7 +17,7 @@ namespace GingerIslandMainlandAdjustments.ScheduleManager;
 [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class ScheduleDebugPatches
 {
-    private static readonly List<NPC> FailedNPCs = new();
+    private static readonly List<NPC> FailedNPCs = [];
 
     /// <summary>
     /// Applies the patches for this class.

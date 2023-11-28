@@ -1,0 +1,31 @@
+{
+    "$schema": "https://smapi.io/schemas/content-patcher.json",
+    "Format": "1.28.0",
+    "Changes": [
+        {
+            "Action": "Load",
+            "FromFile": "assets/spritesheet.png",
+            "Target": "Mods/atravita/MoreFertilizersObjects"
+        },
+        {
+            "Action": "EditData",
+            "Target": "Data/Objects",
+            "Entries": {
+                "atravita.CP.MoreFertilizers.BountifulBushFertilizer": {
+                    "Name": "Bountiful Bush Fertilizer",
+                    "DisplayName": "{{i18n:bountiful-bush-fertilizer.name}}",
+                    "Description": "{{i18n:bountiful-bush-fertilizer.description}}",
+                    "Type": "Basic",
+                    "Category": -19,
+                    "Price": 50,
+                    "Texture": "Mods/atravita/MoreFertilizersObjects",
+                    "SpriteIndex": 0,
+                    "ContextTags": [
+                      "color_orange",
+                      "fertilizer_item"
+                    ],
+                }
+            }
+        }
+    ]
+}

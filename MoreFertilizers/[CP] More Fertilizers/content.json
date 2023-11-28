@@ -21,8 +21,8 @@
                     "Texture": "Mods/atravita/MoreFertilizersObjects",
                     "SpriteIndex": 0,
                     "ContextTags": [
-                      "color_orange",
-                      "fertilizer_item"
+                        "color_orange",
+                        "fertilizer_item"
                     ],
                 },
                 "atravita.CP.MoreFertilizers.BountifulFertilizer": {
@@ -35,8 +35,8 @@
                     "Texture": "Mods/atravita/MoreFertilizersObjects",
                     "SpriteIndex": 1,
                     "ContextTags": [
-                      "color_orange",
-                      "fertilizer_item"
+                        "color_orange",
+                        "fertilizer_item"
                     ],
                 },
                 "atravita.CP.MoreFertilizers.DeluxeFishFoodFertilizer": {
@@ -49,8 +49,50 @@
                     "Texture": "Mods/atravita/MoreFertilizersObjects",
                     "SpriteIndex": 2,
                     "ContextTags": [
-                      "color_purple",
-                      "fertilizer_item"
+                        "color_purple",
+                        "fertilizer_item"
+                    ],
+                },
+                "atravita.CP.MoreFertilizers.DeluxeFruitTreeFertilizer": {
+                    "Name": "Deluxe Fruit Tree Fertilizer",
+                    "DisplayName": "{{i18n:deluxe-fruit-tree-fertilizer.name}}",
+                    "Description": "{{i18n:deluxe-fruit-tree-fertilizer.description}}",
+                    "Type": "Basic",
+                    "Category": -19,
+                    "Price": 100,
+                    "Texture": "Mods/atravita/MoreFertilizersObjects",
+                    "SpriteIndex": 3,
+                    "ContextTags": [
+                        "color_pink",
+                        "fertilizer_item"
+                    ],
+                },
+                "atravita.CP.MoreFertilizers.DeluxeJojaFertilizer": {
+                    "Name": "Deluxe Joja Fertilizer - More Fertilizers",
+                    "DisplayName": "{{i18n:joja-fertilizer-deluxe.name}}",
+                    "Description": "{{i18n:joja-fertilizer-deluxe.description}}",
+                    "Type": "Basic",
+                    "Category": -19,
+                    "Price": 20,
+                    "Texture": "Mods/atravita/MoreFertilizersObjects",
+                    "SpriteIndex": 4,
+                    "ContextTags": [
+                        "color_purple",
+                        "fertilizer_item"
+                    ],
+                },
+                "atravita.CP.MoreFertilizers.DomesticatedFishFoodFertilizer": {
+                    "Name": "Domesticated Fish Food Fertilizer",
+                    "DisplayName": "{{i18n:domesticated-fish-food.name}}",
+                    "Description": "{{i18n:domesticated-fish-food.description}}",
+                    "Type": "Basic",
+                    "Category": -19,
+                    "Price": 100,
+                    "Texture": "Mods/atravita/MoreFertilizersObjects",
+                    "SpriteIndex": 5,
+                    "ContextTags": [
+                        "color_green",
+                        "fertilizer_item"
                     ],
                 }
             }

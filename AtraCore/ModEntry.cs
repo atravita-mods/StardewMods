@@ -16,6 +16,7 @@ using AtraCore.Framework.EventCommands;
 using AtraCore.Framework.EventCommands.AllowRepeatCommand;
 using AtraCore.Framework.EventCommands.RelationshipCommands;
 using AtraCore.Framework.EventPreconditions;
+using AtraCore.Framework.GameStateQueries;
 using AtraCore.Framework.Internal;
 using AtraCore.Framework.ItemManagement;
 using AtraCore.Framework.QueuePlayerAlert;
@@ -114,6 +115,17 @@ internal sealed class ModEntry : BaseMod<ModEntry>
 
         // actions
         GameLocation.RegisterTileAction("atravita.Teleport", TeleportPlayer.ApplyCommand);
+
+        // add GSQ
+        const string EARNED_MONEY = "atravita.AtraCore_HAS_EARNED_MONEY";
+        if (GameStateQuery.Exists(EARNED_MONEY))
+        {
+            this.Monitor.Log($"{EARNED_MONEY} seems to exist already as a GSQ, what.", LogLevel.Warn);
+        }
+        else
+        {
+            GameStateQuery.Register(EARNED_MONEY, MoneyEarned.CheckMoneyEarned);
+        }
     }
 
     /// <inheritdoc cref="IGameLoopEvents.SaveLoaded"/>

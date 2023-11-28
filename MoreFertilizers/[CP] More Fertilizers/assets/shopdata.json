@@ -19,10 +19,36 @@
             "Target": "Data/Shops",
             "TargetField": ["Sandy", "Items"],
             "Entries": {
-                "atravita.CP.MoreFertilizers.DeluxeFishFoodFertilizer": {
+                "atravita.CP.MoreFertilizers.DeluxeFruitTreeFertilizer": {
                     "Condition": "YEAR 2, PLAYER_HAS_FLAG Current qiCave",
                     "Price": 200,
-                    "ItemId": "(O)atravita.CP.MoreFertilizers.DeluxeFishFoodFertilizer",
+                    "ItemId": "(O)atravita.CP.MoreFertilizers.DeluxeFruitTreeFertilizer",
+                    "IgnoreShopPriceModifiers": true
+                }
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Data/Shops",
+            "TargetField": ["Joja", "Items"],
+            "Entries": {
+                "atravita.CP.MoreFertilizers.DeluxeJojaFertilizer": {
+                    "Condition": "atravita.AtraCore_HAS_EARNED_MONEY CURRENT 1000000, PLAYER_HAS_FLAG Host jojaMember, DAY_OF_WEEK Wed Sat Sun",
+                    "Price": 200,
+                    "ItemId": "(O)atravita.CP.MoreFertilizers.DeluxeJojaFertilizer",
+                    "IgnoreShopPriceModifiers": true
+                }
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Data/Shops",
+            "TargetField": ["FishShop", "Items"],
+            "Entries": {
+                "atravita.CP.MoreFertilizers.DomesticatedFishFoodFertilizer": {
+                    "Condition": "YEAR 2, PLAYER_HAS_FLAG Host willyBugWadCutscene, DAY_OF_WEEK Sat Sun",
+                    "Price": 200,
+                    "ItemId": "(O)atravita.CP.MoreFertilizers.DomesticatedFishFoodFertilizer",
                     "IgnoreShopPriceModifiers": true
                 }
             }

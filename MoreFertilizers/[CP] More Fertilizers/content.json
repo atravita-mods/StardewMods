@@ -178,6 +178,34 @@
                         "color_pink",
                         "fertilizer_item"
                     ],
+                },
+                "atravita.CP.MoreFertilizers.MiraculousBeverages": {
+                    "Name": "Miraculous Beverages - More Fertilizers",
+                    "DisplayName": "{{i18n:miraculous-beverages.name}}",
+                    "Description": "{{i18n:miraculous-beverages.description}}",
+                    "Type": "Basic",
+                    "Category": -19,
+                    "Price": 100,
+                    "Texture": "Mods/atravita/MoreFertilizersObjects",
+                    "SpriteIndex": 12,
+                    "ContextTags": [
+                        "color_pink",
+                        "fertilizer_item"
+                    ],
+                },
+                "atravita.CP.MoreFertilizers.OrganicFertilizer": {
+                    "Name": "Organic Fertilizer - More Fertilizers",
+                    "DisplayName": "{{i18n:organic-fertilizer.name}}",
+                    "Description": "{{i18n:organic-fertilizer.description}}",
+                    "Type": "Basic",
+                    "Category": -19,
+                    "Price": 100,
+                    "Texture": "Mods/atravita/MoreFertilizersObjects",
+                    "SpriteIndex": 12,
+                    "ContextTags": [
+                        "color_pink",
+                        "fertilizer_item"
+                    ],
                 }
             }
         },

@@ -471,7 +471,7 @@ internal static class GIScheduler
         {
             sb.Clear();
 
-            if (Globals.Config.StageFarNpcsAtSaloon)
+            if (Globals.Config.StageFarNpcsAtSaloon && visitor.getSpouse() is null)
             {
                 try
                 {

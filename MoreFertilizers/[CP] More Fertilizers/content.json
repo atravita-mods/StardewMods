@@ -94,6 +94,62 @@
                         "color_green",
                         "fertilizer_item"
                     ],
+                },
+                "atravita.CP.MoreFertilizers.EverlastingFertilizer": {
+                    "Name": "Everlasting Fertilizer - More Fertilizers",
+                    "DisplayName": "{{i18n:everlasting-fertilizer.name}}",
+                    "Description": "{{i18n:everlasting-fertilizer.description}}",
+                    "Type": "Basic",
+                    "Category": -19,
+                    "Price": 150,
+                    "Texture": "Mods/atravita/MoreFertilizersObjects",
+                    "SpriteIndex": 6,
+                    "ContextTags": [
+                        "color_purple",
+                        "fertilizer_item"
+                    ],
+                },
+                "atravita.CP.MoreFertilizers.EverlastingFruitTreeFertilizer": {
+                    "Name": "Everlasting Fruit Tree Fertilizer - More Fertilizers",
+                    "DisplayName": "{{i18n:everlasting-fruittree-fertilizer.name}}",
+                    "Description": "{{i18n:everlasting-fruittree-fertilizer.description}}",
+                    "Type": "Basic",
+                    "Category": -19,
+                    "Price": 150,
+                    "Texture": "Mods/atravita/MoreFertilizersObjects",
+                    "SpriteIndex": 7,
+                    "ContextTags": [
+                        "color_green",
+                        "fertilizer_item"
+                    ],
+                },
+                "atravita.CP.MoreFertilizers.FishFood": {
+                    "Name": "Fish Food Fertilizer",
+                    "DisplayName": "{{i18n:fish-food.name}}",
+                    "Description": "{{i18n:fish-food.description}}",
+                    "Type": "Basic",
+                    "Category": -19,
+                    "Price": 50,
+                    "Texture": "Mods/atravita/MoreFertilizersObjects",
+                    "SpriteIndex": 8,
+                    "ContextTags": [
+                        "color_purple",
+                        "fertilizer_item"
+                    ],
+                },
+                "atravita.CP.MoreFertilizers.FruitTreeFertilizer": {
+                    "Name": "Fruit Tree Fertilizer",
+                    "DisplayName": "{{i18n:fruit-tree-fertilizer.name}}",
+                    "Description": "{{i18n:fruit-tree-fertilizer.description}}",
+                    "Type": "Basic",
+                    "Category": -19,
+                    "Price": 50,
+                    "Texture": "Mods/atravita/MoreFertilizersObjects",
+                    "SpriteIndex": 9,
+                    "ContextTags": [
+                        "color_pink",
+                        "fertilizer_item"
+                    ],
                 }
             }
         },

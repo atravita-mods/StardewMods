@@ -19,6 +19,11 @@
             "Target": "Data/Shops",
             "TargetField": ["Sandy", "Items"],
             "Entries": {
+                "atravita.CP.MoreFertilizers.FruitTreeFertilizer": {
+                    "Price": 100,
+                    "ItemId": "(O)atravita.CP.MoreFertilizers.FruitTreeFertilizer",
+                    "IgnoreShopPriceModifiers": true
+                },
                 "atravita.CP.MoreFertilizers.DeluxeFruitTreeFertilizer": {
                     "Condition": "YEAR 2, PLAYER_HAS_FLAG Current qiCave",
                     "Price": 200,
@@ -49,6 +54,12 @@
                     "Condition": "YEAR 2, PLAYER_HAS_FLAG Host willyBugWadCutscene, DAY_OF_WEEK Sat Sun",
                     "Price": 200,
                     "ItemId": "(O)atravita.CP.MoreFertilizers.DomesticatedFishFoodFertilizer",
+                    "IgnoreShopPriceModifiers": true
+                },
+                "atravita.CP.MoreFertilizers.FishFood": {
+                    "Condition": "PLAYER_HAS_FLAG Host ccFishTank, !PLAYER_HAS_FLAG Host jojaMember, DAY_OF_WEEK Wed Sat Sun",
+                    "Price": 500,
+                    "ItemId": "(O)atravita.CP.MoreFertilizers.FishFood",
                     "IgnoreShopPriceModifiers": true
                 }
             }

@@ -1,0 +1,55 @@
+{
+    "prismatic-fertilizer.name": "Prismatischer Dünger",
+    "prismatic-fertilizer.description": "Das Etikett sagt: 'Awwww, schöne Farben!'",
+  
+    "everlasting-fertilizer.name": "Immerwährender Dünger",
+    "everlasting-fertilizer.description": "Behauptet deine Pflanzen auch außerhalb der Saison wachsen zu lassen. Du fühlst , dass den Dünger eine merkwüridge Aura umgibt.",
+  
+    "wisdom-fertilizer.name": "Weisheits-Dünger",
+    "wisdom-fertilizer.description": "Verspricht weiser zu machen. Sicher, dass das kein Fake ist?",
+  
+    "waterlogged-fertilizer.name": "Feucht-Dünger",
+    "waterlogged-fertilizer.description": "Speichert Wasser im Boden, sodass überall ein Feuchtgebiet entstehen kann. (NUR für Pflanzen, die besonders viel Wasser benötigen)",
+  
+    "fruit-tree-fertilizer.name": "Obstbaum-Dünger",
+    "fruit-tree-fertilizer.description": "Lässt Obstbäume schneller wachsen. Keine weiteren Fragen!",
+  
+    "deluxe-fruit-tree-fertilizer.name": "Deluxe-Obstbaum-Dünger",
+    "deluxe-fruit-tree-fertilizer.description": "Garantiert, dass deine Obstbäume schnell wachsen",
+  
+    "bountiful-fertilizer.name": "Reiche Ernte-Dünger",
+    "bountiful-fertilizer.description": "Mit etwas Glück verdoppelt sich dadurch die Ernte.",
+  
+    "organic-fertilizer.name": "Biologischer Dünger",
+    "organic-fertilizer.description": "Man weiß nicht genau wofür er gut ist, aber:  Bio = Geld.",
+  
+    "joja-fertilizer.name": "Jojas patentierter Dünger.",
+    "joja-fertilizer.description": "Garantiert zu 100% eine bessere Ernte.",
+  
+    "joja-fertilizer-deluxe.name": "Jojas Deluxe-Dünger",
+    "joja-fertilizer-deluxe.description": "Deutlich teurer als der patentierte Dünger, aber garantiert dafür eine noch bessere Ernte.",
+  
+    "secret-joja-fertilizer.name": "Jojas Geheimdünger",
+    "secret-joja-fertilizer.description": "Aus irgendeinem Grund haben Jojas Wissenschaftler diesen Dünger unter Verschluss gehalten",
+  
+    "good-luck-fertilizer.name": "Maebys Glücksdünger.",
+    "good-luck-fertilizer.description": "Seit über 50 Jahren: Verspricht deine Pflanzen vor Blitzen und Krähen zu schützen.",
+  
+    "fish-food.name": "Fischfutter",
+    "fish-food.description": "Lockt Fische an, wenn man es ins Wasser gibt.",
+  
+    "deluxe-fish-food.name": "Deluxe-Fischfutter",
+    "deluxe-fish-food.description": "Gut um Fische anzulocken. Hält einige Tage. Einfach ins Wasser geben.",
+  
+    "domesticated-fish-food.name": "Hofteich-Fischfutter",
+    "domesticated-fish-food.description": "Sorgt dafür, dass sich Fische in Hofteichen schneller vermehren.",
+
+    "bountiful-bush-fertilizer.name": "Reiche Ernte-Buschdünger.",
+    "bountiful-bush-fertilizer.description": "Deine Büsche werden so viel Ernte abwerfen wie nie zuvor!",
+
+    "rapid-bush-fertilizer.name": "Murphs schneller Buschdünger",
+    "rapid-bush-fertilizer.description": "Lässt deine Büsche schneller wachsen!",
+
+    "miraculous-beverages.name": "Dünger der wundersamen Getränke",
+    "miraculous-beverages.description": "Lässt... Getränke erscheinen? Was? Hä? Wie soll das funktionieren?"
+}

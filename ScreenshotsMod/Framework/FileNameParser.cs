@@ -65,13 +65,13 @@ internal static class FileNameParser
         return loweredToken switch
         {
             "default" => Game1.game1.GetScreenshotFolder(false),
-            "location" => currentLocation.Name,
+            "location" => currentLocation.NameOrUniqueName,
             "save" => $"{Game1.player.farmName.Value}_{Game1.uniqueIDForThisGame}",
             "farm" => Game1.player.farmName.Value,
             "name" => Game1.player.Name,
             "date" => $"{Game1.year:D2}_{Game1.seasonIndex + 1:D2}_{Game1.dayOfMonth:D2}", // year_month_day for sorting
             "weather" => currentLocation.GetWeather().Weather,
-            "time" => Game1.timeOfDay.ToString(),
+            "time" => $"{Game1.timeOfDay:D4}",
             "timestamp" => $"{DateTime.Now:yyyy.MM.dd HH-mm-ss}",
             _ => match.Value,
         };

@@ -22,13 +22,13 @@ internal static class MonsterBehavior
         {
             ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);
 
-            helper.FindNext(new CodeInstructionWrapper[]
-            {
+            helper.FindNext(
+            [
                 OpCodes.Ldarg_0,
                 (OpCodes.Call, typeof(Monster).GetCachedProperty(nameof(Monster.Player), ReflectionCache.FlagTypes.InstanceFlags).GetGetMethod()),
                 (OpCodes.Ldfld, typeof(Farmer).GetCachedField(nameof(Farmer.isRafting), ReflectionCache.FlagTypes.InstanceFlags)),
                 OpCodes.Brfalse,
-            })
+            ])
             .Push()
             .Advance(3)
             .StoreBranchDest()
@@ -37,13 +37,13 @@ internal static class MonsterBehavior
             .Pop()
             .Advance(2)
             .DefineAndAttachLabel(out Label isNotNull)
-            .Insert(new CodeInstruction[]
-            {
+            .Insert(
+            [
                 new(OpCodes.Dup),
                 new(OpCodes.Brtrue_S, isNotNull),
                 new(OpCodes.Pop),
                 new(OpCodes.Br, retPoint),
-            });
+            ]);
 
             // helper.Print();
             return helper.Render();

@@ -63,6 +63,10 @@ public sealed class ModEntry : Mod
             "Plays a specific event id at speed, including all branches.",
             this.EventById);
         helper.ConsoleCommands.Add(
+            "sinz.check_preconditions",
+            "checks over all preconditions",
+            this.CheckPreconditions);
+        helper.ConsoleCommands.Add(
             "sinz.empty_event_queue",
             "Clears the event queue.",
             (_, _) =>
@@ -79,7 +83,6 @@ public sealed class ModEntry : Mod
             "Forgets mail",
             this.ForgetMail);
     }
-
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
     {
         if (this.Helper.ModRegistry.GetApi<IGenericModConfigMenuApi>("spacechase0.GenericModConfigMenu") is IGenericModConfigMenuApi api)
@@ -730,5 +733,35 @@ Outer: ;
             }
         }
     }
+
+    private void CheckPreconditions(string command, string[] args)
+    {
+        foreach (GameLocation? location in Game1.locations)
+        {
+            if (!location.TryGetLocationEvents(out string? assetName, out Dictionary<string, string>? events) || events.Count == 0)
+            {
+                this.Monitor.Log($"No events for {location.Name}");
+                continue;
+            }
+
+            foreach (string evt in events.Keys)
+            {
+                string[] splits = evt.Split('/');
+                if (splits.Length < 2)
+                {
+                    this.Monitor.Log($"{evt} is either fork or has no preconditions.");
+                    continue;
+                }
+
+                string key = splits[0];
+                foreach (string? s in splits.AsSpan(1))
+                {
+                    Event.CheckPrecondition(location, key, s);
+                }
+            }
+        }
+
+    }
+
     #endregion
 }

@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="SpaceCore" private="false" >
+    <Reference Include="SpaceCore" private="false">
       <HintPath>$(GamePath)\Mods\SpaceCore\SpaceCore.dll</HintPath>
     </Reference>
   </ItemGroup>
@@ -33,6 +33,10 @@
     <Using Alias="NotNullAttribute" Include="System.Diagnostics.CodeAnalysis.NotNullAttribute" />
     <Using Alias="Object" Include="System.Object" />
     <Using Alias="SObject" Include="StardewValley.Object" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="JetBrains.Annotations" Version="2023.3.0" />
   </ItemGroup>
 
 </Project>

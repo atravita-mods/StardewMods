@@ -19,7 +19,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\AtraCore\AtraCore.csproj" Private ="false"/>
+    <ProjectReference Include="..\..\AtraCore\AtraCore.csproj" Private="false" />
     <ProjectReference Include="..\..\Pintail\Pintail\Pintail.csproj" Private="false" />
   </ItemGroup>
 
@@ -31,5 +31,9 @@
     <Using Alias="NotNullAttribute" Include="System.Diagnostics.CodeAnalysis.NotNullAttribute" />
     <Using Alias="Object" Include="System.Object" />
     <Using Alias="SObject" Include="StardewValley.Object" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="JetBrains.Annotations" Version="2023.3.0" />
   </ItemGroup>
 </Project>

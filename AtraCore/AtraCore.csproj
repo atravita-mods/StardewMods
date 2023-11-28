@@ -58,6 +58,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Update="JetBrains.Annotations" Version="2023.3.0" />
     <PackageReference Update="Leclair.Stardew.ModManifestBuilder" Version="2.1.0" />
   </ItemGroup>
 

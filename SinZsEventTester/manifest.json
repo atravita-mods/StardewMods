@@ -7,11 +7,11 @@
    | 
    */
   "$schema": "https://smapi.io/schemas/manifest.json",
-  "UniqueID": "atravita.SinZsEventTester",
+  "UniqueID": "sinZandAtravita.SinZsEventTester",
   "Name": "SinZ's Event Tester",
   "Author": "SinZ and atravita",
-  "Version": "0.0.5-Debug",
-  "Description": "event tester",
+  "Version": "0.1.0",
+  "Description": "Automated way to run events.",
   "MinimumApiVersion": "3.18",
   "EntryDll": "SinZsEventTester.dll",
   "UpdateKeys": [

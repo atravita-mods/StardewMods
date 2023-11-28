@@ -142,7 +142,7 @@ internal sealed class ModEntry : Mod
                 else if (!added.Contains(farmer.UniqueMultiplayerID))
                 {
                     long? other = farmer.team.GetSpouse(farmer.UniqueMultiplayerID);
-                    if (other is not null)
+                    if (other is not null && farmer.team.playerIsOnline(other.Value))
                     {
                         FarmerPair team = FarmerPair.MakePair(other.Value, farmer.UniqueMultiplayerID);
                         if (farmer.team.friendshipData.TryGetValue(team, out Friendship? farmerteam)

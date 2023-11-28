@@ -37,6 +37,12 @@
             "Target": "Data/Shops",
             "TargetField": ["Joja", "Items"],
             "Entries": {
+                "atravita.CP.MoreFertilizers.JojaFertilizer": {
+                    "Condition": "atravita.AtraCore_HAS_EARNED_MONEY CURRENT 10000",
+                    "Price": 25,
+                    "ItemId": "(O)atravita.CP.MoreFertilizers.JojaFertilizer",
+                    "IgnoreShopPriceModifiers": true
+                },
                 "atravita.CP.MoreFertilizers.DeluxeJojaFertilizer": {
                     "Condition": "atravita.AtraCore_HAS_EARNED_MONEY CURRENT 1000000, PLAYER_HAS_FLAG Host jojaMember, DAY_OF_WEEK Wed Sat Sun",
                     "Price": 200,

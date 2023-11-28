@@ -25,15 +25,15 @@ public sealed class ModEntry : Mod
     private EventRecord? current;
 
     // keep track of the dialogue responses given.
-    private readonly Node tree = new("base", 0, new());
+    private readonly Node tree = new("base", 0, []);
     private Node? workingNode;
     private string? currentEventId;
-    private readonly HashSet<string> seenResponses = new();
+    private readonly HashSet<string> seenResponses = [];
 
     // I keep on clicking the stupid dialogues twice. Agh. Don't allow that.
-    private readonly ConditionalWeakTable<DialogueBox, object> _seen = new();
+    private readonly ConditionalWeakTable<DialogueBox, object> _seen = [];
 
-    private HashSet<EventRecord> completed = new();
+    private HashSet<EventRecord> completed = [];
 
     private int iterationstoSkip = 0;
 
@@ -83,6 +83,7 @@ public sealed class ModEntry : Mod
             "Forgets mail",
             this.ForgetMail);
     }
+
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
     {
         if (this.Helper.ModRegistry.GetApi<IGenericModConfigMenuApi>("spacechase0.GenericModConfigMenu") is IGenericModConfigMenuApi api)
@@ -245,7 +246,10 @@ Outer: ;
 
     private void GameLoop_UpdateTicked(object? sender, UpdateTickedEventArgs e)
     {
-        if (!Context.IsWorldReady) return;
+        if (!Context.IsWorldReady)
+        {
+            return;
+        }
 
         // try to run events faster.
         try
@@ -365,6 +369,10 @@ Outer: ;
                         }
 
                         string[] splits = currentCommand.Split("(break)");
+                        if (db.responses.Length != splits.Length - 1)
+                        {
+                            this.Monitor.Log($"Mismatched query and response counts for quickQuestion for {currentCommand}.", LogLevel.Warn);
+                        }
 
                         // check to see if it's just the same command repeated
                         bool mismatchFound = false;
@@ -407,8 +415,14 @@ Outer: ;
                         {
                             for (int i = 0; i < db.responses.Length; i++)
                             {
-                                Node node = new (db.responses[i].responseKey, i, new ());
+                                Response response = db.responses[i];
+                                if (string.IsNullOrEmpty(response.responseText))
+                                {
+                                    this.Monitor.Log($"{JsonConvert.SerializeObject(response)} appears to be empty, huh.", LogLevel.Warn);
+                                    continue;
+                                }
 
+                                Node node = new(response.responseKey, i, []);
                                 this.workingNode.Children.Add(node);
                             }
 
@@ -442,9 +456,9 @@ Outer: ;
                         case Color.Blue:
                         {
                             this.Monitor.Log($"Reached blue node, queue only single child.");
-                            Node blue = new(db.responses[0].responseKey, 0, new())
+                            Node blue = new(db.responses[0].responseKey, 0, [])
                             {
-                                Color = Color.Blue
+                                Color = Color.Blue,
                             };
                             this.workingNode.Children.Add(blue);
 
@@ -740,7 +754,7 @@ Outer: ;
         {
             if (!location.TryGetLocationEvents(out string? assetName, out Dictionary<string, string>? events) || events.Count == 0)
             {
-                this.Monitor.Log($"No events for {location.Name}");
+                this.Monitor.Log($"No events for {location.Name}.");
                 continue;
             }
 
@@ -753,6 +767,7 @@ Outer: ;
                     continue;
                 }
 
+                this.Monitor.Log($"Checking preconditions for {evt}", LogLevel.Info);
                 string key = splits[0];
                 foreach (string? s in splits.AsSpan(1))
                 {
@@ -760,7 +775,6 @@ Outer: ;
                 }
             }
         }
-
     }
 
     #endregion

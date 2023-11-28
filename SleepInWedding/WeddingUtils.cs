@@ -14,7 +14,7 @@ internal static class WeddingUtils
         => HasWeddingToday(farmer.UniqueMultiplayerID);
 
     /// <summary>
-    /// Checks to see if the farmer with that specifc multiplayer ID is supposed to be getting married today.
+    /// Checks to see if the farmer with that specific multiplayer ID is supposed to be getting married today.
     /// </summary>
     /// <param name="multiplayerID">Multiplayer ID of the farmer.</param>
     /// <returns>True if they're scheduled for a wedding today, false otherwise.</returns>

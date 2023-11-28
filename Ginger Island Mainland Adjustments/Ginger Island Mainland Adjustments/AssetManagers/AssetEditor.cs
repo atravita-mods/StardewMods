@@ -160,7 +160,7 @@ internal static class AssetEditor
             {
                 try
                 {
-                    Dictionary<string, string> original = contentManager.LoadBase<Dictionary<string, string>>(e.NameWithoutLocale.BaseName);
+                    Dictionary<string, string> original = contentManager.Load<Dictionary<string, string>>(e.NameWithoutLocale.BaseName);
                     if (original.TryGetValue("spring", out string? data))
                     {
                         Globals.ModMonitor.LogOnce($"Original spring schedule found for {character}: {data}. Adding back", LogLevel.Info);

@@ -686,7 +686,7 @@ public class ShovelTool : Tool
                 {
                     chest.TileLocation = pickupTile;
                 }
-                chest.MoveToSafePosition(location, chest.TileLocation, 0, who.GetFacingDirection());
+                chest.TryMoveToSafePosition(who.FacingDirection);
                 who.Stamina -= energy;
                 return;
             },
@@ -836,7 +836,6 @@ public class ShovelTool : Tool
         who.Stamina -= energy;
         location.makeHoeDirt(pickupTile, ignoreChecks: false);
         location.playSound("hoeHit");
-        Game1.removeSquareDebrisFromTile((int)pickupTile.X, (int)pickupTile.Y);
         location.checkForBuriedItem((int)pickupTile.X, (int)pickupTile.Y, explosion: false, detectOnly: false, who);
         Game1.Multiplayer.broadcastSprites(location, new TemporaryAnimatedSprite(
             rowInAnimationTexture: 12,

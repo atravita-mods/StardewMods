@@ -64,12 +64,7 @@ internal static class ConsoleCommands
         }
 
         InventoryGiantCrop item;
-        if (args.Length == 3 && ModEntry.GiantCropTweaksAPI?.TryGetTexture(args[2], out Texture2D? _) == true)
-        {
-            ModEntry.ModMonitor.Log($"Spawning with GiantCropTweaks id {args[2]}");
-            item = new(args[2], productID, count);
-        }
-        else if (InventoryGiantCrop.IsValidGiantCropIndex(productID))
+        if (InventoryGiantCrop.IsValidGiantCropIndex(productID))
         {
             item = new(productID, count);
         }

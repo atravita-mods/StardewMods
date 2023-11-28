@@ -99,7 +99,7 @@ internal static class AssetEditor
                         contentManager ??= new(Game1.content.ServiceProvider, Game1.content.RootDirectory);
                         try
                         {
-                            Dictionary<string, string> original = contentManager.LoadBase<Dictionary<string, string>>(e.NameWithoutLocale.BaseName);
+                            Dictionary<string, string> original = contentManager.Load<Dictionary<string, string>>(e.NameWithoutLocale.BaseName);
                             if (original.TryGetValue(key, out string? original_dialogue))
                             {
                                 ModEntry.ModMonitor.Log($"Original dialogue key {key} found: {original_dialogue}. Adding back", LogLevel.Info);

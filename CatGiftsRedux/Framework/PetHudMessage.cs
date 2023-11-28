@@ -50,10 +50,12 @@ internal sealed class PetHudMessage : HUDMessage
     /// <inheritdoc />
     /// <remarks>Draws in the hudmessage. Copied and edited from game code.</remarks>
     [MethodImpl(MethodImplOptions.AggressiveOptimization)]
-    public override void draw(SpriteBatch b, int i)
+    public override void draw(SpriteBatch b, int i, ref int heightUsed)
     {
         Rectangle tsarea = Game1.graphics.GraphicsDevice.Viewport.GetTitleSafeArea();
-        Vector2 itemBoxPosition = new(tsarea.Left + 16, tsarea.Bottom - (i * 64 * 7 / 4) - 176);
+        const int height = 112;
+        Vector2 itemBoxPosition = new(tsarea.Left + 16, tsarea.Bottom - height - heightUsed - 64);
+        heightUsed += height;
         if (Game1.isOutdoorMapSmallerThanViewport())
         {
             itemBoxPosition.X = Math.Max(tsarea.Left + 16, -Game1.uiViewport.X + 16);
@@ -74,7 +76,7 @@ internal sealed class PetHudMessage : HUDMessage
             origin: Vector2.Zero,
             scale: Game1.pixelZoom,
             effects: SpriteEffects.None,
-            layerDepth: 1f);
+            layerDepth: 0.99f);
 
         // draws the bit the message sits in.
         b.Draw(
@@ -86,7 +88,7 @@ internal sealed class PetHudMessage : HUDMessage
             origin: Vector2.Zero,
             new Vector2(this.messageWidth, 4f),
             effects: SpriteEffects.None,
-            layerDepth: 1f);
+            layerDepth: 0.99f);
 
         // draw the right side of the box.
         b.Draw(
@@ -98,7 +100,7 @@ internal sealed class PetHudMessage : HUDMessage
             origin: Vector2.Zero,
             scale: Game1.pixelZoom,
             effects: SpriteEffects.None,
-            layerDepth: 1f);
+            layerDepth: 0.99f);
         itemBoxPosition.X += 16f;
         itemBoxPosition.Y += 16f;
 
@@ -123,7 +125,7 @@ internal sealed class PetHudMessage : HUDMessage
                 origin: Vector2.Zero,
                 scale: Game1.pixelZoom,
                 effects: SpriteEffects.None,
-                layerDepth: 1f);
+                layerDepth: 0.99f);
         }
 
         itemBoxPosition.X += 83f;

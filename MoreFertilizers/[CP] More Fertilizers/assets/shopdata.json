@@ -1,0 +1,31 @@
+{
+    "$schema": "https://smapi.io/schemas/content-patcher.json",
+    "Changes": [
+        {
+            "Action": "EditData",
+            "Target": "Data/Shops",
+            "TargetField": ["SeedShop", "Items"],
+            "Entries": {
+                "atravita.CP.MoreFertilizers.BountifulFertilizer": {
+                    "Condition": "YEAR 2, PLAYER_HAS_FLAG Host MSB_Pierre, DAY_OF_WEEK Wed Sun",
+                    "Price": 150,
+                    "ItemId": "(O)atravita.CP.MoreFertilizers.BountifulFertilizer",
+                    "IgnoreShopPriceModifiers": true
+                }
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Data/Shops",
+            "TargetField": ["Sandy", "Items"],
+            "Entries": {
+                "atravita.CP.MoreFertilizers.DeluxeFishFoodFertilizer": {
+                    "Condition": "YEAR 2, PLAYER_HAS_FLAG Current qiCave",
+                    "Price": 200,
+                    "ItemId": "(O)atravita.CP.MoreFertilizers.DeluxeFishFoodFertilizer",
+                    "IgnoreShopPriceModifiers": true
+                }
+            }
+        }
+    ]
+}

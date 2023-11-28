@@ -24,8 +24,40 @@
                       "color_orange",
                       "fertilizer_item"
                     ],
+                },
+                "atravita.CP.MoreFertilizers.BountifulFertilizer": {
+                    "Name": "Bountiful Bush Fertilizer",
+                    "DisplayName": "{{i18n:bountiful-fertilizer.name}}",
+                    "Description": "{{i18n:bountiful-fertilizer.description}}",
+                    "Type": "Basic",
+                    "Category": -19,
+                    "Price": 50,
+                    "Texture": "Mods/atravita/MoreFertilizersObjects",
+                    "SpriteIndex": 1,
+                    "ContextTags": [
+                      "color_orange",
+                      "fertilizer_item"
+                    ],
+                },
+                "atravita.CP.MoreFertilizers.DeluxeFishFoodFertilizer": {
+                    "Name": "Deluxe Fish Food Fertilizer",
+                    "DisplayName": "{{i18n:deluxe-fish-food.name}}",
+                    "Description": "{{i18n:deluxe-fish-food.description}}",
+                    "Type": "Basic",
+                    "Category": -19,
+                    "Price": 100,
+                    "Texture": "Mods/atravita/MoreFertilizersObjects",
+                    "SpriteIndex": 2,
+                    "ContextTags": [
+                      "color_purple",
+                      "fertilizer_item"
+                    ],
                 }
             }
+        },
+        {
+            "Action": "Include",
+            "FromFile": "assets/shopdata.json",
         }
     ]
 }

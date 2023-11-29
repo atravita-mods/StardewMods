@@ -4,6 +4,7 @@
         {
             "Action": "EditData",
             "Target": "Data/Shops",
+            "LogName": "Seed Shop",
             "TargetField": ["SeedShop", "Items"],
             "Entries": {
                 "atravita.CP.MoreFertilizers.BountifulFertilizer": {
@@ -25,7 +26,8 @@
                     "IgnoreShopPriceModifiers": true
                 },
                 "atravita.CP.MoreFertilizers.LuckyFertilizer": {
-                    "Condition": "atravita.AtraCore_HAS_DAILY_LUCK Current 0.07, !YEAR 1, !SEASON spring",
+                    "Condition": "atravita.AtraCore_HAS_DAILY_LUCK Current 0.07, ANY \"!YEAR 1\" \"!SEASON spring\"",
+                    // high daily luck, but not in the first spring.
                     "Price": 100,
                     "AvailableStock": 15,
                     "ItemId": "(O)atravita.CP.MoreFertilizers.LuckyFertilizer",
@@ -43,6 +45,7 @@
         {
             "Action": "EditData",
             "Target": "Data/Shops",
+            "LogName": "Sandy Shop",
             "TargetField": ["Sandy", "Items"],
             "Entries": {
                 "atravita.CP.MoreFertilizers.FruitTreeFertilizer": {
@@ -61,6 +64,7 @@
         {
             "Action": "EditData",
             "Target": "Data/Shops",
+            "LogName": "JojaMart",
             "TargetField": ["Joja", "Items"],
             "Entries": {
                 "atravita.CP.MoreFertilizers.JojaFertilizer": {
@@ -156,6 +160,7 @@
         {
             "Action": "EditData",
             "Target": "Data/Shops",
+            "LogName": "Qi Gem Shop",
             "TargetField": ["QiGemShop", "Items"],
             "Entries": {
                 "atravita.CP.MoreFertilizers.EverlastingFertilizer": {
@@ -211,6 +216,7 @@
         {
             "Action": "EditData",
             "Target": "Data/Shops",
+            "LogName": "Krobus Shop",
             "TargetField": ["ShadowShop", "Items"],
             "Entries": {
                 "atravita.CP.MoreFertilizers.WaterloggedFertilizer": {
@@ -237,7 +243,7 @@
                     "IgnoreShopPriceModifiers": true
                 },
                 "atravita.CP.MoreFertilizers.PrismaticFertilizer": {
-                    "Condition": "PLAYER_HAS_FLAG CURRENT atravita.PrismaticFertilizerMuseum",
+                    "Condition": "PLAYER_HAS_FLAG CURRENT atravita.PrismaticFertilizerMuseum", // picked up the reward from the museum
                     "Price": 100,
                     "ItemId": "atravita.CP.MoreFertilizers.PrismaticFertilizer",
                     "IgnoreShopPriceModifiers": true
@@ -292,6 +298,21 @@
                     "ItemId": "(O)atravita.CP.MoreFertilizers.EverlastingFruitTreeFertilizer",
                     "IgnoreShopPriceModifiers": true
                 }
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Data/Shops",
+            "LogName": "Traveling Trader",
+            "TargetField": ["Traveler", "Items"],
+            "Entries": {
+                "atravita.CP.MoreFertilizers.SecretJojaFertilizer": {
+                    "Condition": "atravita.AtraCore_HAS_DAILY_LUCK Current 0.07, !YEAR 1, SYNCED_RANDOM day secret_joja_trader 0.05",
+                    "Price": 2500,
+                    "ApplyProfitMargins": true,
+                    "ItemId": "(O)atravita.CP.MoreFertilizers.SecretJojaFertilizer",
+                    "IgnoreShopPriceModifiers": true
+                },
             }
         },
     ]

@@ -29,10 +29,6 @@ internal static class TravelingMerchantPatcher
         {
             Random random = new(seed);
             random.PreWarm();
-            if (ModEntry.SecretJojaFertilizerID != -1 && Game1.player.DailyLuck > 0.5 && random.OfChance(0.05))
-            {
-                __result.Add(new SObject(ModEntry.SecretJojaFertilizerID, 1), new[] { (int)(2500 * Game1.player.difficultyModifier), 1 });
-            }
 
             if (ModEntry.BountifulBushID != -1 && Game1.currentSeason is "spring" or "fall" && HasPlayerUnlockedBountiful.GetValue())
             {

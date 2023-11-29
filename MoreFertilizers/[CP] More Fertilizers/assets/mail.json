@@ -7,7 +7,7 @@
             "Entries": {
                 "atravita_OrganicCrops_Reward": "@,^{{i18n:specialorder.organic.mail.text}}^^   --{{i18n: Lewis}}%item bigobject 272 %% [#]{{i18n:specialorder.organic.mail.title}}",
                 "atravita_Bountiful_Bush": "{{i18n: bountiful.bush.mail}}%item object atravita.CP.MoreFertilizers.BountifulBushFertilizer 3 %% [#]{{i18n: bountiful.bush.mail.title}}",
-                "atravita_George_Letter": "{{i18n: george.mail}}%item object atravita.CP.MoreFertilizers.SeedyFertilizer 5 %% [#]{{i18n:george.mail.title})}"
+                "atravita_George_Letter": "{{i18n: george.mail}}%item object atravita.CP.MoreFertilizers.SeedyFertilizer 5 %% [#]{{i18n:george.mail.title}}"
             }
         }
     ]

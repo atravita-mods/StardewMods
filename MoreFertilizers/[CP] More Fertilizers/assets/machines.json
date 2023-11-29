@@ -4,7 +4,7 @@
         {
             "Action": "EditData",
             "Target": "Data/Machines",
-            "TargetField": ["(BC)90", "Default", "OutputItem"],
+            "TargetField": ["(BC)90", "OutputRules", "Default", "OutputItem"],
             "Entries": {
                 "atravita.CP.MoreFertilizers.BountifulFertilizer": {
                     "ItemId": "(O)atravita.CP.MoreFertilizers.BountifulFertilizer",

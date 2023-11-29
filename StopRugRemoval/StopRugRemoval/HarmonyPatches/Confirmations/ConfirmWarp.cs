@@ -262,11 +262,11 @@ internal static class ConfirmWarp
                 .HasFlag(Context.IsMultiplayer ? ConfirmationEnum.InMultiplayerOnly : ConfirmationEnum.NotInMultiplayer))
         {
             ModEntry.InputHelper.SurpressClickInput();
-            Response[] responses = new[]
-            {
+            Response[] responses =
+            [
                 new Response("WarpsYes", I18n.Yes()).SetHotKey(Keys.Y),
                 new Response("WarpsNo", I18n.No()).SetHotKey(Keys.Escape),
-            };
+            ];
 
             Action?[] actions = new[]
             {

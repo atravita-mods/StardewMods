@@ -5,12 +5,14 @@
             "Action": "EditData",
             "Target": "Data/MuseumRewards",
             "Entries": {
-                "atravita.PrismaticFertilizer": {
-                    "TargetContextTags": {
-                        "Tag": "id_(o)74",
-                        "Count": 1,
-                    },
-                    "FlagOnCompletion": "atravita.PrismaticFertilizerRecieved",
+                "atravita.PrismaticFertilizerMuseum": {
+                    "TargetContextTags": [
+                        {
+                            "Tag": "id_(o)74",
+                            "Count": 1,
+                        }
+                    ],
+                    "FlagOnCompletion": true,
                     "RewardItemId": "(O)atravita.CP.MoreFertilizers.PrismaticFertilizer",
                     "RewardItemCount": 5
                 }

@@ -1102,7 +1102,11 @@ internal sealed class ModEntry : Mod
             return;
         }
 
-        Utility.ForAllLocations((GameLocation loc) => loc.FixHoeDirtInLocation(idMapping));
+        Utility.ForEachLocation((GameLocation loc) =>
+        {
+            loc.FixHoeDirtInLocation(idMapping);
+            return true;
+        });
 
         ModMonitor.Log($"Fixed IDs! {string.Join(", ", idMapping.Select((kvp) => $"{kvp.Key}=>{kvp.Value}"))}");
     }

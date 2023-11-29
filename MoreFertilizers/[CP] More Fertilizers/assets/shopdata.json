@@ -235,6 +235,61 @@
                     "Price": 250,
                     "ItemId": "atravita.CP.MoreFertilizers.RadioactiveFertilizer",
                     "IgnoreShopPriceModifiers": true
+                },
+                "atravita.CP.MoreFertilizers.PrismaticFertilizer": {
+                    "Condition": "PLAYER_HAS_FLAG CURRENT atravita.PrismaticFertilizerMuseum",
+                    "Price": 100,
+                    "ItemId": "atravita.CP.MoreFertilizers.PrismaticFertilizer",
+                    "IgnoreShopPriceModifiers": true
+                }
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Data/Shops",
+            "TargetField": ["Festival_StardewValleyFair_StarTokens", "Items"],
+            "Entries": {
+                "atravita.CP.MoreFertilizers.JojaFertilizer": {
+                    "Condition": "IS_JOJA_MART_COMPLETE",
+                    "Price": 200,
+                    "AvailableStock": 20,
+                    "ItemId": "(O)atravita.CP.MoreFertilizers.JojaFertilizer",
+                    "IgnoreShopPriceModifiers": true
+                },
+                "atravita.CP.MoreFertilizers.DeluxeJojaFertilizer": {
+                    "Condition": "IS_JOJA_MART_COMPLETE",
+                    "Price": 400,
+                    "AvailableStock": 20,
+                    "ItemId": "(O)atravita.CP.MoreFertilizers.DeluxeJojaFertilizer",
+                    "IgnoreShopPriceModifiers": true
+                },
+                "atravita.CP.MoreFertilizers.SecretJojaFertilizer": {
+                    "Condition": "PLAYER_HAS_FLAG Host ccMovieTheaterJoja",
+                    "Price": 1500,
+                    "AvailableStock": 4,
+                    "ItemId": "(O)atravita.CP.MoreFertilizers.SecretJojaFertilizer",
+                    "IgnoreShopPriceModifiers": true
+                },
+                "atravita.CP.MoreFertilizers.BountifulFertilizer": {
+                    "Condition": "!IS_JOJA_MART_COMPLETE",
+                    "Price": 200,
+                    "AvailableStock": 20,
+                    "ItemId": "(O)atravita.CP.MoreFertilizers.BountifulFertilizer",
+                    "IgnoreShopPriceModifiers": true
+                },
+                "atravita.CP.MoreFertilizers.OrganicFertilizer": {
+                    "Condition": "!IS_JOJA_MART_COMPLETE",
+                    "Price": 200,
+                    "AvailableStock": 20,
+                    "ItemId": "(O)atravita.CP.MoreFertilizers.OrganicFertilizer",
+                    "IgnoreShopPriceModifiers": true
+                },
+                "atravita.CP.MoreFertilizers.EverlastingFruitTreeFertilizer": {
+                    "Condition": "!IS_JOJA_MART_COMPLETE, YEAR 2",
+                    "Price": 1000,
+                    "AvailableStock": 5,
+                    "ItemId": "(O)atravita.CP.MoreFertilizers.EverlastingFruitTreeFertilizer",
+                    "IgnoreShopPriceModifiers": true
                 }
             }
         },

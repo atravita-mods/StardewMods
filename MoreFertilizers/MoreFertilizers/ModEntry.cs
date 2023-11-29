@@ -53,7 +53,6 @@ internal sealed class ModEntry : Mod
     private MigrationManager? migrator;
 
     private Dictionary<int, int>? idmap;
-    private ISolidFoundationsAPI? solidFoundationsAPI;
 
     #region IDs
 
@@ -595,49 +594,6 @@ internal sealed class ModEntry : Mod
     }
 
     /// <summary>
-    /// When safely saved, also save the ids for each fertilizer.
-    /// </summary>
-    /// <param name="sender">SMAPI.</param>
-    /// <param name="e">Event arguments.</param>
-    private void OnSaving(object? sender, SavingEventArgs e)
-    {
-        this.Helper.Events.GameLoop.Saving -= this.OnSaving;
-        if (!Context.IsMainPlayer)
-        {
-            return;
-        }
-
-        // TODO: This should be doable with expression trees in a less dumb way.
-        storedIDs ??= new()
-            {
-                BountifulBushID = BountifulBushID,
-                BountifulFertilizerID = BountifulFertilizerID,
-                DeluxeFishFoodID = DeluxeFishFoodID,
-                DeluxeFruitTreeFertilizerID = DeluxeFruitTreeFertilizerID,
-                DeluxeJojaFertilizerID = DeluxeJojaFertilizerID,
-                DomesticatedFishFoodID = DomesticatedFishFoodID,
-                EverlastingFertilizerID = EverlastingFertilizerID,
-                EverlastingFruitTreeFertilizerID = EverlastingFruitTreeFertilizerID,
-                FishFoodID = FishFoodID,
-                FruitTreeFertilizerID = FruitTreeFertilizerID,
-                JojaFertilizerID = JojaFertilizerID,
-                LuckyFertilizerID = LuckyFertilizerID,
-                MiraculousBeveragesID = MiraculousBeveragesID,
-                OrganicFertilizerID = OrganicFertilizerID,
-                PaddyFertilizerID = PaddyCropFertilizerID,
-                PrismaticFertilizerID = PrismaticFertilizerID,
-                RapidBushFertilizerID = RapidBushFertilizerID,
-                SecretJojaFertilizerID = SecretJojaFertilizerID,
-                SeedyFertilizerID = SeedyFertilizerID,
-                TreeTapperFertilizerID = TreeTapperFertilizerID,
-                WisdomFertilizerID = WisdomFertilizerID,
-                RadioactiveFertilizerID = RadioactiveFertilizerID,
-            };
-        this.Helper.Data.WriteSaveData(SavedIDKey, storedIDs);
-        this.Monitor.Log("Writing IDs into save data");
-    }
-
-    /// <summary>
     /// Applies the patches for this mod.
     /// </summary>
     /// <param name="harmony">This mod's harmony instance.</param>
@@ -747,14 +703,6 @@ internal sealed class ModEntry : Mod
 
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
     {
-        IntegrationHelper jaHelper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, LogLevel.Warn);
-        if (!jaHelper.TryGetAPI("spacechase0.JsonAssets", "1.10.3", out jsonAssets))
-        {
-            this.Monitor.Log("Packs could not be loaded! This mod will probably not function.", LogLevel.Error);
-            return;
-        }
-        jsonAssets.LoadAssets(Path.Combine(this.Helper.DirectoryPath, "assets", "json-assets"), this.Helper.Translation);
-
         RadioactiveFertilizerHandler.Initialize(this.Helper.GameContent, this.Helper.ModRegistry, this.Helper.Translation);
 
         // Only register for events if JA pack loading was successful.
@@ -967,9 +915,6 @@ internal sealed class ModEntry : Mod
         {
             ModMonitor.Log("No need to fix IDs, not installed before.");
 
-            this.Helper.Events.GameLoop.Saving -= this.OnSaving;
-            this.Helper.Events.GameLoop.Saving += this.OnSaving;
-
             return;
         }
         storedIDs = storedIDCls;
@@ -1157,54 +1102,9 @@ internal sealed class ModEntry : Mod
             return;
         }
 
-        this.Helper.Events.GameLoop.Saving -= this.OnSaving;
-        this.Helper.Events.GameLoop.Saving += this.OnSaving;
-
-        // Grab the SF API to deshuffle in there too.
-        IntegrationHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, LogLevel.Trace);
-        if (this.solidFoundationsAPI is not null || helper.TryGetAPI("PeacefulEnd.SolidFoundations", "1.12.1", out this.solidFoundationsAPI))
-        {
-            this.idmap = idMapping;
-            this.solidFoundationsAPI.AfterBuildingRestoration -= this.AfterSFBuildingRestore;
-            this.solidFoundationsAPI.AfterBuildingRestoration += this.AfterSFBuildingRestore;
-        }
-
         Utility.ForAllLocations((GameLocation loc) => loc.FixHoeDirtInLocation(idMapping));
 
         ModMonitor.Log($"Fixed IDs! {string.Join(", ", idMapping.Select((kvp) => $"{kvp.Key}=>{kvp.Value}"))}");
-    }
-
-    private void AfterSFBuildingRestore(object? sender, EventArgs e)
-    {
-        // unhook event
-        this.solidFoundationsAPI!.AfterBuildingRestoration -= this.AfterSFBuildingRestore;
-        try
-        {
-            if (SolidFoundationShims.IsSFBuilding is null)
-            {
-                this.Monitor.Log("Could not get a handle on SF's building class, deshuffling code will fail!", LogLevel.Error);
-            }
-            else if (this.idmap is null)
-            {
-                this.Monitor.Log("IdMap was not set correctly, deshuffling code will fail.", LogLevel.Error);
-            }
-            else
-            {
-                foreach (Building? building in GameLocationUtils.GetBuildings())
-                {
-                    if (SolidFoundationShims.IsSFBuilding?.Invoke(building) == true)
-                    {
-                        building.indoors.Value?.FixHoeDirtInLocation(this.idmap);
-                    }
-                }
-            }
-        }
-        catch (Exception ex)
-        {
-            this.Monitor.LogError("deshuffling in SF buildings", ex);
-        }
-        this.idmap = null;
-        this.solidFoundationsAPI = null;
     }
 
     #endregion

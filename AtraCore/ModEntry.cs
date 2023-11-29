@@ -33,6 +33,8 @@ using HarmonyLib;
 
 using StardewModdingAPI.Events;
 
+using StardewValley.Delegates;
+
 using AtraUtils = AtraShared.Utils.Utils;
 
 /// <inheritdoc />
@@ -116,15 +118,20 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         // actions
         GameLocation.RegisterTileAction("atravita.Teleport", TeleportPlayer.ApplyCommand);
 
-        // add GSQ
-        const string EARNED_MONEY = "atravita.AtraCore_HAS_EARNED_MONEY";
-        if (GameStateQuery.Exists(EARNED_MONEY))
+        AddGSQ("atravita.AtraCore_HAS_EARNED_MONEY", MoneyEarned.CheckMoneyEarned);
+        AddGSQ("atravita.AtraCore_HAS_DAILY_LUCK", CurrentDailyLuck.DailyLuck);
+        AddGSQ("atravita.AtraCore_FISH_CAUGHT_PERCENT", FishCaught.FishCaughtPercent);
+
+        void AddGSQ(string query, GameStateQueryDelegate del)
         {
-            this.Monitor.Log($"{EARNED_MONEY} seems to exist already as a GSQ, what.", LogLevel.Warn);
-        }
-        else
-        {
-            GameStateQuery.Register(EARNED_MONEY, MoneyEarned.CheckMoneyEarned);
+            if (GameStateQuery.Exists(query))
+            {
+                this.Monitor.Log($"{query} seems to exist already as a GSQ, what.", LogLevel.Warn);
+            }
+            else
+            {
+                GameStateQuery.Register(query, del);
+            }
         }
     }
 

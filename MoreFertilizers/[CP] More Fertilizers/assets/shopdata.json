@@ -11,6 +11,32 @@
                     "Price": 150,
                     "ItemId": "(O)atravita.CP.MoreFertilizers.BountifulFertilizer",
                     "IgnoreShopPriceModifiers": true
+                },
+                "atravita.CP.MoreFertilizers.OrganicFertilizer": {
+                    "Condition": "YEAR 2, PLAYER_HAS_FLAG Host MSB_Pierre, DAY_OF_WEEK Wed Sun",
+                    "Price": 150,
+                    "ItemId": "(O)atravita.CP.MoreFertilizers.OrganicFertilizer",
+                    "IgnoreShopPriceModifiers": true
+                },
+                "atravita.CP.MoreFertilizers.RapidBushFertilizer": {
+                    "Condition": "YEAR 2, PLAYER_HAS_SEEN_EVENT Current 719926, DAY_OF_WEEK Wed Sun, PLAYER_HEARTS Current Caroline 6",
+                    "Price": 150,
+                    "ItemId": "(O)atravita.CP.MoreFertilizers.RapidBushFertilizer",
+                    "IgnoreShopPriceModifiers": true
+                },
+                "atravita.CP.MoreFertilizers.LuckyFertilizer": {
+                    "Condition": "atravita.AtraCore_HAS_DAILY_LUCK 0.07. !YEAR 1, !SEASON spring",
+                    "Price": 100,
+                    "AvailableStock": 15,
+                    "ItemId": "(O)atravita.CP.MoreFertilizers.LuckyFertilizer",
+                    "IgnoreShopPriceModifiers": true,
+                    "PriceModifierMode": "Maximum",
+                    "PriceModifiers": [{
+                        "Id": "YearTwoMarkup",
+                        "Condition": "YEAR 2",
+                        "Modification": "Set",
+                        "Amount": 150
+                    }]
                 }
             }
         },
@@ -48,6 +74,13 @@
                     "Price": 200,
                     "ItemId": "(O)atravita.CP.MoreFertilizers.DeluxeJojaFertilizer",
                     "IgnoreShopPriceModifiers": true
+                },
+                "atravita.CP.MoreFertilizers.SecretJojaFertilizer": {
+                    "Condition": "atravita.AtraCore_HAS_EARNED_MONEY CURRENT 1000000, PLAYER_HAS_FLAG Host ccMovieTheaterJoja, SYNCED_RANDOM day secret_joja 0.15",
+                    "Price": 500,
+                    "AvailableStock": 2,
+                    "ItemId": "(O)atravita.CP.MoreFertilizers.SecretJojaFertilizer",
+                    "IgnoreShopPriceModifiers": true
                 }
             }
         },
@@ -69,6 +102,111 @@
                     "IgnoreShopPriceModifiers": true
                 }
             }
-        }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Data/Shops",
+            "TargetField": ["Carpenter", "Items"],
+            "Entries": {
+                "atravita.CP.MoreFertilizers.SeedyFertilizer": {
+                    "Condition": "YEAR 2, PLAYER_HAS_FLAG Host georgeGifts, DAY_OF_WEEK Wed Sun, PLAYER_HEARTS George 6",
+                    "Price": 150,
+                    "ItemId": "(O)atravita.CP.MoreFertilizers.SeedyFertilizer",
+                    "IgnoreShopPriceModifiers": true
+                },
+                "atravita.CP.MoreFertilizers.TreeTapperFertilizer": {
+                    "Condition": "YEAR 2, PLAYER_HAS_FLAG Host robinResource, DAY_OF_WEEK Wed Sun, PLAYER_HEARTS Robin 6",
+                    "Price": 150,
+                    "ItemId": "(O)atravita.CP.MoreFertilizers.TreeTapperFertilizer",
+                    "IgnoreShopPriceModifiers": true
+                }
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Data/Shops",
+            "TargetField": ["Casino", "Items"],
+            "Entries": {
+                "atravita.CP.MoreFertilizers.LuckyFertilizer": {
+                    "Condition": "atravita.AtraCore_HAS_DAILY_LUCK 0.05",
+                    "Price": 500,
+                    "ItemId": "atravita.CP.MoreFertilizers.LuckyFertilizer",
+                    "IgnoreShopPriceModifiers": true,
+                    "PriceModifiers": [
+                        {
+                            "Id": "RandomMultiplier",
+                            "Modification": "Multiply",
+                            "RandomAmount": [
+                                1.0,
+                                2.0,
+                                3.0,
+                                4.0,
+                                5.0,
+                                6.0,
+                                7.0,
+                                8.0,
+                                9.0,
+                                10.0
+                              ]
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Data/Shops",
+            "TargetField": ["QiGemShop", "Items"],
+            "Entries": {
+                "atravita.CP.MoreFertilizers.EverlastingFertilizer": {
+                    "TradeItemId": "(O)858",
+                    "TradeItemAmount": 1,
+                    "ItemId": "(O)atravita.CP.MoreFertilizers.EverlastingFertilizer",
+                    "IgnoreShopPriceModifiers": true
+                },
+                "atravita.CP.MoreFertilizers.EverlastingFertilizer": {
+                    "TradeItemId": "(O)858",
+                    "TradeItemAmount": 1,
+                    "ItemId": "(O)atravita.CP.MoreFertilizers.EverlastingFertilizer",
+                    "IgnoreShopPriceModifiers": true
+                }
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Data/Shops",
+            "TargetField": ["IslandTrade", "Items"],
+            "Entries": {
+                "atravita.CP.MoreFertilizers.DeluxeFishFoodFertilizer": {
+                    "Condition": "atravita.AtraCore_FISH_CAUGHT_PERCENT 0.5",
+                    "TradeItemId": "(O)851",
+                    "TradeItemAmount": 5,
+                    "ItemId": "(O)atravita.CP.MoreFertilizers.DeluxeFishFoodFertilizer",
+                    "IgnoreShopPriceModifiers": true
+                },
+                "atravita.CP.MoreFertilizers.SecretJojaFertilizer": {
+                    "Condition": "aatravita.AtraCore_HAS_DAILY_LUCK 0.05",
+                    "TradeItemId": "(O)909",
+                    "TradeItemAmount": 4,
+                    "AvailableStock": 5,
+                    "ItemId": "(O)atravita.CP.MoreFertilizers.SecretJojaFertilizer",
+                    "IgnoreShopPriceModifiers": true,
+                    "PriceModifiers": [
+                        {
+                            "Id": "JojaMember",
+                            "Condition": "IS_JOJA_MART_COMPLETE",
+                            "Modification": "Set",
+                            "Amount": 2,
+                        }
+                    ]
+                },
+                "atravita.CP.MoreFertilizers.MiraculousBeverages": {
+                    "TradeItemId": "(O)253",
+                    "TradeItemAmount": 1,
+                    "ItemId": "(O)atravita.CP.MoreFertilizers.MiraculousBeverages",
+                    "IgnoreShopPriceModifiers": true
+                },
+            }
+        },
     ]
 }

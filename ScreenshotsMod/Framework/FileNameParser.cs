@@ -9,6 +9,9 @@ using StardewModdingAPI.Utilities;
 /// </summary>
 internal static class FileNameParser
 {
+    /// <summary>
+    /// The default filename.
+    /// </summary>
     internal const string DEFAULT_FILENAME = @"{{Default}}/{{Save}}/{{Location}}/{{Date}}.png";
 
     [RegexPattern]

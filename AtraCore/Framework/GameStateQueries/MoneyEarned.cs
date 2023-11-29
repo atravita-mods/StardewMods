@@ -3,12 +3,12 @@
 using static StardewValley.GameStateQuery;
 
 /// <summary>
-/// Handles adding a GSQ that checks for a wallet item. wallet item.
+/// Handles adding a GSQ that checks for money earned.
 /// </summary>
 internal static class MoneyEarned
 {
     /// <inheritdoc cref="T:StardewValley.Delegates.GameStateQueryDelegate"/>
-    /// <remarks>Checks if the given player has the specific wallet item.</remarks>
+    /// <remarks>Checks if the given player has the specified amount of money earned, inclusive.</remarks>
     internal static bool CheckMoneyEarned(string[] query, GameLocation location, Farmer player, Item targetItem, Item inputItem, Random random)
     {
         uint max = uint.MaxValue;

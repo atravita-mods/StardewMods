@@ -1,20 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AtraCore.Framework.GameStateQueries;
+﻿namespace AtraCore.Framework.GameStateQueries;
 
 using static StardewValley.GameStateQuery;
 
 /// <summary>
-/// Handles adding a GSQ that checks for a wallet item. wallet item.
+/// Handles adding a GSQ that checks for recipes cooked.
 /// </summary>
 internal static class RecipesCooked
 {
     /// <inheritdoc cref="T:StardewValley.Delegates.GameStateQueryDelegate"/>
-    /// <remarks>Checks if the given player has the specific wallet item.</remarks>
+    /// <remarks>Checks if the given player has the specified percentage of recipes cooked, inclusive.</remarks>
     internal static bool RecipesCookedPercent(string[] query, GameLocation location, Farmer player, Item targetItem, Item inputItem, Random random)
     {
         if (!ArgUtility.TryGet(query, 1, out string? playerKey, out string? error)

@@ -1,20 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AtraCore.Framework.GameStateQueries;
+﻿namespace AtraCore.Framework.GameStateQueries;
 
 using static StardewValley.GameStateQuery;
 
 /// <summary>
-/// Handles adding a GSQ that checks for a wallet item. wallet item.
+/// Handles adding a GSQ that checks for the fish caught percentage.
 /// </summary>
 internal static class FishCaught
 {
     /// <inheritdoc cref="T:StardewValley.Delegates.GameStateQueryDelegate"/>
-    /// <remarks>Checks if the given player has the specific wallet item.</remarks>
+    /// <remarks>Checks if the given player has caught the specified percentage of total fish, inclusive.</remarks>
     internal static bool FishCaughtPercent(string[] query, GameLocation location, Farmer player, Item targetItem, Item inputItem, Random random)
     {
         if (!ArgUtility.TryGet(query, 1, out string? playerKey, out string? error)

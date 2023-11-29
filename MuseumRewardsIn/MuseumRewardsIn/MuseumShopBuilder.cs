@@ -48,7 +48,7 @@ internal static class MuseumShopBuilder
                     {
                         return ItemQueryResolver.DefaultResolvers.ErrorResult(key, arguments, logError, $"argument '{arg}' was not given values");
                     }
-                    types ??= new();
+                    types ??= [];
 
                     do
                     {
@@ -107,7 +107,7 @@ internal static class MuseumShopBuilder
             return ItemQueryResolver.DefaultResolvers.ErrorResult(key, arguments, logError, $"museum data appears empty");
         }
 
-        List<ItemQueryResult> items = new();
+        List<ItemQueryResult> items = [];
         Dictionary<string, int> countsByTag = library.GetDonatedByContextTag(museumRewardData);
         HashSet<string>? repeats = avoidRepeat ? new() : null;
 

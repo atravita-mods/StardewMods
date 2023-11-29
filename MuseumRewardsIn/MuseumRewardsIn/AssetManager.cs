@@ -2,10 +2,8 @@
 
 using StardewModdingAPI.Events;
 
-using StardewValley.Buildings;
 using StardewValley.GameData;
 using StardewValley.GameData.Shops;
-using StardewValley.Objects;
 
 namespace MuseumRewardsIn;
 
@@ -14,8 +12,6 @@ namespace MuseumRewardsIn;
 /// </summary>
 internal static class AssetManager
 {
-    internal static IAssetName libraryHouse = null!;
-
     private const string BUILDING = "Buildings";
     private const string SHOPNAME = "atravita.MuseumShop";
 
@@ -24,6 +20,11 @@ internal static class AssetManager
     private static IAssetName letters = null!;
     private static IAssetName shops = null!;
     private static IAssetName strings = null!;
+
+    /// <summary>
+    /// Gets the asset name for the library.
+    /// </summary>
+    internal static IAssetName LibraryHouse { get; private set; } = null!;
 
     /// <summary>
     /// Gets a hashset of mailflags to process for gifts.
@@ -38,7 +39,7 @@ internal static class AssetManager
     {
         letters = parser.ParseAssetName("Mods/atravita/MuseumStore/Letters");
         shops = parser.ParseAssetName("Data/Shops");
-        libraryHouse = parser.ParseAssetName("Maps/ArchaeologyHouse");
+        LibraryHouse = parser.ParseAssetName("Maps/ArchaeologyHouse");
         strings = parser.ParseAssetName("Mods/atravita/MuseumStore/Strings");
     }
 
@@ -64,7 +65,7 @@ internal static class AssetManager
         {
             e.LoadFromModFile<Dictionary<string, string>>("assets/vanilla_mail.json", AssetLoadPriority.Exclusive);
         }
-        else if (e.NameWithoutLocale.IsEquivalentTo(libraryHouse))
+        else if (e.NameWithoutLocale.IsEquivalentTo(LibraryHouse))
         {
             e.Edit(
                 apply: static (asset) => asset.AsMap().AddTileProperty(
@@ -97,54 +98,54 @@ internal static class AssetManager
 
         ShopData museumShop = new()
         {
-            Owners = new()
-            {
+            Owners =
+            [
                 new()
                 {
                     Name = nameof(ShopOwnerType.AnyOrNone),
                     Portrait = "Portraits/Gunther",
-                    Dialogues = new()
-                    {
+                    Dialogues =
+                    [
                         new()
                         {
                             Id = "Default",
                             Dialogue = $"[LocalizedText {strings.BaseName}:GuntherDialogue]",
                         },
-                    },
+                    ],
                 },
-            },
-            Items = new()
-            {
+            ],
+            Items =
+            [
                 new()
                 {
                     PriceModifierMode = QuantityModifier.QuantityModifierMode.Maximum,
-                    PriceModifiers = new()
-                    {
+                    PriceModifiers =
+                    [
                         new()
                         {
                             Modification = QuantityModifier.ModificationType.Multiply,
-                            Amount = 2,
+                            Amount = 3,
                         },
                         new()
                         {
                             Modification = QuantityModifier.ModificationType.Set,
                             Amount = 2000,
                         },
-                    },
+                    ],
                     ItemId = ModEntry.MUSEUM_RESOLVER,
                 },
-            },
+            ],
             ApplyProfitMargins = false,
         };
 
         if (ModEntry.Config.AllowBuyBacks)
         {
-            museumShop.SalableItemTags = new()
-            {
+            museumShop.SalableItemTags =
+            [
                 "category_gem",
                 "category_minerals",
                 "item_type_arch",
-            };
+            ];
         }
         editor[SHOPNAME] = museumShop;
 

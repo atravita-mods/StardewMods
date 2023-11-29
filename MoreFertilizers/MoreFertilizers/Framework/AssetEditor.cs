@@ -36,8 +36,6 @@ internal static class AssetEditor
 
     private static readonly TickCache<bool> HasSeenBoat = new(static () => FarmerHelpers.HasAnyFarmerRecievedFlag("seenBoatJourney"));
 
-    private static IAssetName SPECIAL_ORDERS_STRINGS = null!;
-    private static IAssetName MAIL = null!;
     private static IAssetName LEWIS_DIALOGUE = null!;
     private static IAssetName RADIOACTIVE_DENYLIST = null!;
 

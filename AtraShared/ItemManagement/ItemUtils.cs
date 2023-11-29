@@ -1,4 +1,6 @@
-﻿using System.Runtime.CompilerServices;
+﻿// Ignore Spelling: Utils
+
+using System.Runtime.CompilerServices;
 
 using AtraShared.ConstantsAndEnums;
 

@@ -71,7 +71,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
                 reset: static () => Config = new(),
                 save: () =>
                 {
-                    this.Helper.GameContent.InvalidateCacheAndLocalized(AssetManager.libraryHouse.BaseName);
+                    this.Helper.GameContent.InvalidateCacheAndLocalized(AssetManager.LibraryHouse.BaseName);
                     this.Helper.AsyncWriteConfig(this.Monitor, Config);
                 })
             .AddTextOption(

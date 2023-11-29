@@ -1,0 +1,63 @@
+{
+    "$schema": "https://smapi.io/schemas/content-patcher.json",
+    "Changes": [
+        {
+            "Action": "EditData",
+            "Target": "Data/Machines",
+            "TargetField": ["(BC)90", "Default", "OutputItem"],
+            "Entries": {
+                "atravita.CP.MoreFertilizers.BountifulFertilizer": {
+                    "ItemId": "(O)atravita.CP.MoreFertilizers.BountifulFertilizer",
+                    "MinStack": 3,
+                    "StackModifiers": [
+                        {
+                          "Id": "RareDouble",
+                          "Condition": "RANDOM .1",
+                          "Modification": "Multiply",
+                          "Amount": 2.0,
+                        }
+                      ],
+                      "StackModifierMode": "Stack",
+                },
+                "atravita.CP.MoreFertilizers.Organic": {
+                    "ItemId": "(O)atravita.CP.MoreFertilizers.OrganicFertilizer",
+                    "MinStack": 3,
+                    "StackModifiers": [
+                        {
+                          "Id": "RareDouble",
+                          "Condition": "RANDOM .1",
+                          "Modification": "Multiply",
+                          "Amount": 2.0,
+                        }
+                      ],
+                      "StackModifierMode": "Stack",
+                },
+                "atravita.CP.MoreFertilizers.FruitTreeFertilizer": {
+                    "ItemId": "(O)atravita.CP.MoreFertilizers.FruitTreeFertilizer",
+                    "MinStack": 3,
+                    "StackModifiers": [
+                        {
+                          "Id": "RareDouble",
+                          "Condition": "RANDOM .1",
+                          "Modification": "Multiply",
+                          "Amount": 2.0,
+                        }
+                      ],
+                      "StackModifierMode": "Stack",
+                },
+                "atravita.CP.MoreFertilizers.DeluxeFruitTreeFertilizer": {
+                    "ItemId": "(O)atravita.CP.MoreFertilizers.DeluxeFruitTreeFertilizer",
+                    "StackModifiers": [
+                        {
+                          "Id": "RareDouble",
+                          "Condition": "RANDOM .1",
+                          "Modification": "Multiply",
+                          "Amount": 2.0,
+                        }
+                      ],
+                      "StackModifierMode": "Stack",
+                }
+            }
+        }
+    ]
+}

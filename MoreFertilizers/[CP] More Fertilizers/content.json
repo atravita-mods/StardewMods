@@ -27,6 +27,10 @@
         },
         {
             "Action": "Include",
+            "FromFile": "assets/phonecalls.json"
+        },
+        {
+            "Action": "Include",
             "FromFile": "assets/shopdata.json",
         },
         {

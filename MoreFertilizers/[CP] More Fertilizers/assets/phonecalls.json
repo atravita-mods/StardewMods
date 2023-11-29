@@ -1,0 +1,23 @@
+{
+    "$schema": "https://smapi.io/schemas/content-patcher.json",
+    "Changes": [
+        {
+            "Action": "EditData",
+            "Target": "Data/IncomingPhoneCalls",
+            "Entries": {
+                "atravita.MoreFertilizers.Sandy": {
+                    "TriggerCondition": "Year 2, PLAYER_HAS_MET Any Sandy",
+                    "RingCondition": "Year 2, PLAYER_HAS_MET Current Sandy",
+                    "FromNpc": "Sandy",
+                    "Dialogue": "{{i18n: sandy-call}}",
+                },
+                "atravita.MoreFertilizers.PierreCall": {
+                    "TriggerCondition": "PLAYER_HAS_READ_LETTER Any atravita_OrganicCrops_Reward",
+                    "RingCondition": "PLAYER_HAS_READ_LETTER Any atravita_OrganicCrops_Reward",
+                    "FromNpc": "Lewis",
+                    "Dialogue": "{{i18n: lewis-call}}"
+                }
+            }
+        }
+    ]
+}

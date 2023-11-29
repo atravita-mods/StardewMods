@@ -620,26 +620,6 @@ internal sealed class ModEntry : Mod
                 HoeDirtDrawTranspiler.ApplyPatches(harmony);
             }
 
-            if (!this.Helper.ModRegistry.IsLoaded("Digus.ProducerFrameworkMod"))
-            {
-                PerformObjectDropInTranspiler.ApplyPatches(harmony);
-            }
-            else if (this.Helper.ModRegistry.Get("Digus.PFMAutomate") is IModInfo pfmAutomate
-                && pfmAutomate.Manifest.Version.IsNewerThan("1.4.1"))
-            {
-                this.Monitor.Log("Found PFMAutomate, transpiling PFM to support that.", LogLevel.Info);
-                PFMAutomateTranspilers.ApplyPatches(harmony);
-            }
-
-            if (this.Helper.ModRegistry.Get("spacechase0.DynamicGameAssets") is IModInfo dga
-                && dga.Manifest.Version.IsNewerThan("1.4.1"))
-            {
-                this.Monitor.Log("Found Dynamic Game Assets, applying compat patches", LogLevel.Info);
-                CropHarvestTranspiler.ApplyDGAPatch(harmony);
-                SObjectPatches.ApplyDGAPatch(harmony);
-                CropNewDayTranspiler.ApplyDGAPatches(harmony);
-            }
-
             if (this.Helper.ModRegistry.Get("PeacefulEnd.AlternativeTextures") is IModInfo at
                 && at.Manifest.Version.IsNewerThan("6.0.0"))
             {
@@ -652,14 +632,6 @@ internal sealed class ModEntry : Mod
             {
                 this.Monitor.Log("Found MultiYieldCrops, applying compat patches", LogLevel.Info);
                 MultiYieldCropsCompat.ApplyPatches(harmony);
-            }
-
-            if (this.Helper.ModRegistry.Get("Pathoschild.Automate") is IModInfo automate
-                && automate.Manifest.Version.IsNewerThan("1.25.2"))
-            {
-                this.Monitor.Log("Found Automate, applying compat patches", LogLevel.Info);
-                AutomateTranspiler.ApplyPatches(harmony);
-                PerformObjectDropInTranspiler.ApplyAutomateTranspiler(harmony);
             }
 
             if (this.Helper.ModRegistry.Get("Satozaki.MillerTime") is IModInfo millerTime
@@ -1128,12 +1100,6 @@ internal sealed class ModEntry : Mod
 
         MiraculousFertilizerHandler.Initialize();
         MultiplayerHelpers.AssertMultiplayerVersions(this.Helper.Multiplayer, this.ModManifest, this.Monitor, this.Helper.Translation);
-
-        IntegrationHelper pfmHelper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, LogLevel.Trace);
-        if (pfmHelper.TryGetAPI("Digus.ProducerFrameworkMod", "1.7.4", out IProducerFrameworkModAPI? pfmAPI))
-        {
-            pfmAPI.AddContentPack(Path.Combine(this.Helper.DirectoryPath, "assets", "pfm-assets"));
-        }
 
         this.migrator = new(this.ModManifest, this.Helper, this.Monitor);
 

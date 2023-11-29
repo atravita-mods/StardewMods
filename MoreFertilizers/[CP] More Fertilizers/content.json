@@ -15,6 +15,10 @@
         },
         {
             "Action": "Include",
+            "FromFile": "assets/mail.json"
+        },
+        {
+            "Action": "Include",
             "FromFile": "assets/museum.json",
         },
         {

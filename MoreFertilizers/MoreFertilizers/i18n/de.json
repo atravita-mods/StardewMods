@@ -27,15 +27,4 @@
   "joja.event.0": "Willkommen im JojaMart, @! Kann ich Sie von unserem patentierten Dünger überzeugen? Hier, nehmen Sie!",
   "joja.event.1": "Oh, @! Schön Sie hier zu sehen! Wir haben kostenlose Proben unseres patentierten Düngers. Greifen Sie zu!",
   "joja.event.2": "Willkommen im JojaMart! Ich hoffe Sie werden hier alles finden, was Sie brauchen!#$b# Sagen Sie... Wären Sie an einer Kostprobe unseres patentierten Düngers interessiert?",
-
-  // Organic fertilizer special order.
-  "specialorder.organic.name": "Bio-Pflanzen gesucht!",
-  "specialorder.organic.text": "Heutzutage dreht sich alles um Bio-Obst und -Gemüse! Ich bin bereit einen schönen Bonus an den zu bezahlen, der bereit ist 100x Bio-Gemüse zu liefern. ",
-  "specialorder.organic.gather": "Ernte 100x Bio-Gemüse.",
-  "specialorder.organic.ship": "Verkaufe 100x Bio-Gemüse.",
-  "specialorder.organic.mail.title": "Bio-Pflanzen gesucht - Danke!",
-  "specialorder.organic.mail.text": "Ah, vielen Dank, dass Sie uns mit Bio-Pflanzen versorgen! Ich bin sicher, dass sie ein hübsches Sümmchen in Zuzu City bringen werden. Als kleines Dankeschön habe ich ein kleines Geschenk beigelegt...",
-  "specialorder.organic.lewis_inprogress": "Ah @, gerade rechtzeitig! Ich glaube, du wirst gute Arbeit leisten, uns mit exzellenten Pflanzen zu versorgen...",
-
-  "Lewis": "Lewis"
 }

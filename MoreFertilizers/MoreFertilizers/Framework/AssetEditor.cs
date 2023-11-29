@@ -76,10 +76,6 @@ internal static class AssetEditor
             {
                 e.Edit(EditSpecialOrdersStringsImpl, AssetEditPriority.Early);
             }
-            else if (e.NameWithoutLocale.IsEquivalentTo(MAIL))
-            {
-                e.Edit(EditMailImpl, AssetEditPriority.Early);
-            }
         }
     }
 
@@ -157,14 +153,6 @@ internal static class AssetEditor
         editor.Data["atravita.OrganicCrops.Text"] = I18n.Specialorder_Organic_Text();
         editor.Data["atravita.OrganicCrops.gather"] = I18n.Specialorder_Organic_Gather();
         editor.Data["atravita.OrganicCrops.ship"] = I18n.Specialorder_Organic_Ship();
-    }
-
-    private static void EditMailImpl(IAssetData asset)
-    {
-        IAssetDataForDictionary<string, string>? editor = asset.AsDictionary<string, string>();
-        editor.Data[ORGANICVEGGIEMAIL] = $"@,^{I18n.Specialorder_Organic_Mail_Text()}^^   --{NPCCache.GetByVillagerName("Lewis")?.displayName ?? I18n.Lewis()}%item bigobject 272 %% [#]{I18n.Specialorder_Organic_Mail_Text()}";
-        editor.Data[GEORGE_EVENT] = $"{I18n.George_Mail()}%item object {ModEntry.SeedyFertilizerID} 5 %% [#]{I18n.George_Mail_Title()}";
-        editor.Data[BOUNTIFUL_BUSH_UNLOCK] = $"{I18n.Bountiful_Bush_Mail()}%item object {ModEntry.BountifulBushID} 3 %% [#]{I18n.Bountiful_Bush_Mail_Title()}";
     }
 
     private static void EditLewisDialogueImpl(IAssetData asset)

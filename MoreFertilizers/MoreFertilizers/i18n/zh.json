@@ -25,24 +25,10 @@
   // Appended to the name of organic objects.
   "organic": "(有机)",
 
-  // mail
-  "bountiful.bush.mail": "...这种肥料可以让灌木丛收获持续时间增加...我希望我们能用这个赚很多钱....[剩余的部分因为水渍看不清]",
-  "bountiful.bush.mail.title": "一张小纸条",
-  "george.mail": "@，你比我想象中表现出色的多，我给你带来了点东西，你可能会感兴趣。^^-乔治. PS - 我是让罗宾帮我送过来的，你还想要的话去找她吧。",
-  "george.mail.title": "乔治寄来的信",
-
   // Joja free sample dialogue.
   "joja.event.0": "欢迎来到Joja超市, @! 有没有兴趣看看使用我们Joja公司专利技术制作的肥料？拿去用用看吧。",
   "joja.event.1": "噢, @! 很高兴你能来！ 这是我们的专利肥料样品，拿去用用看吧！",
   "joja.event.2": "欢迎来到Joja超市！我希望你能买到你要的商品！#$b#话说....有试用一下我们的专利肥料吗？这儿有些样品可以给你。",
 
-  // Organic fertilizer special order.
-  "specialorder.organic.name": "这里需要有机蔬菜！",
-  "specialorder.organic.text": "最近有机蔬菜正在大卖！有人愿意售出100个有机蔬菜的话，我会付他/她一笔不错的酬劳。",
-  "specialorder.organic.gather": "收获100个有机蔬菜",
-  "specialorder.organic.ship": "售出100个有机蔬菜",
-  "specialorder.organic.mail.title": "有机蔬菜任务完成 - 感谢你!",
-  "specialorder.organic.mail.text": "啊，谢谢你的这些有机蔬菜！这些拿到祖祖城应该能卖个不错的价钱。为了感谢你，我决定把这个给你，我在库存里翻到的...",
-  "specialorder.organic.lewis_inprogress": "啊, @, 你来的刚刚好! 我想你能胜任这份工作的，你的作物质量向来都很不错...",
-  "Lewis": "刘易斯",
+
 }

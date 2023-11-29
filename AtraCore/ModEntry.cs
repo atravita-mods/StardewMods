@@ -120,6 +120,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
 
         AddGSQ("atravita.AtraCore_HAS_EARNED_MONEY", MoneyEarned.CheckMoneyEarned);
         AddGSQ("atravita.AtraCore_HAS_DAILY_LUCK", CurrentDailyLuck.DailyLuck);
+        AddGSQ("atravita.AtraCore_RECIPES_COOKED_PERCENT", RecipesCooked.RecipesCookedPercent);
         AddGSQ("atravita.AtraCore_FISH_CAUGHT_PERCENT", FishCaught.FishCaughtPercent);
 
         void AddGSQ(string query, GameStateQueryDelegate del)

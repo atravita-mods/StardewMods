@@ -15,6 +15,14 @@
         },
         {
             "Action": "Include",
+            "FromFile": "assets/museum.json",
+        },
+        {
+            "Action": "Include",
+            "FromFile": "assets/objects.json",
+        },
+        {
+            "Action": "Include",
             "FromFile": "assets/shopdata.json",
         },
         {

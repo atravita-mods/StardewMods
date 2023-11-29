@@ -25,7 +25,7 @@
                     "IgnoreShopPriceModifiers": true
                 },
                 "atravita.CP.MoreFertilizers.LuckyFertilizer": {
-                    "Condition": "atravita.AtraCore_HAS_DAILY_LUCK 0.07. !YEAR 1, !SEASON spring",
+                    "Condition": "atravita.AtraCore_HAS_DAILY_LUCK Current 0.07, !YEAR 1, !SEASON spring",
                     "Price": 100,
                     "AvailableStock": 15,
                     "ItemId": "(O)atravita.CP.MoreFertilizers.LuckyFertilizer",
@@ -128,7 +128,7 @@
             "TargetField": ["Casino", "Items"],
             "Entries": {
                 "atravita.CP.MoreFertilizers.LuckyFertilizer": {
-                    "Condition": "atravita.AtraCore_HAS_DAILY_LUCK 0.05",
+                    "Condition": "atravita.AtraCore_HAS_DAILY_LUCK Current 0.05",
                     "Price": 500,
                     "ItemId": "atravita.CP.MoreFertilizers.LuckyFertilizer",
                     "IgnoreShopPriceModifiers": true,
@@ -164,10 +164,10 @@
                     "ItemId": "(O)atravita.CP.MoreFertilizers.EverlastingFertilizer",
                     "IgnoreShopPriceModifiers": true
                 },
-                "atravita.CP.MoreFertilizers.EverlastingFertilizer": {
+                "atravita.CP.MoreFertilizers.EverlastingFruitTreeFertilizer": {
                     "TradeItemId": "(O)858",
                     "TradeItemAmount": 1,
-                    "ItemId": "(O)atravita.CP.MoreFertilizers.EverlastingFertilizer",
+                    "ItemId": "(O)atravita.CP.MoreFertilizers.EverlastingFruitTreeFertilizer",
                     "IgnoreShopPriceModifiers": true
                 }
             }
@@ -178,14 +178,14 @@
             "TargetField": ["IslandTrade", "Items"],
             "Entries": {
                 "atravita.CP.MoreFertilizers.DeluxeFishFoodFertilizer": {
-                    "Condition": "atravita.AtraCore_FISH_CAUGHT_PERCENT 0.5",
+                    "Condition": "atravita.AtraCore_FISH_CAUGHT_PERCENT Current 0.5",
                     "TradeItemId": "(O)851",
                     "TradeItemAmount": 5,
                     "ItemId": "(O)atravita.CP.MoreFertilizers.DeluxeFishFoodFertilizer",
                     "IgnoreShopPriceModifiers": true
                 },
                 "atravita.CP.MoreFertilizers.SecretJojaFertilizer": {
-                    "Condition": "atravita.AtraCore_HAS_DAILY_LUCK 0.05",
+                    "Condition": "atravita.AtraCore_HAS_DAILY_LUCK Current 0.05",
                     "TradeItemId": "(O)909",
                     "TradeItemAmount": 4,
                     "AvailableStock": 5,
@@ -219,9 +219,21 @@
                     "IgnoreShopPriceModifiers": true
                 },
                 "atravita.CP.MoreFertilizers.WisdomFertilizer": {
-                    "Condition": "LOCATION_SEASON spring fall",
+                    "Condition": "LOCATION_SEASON Here spring fall",
                     "Price": 100,
                     "ItemId": "atravita.CP.MoreFertilizers.WisdomFertilizer",
+                    "IgnoreShopPriceModifiers": true
+                },
+                "atravita.CP.MoreFertilizers.MiraculousBeverages": {
+                    "Condition": "Year 3, atravita.AtraCore_RECIPES_COOKED_PERCENT Current 0.5",
+                    "Price": 250,
+                    "ItemId": "atravita.CP.MoreFertilizers.MiraculousBeverages",
+                    "IgnoreShopPriceModifiers": true
+                },
+                "atravita.CP.MoreFertilizers.RadioactiveFertilizer": {
+                    "Condition": "YEAR 3, PLAYER_HAS_READ_LETTER Current HasMagicInk",
+                    "Price": 250,
+                    "ItemId": "atravita.CP.MoreFertilizers.RadioactiveFertilizer",
                     "IgnoreShopPriceModifiers": true
                 }
             }

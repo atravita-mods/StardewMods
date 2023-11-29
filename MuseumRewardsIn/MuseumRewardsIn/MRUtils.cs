@@ -1,7 +1,5 @@
 ﻿using AtraBase.Toolkit.StringHandler;
 
-using StardewValley.Objects;
-
 namespace MuseumRewardsIn;
 
 /// <summary>
@@ -26,15 +24,16 @@ internal static class MRUtils
             {
                 break;
             }
+            var remainder = mailSpan[(startIndex + "%item".Length)..];
 
-            int endIndex = mailSpan[(startIndex + "%item".Length)..].IndexOf("%%", StringComparison.Ordinal);
+            int endIndex = remainder.IndexOf("%%", StringComparison.Ordinal);
             if (endIndex < 0)
             {
                 break;
             }
 
-            ReadOnlySpan<char> substring = mailSpan[startIndex..endIndex].Trim();
-            mailSpan = mailSpan[(endIndex + 2)..].Trim();
+            ReadOnlySpan<char> substring = remainder[..endIndex].Trim();
+            mailSpan = remainder[endIndex..].Trim();
 
             if (substring.Length <= 0)
             {
@@ -43,7 +42,7 @@ internal static class MRUtils
 
             if (substring.StartsWith("object ", StringComparison.OrdinalIgnoreCase))
             {
-                ret ??= new();
+                ret ??= [];
 
                 bool isItem = true;
                 foreach (SpanSplitEntry split in substring["object ".Length..].Trim().StreamSplit(null, StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries))
@@ -62,7 +61,7 @@ internal static class MRUtils
             }
             else if (substring.StartsWith("id", StringComparison.OrdinalIgnoreCase))
             {
-                ret ??= new();
+                ret ??= [];
                 bool isItem = true;
                 foreach (SpanSplitEntry split in substring["id ".Length..].Trim().StreamSplit(null, StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries))
                 {
@@ -79,7 +78,7 @@ internal static class MRUtils
             }
             else if (substring.StartsWith("bigobject ", StringComparison.OrdinalIgnoreCase))
             {
-                ret ??= new();
+                ret ??= [];
 
                 foreach (SpanSplitEntry split in substring["bigobject ".Length..].Trim().StreamSplit(null, StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries))
                 {
@@ -94,7 +93,7 @@ internal static class MRUtils
             }
             else if (substring.StartsWith("furniture ", StringComparison.OrdinalIgnoreCase))
             {
-                ret ??= new();
+                ret ??= [];
 
                 foreach (SpanSplitEntry split in substring["furniture ".Length..].Trim().StreamSplit(null, StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries))
                 {

@@ -185,7 +185,7 @@
                     "IgnoreShopPriceModifiers": true
                 },
                 "atravita.CP.MoreFertilizers.SecretJojaFertilizer": {
-                    "Condition": "aatravita.AtraCore_HAS_DAILY_LUCK 0.05",
+                    "Condition": "atravita.AtraCore_HAS_DAILY_LUCK 0.05",
                     "TradeItemId": "(O)909",
                     "TradeItemAmount": 4,
                     "AvailableStock": 5,
@@ -206,6 +206,24 @@
                     "ItemId": "(O)atravita.CP.MoreFertilizers.MiraculousBeverages",
                     "IgnoreShopPriceModifiers": true
                 },
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Data/Shops",
+            "TargetField": ["ShadowShop", "Items"],
+            "Entries": {
+                "atravita.CP.MoreFertilizers.WaterloggedFertilizer": {
+                    "Price": 40,
+                    "ItemId": "(O)atravita.CP.MoreFertilizers.WaterloggedFertilizer",
+                    "IgnoreShopPriceModifiers": true
+                },
+                "atravita.CP.MoreFertilizers.WisdomFertilizer": {
+                    "Condition": "LOCATION_SEASON spring fall",
+                    "Price": 100,
+                    "ItemId": "atravita.CP.MoreFertilizers.WisdomFertilizer",
+                    "IgnoreShopPriceModifiers": true
+                }
             }
         },
     ]

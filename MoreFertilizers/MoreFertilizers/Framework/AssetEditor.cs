@@ -10,9 +10,6 @@ using AtraShared.Utils;
 using AtraShared.Utils.Extensions;
 
 using StardewModdingAPI.Events;
-using StardewModdingAPI.Utilities;
-
-using StardewValley.GameData.SpecialOrders;
 
 namespace MoreFertilizers.Framework;
 
@@ -38,36 +35,8 @@ internal static class AssetEditor
     /// </summary>
     internal const string GEORGE_EVENT = "atravita_George_Letter";
 
-    /// <summary>
-    /// Our special orders.
-    /// </summary>
-    private static readonly Lazy<Dictionary<string, SpecialOrderData>> SpecialOrders = new(() =>
-    {
-        Dictionary<string, SpecialOrderData> ret = new();
-        int i = 0;
-        foreach (string? filename in Directory.GetFiles(PathUtilities.NormalizePath(ModEntry.DIRPATH + "/assets/special-orders/"), "*.json"))
-        {
-            try
-            {
-                Dictionary<string, SpecialOrderData> orders = ModEntry.ModContentHelper.Load<Dictionary<string, SpecialOrderData>>(Path.GetRelativePath(ModEntry.DIRPATH, filename));
-                foreach ((string key, SpecialOrderData order) in orders)
-                {
-                    ret[key] = order;
-                    i++;
-                }
-            }
-            catch (Exception ex)
-            {
-                ModEntry.ModMonitor.LogError($"reading from {filename}", ex);
-            }
-        }
-        ModEntry.ModMonitor.Log($"Found {i} Special Orders");
-        return ret;
-    });
-
     private static readonly TickCache<bool> HasSeenBoat = new(static () => FarmerHelpers.HasAnyFarmerRecievedFlag("seenBoatJourney"));
 
-    private static IAssetName SPECIAL_ORDERS_LOCATION = null!;
     private static IAssetName SPECIAL_ORDERS_STRINGS = null!;
     private static IAssetName MAIL = null!;
     private static IAssetName LEWIS_DIALOGUE = null!;
@@ -81,7 +50,6 @@ internal static class AssetEditor
     /// <param name="parser">Game content helper.</param>
     internal static void Initialize(IGameContentHelper parser)
     {
-        SPECIAL_ORDERS_LOCATION = parser.ParseAssetName("Data/SpecialOrders");
         SPECIAL_ORDERS_STRINGS = parser.ParseAssetName("Strings/SpecialOrderStrings");
         MAIL = parser.ParseAssetName("Data/mail");
         LEWIS_DIALOGUE = parser.ParseAssetName("Characters/Dialogue/Lewis");
@@ -104,11 +72,7 @@ internal static class AssetEditor
         }
         else if (HasSeenBoat.GetValue())
         {
-            if (e.NameWithoutLocale.IsEquivalentTo(SPECIAL_ORDERS_LOCATION))
-            {
-                e.Edit(EditSpecialOrdersImpl, AssetEditPriority.Early);
-            }
-            else if (e.NameWithoutLocale.IsEquivalentTo(SPECIAL_ORDERS_STRINGS))
+            if (e.NameWithoutLocale.IsEquivalentTo(SPECIAL_ORDERS_STRINGS))
             {
                 e.Edit(EditSpecialOrdersStringsImpl, AssetEditPriority.Early);
             }
@@ -141,7 +105,7 @@ internal static class AssetEditor
 
         ModEntry.ModMonitor.DebugOnlyLog("Resolving radioactive fertilizer denylist", LogLevel.Info);
 
-        HashSet<string> ret = new();
+        HashSet<string> ret = [];
         foreach (string item in Game1.content.Load<Dictionary<string, string>>(RADIOACTIVE_DENYLIST.BaseName).Keys)
         {
             string? id = MFUtilities.ResolveID(item);
@@ -183,15 +147,6 @@ internal static class AssetEditor
         if (!editor.Data.TryAdd(prismatic.Identifier, prismatic))
         {
             ModEntry.ModMonitor.Log("Could not add prismatic fertilizer to DrawPrismatic", LogLevel.Warn);
-        }
-    }
-
-    private static void EditSpecialOrdersImpl(IAssetData asset)
-    {
-        IAssetDataForDictionary<string, SpecialOrderData>? editor = asset.AsDictionary<string, SpecialOrderData>();
-        foreach ((string key, SpecialOrderData order) in SpecialOrders.Value)
-        {
-            editor.Data[key] = order;
         }
     }
 

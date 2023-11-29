@@ -1,6 +1,12 @@
 {
     "$schema": "https://smapi.io/schemas/content-patcher.json",
     "Format": "1.28.0",
+    "ConfigSchema": {
+        "SpecialOrders": {
+            "AllowValues": "true, false",
+            "Default": "true"
+        }
+    },
     "Changes": [
         {
             "Action": "Load",
@@ -10,6 +16,14 @@
         {
             "Action": "Include",
             "FromFile": "assets/shopdata.json",
+        },
+        {
+            "Action": "Include",
+            "FromFile": "assets/special_orders.json",
+            "When": {
+                "SpecialOrders": true,
+                "HasReadLetter: anyPlayer": "seenBoatJourney"
+            }
         }
     ]
 }

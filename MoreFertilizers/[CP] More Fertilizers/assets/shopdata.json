@@ -247,6 +247,7 @@
         {
             "Action": "EditData",
             "Target": "Data/Shops",
+            "LogName": "Stardew Valley Fair.",
             "TargetField": ["Festival_StardewValleyFair_StarTokens", "Items"],
             "Entries": {
                 "atravita.CP.MoreFertilizers.JojaFertilizer": {
@@ -264,7 +265,7 @@
                     "IgnoreShopPriceModifiers": true
                 },
                 "atravita.CP.MoreFertilizers.SecretJojaFertilizer": {
-                    "Condition": "PLAYER_HAS_FLAG Host ccMovieTheaterJoja",
+                    "Condition": "PLAYER_HAS_FLAG Host ccMovieTheaterJoja, IS_JOJA_MART_COMPLETE",
                     "Price": 1500,
                     "AvailableStock": 4,
                     "ItemId": "(O)atravita.CP.MoreFertilizers.SecretJojaFertilizer",

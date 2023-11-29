@@ -214,6 +214,8 @@ internal static class ConfirmWarp
         return true;
     }
 
+    // TODO - something about GameLocation.checkAction is causing the warps to go off anyways.
+
     [HarmonyPrefix]
     [HarmonyPriority(Priority.First)]
     [HarmonyPatch(typeof(Building), nameof(Building.doAction))]

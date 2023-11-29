@@ -46,6 +46,16 @@
                     ]
                 }
             }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Strings/SpecialOrderStrings",
+            "Entries": {
+                "atravita.OrganicCrops.Name": "{{i18n:specialorder.organic.name}}",
+                "atravita.OrganicCrops.Text": "{{i18n:specialorder.organic.text}}",
+                "atravita.OrganicCrops.gather": "{{i18n: specialorder.organic.gather}}",
+                "atravita.OrganicCrops.ship": "{{i18n:specialorder.organic.ship}}"
+            }
         }
     ]
 }

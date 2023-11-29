@@ -23,7 +23,7 @@ public sealed class UserTrigger
     /// <summary>
     /// Gets or sets the times for which this trigger should apply.
     /// </summary>
-    public TimeRange Time { get; set; } = new();
+    public TimeRange[] Time { get; set; } = [new()];
 
     /// <summary>
     /// Gets or sets the weather conditions for which this trigger should apply.

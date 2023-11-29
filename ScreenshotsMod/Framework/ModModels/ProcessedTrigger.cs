@@ -1,11 +1,49 @@
-﻿namespace ScreenshotsMod.Framework.ModModels;
+﻿using ScreenshotsMod.Framework.UserModels;
 
-internal sealed class ProcessedTrigger
+namespace ScreenshotsMod.Framework.ModModels;
+
+/// <summary>
+/// Represents a processed trigger condition.
+/// </summary>
+/// <param name="Day">The packed day.</param>
+/// <param name="Times">The allowed times.</param>
+/// <param name="Weather">The weather allowed.</param>
+internal sealed class ProcessedTrigger(PackedDay Day, TimeRange[] Times, Weather Weather)
 {
-    private uint DayTime = 0xFFFF_FFFF;
-
-    internal bool Check()
+    /// <summary>
+    /// Checks to see if this processed trigger is valid.
+    /// </summary>
+    /// <param name="current">The current location.</param>
+    /// <param name="currentDay">The (packed) current day.</param>
+    /// <param name="timeOfDay">The current time of day.</param>
+    /// <returns>Whether or not this is valid.</returns>
+    internal bool Check(GameLocation current, PackedDay currentDay, int timeOfDay)
     {
-        return true;
+        // check weather.
+        switch (Weather)
+        {
+            case Weather.Sunny when current.IsRainingHere():
+                return false;
+            case Weather.Rainy when !current.IsRainingHere():
+                return false;
+        }
+
+        // check to see if my day is valid. The first four bits are my season, other twenty eight are the days.
+        // var currentDay = (1 << (Game1.seasonIndex + 28)) | (1 << ((Game1.dayOfMonth % 28 )- 1));
+        if (!Day.Check(currentDay))
+        {
+            return false;
+        }
+
+        // check to see if I'm in a valid time range
+        // var currentTime = Game1.timeOfDay;
+        foreach (TimeRange range in Times)
+        {
+            if (range.StartTime >= timeOfDay && range.EndTime <= timeOfDay)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }

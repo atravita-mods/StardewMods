@@ -50,8 +50,6 @@ internal static class AssetEditor
     /// <param name="parser">Game content helper.</param>
     internal static void Initialize(IGameContentHelper parser)
     {
-        SPECIAL_ORDERS_STRINGS = parser.ParseAssetName("Strings/SpecialOrderStrings");
-        MAIL = parser.ParseAssetName("Data/mail");
         LEWIS_DIALOGUE = parser.ParseAssetName("Characters/Dialogue/Lewis");
         RADIOACTIVE_DENYLIST = parser.ParseAssetName("Mods/atravita/MoreFertilizers/RadioactiveDenylist");
     }
@@ -69,13 +67,6 @@ internal static class AssetEditor
         else if (e.NameWithoutLocale.IsEquivalentTo(RADIOACTIVE_DENYLIST))
         {
             e.LoadFrom(EmptyContainers.GetEmptyDictionary<string, string>, AssetLoadPriority.Exclusive);
-        }
-        else if (HasSeenBoat.GetValue())
-        {
-            if (e.NameWithoutLocale.IsEquivalentTo(SPECIAL_ORDERS_STRINGS))
-            {
-                e.Edit(EditSpecialOrdersStringsImpl, AssetEditPriority.Early);
-            }
         }
     }
 
@@ -144,15 +135,6 @@ internal static class AssetEditor
         {
             ModEntry.ModMonitor.Log("Could not add prismatic fertilizer to DrawPrismatic", LogLevel.Warn);
         }
-    }
-
-    private static void EditSpecialOrdersStringsImpl(IAssetData asset)
-    {
-        IAssetDataForDictionary<string, string>? editor = asset.AsDictionary<string, string>();
-        editor.Data["atravita.OrganicCrops.Name"] = I18n.Specialorder_Organic_Name();
-        editor.Data["atravita.OrganicCrops.Text"] = I18n.Specialorder_Organic_Text();
-        editor.Data["atravita.OrganicCrops.gather"] = I18n.Specialorder_Organic_Gather();
-        editor.Data["atravita.OrganicCrops.ship"] = I18n.Specialorder_Organic_Ship();
     }
 
     private static void EditLewisDialogueImpl(IAssetData asset)

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AtraCore.Framework.Models;
+﻿namespace AtraCore.Framework.Models;
 
 /// <summary>
 /// Data model to allow overriding category names.

@@ -175,6 +175,11 @@ public static partial class SeasonExtensions
     /// <returns>Number of seasons.</returns>
     public static int CountSeasons(this StardewSeasons seasons) => BitOperations.PopCount((uint)seasons);
 
+    /// <summary>
+    /// Converts a <see cref="StardewSeasons"/> to the season index.
+    /// </summary>
+    /// <param name="seasons">Single season value.</param>
+    /// <returns>The season index.</returns>
     public static int ToSeasonIndex(this StardewSeasons seasons)
         => seasons switch
         {

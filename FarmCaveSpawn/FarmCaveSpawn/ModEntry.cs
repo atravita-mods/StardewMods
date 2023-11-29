@@ -47,17 +47,17 @@ internal sealed class ModEntry : BaseMod<ModEntry>
     /// <summary>
     /// The item IDs for the four basic forage fruit.
     /// </summary>
-    private readonly List<string> BASE_FRUIT = new() { "(O)296", "(O)396", "(O)406", "(O)410" };
+    private readonly List<string> BASE_FRUIT = ["(O)296", "(O)396", "(O)406", "(O)410"];
 
     /// <summary>
     /// A list of vanilla fruit.
     /// </summary>
-    private readonly List<string> VANILLA_FRUIT = new() { "(O)613", "(O)634", "(O)635", "(O)636", "(O)637", "(O)638" };
+    private readonly List<string> VANILLA_FRUIT = ["(O)613", "(O)634", "(O)635", "(O)636", "(O)637", "(O)638"];
 
     /// <summary>
     /// Item IDs for items produced by trees.
     /// </summary>
-    private List<string> TreeFruit = new();
+    private List<string> TreeFruit = [];
 
     private StardewSeasons season = StardewSeasons.None;
 
@@ -356,7 +356,7 @@ END:
             return;
         }
 
-        List<string> fruitNames = new();
+        List<string> fruitNames = [];
         foreach (string objectID in this.GetTreeFruits())
         {
             if (Game1Wrappers.ObjectData.TryGetValue(objectID, out var data))
@@ -378,7 +378,7 @@ END:
     private List<string> GetData(IAssetName datalocation)
     {
         IDictionary<string, string> rawlist = this.Helper.GameContent.Load<Dictionary<string, string>>(datalocation);
-        List<string> datalist = new();
+        List<string> datalist = [];
 
         foreach (string uniqueID in rawlist.Keys)
         {

@@ -53,7 +53,7 @@ public static class FarmerExtensions
         {
             return true;
         }
-        return farmer.spouse is { } spouse && farmer.friendshipData.TryGetValue(spouse, out var friendship)
+        return farmer.spouse is { } spouse && farmer.friendshipData.TryGetValue(spouse, out Friendship? friendship)
             && friendship.IsMarried() && !friendship.RoommateMarriage;
     }
 }

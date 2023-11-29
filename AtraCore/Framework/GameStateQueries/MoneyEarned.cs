@@ -13,8 +13,8 @@ internal static class MoneyEarned
     {
         uint max = uint.MaxValue;
         if (!ArgUtility.TryGet(query, 1, out string? playerKey, out string? error)
-            || !ArgUtility.TryGet(query, 2, out var minS, out error) || !TryParseUInt(minS, out uint min, out error)
-            || !ArgUtility.TryGetOptional(query, 3, out var maxS, out error, null)
+            || !ArgUtility.TryGet(query, 2, out string? minS, out error) || !TryParseUInt(minS, out uint min, out error)
+            || !ArgUtility.TryGetOptional(query, 3, out string? maxS, out error, null)
             || (maxS is not null && !TryParseUInt(maxS, out max, out error)))
         {
             return Helpers.ErrorResult(query, error);

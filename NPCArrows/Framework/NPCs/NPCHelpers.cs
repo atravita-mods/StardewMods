@@ -1,15 +1,15 @@
-﻿using AtraShared.ConstantsAndEnums;
+﻿namespace NPCArrows.Framework.NPCs;
+
+using AtraShared.ConstantsAndEnums;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using NPCArrows.Framework;
-
-namespace NPCArrows.Framework.NPCs;
-
+/// <summary>
+/// Draws in an arrow pointing at an off-screen.
+/// </summary>
 internal static class NPCHelpers
 {
-
     /// <summary>
     /// Draws in an arrow pointing at an NPC.
     /// </summary>

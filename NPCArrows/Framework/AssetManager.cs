@@ -1,8 +1,8 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿namespace NPCArrows.Framework;
+
+using Microsoft.Xna.Framework.Graphics;
 
 using StardewModdingAPI.Events;
-
-namespace NPCArrows.Framework;
 
 /// <summary>
 /// Manages assets for this mod.
@@ -13,6 +13,9 @@ internal static class AssetManager
 
     private static Lazy<Texture2D> arrowTexture = new(() => Game1.content.Load<Texture2D>(arrowLocation.BaseName));
 
+    /// <summary>
+    /// Gets the little arrow texture, greyscale.
+    /// </summary>
     internal static Texture2D ArrowTexture => arrowTexture.Value;
 
     /// <summary>
@@ -21,6 +24,7 @@ internal static class AssetManager
     /// <param name="parser">Game Content Helper.</param>
     internal static void Initialize(IGameContentHelper parser) => arrowLocation = parser.ParseAssetName("Mods/atravita/NPCArrows/Arrow");
 
+    /// <inheritdoc cref="IContentEvents.AssetRequested"/>
     internal static void Apply(AssetRequestedEventArgs e)
     {
         if (e.NameWithoutLocale.IsEquivalentTo(arrowLocation))
@@ -29,6 +33,7 @@ internal static class AssetManager
         }
     }
 
+    /// <inheritdoc cref="IContentEvents.AssetsInvalidated"/>
     internal static void Reset(IReadOnlySet<IAssetName>? assets = null)
     {
         if (arrowTexture.IsValueCreated && (assets is null || assets.Contains(arrowLocation)))

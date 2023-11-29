@@ -1,4 +1,6 @@
-﻿using System.Runtime.CompilerServices;
+﻿namespace CritterRings.Framework.Managers;
+
+using System.Runtime.CompilerServices;
 
 using AtraBase.Toolkit;
 using AtraBase.Toolkit.Extensions;
@@ -19,8 +21,6 @@ using StardewValley.Locations;
 using StardewValley.TerrainFeatures;
 
 using XLocation = xTile.Dimensions.Location;
-
-namespace CritterRings.Framework.Managers;
 
 /// <summary>
 /// Manages a jump for a player.

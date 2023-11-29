@@ -89,7 +89,7 @@ internal static class AllowRepeatAfterHandler
             {
                 continue;
             }
-            foreach (var evt in eventsToForget)
+            foreach (string evt in eventsToForget)
             {
                 if (Game1.player.eventsSeen.Remove(evt))
                 {

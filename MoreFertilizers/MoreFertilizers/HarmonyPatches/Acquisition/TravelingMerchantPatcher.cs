@@ -16,7 +16,6 @@ namespace MoreFertilizers.HarmonyPatches.Acquisition;
 /// Applies patches against the traveling merchant.
 /// </summary>
 [HarmonyPatch(typeof(Utility))]
-[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class TravelingMerchantPatcher
 {
     private static readonly TickCache<bool> HasPlayerUnlockedBountiful = new(() => Game1.MasterPlayer.mailReceived.Contains(AssetEditor.BOUNTIFUL_BUSH_UNLOCK));

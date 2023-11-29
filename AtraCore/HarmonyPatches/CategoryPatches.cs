@@ -31,7 +31,7 @@ internal static class CategoryPatches
             return (null, null);
         }
 
-        if (_cache.TryGetValue(obj.QualifiedItemId, out var val))
+        if (_cache.TryGetValue(obj.QualifiedItemId, out (string? title, Color? color) val))
         {
             return val;
         }
@@ -39,14 +39,14 @@ internal static class CategoryPatches
         string? title = null;
         Color? color = null;
 
-        if (Game1.objectData.TryGetValue(obj.ItemId, out var objectData) && objectData.CustomFields is { } fields)
+        if (Game1.objectData.TryGetValue(obj.ItemId, out StardewValley.GameData.Objects.ObjectData? objectData) && objectData.CustomFields is { } fields)
         {
-            if (fields.TryGetValue("atravita.CategoryNameOverride", out var tokenizedTitle) && TokenParser.ParseText(tokenizedTitle) is string proposedTitle
+            if (fields.TryGetValue("atravita.CategoryNameOverride", out string? tokenizedTitle) && TokenParser.ParseText(tokenizedTitle) is string proposedTitle
                 && !string.IsNullOrWhiteSpace(proposedTitle))
             {
                 title = proposedTitle;
             }
-            if (fields.TryGetValue("atravita.CategoryColorOverride", out var sColor) && ColorHandler.TryParseColor(sColor, out var proposedColor))
+            if (fields.TryGetValue("atravita.CategoryColorOverride", out string? sColor) && ColorHandler.TryParseColor(sColor, out Color proposedColor))
             {
                 color = proposedColor;
             }
@@ -64,7 +64,7 @@ internal static class CategoryPatches
             {
                 title = proposedTitle;
             }
-            if (categoryOverride.CategoryColorOverride is string sColor && ColorHandler.TryParseColor(sColor, out var proposedColor))
+            if (categoryOverride.CategoryColorOverride is string sColor && ColorHandler.TryParseColor(sColor, out Color proposedColor))
             {
                 color = proposedColor;
             }

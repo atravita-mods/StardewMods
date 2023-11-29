@@ -111,7 +111,7 @@ public static class ColorHandler
         }
 
         // Try to split and process it that way?
-        var splits = colorname.StreamSplit(Valid_Split_Chars, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+        StreamSplit splits = colorname.StreamSplit(Valid_Split_Chars, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
         byte[] vals = [255, 255, 255, 255];
         for (int i = 0; i < vals.Length; i++)

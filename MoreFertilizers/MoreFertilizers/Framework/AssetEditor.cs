@@ -1,7 +1,6 @@
 ﻿using AtraBase.Collections;
 
 using AtraCore;
-using AtraCore.Framework.Caches;
 using AtraCore.Framework.Models;
 
 using AtraShared.Caching;

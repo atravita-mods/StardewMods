@@ -1,4 +1,6 @@
-﻿using System.Linq.Expressions;
+﻿namespace FrameRateLogger;
+
+using System.Linq.Expressions;
 using System.Reflection;
 
 using AtraShared.Integrations.Interfaces;
@@ -6,8 +8,6 @@ using AtraShared.Integrations.Interfaces;
 using FrameRateLogger.Framework;
 
 using StardewModdingAPI.Events;
-
-namespace FrameRateLogger;
 
 /// <inheritdoc />
 internal sealed class ModEntry : Mod

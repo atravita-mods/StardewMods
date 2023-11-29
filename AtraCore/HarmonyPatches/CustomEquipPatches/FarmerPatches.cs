@@ -2,6 +2,7 @@
 
 using AtraCore.Framework.Models;
 
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
 
 using HarmonyLib;
@@ -14,6 +15,7 @@ using StardewValley.Tools;
 /// Patches against farmer for the equipment fun.
 /// </summary>
 [HarmonyPatch(typeof(Farmer))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class FarmerPatches
 {
     [HarmonyPatch(nameof(Farmer.takeDamage))]

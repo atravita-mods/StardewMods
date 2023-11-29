@@ -23,8 +23,8 @@ internal static class RecipesCooked
             playerKey,
             (Farmer target) =>
                 {
-                    float fishCaught = Utility.getCookedRecipesPercent(target);
-                    return fishCaught >= min && fishCaught <= max;
+                    float recipesCooked = Utility.getCookedRecipesPercent(target);
+                    return recipesCooked >= min && recipesCooked <= max;
                 });
     }
 }

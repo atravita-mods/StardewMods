@@ -39,7 +39,7 @@ public sealed class ModConfig
     }
 
     /// <summary>
-    /// The scale of the image to use for a keybind screenshot.
+    /// Gets or sets the scale of the image to use for a keybind screenshot.
     /// </summary>
     [GMCMInterval(0.1)]
     [GMCMRange(0.01, 1)]
@@ -50,6 +50,9 @@ public sealed class ModConfig
     }
     #endregion
 
+    /// <summary>
+    /// Gets or sets the series of rules to check.
+    /// </summary>
     public Dictionary<string, UserRule> Rules { get; set; } = new()
     {
         ["Default"] = new(),

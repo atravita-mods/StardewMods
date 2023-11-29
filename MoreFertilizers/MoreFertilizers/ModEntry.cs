@@ -443,7 +443,7 @@ internal sealed class ModEntry : Mod
     /// <summary>
     /// Gets a list of fertilizer IDs for fertilizers that are meant to be planted into HoeDirt.
     /// </summary>
-    /// <remarks>Will be stored in the <see cref="HoeDirt.fertilizer.Value"/> field.</remarks>
+    /// <remarks>Will be stored in the <see cref="HoeDirt.fertilizer"/> field.</remarks>
     internal static HashSet<int> PlantableFertilizerIDs { get; } = new ();
 
     /// <summary>
@@ -560,39 +560,6 @@ internal sealed class ModEntry : Mod
     }
 #endif
 
-    [EventPriority(EventPriority.High)]
-    private void OnReturnedToTitle(object? sender, ReturnedToTitleEventArgs e)
-    {
-        // JA will reassign us IDs when it returns to title.
-        // (I'm not quite sure why?)
-        // But we need to drop our IDs too.
-        bountifulBushID = -1;
-        bountifulFertilizerID = -1;
-        deluxeFishFoodID = -1;
-        deluxeFruitTreeFertilizerID = -1;
-        deluxeJojaFertilizerID = -1;
-        domesticatedFishFoodID = -1;
-        everlastingFertilizerID = -1;
-        everlastingFruitTreeFertilizerID = -1;
-        fishfoodID = -1;
-        fruitTreeFertilizerID = -1;
-        jojaFertilizerID = -1;
-        luckyFertilizerID = -1;
-        miraculousBeverages = -1;
-        organicFertilizerID = -1;
-        paddyCropFertilizerID = -1;
-        prismaticFertilizerID = -1;
-        rapidBushFertilizerID = -1;
-        secretJojaFertilizerID = -1;
-        seedyFertilizerID = -1;
-        treeTapperFertilizerID = -1;
-        wisdomFertilizerID = -1;
-        radioactiveFertilizerID = -1;
-
-        PlantableFertilizerIDs.Clear();
-        SpecialFertilizerIDs.Clear();
-    }
-
     /// <summary>
     /// Applies the patches for this mod.
     /// </summary>
@@ -676,10 +643,7 @@ internal sealed class ModEntry : Mod
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
     {
         RadioactiveFertilizerHandler.Initialize(this.Helper.GameContent, this.Helper.ModRegistry, this.Helper.Translation);
-
-        // Only register for events if JA pack loading was successful.
         this.Helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
-        this.Helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
 
         this.Helper.Events.Multiplayer.ModMessageReceived += this.Multiplayer_ModMessageReceived;
         this.Helper.Events.Multiplayer.PeerConnected += this.Multiplayer_PeerConnected;

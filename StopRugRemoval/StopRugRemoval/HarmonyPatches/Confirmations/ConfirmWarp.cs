@@ -100,37 +100,37 @@ internal static class ConfirmWarp
         try
         {
             ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);
-            helper.FindNext(new CodeInstructionWrapper[]
-            { // case "WarperQuestion_Yes"
+            helper.FindNext(
+            [ // case "WarperQuestion_Yes"
                 OpCodes.Ldarg_1,
                 new(OpCodes.Ldstr, "WarperQuestion_Yes"),
                 OpCodes.Call,
                 OpCodes.Brtrue_S,
-            })
+            ])
             .Advance(3)
             .StoreBranchDest()
             .AdvanceToStoredLabel()
-            .FindNext(new CodeInstructionWrapper[]
-            { // new SObject(688,1)
+            .FindNext(
+            [ // new SObject(688,1)
                 new(OpCodes.Ldstr, "(O)688"),
-            })
+            ])
             .GetLabels(out IList<Label>? labels)
-            .Insert(new CodeInstruction[]
-            {
+            .Insert(
+            [
                 new(OpCodes.Ldc_I4_1),
                 new(OpCodes.Call, typeof(ConfirmWarp).GetCachedMethod(nameof(SetHaveConfirmed), ReflectionCache.FlagTypes.StaticFlags)),
-            }, withLabels: labels)
-            .FindNext(new CodeInstructionWrapper[]
-            {
+            ], withLabels: labels)
+            .FindNext(
+            [
                 new(OpCodes.Ldc_I4_1),
                 new(OpCodes.Ret),
-            })
+            ])
             .GetLabels(out IList<Label>? secondLabels)
-            .Insert(new CodeInstruction[]
-            {
+            .Insert(
+            [
                 new(OpCodes.Ldc_I4_0),
                 new(OpCodes.Call, typeof(ConfirmWarp).GetCachedMethod(nameof(SetHaveConfirmed), ReflectionCache.FlagTypes.StaticFlags)),
-            }, withLabels: secondLabels);
+            ], withLabels: secondLabels);
 
             // helper.Print();
             return helper.Render();
@@ -190,11 +190,11 @@ internal static class ConfirmWarp
                 .HasFlag(Context.IsMultiplayer ? ConfirmationEnum.InMultiplayerOnly : ConfirmationEnum.NotInMultiplayer))
         {
             ModEntry.InputHelper.SurpressClickInput();
-            Response[] responses = new[]
-            {
+            Response[] responses =
+            [
                 new Response("WarpsYes", I18n.Yes()).SetHotKey(Keys.Y),
                 new Response("WarpsNo", I18n.No()).SetHotKey(Keys.Escape),
-            };
+            ];
 
             Action?[] actions = new[]
             {
@@ -308,11 +308,11 @@ internal static class ConfirmWarp
                  .HasFlag(Context.IsMultiplayer ? ConfirmationEnum.InMultiplayerOnly : ConfirmationEnum.NotInMultiplayer))
         {
             ModEntry.InputHelper.SurpressClickInput();
-            Response[] responses = new[]
-            {
+            Response[] responses =
+            [
                 new Response("WarpsYes", I18n.Yes()).SetHotKey(Keys.Y),
                 new Response("WarpsNo", I18n.No()).SetHotKey(Keys.Escape),
-            };
+            ];
 
             Action?[] actions = new[]
             {
@@ -346,11 +346,11 @@ internal static class ConfirmWarp
             && (IsLocationConsideredDangerous(__instance) ? ModEntry.Config.WarpsInDangerousAreas : ModEntry.Config.WarpsInSafeAreas)
                  .HasFlag(Context.IsMultiplayer ? ConfirmationEnum.InMultiplayerOnly : ConfirmationEnum.NotInMultiplayer))
         {
-            Response[] responses = new[]
-            {
+            Response[] responses =
+            [
                 new Response("WarpsYes", I18n.Yes()).SetHotKey(Keys.Y),
                 new Response("WarpsNo", I18n.No()).SetHotKey(Keys.Escape),
-            };
+            ];
 
             Action?[] actions = new[]
             {

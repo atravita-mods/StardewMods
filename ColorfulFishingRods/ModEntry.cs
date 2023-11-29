@@ -21,14 +21,14 @@ internal sealed class ModEntry : Mod
 
     private static int errorDelay = 0;
 
-    private static IMonitor ModMonitor = null!;
+    private static IMonitor modMonitor = null!;
 
     private static ModConfig config = null!;
 
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
     {
-        ModMonitor = this.Monitor; // assign monitor to a static field so we can use it.
+        modMonitor = this.Monitor; // assign monitor to a static field so we can use it.
         colorAsset = helper.GameContent.ParseAssetName("Mods/ColorfulFishingRods");
         try
         {
@@ -37,7 +37,7 @@ internal sealed class ModEntry : Mod
         catch (Exception ex)
         {
             this.Monitor.Log($"Failed to read config, using default: {ex}.", LogLevel.Warn);
-            config = new();
+            config = new ();
         }
 
         helper.Events.Content.AssetRequested += this.OnAssetRequested;
@@ -79,13 +79,13 @@ internal sealed class ModEntry : Mod
         }
         catch (ContentLoadException)
         {
-            ModMonitor.Log($"Failed to load asset {colorAsset.BaseName}.", LogLevel.Error);
+            modMonitor.Log($"Failed to load asset {colorAsset.BaseName}.", LogLevel.Error);
             errorDelay = 30_000;
             return;
         }
         catch (Exception ex)
         {
-            ModMonitor.Log($"Error overriding fishing rod colors: {ex}", LogLevel.Error);
+            modMonitor.Log($"Error overriding fishing rod colors: {ex}", LogLevel.Error);
             return;
         }
 

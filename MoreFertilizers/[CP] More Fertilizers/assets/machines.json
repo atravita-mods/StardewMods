@@ -56,7 +56,19 @@
                         }
                       ],
                       "StackModifierMode": "Stack",
-                }
+                },
+                "atravita.CP.MoreFertilizers.MiraculousBeverages": {
+                    "ItemId": "(O)atravita.CP.MoreFertilizers.MiraculousBeverages",
+                    "StackModifiers": [
+                        {
+                          "Id": "RareDouble",
+                          "Condition": "RANDOM .1",
+                          "Modification": "Multiply",
+                          "Amount": 2.0,
+                        }
+                      ],
+                      "StackModifierMode": "Stack",
+                },
             }
         }
     ]

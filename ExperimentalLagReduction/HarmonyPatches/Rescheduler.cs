@@ -226,7 +226,7 @@ internal static class Rescheduler
     /// </summary>
     internal static void PrintCache()
     {
-        Counter<int> counter = new();
+        Counter<int> counter = [];
 
         foreach (((string start, string end, Gender gender) key, string[]? value) in PathCache.OrderBy(static kvp => kvp.Key.start).ThenBy(static kvp => kvp.Value?.Length ?? -1))
         {
@@ -274,7 +274,7 @@ internal static class Rescheduler
         {
             _queue.Value ??= new();
             _queue.Value.Clear();
-            _visited.Value ??= new();
+            _visited.Value ??= [];
             _visited.Value.Clear();
 
             // seed with initial
@@ -600,7 +600,7 @@ internal static class Rescheduler
             return;
         }
 
-        _dedup.Value ??= new();
+        _dedup.Value ??= [];
         _dedup.Value.Clear();
         if (location.warps?.Count is not null and not 0)
         {

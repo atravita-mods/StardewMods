@@ -14,7 +14,7 @@ using StardewModdingAPI.Utilities;
 /// <inheritdoc />
 internal sealed class ModEntry : Mod
 {
-    private readonly PerScreen<LocationDataModel?> _activeModel = new();
+    private readonly PerScreen<LocationDataModel?> activeModel = new ();
 
     /// <summary>Gets the logger for this mod.</summary>
     internal static IMonitor ModMonitor { get; private set; } = null!;
@@ -60,7 +60,7 @@ internal sealed class ModEntry : Mod
             return;
         }
 
-        if (this._activeModel.Value is not { } model || Game1.currentLocation is not { } location || Game1.player is not { } player)
+        if (this.activeModel.Value is not { } model || Game1.currentLocation is not { } location || Game1.player is not { } player)
         {
             return;
         }
@@ -75,7 +75,7 @@ internal sealed class ModEntry : Mod
             return;
         }
 
-        if (this._activeModel.Value is not { } model || Game1.currentLocation is not { } location || Game1.player is not { } player)
+        if (this.activeModel.Value is not { } model || Game1.currentLocation is not { } location || Game1.player is not { } player)
         {
             return;
         }
@@ -90,7 +90,7 @@ internal sealed class ModEntry : Mod
             return;
         }
 
-        if (this._activeModel.Value is not { } model || Game1.currentLocation is not { } location || Game1.player is not { } player)
+        if (this.activeModel.Value is not { } model || Game1.currentLocation is not { } location || Game1.player is not { } player)
         {
             return;
         }
@@ -111,11 +111,11 @@ internal sealed class ModEntry : Mod
 
         if (e.NewLocation is null || !AssetManager.Data.TryGetValue(e.NewLocation.Name, out LocationDataModel? data))
         {
-            this._activeModel.Value = null;
+            this.activeModel.Value = null;
             return;
         }
 
-        this._activeModel.Value = data;
+        this.activeModel.Value = data;
 
         // check for valid water color.
         foreach (WaterColor color in data.WaterColor)
@@ -134,6 +134,13 @@ internal sealed class ModEntry : Mod
         SpawnCrittersAndMonsters(data, SpawnTrigger.OnEntry, e.NewLocation, e.Player);
     }
 
+    /// <summary>
+    /// Handles spawning for a specific data model.
+    /// </summary>
+    /// <param name="data">The data to spawn for.</param>
+    /// <param name="trigger">The trigger it was called for.</param>
+    /// <param name="location">The current location.</param>
+    /// <param name="player">The current player.</param>
     private static void SpawnCrittersAndMonsters(LocationDataModel data, SpawnTrigger trigger, GameLocation location, Farmer player)
     {
         // check for monster spawn, skip if there's one already.

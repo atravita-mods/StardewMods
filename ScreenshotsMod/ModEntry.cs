@@ -20,6 +20,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
     /// </summary>
     private readonly PerScreen<AbstractScreenshotter?> screenshotters = new(() => null);
 
+    /// <summary>Gets the config class for this mod.</summary>
     internal static ModConfig Config { get; private set; } = null!;
 
     /// <inheritdoc />

@@ -116,6 +116,7 @@ internal readonly record struct PackedDay
         return new(packed);
     }
 
+    /// <inheritdoc />
     public override string ToString() => this.value.ToString("X8");
 
     /// <summary>

@@ -24,8 +24,8 @@ internal static class FileNameParser
     /// <returns>Sanitized (hopefully) path.</returns>
     internal static string SanitizePath(string value)
     {
-        var proposed = PathUtilities.NormalizePath(value);
-        var ext = Path.GetExtension(proposed);
+        string proposed = PathUtilities.NormalizePath(value);
+        string ext = Path.GetExtension(proposed);
         if (!ext.Equals(".png", Constants.TargetPlatform is GamePlatform.Linux or GamePlatform.Android ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase))
         {
             proposed += ".png";

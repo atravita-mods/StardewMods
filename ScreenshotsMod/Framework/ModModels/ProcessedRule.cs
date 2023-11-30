@@ -28,16 +28,20 @@ internal sealed class ProcessedRule(string name, string path, float scale, Proce
 
     internal void Reset() => this.triggered = false;
 
-    internal (string path, float scale)? GetScreenshot(GameLocation current, PackedDay currentDay, int timeOfDay)
+    internal bool Trigger(GameLocation current, PackedDay currentDay, int timeOfDay)
     {
-        foreach (var trigger in triggers)
+        if (this.triggered)
+        {
+            return false;
+        }
+        foreach (ProcessedTrigger trigger in triggers)
         {
             if (trigger.Check(current, currentDay, timeOfDay))
             {
                 this.triggered = true;
-                return (path, scale);
+                return true;
             }
         }
-        return null;
+        return false;
     }
 }

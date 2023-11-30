@@ -1,4 +1,6 @@
-﻿using System.Reflection;
+﻿// Ignore Spelling: Screenshotter
+
+using System.Reflection;
 
 using AtraBase.Toolkit.Reflection;
 

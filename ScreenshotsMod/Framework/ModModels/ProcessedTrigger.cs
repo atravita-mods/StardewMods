@@ -29,17 +29,15 @@ internal sealed class ProcessedTrigger(PackedDay Day, TimeRange[] Times, Weather
         }
 
         // check to see if my day is valid. The first four bits are my season, other twenty eight are the days.
-        // var currentDay = (1 << (Game1.seasonIndex + 28)) | (1 << ((Game1.dayOfMonth % 28 )- 1));
         if (!Day.Check(currentDay))
         {
             return false;
         }
 
         // check to see if I'm in a valid time range
-        // var currentTime = Game1.timeOfDay;
         foreach (TimeRange range in Times)
         {
-            if (range.StartTime >= timeOfDay && range.EndTime <= timeOfDay)
+            if (range.StartTime <= timeOfDay && range.EndTime >= timeOfDay)
             {
                 return true;
             }

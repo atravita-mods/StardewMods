@@ -8,6 +8,11 @@ public sealed class UserRule
     private string path;
 
     /// <summary>
+    /// Gets or sets the internal names for maps for which this rule should apply.
+    /// </summary>
+    public string[] Maps { get; set; } = ["Farm"];
+
+    /// <summary>
     /// Gets or sets a list of triggers that may trigger this rule.
     /// </summary>
     public UserTrigger[] Triggers { get; set; } = [new()];

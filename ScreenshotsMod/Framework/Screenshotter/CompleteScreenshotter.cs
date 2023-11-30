@@ -1,6 +1,7 @@
 ﻿// Ignore Spelling: Screenshotter
 
-#define TRACELOG // enables timing information.
+// #define TRACELOG // enables timing information.
+// #define DETAIL_TIMING
 
 using System.Buffers;
 using System.Collections.Concurrent;
@@ -50,6 +51,8 @@ internal sealed class CompleteScreenshotter : AbstractScreenshotter
     private readonly int startY;
     private readonly int scaledWidth;
     private readonly int scaledHeight;
+    private readonly int width;
+    private readonly int height;
 
     private ConcurrentBag<(SKBitmap, SKRect)> queue = [];
     private Task? writeFileTask;
@@ -123,6 +126,8 @@ internal sealed class CompleteScreenshotter : AbstractScreenshotter
         this.startY = start_y;
         this.scaledHeight = scaled_height;
         this.scaledWidth = scaled_width;
+        this.width = width;
+        this.height = height;
         this.surface = map_bitmap;
         this.state = BeforeTakingMapScreenshot;
 
@@ -157,10 +162,15 @@ internal sealed class CompleteScreenshotter : AbstractScreenshotter
                     Volatile.Write(ref this.state, TransferToSkia);
                     Thread t = new(this.HandleSkiaTransfers); // will start the WritingFile task when it's done.
                     t.Start();
+                    this.DisplayHud();
                     break;
                 case WritingFile:
                 {
-                    Task task = this.writeFileTask!;
+                    if (this.writeFileTask is not Task task)
+                    {
+                        return;
+                    }
+
                     if (!task.IsCompleted)
                     {
                         // awaiting task
@@ -174,7 +184,6 @@ internal sealed class CompleteScreenshotter : AbstractScreenshotter
                         return;
                     }
                     Volatile.Write(ref this.state, Complete);
-                    this.DisplayHud();
 #if TRACELOG
                     ModEntry.ModMonitor.LogTimespan("taking full screenshot", this.watch);
 #endif
@@ -226,7 +235,9 @@ internal sealed class CompleteScreenshotter : AbstractScreenshotter
 
         Color[]? buffer = null;
         RenderTarget2D? render_target = null;
-        // todo - hoist scaled render target.
+        RenderTarget2D? scaled_render_target = null;
+
+        bool needs_scaling = this.Scale != 1f;
 
         try
         {
@@ -238,35 +249,39 @@ internal sealed class CompleteScreenshotter : AbstractScreenshotter
             buffer = ArrayPool<Color>.Shared.Rent(scaled_chunk_size * scaled_chunk_size);
             render_target = new(Game1.graphics.GraphicsDevice, chunk_size, chunk_size, mipMap: false, SurfaceFormat.Color, DepthFormat.None, 0, RenderTargetUsage.DiscardContents);
 
+            if (needs_scaling)
+            {
+                ModEntry.ModMonitor.TraceOnlyLog($"Scaling requested, creating scaled render target", LogLevel.Info);
+                scaled_render_target = new(Game1.graphics.GraphicsDevice, scaled_chunk_size, scaled_chunk_size, mipMap: false, SurfaceFormat.Color, DepthFormat.None, 0, RenderTargetUsage.DiscardContents);
+            }
+
             for (int dy = 0; dy < chunks_high; dy++)
             {
                 for (int dx = 0; dx < chunks_wide; dx++)
                 {
-                    int current_width = scaled_chunk_size;
-                    int current_height = scaled_chunk_size;
                     int current_x = dx * scaled_chunk_size;
                     int current_y = dy * scaled_chunk_size;
-                    if (current_x + scaled_chunk_size > this.scaledWidth)
-                    {
-                        current_width += this.scaledWidth - (current_x + scaled_chunk_size);
-                    }
-                    if (current_y + scaled_chunk_size > this.scaledHeight)
-                    {
-                        current_height += this.scaledHeight - (current_y + scaled_chunk_size);
-                    }
+
+                    int current_width = Math.Min(scaled_chunk_size, this.scaledWidth - current_x);
+                    int current_height = Math.Min(scaled_chunk_size, this.scaledHeight - current_y);
                     if (current_height <= 0 || current_width <= 0)
                     {
                         continue;
                     }
 
-                    Game1.viewport = new XRectangle((dx * chunk_size) + this.startX, (dy * chunk_size) + this.startY, chunk_size, chunk_size);
+#if DETAIL_TIMING
+                    Stopwatch render = Stopwatch.StartNew();
+#endif
+
+                    XRectangle window = new((dx * chunk_size) + this.startX, (dy * chunk_size) + this.startY, chunk_size, chunk_size);
+                    Game1.viewport = window;
                     _draw(Game1.game1, Game1.currentGameTime, render_target);
 
+                    RenderTarget2D target;
+
                     // if necessary, re-render to scale.
-                    RenderTarget2D scaled_render_target;
-                    if (current_width != chunk_size || current_height != chunk_size)
+                    if (needs_scaling)
                     {
-                        scaled_render_target = new(Game1.graphics.GraphicsDevice, current_width, current_height, mipMap: false, SurfaceFormat.Color, DepthFormat.None, 0, RenderTargetUsage.DiscardContents);
                         Game1.game1.GraphicsDevice.SetRenderTarget(scaled_render_target);
                         Game1.spriteBatch.Begin(
                             sortMode: SpriteSortMode.Deferred,
@@ -277,7 +292,7 @@ internal sealed class CompleteScreenshotter : AbstractScreenshotter
                         Game1.spriteBatch.Draw(
                             texture: render_target,
                             position: Vector2.Zero,
-                            sourceRectangle: render_target.Bounds,
+                            sourceRectangle: new(0, 0, Math.Min(chunk_size, this.width - window.X), Math.Min(chunk_size, this.height - window.Y)),
                             color: Color.White,
                             rotation: 0f,
                             origin: Vector2.Zero,
@@ -286,23 +301,42 @@ internal sealed class CompleteScreenshotter : AbstractScreenshotter
                             layerDepth: 1f);
                         Game1.spriteBatch.End();
                         Game1.game1.GraphicsDevice.SetRenderTarget(null);
+                        target = scaled_render_target!;
                     }
                     else
                     {
-                        scaled_render_target = render_target;
+                        target = render_target;
                     }
+
+#if DETAIL_TIMING
+                    ModEntry.ModMonitor.LogTimespan("rendering", render);
+#endif
+
+#if DETAIL_TIMING
+                    Stopwatch getData = Stopwatch.StartNew();
+#endif
 
                     // Get the data out of the scaled render buffer.
                     int pixels = current_height * current_width;
-                    scaled_render_target.GetData(buffer, 0, pixels);
+                    target.GetData(0, new Rectangle(0, 0, current_width, current_height), buffer, 0, pixels);
+
+#if DETAIL_TIMING
+                    ModEntry.ModMonitor.LogTimespan("get data", getData);
+#endif
+
+#if DETAIL_TIMING
+                    Stopwatch watch = Stopwatch.StartNew();
+#endif
+
                     SKBitmap portion_bitmap = new(current_width, current_height, SKColorType.Rgb888x, SKAlphaType.Opaque);
                     CopyToSkia(buffer, portion_bitmap, pixels);
 
+#if DETAIL_TIMING
+                    ModEntry.ModMonitor.LogTimespan("creating and transfer to skia bitmap", watch);
+#endif
+
+                    portion_bitmap.SetImmutable();
                     this.queue.Add((portion_bitmap, SKRect.Create(current_x, current_y, current_width, current_height)));
-                    if (!ReferenceEquals(scaled_render_target, render_target))
-                    {
-                        scaled_render_target.Dispose();
-                    }
                 }
             }
 
@@ -324,6 +358,8 @@ internal sealed class CompleteScreenshotter : AbstractScreenshotter
             }
 
             render_target?.Dispose();
+            scaled_render_target?.Dispose();
+
             if (buffer is not null)
             {
                 ArrayPool<Color>.Shared.Return(buffer);
@@ -358,8 +394,8 @@ internal sealed class CompleteScreenshotter : AbstractScreenshotter
             {
                 SKBitmap bitmap = pair.bitmap;
                 SKRect rect = pair.rect;
-                ModEntry.ModMonitor.TraceOnlyLog($"Processing for {rect.Top}x{rect.Left}.", LogLevel.Debug);
-                bitmap.SetImmutable();
+
+                ModEntry.ModMonitor.TraceOnlyLog($"Processing for {rect.Top}x{rect.Left} (size {rect.Height}x{rect.Width}).", LogLevel.Debug);
                 this.surface.Canvas.DrawBitmap(bitmap, rect);
                 bitmap.Dispose();
             }

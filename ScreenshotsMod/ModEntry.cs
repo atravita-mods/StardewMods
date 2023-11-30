@@ -2,10 +2,16 @@
 
 namespace ScreenshotsMod;
 
+using System;
+
 using AtraCore.Framework.Internal;
 
+using AtraShared.Utils.Extensions;
+
 using ScreenshotsMod.Framework;
+using ScreenshotsMod.Framework.ModModels;
 using ScreenshotsMod.Framework.Screenshotter;
+using ScreenshotsMod.Framework.UserModels;
 
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
@@ -20,6 +26,8 @@ internal sealed class ModEntry : BaseMod<ModEntry>
     /// </summary>
     private readonly PerScreen<AbstractScreenshotter?> screenshotters = new(() => null);
 
+    private readonly Dictionary<string, List<ProcessedRule>> _rules = new();
+
     /// <summary>Gets the config class for this mod.</summary>
     internal static ModConfig Config { get; private set; } = null!;
 
@@ -31,8 +39,12 @@ internal sealed class ModEntry : BaseMod<ModEntry>
 
         Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
         helper.Events.Player.Warped += this.OnWarp;
+        helper.Events.GameLoop.DayStarted += this.OnDayStart;
         helper.Events.Input.ButtonPressed += this.OnButtonPressed;
         AbstractScreenshotter.Init();
+
+        this.Process(Config);
+        helper.Events.GameLoop.DayEnding += this.Reset;
     }
 
     private void OnButtonPressed(object? sender, ButtonPressedEventArgs e)
@@ -42,7 +54,25 @@ internal sealed class ModEntry : BaseMod<ModEntry>
             return;
         }
 
-        this.TakeScreenshotImplict(Game1.currentLocation, "keybind", Config.KeyBindFileName, Config.KeyBindScale);
+        this.TakeScreenshotImpl(Game1.currentLocation, "keybind", Config.KeyBindFileName, Config.KeyBindScale);
+    }
+
+    private void OnDayStart(object? sender, DayStartedEventArgs e)
+    {
+        if (this.screenshotters.Value is { } prev)
+        {
+            if (prev.IsDisposed)
+            {
+                this.screenshotters.Value = null;
+            }
+        }
+
+        if (Game1.currentLocation is null || Game1.game1.takingMapScreenshot || (Game1.currentLocation.IsTemporary && Game1.CurrentEvent?.isFestival != true))
+        {
+            return;
+        }
+
+        this.ProcessRules(Game1.currentLocation);
     }
 
     private void OnWarp(object? sender, WarpedEventArgs e)
@@ -61,9 +91,27 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         {
             return;
         }
+
+        this.ProcessRules(e.NewLocation);
     }
 
-    private void TakeScreenshotImplict(GameLocation location, string name, string filename, float scale)
+    private void ProcessRules(GameLocation location)
+    {
+        if (this._rules.TryGetValue(location.Name, out var rules))
+        {
+            PackedDay today = new();
+            foreach (var rule in rules)
+            {
+                if (rule.Trigger(location, today, Game1.timeOfDay))
+                {
+                    this.TakeScreenshotImpl(location, rule.Name, rule.Path, rule.Scale);
+                    break;
+                }
+            }
+        }
+    }
+
+    private void TakeScreenshotImpl(GameLocation location, string name, string filename, float scale)
     {
         if (this.screenshotters.Value is { } prev)
         {
@@ -77,6 +125,8 @@ internal sealed class ModEntry : BaseMod<ModEntry>
                 return;
             }
         }
+
+        this.Monitor.VerboseLog($"Taking screenshot for {location.NameOrUniqueName} using scale {scale}: {filename}");
 
         CompleteScreenshotter completeScreenshotter = new(
             Game1.player,
@@ -93,6 +143,68 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         {
             this.screenshotters.Value = completeScreenshotter;
         }
+    }
 
+    private void Process(ModConfig config)
+    {
+        this._rules.Clear();
+
+        foreach ((string name, UserRule rule) in config.Rules)
+        {
+            if (rule.Triggers.Length == 0)
+            {
+                this.Monitor.Log($"Rule {name} appears to lack triggers, skipping.", LogLevel.Warn);
+                continue;
+            }
+
+            List<ProcessedTrigger> processedTriggers = new(rule.Triggers.Length);
+            foreach (UserTrigger proposedTrigger in rule.Triggers)
+            {
+                PackedDay? packed = PackedDay.Parse(proposedTrigger.Seasons, proposedTrigger.Days, out string? error);
+                if (packed is null)
+                {
+                    this.Monitor.Log($"Rule {name} has invalid times: {error}, skipping", LogLevel.Warn);
+                    continue;
+                }
+
+                if (proposedTrigger.Time.Length == 0)
+                {
+                    this.Monitor.Log($"Rule {name} has no valid times, skipping.", LogLevel.Warn);
+                    continue;
+                }
+
+                ProcessedTrigger newTrigger = new(packed.Value, proposedTrigger.Time, proposedTrigger.Weather);
+                processedTriggers.Add(newTrigger);
+
+                this.Monitor.DebugOnlyLog($"Added trigger {newTrigger}");
+            }
+
+            if (processedTriggers.Count == 0)
+            {
+                this.Monitor.Log($"Rule {name} has no valid triggers.", LogLevel.Warn);
+                continue;
+            }
+
+            ProcessedRule newRule = new(name, rule.Path, rule.Scale, processedTriggers.ToArray());
+            foreach (string map in rule.Maps)
+            {
+                if (!this._rules.TryGetValue(map, out List<ProcessedRule>? prev))
+                {
+                    this._rules[map] = prev = [];
+                }
+                prev.Add(newRule);
+            }
+        }
+    }
+
+    private void Reset(object? sender, DayEndingEventArgs e)
+    {
+        foreach (List<ProcessedRule> series in this._rules.Values)
+        {
+            foreach (ProcessedRule rule in series)
+            {
+                rule.Reset();
+            }
+        }
     }
 }

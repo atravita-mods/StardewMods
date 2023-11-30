@@ -21,8 +21,7 @@ using AtraShared.Utils.Shims;
 using CommunityToolkit.Diagnostics;
 
 using HarmonyLib;
-
-using MoreFertilizers.DataModels;
+using MoreFertilizers.DataModels.Legacy;
 using MoreFertilizers.Framework;
 using MoreFertilizers.HarmonyPatches;
 using MoreFertilizers.HarmonyPatches.Acquisition;

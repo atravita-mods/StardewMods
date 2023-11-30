@@ -1,4 +1,4 @@
-﻿namespace MoreFertilizers.DataModels;
+﻿namespace MoreFertilizers.DataModels.Legacy;
 
 /// <summary>
 /// Data model used to save the ID number, to protect against shuffling...

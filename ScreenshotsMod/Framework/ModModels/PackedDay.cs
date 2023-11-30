@@ -1,10 +1,20 @@
-﻿namespace ScreenshotsMod.Framework.ModModels;
+﻿using AtraBase.Toolkit.Extensions;
+
+using AtraShared.ConstantsAndEnums;
+
+namespace ScreenshotsMod.Framework.ModModels;
 
 /// <summary>
 /// A struct that represents a packed format of a day/season constraint.
 /// </summary>
 internal readonly record struct PackedDay
 {
+    /// <summary>
+    /// Represents all mondays.
+    /// </summary>
+    private const uint Monday = 0b1 | 0b1 << 7 | 0b1 << 14 | 0b1 << 21;
+    private const uint AllDays = 0x0FFF_FFFF;
+
     /// <summary>
     /// Initializes a new instance of the <see cref="PackedDay"/> class.
     /// Gets the packed day representation of the current day.
@@ -21,6 +31,86 @@ internal readonly record struct PackedDay
         => this.value = value;
 
     private readonly uint value;
+
+    /// <summary>
+    /// Parses days and seasons to the PackedDay struct.
+    /// </summary>
+    /// <param name="seasons">Seasons to parse.</param>
+    /// <param name="days">Days to parse.</param>
+    /// <param name="error">Error.</param>
+    /// <returns>PackedValue, or null if there's an issue.</returns>
+    public static PackedDay? Parse(string[] seasons, string[] days, out string? error)
+    {
+        if (seasons.Length == 0 || days.Length == 0)
+        {
+            error = "is empty";
+            return null;
+        }
+
+        uint packed = 0;
+        foreach (var season in seasons)
+        {
+            if (!StardewSeasonsExtensions.TryParse(season, out var s, ignoreCase: true))
+            {
+                error = $"could not parse {season} as a valid season";
+                return null;
+            }
+
+            packed |= ((uint)s) << 28;
+        }
+
+        foreach (var day in days)
+        {
+            var d = day.Trim();
+            if (d.Equals("Any", StringComparison.OrdinalIgnoreCase) || d == "-")
+            {
+                packed |= AllDays;
+                break;
+            }
+            if (Enum.TryParse<DayOfWeek>(d, out var dayOfWeek))
+            {
+                var shift = dayOfWeek == DayOfWeek.Sunday ? 6 : (int)dayOfWeek - 1;
+                packed |= Monday << shift;
+            }
+            else if (d.TrySplitOnce('-', out var first, out var second))
+            {
+                var min = int.TryParse(first, out var v) ? Math.Clamp(v, 1, 28) : 1;
+                var max = int.TryParse(second, out var v2) ? Math.Clamp(v2, 1, 28) : 28;
+
+                if (max < min)
+                {
+                    continue;
+                }
+
+                uint full = AllDays;
+
+                // shift to the right to get the right number of bits.
+                // total number of days is (max - min + 1). I originally have 28 bits
+                // so shift away 28 - (max - min + 1);
+                full >>= 28 - (max - min + 1);
+
+                // shift back enough for min.
+                full <<= min - 1;
+                packed |= full;
+            }
+            else if (int.TryParse(d, out var val))
+            {
+                val = Math.Clamp(val, 1, 28);
+                packed |= 0b1u << (val - 1);
+            }
+        }
+
+        if ((0xF000_0000 & packed) == 0 || (AllDays & packed) == 0)
+        {
+            error = "is empty";
+            return null;
+        }
+
+        error = null;
+        return new(packed);
+    }
+
+    public override string ToString() => this.value.ToString("X8");
 
     /// <summary>
     /// Checks to see if the current day is allowed by this value.

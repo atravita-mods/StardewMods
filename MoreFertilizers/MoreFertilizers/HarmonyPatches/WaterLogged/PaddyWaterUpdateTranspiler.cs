@@ -26,10 +26,10 @@ internal static class PaddyWaterUpdateTranspiler
         {
             Vector2 v = new(tileX, tileY);
             dirt.nearWaterForPaddy.Value = -1;
-            if (dirt.hasPaddyCrop() && dirt.paddyWaterCheck(location, v))
+            if (dirt.hasPaddyCrop() && dirt.paddyWaterCheck(true))
             {
                 dirt.state.Value = -1;
-                dirt.updateNeighbors(location, v);
+                dirt.updateNeighbors();
             }
         }
     }

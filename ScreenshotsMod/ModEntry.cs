@@ -47,6 +47,14 @@ internal sealed class ModEntry : BaseMod<ModEntry>
 
     private void OnWarp(object? sender, WarpedEventArgs e)
     {
+        if (this.screenshotters.Value is { } prev)
+        {
+            if (prev.IsDisposed)
+            {
+                this.screenshotters.Value = null;
+            }
+        }
+
         // it's possible for this event to be raised for a "false warp".
         if (e.NewLocation is null || ReferenceEquals(e.NewLocation, e.OldLocation) || !e.IsLocalPlayer
             || (e.NewLocation.IsTemporary && Game1.CurrentEvent?.isFestival != true) || Game1.game1.takingMapScreenshot)
@@ -70,39 +78,21 @@ internal sealed class ModEntry : BaseMod<ModEntry>
             }
         }
 
-        xTile.Layers.Layer layer = location.Map.Layers[0];
-        if (layer.LayerHeight > 32 || layer.LayerWidth > 32)
+        CompleteScreenshotter completeScreenshotter = new(
+            Game1.player,
+            this.Helper.Events.GameLoop,
+            name,
+            filename,
+            scale,
+            location);
+        if (!completeScreenshotter.IsDisposed)
         {
-            CompleteScreenshotter completeScreenshotter = new(
-                Game1.player,
-                this.Helper.Events.GameLoop,
-                name,
-                filename,
-                scale,
-                location);
-            if (!completeScreenshotter.IsDisposed)
-            {
-                completeScreenshotter.Tick();
-            }
-            if (!completeScreenshotter.IsDisposed)
-            {
-                this.screenshotters.Value = completeScreenshotter;
-            }
+            completeScreenshotter.Tick();
         }
-        else
+        if (!completeScreenshotter.IsDisposed)
         {
-            SimplifiedScreenshotter simple = new(
-                Game1.player,
-                this.Helper.Events.GameLoop,
-                name,
-                filename,
-                scale,
-                location);
-            simple.Tick();
-            if (!simple.IsDisposed)
-            {
-                this.screenshotters.Value = simple;
-            }
+            this.screenshotters.Value = completeScreenshotter;
         }
+
     }
 }

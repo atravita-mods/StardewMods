@@ -1,11 +1,6 @@
-﻿namespace ScreenshotsMod.Framework;
+﻿#define TRACELOG // enables timing information.
 
 using System.Buffers;
-using System.Reflection;
-
-using AtraBase.Toolkit.Reflection;
-
-using AtraCore.Framework.ReflectionManager;
 
 using AtraShared.Utils.Extensions;
 
@@ -14,120 +9,35 @@ using Microsoft.Xna.Framework.Graphics;
 
 using SkiaSharp;
 
+using StardewModdingAPI.Events;
+
 using XRectangle = xTile.Dimensions.Rectangle;
 
+namespace ScreenshotsMod.Framework.Screenshotter;
+
 /// <summary>
-/// Handles taking screenshots, safely.
+/// The complex, skia-knitting screenshot.
 /// </summary>
-internal sealed class Screenshotter
+internal sealed class CompleteScreenshotter : AbstractScreenshotter
 {
-    #region delegates
-
-    private readonly Func<RenderTarget2D?> _lightMapGetter;
-
-    private readonly Action<RenderTarget2D?> _lightMapSetter;
-
-    private readonly Action<int, int> _allocateLightMap;
-
-    private readonly Action<Game1, GameTime, RenderTarget2D> _draw;
-
-    #endregion
-
-    public Screenshotter()
-    {
-        FieldInfo lightmap = typeof(Game1).GetCachedField("_lightmap", ReflectionCache.FlagTypes.StaticFlags);
-        this._lightMapGetter = lightmap.GetStaticFieldGetter<RenderTarget2D?>();
-        this._lightMapSetter = lightmap.GetStaticFieldSetter<RenderTarget2D?>();
-        this._allocateLightMap = typeof(Game1).GetCachedMethod("allocateLightmap", ReflectionCache.FlagTypes.StaticFlags).CreateDelegate<Action<int, int>>();
-        this._draw = typeof(Game1).GetCachedMethod("_draw", ReflectionCache.FlagTypes.InstanceFlags).CreateDelegate<Action<Game1, GameTime, RenderTarget2D>>();
-    }
+    private Task[]? tasks = null;
 
     /// <summary>
-    /// A simplified screenshot method, meant for cases where the map is smaller than 32*32. Avoids using Skia.
+    /// Initializes a new instance of the <see cref="CompleteScreenshotter"/> class.
     /// </summary>
-    /// <param name="filename">The filename to save to.</param>
-    /// <param name="scale">The scale of the image.</param>
-    /// 
-    internal void TakeScreenshotSimplifed(string filename, float scale = 1f)
+    /// <param name="gameEvents">The gameloop event manager.</param>
+    /// <param name="name">The name of the rule we're processing.</param>
+    /// <param name="filename">The tokenized filename.</param>
+    /// <param name="scale">The scale of the screenshot.</param>
+    /// <param name="target">The target location.</param>
+    public CompleteScreenshotter(IGameLoopEvents gameEvents, string name, string filename, float scale, GameLocation target)
+        : base(gameEvents, name, filename, scale, target)
     {
-        if (Game1.currentLocation is not GameLocation current)
-        {
-            return;
-        }
+    }
 
-        (int start_x, int start_y, int width, int height) = CalculateBounds();
-
-        int scaled_width = (int)(width * scale);
-        int scaled_height = (int)(height * scale);
-
-        // save old state.
-        XRectangle old_viewport = Game1.viewport;
-        bool old_display_hud = Game1.displayHUD;
-        Game1.game1.takingMapScreenshot = true;
-        float old_zoom_level = Game1.options.baseZoomLevel;
-        Game1.options.baseZoomLevel = 1f;
-        RenderTarget2D? cached_lightmap = this._lightMapGetter();
-        this._lightMapSetter(null);
-
-        try
-        {
-            this._allocateLightMap(width, height);
-            RenderTarget2D render_target = new(Game1.graphics.GraphicsDevice, width, height, mipMap: false, SurfaceFormat.Color, DepthFormat.None, 0, RenderTargetUsage.DiscardContents);
-
-            Game1.viewport = new XRectangle(0, 0, width, height);
-            this._draw(Game1.game1, Game1.currentGameTime, render_target);
-
-            // if necessary, re-render to scale.
-            RenderTarget2D scaled_render_target;
-            if (scaled_height != height || scaled_width != width)
-            {
-                scaled_render_target = new(Game1.graphics.GraphicsDevice, scaled_width, scaled_height, mipMap: false, SurfaceFormat.Color, DepthFormat.None, 0, RenderTargetUsage.DiscardContents);
-                Game1.game1.GraphicsDevice.SetRenderTarget(scaled_render_target);
-                Game1.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Opaque, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone);
-                Color color = Color.White;
-                Game1.spriteBatch.Draw(render_target, Vector2.Zero, render_target.Bounds, color, 0f, Vector2.Zero, scale, SpriteEffects.None, 1f);
-                Game1.spriteBatch.End();
-                Game1.game1.GraphicsDevice.SetRenderTarget(null);
-            }
-            else
-            {
-                scaled_render_target = render_target;
-            }
-
-            string? directory = Path.GetDirectoryName(filename);
-            Directory.CreateDirectory(directory!);
-
-            using FileStream fs = new (filename, FileMode.OpenOrCreate);
-
-            scaled_render_target.SaveAsPng(fs, scaled_width, scaled_height);
-
-            if (!ReferenceEquals(scaled_render_target, render_target))
-            {
-                scaled_render_target.Dispose();
-            }
-            render_target.Dispose();
-            return;
-        }
-        catch (Exception ex)
-        {
-            ModEntry.ModMonitor.LogError("taking simplified screenshot", ex);
-            Game1.game1.GraphicsDevice.SetRenderTarget(null);
-            return;
-        }
-        finally
-        {
-            if (this._lightMapGetter() is RenderTarget2D lightmap)
-            {
-                lightmap.Dispose();
-                this._lightMapSetter(null);
-            }
-
-            this._lightMapSetter(cached_lightmap);
-            Game1.options.baseZoomLevel = old_zoom_level;
-            Game1.game1.takingMapScreenshot = false;
-            Game1.displayHUD = old_display_hud;
-            Game1.viewport = old_viewport;
-        }
+    internal override void UpdateTicked(object? sender, UpdateTickedEventArgs args)
+    {
+        throw new NotImplementedException();
     }
 
     // derived from Game1.takeMapScreenshot
@@ -138,7 +48,7 @@ internal sealed class Screenshotter
             return null;
         }
 
-        (int start_x, int start_y, int width, int height) = CalculateBounds();
+        (int start_x, int start_y, int width, int height) = CalculateBounds(this.TargetLocation);
 
         // create the surface.
         SKSurface? map_bitmap = null;
@@ -186,8 +96,8 @@ internal sealed class Screenshotter
         Game1.game1.takingMapScreenshot = true;
         float old_zoom_level = Game1.options.baseZoomLevel;
         Game1.options.baseZoomLevel = 1f;
-        RenderTarget2D? cached_lightmap = this._lightMapGetter();
-        this._lightMapSetter(null);
+        RenderTarget2D? cached_lightmap = _lightMapGetter();
+        _lightMapSetter(null);
 
         Color[]? buffer = null;
         RenderTarget2D? render_target = null;
@@ -195,7 +105,7 @@ internal sealed class Screenshotter
 
         try
         {
-            this._allocateLightMap(chunk_size, chunk_size);
+            _allocateLightMap(chunk_size, chunk_size);
             int chunks_wide = (int)Math.Ceiling(scaled_width / (float)scaled_chunk_size);
             int chunks_high = (int)Math.Ceiling(scaled_height / (float)scaled_chunk_size);
 
@@ -228,8 +138,8 @@ internal sealed class Screenshotter
                         continue;
                     }
 
-                    Game1.viewport = new XRectangle((dx * chunk_size) + start_x, (dy * chunk_size) + start_y, chunk_size, chunk_size);
-                    this._draw(Game1.game1, Game1.currentGameTime, render_target);
+                    Game1.viewport = new XRectangle(dx * chunk_size + start_x, dy * chunk_size + start_y, chunk_size, chunk_size);
+                    _draw(Game1.game1, Game1.currentGameTime, render_target);
 
                     // if necessary, re-render to scale.
                     RenderTarget2D scaled_render_target;
@@ -264,7 +174,7 @@ internal sealed class Screenshotter
                     // Get the data out of the scaled render buffer.
                     int pixels = current_height * current_width;
                     scaled_render_target.GetData(buffer, 0, pixels);
-                    SKBitmap portion_bitmap = useSKBuffer ? skbuffer : new (current_width, current_height, SKColorType.Rgb888x, SKAlphaType.Opaque);
+                    SKBitmap portion_bitmap = useSKBuffer ? skbuffer : new(current_width, current_height, SKColorType.Rgb888x, SKAlphaType.Opaque);
                     CopyToSkia(buffer, portion_bitmap, pixels);
 
                     if (!ReferenceEquals(skbuffer, portion_bitmap))
@@ -294,10 +204,10 @@ internal sealed class Screenshotter
         }
         finally
         {
-            if (this._lightMapGetter() is RenderTarget2D lightmap)
+            if (_lightMapGetter() is RenderTarget2D lightmap)
             {
                 lightmap.Dispose();
-                this._lightMapSetter(null);
+                _lightMapSetter(null);
             }
 
             render_target?.Dispose();
@@ -307,7 +217,7 @@ internal sealed class Screenshotter
                 ArrayPool<Color>.Shared.Return(buffer);
             }
 
-            this._lightMapSetter(cached_lightmap);
+            _lightMapSetter(cached_lightmap);
             Game1.options.baseZoomLevel = old_zoom_level;
             Game1.game1.takingMapScreenshot = false;
             Game1.displayHUD = old_display_hud;
@@ -327,38 +237,8 @@ internal sealed class Screenshotter
         string? directory = Path.GetDirectoryName(filename);
         Directory.CreateDirectory(directory!);
 
-        using FileStream fs = new (filename, FileMode.OpenOrCreate);
+        using FileStream fs = new(filename, FileMode.OpenOrCreate);
         image.Snapshot().Encode().SaveTo(fs);
-    }
-
-    private static (int start_x, int start_y, int width, int height) CalculateBounds()
-    {
-        GameLocation currentLocation = Game1.currentLocation;
-
-        int start_x = 0;
-        int start_y = 0;
-        int width = currentLocation.map.DisplayWidth;
-        int height = currentLocation.map.DisplayHeight;
-        string[] fields = currentLocation.GetMapPropertySplitBySpaces("ScreenshotRegion");
-        if (fields.Length != 0)
-        {
-            if (!ArgUtility.TryGetInt(fields, 0, out int topLeftX, out string? error)
-                || !ArgUtility.TryGetInt(fields, 1, out int topLeftY, out error)
-                || !ArgUtility.TryGetInt(fields, 2, out int bottomRightX, out error)
-                || !ArgUtility.TryGetInt(fields, 3, out int bottomRightY, out error))
-            {
-                currentLocation.LogMapPropertyError("ScreenshotRegion", fields, error);
-            }
-            else
-            {
-                start_x = topLeftX * 64;
-                start_y = topLeftY * 64;
-                width = ((bottomRightX + 1) * 64) - start_x;
-                height = ((bottomRightY + 1) * 64) - start_y;
-            }
-        }
-
-        return (start_x, start_y, width, height);
     }
 
     private static unsafe void CopyToSkia(Color[] buffer, SKBitmap bitmap, int pixels)

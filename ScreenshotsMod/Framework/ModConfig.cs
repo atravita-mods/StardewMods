@@ -26,7 +26,7 @@ public sealed class ModConfig
     public KeybindList KeyBind { get; set; } = KeybindList.ForSingle(SButton.Multiply);
 
     private string keyBindFileName;
-    private float keyBindScale = 1f;
+    private float keyBindScale = 0.25f;
 
     /// <summary>
     /// Gets or sets the (tokenized) file name to save keybind screenshots at.

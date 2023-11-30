@@ -50,9 +50,15 @@ internal readonly record struct PackedDay
         uint packed = 0;
         foreach (string season in seasons)
         {
-            if (!StardewSeasonsExtensions.TryParse(season, out StardewSeasons s, ignoreCase: true))
+            string trimmed = season.Trim();
+            if (trimmed.Equals("Any", StringComparison.OrdinalIgnoreCase))
             {
-                error = $"could not parse {season} as a valid season";
+                packed |= 0xF000_0000;
+                break;
+            }
+            if (!StardewSeasonsExtensions.TryParse(trimmed, out StardewSeasons s, ignoreCase: true))
+            {
+                error = $"could not parse {trimmed} as a valid season";
                 return null;
             }
 
@@ -67,15 +73,15 @@ internal readonly record struct PackedDay
                 packed |= AllDays;
                 break;
             }
-            if (Enum.TryParse(d, out DayOfWeek dayOfWeek))
+            if (Enum.TryParse(d, ignoreCase: true, out DayOfWeek dayOfWeek))
             {
                 int shift = dayOfWeek == DayOfWeek.Sunday ? 6 : (int)dayOfWeek - 1;
                 packed |= Monday << shift;
             }
             else if (d.TrySplitOnce('-', out ReadOnlySpan<char> first, out ReadOnlySpan<char> second))
             {
-                int min = int.TryParse(first, out int v) ? Math.Clamp(v, 1, 28) : 1;
-                int max = int.TryParse(second, out int v2) ? Math.Clamp(v2, 1, 28) : 28;
+                int min = int.TryParse(first.Trim(), out int v) ? Math.Clamp(v, 1, 28) : 1;
+                int max = int.TryParse(second.Trim(), out int v2) ? Math.Clamp(v2, 1, 28) : 28;
 
                 if (max < min)
                 {

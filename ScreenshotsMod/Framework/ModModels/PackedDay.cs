@@ -48,9 +48,9 @@ internal readonly record struct PackedDay
         }
 
         uint packed = 0;
-        foreach (var season in seasons)
+        foreach (string season in seasons)
         {
-            if (!StardewSeasonsExtensions.TryParse(season, out var s, ignoreCase: true))
+            if (!StardewSeasonsExtensions.TryParse(season, out StardewSeasons s, ignoreCase: true))
             {
                 error = $"could not parse {season} as a valid season";
                 return null;
@@ -59,23 +59,23 @@ internal readonly record struct PackedDay
             packed |= ((uint)s) << 28;
         }
 
-        foreach (var day in days)
+        foreach (string day in days)
         {
-            var d = day.Trim();
+            string d = day.Trim();
             if (d.Equals("Any", StringComparison.OrdinalIgnoreCase) || d == "-")
             {
                 packed |= AllDays;
                 break;
             }
-            if (Enum.TryParse<DayOfWeek>(d, out var dayOfWeek))
+            if (Enum.TryParse(d, out DayOfWeek dayOfWeek))
             {
-                var shift = dayOfWeek == DayOfWeek.Sunday ? 6 : (int)dayOfWeek - 1;
+                int shift = dayOfWeek == DayOfWeek.Sunday ? 6 : (int)dayOfWeek - 1;
                 packed |= Monday << shift;
             }
-            else if (d.TrySplitOnce('-', out var first, out var second))
+            else if (d.TrySplitOnce('-', out ReadOnlySpan<char> first, out ReadOnlySpan<char> second))
             {
-                var min = int.TryParse(first, out var v) ? Math.Clamp(v, 1, 28) : 1;
-                var max = int.TryParse(second, out var v2) ? Math.Clamp(v2, 1, 28) : 28;
+                int min = int.TryParse(first, out int v) ? Math.Clamp(v, 1, 28) : 1;
+                int max = int.TryParse(second, out int v2) ? Math.Clamp(v2, 1, 28) : 28;
 
                 if (max < min)
                 {
@@ -93,7 +93,7 @@ internal readonly record struct PackedDay
                 full <<= min - 1;
                 packed |= full;
             }
-            else if (int.TryParse(d, out var val))
+            else if (int.TryParse(d, out int val))
             {
                 val = Math.Clamp(val, 1, 28);
                 packed |= 0b1u << (val - 1);

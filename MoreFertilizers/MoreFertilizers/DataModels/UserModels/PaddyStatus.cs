@@ -1,4 +1,4 @@
-﻿namespace MoreFertilizers.DataModels;
+﻿namespace MoreFertilizers.DataModels.UserModels;
 
 /// <summary>
 /// Checks to see if this rule should apply to paddy crops, non paddy crops, or both.

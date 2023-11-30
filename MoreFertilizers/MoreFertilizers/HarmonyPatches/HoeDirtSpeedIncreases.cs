@@ -10,6 +10,21 @@ namespace MoreFertilizers.HarmonyPatches;
 [HarmonyPatch(typeof(HoeDirt))]
 internal static class HoeDirtSpeedIncreases
 {
+    private static readonly Dictionary<string, (float dry, float paddy)> Values = [];
+
+    internal static bool AddFertilizer(string unqualified, (float dry, float paddy) value)
+    {
+        if (Values.TryAdd(unqualified, value))
+        {
+            Values.TryAdd(ItemRegistry.type_object + unqualified, value);
+            return true;
+        }
+
+        return false;
+    }
+
+    internal static void Clear() => Values.Clear();
+
     [HarmonyPatch(nameof(HoeDirt.GetFertilizerSpeedBoost))]
     private static void Postfix(HoeDirt __instance, ref float __result)
     {

@@ -36,6 +36,7 @@
 
   <ItemGroup>
     <Folder Include="assets\" />
+    <Folder Include="DataModels\ModModels\" />
     <Folder Include="Legacy\" />
   </ItemGroup>
 

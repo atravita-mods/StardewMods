@@ -1,6 +1,7 @@
 ﻿#define TRACELOG // enables timing information.
 
 using System.Buffers;
+using System.Diagnostics;
 
 using AtraShared.Utils.Extensions;
 
@@ -21,6 +22,20 @@ namespace ScreenshotsMod.Framework.Screenshotter;
 internal sealed class CompleteScreenshotter : AbstractScreenshotter
 {
     private Task[]? tasks = null;
+    private int currentTask = 0;
+
+    private SKSurface surface;
+
+    private readonly int start_x;
+    private readonly int start_y;
+    private readonly int scaled_width;
+    private readonly int scaled_height;
+
+    private State state;
+
+#if TRACELOG
+    private Stopwatch watch = new();
+#endif
 
     /// <summary>
     /// Initializes a new instance of the <see cref="CompleteScreenshotter"/> class.
@@ -30,24 +45,14 @@ internal sealed class CompleteScreenshotter : AbstractScreenshotter
     /// <param name="filename">The tokenized filename.</param>
     /// <param name="scale">The scale of the screenshot.</param>
     /// <param name="target">The target location.</param>
-    public CompleteScreenshotter(IGameLoopEvents gameEvents, string name, string filename, float scale, GameLocation target)
-        : base(gameEvents, name, filename, scale, target)
+    /// <remarks>Note that if there's an issue with construction, it will immediately dispose itself.</remarks>
+    public CompleteScreenshotter(Farmer player, IGameLoopEvents gameEvents, string name, string filename, float scale, GameLocation target)
+        : base(player, gameEvents, name, filename, scale, target)
     {
-    }
-
-    internal override void UpdateTicked(object? sender, UpdateTickedEventArgs args)
-    {
-        throw new NotImplementedException();
-    }
-
-    // derived from Game1.takeMapScreenshot
-    internal SKSurface? TakeScreenshot(float scale = 1f)
-    {
-        if (Game1.currentLocation is not GameLocation current)
-        {
-            return null;
-        }
-
+#if TRACELOG
+        Stopwatch sw = Stopwatch.StartNew();
+#endif
+        // prepare surface
         (int start_x, int start_y, int width, int height) = CalculateBounds(this.TargetLocation);
 
         // create the surface.
@@ -75,20 +80,161 @@ internal sealed class CompleteScreenshotter : AbstractScreenshotter
             }
             if (scale <= 0f)
             {
-                return null;
+                this.surface = null!;
+                this.Dispose();
+                this.state = State.Error;
+                return;
             }
         }
         while (failed);
 
         if (map_bitmap is null)
         {
-            return null;
+            this.surface = null!;
+            this.state = State.Error;
+            this.Dispose();
+            return;
         }
 
+        this.Scale = scale;
+        this.start_x = start_x;
+        this.start_y = start_y;
+        this.scaled_height = scaled_height;
+        this.scaled_width = scaled_width;
+        this.surface = map_bitmap;
+        this.state = State.BeforeTakingMapScreenshot;
+
+#if TRACELOG
+        ModEntry.ModMonitor.LogTimespan("setting up complete screenshot", sw);
+#endif
+    }
+
+    internal override void UpdateTicked(object? sender, UpdateTickedEventArgs args) => this.Tick();
+
+    internal void Tick()
+    {
+        if (!ReferenceEquals(this.Player, Game1.player) || !ReferenceEquals(Game1.currentLocation, this.TargetLocation) || Game1.game1.takingMapScreenshot)
+        {
+            return;
+        }
+#if TRACELOG
+        this.watch.Start();
+        try
+        {
+#endif
+            switch (this.state)
+            {
+                case State.BeforeTakingMapScreenshot:
+                    this.state = State.TakingMapScreenshot;
+                    this.TakeScreenshot();
+#if TRACELOG
+                    ModEntry.ModMonitor.LogTimespan("initializing full screenshot", this.watch);
+#endif
+                    this.state = State.TransferToSkia;
+                    break;
+                case State.TransferToSkia:
+                {
+                    if (this.currentTask < this.tasks!.Length)
+                    {
+                        var task = this.tasks[this.currentTask];
+                        if (task is null)
+                        {
+                            this.currentTask++;
+                            return;
+                        }
+                        switch (task.Status)
+                        {
+                            case TaskStatus.Created:
+                            {
+                                ModEntry.ModMonitor.DebugOnlyLog($"Starting task {this.currentTask}", LogLevel.Info);
+                                task.Start();
+                                return;
+                            }
+                            case TaskStatus.Faulted:
+                            {
+                                this.state = State.Error;
+                                ModEntry.ModMonitor.LogError("transfering screenshot to skia", task.Exception!);
+                                this.Dispose();
+                                return;
+                            }
+                            case TaskStatus.RanToCompletion:
+                            {
+                                ModEntry.ModMonitor.DebugOnlyLog($"Completed task {this.currentTask}", LogLevel.Info);
+                                this.currentTask++;
+                                return;
+                            }
+#if TRACELOG
+                            case TaskStatus.Running:
+                            {
+                                ModEntry.ModMonitor.Log($"Awaiting task {this.currentTask}", LogLevel.Info);
+                                return;
+                            }
+#endif
+                            default:
+                                return;
+                        }
+                    }
+                    else
+                    {
+                        this.state = State.WritingFile;
+                        this.WriteToDisk();
+                        return;
+                    }
+                }
+                case State.WritingFile:
+                {
+                    Task task = this.tasks![0];
+                    if (!task.IsCompleted)
+                    {
+                        // awaiting task
+                        return;
+                    }
+                    else if (task.IsFaulted)
+                    {
+                        this.state = State.Error;
+                        ModEntry.ModMonitor.LogError("writing to disk", task.Exception!);
+                        this.Dispose();
+                        return;
+                    }
+                    this.state = State.Complete;
+                    this.DisplayHud();
+#if TRACELOG
+                    ModEntry.ModMonitor.LogTimespan("taking full screenshot", this.watch);
+#endif
+                    this.Dispose();
+                    return;
+                }
+            }
+#if TRACELOG
+        }
+        finally
+        {
+            this.watch.Stop();
+        }
+#endif
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        if (!this.IsDisposed)
+        {
+            this.surface?.Dispose();
+            this.surface = null!;
+            this.tasks = null!;
+        }
+        base.Dispose(disposing);
+    }
+
+    /// <summary>
+    /// Takes the screenshot.
+    /// As of this point, we are fully sync still.
+    /// </summary>
+    private void TakeScreenshot()
+    {
         // the game's screenshots work by rendering the map, in chunks, to a render target
         // and then stitching it all together via SkiaSharp.
         const int chunk_size = 2048;
-        int scaled_chunk_size = (int)(chunk_size * scale);
+        int scaled_chunk_size = (int)(chunk_size * this.Scale);
 
         // save old state.
         XRectangle old_viewport = Game1.viewport;
@@ -101,44 +247,43 @@ internal sealed class CompleteScreenshotter : AbstractScreenshotter
 
         Color[]? buffer = null;
         RenderTarget2D? render_target = null;
-        SKBitmap? skbuffer = null;
+        // todo - hoist scaled render target.
 
         try
         {
             _allocateLightMap(chunk_size, chunk_size);
-            int chunks_wide = (int)Math.Ceiling(scaled_width / (float)scaled_chunk_size);
-            int chunks_high = (int)Math.Ceiling(scaled_height / (float)scaled_chunk_size);
+            int chunks_wide = (int)Math.Ceiling(this.scaled_width / (float)scaled_chunk_size);
+            int chunks_high = (int)Math.Ceiling(this.scaled_height / (float)scaled_chunk_size);
+
+            // tasks!
+            this.tasks = new Task[chunks_wide * chunks_high];
 
             // hoisted buffers. Will note that the ArrayPool here is only going to be used for small scales. Still worth it.
             buffer = ArrayPool<Color>.Shared.Rent(scaled_chunk_size * scaled_chunk_size);
-            skbuffer = new(scaled_chunk_size, scaled_chunk_size, SKColorType.Rgb888x, SKAlphaType.Opaque);
             render_target = new(Game1.graphics.GraphicsDevice, chunk_size, chunk_size, mipMap: false, SurfaceFormat.Color, DepthFormat.None, 0, RenderTargetUsage.DiscardContents);
 
             for (int dy = 0; dy < chunks_high; dy++)
             {
                 for (int dx = 0; dx < chunks_wide; dx++)
                 {
-                    bool useSKBuffer = true;
                     int current_width = scaled_chunk_size;
                     int current_height = scaled_chunk_size;
                     int current_x = dx * scaled_chunk_size;
                     int current_y = dy * scaled_chunk_size;
-                    if (current_x + scaled_chunk_size > scaled_width)
+                    if (current_x + scaled_chunk_size > this.scaled_width)
                     {
-                        current_width += scaled_width - (current_x + scaled_chunk_size);
-                        useSKBuffer = false;
+                        current_width += this.scaled_width - (current_x + scaled_chunk_size);
                     }
-                    if (current_y + scaled_chunk_size > scaled_height)
+                    if (current_y + scaled_chunk_size > this.scaled_height)
                     {
-                        current_height += scaled_height - (current_y + scaled_chunk_size);
-                        useSKBuffer = false;
+                        current_height += this.scaled_height - (current_y + scaled_chunk_size);
                     }
                     if (current_height <= 0 || current_width <= 0)
                     {
                         continue;
                     }
 
-                    Game1.viewport = new XRectangle(dx * chunk_size + start_x, dy * chunk_size + start_y, chunk_size, chunk_size);
+                    Game1.viewport = new XRectangle(dx * chunk_size + this.start_x, dy * chunk_size + this.start_y, chunk_size, chunk_size);
                     _draw(Game1.game1, Game1.currentGameTime, render_target);
 
                     // if necessary, re-render to scale.
@@ -160,7 +305,7 @@ internal sealed class CompleteScreenshotter : AbstractScreenshotter
                             color: Color.White,
                             rotation: 0f,
                             origin: Vector2.Zero,
-                            scale,
+                            this.Scale,
                             effects: SpriteEffects.None,
                             layerDepth: 1f);
                         Game1.spriteBatch.End();
@@ -174,19 +319,20 @@ internal sealed class CompleteScreenshotter : AbstractScreenshotter
                     // Get the data out of the scaled render buffer.
                     int pixels = current_height * current_width;
                     scaled_render_target.GetData(buffer, 0, pixels);
-                    SKBitmap portion_bitmap = useSKBuffer ? skbuffer : new(current_width, current_height, SKColorType.Rgb888x, SKAlphaType.Opaque);
+                    SKBitmap portion_bitmap = new(current_width, current_height, SKColorType.Rgb888x, SKAlphaType.Opaque);
                     CopyToSkia(buffer, portion_bitmap, pixels);
 
-                    if (!ReferenceEquals(skbuffer, portion_bitmap))
+                    Task segment = new(() =>
                     {
+#if TRACELOG
+                        ModEntry.ModMonitor.DebugOnlyLog($"starting skia task for {current_x} and {current_y} with {current_width} and {current_height} on {Environment.CurrentManagedThreadId}", LogLevel.Info);
+#endif
                         portion_bitmap.SetImmutable();
-                    }
-
-                    map_bitmap.Canvas.DrawBitmap(portion_bitmap, SKRect.Create(current_x, current_y, current_width, current_height));
-                    if (!ReferenceEquals(skbuffer, portion_bitmap))
-                    {
+                        this.surface.Canvas.DrawBitmap(portion_bitmap, SKRect.Create(current_x, current_y, current_width, current_height));
                         portion_bitmap.Dispose();
-                    }
+                    });
+                    this.tasks[dy * chunks_wide + dx] = segment;
+
                     if (!ReferenceEquals(scaled_render_target, render_target))
                     {
                         scaled_render_target.Dispose();
@@ -194,13 +340,13 @@ internal sealed class CompleteScreenshotter : AbstractScreenshotter
                 }
             }
 
-            return map_bitmap;
+            return;
         }
         catch (Exception ex)
         {
             ModEntry.ModMonitor.LogError("taking screenshot", ex);
             Game1.game1.GraphicsDevice.SetRenderTarget(null);
-            return null;
+            this.Dispose();
         }
         finally
         {
@@ -211,7 +357,6 @@ internal sealed class CompleteScreenshotter : AbstractScreenshotter
             }
 
             render_target?.Dispose();
-            skbuffer?.Dispose();
             if (buffer is not null)
             {
                 ArrayPool<Color>.Shared.Return(buffer);
@@ -225,20 +370,19 @@ internal sealed class CompleteScreenshotter : AbstractScreenshotter
         }
     }
 
-    /// <summary>
-    /// Writes a bitmap to a file.
-    /// </summary>
-    /// <param name="image">The SKSurface that holds the image.</param>
-    /// <param name="filename">The file to write to.</param>
-    /// <remarks>This is split out because it can happen on a background thread.</remarks>
-    internal static void WriteBitmap(SKSurface image, string filename)
+    private void WriteToDisk()
     {
-        // ensure the directory is made.
-        string? directory = Path.GetDirectoryName(filename);
-        Directory.CreateDirectory(directory!);
+        Task task = new(() =>
+        {
+            // ensure the directory is made.
+            string? directory = Path.GetDirectoryName(this.Filename);
+            Directory.CreateDirectory(directory!);
 
-        using FileStream fs = new(filename, FileMode.OpenOrCreate);
-        image.Snapshot().Encode().SaveTo(fs);
+            using FileStream fs = new(this.Filename, FileMode.OpenOrCreate);
+            this.surface.Snapshot().Encode().SaveTo(fs);
+        });
+        task.Start();
+        this.tasks = [task];
     }
 
     private static unsafe void CopyToSkia(Color[] buffer, SKBitmap bitmap, int pixels)
@@ -248,5 +392,15 @@ internal sealed class CompleteScreenshotter : AbstractScreenshotter
         {
             Buffer.MemoryCopy(bufferPtr, ptr, pixels * 4, pixels * 4);
         }
+    }
+
+    private enum State
+    {
+        BeforeTakingMapScreenshot,
+        TakingMapScreenshot,
+        TransferToSkia,
+        WritingFile,
+        Complete,
+        Error,
     }
 }

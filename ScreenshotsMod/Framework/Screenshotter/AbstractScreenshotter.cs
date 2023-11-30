@@ -9,8 +9,6 @@ using AtraShared.Utils.Extensions;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using ScreenshotsMod.Framework.ModModels;
-
 using StardewModdingAPI.Events;
 
 namespace ScreenshotsMod.Framework.Screenshotter;
@@ -43,7 +41,7 @@ internal abstract class AbstractScreenshotter : IDisposable
     /// <param name="filename">The tokenized filename.</param>
     /// <param name="scale">The scale of the screenshot.</param>
     /// <param name="targetLocation">The target location.</param>
-    protected AbstractScreenshotter(IGameLoopEvents gameEvents, string name, string filename, float scale, GameLocation targetLocation)
+    protected AbstractScreenshotter(Farmer player, IGameLoopEvents gameEvents, string name, string filename, float scale, GameLocation targetLocation)
     {
         ModEntry.ModMonitor.DebugOnlyLog($"Attaching for: {name}");
         gameEvents.UpdateTicked += this.UpdateTicked;
@@ -52,6 +50,7 @@ internal abstract class AbstractScreenshotter : IDisposable
         this.Filename = FileNameParser.GetFilename(filename);
         this.Scale = scale;
         this.TargetLocation = targetLocation;
+        this.Player = player;
     }
 
     /// <summary>
@@ -67,12 +66,14 @@ internal abstract class AbstractScreenshotter : IDisposable
     /// <summary>
     /// Gets the scale.
     /// </summary>
-    protected float Scale { get; private set; }
+    protected float Scale { get; set; }
 
     /// <summary>
     /// Gets the location we're targetting with our screenshot.
     /// </summary>
     protected GameLocation TargetLocation { get; private set; }
+
+    protected Farmer Player { get; private set; }
 
     /// <summary>
     /// Gets whether or not this instance has been disposed.
@@ -102,6 +103,7 @@ internal abstract class AbstractScreenshotter : IDisposable
             this.Name = null!;
             this.Filename = null!;
             this.TargetLocation = null!;
+            this.Player = null!;
             this.disposedValue = true;
         }
     }
@@ -139,7 +141,7 @@ internal abstract class AbstractScreenshotter : IDisposable
         Game1.addHUDMessage(message);
         if (ModEntry.Config.AudioCue)
         {
-            Game1.playSound("camera");
+            Game1.playSound("cameraNoise");
         }
         if (ModEntry.Config.ScreenFlash)
         {

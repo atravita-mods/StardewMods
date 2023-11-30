@@ -28,8 +28,8 @@ internal sealed class SimplifiedScreenshotter : AbstractScreenshotter
     /// <param name="filename">The tokenized filename.</param>
     /// <param name="scale">The scale of the screenshot.</param>
     /// <param name="target">The target location.</param>
-    public SimplifiedScreenshotter(IGameLoopEvents gameEvents, string name, string filename, float scale, GameLocation target)
-        : base(gameEvents, name, filename, scale, target)
+    public SimplifiedScreenshotter(Farmer player, IGameLoopEvents gameEvents, string name, string filename, float scale, GameLocation target)
+        : base(player, gameEvents, name, filename, scale, target)
     {
     }
 
@@ -41,7 +41,7 @@ internal sealed class SimplifiedScreenshotter : AbstractScreenshotter
     /// </summary>
     internal void Tick()
     {
-        if (!ReferenceEquals(Game1.currentLocation, this.TargetLocation) || Game1.game1.takingMapScreenshot)
+        if (!ReferenceEquals(this.Player, Game1.player) || !ReferenceEquals(Game1.currentLocation, this.TargetLocation) || Game1.game1.takingMapScreenshot)
         {
             return;
         }

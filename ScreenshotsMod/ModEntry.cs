@@ -26,8 +26,9 @@ internal sealed class ModEntry : BaseMod<ModEntry>
     public override void Entry(IModHelper helper)
     {
         base.Entry(helper);
-        Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
+        I18n.Init(this.Helper.Translation);
 
+        Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
         helper.Events.Player.Warped += this.OnWarp;
         helper.Events.Input.ButtonPressed += this.OnButtonPressed;
         AbstractScreenshotter.Init();
@@ -35,7 +36,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
 
     private void OnButtonPressed(object? sender, ButtonPressedEventArgs e)
     {
-        if (!Context.IsWorldReady || Game1.currentLocation is null || !Config.KeyBind.JustPressed())
+        if (!Context.IsWorldReady || Game1.currentLocation is null || !Config.KeyBind.JustPressed() || Game1.game1.takingMapScreenshot)
         {
             return;
         }
@@ -46,7 +47,8 @@ internal sealed class ModEntry : BaseMod<ModEntry>
     private void OnWarp(object? sender, WarpedEventArgs e)
     {
         // it's possible for this event to be raised for a "false warp".
-        if (e.NewLocation is null || ReferenceEquals(e.NewLocation, e.OldLocation) || !e.IsLocalPlayer || e.NewLocation.IsTemporary)
+        if (e.NewLocation is null || ReferenceEquals(e.NewLocation, e.OldLocation) || !e.IsLocalPlayer
+            || (e.NewLocation.IsTemporary && Game1.CurrentEvent?.isFestival != true) || Game1.game1.takingMapScreenshot)
         {
             return;
         }
@@ -70,12 +72,31 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         xTile.Layers.Layer layer = location.Map.Layers[0];
         if (layer.LayerHeight > 32 || layer.LayerWidth > 32)
         {
-            CompleteScreenshotter completeScreenshotter = new CompleteScreenshotter(this.Helper.Events.GameLoop, name, filename, scale, location);
-            this.screenshotters.Value = completeScreenshotter;
+            CompleteScreenshotter completeScreenshotter = new(
+                Game1.player,
+                this.Helper.Events.GameLoop,
+                name,
+                filename,
+                scale,
+                location);
+            if (!completeScreenshotter.IsDisposed)
+            {
+                completeScreenshotter.Tick();
+            }
+            if (!completeScreenshotter.IsDisposed)
+            {
+                this.screenshotters.Value = completeScreenshotter;
+            }
         }
         else
         {
-            SimplifiedScreenshotter simple = new(this.Helper.Events.GameLoop, name, filename, scale, location);
+            SimplifiedScreenshotter simple = new(
+                Game1.player,
+                this.Helper.Events.GameLoop,
+                name,
+                filename,
+                scale,
+                location);
             simple.Tick();
             if (!simple.IsDisposed)
             {

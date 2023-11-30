@@ -29,7 +29,7 @@ public sealed class UserTrigger
 /// <summary>
 /// Represents an range in time (inclusive.)
 /// </summary>
-public sealed class TimeRange
+public sealed class TimeRange : IComparable<TimeRange>
 {
     private int startTime = 600;
     private int endTime = 2600;
@@ -51,6 +51,9 @@ public sealed class TimeRange
         get => this.endTime;
         set => this.endTime = Math.Clamp(value - (value % 10), 600, 2600);
     }
+
+    /// <inheritdoc/>
+    public int CompareTo(TimeRange? other) => this.StartTime - (other?.StartTime ?? 0);
 }
 
 /// <summary>

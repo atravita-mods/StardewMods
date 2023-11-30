@@ -112,6 +112,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
 
         // add event commands and preconditions.
         Event.RegisterCustomPrecondition("atravita_PlayerRelationship", PlayerRelationshipPreconditions.PlayerRelationshipStatus);
+        Event.RegisterCustomCommand("atravita_FacePlayer", FacePlayer.FacePlayerCommand);
 
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
 

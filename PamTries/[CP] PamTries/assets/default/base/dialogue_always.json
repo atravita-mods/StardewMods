@@ -33,7 +33,7 @@
         "Target": "Characters/Dialogue/Pam",
         "When":
         {
-            "Hearts:Penny": "0,1,2,3,4,5,6", 
+            "Hearts:Penny": "0,1,2,3,4,5,6",
             "Relationship:Penny": "Married"
         },
         "Entries":

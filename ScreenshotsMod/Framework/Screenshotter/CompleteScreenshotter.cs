@@ -170,7 +170,7 @@ internal sealed class CompleteScreenshotter : AbstractScreenshotter
 
     internal void Tick()
     {
-        if (!ReferenceEquals(this.Player, Game1.player) || !ReferenceEquals(Game1.currentLocation, this.TargetLocation) || Game1.game1.takingMapScreenshot)
+        if (this.CheckIfCantTick())
         {
             return;
         }

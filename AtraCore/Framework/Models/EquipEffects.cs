@@ -58,7 +58,7 @@ public sealed class EquipmentExtModel
     /// <summary>
     /// Gets or sets a list of the effects for this ring. Effects are checked in order.
     /// </summary>
-    public List<EquipEffects> Effects { get; set; } = new();
+    public List<EquipEffects> Effects { get; set; } = [];
 
     /// <summary>
     /// Gets or sets a value indicating whether this ring should be eligible for combining. 
@@ -226,7 +226,7 @@ public sealed class BuffModel : ObjectBuffAttributesData
         ParameterExpression effects = Expression.ParameterOf<BuffEffects>("effects");
         ParameterExpression model = Expression.ParameterOf<BuffModel>("model");
 
-        List<Expression> expressions = new();
+        List<Expression> expressions = [];
 
         foreach (FieldInfo field in typeof(BuffModel).GetFields())
         {
@@ -303,7 +303,7 @@ public sealed class BuffModel : ObjectBuffAttributesData
 
     private static readonly Lazy<Func<BuffModel, int>> _extraRows = new(() =>
     {
-        List<Expression> expressions = new();
+        List<Expression> expressions = [];
 
         ParameterExpression model = Expression.ParameterOf<BuffModel>("model");
         ParameterExpression rows = Expression.ParameterOf<int>("rows");
@@ -335,7 +335,7 @@ public sealed class BuffModel : ObjectBuffAttributesData
 
     private static readonly Lazy<Action<BuffModel, BuffModel>> _leftFold = new(() =>
     {
-        List<Expression> expressions = new();
+        List<Expression> expressions = [];
 
         ParameterExpression left = Expression.ParameterOf<BuffModel>("left");
         ParameterExpression right = Expression.ParameterOf<BuffModel>("right");

@@ -48,7 +48,7 @@ public sealed class ModConfig
     /// <summary>
     /// Gets or sets the scale of the image to use for a keybind screenshot.
     /// </summary>
-    [GMCMInterval(0.1)]
+    [GMCMInterval(0.25)]
     [GMCMRange(0.01, 1)]
     public float KeyBindScale
     {

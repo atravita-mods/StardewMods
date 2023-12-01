@@ -37,46 +37,49 @@ internal static class FileNameParser
     /// Gets the filename associated with a tokenized string.
     /// </summary>
     /// <param name="tokenized">Tokenized string.</param>
+    /// <param name="currentLocation">The location to use.</param>
     /// <returns>Filename (sanitized) (hopefully).</returns>
-    internal static string GetFilename(string tokenized)
-        => string.Join(
-            '_',
-            _parser.Replace(tokenized, MatchEvaluator).Split(Path.GetInvalidPathChars()));
-
-    private static string MatchEvaluator(Match match)
+    internal static string GetFilename(string tokenized, GameLocation currentLocation)
     {
-        ReadOnlySpan<char> token = match.Groups[1].ValueSpan.Trim();
+        // we must pass in the currentLocation because occasionally Game1.currentLocation is null in multiplayer when farmhands warp.
+        return string.Join(
+                '_',
+                _parser.Replace(tokenized, MatchEvaluator).Split(Path.GetInvalidPathChars()));
 
-        if (token.Length > 256)
+        string MatchEvaluator(Match match)
         {
-            ModEntry.ModMonitor.LogOnce($"Unrecognized token {token}", LogLevel.Warn);
-            return match.Value;
+            ReadOnlySpan<char> token = match.Groups[1].ValueSpan.Trim();
+
+            if (token.Length > 256)
+            {
+                ModEntry.ModMonitor.LogOnce($"Unrecognized token {token}", LogLevel.Warn);
+                return match.Value;
+            }
+
+            // SAFETY: length was checked earlier, caps to 256
+            Span<char> loweredToken = stackalloc char[token.Length + 10];
+            int copiedCount = token.ToLowerInvariant(loweredToken);
+            if (copiedCount < 0)
+            {
+                ModEntry.ModMonitor.LogOnce($"Unable to lowercase token {token}", LogLevel.Warn);
+                return match.Value;
+            }
+
+            loweredToken = loweredToken[..copiedCount];
+
+            return loweredToken switch
+            {
+                "default" => Game1.game1.GetScreenshotFolder(false),
+                "location" => currentLocation.NameOrUniqueName,
+                "save" => $"{Game1.player.farmName.Value}_{Game1.uniqueIDForThisGame}",
+                "farm" => Game1.player.farmName.Value,
+                "name" => Game1.player.Name,
+                "date" => $"{Game1.year:D2}_{Game1.seasonIndex + 1:D2}_{Game1.dayOfMonth:D2}", // year_month_day for sorting
+                "weather" => currentLocation.GetWeather().Weather,
+                "time" => $"{Game1.timeOfDay:D4}",
+                "timestamp" => $"{DateTime.Now:yyyy.MM.dd HH-mm-ss}",
+                _ => match.Value,
+            };
         }
-
-        // SAFETY: length was checked earlier, caps to 256
-        Span<char> loweredToken = stackalloc char[token.Length + 10];
-        int copiedCount = token.ToLowerInvariant(loweredToken);
-        if (copiedCount < 0)
-        {
-            ModEntry.ModMonitor.LogOnce($"Unable to lowercase token {token}", LogLevel.Warn);
-            return match.Value;
-        }
-
-        loweredToken = loweredToken[..copiedCount];
-
-        GameLocation currentLocation = Game1.currentLocation;
-        return loweredToken switch
-        {
-            "default" => Game1.game1.GetScreenshotFolder(false),
-            "location" => currentLocation.NameOrUniqueName,
-            "save" => $"{Game1.player.farmName.Value}_{Game1.uniqueIDForThisGame}",
-            "farm" => Game1.player.farmName.Value,
-            "name" => Game1.player.Name,
-            "date" => $"{Game1.year:D2}_{Game1.seasonIndex + 1:D2}_{Game1.dayOfMonth:D2}", // year_month_day for sorting
-            "weather" => currentLocation.GetWeather().Weather,
-            "time" => $"{Game1.timeOfDay:D4}",
-            "timestamp" => $"{DateTime.Now:yyyy.MM.dd HH-mm-ss}",
-            _ => match.Value,
-        };
     }
 }

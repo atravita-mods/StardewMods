@@ -9,7 +9,7 @@
     <Name>Screenshot Mod</Name>
     <Authors>atravita</Authors>
     <Description>Automated Screenshots</Description>
-    <Version>0.0.1</Version>
+    <Version>0.1.0</Version>
     <UpdateKeys>-1</UpdateKeys>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
   </PropertyGroup>

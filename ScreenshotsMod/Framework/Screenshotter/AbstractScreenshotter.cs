@@ -35,6 +35,9 @@ internal abstract class AbstractScreenshotter : IDisposable
     // event handlers
     private IGameLoopEvents gameEvents;
 
+    // Both players in splitscreen get ticks, check to make sure it's the right one.
+    private Farmer player;
+
     /// <summary>
     /// Initializes a new instance of the <see cref="AbstractScreenshotter"/> class.
     /// </summary>
@@ -49,10 +52,10 @@ internal abstract class AbstractScreenshotter : IDisposable
         gameEvents.UpdateTicked += this.UpdateTicked;
         this.gameEvents = gameEvents;
         this.Name = name;
-        this.Filename = FileNameParser.GetFilename(filename);
+        this.Filename = FileNameParser.GetFilename(filename, targetLocation);
         this.Scale = scale;
         this.TargetLocation = targetLocation;
-        this.Player = player;
+        this.player = player;
     }
 
     /// <summary>
@@ -68,14 +71,12 @@ internal abstract class AbstractScreenshotter : IDisposable
     /// <summary>
     /// Gets the scale.
     /// </summary>
-    protected float Scale { get; set; }
+    protected float Scale { get; init; }
 
     /// <summary>
     /// Gets the location we're targetting with our screenshot.
     /// </summary>
     protected GameLocation TargetLocation { get; private set; }
-
-    protected Farmer Player { get; private set; }
 
     /// <summary>
     /// Gets whether or not this instance has been disposed.
@@ -106,7 +107,7 @@ internal abstract class AbstractScreenshotter : IDisposable
             this.Name = null!;
             this.Filename = null!;
             this.TargetLocation = null!;
-            this.Player = null!;
+            this.player = null!;
             this.disposedValue = true;
         }
     }
@@ -155,6 +156,7 @@ internal abstract class AbstractScreenshotter : IDisposable
     /// <summary>
     /// Calculates the bounds for the screenshot, in pixels.
     /// </summary>
+    /// <param name="location">The location to calcuate bounds for.</param>
     /// <returns>The bounds, in pixels.</returns>
     protected static (int start_x, int start_y, int width, int height) CalculateBounds(GameLocation location)
     {
@@ -183,4 +185,10 @@ internal abstract class AbstractScreenshotter : IDisposable
 
         return (start_x, start_y, width, height);
     }
+
+    /// <summary>
+    /// Checks if it's safe for us to do stuff on the main thread.
+    /// </summary>
+    /// <returns>True if it's safe, false if we should ignore this tick.</returns>
+    protected bool CheckIfCantTick() => !ReferenceEquals(this.player, Game1.player) || !ReferenceEquals(Game1.currentLocation, this.TargetLocation) || Game1.game1.takingMapScreenshot;
 }

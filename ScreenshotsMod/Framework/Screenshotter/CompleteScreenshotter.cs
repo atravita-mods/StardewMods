@@ -3,7 +3,6 @@
 #define TRACELOG // enables timing information.
 #define DETAIL_TIMING
 
-using System.Buffers;
 using System.Collections.Concurrent;
 using System.Diagnostics;
 
@@ -42,11 +41,35 @@ namespace ScreenshotsMod.Framework.Screenshotter;
 internal sealed class CompleteScreenshotter : AbstractScreenshotter
 {
     // state constants. Grumbles.
-    private const int BeforeTakingMapScreenshot = 0;
+
+    /// <summary>
+    /// Initial state, set in constructor.
+    /// </summary>
+    private const int BeforeTakingMapScreenshot = 0; // initial state
+
+    /// <summary>
+    /// Set when the map screenshot starts.
+    /// </summary>
     private const int TakingMapScreenshot = 1;
+
+    /// <summary>
+    /// Set when the map screenshot finishes, waiting for the queue to finish up.
+    /// </summary>
     private const int TransferToSkia = 2;
+
+    /// <summary>
+    /// Set by the handle-skia queue after is fully done.
+    /// </summary>
     private const int WritingFile = 3;
+
+    /// <summary>
+    /// Set when the write task is finished.
+    /// </summary>
     private const int Complete = 4;
+
+    /// <summary>
+    /// Can be set by literally anyone if something goes wrong.
+    /// </summary>
     private const int Error = 5;
 
 #if TRACELOG
@@ -161,14 +184,11 @@ internal sealed class CompleteScreenshotter : AbstractScreenshotter
             {
                 case BeforeTakingMapScreenshot:
                     Volatile.Write(ref this.state, TakingMapScreenshot);
+
                     this.TakeScreenshot();
 #if TRACELOG
                     ModEntry.ModMonitor.LogTimespan("initializing full screenshot", this.watch);
 #endif
-                    Volatile.Write(ref this.state, TransferToSkia);
-                    Thread t = new(this.HandleSkiaTransfers); // will start the WritingFile task when it's done.
-                    t.Start();
-                    this.DisplayHud();
                     break;
                 case WritingFile:
                 {
@@ -212,18 +232,29 @@ internal sealed class CompleteScreenshotter : AbstractScreenshotter
         {
             this.surface?.Dispose();
             this.surface = null!;
+            if (this.queue is { } q)
+            {
+                foreach ((SKBitmap bitmap, SKRect _) in q)
+                {
+                    bitmap.Dispose();
+                }
+            }
+
             this.queue = null!;
             this.writeFileTask = null!;
+
         }
         base.Dispose(disposing);
     }
 
     /// <summary>
     /// Takes the screenshot.
-    /// As of this point, we are fully sync still.
+    /// This process needs to happen on the UI thread.
     /// </summary>
     private void TakeScreenshot()
     {
+        Threading.EnsureUIThread();
+
         // the game's screenshots work by rendering the map, in chunks, to a render target
         // and then stitching it all together via SkiaSharp.
         // derived from Game1.takeMapScreenshot
@@ -239,27 +270,23 @@ internal sealed class CompleteScreenshotter : AbstractScreenshotter
         RenderTarget2D? cached_lightmap = _lightMapGetter();
         _lightMapSetter(null);
 
-        Color[]? buffer = null;
         RenderTarget2D? render_target = null;
         RenderTarget2D? scaled_render_target = null;
-
-        bool needs_scaling = this.Scale != 1f;
-
         try
         {
             _allocateLightMap(chunk_size, chunk_size);
             int chunks_wide = (int)Math.Ceiling(this.scaledWidth / (float)scaled_chunk_size);
             int chunks_high = (int)Math.Ceiling(this.scaledHeight / (float)scaled_chunk_size);
 
-            // hoisted buffers. Will note that the ArrayPool here is only going to be used for small scales. Still worth it.
-            buffer = ArrayPool<Color>.Shared.Rent(scaled_chunk_size * scaled_chunk_size);
             render_target = new(Game1.graphics.GraphicsDevice, chunk_size, chunk_size, mipMap: false, SurfaceFormat.Color, DepthFormat.None, 0, RenderTargetUsage.DiscardContents);
-
-            if (needs_scaling)
+            if (this.Scale != 1f)
             {
                 ModEntry.ModMonitor.TraceOnlyLog($"Scaling requested, creating scaled render target", LogLevel.Info);
                 scaled_render_target = new(Game1.graphics.GraphicsDevice, scaled_chunk_size, scaled_chunk_size, mipMap: false, SurfaceFormat.Color, DepthFormat.None, 0, RenderTargetUsage.DiscardContents);
             }
+
+            // okay, safe to start the skia transfers now.
+            new Thread(this.HandleSkiaTransfers).Start();
 
             for (int dy = 0; dy < chunks_high; dy++)
             {
@@ -279,16 +306,36 @@ internal sealed class CompleteScreenshotter : AbstractScreenshotter
                     Stopwatch render = Stopwatch.StartNew();
 #endif
 
+                    ModEntry.ModMonitor.TraceOnlyLog($"Begin render for {current_x}x{current_y}");
+
                     XRectangle window = new((dx * chunk_size) + this.startX, (dy * chunk_size) + this.startY, chunk_size, chunk_size);
                     Game1.viewport = window;
                     _draw(Game1.game1, Game1.currentGameTime, render_target);
 
                     RenderTarget2D target;
 
-                    // if necessary, re-render to scale.
-                    if (needs_scaling)
+                    bool dispose_target = false;
+
+                    // if necessary, re-render to scale. We'll re-render to a correct sized texture because it's much faster to pull the image info from.
+
+                    // no rescaling needed.
+                    if (current_height == chunk_size && current_width == chunk_size)
                     {
-                        Game1.game1.GraphicsDevice.SetRenderTarget(scaled_render_target);
+                        target = render_target;
+                    }
+                    else
+                    {
+                        if (current_height != scaled_chunk_size || current_width != scaled_chunk_size)
+                        {
+                            target = new(Game1.graphics.GraphicsDevice, current_width, current_height, mipMap: false, SurfaceFormat.Color, DepthFormat.None, 0, RenderTargetUsage.DiscardContents);
+                            dispose_target = true;
+                        }
+                        else
+                        {
+                            target = scaled_render_target!;
+                        }
+
+                        Game1.game1.GraphicsDevice.SetRenderTarget(target);
                         Game1.spriteBatch.Begin(
                             sortMode: SpriteSortMode.Deferred,
                             blendState: BlendState.Opaque,
@@ -307,15 +354,10 @@ internal sealed class CompleteScreenshotter : AbstractScreenshotter
                             layerDepth: 1f);
                         Game1.spriteBatch.End();
                         Game1.game1.GraphicsDevice.SetRenderTarget(null);
-                        target = scaled_render_target!;
-                    }
-                    else
-                    {
-                        target = render_target;
                     }
 
 #if DETAIL_TIMING
-                    ModEntry.ModMonitor.LogTimespan("rendering", render);
+                    ModEntry.ModMonitor.LogTimespan($"rendering for {current_x}x{current_y}", render);
 #endif
 
 #if DETAIL_TIMING
@@ -323,14 +365,25 @@ internal sealed class CompleteScreenshotter : AbstractScreenshotter
 #endif
 
                     SKBitmap portion_bitmap = new(current_width, current_height, SKColorType.Rgb888x, SKAlphaType.Opaque);
-                    CopyTextureToSkia(target, portion_bitmap, buffer);
+                    CopyTextureToSkia(target, portion_bitmap);
+
+                    if (dispose_target)
+                    {
+                        target.Dispose();
+                    }
 
 #if DETAIL_TIMING
-                    ModEntry.ModMonitor.LogTimespan("get data", getData);
+                    ModEntry.ModMonitor.LogTimespan($"get data for {current_x}x{current_y}", getData);
 #endif
                     portion_bitmap.SetImmutable();
                     this.queue.Add((portion_bitmap, SKRect.Create(current_x, current_y, current_width, current_height)));
                 }
+            }
+
+            // if this was changed on us, the screenshot was unsuccessful.
+            if (Interlocked.CompareExchange(ref this.state, TransferToSkia, TakingMapScreenshot) == TakingMapScreenshot)
+            {
+                this.DisplayHud();
             }
 
             return;
@@ -353,11 +406,6 @@ internal sealed class CompleteScreenshotter : AbstractScreenshotter
             render_target?.Dispose();
             scaled_render_target?.Dispose();
 
-            if (buffer is not null)
-            {
-                ArrayPool<Color>.Shared.Return(buffer);
-            }
-
             _lightMapSetter(cached_lightmap);
             Game1.options.baseZoomLevel = old_zoom_level;
             Game1.game1.takingMapScreenshot = false;
@@ -366,31 +414,67 @@ internal sealed class CompleteScreenshotter : AbstractScreenshotter
         }
     }
 
+    /// <summary>
+    /// Currently, this is started when the screenshot method finishes setup.
+    /// Will call the screenshot write to file when it's done.
+    /// </summary>
     private void HandleSkiaTransfers()
     {
         try
         {
-            while (Volatile.Read(ref this.state) != TransferToSkia)
+            Thread.Sleep(50);
+
+            while (Volatile.Read(ref this.state) == BeforeTakingMapScreenshot)
             {
-#if TRACELOG
-                ModEntry.ModMonitor.Log($"waiting for Transfer to start");
-#endif
+                ModEntry.ModMonitor.TraceOnlyLog($"waiting for screenshot to start");
                 Thread.Sleep(100);
             }
 
 #if TRACELOG
-            Stopwatch watch = Stopwatch.StartNew();
+            Stopwatch watch = new();
 #endif
 
-            // all my work is queued. Let's start processing.
-            while (this.queue.TryTake(out (SKBitmap bitmap, SKRect rect) pair))
+            while (true)
             {
-                SKBitmap bitmap = pair.bitmap;
-                SKRect rect = pair.rect;
+                // something has gone wrong somewhere...
+                switch (Volatile.Read(ref this.state))
+                {
+                    case Error:
+                        return;
+                    case Complete:
+                    {
+                        ThrowHelper.ThrowInvalidOperationException();
+                        return;
+                    }
+                }
 
-                ModEntry.ModMonitor.TraceOnlyLog($"Processing for {rect.Top}x{rect.Left} (size {rect.Height}x{rect.Width}).", LogLevel.Debug);
-                this.surface.Canvas.DrawBitmap(bitmap, rect);
-                bitmap.Dispose();
+#if TRACELOG
+                watch.Start();
+#endif
+
+                ModEntry.ModMonitor.TraceOnlyLog($"Attempting to grab work.");
+                while (this.queue?.TryTake(out (SKBitmap bitmap, SKRect rect) pair) == true)
+                {
+                    SKBitmap bitmap = pair.bitmap;
+                    SKRect rect = pair.rect;
+
+                    ModEntry.ModMonitor.TraceOnlyLog($"Processing for {rect.Top}x{rect.Left} (size {rect.Height}x{rect.Width}).", LogLevel.Debug);
+                    this.surface.Canvas.DrawBitmap(bitmap, rect);
+                    bitmap.Dispose();
+                }
+
+#if TRACELOG
+                watch.Stop();
+#endif
+
+                // no more to process.
+                if (Volatile.Read(ref this.state) == TransferToSkia && this.queue?.IsEmpty != false)
+                {
+                    break;
+                }
+
+                ModEntry.ModMonitor.TraceOnlyLog($"snoozing");
+                Thread.Sleep(100);
             }
 
 #if TRACELOG
@@ -402,6 +486,7 @@ internal sealed class CompleteScreenshotter : AbstractScreenshotter
             ModEntry.ModMonitor.LogError("transferring to skia", ex);
             Volatile.Write(ref this.state, Error);
             this.Dispose();
+            return;
         }
 
         Volatile.Write(ref this.state, WritingFile);
@@ -416,7 +501,10 @@ internal sealed class CompleteScreenshotter : AbstractScreenshotter
 
             // ensure the directory is made.
             string? directory = Path.GetDirectoryName(this.Filename);
-            Directory.CreateDirectory(directory!);
+            if (!string.IsNullOrEmpty(directory))
+            {
+                Directory.CreateDirectory(directory);
+            }
 
             using FileStream fs = new(this.Filename, FileMode.OpenOrCreate);
             this.surface.Snapshot().Encode().SaveTo(fs);
@@ -424,16 +512,12 @@ internal sealed class CompleteScreenshotter : AbstractScreenshotter
         this.writeFileTask.Start();
     }
 
-    private static unsafe void CopyToSkia(Color[] buffer, SKBitmap bitmap, int pixels)
-    {
-        uint* ptr = (uint*)bitmap.GetPixels().ToPointer();
-        fixed (Color* bufferPtr = buffer)
-        {
-            Buffer.MemoryCopy(bufferPtr, ptr, pixels * 4, pixels * 4);
-        }
-    }
-
-    private static unsafe void CopyTextureToSkia(RenderTarget2D texture, SKBitmap bitmap, Color[] buffer)
+    /// <summary>
+    /// Given a texture the same size as an SKBitmap, transfers the data out of the texture into the bitmap.
+    /// </summary>
+    /// <param name="texture">The texture.</param>
+    /// <param name="bitmap">The bitmap.</param>
+    private static void CopyTextureToSkia(RenderTarget2D texture, SKBitmap bitmap)
     {
         const int colorSize = sizeof(uint); // Color is secretly a uint.
 
@@ -443,36 +527,15 @@ internal sealed class CompleteScreenshotter : AbstractScreenshotter
         // ensure a valid level.
         Guard.IsGreaterThan(texture.LevelCount, 0);
 
-        // ensure that if I do need to use the buffer, it's big enough.
-        Guard.IsGreaterThanOrEqualTo(buffer.Length, texture.ArraySize);
-
-        // ensure my texture the same size or bigger than my bitmap.
-        Guard.IsGreaterThanOrEqualTo(texture.Height, bitmap.Height);
-        Guard.IsGreaterThanOrEqualTo(texture.Width, bitmap.Width);
+        // ensure my texture is the same size as the bitmap
+        Guard.IsEqualTo(texture.Height, bitmap.Height);
+        Guard.IsEqualTo(texture.Width, bitmap.Width);
         Guard.IsEqualTo(texture.Format.GetSize(), colorSize);
         Guard.IsNotEqualTo((int)texture.glFormat, (int)PixelFormat.CompressedTextureFormats);
 
         GL.BindTexture(TextureTarget.Texture2D, texture.glTexture);
         GL.PixelStore(PixelStoreParameter.PackAlignment, colorSize);
 
-        if (bitmap.Width == texture.Width && bitmap.Height == texture.Height)
-        {
-            GL.GetTexImageInternal(TextureTarget.Texture2D, 0, texture.glFormat, texture.glType, bitmap.GetPixels());
-        }
-        else
-        {
-            GL.GetTexImage(TextureTarget.Texture2D, 0, texture.glFormat, texture.glType, buffer);
-            int rowCount = bitmap.Height;
-            int widthBytes = bitmap.Width * 4;
-
-            uint* ptr = (uint*)bitmap.GetPixels().ToPointer();
-            fixed (Color* bufferPtr = buffer)
-            {
-                for (int dy = 0; dy < rowCount; dy++)
-                {
-                    Buffer.MemoryCopy(bufferPtr + (dy * texture.Width), ptr + (dy * bitmap.Width), widthBytes, widthBytes);
-                }
-            }
-        }
+        GL.GetTexImageInternal(TextureTarget.Texture2D, 0, texture.glFormat, texture.glType, bitmap.GetPixels());
     }
 }

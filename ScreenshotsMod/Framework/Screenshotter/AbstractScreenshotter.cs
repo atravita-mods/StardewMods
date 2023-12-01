@@ -99,9 +99,10 @@ internal abstract class AbstractScreenshotter : IDisposable
     {
         if (!this.disposedValue)
         {
-            ModEntry.ModMonitor.DebugOnlyLog($"Disposing for {this.Name}.");
+            ModEntry.ModMonitor.TraceOnlyLog($"Disposing for {this.Name}.");
             this.gameEvents.UpdateTicked -= this.UpdateTicked;
             this.gameEvents = null!;
+
             this.Name = null!;
             this.Filename = null!;
             this.TargetLocation = null!;

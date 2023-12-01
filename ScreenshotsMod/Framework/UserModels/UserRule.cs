@@ -33,6 +33,11 @@ public sealed class UserRule
     public float Scale { get; set; } = 0.25f;
 
     /// <summary>
+    /// Gets or sets a value indicating whether or not the screenshot should wait until events are over.
+    /// </summary>
+    public bool DuringEvents { get; set; } = true;
+
+    /// <summary>
     /// Initializes a new instance of the <see cref="UserRule"/> class.
     /// </summary>
     public UserRule()

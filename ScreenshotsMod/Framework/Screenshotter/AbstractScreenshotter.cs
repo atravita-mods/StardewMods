@@ -37,6 +37,7 @@ internal abstract class AbstractScreenshotter : IDisposable
 
     // Both players in splitscreen get ticks, check to make sure it's the right one.
     private Farmer player;
+    private bool duringEvent;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="AbstractScreenshotter"/> class.
@@ -46,16 +47,17 @@ internal abstract class AbstractScreenshotter : IDisposable
     /// <param name="filename">The tokenized filename.</param>
     /// <param name="scale">The scale of the screenshot.</param>
     /// <param name="targetLocation">The target location.</param>
-    protected AbstractScreenshotter(Farmer player, IGameLoopEvents gameEvents, string name, string filename, float scale, GameLocation targetLocation)
+    protected AbstractScreenshotter(Farmer player, IGameLoopEvents gameEvents, string name, string filename, float scale, bool duringEvent, GameLocation targetLocation)
     {
         ModEntry.ModMonitor.DebugOnlyLog($"Attaching for: {name}");
         gameEvents.UpdateTicked += this.UpdateTicked;
         this.gameEvents = gameEvents;
         this.Name = name;
-        this.Filename = FileNameParser.GetFilename(filename, targetLocation);
+        this.Filename = FileNameParser.GetFilename(filename, targetLocation, name);
         this.Scale = scale;
         this.TargetLocation = targetLocation;
         this.player = player;
+        this.duringEvent = duringEvent;
     }
 
     /// <summary>
@@ -190,5 +192,6 @@ internal abstract class AbstractScreenshotter : IDisposable
     /// Checks if it's safe for us to do stuff on the main thread.
     /// </summary>
     /// <returns>True if it's safe, false if we should ignore this tick.</returns>
-    protected bool CheckIfCantTick() => !ReferenceEquals(this.player, Game1.player) || !ReferenceEquals(Game1.currentLocation, this.TargetLocation) || Game1.game1.takingMapScreenshot;
+    protected bool CheckIfCantTick() => !ReferenceEquals(this.player, Game1.player) || !ReferenceEquals(Game1.currentLocation, this.TargetLocation)
+                                            || Game1.game1.takingMapScreenshot || (!this.duringEvent && Game1.CurrentEvent?.isFestival != false);
 }

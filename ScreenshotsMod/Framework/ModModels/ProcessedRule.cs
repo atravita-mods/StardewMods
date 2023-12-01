@@ -7,7 +7,7 @@
 /// <param name="path">The path the rule corresponds to.</param>
 /// <param name="scale">The scale to use.</param>
 /// <param name="triggers">A list of processed triggers.</param>
-internal sealed class ProcessedRule(string name, string path, float scale, ProcessedTrigger[] triggers)
+internal sealed class ProcessedRule(string name, string path, float scale, bool duringEvents, ProcessedTrigger[] triggers)
 {
     private bool triggered = false;
 
@@ -25,6 +25,11 @@ internal sealed class ProcessedRule(string name, string path, float scale, Proce
     /// Gets the tokenized path this screenshot should be saved at.
     /// </summary>
     internal string Path => path;
+
+    /// <summary>
+    /// Gets or sets a value indicating whether or not this rule should wait for an event to be over.
+    /// </summary>
+    internal bool DuringEvents => duringEvents;
 
     internal void Reset() => this.triggered = false;
 

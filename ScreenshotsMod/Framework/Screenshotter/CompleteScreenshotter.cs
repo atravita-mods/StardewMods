@@ -99,8 +99,8 @@ internal sealed class CompleteScreenshotter : AbstractScreenshotter
     /// <param name="scale">The scale of the screenshot.</param>
     /// <param name="target">The target location.</param>
     /// <remarks>Note that if there's an issue with construction, it will immediately dispose itself.</remarks>
-    public CompleteScreenshotter(Farmer player, IGameLoopEvents gameEvents, string name, string filename, float scale, GameLocation target)
-        : base(player, gameEvents, name, filename, scale, target)
+    public CompleteScreenshotter(Farmer player, IGameLoopEvents gameEvents, string name, string filename, float scale, bool duringEvent, GameLocation target)
+        : base(player, gameEvents, name, filename, scale, duringEvent, target)
     {
 #if TRACELOG
         Stopwatch sw = Stopwatch.StartNew();

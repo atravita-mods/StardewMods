@@ -56,7 +56,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
             return;
         }
 
-        this.TakeScreenshotImpl(Game1.currentLocation, "keybind", Config.KeyBindFileName, Config.KeyBindScale);
+        this.TakeScreenshotImpl(Game1.currentLocation, "keybind", Config.KeyBindFileName, Config.KeyBindScale, true);
     }
 
     private void OnDayStart(object? sender, DayStartedEventArgs e)
@@ -104,7 +104,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         {
             if (rule.Trigger(location, today, Game1.timeOfDay))
             {
-                this.TakeScreenshotImpl(location, rule.Name, rule.Path, rule.Scale);
+                this.TakeScreenshotImpl(location, rule.Name, rule.Path, rule.Scale, rule.DuringEvents);
                 break;
             }
         }
@@ -126,7 +126,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         }
     }
 
-    private void TakeScreenshotImpl(GameLocation location, string name, string filename, float scale)
+    private void TakeScreenshotImpl(GameLocation location, string name, string filename, float scale, bool duringEvent)
     {
         if (this.screenshotters.Value is { } prev)
         {
@@ -149,6 +149,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
             name,
             filename,
             scale,
+            duringEvent,
             location);
         if (!completeScreenshotter.IsDisposed)
         {
@@ -203,7 +204,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
                 continue;
             }
 
-            ProcessedRule newRule = new(name, rule.Path, rule.Scale, [.. processedTriggers]);
+            ProcessedRule newRule = new(name, rule.Path, rule.Scale, rule.DuringEvents, [.. processedTriggers]);
             foreach (string map in rule.Maps)
             {
                 var m = map.Trim();

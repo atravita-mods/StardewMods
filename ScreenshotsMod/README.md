@@ -43,6 +43,7 @@ These are the valid tokens:
 | `Weather` | The in-game weather conditions.
 | `Time`| The current game time (in military time.)
 | `Timestamp`| The current real-life time.
+| `Rule` | The name of the rule.
 
 *Any other values will be left unchanged. Paths MUST end with .png, or else that will be added for you.*
 

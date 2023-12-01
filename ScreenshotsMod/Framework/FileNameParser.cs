@@ -38,8 +38,9 @@ internal static class FileNameParser
     /// </summary>
     /// <param name="tokenized">Tokenized string.</param>
     /// <param name="currentLocation">The location to use.</param>
+    /// <param name="ruleName">The name of the rule.</param>
     /// <returns>Filename (sanitized) (hopefully).</returns>
-    internal static string GetFilename(string tokenized, GameLocation currentLocation)
+    internal static string GetFilename(string tokenized, GameLocation currentLocation, string ruleName)
     {
         // we must pass in the currentLocation because occasionally Game1.currentLocation is null in multiplayer when farmhands warp.
         return string.Join(
@@ -78,6 +79,7 @@ internal static class FileNameParser
                 "weather" => currentLocation.GetWeather().Weather,
                 "time" => $"{Game1.timeOfDay:D4}",
                 "timestamp" => $"{DateTime.Now:yyyy.MM.dd HH-mm-ss}",
+                "rule" => ruleName,
                 _ => match.Value,
             };
         }

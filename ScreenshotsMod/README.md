@@ -64,7 +64,7 @@ Triggers are ONLY checked at the start of the day and when you warp from map to 
 Valid trigger options
 
 | Option | Usage | Example
-|--------------------------------------
+| --------------------------------------
 | `Seasons` | A list of valid seasons, or `"Any"` for any season. Case insensitive. | `["Spring", "Summer"]` to only take pictures in Spring or Summer.
 | `Days` | The valid day *ranges* for this trigger. This may be formated as: <ol><li>An exact day (like `"5"`).<li>A range (ie `"1-5"` for days 1- 5). May be left half open (ie `"-6"` for days 1-6).<li>A day of the week (case insensitive, ie `"Monday"`)<li>The exact word `"Any"` for any day.</ol> | <ul><li> `["Any"]` for any day. <li> `["Monday", "Tuesday"]` for Mondays and Tuesdays. <li> `["1-7"]` for the first seven days of a month.</ul>
 | `Time` | A list of time ranges (both inclusive). | <ul><li>```[ { "StartTime": 600, "EndTime": 2600 } ]``` for the entire day. <li>```[ { "StartTime": 600, "EndTime": 1000 },{ "StartTime": 2200, "EndTime": 2600 }  ]```</ul> for mornings from 6AM to 10AM, then evenings from 10PM to 2AM. This is in military time!

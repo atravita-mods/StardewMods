@@ -103,7 +103,8 @@ A full example of a rule is as follows
       ],
 
       // The path to save to is tokenized (see above!)
-      // In this case, we want to save in the default screenshot directory, in a directory for this save, then a directory per location, then name each file based on the in-game date.
+      // In this case, we want to save in the default screenshot directory, in a directory for this save,
+      // then a directory per location, then name each file based on the in-game date.
       "Path": "{{Default}}\\{{Save}}\\{{Location}}\\{{Date}}.png",
 
       // The scale to use for this rule.
@@ -125,7 +126,7 @@ The way the screenshot method of the game works is roughly this:
 * Transfer the data from the SkiaSharp bitmap to a SkiaSharp canvas.
 * Save the SkiaSharp canvas to disk.
 
-Which worked fine! Except, it's kinda slow. Now, normally in game, you don't notice, because for the game, the only way you can take a screenshot is in a menu. Sure, your splitscreen partner might be annoyed, but you don't care.
+Which worked fine! Except, slow, and I was getting tired of the game locking up when walking out to my farm first thing in the morning. Now, normally in game, you don't notice, because for the game, the only way you can take a screenshot is in a menu. Sure, your splitscreen partner might be annoyed, but you don't care.
 
 This is different if there's a mod calling that function. In which case, well. It suddenly appears like the game is locking up. So let's see what we can do about that.
 
@@ -193,6 +194,7 @@ I still don't recommend trying to take full scale (`scale = 1`) pictures of larg
 ## FAQ:
 * **Why is there (some random other mod's UI element) repeated over my map?** Because they forgot to disable drawing that during screenshots. Nothing I can do, tell them to not draw if `Game1.game1.takingMapScreenshot` is true.
 * **Huh, I can see stitching lines in the screenshot.** I recommend setting the scale to `0.25`, `0.50`, `0.75`, or `1`. Any other value may cause stitching artifacts.
+* **Why not reuse the SKBitmaps?** Because it doesn't actually matter. Skia will make a defensive copy to copy to the `SKCanvas` unless I specify it's immutable, in which case I can't reuse it.
 * **What next?** I'd love to override the game's ambience to get more consistent screenshots, but so far haven't figured that one out.
 
 ## Compatibility

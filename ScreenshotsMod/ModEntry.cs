@@ -100,7 +100,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         if (this._rules.TryGetValue(location.Name, out var rules))
         {
             PackedDay today = new();
-            foreach (var rule in rules)
+            foreach (ProcessedRule rule in rules)
             {
                 if (rule.Trigger(location, today, Game1.timeOfDay))
                 {
@@ -173,6 +173,8 @@ internal sealed class ModEntry : BaseMod<ModEntry>
                     continue;
                 }
 
+                TimeRange[] times = this.FoldTimes(proposedTrigger.Time);
+
                 ProcessedTrigger newTrigger = new(packed.Value, proposedTrigger.Time, proposedTrigger.Weather);
                 processedTriggers.Add(newTrigger);
 
@@ -185,7 +187,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
                 continue;
             }
 
-            ProcessedRule newRule = new(name, rule.Path, rule.Scale, processedTriggers.ToArray());
+            ProcessedRule newRule = new(name, rule.Path, rule.Scale, [.. processedTriggers]);
             foreach (string map in rule.Maps)
             {
                 if (!this._rules.TryGetValue(map, out List<ProcessedRule>? prev))
@@ -195,6 +197,51 @@ internal sealed class ModEntry : BaseMod<ModEntry>
                 prev.Add(newRule);
             }
         }
+    }
+
+    private TimeRange[] FoldTimes(TimeRange[] time)
+    {
+        if (time.Length is 0 or 1)
+        {
+            return time;
+        }
+
+        Array.Sort(time);
+
+        bool nonoverlap = true;
+        for (int i = 1; i < time.Length; i++)
+        {
+            var first = time[i - 1];
+            var second = time[i];
+            if (first.EndTime >= second.StartTime)
+            {
+                nonoverlap = false;
+                break;
+            }
+        }
+
+        if (nonoverlap)
+        {
+            return time;
+        }
+
+        List<TimeRange>? proposed = [];
+        TimeRange prev = time[0];
+        for (int i = 1; i < time.Length; i++)
+        {
+            var current = time[i];
+            if (current.StartTime <= prev.EndTime)
+            {
+                prev = new(prev.StartTime, Math.Max(prev.EndTime, current.EndTime));
+            }
+            else
+            {
+                proposed.Add(prev);
+                prev = current;
+            }
+        }
+        proposed.Add(prev);
+        return [.. proposed];
     }
 
     private void Reset(object? sender, DayEndingEventArgs e)

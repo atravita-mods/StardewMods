@@ -15,7 +15,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="i18n\default.json" />
+    <Publicize Include="MonoGame.Framework" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <PackageReference Include="Krafs.Publicizer" Version="2.2.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>

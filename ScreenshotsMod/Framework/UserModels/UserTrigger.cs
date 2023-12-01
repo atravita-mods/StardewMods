@@ -34,6 +34,14 @@ public sealed class TimeRange : IComparable<TimeRange>
     private int startTime = 600;
     private int endTime = 2600;
 
+    public TimeRange() { }
+
+    public TimeRange(int startTime, int endTime)
+    {
+        this.StartTime = startTime;
+        this.EndTime = endTime;
+    }
+
     /// <summary>
     /// Gets or sets the start time.
     /// </summary>

@@ -30,6 +30,8 @@ namespace ScreenshotsMod.Framework.Screenshotter;
 * - The task is polled repeatedly. When that completes, the entire class is disposed.
 ******************/
 
+// we may be able to do better by rewriting Texture2d.GetData.
+
 /// <summary>
 /// The complex, skia-knitting screenshot.
 /// </summary>
@@ -319,7 +321,8 @@ internal sealed class CompleteScreenshotter : AbstractScreenshotter
                     // Get the data out of the scaled render buffer.
                     int pixels = current_height * current_width;
                     target.GetData(0, new Rectangle(0, 0, current_width, current_height), buffer, 0, pixels);
-
+                    var test = target.glTarget;
+                    ModEntry.ModMonitor.Log(test.ToString(), LogLevel.Alert);
 #if DETAIL_TIMING
                     ModEntry.ModMonitor.LogTimespan("get data", getData);
 #endif

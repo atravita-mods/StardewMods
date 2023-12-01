@@ -1,7 +1,7 @@
 ﻿// Ignore Spelling: Screenshotter
 
-// #define TRACELOG // enables timing information.
-// #define DETAIL_TIMING
+#define TRACELOG // enables timing information.
+#define DETAIL_TIMING
 
 using System.Buffers;
 using System.Collections.Concurrent;
@@ -9,8 +9,12 @@ using System.Diagnostics;
 
 using AtraShared.Utils.Extensions;
 
+using CommunityToolkit.Diagnostics;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+
+using MonoGame.OpenGL;
 
 using SkiaSharp;
 
@@ -318,26 +322,12 @@ internal sealed class CompleteScreenshotter : AbstractScreenshotter
                     Stopwatch getData = Stopwatch.StartNew();
 #endif
 
-                    // Get the data out of the scaled render buffer.
-                    int pixels = current_height * current_width;
-                    target.GetData(0, new Rectangle(0, 0, current_width, current_height), buffer, 0, pixels);
-                    var test = target.glTarget;
-                    ModEntry.ModMonitor.Log(test.ToString(), LogLevel.Alert);
+                    SKBitmap portion_bitmap = new(current_width, current_height, SKColorType.Rgb888x, SKAlphaType.Opaque);
+                    CopyTextureToSkia(target, portion_bitmap, buffer);
+
 #if DETAIL_TIMING
                     ModEntry.ModMonitor.LogTimespan("get data", getData);
 #endif
-
-#if DETAIL_TIMING
-                    Stopwatch watch = Stopwatch.StartNew();
-#endif
-
-                    SKBitmap portion_bitmap = new(current_width, current_height, SKColorType.Rgb888x, SKAlphaType.Opaque);
-                    CopyToSkia(buffer, portion_bitmap, pixels);
-
-#if DETAIL_TIMING
-                    ModEntry.ModMonitor.LogTimespan("creating and transfer to skia bitmap", watch);
-#endif
-
                     portion_bitmap.SetImmutable();
                     this.queue.Add((portion_bitmap, SKRect.Create(current_x, current_y, current_width, current_height)));
                 }
@@ -440,6 +430,49 @@ internal sealed class CompleteScreenshotter : AbstractScreenshotter
         fixed (Color* bufferPtr = buffer)
         {
             Buffer.MemoryCopy(bufferPtr, ptr, pixels * 4, pixels * 4);
+        }
+    }
+
+    private static unsafe void CopyTextureToSkia(RenderTarget2D texture, SKBitmap bitmap, Color[] buffer)
+    {
+        const int colorSize = sizeof(uint); // Color is secretly a uint.
+
+        // initial checks.
+        Threading.EnsureUIThread();
+
+        // ensure a valid level.
+        Guard.IsGreaterThan(texture.LevelCount, 0);
+
+        // ensure that if I do need to use the buffer, it's big enough.
+        Guard.IsGreaterThanOrEqualTo(buffer.Length, texture.ArraySize);
+
+        // ensure my texture the same size or bigger than my bitmap.
+        Guard.IsGreaterThanOrEqualTo(texture.Height, bitmap.Height);
+        Guard.IsGreaterThanOrEqualTo(texture.Width, bitmap.Width);
+        Guard.IsEqualTo(texture.Format.GetSize(), colorSize);
+        Guard.IsNotEqualTo((int)texture.glFormat, (int)PixelFormat.CompressedTextureFormats);
+
+        GL.BindTexture(TextureTarget.Texture2D, texture.glTexture);
+        GL.PixelStore(PixelStoreParameter.PackAlignment, colorSize);
+
+        if (bitmap.Width == texture.Width && bitmap.Height == texture.Height)
+        {
+            GL.GetTexImageInternal(TextureTarget.Texture2D, 0, texture.glFormat, texture.glType, bitmap.GetPixels());
+        }
+        else
+        {
+            GL.GetTexImage(TextureTarget.Texture2D, 0, texture.glFormat, texture.glType, buffer);
+            int rowCount = bitmap.Height;
+            int widthBytes = bitmap.Width * 4;
+
+            uint* ptr = (uint*)bitmap.GetPixels().ToPointer();
+            fixed (Color* bufferPtr = buffer)
+            {
+                for (int dy = 0; dy < rowCount; dy++)
+                {
+                    Buffer.MemoryCopy(bufferPtr + (dy * texture.Width), ptr + (dy * bitmap.Width), widthBytes, widthBytes);
+                }
+            }
         }
     }
 }

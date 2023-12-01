@@ -4,7 +4,10 @@ using EastScarp.Models;
 
 using Microsoft.Xna.Framework;
 
+using StardewValley.BellsAndWhistles;
 using StardewValley.Extensions;
+
+// TODO: bunnies.
 
 /// <summary>
 /// Manages critters.
@@ -43,19 +46,95 @@ internal static class Critters
                 continue;
             }
 
+            ModEntry.ModMonitor.VerboseLog($"Spawning {clusters} {spawn.Critter.ToStringFast()} at {location.NameOrUniqueName}.");
+
             Rectangle area = spawn.Area.ClampMap(location);
-            Vector2 center = new (
-                Random.Shared.Next(area.Left, area.Right + 1),
-                Random.Shared.Next(area.Top, area.Bottom + 1));
 
-            // some critters should spawn on the map.
-            if (spawn.Critter > CritterType.Owl && !location.isTileOnMap(center))
+            for (int i = 0; i < clusters; i++)
             {
-                continue;
+                Vector2 center = new(
+                    Random.Shared.Next(area.Left, area.Right + 1),
+                    Random.Shared.Next(area.Top, area.Bottom + 1));
+
+                int num = spawn.CountPerCluster.Get();
+                if (num < 1)
+                {
+                    break;
+                }
+
+                ModEntry.ModMonitor.VerboseLog($"    Cluster of {num} at {center}.");
+                foreach (Vector2 tile in Utility.getPositionsInClusterAroundThisTile(center, num))
+                {
+                    // some critters should spawn on the map.
+                    if (spawn.Critter > CritterType.Owl && !location.isTileOnMap(center))
+                    {
+                        continue;
+                    }
+
+                    if (spawn.Critter <= CritterType.Owl && Utility.isOnScreen(center.ToPoint(), 64, location))
+                    {
+                        // flying critters need to be off screen or else they appear to just pop in.
+                        continue;
+                    }
+
+                    int tileX = (int)tile.X;
+                    int tileY = (int)tile.Y;
+
+                    var waterTile = location.isWaterTile(tileX, tileY) && location.doesTileHaveProperty(tileX, tileY, "Passable", "Buildings") is null;
+                    if (!waterTile && location.CanItemBePlacedHere(tile, false, CollisionMask.All, CollisionMask.Flooring))
+                    {
+                        continue;
+                    }
+
+                    var chance = waterTile ? spawn.ChanceOnWater : spawn.ChanceOnLand;
+                    if (Random.Shared.NextBool(chance))
+                    {
+                        Critter? critter = spawn.Critter switch
+                        {
+                            CritterType.BrownBird =>
+                                new Birdie((int)tile.X, (int)tile.Y, Birdie.brownBird),
+                            CritterType.BlueBird =>
+                                new Birdie((int)tile.X, (int)tile.Y, Birdie.blueBird),
+                            CritterType.SpecialBlueBird =>
+                                new Birdie((int)tile.X, (int)tile.Y, 125),
+                            CritterType.SpecialRedBird =>
+                                new Birdie((int)tile.X, (int)tile.Y, 135),
+                            CritterType.Butterfly =>
+                                new Butterfly(location, tile),
+                            CritterType.IslandButterfly =>
+                                new Butterfly(location, tile, true),
+                            CritterType.CalderaMonkey =>
+                                new CalderaMonkey(tile * 64f),
+                            CritterType.Cloud =>
+                                new Cloud(tile),
+                            CritterType.Crab =>
+                                new CrabCritter(tile * 64f),
+                            CritterType.Crow =>
+                                new Crow((int)tile.X, (int)tile.Y),
+                            CritterType.Firefly =>
+                                new Firefly(tile),
+                            CritterType.Frog =>
+                                new Frog(tile, waterLeaper: waterTile, forceFlip: Game1.random.NextDouble() < 0.5),
+                            CritterType.OverheadParrot =>
+                                new OverheadParrot(tile * 64f),
+                            CritterType.Owl =>
+                                new Owl(tile * 64f),
+                            CritterType.Rabbit =>
+                                new Rabbit(location, tile, flip: Game1.random.NextDouble() < 0.5),
+                            CritterType.Seagull =>
+                                new Seagull((tile * 64f) + new Vector2(32f, 32f), startingState: waterTile ? 2 : 3),
+                            CritterType.Squirrel =>
+                                new Squirrel(tile, flip: Game1.random.NextDouble() < 0.5),
+                            _ => null,
+                        };
+                        if (critter is not null)
+                        {
+                            location.instantiateCrittersList();
+                            location.critters.Add(critter);
+                        }
+                    }
+                }
             }
-
-            ModEntry.ModMonitor.VerboseLog($"Spawning {clusters} {spawn.Critter.ToStringFast()} at {location.NameOrUniqueName} ({center}).");
-
         }
     }
 }

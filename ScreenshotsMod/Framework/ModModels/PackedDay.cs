@@ -104,6 +104,11 @@ internal readonly record struct PackedDay
                 val = Math.Clamp(val, 1, 28);
                 packed |= 0b1u << (val - 1);
             }
+            else
+            {
+                error = $"could not parse {d} as valid day range";
+                return null;
+            }
         }
 
         if ((0xF000_0000 & packed) == 0 || (AllDays & packed) == 0)

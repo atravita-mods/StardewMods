@@ -26,7 +26,9 @@ internal sealed class ModEntry : BaseMod<ModEntry>
     /// </summary>
     private readonly PerScreen<AbstractScreenshotter?> screenshotters = new(() => null);
 
-    private readonly Dictionary<string, List<ProcessedRule>> _rules = new();
+    private readonly Dictionary<string, List<ProcessedRule>> _rules = [];
+
+    private readonly List<ProcessedRule> _allMaps = [];
 
     /// <summary>Gets the config class for this mod.</summary>
     internal static ModConfig Config { get; private set; } = null!;
@@ -97,16 +99,29 @@ internal sealed class ModEntry : BaseMod<ModEntry>
 
     private void ProcessRules(GameLocation location)
     {
-        if (this._rules.TryGetValue(location.Name, out var rules))
+        PackedDay today = new();
+        foreach (ProcessedRule rule in this.GetCurrentValidRules(location))
         {
-            PackedDay today = new();
-            foreach (ProcessedRule rule in rules)
+            if (rule.Trigger(location, today, Game1.timeOfDay))
             {
-                if (rule.Trigger(location, today, Game1.timeOfDay))
-                {
-                    this.TakeScreenshotImpl(location, rule.Name, rule.Path, rule.Scale);
-                    break;
-                }
+                this.TakeScreenshotImpl(location, rule.Name, rule.Path, rule.Scale);
+                break;
+            }
+        }
+    }
+
+    private IEnumerable<ProcessedRule> GetCurrentValidRules(GameLocation location)
+    {
+        foreach (var r in this._allMaps)
+        {
+            yield return r;
+        }
+
+        if (this._rules.TryGetValue(location.Name, out List<ProcessedRule>? rules))
+        {
+            foreach (ProcessedRule i in rules)
+            {
+                yield return i;
             }
         }
     }
@@ -148,6 +163,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
     private void Process(ModConfig config)
     {
         this._rules.Clear();
+        this._allMaps.Clear();
 
         foreach ((string name, UserRule rule) in config.Rules)
         {
@@ -190,9 +206,16 @@ internal sealed class ModEntry : BaseMod<ModEntry>
             ProcessedRule newRule = new(name, rule.Path, rule.Scale, [.. processedTriggers]);
             foreach (string map in rule.Maps)
             {
-                if (!this._rules.TryGetValue(map, out List<ProcessedRule>? prev))
+                var m = map.Trim();
+                if (m == "*")
                 {
-                    this._rules[map] = prev = [];
+                    this._allMaps.Add(newRule);
+                    continue;
+                }
+
+                if (!this._rules.TryGetValue(m, out List<ProcessedRule>? prev))
+                {
+                    this._rules[m] = prev = [];
                 }
                 prev.Add(newRule);
             }
@@ -211,8 +234,8 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         bool nonoverlap = true;
         for (int i = 1; i < time.Length; i++)
         {
-            var first = time[i - 1];
-            var second = time[i];
+            TimeRange first = time[i - 1];
+            TimeRange second = time[i];
             if (first.EndTime >= second.StartTime)
             {
                 nonoverlap = false;
@@ -229,7 +252,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         TimeRange prev = time[0];
         for (int i = 1; i < time.Length; i++)
         {
-            var current = time[i];
+            TimeRange current = time[i];
             if (current.StartTime <= prev.EndTime)
             {
                 prev = new(prev.StartTime, Math.Max(prev.EndTime, current.EndTime));
@@ -246,6 +269,11 @@ internal sealed class ModEntry : BaseMod<ModEntry>
 
     private void Reset(object? sender, DayEndingEventArgs e)
     {
+        foreach (var r in this._allMaps)
+        {
+            r.Reset();
+        }
+
         foreach (List<ProcessedRule> series in this._rules.Values)
         {
             foreach (ProcessedRule rule in series)

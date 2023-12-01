@@ -13,8 +13,15 @@ using StardewModdingAPI.Utilities;
 public sealed class ModConfig
 {
     #region general
+
+    /// <summary>
+    /// Gets or sets a value indicating whether or not a screenshot should flash the screen.
+    /// </summary>
     public bool ScreenFlash { get; set; } = true;
 
+    /// <summary>
+    /// Gets or sets a value indicating whether or not a screenshot should have an audio cue.
+    /// </summary>
     public bool AudioCue { get; set; } = true;
     #endregion
 

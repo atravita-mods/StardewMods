@@ -195,7 +195,11 @@ I still don't recommend trying to take full scale (`scale = 1`) pictures of larg
 * **Why is there (some random other mod's UI element) repeated over my map?** Because they forgot to disable drawing that during screenshots. Nothing I can do, tell them to not draw if `Game1.game1.takingMapScreenshot` is true.
 * **Huh, I can see stitching lines in the screenshot.** I recommend setting the scale to `0.25`, `0.50`, `0.75`, or `1`. Any other value may cause stitching artifacts.
 * **Why not reuse the SKBitmaps?** Because it doesn't actually matter. Skia will make a defensive copy to copy to the `SKCanvas` unless I specify it's immutable, in which case I can't reuse it.
-* **What next?** I'd love to override the game's ambience to get more consistent screenshots, but so far haven't figured that one out.
+* **What next?** I'd love to override the game's ambiance to get more consistent screenshots, but so far haven't figured that one out.
+
+## Acknowledgements
+
+This was, of course, inspired by [DailyScreenshot by CompSciLauren](https://github.com/CompSciLauren/stardew-valley-daily-screenshot-mod).
 
 ## Compatibility
 

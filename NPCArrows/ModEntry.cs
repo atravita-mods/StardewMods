@@ -2,13 +2,9 @@
 
 using AtraCore.Framework.Internal;
 
-using AtraShared.ConstantsAndEnums;
-
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-
 using NPCArrows.Framework;
 using NPCArrows.Framework.NPCs;
+
 using StardewModdingAPI.Events;
 
 /// <inheritdoc />

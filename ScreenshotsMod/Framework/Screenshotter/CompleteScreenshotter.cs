@@ -292,6 +292,11 @@ internal sealed class CompleteScreenshotter : AbstractScreenshotter
             {
                 for (int dx = 0; dx < chunks_wide; dx++)
                 {
+                    if (Volatile.Read(ref this.state) == Error)
+                    {
+                        return;
+                    }
+
                     int current_x = dx * scaled_chunk_size;
                     int current_y = dy * scaled_chunk_size;
 

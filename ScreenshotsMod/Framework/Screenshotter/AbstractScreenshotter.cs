@@ -74,7 +74,7 @@ internal abstract class AbstractScreenshotter : IDisposable
     protected float Scale { get; init; }
 
     /// <summary>
-    /// Gets the location we're targetting with our screenshot.
+    /// Gets the location we're targeting with our screenshot.
     /// </summary>
     protected GameLocation TargetLocation { get; private set; }
 

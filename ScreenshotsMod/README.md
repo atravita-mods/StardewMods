@@ -33,7 +33,7 @@ This mod uses a token system to generate file paths. the `{{` and `}}` indicate 
 These are the valid tokens:
 
 | Token     | Usage
-|-----------|-----------------------------------------------
+| -----------|-----------------------------------------------
 | `Default` | The default screenshot directory of the game. Note that if you don't start the path with `{{Default}}` you should probably give it an absolute path.
 | `Location`| The unique name of a location.
 | `Save` | The farm's name, followed by the unique ID for the save. This acts as a distinct identifier for the save.
@@ -50,7 +50,7 @@ These are the valid tokens:
 The automated part of the mod works with a list of rules, which each can activate once per day. Each rule has the following:
 
 | Option | Usage | Example
-|--------------------------------------------
+| --------------------------------------------
 | `Maps` | A list of maps this rule is valid for, by internal name. Special case: `*` refers to any map, and buildings can be refered to by the non-unique name (ie `"Barn"`). Use the mod [Debug Mode](https://www.nexusmods.com/stardewvalley/mods/679) to find the internal names.| `["FarmHouse", "IslandFarmHouse"]` would go off in either the vanilla farm house or the ginger island farmhouse.
 | `Path` | The tokenized path to save this particular rule at. See above for options. | `"{{Default}}/{{Save}}/{{Location}}/{{Date}}.png"`
 | `Scale` | The scale to save the screenshot at. | `0.25`

@@ -3,10 +3,13 @@
 namespace ScreenshotsMod;
 
 using System;
+using System.Text.Json.Serialization;
 
 using AtraCore.Framework.Internal;
 
 using AtraShared.Utils.Extensions;
+
+using Newtonsoft.Json;
 
 using ScreenshotsMod.Framework;
 using ScreenshotsMod.Framework.ModModels;
@@ -190,12 +193,9 @@ internal sealed class ModEntry : BaseMod<ModEntry>
                     continue;
                 }
 
-                TimeRange[] times = this.FoldTimes(proposedTrigger.Time);
+                TimeRange[] times = FoldTimes(proposedTrigger.Time);
 
-                ProcessedTrigger newTrigger = new(packed.Value, proposedTrigger.Time, proposedTrigger.Weather);
-                processedTriggers.Add(newTrigger);
-
-                this.Monitor.DebugOnlyLog($"Added trigger {newTrigger}");
+                processedTriggers.Add(new ProcessedTrigger(packed.Value, times, proposedTrigger.Weather));
             }
 
             if (processedTriggers.Count == 0)
@@ -204,26 +204,45 @@ internal sealed class ModEntry : BaseMod<ModEntry>
                 continue;
             }
 
-            ProcessedRule newRule = new(name, rule.Path, rule.Scale, rule.DuringEvents, [.. processedTriggers]);
-            foreach (string map in rule.Maps)
-            {
-                var m = map.Trim();
-                if (m == "*")
-                {
-                    this._allMaps.Add(newRule);
-                    continue;
-                }
+            ProcessedRule newRule = new(name, rule.Path, rule.Scale, rule.DuringEvents, processedTriggers.ToArray());
 
-                if (!this._rules.TryGetValue(m, out List<ProcessedRule>? prev))
-                {
-                    this._rules[m] = prev = [];
-                }
-                prev.Add(newRule);
+            if (rule.Maps.Length == 0)
+            {
+                this.Monitor.Log($"Rule {name} has no valid maps.", LogLevel.Warn);
+                continue;
+            }
+
+            this.AddRuleToMap(rule.Maps[0], newRule);
+
+            for (int m = 1; m < rule.Maps.Length; m++)
+            {
+                this.AddRuleToMap(rule.Maps[m], newRule.Clone());
             }
         }
     }
 
-    private TimeRange[] FoldTimes(TimeRange[] time)
+    private void AddRuleToMap(string mapName, ProcessedRule rule)
+    {
+        mapName = mapName.Trim();
+        if (mapName == "*")
+        {
+            this._allMaps.Add(rule);
+            return;
+        }
+
+        if (!this._rules.TryGetValue(mapName, out List<ProcessedRule>? prev))
+        {
+            this._rules[mapName] = prev = [];
+        }
+        prev.Add(rule);
+
+        if (this.Monitor.IsVerbose)
+        {
+            this.Monitor.Log($"New rule added for {mapName}:\n\n{JsonConvert.SerializeObject(rule, Formatting.Indented)}.");
+        }
+    }
+
+    private static TimeRange[] FoldTimes(TimeRange[] time)
     {
         if (time.Length is 0 or 1)
         {
@@ -265,7 +284,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
             }
         }
         proposed.Add(prev);
-        return [.. proposed];
+        return proposed.ToArray();
     }
 
     private void Reset(object? sender, DayEndingEventArgs e)

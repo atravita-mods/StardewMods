@@ -1,4 +1,6 @@
-﻿namespace ScreenshotsMod.Framework.ModModels;
+﻿using Newtonsoft.Json;
+
+namespace ScreenshotsMod.Framework.ModModels;
 
 /// <summary>
 /// A processed rule.
@@ -14,22 +16,30 @@ internal sealed class ProcessedRule(string name, string path, float scale, bool 
     /// <summary>
     /// Gets the name of the rule.
     /// </summary>
+    [JsonProperty]
     internal string Name => name;
 
     /// <summary>
     /// Gets the scale this screenshot should be at.
     /// </summary>
+    [JsonProperty]
     internal float Scale => scale;
 
     /// <summary>
     /// Gets the tokenized path this screenshot should be saved at.
     /// </summary>
+    [JsonProperty]
     internal string Path => path;
 
     /// <summary>
     /// Gets or sets a value indicating whether or not this rule should wait for an event to be over.
     /// </summary>
+    [JsonProperty]
     internal bool DuringEvents => duringEvents;
+
+    // this odd construct exists for a simple reason - it lets newtonsoft dump it.
+    [JsonProperty]
+    private ProcessedTrigger[] Triggers => triggers;
 
     internal void Reset() => this.triggered = false;
 
@@ -49,4 +59,10 @@ internal sealed class ProcessedRule(string name, string path, float scale, bool 
         }
         return false;
     }
+
+    /// <summary>
+    /// Gets a copy of this processed rule.
+    /// </summary>
+    /// <returns>A copy of the rule.</returns>
+    internal ProcessedRule Clone() => new(name, path, scale, duringEvents, triggers);
 }

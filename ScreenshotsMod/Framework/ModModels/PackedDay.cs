@@ -1,12 +1,16 @@
 ﻿using AtraBase.Toolkit.Extensions;
-
 using AtraShared.ConstantsAndEnums;
+
+using CommunityToolkit.Diagnostics;
+
+using Newtonsoft.Json;
 
 namespace ScreenshotsMod.Framework.ModModels;
 
 /// <summary>
 /// A struct that represents a packed format of a day/season constraint.
 /// </summary>
+[JsonConverter(typeof(PackedDayConverter))]
 internal readonly record struct PackedDay
 {
     /// <summary>
@@ -131,4 +135,39 @@ internal readonly record struct PackedDay
     /// <returns>True if allowed, false otherwise.</returns>
     internal bool Check(PackedDay current)
         => (current.value & this.value) == current.value;
+}
+
+/// <summary>
+/// A JSON converter for the Packed Day.
+/// </summary>
+public class PackedDayConverter : JsonConverter
+{
+    /// <inheritdoc />
+    public override bool CanConvert(Type objectType) => objectType == typeof(PackedDay);
+
+    /// <inheritdoc />
+    public override object? ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer)
+    {
+        switch (reader.TokenType)
+        {
+            case JsonToken.Integer:
+                return new PackedDay((uint)reader.Value!);
+            case JsonToken.String:
+            {
+                if (uint.TryParse((string?)reader.Value, out uint val))
+                {
+                    return new PackedDay(val);
+                }
+                break;
+            }
+        }
+        return ThrowHelper.ThrowInvalidDataException<object?>($"Could not parse {reader.Value} as {nameof(PackedDay)} at {reader.Path}.");
+    }
+
+    /// <inheritdoc />
+    public override void WriteJson(JsonWriter writer, object? value, JsonSerializer serializer)
+    {
+        var packed = (PackedDay)value!;
+        writer.WriteValue(packed.ToString());
+    }
 }

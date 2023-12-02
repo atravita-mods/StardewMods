@@ -489,12 +489,12 @@ internal sealed class CompleteScreenshotter : AbstractScreenshotter
             return;
         }
 
-        Volatile.Write(ref this.state, WritingFile);
         this.WriteToDisk();
     }
 
     private void WriteToDisk()
     {
+        Volatile.Write(ref this.state, WritingFile);
         this.writeFileTask = new(() =>
         {
             ModEntry.ModMonitor.TraceOnlyLog($"Start write to disk for {this.Name}.", LogLevel.Debug);

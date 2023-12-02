@@ -52,7 +52,7 @@ The automated part of the mod works with a list of rules, which each can activat
 
 | Option | Usage | Example
 | -------|-------|------------------------------
-| `Maps` | A list of maps this rule is valid for, by internal name. Special case: `*` refers to any map, and buildings can be referred to by the non-unique name (ie `"Barn"`). Use the mod [Debug Mode](https://www.nexusmods.com/stardewvalley/mods/679) to find the internal names.| `["FarmHouse", "IslandFarmHouse"]` would go off in either the vanilla farm house or the ginger island farmhouse. Note that once the rule's gone off for either location, it won't for the other.
+| `Maps` | A list of maps this rule is valid for, by internal name. Special case: `*` refers the first map the rule sees, and buildings can be referred to by the non-unique name (ie `"Barn"`). Use the mod [Debug Mode](https://www.nexusmods.com/stardewvalley/mods/679) to find the internal names.| <ul><li>`["FarmHouse", "IslandFarmHouse"]` would go off in either the vanilla farm house or the ginger island farmhouse.<li>`["*"]` is a special value and will take a screenshot at the first valid map it finds.</ul>
 | `Path` | The tokenized path to save this particular rule at. See above for options. | `"{{Default}}/{{Save}}/{{Location}}/{{Date}}.png"`
 | `Scale` | The scale to save the screenshot at. | `0.25`
 | `Triggers` | A list of triggers that may activate this rule. A rule will activate the first time in a day where ANY trigger is valid. | See below.
@@ -68,7 +68,7 @@ Valid trigger options
 | -------|-------|------------------------
 | `Seasons` | A list of valid seasons, or `"Any"` for any season. Case insensitive. | `["Spring", "Summer"]` to only take pictures in Spring or Summer.
 | `Days` | The valid day *ranges* for this trigger. This may be formated as: <ol><li>An exact day (like `"5"`).<li>A range (ie `"1-5"` for days 1- 5). May be left half open (ie `"-6"` for days 1-6).<li>A day of the week (case insensitive, ie `"Monday"`)<li>The exact word `"Any"` for any day.</ol> | <ul><li> `["Any"]` for any day. <li> `["Monday", "Tuesday"]` for Mondays and Tuesdays. <li> `["1-7"]` for the first seven days of a month.</ul>
-| `Time` | A list of time ranges (both inclusive). | <ul><li>```[ { "StartTime": 600, "EndTime": 2600 } ]``` for the entire day. <li>```[ { "StartTime": 600, "EndTime": 1000 },{ "StartTime": 2200, "EndTime": 2600 }  ]```</ul> for mornings from 6AM to 10AM, then evenings from 10PM to 2AM. This is in military time!
+| `Time` | A list of time ranges (both inclusive), in the format `start-end`. | <ul><li>```[ "0600-2600" ]``` for the entire day. <li>```[ "0600-1000", "2200-2600" ]```</ul> for mornings from 6AM to 10AM, then evenings from 10PM to 2AM. This is in military time!
 | `Weather`| The current weather conditions. May be one of these values: `Sunny`, `Rainy`, or `Any`. Does NOT use the game's internal weather names. Note that this checks ONLY if the current weather can be considered a rainy weather, so, basically, windy is sunny and storming is rainy. | `"Any"` 
 
 If you're confused, check the default config! There's one entry automatically populated, for the Farm. I **strongly** recommend using VSCode to edit this!

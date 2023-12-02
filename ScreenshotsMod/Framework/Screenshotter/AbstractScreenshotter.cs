@@ -136,7 +136,20 @@ internal abstract class AbstractScreenshotter : IDisposable
     /// </summary>
     /// <param name="sender">smapi (always null).</param>
     /// <param name="args">update ticked arguments.</param>
-    internal abstract void UpdateTicked(object? sender, UpdateTickedEventArgs args);
+    internal void UpdateTicked(object? sender, UpdateTickedEventArgs args) => this.Tick();
+
+    internal void Tick()
+    {
+        if (!this.CantTick())
+        {
+            this.TickImpl();
+        }
+    }
+
+    /// <summary>
+    /// The behavior that happens per tick.
+    /// </summary>
+    protected abstract void TickImpl();
 
     /// <summary>
     /// Displays "screenshot taken" as a HUD element.
@@ -189,9 +202,11 @@ internal abstract class AbstractScreenshotter : IDisposable
     }
 
     /// <summary>
-    /// Checks if it's safe for us to do stuff on the main thread.
+    /// Checks to see if it's safe to tick the screenshotter forward.
     /// </summary>
-    /// <returns>True if it's safe, false if we should ignore this tick.</returns>
-    protected bool CheckIfCantTick() => !ReferenceEquals(this.player, Game1.player) || !ReferenceEquals(Game1.currentLocation, this.TargetLocation)
-                                            || Game1.game1.takingMapScreenshot || (!this.duringEvent && Game1.CurrentEvent?.isFestival != false);
+    /// <returns></returns>
+    protected bool CantTick() =>
+        !ReferenceEquals(this.player, Game1.player) || !ReferenceEquals(Game1.currentLocation, this.TargetLocation)
+            || Game1.game1.takingMapScreenshot || (!this.duringEvent && Game1.CurrentEvent?.isFestival != false)
+            || this.disposedValue;
 }

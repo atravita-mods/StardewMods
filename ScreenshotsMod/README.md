@@ -52,7 +52,7 @@ The automated part of the mod works with a list of rules, which each can activat
 
 | Option | Usage | Example
 | -------|-------|------------------------------
-| `Maps` | A list of maps this rule is valid for, by internal name. Special case: `*` refers to any map, and buildings can be refered to by the non-unique name (ie `"Barn"`). Use the mod [Debug Mode](https://www.nexusmods.com/stardewvalley/mods/679) to find the internal names.| `["FarmHouse", "IslandFarmHouse"]` would go off in either the vanilla farm house or the ginger island farmhouse.
+| `Maps` | A list of maps this rule is valid for, by internal name. Special case: `*` refers to any map, and buildings can be referred to by the non-unique name (ie `"Barn"`). Use the mod [Debug Mode](https://www.nexusmods.com/stardewvalley/mods/679) to find the internal names.| `["FarmHouse", "IslandFarmHouse"]` would go off in either the vanilla farm house or the ginger island farmhouse. Note that once the rule's gone off for either location, it won't for the other.
 | `Path` | The tokenized path to save this particular rule at. See above for options. | `"{{Default}}/{{Save}}/{{Location}}/{{Date}}.png"`
 | `Scale` | The scale to save the screenshot at. | `0.25`
 | `Triggers` | A list of triggers that may activate this rule. A rule will activate the first time in a day where ANY trigger is valid. | See below.
@@ -84,7 +84,7 @@ A full example of a rule is as follows
       ],
       "Triggers": [
         // Remember, multiple triggers are allowed, and the rule will fire the FIRST time ANY trigger is valid in a day!
-        // We only have on here.
+        // We only have one here.
         {
           "Seasons": [
             "Any" // the valid season.
@@ -195,7 +195,7 @@ I still don't recommend trying to take full scale (`scale = 1`) pictures of larg
 ## FAQ:
 * **Why is there (some random other mod's UI element) repeated over my map?** Because they forgot to disable drawing that during screenshots. Nothing I can do, tell them to not draw if `Game1.game1.takingMapScreenshot` is true.
 * **Huh, I can see stitching lines in the screenshot.** I recommend setting the scale to `0.25`, `0.50`, `0.75`, or `1`. Any other value may cause stitching artifacts.
-* **Why not reuse the SKBitmaps?** Because it doesn't actually matter. Skia will make a defensive copy to copy to the `SKCanvas` unless I specify it's immutable, in which case I can't reuse it.
+* **Why not reuse the SKBitmaps?** Because it doesn't actually matter. Skia will make a defensive copy of the `SKBitmap` when copying to the `SKCanvas` unless I specify it's immutable, in which case I can't reuse it.
 * **What next?** I'd love to override the game's ambiance to get more consistent screenshots, but so far haven't figured that one out.
 
 ## Acknowledgements

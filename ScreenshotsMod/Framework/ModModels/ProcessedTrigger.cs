@@ -8,7 +8,7 @@ namespace ScreenshotsMod.Framework.ModModels;
 /// <param name="Day">The packed day.</param>
 /// <param name="Times">The allowed times.</param>
 /// <param name="Weather">The weather allowed.</param>
-internal sealed class ProcessedTrigger(PackedDay Day, TimeRange[] Times, Weather Weather)
+internal readonly record struct ProcessedTrigger(PackedDay Day, TimeRange[] Times, Weather Weather)
 {
     /// <summary>
     /// Checks to see if this processed trigger is valid.
@@ -20,7 +20,7 @@ internal sealed class ProcessedTrigger(PackedDay Day, TimeRange[] Times, Weather
     internal bool Check(GameLocation current, PackedDay currentDay, int timeOfDay)
     {
         // check weather.
-        switch (Weather)
+        switch (this.Weather)
         {
             case Weather.Sunny when current.IsRainingHere():
                 return false;
@@ -29,13 +29,13 @@ internal sealed class ProcessedTrigger(PackedDay Day, TimeRange[] Times, Weather
         }
 
         // check to see if my day is valid. The first four bits are my season, other twenty eight are the days.
-        if (!Day.Check(currentDay))
+        if (!this.Day.Check(currentDay))
         {
             return false;
         }
 
         // check to see if I'm in a valid time range
-        foreach (TimeRange range in Times)
+        foreach (TimeRange range in this.Times)
         {
             if (range.StartTime <= timeOfDay && range.EndTime >= timeOfDay)
             {

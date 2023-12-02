@@ -1,4 +1,4 @@
-﻿// Ignore Spelling: Screenshotter
+﻿// Ignore Spelling: Screenshotter Impl
 
 #define TRACELOG // enables timing information.
 #define DETAIL_TIMING
@@ -166,14 +166,8 @@ internal sealed class CompleteScreenshotter : AbstractScreenshotter
     }
 
     /// <inheritdoc />
-    internal override void UpdateTicked(object? sender, UpdateTickedEventArgs args) => this.Tick();
-
-    internal void Tick()
+    protected override void TickImpl()
     {
-        if (this.CheckIfCantTick())
-        {
-            return;
-        }
 #if TRACELOG
         this.watch.Start();
         try
@@ -226,6 +220,7 @@ internal sealed class CompleteScreenshotter : AbstractScreenshotter
 #endif
     }
 
+    /// <inheritdoc />
     protected override void Dispose(bool disposing)
     {
         if (!this.IsDisposed)

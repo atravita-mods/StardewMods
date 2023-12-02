@@ -37,4 +37,9 @@ public sealed class UserTrigger
     /// Gets or sets the weather conditions for which this trigger should apply.
     /// </summary>
     public Weather Weather { get; set; } = Weather.Any;
+
+    /// <summary>
+    /// Gets or sets a <see cref="GameStateQuery"/> that controls this trigger.
+    /// </summary>
+    public string? Condition { get; set; }
 }

@@ -33,7 +33,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
     /// </summary>
     private readonly PerScreen<AbstractScreenshotter?> screenshotters = new(() => null);
 
-    private readonly Dictionary<string, List<ProcessedRule>> _rules = [];
+    private readonly Dictionary<string, List<ProcessedRule>> _rules = new(StringComparer.OrdinalIgnoreCase);
 
     private readonly List<ProcessedRule> _allMaps = [];
 
@@ -159,7 +159,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         PackedDay today = new();
         foreach (ProcessedRule rule in this.GetCurrentValidRules(location))
         {
-            if (rule.CanTrigger(location, today, Game1.timeOfDay, daysSinceTriggered))
+            if (rule.CanTrigger(location, Game1.player, today, Game1.timeOfDay, daysSinceTriggered))
             {
                 this.TakeScreenshotImpl(location, rule.Name, rule.Path, rule.Scale, rule.DuringEvents);
                 break;
@@ -169,14 +169,6 @@ internal sealed class ModEntry : BaseMod<ModEntry>
 
     private IEnumerable<ProcessedRule> GetCurrentValidRules(GameLocation location)
     {
-        if (location is not MineShaft or VolcanoDungeon)
-        {
-            foreach (ProcessedRule r in this._allMaps)
-            {
-                yield return r;
-            }
-        }
-
         string locationName = location switch
         {
             MineShaft shaft => shaft.getMineArea() switch
@@ -195,6 +187,16 @@ internal sealed class ModEntry : BaseMod<ModEntry>
             {
                 yield return i;
             }
+        }
+
+        if (location is MineShaft or VolcanoDungeon)
+        {
+            yield break;
+        }
+
+        foreach (ProcessedRule r in this._allMaps)
+        {
+            yield return r;
         }
 
         var context = location.GetLocationContextId();
@@ -276,7 +278,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
 
                 TimeRange[] times = FoldTimes(proposedTrigger.Time);
 
-                processedTriggers.Add(new ProcessedTrigger(packed.Value, times, proposedTrigger.Weather, proposedTrigger.Cooldown));
+                processedTriggers.Add(new ProcessedTrigger(packed.Value, times, proposedTrigger.Weather, proposedTrigger.Cooldown, proposedTrigger.Condition));
             }
 
             if (processedTriggers.Count == 0)

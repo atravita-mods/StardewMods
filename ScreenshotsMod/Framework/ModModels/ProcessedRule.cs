@@ -45,11 +45,12 @@ internal sealed class ProcessedRule(string name, string path, float scale, bool 
     /// Checks to see if a screenshot can be triggered for the current map.
     /// </summary>
     /// <param name="location">The location to check.</param>
+    /// <param name="farmer">The farmer to check for.</param>
     /// <param name="currentDay">A <see cref="PackedDay"/> that represents the current day.</param>
     /// <param name="timeOfDay">The current time of day.</param>
     /// <param name="daysSinceTriggered">The number of days since a screenshot was triggered on this map.</param>
     /// <returns>True if it can be triggered, false otherwise.</returns>
-    internal bool CanTrigger(GameLocation location, PackedDay currentDay, int timeOfDay, uint daysSinceTriggered)
+    internal bool CanTrigger(GameLocation location, Farmer farmer, PackedDay currentDay, int timeOfDay, uint daysSinceTriggered)
     {
         if (daysSinceTriggered == 0u)
         {
@@ -58,7 +59,7 @@ internal sealed class ProcessedRule(string name, string path, float scale, bool 
 
         foreach (ProcessedTrigger trigger in triggers)
         {
-            if (trigger.Check(location, currentDay, timeOfDay, daysSinceTriggered))
+            if (trigger.Check(location, farmer, currentDay, timeOfDay, daysSinceTriggered))
             {
                 return true;
             }

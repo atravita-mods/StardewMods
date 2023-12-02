@@ -22,7 +22,7 @@ public sealed class UserRule
         },
         new()
         {
-            Delay = 7,
+            Cooldown = 7,
         },
     ];
 

@@ -57,7 +57,7 @@ Each rule has the following:
 
 | Option | Usage | Example
 | -------|-------|------------------------------
-| `Maps` | A list of maps this rule is valid for, by internal name. Special case: `*` refers the first map the rule sees, and buildings can be referred to by the non-unique name (ie `"Barn"`). Use the mod [Debug Mode](https://www.nexusmods.com/stardewvalley/mods/679) to find the internal names.| <ul><li>`["FarmHouse", "IslandFarmHouse"]` would go off in either the vanilla farm house or the ginger island farmhouse.<li>`["*"]` is a special value and will take a screenshot at the first valid map it finds.</ul>
+| `Maps` | A list of maps this rule is valid for, by internal name. <br>Special cases:<ul><li>`*` refers to **every** non-generated map.<li>You may also use the name of the location context (ie `"Island"` refers to every Ginger Island map.)<li>Use `"Mines"` to refer to the mines, `"SkullCavern"` to refer to the skull cavern, `"Quarry"` to refer to the quarry mines, and `"Volcano"` to refer to the inside of the volcano.<li>Building interiors use the non-unique name, ie (`"Barn"`).</ul>Use the mod [Debug Mode](https://www.nexusmods.com/stardewvalley/mods/679) to find the internal names.| <ul><li>`["FarmHouse", "IslandFarmHouse"]` would go off in either the vanilla farm house or the ginger island farmhouse.<li>`["*"]` refers to **every** map.</ul> Note that only one screenshot can happen per location per day.
 | `Path` | The tokenized path to save this particular rule at. See above for options. | `"{{Default}}/{{Save}}/{{Location}}/{{Date}}.png"`
 | `Scale` | The scale to save the screenshot at. | `0.25`
 | `DuringEvents` | If true, the rule can fire during an event. If false, it will wait for the event to be over. | `true`
@@ -72,11 +72,11 @@ Valid trigger options
 
 | Option | Usage | Example
 | -------|-------|------------------------
-| `Delay`| The number of days after the last screenshot to this location that need to pass before this trigger can fire. | `1`
+| `Cooldown`| The number of days after the last screenshot to this location that need to pass before this trigger can fire. | `1`
 | `Seasons` | A list of valid seasons, or `"Any"` for any season. Case insensitive. | `["Spring", "Summer"]` to only take pictures in Spring or Summer.
 | `Days` | The valid day *ranges* for this trigger. This may be formated as: <ol><li>An exact day (like `"5"`).<li>A range (ie `"1-5"` for days 1- 5). May be left half open (ie `"-6"` for days 1-6).<li>A day of the week (case insensitive, ie `"Monday"`)<li>The exact word `"Any"` for any day.</ol> | <ul><li> `["Any"]` for any day. <li> `["Monday", "Tuesday"]` for Mondays and Tuesdays. <li> `["1-7"]` for the first seven days of a month.</ul>
 | `Time` | A list of time ranges (both inclusive), in the format `"start-end"`, in military time. | <ul><li>```[ "0600-2600" ]``` for the entire day. <li>```[ "0600-1000", "2200-2600" ]``` for mornings from 6AM to 10AM, then evenings from 10PM to 2AM.</ul>
-| `Weather`| The current weather conditions. May be one of these values: `Sunny`, `Rainy`, or `Any`. Does NOT use the game's internal weather names. Note that this checks ONLY if the current weather can be considered a rainy weather, so, basically, windy is sunny and storming is rainy. | `"Any"` 
+| `Weather`| The current weather conditions. May be one of these values: `"Sunny"`, `"Rainy"`, or `"Any"`. Does NOT use the game's internal weather names. Note that this checks ONLY if the current weather can be considered a rainy weather, so, basically, windy is sunny and storming is rainy. | `"Any"` 
 
 If you're confused, check the default config! There's one entry automatically populated, for the Farm. I **strongly** recommend using VSCode to edit this!
 
@@ -93,7 +93,7 @@ A full example of a rule is as follows
         // Remember, multiple triggers are allowed, and the rule will fire the FIRST time ANY trigger is valid in a day!
         // We only have one here.
         {
-          "Delay": 1, // allow a screenshot per day.
+          "Cooldown": 1, // allow a screenshot per day.
           "Seasons": [
             "Any" // the valid season.
           ],
@@ -109,7 +109,7 @@ A full example of a rule is as follows
         // okay, but what if it was raining on Monday? Let's do a catchup trigger.
         // this one will will fire on any day if there hasn't been a screenshot for an entire week.
         {
-          "Delay": 7, // seven full days must pass before this trigger will fire.
+          "Cooldown": 7, // seven full days must pass before this trigger will fire.
           "Seasons": [
             "Any"
           ],

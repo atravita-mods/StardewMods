@@ -8,7 +8,7 @@ namespace ScreenshotsMod.Framework.ModModels;
 /// <param name="Day">The packed day.</param>
 /// <param name="Times">The allowed times.</param>
 /// <param name="Weather">The weather allowed.</param>
-internal readonly record struct ProcessedTrigger(PackedDay Day, TimeRange[] Times, Weather Weather, uint Delay)
+internal readonly record struct ProcessedTrigger(PackedDay Day, TimeRange[] Times, Weather Weather, uint Cooldown)
 {
     /// <summary>
     /// Checks to see if this processed trigger is valid.
@@ -16,10 +16,11 @@ internal readonly record struct ProcessedTrigger(PackedDay Day, TimeRange[] Time
     /// <param name="current">The current location.</param>
     /// <param name="currentDay">The (packed) current day.</param>
     /// <param name="timeOfDay">The current time of day.</param>
+    /// <param name="daysSinceLastTrigger">The number of days since a screenshot was last triggered on this map.</param>
     /// <returns>Whether or not this is valid.</returns>
-    internal bool Check(GameLocation current, PackedDay currentDay, int timeOfDay, uint lastTriggeredDiff)
+    internal bool Check(GameLocation current, PackedDay currentDay, int timeOfDay, uint daysSinceLastTrigger)
     {
-        if (lastTriggeredDiff < this.Delay)
+        if (daysSinceLastTrigger < this.Cooldown)
         {
             return false;
         }

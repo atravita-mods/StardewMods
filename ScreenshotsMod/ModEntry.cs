@@ -19,6 +19,8 @@ using ScreenshotsMod.Framework.UserModels;
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
 
+using StardewValley.Locations;
+
 using AtraUtils = AtraShared.Utils.Utils;
 
 /// <inheritdoc />
@@ -167,16 +169,43 @@ internal sealed class ModEntry : BaseMod<ModEntry>
 
     private IEnumerable<ProcessedRule> GetCurrentValidRules(GameLocation location)
     {
-        foreach (ProcessedRule r in this._allMaps)
+        if (location is not MineShaft or VolcanoDungeon)
         {
-            yield return r;
+            foreach (ProcessedRule r in this._allMaps)
+            {
+                yield return r;
+            }
         }
 
-        if (this._rules.TryGetValue(location.Name, out List<ProcessedRule>? rules))
+        string locationName = location switch
+        {
+            MineShaft shaft => shaft.getMineArea() switch
+            {
+                MineShaft.desertArea => "SkullCavern",
+                MineShaft.quarryMineShaft => "Quarry",
+                _ => "Mines"
+            },
+            VolcanoDungeon => "Volcano",
+            _ => location.Name,
+        };
+
+        if (this._rules.TryGetValue(locationName, out List<ProcessedRule>? rules))
         {
             foreach (ProcessedRule i in rules)
             {
                 yield return i;
+            }
+        }
+
+        var context = location.GetLocationContextId();
+        if (!context.Equals(locationName, StringComparison.OrdinalIgnoreCase))
+        {
+            if (this._rules.TryGetValue(context, out List<ProcessedRule>? contextRules))
+            {
+                foreach (ProcessedRule i in contextRules)
+                {
+                    yield return i;
+                }
             }
         }
     }
@@ -206,10 +235,6 @@ internal sealed class ModEntry : BaseMod<ModEntry>
             scale,
             duringEvent,
             location);
-        if (!completeScreenshotter.IsDisposed)
-        {
-            completeScreenshotter.Tick();
-        }
         if (!completeScreenshotter.IsDisposed)
         {
             this.screenshotters.Value = completeScreenshotter;
@@ -251,7 +276,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
 
                 TimeRange[] times = FoldTimes(proposedTrigger.Time);
 
-                processedTriggers.Add(new ProcessedTrigger(packed.Value, times, proposedTrigger.Weather, proposedTrigger.Delay));
+                processedTriggers.Add(new ProcessedTrigger(packed.Value, times, proposedTrigger.Weather, proposedTrigger.Cooldown));
             }
 
             if (processedTriggers.Count == 0)

@@ -1,7 +1,7 @@
 ﻿// Ignore Spelling: Screenshotter Impl
 
 #define TRACELOG // enables timing information.
-#define DETAIL_TIMING
+// #define DETAIL_TIMING
 
 using System.Collections.Concurrent;
 using System.Diagnostics;

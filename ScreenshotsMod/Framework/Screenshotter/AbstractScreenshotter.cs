@@ -1,4 +1,4 @@
-﻿// Ignore Spelling: Screenshotter
+﻿// Ignore Spelling: Screenshotter Impl
 
 using System.Reflection;
 
@@ -29,6 +29,7 @@ internal abstract class AbstractScreenshotter : IDisposable
 
     protected static Action<Game1, GameTime, RenderTarget2D> _draw = null!;
     #endregion
+    private readonly bool duringEvent;
 
     private bool disposedValue;
 
@@ -37,15 +38,16 @@ internal abstract class AbstractScreenshotter : IDisposable
 
     // Both players in splitscreen get ticks, check to make sure it's the right one.
     private Farmer player;
-    private bool duringEvent;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="AbstractScreenshotter"/> class.
     /// </summary>
+    /// <param name="player">The player to track.</param>
     /// <param name="gameEvents">The gameloop event manager.</param>
     /// <param name="name">The name of the rule we're processing.</param>
     /// <param name="filename">The tokenized filename.</param>
     /// <param name="scale">The scale of the screenshot.</param>
+    /// <param name="duringEvent">Whether or not the screenshotter should run during events, or wait until the event is over.</param>
     /// <param name="targetLocation">The target location.</param>
     protected AbstractScreenshotter(Farmer player, IGameLoopEvents gameEvents, string name, string filename, float scale, bool duringEvent, GameLocation targetLocation)
     {
@@ -59,6 +61,20 @@ internal abstract class AbstractScreenshotter : IDisposable
         this.player = player;
         this.duringEvent = duringEvent;
     }
+
+    /// <summary>
+    /// Finalizes an instance of the <see cref="AbstractScreenshotter"/> class.
+    /// </summary>
+    ~AbstractScreenshotter()
+    {
+        // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+        this.Dispose(disposing: false);
+    }
+
+    /// <summary>
+    /// Gets a value indicating whether this instance has been disposed.
+    /// </summary>
+    internal bool IsDisposed => this.disposedValue;
 
     /// <summary>
     /// Gets the name of the rule to process.
@@ -80,10 +96,13 @@ internal abstract class AbstractScreenshotter : IDisposable
     /// </summary>
     protected GameLocation TargetLocation { get; private set; }
 
-    /// <summary>
-    /// Gets whether or not this instance has been disposed.
-    /// </summary>
-    internal bool IsDisposed => this.disposedValue;
+    /// <inheritdoc cref="IDisposable.Dispose"/>
+    public void Dispose()
+    {
+        // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+        this.Dispose(disposing: true);
+        GC.SuppressFinalize(this);
+    }
 
     /// <summary>
     /// Initializes reflection delegates.
@@ -95,6 +114,17 @@ internal abstract class AbstractScreenshotter : IDisposable
         _lightMapSetter = lightmap.GetStaticFieldSetter<RenderTarget2D?>();
         _allocateLightMap = typeof(Game1).GetCachedMethod("allocateLightmap", ReflectionCache.FlagTypes.StaticFlags).CreateDelegate<Action<int, int>>();
         _draw = typeof(Game1).GetCachedMethod("_draw", ReflectionCache.FlagTypes.InstanceFlags).CreateDelegate<Action<Game1, GameTime, RenderTarget2D>>();
+    }
+
+    /// <summary>
+    /// Ticks the screenshotter forward.
+    /// </summary>
+    internal void Tick()
+    {
+        if (!this.CantTick())
+        {
+            this.TickImpl();
+        }
     }
 
     /// <inheritdoc cref="IDisposable.Dispose"/>
@@ -115,38 +145,6 @@ internal abstract class AbstractScreenshotter : IDisposable
     }
 
     /// <summary>
-    /// Finalizes an instance of the <see cref="AbstractScreenshotter"/> class.
-    /// </summary>
-    ~AbstractScreenshotter()
-    {
-         // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
-         this.Dispose(disposing: false);
-    }
-
-    /// <inheritdoc cref="IDisposable.Dispose"/>
-    public void Dispose()
-    {
-        // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
-        this.Dispose(disposing: true);
-        GC.SuppressFinalize(this);
-    }
-
-    /// <summary>
-    /// The tick method.
-    /// </summary>
-    /// <param name="sender">smapi (always null).</param>
-    /// <param name="args">update ticked arguments.</param>
-    internal void UpdateTicked(object? sender, UpdateTickedEventArgs args) => this.Tick();
-
-    internal void Tick()
-    {
-        if (!this.CantTick())
-        {
-            this.TickImpl();
-        }
-    }
-
-    /// <summary>
     /// The behavior that happens per tick.
     /// </summary>
     protected abstract void TickImpl();
@@ -156,8 +154,10 @@ internal abstract class AbstractScreenshotter : IDisposable
     /// </summary>
     protected void DisplayHud()
     {
-        HUDMessage message = new(I18n.PictureTaken(this.Name), HUDMessage.screenshot_type);
-        Game1.addHUDMessage(message);
+        if (ModEntry.Config.Notification)
+        {
+            Game1.addHUDMessage(new HUDMessage(I18n.PictureTaken(this.Name), HUDMessage.screenshot_type));
+        }
         if (ModEntry.Config.AudioCue)
         {
             Game1.playSound("cameraNoise");
@@ -204,9 +204,16 @@ internal abstract class AbstractScreenshotter : IDisposable
     /// <summary>
     /// Checks to see if it's safe to tick the screenshotter forward.
     /// </summary>
-    /// <returns></returns>
-    protected bool CantTick() =>
+    /// <returns>True if it's safe to tick, false otherwise.</returns>
+    private bool CantTick() =>
         !ReferenceEquals(this.player, Game1.player) || !ReferenceEquals(Game1.currentLocation, this.TargetLocation)
             || Game1.game1.takingMapScreenshot || (!this.duringEvent && Game1.CurrentEvent?.isFestival != false)
             || this.disposedValue;
+
+    /// <summary>
+    /// The tick method.
+    /// </summary>
+    /// <param name="sender">smapi (always null).</param>
+    /// <param name="args">update ticked arguments.</param>
+    private void UpdateTicked(object? sender, UpdateTickedEventArgs args) => this.Tick();
 }

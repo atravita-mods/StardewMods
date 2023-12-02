@@ -15,6 +15,11 @@ public sealed class ModConfig
     #region general
 
     /// <summary>
+    /// Gets or sets a value indicating whether or not to show a toast notification.
+    /// </summary>
+    public bool Notification { get; set; } = true;
+
+    /// <summary>
     /// Gets or sets a value indicating whether or not a screenshot should flash the screen.
     /// </summary>
     public bool ScreenFlash { get; set; } = true;
@@ -71,5 +76,18 @@ public sealed class ModConfig
     public ModConfig()
     {
         this.KeyBindFileName = FileNameParser.DEFAULT_FILENAME;
+    }
+
+    /// <summary>
+    /// Resets the base rules to the default settings.
+    /// </summary>
+    internal void Reset()
+    {
+        this.ScreenFlash = true;
+        this.Notification = true;
+        this.AudioCue = true;
+        this.KeyBind = KeybindList.ForSingle(SButton.Multiply);
+        this.KeyBindFileName = FileNameParser.DEFAULT_FILENAME;
+        this.KeyBindScale = 0.25f;
     }
 }

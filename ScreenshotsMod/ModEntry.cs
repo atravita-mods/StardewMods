@@ -1,12 +1,12 @@
-﻿#define TRACELOG
+﻿// #define TRACELOG
 
 namespace ScreenshotsMod;
 
 using System;
-using System.Text.Json.Serialization;
 
 using AtraCore.Framework.Internal;
 
+using AtraShared.Integrations;
 using AtraShared.Utils.Extensions;
 
 using Newtonsoft.Json;
@@ -43,14 +43,36 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         I18n.Init(this.Helper.Translation);
 
         Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
+        this.Parse(Config);
+
+        helper.Events.GameLoop.GameLaunched += this.RegisterGMCM;
+
         helper.Events.Player.Warped += this.OnWarp;
         helper.Events.GameLoop.DayStarted += this.OnDayStart;
         helper.Events.Input.ButtonPressed += this.OnButtonPressed;
-        AbstractScreenshotter.Init();
-
-        this.Process(Config);
         helper.Events.GameLoop.DayEnding += this.Reset;
+        AbstractScreenshotter.Init();
     }
+
+    private void RegisterGMCM(object? sender, GameLaunchedEventArgs e)
+    {
+        var helper = new GMCMHelper(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
+        if (!helper.TryGetAPI())
+        {
+            return;
+        }
+
+        helper.Register(
+            reset: Config.Reset,
+            save: () =>
+            {
+                this.Helper.AsyncWriteConfig(this.Monitor, Config);
+                this.Parse(Config);
+            })
+            .GenerateDefaultGMCM(static () => Config);
+    }
+
+    #region triggers
 
     private void OnButtonPressed(object? sender, ButtonPressedEventArgs e)
     {
@@ -115,7 +137,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
 
     private IEnumerable<ProcessedRule> GetCurrentValidRules(GameLocation location)
     {
-        foreach (var r in this._allMaps)
+        foreach (ProcessedRule r in this._allMaps)
         {
             yield return r;
         }
@@ -164,7 +186,27 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         }
     }
 
-    private void Process(ModConfig config)
+    private void Reset(object? sender, DayEndingEventArgs e)
+    {
+        foreach (ProcessedRule r in this._allMaps)
+        {
+            r.Reset();
+        }
+
+        foreach (List<ProcessedRule> series in this._rules.Values)
+        {
+            foreach (ProcessedRule rule in series)
+            {
+                rule.Reset();
+            }
+        }
+    }
+
+    #endregion
+
+    #region parsing
+
+    private void Parse(ModConfig config)
     {
         this._rules.Clear();
         this._allMaps.Clear();
@@ -287,19 +329,5 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         return proposed.ToArray();
     }
 
-    private void Reset(object? sender, DayEndingEventArgs e)
-    {
-        foreach (var r in this._allMaps)
-        {
-            r.Reset();
-        }
-
-        foreach (List<ProcessedRule> series in this._rules.Values)
-        {
-            foreach (ProcessedRule rule in series)
-            {
-                rule.Reset();
-            }
-        }
-    }
+    #endregion
 }

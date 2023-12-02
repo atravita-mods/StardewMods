@@ -1,5 +1,7 @@
 ﻿// Ignore Spelling: Screenshotter Impl
 
+#define TRACELOG
+
 using System.Reflection;
 
 using AtraBase.Toolkit.Reflection;
@@ -45,21 +47,23 @@ internal abstract class AbstractScreenshotter : IDisposable
     /// <param name="player">The player to track.</param>
     /// <param name="gameEvents">The gameloop event manager.</param>
     /// <param name="name">The name of the rule we're processing.</param>
-    /// <param name="filename">The tokenized filename.</param>
+    /// <param name="tokenizedFilename">The tokenized filename.</param>
     /// <param name="scale">The scale of the screenshot.</param>
     /// <param name="duringEvent">Whether or not the screenshotter should run during events, or wait until the event is over.</param>
     /// <param name="targetLocation">The target location.</param>
-    protected AbstractScreenshotter(Farmer player, IGameLoopEvents gameEvents, string name, string filename, float scale, bool duringEvent, GameLocation targetLocation)
+    protected AbstractScreenshotter(Farmer player, IGameLoopEvents gameEvents, string name, string tokenizedFilename, float scale, bool duringEvent, GameLocation targetLocation)
     {
         ModEntry.ModMonitor.DebugOnlyLog($"Attaching for: {name}");
         gameEvents.UpdateTicked += this.UpdateTicked;
         this.gameEvents = gameEvents;
         this.Name = name;
-        this.Filename = FileNameParser.GetFilename(filename, targetLocation, name);
+        this.Filename = FileNameParser.GetFilename(tokenizedFilename, targetLocation, name);
         this.Scale = scale;
         this.TargetLocation = targetLocation;
         this.player = player;
         this.duringEvent = duringEvent;
+
+        ModEntry.ModMonitor.VerboseLog($"Taking screenshot for {targetLocation.NameOrUniqueName} using scale {scale}: {this.Filename}.");
     }
 
     /// <summary>

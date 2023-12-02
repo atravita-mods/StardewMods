@@ -5,6 +5,17 @@
 /// </summary>
 public sealed class UserTrigger
 {
+    private uint delay = 1;
+
+    /// <summary>
+    /// Gets or sets a value indicating how many days should pass before this rule applies again.
+    /// </summary>
+    public uint Delay
+    {
+        get => this.delay;
+        set => this.delay = Math.Max(value, 1);
+    }
+
     /// <summary>
     /// Gets or sets the season for which this trigger should apply.
     /// </summary>

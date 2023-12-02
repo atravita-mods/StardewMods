@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using AtraShared.Utils.Extensions;
+
+using Newtonsoft.Json;
 
 namespace ScreenshotsMod.Framework.ModModels;
 
@@ -11,8 +13,6 @@ namespace ScreenshotsMod.Framework.ModModels;
 /// <param name="triggers">A list of processed triggers.</param>
 internal sealed class ProcessedRule(string name, string path, float scale, bool duringEvents, ProcessedTrigger[] triggers)
 {
-    private bool triggered = false;
-
     /// <summary>
     /// Gets the name of the rule.
     /// </summary>
@@ -32,7 +32,7 @@ internal sealed class ProcessedRule(string name, string path, float scale, bool 
     internal string Path => path;
 
     /// <summary>
-    /// Gets or sets a value indicating whether or not this rule should wait for an event to be over.
+    /// Gets a value indicating whether or not this rule should wait for an event to be over.
     /// </summary>
     [JsonProperty]
     internal bool DuringEvents => duringEvents;
@@ -41,19 +41,25 @@ internal sealed class ProcessedRule(string name, string path, float scale, bool 
     [JsonProperty]
     private ProcessedTrigger[] Triggers => triggers;
 
-    internal void Reset() => this.triggered = false;
-
-    internal bool Trigger(GameLocation current, PackedDay currentDay, int timeOfDay)
+    /// <summary>
+    /// Checks to see if a screenshot can be triggered for the current map.
+    /// </summary>
+    /// <param name="location">The location to check.</param>
+    /// <param name="currentDay">A <see cref="PackedDay"/> that represents the current day.</param>
+    /// <param name="timeOfDay">The current time of day.</param>
+    /// <param name="daysSinceTriggered">The number of days since a screenshot was triggered on this map.</param>
+    /// <returns>True if it can be triggered, false otherwise.</returns>
+    internal bool CanTrigger(GameLocation location, PackedDay currentDay, int timeOfDay, uint daysSinceTriggered)
     {
-        if (this.triggered)
+        if (daysSinceTriggered == 0u)
         {
             return false;
         }
+
         foreach (ProcessedTrigger trigger in triggers)
         {
-            if (trigger.Check(current, currentDay, timeOfDay))
+            if (trigger.Check(location, currentDay, timeOfDay, daysSinceTriggered))
             {
-                this.triggered = true;
                 return true;
             }
         }

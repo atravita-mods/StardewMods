@@ -67,7 +67,7 @@ public static class ModDataExtensions
     /// <param name="defaultVal">default value.</param>
     /// <returns>Boolean value, or null if not found/not parseable.</returns>
     [MethodImpl(TKConstants.Hot)]
-    [return: NotNullIfNotNull("defaultVal")]
+    [return: NotNullIfNotNull(nameof(defaultVal))]
     public static bool? GetBool(this ModDataDictionary modData, string key, bool? defaultVal = null)
         => modData.TryGetValue(key, out string val)
             ? val != FalseValue
@@ -101,7 +101,7 @@ public static class ModDataExtensions
     /// <param name="defaultVal">default value.</param>
     /// <returns>Float value, or null of not found/not parseable.</returns>
     [MethodImpl(TKConstants.Hot)]
-    [return: NotNullIfNotNull("defaultVal")]
+    [return: NotNullIfNotNull(nameof(defaultVal))]
     public static float? GetFloat(this ModDataDictionary modData, string key, float? defaultVal = null)
         => modData.TryGetValue(key, out string val) && float.TryParse(val, NumberStyles.Number, CultureInfo.InvariantCulture, out float result)
             ? result
@@ -138,7 +138,7 @@ public static class ModDataExtensions
     /// <param name="defaultVal">default value.</param>
     /// <returns>Int value, or null of not found/not parseable.</returns>
     [MethodImpl(TKConstants.Hot)]
-    [return: NotNullIfNotNull("defaultVal")]
+    [return: NotNullIfNotNull(nameof(defaultVal))]
     public static int? GetInt(this ModDataDictionary modData, string key, int? defaultVal = null)
         => modData.TryGetValue(key, out string val) && int.TryParse(val, NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out int result) ? result : defaultVal;
 
@@ -212,7 +212,7 @@ public static class ModDataExtensions
     /// <param name="defaultVal">default value.</param>
     /// <returns>Int value, or null of not found/not parseable.</returns>
     [MethodImpl(TKConstants.Hot)]
-    [return: NotNullIfNotNull("defaultVal")]
+    [return: NotNullIfNotNull(nameof(defaultVal))]
     public static Color? GetColor(this ModDataDictionary modData, string key, Color? defaultVal = null)
         => modData.TryGetValue(key, out string? color) && uint.TryParse(color, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out uint result)
             ? new Color(result)

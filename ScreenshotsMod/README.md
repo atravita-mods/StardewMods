@@ -16,6 +16,7 @@ Bear with me a bit, the configuration is a little complex, and not all of it wor
 
 ### Basics
 Let's start with the basic screenshot settings. These are global, affecting every screenshot.
+* **Notification**: whether or not to show a small toast notification when a screenshot is taken.
 * **ScreenFlash**: whether or not to cause the screen to flash white when a screenshot is taken.
 * **AudioCue**: whether or not to play an audio cue when a screenshot is taken.
 
@@ -28,7 +29,7 @@ Let's start with the basic screenshot settings. These are global, affecting ever
 ### Tokenized paths
 *Default value: `"{{Default}}/{{Save}}/{{Location}}/{{Date}}.png"`*
 
-This mod uses a token system to generate file paths. the `{{` and `}}` indicate tokens where information will be filled in to construct the final path. Tokens are case-insensitive.
+This mod uses a token system to generate file paths. The `{{` and `}}` indicate tokens where information will be filled in to construct the final path. Tokens are case-insensitive.
 
 These are the valid tokens:
 
@@ -48,13 +49,18 @@ These are the valid tokens:
 *Any other values will be left unchanged. Paths MUST end with .png, or else that will be added for you.*
 
 ### Rules
-The automated part of the mod works with a list of rules, which each can activate once per day. Each rule has the following:
+The automated part of the mod works with a list of rules. They are listed in the config file as Name->Rule pairs.
+
+For **each game location, only one screenshot can be taken per day**, no matter how many valid rules match. The first match will be used.
+
+Each rule has the following:
 
 | Option | Usage | Example
 | -------|-------|------------------------------
 | `Maps` | A list of maps this rule is valid for, by internal name. Special case: `*` refers the first map the rule sees, and buildings can be referred to by the non-unique name (ie `"Barn"`). Use the mod [Debug Mode](https://www.nexusmods.com/stardewvalley/mods/679) to find the internal names.| <ul><li>`["FarmHouse", "IslandFarmHouse"]` would go off in either the vanilla farm house or the ginger island farmhouse.<li>`["*"]` is a special value and will take a screenshot at the first valid map it finds.</ul>
 | `Path` | The tokenized path to save this particular rule at. See above for options. | `"{{Default}}/{{Save}}/{{Location}}/{{Date}}.png"`
 | `Scale` | The scale to save the screenshot at. | `0.25`
+| `DuringEvents` | If true, the rule can fire during an event. If false, it will wait for the event to be over. | `true`
 | `Triggers` | A list of triggers that may activate this rule. A rule will activate the first time in a day where ANY trigger is valid. | See below.
 
 ### Triggers.
@@ -66,9 +72,10 @@ Valid trigger options
 
 | Option | Usage | Example
 | -------|-------|------------------------
+| `Delay`| The number of days after the last screenshot to this location that need to pass before this trigger can fire. | `1`
 | `Seasons` | A list of valid seasons, or `"Any"` for any season. Case insensitive. | `["Spring", "Summer"]` to only take pictures in Spring or Summer.
 | `Days` | The valid day *ranges* for this trigger. This may be formated as: <ol><li>An exact day (like `"5"`).<li>A range (ie `"1-5"` for days 1- 5). May be left half open (ie `"-6"` for days 1-6).<li>A day of the week (case insensitive, ie `"Monday"`)<li>The exact word `"Any"` for any day.</ol> | <ul><li> `["Any"]` for any day. <li> `["Monday", "Tuesday"]` for Mondays and Tuesdays. <li> `["1-7"]` for the first seven days of a month.</ul>
-| `Time` | A list of time ranges (both inclusive), in the format `start-end`. | <ul><li>```[ "0600-2600" ]``` for the entire day. <li>```[ "0600-1000", "2200-2600" ]```</ul> for mornings from 6AM to 10AM, then evenings from 10PM to 2AM. This is in military time!
+| `Time` | A list of time ranges (both inclusive), in the format `"start-end"`, in military time. | <ul><li>```[ "0600-2600" ]``` for the entire day. <li>```[ "0600-1000", "2200-2600" ]``` for mornings from 6AM to 10AM, then evenings from 10PM to 2AM.</ul>
 | `Weather`| The current weather conditions. May be one of these values: `Sunny`, `Rainy`, or `Any`. Does NOT use the game's internal weather names. Note that this checks ONLY if the current weather can be considered a rainy weather, so, basically, windy is sunny and storming is rainy. | `"Any"` 
 
 If you're confused, check the default config! There's one entry automatically populated, for the Farm. I **strongly** recommend using VSCode to edit this!
@@ -86,6 +93,7 @@ A full example of a rule is as follows
         // Remember, multiple triggers are allowed, and the rule will fire the FIRST time ANY trigger is valid in a day!
         // We only have one here.
         {
+          "Delay": 1, // allow a screenshot per day.
           "Seasons": [
             "Any" // the valid season.
           ],
@@ -93,13 +101,25 @@ A full example of a rule is as follows
             "Monday" // this trigger is valid only on Mondays.
           ],
           "Time": [
-            // This trigger is valid between the hours of 6AM and 2AM the next day.
-            {
-              "StartTime": 600,
-              "EndTime": 2600
-            }
+            "0600-2600" // This trigger is valid between the hours of 6AM and 2AM the next day.
           ],
-          "Weather": "Any" // Any weather is allowed!
+          "Weather": "Sunny" // Only sunny weather is allowed!
+        },
+
+        // okay, but what if it was raining on Monday? Let's do a catchup trigger.
+        // this one will will fire on any day if there hasn't been a screenshot for an entire week.
+        {
+          "Delay": 7, // seven full days must pass before this trigger will fire.
+          "Seasons": [
+            "Any"
+          ],
+          "Days": [
+            "Any" // but this trigger is valid on any day.
+          ],
+          "Time": [
+            "0600-2600",
+          ],
+          "Weather": "Sunny"
         }
       ],
 
@@ -109,7 +129,10 @@ A full example of a rule is as follows
       "Path": "{{Default}}\\{{Save}}\\{{Location}}\\{{Date}}.png",
 
       // The scale to use for this rule.
-      "Scale": 0.25
+      "Scale": 0.25,
+
+      // This trigger is allowed to go off during an event.
+      "DuringEvents": true
     },
 ```
 

@@ -15,7 +15,16 @@ public sealed class UserRule
     /// <summary>
     /// Gets or sets a list of triggers that may trigger this rule.
     /// </summary>
-    public UserTrigger[] Triggers { get; set; } = [new()];
+    public UserTrigger[] Triggers { get; set; } = [
+        new()
+        {
+            Days = ["Monday"],
+        },
+        new()
+        {
+            Delay = 7,
+        },
+    ];
 
     /// <summary>
     /// Gets or sets the path to save this rule at.

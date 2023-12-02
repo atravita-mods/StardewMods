@@ -93,14 +93,16 @@ internal sealed class CompleteScreenshotter : AbstractScreenshotter
     /// <summary>
     /// Initializes a new instance of the <see cref="CompleteScreenshotter"/> class.
     /// </summary>
+    /// <param name="player">The relevant player.</param>
     /// <param name="gameEvents">The gameloop event manager.</param>
     /// <param name="name">The name of the rule we're processing.</param>
-    /// <param name="filename">The tokenized filename.</param>
+    /// <param name="tokenizedFileName">The tokenized filename.</param>
     /// <param name="scale">The scale of the screenshot.</param>
+    /// <param name="duringEvent">Whether to fire during an event (true) or wait until the event is over (false).</param>
     /// <param name="target">The target location.</param>
     /// <remarks>Note that if there's an issue with construction, it will immediately dispose itself.</remarks>
-    public CompleteScreenshotter(Farmer player, IGameLoopEvents gameEvents, string name, string filename, float scale, bool duringEvent, GameLocation target)
-        : base(player, gameEvents, name, filename, scale, duringEvent, target)
+    public CompleteScreenshotter(Farmer player, IGameLoopEvents gameEvents, string name, string tokenizedFileName, float scale, bool duringEvent, GameLocation target)
+        : base(player, gameEvents, name, tokenizedFileName, scale, duringEvent, target)
     {
 #if TRACELOG
         Stopwatch sw = Stopwatch.StartNew();
@@ -237,7 +239,6 @@ internal sealed class CompleteScreenshotter : AbstractScreenshotter
 
             this.queue = null!;
             this.writeFileTask = null!;
-
         }
         base.Dispose(disposing);
     }

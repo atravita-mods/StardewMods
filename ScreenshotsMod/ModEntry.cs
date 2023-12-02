@@ -24,6 +24,8 @@ using AtraUtils = AtraShared.Utils.Utils;
 /// <inheritdoc />
 internal sealed class ModEntry : BaseMod<ModEntry>
 {
+    internal const string ModDataKey = "atravita.ScreenShots";
+
     /// <summary>
     /// The current live screenshotters.
     /// </summary>
@@ -50,7 +52,6 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         helper.Events.Player.Warped += this.OnWarp;
         helper.Events.GameLoop.DayStarted += this.OnDayStart;
         helper.Events.Input.ButtonPressed += this.OnButtonPressed;
-        helper.Events.GameLoop.DayEnding += this.Reset;
         AbstractScreenshotter.Init();
     }
 
@@ -124,10 +125,39 @@ internal sealed class ModEntry : BaseMod<ModEntry>
 
     private void ProcessRules(GameLocation location)
     {
+        int? lastTriggerDay = location.modData.GetInt(ModDataKey);
+        uint daysSinceTriggered = uint.MaxValue;
+        if (lastTriggerDay.HasValue)
+        {
+            var daysPlayed = Game1.stats.DaysPlayed;
+            uint uLastTriggerDay;
+
+            unchecked
+            {
+                uLastTriggerDay = (uint)lastTriggerDay.Value;
+            }
+
+            if (daysPlayed < uLastTriggerDay)
+            {
+                this.Monitor.Log($"The last trigger day is in the future, time travel must have happened, clearing data.", LogLevel.Info);
+                location.modData.Remove(ModDataKey);
+            }
+            else
+            {
+                daysSinceTriggered = daysPlayed - uLastTriggerDay;
+            }
+        }
+
+        if (daysSinceTriggered == 0u)
+        {
+            ModMonitor.DebugOnlyLog($"Map {location.NameOrUniqueName} has already had a screenshot today, skipping.");
+            return;
+        }
+
         PackedDay today = new();
         foreach (ProcessedRule rule in this.GetCurrentValidRules(location))
         {
-            if (rule.Trigger(location, today, Game1.timeOfDay))
+            if (rule.CanTrigger(location, today, Game1.timeOfDay, daysSinceTriggered))
             {
                 this.TakeScreenshotImpl(location, rule.Name, rule.Path, rule.Scale, rule.DuringEvents);
                 break;
@@ -151,7 +181,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         }
     }
 
-    private void TakeScreenshotImpl(GameLocation location, string name, string filename, float scale, bool duringEvent)
+    private void TakeScreenshotImpl(GameLocation location, string name, string tokenizedFilename, float scale, bool duringEvent)
     {
         if (this.screenshotters.Value is { } prev)
         {
@@ -166,13 +196,13 @@ internal sealed class ModEntry : BaseMod<ModEntry>
             }
         }
 
-        this.Monitor.VerboseLog($"Taking screenshot for {location.NameOrUniqueName} using scale {scale}: {filename}");
+        location.modData.SetInt(ModDataKey, (int)Game1.stats.DaysPlayed);
 
         CompleteScreenshotter completeScreenshotter = new(
             Game1.player,
             this.Helper.Events.GameLoop,
             name,
-            filename,
+            tokenizedFilename,
             scale,
             duringEvent,
             location);
@@ -183,22 +213,6 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         if (!completeScreenshotter.IsDisposed)
         {
             this.screenshotters.Value = completeScreenshotter;
-        }
-    }
-
-    private void Reset(object? sender, DayEndingEventArgs e)
-    {
-        foreach (ProcessedRule r in this._allMaps)
-        {
-            r.Reset();
-        }
-
-        foreach (List<ProcessedRule> series in this._rules.Values)
-        {
-            foreach (ProcessedRule rule in series)
-            {
-                rule.Reset();
-            }
         }
     }
 
@@ -237,7 +251,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
 
                 TimeRange[] times = FoldTimes(proposedTrigger.Time);
 
-                processedTriggers.Add(new ProcessedTrigger(packed.Value, times, proposedTrigger.Weather));
+                processedTriggers.Add(new ProcessedTrigger(packed.Value, times, proposedTrigger.Weather, proposedTrigger.Delay));
             }
 
             if (processedTriggers.Count == 0)

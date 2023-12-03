@@ -1,8 +1,11 @@
 ﻿namespace ScreenshotsMod.Framework;
 
+using System.IO;
 using System.Text.RegularExpressions;
 
 using StardewModdingAPI.Utilities;
+
+using StardewValley;
 
 /// <summary>
 /// Parses tokens out of the filename.
@@ -30,6 +33,7 @@ internal static class FileNameParser
         {
             proposed += ".png";
         }
+
         return proposed;
     }
 
@@ -43,9 +47,28 @@ internal static class FileNameParser
     internal static string GetFilename(string tokenized, GameLocation currentLocation, string ruleName)
     {
         // we must pass in the currentLocation because occasionally Game1.currentLocation is null in multiplayer when farmhands warp.
-        return string.Join(
+        var ret = string.Join(
                 '_',
                 _parser.Replace(tokenized, MatchEvaluator).Split(Path.GetInvalidPathChars()));
+
+        if (Constants.TargetPlatform != GamePlatform.Windows)
+        {
+            // handle the unix `~` home.
+            // took a look at the SMAPI installer for this: https://github.com/Pathoschild/SMAPI/blob/5919337236650c6a0d7755863d35b2923a94775c/src/SMAPI.Installer/InteractiveInstaller.cs#L776C21-L777C66
+            // Thanks, Pathos!
+            if (ret.StartsWith("~/"))
+            {
+                string? home = Environment.GetEnvironmentVariable("HOME") ?? Environment.GetEnvironmentVariable("USERPROFILE");
+                if (home is not null)
+                {
+                    ret = Path.Combine(home, ret[2..]);
+                }
+            }
+        }
+
+        // anything like this for Windows?
+
+        return ret;
 
         string MatchEvaluator(Match match)
         {

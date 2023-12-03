@@ -1,4 +1,4 @@
-﻿// #define TRACELOG
+﻿#define TRACELOG
 
 namespace AtraCore.HarmonyPatches.CustomEquipPatches;
 
@@ -44,10 +44,10 @@ internal static class ItemPatcher
     private static readonly PerScreen<ConditionalWeakTable<Item, EquipEffects>> _activeEffects = new(static () => new());
 
     // holds tooltip cache for combined rings
-    private static readonly ConditionalWeakTable<CombinedRing, EquipEffects?> _combinedTooltips = new();
+    private static readonly ConditionalWeakTable<CombinedRing, EquipEffects?> _combinedTooltips = [];
 
     // holds tooltip cache for boots
-    private static readonly ConditionalWeakTable<Boots, EquipEffects?> _bootsTooltips = new();
+    private static readonly ConditionalWeakTable<Boots, EquipEffects?> _bootsTooltips = [];
 
     // holds references to active lights
     private static readonly PerScreen<Dictionary<Item, int>> _lightSources = new(static () => new());
@@ -88,6 +88,16 @@ internal static class ItemPatcher
         _tooltipMap.Value.Clear();
         _combinedTooltips.Clear();
         _bootsTooltips.Clear();
+    }
+
+    /// <summary>
+    /// When returning to title screen, have to reset everything.
+    /// </summary>
+    internal static void OnReturnToTitle()
+    {
+        Reset();
+        _activeEffects.ResetAllScreens();
+        _tooltipMap.ResetAllScreens();
     }
 
     [HarmonyPostfix]
@@ -661,6 +671,8 @@ internal static class ItemPatcher
                 health_regen += effect.HealthRegen;
                 stamina_regen += effect.StaminaRegen;
             }
+
+            ModEntry.ModMonitor.DebugOnlyLog($"Health regen {health_regen}, stamina regen {stamina_regen}.");
 
             EquipEffects.HandleRegen(currentPlayer, health_regen, stamina_regen);
         }

@@ -176,6 +176,8 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         NPCCache.Reset();
         AllowRepeatAfterHandler.Reset();
         QuestTracker.Reset();
+
+        ItemPatcher.OnReturnToTitle();
     }
 
     /// <inheritdoc cref="IGameLoopEvents.TimeChanged"/>

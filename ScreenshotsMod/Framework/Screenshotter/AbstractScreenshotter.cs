@@ -223,7 +223,7 @@ internal abstract class AbstractScreenshotter : IDisposable
     /// <returns>True if it's safe to tick, false otherwise.</returns>
     private bool CantTick() =>
         !ReferenceEquals(this.player, Game1.player) || !ReferenceEquals(Game1.currentLocation, this.TargetLocation)
-            || Game1.game1.takingMapScreenshot || (!this.duringEvent && Game1.CurrentEvent?.isFestival != false)
+            || Game1.game1.takingMapScreenshot || (!this.duringEvent && Game1.CurrentEvent is { } evt && !evt.isFestival)
             || this.disposedValue;
 
     /// <summary>

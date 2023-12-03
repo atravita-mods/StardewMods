@@ -37,6 +37,7 @@ These are the valid tokens:
 | -----------|-----------------------------------------------
 | `Default` | The default screenshot directory of the game. Note that if you don't start the path with `{{Default}}` you should probably give it an absolute path.
 | `Location`| The unique name of a location.
+| `Context` | The name of this location's location context.
 | `Save` | The farm's name, followed by the unique ID for the save. This acts as a distinct identifier for the save.
 | `Farm` | The name of the farm.
 | `Name`| The current player's name.

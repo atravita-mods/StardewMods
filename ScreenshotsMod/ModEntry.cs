@@ -94,7 +94,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         }
 
         int ticks = Game1.ticks;
-        if (this.lastPressedTick.Value + 60 > ticks)
+        if (this.lastPressedTick.Value + 60 > ticks || !this.CheckScreenshotCapacity())
         {
             Game1.showRedMessage(I18n.SlowDown());
             return;

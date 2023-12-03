@@ -26,6 +26,11 @@ internal sealed class ModEntry : BaseMod<ModEntry>
 
     private void Display_RenderedHud(object? sender, RenderedHudEventArgs e)
     {
+        if (Game1.game1.takingMapScreenshot)
+        {
+            return;
+        }
+
         IList<NPC>? characters = Game1.CurrentEvent?.actors;
         characters ??= Game1.currentLocation?.characters;
 

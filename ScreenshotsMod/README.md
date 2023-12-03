@@ -92,7 +92,7 @@ A full example of a rule is as follows
       ],
       "Triggers": [
         // Remember, multiple triggers are allowed, and the rule will fire the FIRST time ANY trigger is valid in a day!
-        // We only have one here.
+        // We have two here.
         {
           "Cooldown": 1, // allow a screenshot per day.
           "Seasons": [
@@ -216,11 +216,17 @@ With this last little trick, I can skip the intermediate transfer buffers entire
 
 I still don't recommend trying to take full scale (`scale = 1`) pictures of large maps, especially in multiplayer. On my computer, the final total time for a screenshot of `Town` (one of the biggest maps) at full scale is about 300-500 ms, with occasional random spikes. (The original time was closer to 1-2 seconds). At quarter scale, it's about 150 ms or so, so still a stutter you can feel if you try to take a screenshot during gameplay, but hides well enough in a warp otherwise.
 
+### What else takes time?
+
+Currently, the longest bits of time are:
+* The remaining time in getting data out of the render textures, which is in native code and thus something I'm not touching.
+* On-demand loading of textures and assets before rendering, which would be best optimized in SMAPI.
+
 ## FAQ:
 * **Why is there (some random other mod's UI element) repeated over my map?** Because they forgot to disable drawing that during screenshots. Nothing I can do, tell them to not draw if `Game1.game1.takingMapScreenshot` is true.
 * **Huh, I can see stitching lines in the screenshot.** I recommend setting the scale to `0.25`, `0.50`, `0.75`, or `1`. Any other value may cause stitching artifacts.
 * **Why not reuse the SKBitmaps?** Because it doesn't actually matter. Skia will make a defensive copy of the `SKBitmap` when copying to the `SKCanvas` unless I specify it's immutable, in which case I can't reuse it.
-* **What next?** I'd love to override the game's ambiance to get more consistent screenshots, but so far haven't figured that one out.
+* **What next?** I'd love to override the game's ambiance to get more consistent screenshots, but so far haven't figured that one out. And I'd like to have a more intuitive gui-based config editor. Stay tuned.
 
 ## Acknowledgements
 

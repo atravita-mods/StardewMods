@@ -26,15 +26,24 @@ using AtraUtils = AtraShared.Utils.Utils;
 /// <inheritdoc />
 internal sealed class ModEntry : BaseMod<ModEntry>
 {
+    /// <summary>
+    /// The mod data key used to mark maps.
+    /// </summary>
     internal const string ModDataKey = "atravita.ScreenShots";
+
+    /// <summary>
+    /// The maximum number of screenshots we allow to be active at any one time.
+    /// </summary>
+    private const int MAX_ACTIVE_SCREENSHOTS = 8; // I goddamn hope you don't hit this.
 
     /// <summary>
     /// The current live screenshotters.
     /// </summary>
-    private readonly PerScreen<AbstractScreenshotter?> screenshotters = new(() => null);
+    private readonly List<AbstractScreenshotter> screenshotters = [];
+    private readonly PerScreen<int> lastPressedTick = new(static () => -1);
+    private readonly PerScreen<bool> modTriggeredWarp = new(() => false);
 
     private readonly Dictionary<string, List<ProcessedRule>> _rules = new(StringComparer.OrdinalIgnoreCase);
-
     private readonly List<ProcessedRule> _allMaps = [];
 
     /// <summary>Gets the config class for this mod.</summary>
@@ -84,19 +93,19 @@ internal sealed class ModEntry : BaseMod<ModEntry>
             return;
         }
 
+        int ticks = Game1.ticks;
+        if (this.lastPressedTick.Value + 60 > ticks)
+        {
+            Game1.showRedMessage(I18n.SlowDown());
+            return;
+        }
+        this.lastPressedTick.Value = ticks;
+
         this.TakeScreenshotImpl(Game1.currentLocation, "keybind", Config.KeyBindFileName, Config.KeyBindScale, true);
     }
 
     private void OnDayStart(object? sender, DayStartedEventArgs e)
     {
-        if (this.screenshotters.Value is { } prev)
-        {
-            if (prev.IsDisposed)
-            {
-                this.screenshotters.Value = null;
-            }
-        }
-
         if (Game1.currentLocation is null || Game1.game1.takingMapScreenshot || (Game1.currentLocation.IsTemporary && Game1.CurrentEvent?.isFestival != true))
         {
             return;
@@ -107,16 +116,8 @@ internal sealed class ModEntry : BaseMod<ModEntry>
 
     private void OnWarp(object? sender, WarpedEventArgs e)
     {
-        if (this.screenshotters.Value is { } prev)
-        {
-            if (prev.IsDisposed)
-            {
-                this.screenshotters.Value = null;
-            }
-        }
-
         // it's possible for this event to be raised for a "false warp".
-        if (e.NewLocation is null || ReferenceEquals(e.NewLocation, e.OldLocation) || !e.IsLocalPlayer
+        if (e.NewLocation is null || ReferenceEquals(e.NewLocation, e.OldLocation) || !e.IsLocalPlayer || this.modTriggeredWarp.Value
             || (e.NewLocation.IsTemporary && Game1.CurrentEvent?.isFestival != true) || Game1.game1.takingMapScreenshot)
         {
             return;
@@ -127,28 +128,13 @@ internal sealed class ModEntry : BaseMod<ModEntry>
 
     private void ProcessRules(GameLocation location)
     {
-        int? lastTriggerDay = location.modData.GetInt(ModDataKey);
-        uint daysSinceTriggered = uint.MaxValue;
-        if (lastTriggerDay.HasValue)
+        if (!this.CheckScreenshotCapacity())
         {
-            var daysPlayed = Game1.stats.DaysPlayed;
-            uint uLastTriggerDay;
-
-            unchecked
-            {
-                uLastTriggerDay = (uint)lastTriggerDay.Value;
-            }
-
-            if (daysPlayed < uLastTriggerDay)
-            {
-                this.Monitor.Log($"The last trigger day is in the future, time travel must have happened, clearing data.", LogLevel.Info);
-                location.modData.Remove(ModDataKey);
-            }
-            else
-            {
-                daysSinceTriggered = daysPlayed - uLastTriggerDay;
-            }
+            this.Monitor.Log($"Too many active screenshotters. This is likely an error.", LogLevel.Error);
+            return;
         }
+
+        uint daysSinceTriggered = GetDaysSinceLastTriggered(location);
 
         if (daysSinceTriggered == 0u)
         {
@@ -161,10 +147,82 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         {
             if (rule.CanTrigger(location, Game1.player, today, Game1.timeOfDay, daysSinceTriggered))
             {
-                this.TakeScreenshotImpl(location, rule.Name, rule.Path, rule.Scale, rule.DuringEvents);
+                if (!rule.DuringEvents && Game1.CurrentEvent is { } evt)
+                {
+                    // we may have to warp players BACK to the original map after an event.
+                    // this lets us delay a screenshot to after an event.
+                    void WarpBack()
+                    {
+                        if (location.isStructure.Value)
+                        {
+                            return; // welp, buildings are weird. Bail.
+                        }
+                        if (Game1.currentLocation.Name != location.Name)
+                        {
+                            this.Monitor.Log($"Warping farmer back to original map after event {evt.id} for screenshots.");
+                            LocationRequest locationRequest = new(location.Name, location.isStructure.Value, location);
+                            locationRequest.OnLoad += () =>
+                            {
+                                this.TakeScreenshotImpl(location, rule.Name, rule.Path, rule.Scale, rule.DuringEvents);
+                                this.modTriggeredWarp.Value = false;
+                            };
+                            int x = 8;
+                            int y = 8;
+                            Utility.getDefaultWarpLocation(location.Name, ref x, ref y);
+                            this.modTriggeredWarp.Value = true;
+                            Game1.warpFarmer(locationRequest, x, y, 2);
+                        }
+                        else
+                        {
+                            this.Monitor.Log($"Taking event-delayed screenshot after {evt.id} for {rule.Name}.");
+                            this.TakeScreenshotImpl(location, rule.Name, rule.Path, rule.Scale, rule.DuringEvents);
+                        }
+                    }
+
+                    if (evt.onEventFinished is { } act)
+                    {
+                        act += WarpBack;
+                    }
+                    else
+                    {
+                        evt.onEventFinished = WarpBack;
+                    }
+                }
+                else
+                {
+                    this.TakeScreenshotImpl(location, rule.Name, rule.Path, rule.Scale, rule.DuringEvents);
+                }
                 break;
             }
         }
+    }
+
+    private static uint GetDaysSinceLastTriggered(GameLocation location)
+    {
+        int? lastTriggerDay = location.modData.GetInt(ModDataKey);
+        uint daysSinceTriggered = uint.MaxValue;
+        if (lastTriggerDay.HasValue)
+        {
+            uint daysPlayed = Game1.stats.DaysPlayed;
+            uint uLastTriggerDay;
+
+            unchecked
+            {
+                uLastTriggerDay = (uint)lastTriggerDay.Value;
+            }
+
+            if (daysPlayed < uLastTriggerDay)
+            {
+                ModMonitor.Log($"The last trigger day is in the future, time travel must have happened, clearing data.", LogLevel.Info);
+                location.modData.Remove(ModDataKey);
+            }
+            else
+            {
+                daysSinceTriggered = daysPlayed - uLastTriggerDay;
+            }
+        }
+
+        return daysSinceTriggered;
     }
 
     private IEnumerable<ProcessedRule> GetCurrentValidRules(GameLocation location)
@@ -199,7 +257,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
             yield return r;
         }
 
-        var context = location.GetLocationContextId();
+        string context = location.GetLocationContextId();
         if (!context.Equals(locationName, StringComparison.OrdinalIgnoreCase))
         {
             if (this._rules.TryGetValue(context, out List<ProcessedRule>? contextRules))
@@ -214,21 +272,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
 
     private void TakeScreenshotImpl(GameLocation location, string name, string tokenizedFilename, float scale, bool duringEvent)
     {
-        if (this.screenshotters.Value is { } prev)
-        {
-            if (prev.IsDisposed)
-            {
-                this.screenshotters.Value = null;
-            }
-            else
-            {
-                this.Monitor.Log($"Previous screenshot is still in effect.", LogLevel.Warn);
-                return;
-            }
-        }
-
         location.modData.SetInt(ModDataKey, (int)Game1.stats.DaysPlayed);
-
         CompleteScreenshotter completeScreenshotter = new(
             Game1.player,
             this.Helper.Events.GameLoop,
@@ -239,8 +283,28 @@ internal sealed class ModEntry : BaseMod<ModEntry>
             location);
         if (!completeScreenshotter.IsDisposed)
         {
-            this.screenshotters.Value = completeScreenshotter;
+            this.screenshotters.Add(completeScreenshotter);
         }
+    }
+
+    private bool CheckScreenshotCapacity()
+    {
+        int count = this.screenshotters.Count;
+        if (count == 0)
+        {
+            return true;
+        }
+
+        for (int i = count - 1; i >= 0; i--)
+        {
+            AbstractScreenshotter shot = this.screenshotters[i];
+            if (shot.IsDisposed)
+            {
+                this.screenshotters.RemoveAt(i);
+            }
+        }
+
+        return this.screenshotters.Count < MAX_ACTIVE_SCREENSHOTS;
     }
 
     #endregion
@@ -254,58 +318,23 @@ internal sealed class ModEntry : BaseMod<ModEntry>
 
         foreach ((string name, UserRule rule) in config.Rules)
         {
-            if (rule.Triggers.Length == 0)
+            if (rule.Process(name) is { } newRule)
             {
-                this.Monitor.Log($"Rule {name} appears to lack triggers, skipping.", LogLevel.Warn);
-                continue;
-            }
-
-            List<ProcessedTrigger> processedTriggers = new(rule.Triggers.Length);
-            foreach (UserTrigger proposedTrigger in rule.Triggers)
-            {
-                PackedDay? packed = PackedDay.Parse(proposedTrigger.Seasons, proposedTrigger.Days, out string? error);
-                if (packed is null)
+                foreach (string map in rule.Maps)
                 {
-                    this.Monitor.Log($"Rule {name} has invalid times: {error}, skipping", LogLevel.Warn);
-                    continue;
+                    this.AddRuleToMap(map, newRule);
                 }
-
-                if (proposedTrigger.Time.Length == 0)
-                {
-                    this.Monitor.Log($"Rule {name} has no valid times, skipping.", LogLevel.Warn);
-                    continue;
-                }
-
-                TimeRange[] times = FoldTimes(proposedTrigger.Time);
-
-                processedTriggers.Add(new ProcessedTrigger(packed.Value, times, proposedTrigger.Weather, proposedTrigger.Cooldown, proposedTrigger.Condition));
-            }
-
-            if (processedTriggers.Count == 0)
-            {
-                this.Monitor.Log($"Rule {name} has no valid triggers.", LogLevel.Warn);
-                continue;
-            }
-
-            ProcessedRule newRule = new(name, rule.Path, rule.Scale, rule.DuringEvents, processedTriggers.ToArray());
-
-            if (rule.Maps.Length == 0)
-            {
-                this.Monitor.Log($"Rule {name} has no valid maps.", LogLevel.Warn);
-                continue;
-            }
-
-            this.AddRuleToMap(rule.Maps[0], newRule);
-
-            for (int m = 1; m < rule.Maps.Length; m++)
-            {
-                this.AddRuleToMap(rule.Maps[m], newRule.Clone());
             }
         }
     }
 
     private void AddRuleToMap(string mapName, ProcessedRule rule)
     {
+        if (this.Monitor.IsVerbose)
+        {
+            this.Monitor.Log($"New rule added for {mapName}:\n\n{JsonConvert.SerializeObject(rule, Formatting.Indented)}.");
+        }
+
         mapName = mapName.Trim();
         if (mapName == "*")
         {
@@ -318,56 +347,6 @@ internal sealed class ModEntry : BaseMod<ModEntry>
             this._rules[mapName] = prev = [];
         }
         prev.Add(rule);
-
-        if (this.Monitor.IsVerbose)
-        {
-            this.Monitor.Log($"New rule added for {mapName}:\n\n{JsonConvert.SerializeObject(rule, Formatting.Indented)}.");
-        }
-    }
-
-    private static TimeRange[] FoldTimes(TimeRange[] time)
-    {
-        if (time.Length is 0 or 1)
-        {
-            return time;
-        }
-
-        Array.Sort(time);
-
-        bool nonoverlap = true;
-        for (int i = 1; i < time.Length; i++)
-        {
-            TimeRange first = time[i - 1];
-            TimeRange second = time[i];
-            if (first.EndTime >= second.StartTime)
-            {
-                nonoverlap = false;
-                break;
-            }
-        }
-
-        if (nonoverlap)
-        {
-            return time;
-        }
-
-        List<TimeRange>? proposed = [];
-        TimeRange prev = time[0];
-        for (int i = 1; i < time.Length; i++)
-        {
-            TimeRange current = time[i];
-            if (current.StartTime <= prev.EndTime)
-            {
-                prev = new(prev.StartTime, Math.Max(prev.EndTime, current.EndTime));
-            }
-            else
-            {
-                proposed.Add(prev);
-                prev = current;
-            }
-        }
-        proposed.Add(prev);
-        return proposed.ToArray();
     }
 
     #endregion

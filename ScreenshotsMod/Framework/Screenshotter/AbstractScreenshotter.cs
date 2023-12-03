@@ -15,6 +15,8 @@ using Microsoft.Xna.Framework.Graphics;
 
 using StardewModdingAPI.Events;
 
+using StardewValley.BellsAndWhistles;
+
 namespace ScreenshotsMod.Framework.Screenshotter;
 
 /// <summary>
@@ -30,9 +32,11 @@ internal abstract class AbstractScreenshotter : IDisposable
     protected static Action<int, int> _allocateLightMap = null!;
 
     protected static Action<Game1, GameTime, RenderTarget2D> _draw = null!;
-    #endregion
-    private readonly bool duringEvent;
 
+    protected static Func<ScreenFade?> _fade = null!;
+    #endregion
+
+    private readonly bool duringEvent;
     private bool disposedValue;
 
     // event handlers
@@ -118,6 +122,7 @@ internal abstract class AbstractScreenshotter : IDisposable
         _lightMapSetter = lightmap.GetStaticFieldSetter<RenderTarget2D?>();
         _allocateLightMap = typeof(Game1).GetCachedMethod("allocateLightmap", ReflectionCache.FlagTypes.StaticFlags).CreateDelegate<Action<int, int>>();
         _draw = typeof(Game1).GetCachedMethod("_draw", ReflectionCache.FlagTypes.InstanceFlags).CreateDelegate<Action<Game1, GameTime, RenderTarget2D>>();
+        _fade = typeof(Game1).GetCachedField("screenFade", ReflectionCache.FlagTypes.StaticFlags).GetStaticFieldGetter<ScreenFade?>();
     }
 
     /// <summary>
@@ -162,6 +167,13 @@ internal abstract class AbstractScreenshotter : IDisposable
         {
             Game1.addHUDMessage(new HUDMessage(I18n.PictureTaken(this.Name), HUDMessage.screenshot_type));
         }
+    }
+
+    /// <summary>
+    /// Displays the audio cue and plays the camera noise for the screenshot effect.
+    /// </summary>
+    protected void DisplayEffects()
+    {
         if (ModEntry.Config.AudioCue)
         {
             Game1.playSound("cameraNoise");

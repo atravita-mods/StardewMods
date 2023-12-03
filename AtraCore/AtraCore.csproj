@@ -21,7 +21,7 @@
     <IgnoreModFilePatterns>
          $(IgnoreModFilePatterns),
          System.*.dll$, <!-- System would bundle these.-->
-         ^Microsoft.(?!.*(Toolkit.Diagnostics.dll)), <!-- Everyone but MS.Toolkit.Diagnostics-->
+         ^Microsoft.(?!.*(Toolkit.Diagnostics.dll|Msagl)), <!-- Everyone but MS.Toolkit.Diagnostics and MSagl-->
          ^runtimes[/\\].*, 
          .*[/\\]Microsoft.*, <!-- CodeDiagnostics in a bunch of languages?-->
          ^JetBrains,<!-- Should never be bundled.-->

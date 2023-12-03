@@ -1,4 +1,8 @@
-﻿namespace ScreenshotsMod.Framework.UserModels;
+﻿using System.Data;
+
+using ScreenshotsMod.Framework.ModModels;
+
+namespace ScreenshotsMod.Framework.UserModels;
 
 /// <summary>
 /// A user defined screenshot rule.
@@ -52,5 +56,37 @@ public sealed class UserRule
     public UserRule()
     {
         this.Path = FileNameParser.DEFAULT_FILENAME;
+    }
+
+    internal ProcessedRule? Process(string name)
+    {
+        if (this.Triggers.Length == 0)
+        {
+            ModEntry.ModMonitor.Log($"Rule {name} appears to lack triggers, skipping.", LogLevel.Warn);
+            return null;
+        }
+
+        if (this.Maps.Length == 0)
+        {
+            ModEntry.ModMonitor.Log($"Rule {name} has no valid maps.", LogLevel.Warn);
+            return null;
+        }
+
+        List<ProcessedTrigger> processedTriggers = new(this.Triggers.Length);
+        foreach (UserTrigger proposedTrigger in this.Triggers)
+        {
+            if (proposedTrigger.Process(name) is { } trigger)
+            {
+                processedTriggers.Add(trigger);
+            }
+        }
+
+        if (processedTriggers.Count == 0)
+        {
+            ModEntry.ModMonitor.Log($"Rule {name} has no valid triggers.", LogLevel.Warn);
+            return null;
+        }
+
+        return new(name, this.Path, this.Scale, this.DuringEvents, processedTriggers.ToArray());
     }
 }

@@ -19,6 +19,8 @@ using SkiaSharp;
 
 using StardewModdingAPI.Events;
 
+using StardewValley.BellsAndWhistles;
+
 using XRectangle = xTile.Dimensions.Rectangle;
 
 namespace ScreenshotsMod.Framework.Screenshotter;
@@ -40,7 +42,9 @@ namespace ScreenshotsMod.Framework.Screenshotter;
 /// </summary>
 internal sealed class CompleteScreenshotter : AbstractScreenshotter
 {
-    // state constants. Grumbles.
+    //
+
+    // state constants. Grumbles. I would use an enum if C# would let me, but cmpexchange and the volatiles don't make it easy.
 
     /// <summary>
     /// Initial state, set in constructor.
@@ -205,6 +209,8 @@ internal sealed class CompleteScreenshotter : AbstractScreenshotter
                         this.Dispose();
                         return;
                     }
+
+                    this.DisplayHud();
                     Volatile.Write(ref this.state, Complete);
 #if TRACELOG
                     ModEntry.ModMonitor.LogTimespan("taking full screenshot", this.watch);
@@ -378,13 +384,23 @@ internal sealed class CompleteScreenshotter : AbstractScreenshotter
 #endif
                     portion_bitmap.SetImmutable();
                     this.queue.Add((portion_bitmap, SKRect.Create(current_x, current_y, current_width, current_height)));
+
+                    // sneakily advancing the screen fade to make things "appear" to go faster.
+                    if (Game1.globalFade)
+                    {
+                        ScreenFade? fade = _fade();
+                        if (fade?.fadeIn == true)
+                        {
+                            fade.fadeToBlackAlpha = Math.Max(0f, fade.fadeToBlackAlpha - fade.globalFadeSpeed);
+                        }
+                    }
                 }
             }
 
             // if this was changed on us, the screenshot was unsuccessful.
             if (Interlocked.CompareExchange(ref this.state, TransferToSkia, TakingMapScreenshot) == TakingMapScreenshot)
             {
-                this.DisplayHud();
+                this.DisplayEffects();
             }
 
             return;

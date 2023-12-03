@@ -1,3 +1,4 @@
 ﻿{
-    "picture-taken": "Screenshot Taken ({{rule}})",
+  "picture-taken": "Screenshot Taken ({{rule}})",
+  "slow-down": "Slow down! Too many screenshots."
 }

@@ -262,6 +262,10 @@ Outer: ;
 
                 ScreenFade? fade = this.Helper.Reflection.GetField<ScreenFade>(typeof(Game1), "screenFade")?.GetValue();
                 fade?.UpdateFade(Game1.currentGameTime);
+                if (Game1.globalFade)
+                {
+                    fade?.UpdateGlobalFade();
+                }
             }
         }
         catch (Exception ex)

@@ -317,22 +317,10 @@ internal sealed class ModEntry : Mod
         }
     }
 
-    private static int jojaFertilizerID = -1;
-
     /// <summary>
-    /// Gets the integer ID of Joja's fertilizer. -1 if not found/not loaded yet.
+    /// Gets the string ID of Joja's fertilizer
     /// </summary>
-    internal static int JojaFertilizerID
-    {
-        get
-        {
-            if (jojaFertilizerID == -1)
-            {
-                jojaFertilizerID = jsonAssets?.GetObjectId("Joja Fertilizer - More Fertilizers") ?? -1;
-            }
-            return jojaFertilizerID;
-        }
-    }
+    internal const string JojaFertilizerID = "atravita.CP.MoreFertilizers.JojaFertilizer";
 
     private static int deluxeJojaFertilizerID = -1;
 

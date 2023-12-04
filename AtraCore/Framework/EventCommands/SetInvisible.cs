@@ -14,36 +14,26 @@ using StardewModdingAPI.Events;
 /// <summary>
 /// Used to set an NPC invisible for a specific number of days.
 /// </summary>
-internal sealed class SetInvisible : IEventCommand
+/// <remarks>
+/// Initializes a new instance of the <see cref="SetInvisible"/> class.
+/// </remarks>
+/// <param name="name">Name of the command.</param>
+/// <param name="monitor">Monitor to use.</param>
+/// <param name="multiplayer">SMAPI's multiplayer helper.</param>
+/// <param name="uniqueID">This mod's uniqueID.</param>
+internal sealed class SetInvisible(string name, IMonitor monitor, IMultiplayerHelper multiplayer, string uniqueID) : IEventCommand
 {
     private const string RequestSetInvisible = "RequestSetInvisible";
 
     private const char Sep = 'Ω';
 
-    /// <summary>
-    /// Initializes a new instance of the <see cref="SetInvisible"/> class.
-    /// </summary>
-    /// <param name="name">Name of the command.</param>
-    /// <param name="monitor">Monitor to use.</param>
-    /// <param name="multiplayer">SMAPI's multiplayer helper.</param>
-    /// <param name="uniqueID">This mod's uniqueID.</param>
-    public SetInvisible(string name, IMonitor monitor, IMultiplayerHelper multiplayer, string uniqueID)
-    {
-        this.Name = name;
-        this.Monitor = monitor;
-        this.Multiplayer = multiplayer;
-        this.UniqueID = string.Intern(uniqueID);
-    }
+    /// <inheritdoc />
+    public string Name { get; init; } = name;
 
     /// <inheritdoc />
-    public string Name { get; init; }
+    public IMonitor Monitor { get; init; } = monitor;
 
-    /// <inheritdoc />
-    public IMonitor Monitor { get; init; }
-
-    private IMultiplayerHelper Multiplayer { get; init; }
-
-    private string UniqueID { get; init; }
+    private string UniqueID { get; init; } = string.Intern(uniqueID);
 
     /// <inheritdoc />
     public bool Validate(Event @event, GameLocation location, GameTime time, string[] args, out string? error)
@@ -95,7 +85,7 @@ internal sealed class SetInvisible : IEventCommand
             else
             {
                 ModEntry.ModMonitor.Log($"Requesting {npc.Name} to be set invisible for {days} days.");
-                this.Multiplayer.SendMessage(
+                multiplayer.SendMessage(
                     message: $"{npc.Name}{Sep}{days}",
                     messageType: RequestSetInvisible,
                     modIDs: new[] { this.UniqueID },

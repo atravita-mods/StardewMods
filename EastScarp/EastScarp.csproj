@@ -28,6 +28,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json" HintPath="$(GamePath)\smapi-internal\Newtonsoft.Json.dll" private="false" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Update="JetBrains.Annotations" Version="2023.3.0" />
   </ItemGroup>
 

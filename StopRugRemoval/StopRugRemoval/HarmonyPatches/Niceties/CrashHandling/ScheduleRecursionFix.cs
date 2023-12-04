@@ -1,18 +1,10 @@
-﻿using System.Reflection;
-using System.Reflection.Emit;
-
-using AtraBase.Toolkit.Reflection;
-
-using AtraCore.Framework.ReflectionManager;
+﻿namespace StopRugRemoval.HarmonyPatches.Niceties.CrashHandling;
 
 using AtraShared.Utils.Extensions;
-using AtraShared.Utils.HarmonyHelper;
 
 using HarmonyLib;
 
-namespace StopRugRemoval.HarmonyPatches.Niceties.CrashHandling;
-
-#warning - crosscheck in 1.6.
+using StardewValley.Pathfinding;
 
 /// <summary>
 /// Prevents default->default and spring->spring recursion in scheduling.
@@ -20,60 +12,47 @@ namespace StopRugRemoval.HarmonyPatches.Niceties.CrashHandling;
 [HarmonyPatch(typeof(NPC))]
 internal static class ScheduleRecursionFix
 {
-    private static bool CheckForRecursion(string scheduleKey, string schedule, NPC npc)
+    private static readonly ThreadLocal<Stack<string>> _stack = new(() => new());
+
+    [HarmonyPriority(Priority.First)]
+    [HarmonyPatch(nameof(NPC.parseMasterSchedule))]
+    private static bool Prefix(NPC __instance, string scheduleKey, string rawData, ref Dictionary<int, SchedulePathDescription>? __result)
     {
-        if (scheduleKey == schedule)
+        _stack.Value ??= new();
+
+        ModEntry.ModMonitor.DebugOnlyLog($"Pushing {scheduleKey} for {__instance.Name}");
+
+        if (_stack.Value.Contains(scheduleKey))
         {
-            ModEntry.ModMonitor.Log($"Schedule disabled for {npc.Name} - infinite recursion found.", LogLevel.Error);
-            return true;
+            ModEntry.ModMonitor.Log($"Broke schedule loop for NPC {__instance.Name}: {string.Join("->", _stack.Value)}.\n\tRaw data was {rawData}", LogLevel.Warn);
+            _stack.Value.Push(scheduleKey);
+            __result = [];
+            return false;
         }
-        return false;
+
+        _stack.Value.Push(scheduleKey);
+        return true;
     }
 
     [HarmonyPatch(nameof(NPC.parseMasterSchedule))]
-    [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:Split parameters should start on line after declaration", Justification = "Reviewed.")]
-    private static IEnumerable<CodeInstruction>? Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
+    private static void Finalizer(NPC __instance, string scheduleKey, string rawData, Exception __exception)
     {
-        try
+        if (__exception is not null)
         {
-            ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);
-            helper.FindNext(new CodeInstructionWrapper[]
-            { // if (this.changeScheduleForLocationAccessibility)
-                (OpCodes.Call, typeof(NPC).GetCachedMethod("changeScheduleForLocationAccessibility", ReflectionCache.FlagTypes.InstanceFlags)),
-            });
-
-            foreach (string? schedulestring in new[] { "default", "spring" })
-            {
-                helper.FindNext(new CodeInstructionWrapper[]
-                { // return this.parseMasterSchedule(this.GetMasterScheduleEntry("default" OR "spring");
-                    OpCodes.Ldarg_0,
-                    (OpCodes.Ldstr, schedulestring),
-                    OpCodes.Ldarg_0,
-                    (OpCodes.Ldstr, schedulestring),
-                    (OpCodes.Call, typeof(NPC).GetCachedMethod(nameof(NPC.getMasterScheduleEntry), ReflectionCache.FlagTypes.InstanceFlags)),
-                    (OpCodes.Callvirt, typeof(NPC).GetCachedMethod(nameof(NPC.parseMasterSchedule), ReflectionCache.FlagTypes.InstanceFlags)),
-                })
-                .GetLabels(out IList<Label>? defaultLabels)
-                .DefineAndAttachLabel(out Label defaultJump)
-                .Insert(new CodeInstruction[]
-                {
-                    new (OpCodes.Ldarg_1),
-                    new(OpCodes.Ldstr, schedulestring),
-                    new(OpCodes.Ldarg_0),
-                    new(OpCodes.Call, typeof(ScheduleRecursionFix).GetCachedMethod(nameof(CheckForRecursion), ReflectionCache.FlagTypes.StaticFlags)),
-                    new(OpCodes.Brfalse, defaultJump),
-                    new(OpCodes.Ldnull),
-                    new(OpCodes.Ret),
-                }, withLabels: defaultLabels);
-            }
-
-            // helper.Print();
-            return helper.Render();
+            ModEntry.ModMonitor.Log($"Schedule parsing ran into errors for npc '{__instance.Name}' with key '{scheduleKey}': {rawData}.", LogLevel.Warn);
+            ModEntry.ModMonitor.Log(__exception.ToString());
+            _stack.Value?.Clear();
+            return;
         }
-        catch (Exception ex)
+
+        if (_stack.Value is not { } s || !s.TryPop(out string? last))
         {
-            ModEntry.ModMonitor.LogTranspilerError(original, ex);
+            ModEntry.ModMonitor.Log($"Huh, how did we get here? {Environment.CurrentManagedThreadId}.", LogLevel.Warn);
+            return;
         }
-        return null;
+        else
+        {
+            ModEntry.ModMonitor.DebugOnlyLog($"Leaving processing {last} for {__instance.Name}");
+        }
     }
 }

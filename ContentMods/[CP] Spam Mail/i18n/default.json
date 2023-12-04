@@ -1,4 +1,9 @@
 {
+    /***********************
+    * Configuration
+    * **********************/
+    "config.ExpectedPlayTime.name": "Expected Play Time",
+
     /*********
     * Mail
     **********/
@@ -10,10 +15,15 @@
     "Aquarium.Text": "Ever interested in the crazy weird creatures that inhabit the depths of the ocean! Now you have an opportunity to meet them! For two weeks only, our Denizens of the Deep exhibit will let you see anglerfish, rattails, and even vampire squid!",
 
     // zoo?
+    "Zoo.Title": "New Exhibits at the Zuzu City Zoo!",
+    "Zoo.Text": "Just for this summer, we've got some panda visitors! Bring your kids to meet these lovely fluffy critters, and watch us feed them bamboo.",
+
+    "Zoo2.Title": "Meet our new Eagle Ambassador!",
+    "Zoo2.Text": "We'd like to introduce you to Sparrow, our new eagle ambassador! Come and watch us feed her fish and learn about conservation efforts.",
 
     // anyone else remember Medieval Times?
     "Castle.Title": "Jousting, Knights, and Festivities!",
-    "Castle.Text": "Come see an unique attraction in Castle Town! Featuring dynamic jousts, expert horsemanship, and a feast fit for kings! Only 1000$ per person!",
+    "Castle.Text": "Come see an unique attraction in Castle Times! Featuring dynamic jousts, expert horsemanship, and a feast fit for kings! Only 1000$ per person!",
 
     // Joja mail
     "JojaMail.Summer.Title": "It's Summer!",

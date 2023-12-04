@@ -55,4 +55,29 @@ internal static class Extensions
         monitor.Log($"Mod failed while {action}, see log for details.", LogLevel.Error);
         monitor.Log(ex.ToString());
     }
+
+    /// <summary>
+    /// Tries to split once by a deliminator.
+    /// </summary>
+    /// <param name="str">Text to split.</param>
+    /// <param name="deliminator">Deliminator to split by.</param>
+    /// <param name="first">The part that precedes the deliminator, or the whole text if not found.</param>
+    /// <param name="second">The part that is after the deliminator.</param>
+    /// <returns>True if successful, false otherwise.</returns>
+    [Pure]
+    public static bool TrySplitOnce(this ReadOnlySpan<char> str, char deliminator, out ReadOnlySpan<char> first, out ReadOnlySpan<char> second)
+    {
+        int idx = str.IndexOf(deliminator);
+
+        if (idx < 0)
+        {
+            first = str;
+            second = [];
+            return false;
+        }
+
+        first = str[..idx];
+        second = str[(idx + 1)..];
+        return true;
+    }
 }

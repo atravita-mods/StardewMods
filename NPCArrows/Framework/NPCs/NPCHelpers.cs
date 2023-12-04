@@ -71,6 +71,6 @@ internal static class NPCHelpers
             origin: Vector2.Zero,
             layerDepth: 1f,
             effects: SpriteEffects.None,
-            scale: Game1.pixelZoom);
+            scale: 1f);
     }
 }

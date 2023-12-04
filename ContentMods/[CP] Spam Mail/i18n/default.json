@@ -11,7 +11,7 @@
 
     // zoo?
 
-    // anyone else remember Medieval Times? 
+    // anyone else remember Medieval Times?
     "Castle.Title": "Jousting, Knights, and Festivities!",
     "Castle.Text": "Come see an unique attraction in Castle Town! Featuring dynamic jousts, expert horsemanship, and a feast fit for kings! Only 1000$ per person!",
 
@@ -52,7 +52,7 @@
 
     // VPN
     "VPN.Title": "Protect Your Privacy!",
-    "VPN.Text": "Did you know that when you're browsing online, every website tracks you! Well, they do! Let us help you hide from them.",
+    "VPN.Text": "Did you know that when you're browsing online, every website tracks you! Well, they do! Let us help you hide from them. Only 99g for the first month!",
 
     // pizza
     "Pizza.Title": "Enjoy our new fully-stuffed-crust pizza!",
@@ -64,6 +64,9 @@
     "EnergyDrink.Text.00": "All you need is a single sip of our patented Bungle Blaster and you'll run faster than you've ever in your life!",
     "EnergyDrink.Text.01": "Not recommended for pregnant women or anyone with heart issues.",
 
+    "EnergyDrink2.Title": "Introducing...Fahrenheit!",
+    "EnergyDrink2.Text.00": "Now with even more caffeine, guaranteed to get you going all day long.",
+
     // Tools Shop
     "ToolsShop.Title": "Air Compressors For Less",
     "ToolsShop.Text.00": "Introducing our new Black and Yellow Air Compressor, perfect for small tasks! Buy yours, thirty percent off, today!",
@@ -71,6 +74,14 @@
 
     "GoldShop.Title": "The World's Ending!",
     "GoldShop.Text.00": "You can't trust the financial system, so trust us instead! Buy gold from us, we promise we aren't overcharging you! Just 500$/bar.",
+
+    // Affirm
+    "TV.Title": "Just Four Easy Payments",
+    "TV.Text": "Coveting that new TV your friend just bought? Don't have enough in the bank for it? Well, no worries, let Helping Hand help you out! Split anything into four easy payments! (Credit check required.)",
+
+    // Craft store
+    "Craft.Title": "70% off yarn!",
+    "Craft.Text": "Come in this weekend for 70% off most of our stock! Yarn, glitter, cake decorations, anything to unlock your creativity!",
 
     /*********
     * Dialogue

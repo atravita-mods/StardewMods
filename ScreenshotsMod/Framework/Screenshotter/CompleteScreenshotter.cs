@@ -35,15 +35,11 @@ namespace ScreenshotsMod.Framework.Screenshotter;
 * - The task is polled repeatedly. When that completes, the entire class is disposed.
 ******************/
 
-// we may be able to do better by rewriting Texture2d.GetData.
-
 /// <summary>
 /// The complex, skia-knitting screenshot.
 /// </summary>
 internal sealed class CompleteScreenshotter : AbstractScreenshotter
 {
-    //
-
     // state constants. Grumbles. I would use an enum if C# would let me, but cmpexchange and the volatiles don't make it easy.
 
     /// <summary>
@@ -400,7 +396,7 @@ internal sealed class CompleteScreenshotter : AbstractScreenshotter
             // if this was changed on us, the screenshot was unsuccessful.
             if (Interlocked.CompareExchange(ref this.state, TransferToSkia, TakingMapScreenshot) == TakingMapScreenshot)
             {
-                this.DisplayEffects();
+                DisplayEffects();
             }
 
             return;

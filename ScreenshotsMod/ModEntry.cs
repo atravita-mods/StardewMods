@@ -295,15 +295,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
             return true;
         }
 
-        for (int i = count - 1; i >= 0; i--)
-        {
-            AbstractScreenshotter shot = this.screenshotters[i];
-            if (shot.IsDisposed)
-            {
-                this.screenshotters.RemoveAt(i);
-            }
-        }
-
+        this.screenshotters.RemoveAll(static shot => shot.IsDisposed);
         return this.screenshotters.Count < MAX_ACTIVE_SCREENSHOTS;
     }
 

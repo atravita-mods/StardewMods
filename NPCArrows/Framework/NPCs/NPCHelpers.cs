@@ -61,5 +61,16 @@ internal static class NPCHelpers
             scale: Game1.pixelZoom,
             effects: SpriteEffects.None,
             layerDepth: 1f);
+
+        spriteBatch.Draw(
+            texture: character.Sprite.Texture,
+            position: arrowPos - (direction.GetVectorFacing() * 48f) - new Vector2(32f, 48f),
+            sourceRectangle: character.getMugShotSourceRect(),
+            color: Color.White,
+            rotation: 0f,
+            origin: Vector2.Zero,
+            layerDepth: 1f,
+            effects: SpriteEffects.None,
+            scale: Game1.pixelZoom);
     }
 }

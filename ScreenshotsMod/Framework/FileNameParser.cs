@@ -18,7 +18,7 @@ internal static class FileNameParser
     internal const string DEFAULT_FILENAME = @"{{Default}}/{{Save}}/{{Location}}/{{Date}}.png";
 
     [RegexPattern]
-    private static readonly Regex _parser = new(@"{{([a-zA-Z]+)}}", RegexOptions.Compiled, TimeSpan.FromSeconds(20));
+    private static readonly Regex _parser = new(@"{{([a-zA-Z]+)}}|^%([a-zA-Z])%", RegexOptions.Compiled, TimeSpan.FromSeconds(20));
 
     /// <summary>
     /// Sanitizes a given path.
@@ -47,7 +47,7 @@ internal static class FileNameParser
     internal static string GetFilename(string tokenized, GameLocation currentLocation, string ruleName)
     {
         // we must pass in the currentLocation because occasionally Game1.currentLocation is null in multiplayer when farmhands warp.
-        var ret = string.Join(
+        string ret = string.Join(
                 '_',
                 _parser.Replace(tokenized, MatchEvaluator).Split(Path.GetInvalidPathChars()));
 
@@ -66,46 +66,78 @@ internal static class FileNameParser
             }
         }
 
-        // anything like this for Windows?
-
         return ret;
 
         string MatchEvaluator(Match match)
         {
-            ReadOnlySpan<char> token = match.Groups[1].ValueSpan.Trim();
 
-            if (token.Length > 256)
+            if (match.Value.StartsWith("{{"))
             {
-                ModEntry.ModMonitor.LogOnce($"Unrecognized token {token}", LogLevel.Warn);
-                return match.Value;
+                ReadOnlySpan<char> token = match.Groups[1].ValueSpan.Trim();
+
+                if (token.Length > 256)
+                {
+                    ModEntry.ModMonitor.LogOnce($"Unrecognized token {token}", LogLevel.Warn);
+                    return match.Value;
+                }
+
+                // SAFETY: length was checked earlier, caps to 256
+                Span<char> loweredToken = stackalloc char[token.Length + 10];
+                int copiedCount = token.ToLowerInvariant(loweredToken);
+                if (copiedCount < 0)
+                {
+                    ModEntry.ModMonitor.LogOnce($"Unable to lowercase token {token}", LogLevel.Warn);
+                    return match.Value;
+                }
+
+                loweredToken = loweredToken[..copiedCount];
+
+                return loweredToken switch
+                {
+                    "context" => currentLocation.GetLocationContextId(),
+                    "date" => $"{Game1.year:D2}_{Game1.seasonIndex + 1:D2}_{Game1.dayOfMonth:D2}", // year_month_day for sorting
+                    "default" => Game1.game1.GetScreenshotFolder(false),
+                    "farm" => Game1.player.farmName.Value,
+                    "location" => currentLocation.NameOrUniqueName,
+                    "name" => Game1.player.Name,
+                    "rule" => ruleName,
+                    "save" => $"{Game1.player.farmName.Value}_{Game1.uniqueIDForThisGame}",
+                    "time" => $"{Game1.timeOfDay:D4}",
+                    "timestamp" => $"{DateTime.Now:yyyy.MM.dd HH-mm-ss}",
+                    "weather" => currentLocation.GetWeather().Weather,
+                    _ => GetSpecialWindowsFolder(token) ?? match.Value,
+                };
+            }
+            else if (match.Value.StartsWith("%"))
+            {
+                string? dir = Environment.GetEnvironmentVariable(match.Groups[2].Value);
+
+                if (string.IsNullOrWhiteSpace(dir) || dir.Contains(';'))
+                {
+                    return match.Value;
+                }
+
+                if (Path.IsPathRooted(dir))
+                {
+                    return dir;
+                }
             }
 
-            // SAFETY: length was checked earlier, caps to 256
-            Span<char> loweredToken = stackalloc char[token.Length + 10];
-            int copiedCount = token.ToLowerInvariant(loweredToken);
-            if (copiedCount < 0)
-            {
-                ModEntry.ModMonitor.LogOnce($"Unable to lowercase token {token}", LogLevel.Warn);
-                return match.Value;
-            }
-
-            loweredToken = loweredToken[..copiedCount];
-
-            return loweredToken switch
-            {
-                "context" => currentLocation.GetLocationContextId(),
-                "date" => $"{Game1.year:D2}_{Game1.seasonIndex + 1:D2}_{Game1.dayOfMonth:D2}", // year_month_day for sorting
-                "default" => Game1.game1.GetScreenshotFolder(false),
-                "farm" => Game1.player.farmName.Value,
-                "location" => currentLocation.NameOrUniqueName,
-                "name" => Game1.player.Name,
-                "rule" => ruleName,
-                "save" => $"{Game1.player.farmName.Value}_{Game1.uniqueIDForThisGame}",
-                "time" => $"{Game1.timeOfDay:D4}",
-                "timestamp" => $"{DateTime.Now:yyyy.MM.dd HH-mm-ss}",
-                "weather" => currentLocation.GetWeather().Weather,
-                _ => match.Value,
-            };
+            return match.Value;
         }
+    }
+
+    private static string? GetSpecialWindowsFolder(ReadOnlySpan<char> token)
+    {
+        if (token.StartsWith("my") && Enum.TryParse<Environment.SpecialFolder>(token, true, out var folder))
+        {
+            var proposed = Environment.GetFolderPath(folder);
+            if (!string.IsNullOrEmpty(proposed))
+            {
+                return proposed;
+            }
+        }
+
+        return null;
     }
 }

@@ -57,7 +57,7 @@ internal abstract class AbstractScreenshotter : IDisposable
     /// <param name="targetLocation">The target location.</param>
     protected AbstractScreenshotter(Farmer player, IGameLoopEvents gameEvents, string name, string tokenizedFilename, float scale, bool duringEvent, GameLocation targetLocation)
     {
-        ModEntry.ModMonitor.DebugOnlyLog($"Attaching for: {name}");
+        ModEntry.ModMonitor.DebugOnlyLog($"Attaching for: {name} - {targetLocation.NameOrUniqueName}");
         gameEvents.UpdateTicked += this.UpdateTicked;
         this.gameEvents = gameEvents;
         this.Name = name;
@@ -67,7 +67,7 @@ internal abstract class AbstractScreenshotter : IDisposable
         this.player = player;
         this.duringEvent = duringEvent;
 
-        ModEntry.ModMonitor.VerboseLog($"Taking screenshot for {targetLocation.NameOrUniqueName} using scale {scale}: {this.Filename}.");
+        ModEntry.ModMonitor.Log($"Taking screenshot for {targetLocation.NameOrUniqueName} using scale {scale}: {this.Filename}.", LogLevel.Info);
     }
 
     /// <summary>
@@ -75,7 +75,6 @@ internal abstract class AbstractScreenshotter : IDisposable
     /// </summary>
     ~AbstractScreenshotter()
     {
-        // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
         this.Dispose(disposing: false);
     }
 
@@ -172,7 +171,7 @@ internal abstract class AbstractScreenshotter : IDisposable
     /// <summary>
     /// Displays the audio cue and plays the camera noise for the screenshot effect.
     /// </summary>
-    protected void DisplayEffects()
+    protected static void DisplayEffects()
     {
         if (ModEntry.Config.AudioCue)
         {

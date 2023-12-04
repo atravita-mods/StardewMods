@@ -1,9 +1,16 @@
-﻿namespace AtraCore.Framework.EventCommands;
+﻿using StardewValley.Delegates;
+
+namespace AtraCore.Framework.EventCommands;
+
+/// <summary>
+/// Turns the NPC to face the player.
+/// </summary>
 internal static class FacePlayer
 {
+    /// <inheritdoc cref="EventCommandDelegate"/>
     internal static void FacePlayerCommand(Event @event, string[] args, EventContext context)
     {
-        if (!ArgUtility.TryGet(args, 1, out var actorName, out var error) || !ArgUtility.TryGetInt(args, 2, out var milliseconds, out error))
+        if (!ArgUtility.TryGet(args, 1, out string? actorName, out string? error) || !ArgUtility.TryGetInt(args, 2, out int milliseconds, out error))
         {
             context.LogErrorAndSkip(error);
             return;
@@ -16,14 +23,14 @@ internal static class FacePlayer
             return;
         }
 
-        if (!ArgUtility.TryGetOptional(args, 3, out var farmerName, out error, null, false))
+        if (!ArgUtility.TryGetOptional(args, 3, out string? farmerName, out error, null, false))
         {
             context.LogErrorAndSkip(error);
             return;
         }
 
         int actorId = -1;
-        if (farmerName is not null && !@event.IsFarmerActorId(farmerName, out var proposed))
+        if (farmerName is not null && !@event.IsFarmerActorId(farmerName, out int proposed))
         {
             actorId = proposed;
         }

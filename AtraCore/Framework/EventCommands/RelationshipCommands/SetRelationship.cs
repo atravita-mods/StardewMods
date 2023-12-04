@@ -3,7 +3,6 @@
 using AtraBase.Toolkit.Extensions;
 
 using AtraCore.Framework.Caches;
-using AtraCore.Interfaces;
 
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils;
@@ -11,10 +10,9 @@ using AtraShared.Utils.Extensions;
 
 using HarmonyLib;
 
-using Microsoft.Xna.Framework;
-
 using StardewModdingAPI.Events;
 
+using StardewValley.Delegates;
 using StardewValley.Locations;
 
 namespace AtraCore.Framework.EventCommands.RelationshipCommands;
@@ -24,9 +22,16 @@ namespace AtraCore.Framework.EventCommands.RelationshipCommands;
 /// <summary>
 /// Lets you set the relationship status between the current player and an NPC.
 /// </summary>
-internal sealed class SetRelationship : IEventCommand
+/// <remarks>
+/// Initializes a new instance of the <see cref="SetRelationship"/> class.
+/// </remarks>
+/// <param name="name">Name of the command.</param>
+/// <param name="monitor">Monitor to use.</param>
+/// <param name="multiplayer">SMAPI's multiplayer helper.</param>
+/// <param name="uniqueID">This mod's uniqueID.</param>
+internal sealed class SetRelationship(IMultiplayerHelper multiplayer, string uniqueID)
 {
-    private const string RequestNPCMove = "RequestNPCMove";
+    internal const string RequestNPCMove = "RequestNPCMove";
 
     private const string DEFAULT = "DEFAULT";
 
@@ -57,112 +62,75 @@ internal sealed class SetRelationship : IEventCommand
             return null;
         }
     });
+
     #endregion
 
-    /// <summary>
-    /// Initializes a new instance of the <see cref="SetRelationship"/> class.
-    /// </summary>
-    /// <param name="name">Name of the command.</param>
-    /// <param name="monitor">Monitor to use.</param>
-    /// <param name="multiplayer">SMAPI's multiplayer helper.</param>
-    /// <param name="uniqueID">This mod's uniqueID.</param>
-    public SetRelationship(string name, IMonitor monitor, IMultiplayerHelper multiplayer, string uniqueID)
-    {
-        this.Name = name;
-        this.Monitor = monitor;
-        this.Multiplayer = multiplayer;
-        this.UniqueID = string.Intern(uniqueID);
-    }
+    private string UniqueID { get; init; } = string.Intern(uniqueID);
 
-    /// <inheritdoc />
-    public string Name { get; init; }
-
-    /// <inheritdoc />
-    public IMonitor Monitor { get; init; }
-
-    private IMultiplayerHelper Multiplayer { get; init; }
-
-    private string UniqueID { get; init; }
-
-    /// <inheritdoc />
-    public bool Validate(Event @event, GameLocation location, GameTime time, string[] args, out string? error)
+    /// <inheritdoc cref="EventCommandDelegate"/>
+    internal void ApplySetRelationship(Event @event, string[] args, EventContext context)
     {
         if (args.Length != 3 || args.Length != 4)
         {
-            error = "Event requires exactly two or three arguments.";
-            return false;
+            @event.LogCommandErrorAndSkip(args, "Event requires exactly two or three arguments.");
+            return;
         }
 
         if (string.IsNullOrWhiteSpace(args[1]))
         {
-            error = $"NPC name may not be empty";
-            return false;
+            @event.LogCommandErrorAndSkip(args, $"NPC name may not be empty");
+            return;
         }
 
         if (NPCCache.GetByVillagerName(args[1], searchTheater: true) is not NPC npc)
         {
-            error = $"Could not find NPC by name {args[1]}";
-            return false;
+            @event.LogCommandErrorAndSkip(args, $"Could not find NPC by name {args[1]}");
+            return;
         }
 
-        try
+        if (!npc.CanSocialize)
         {
-            if (!npc.CanSocialize)
-            {
-                error = $"NPC {npc.Name} is antisocial";
-                return false;
-            }
-        }
-        catch (Exception ex)
-        {
-            error = $"Error checking if {npc.Name} is antisocial, weird.";
-            this.Monitor.Log(ex.ToString());
-            return false;
+            @event.LogCommandErrorAndSkip(args, $"NPC {npc.Name} is antisocial");
+            return;
         }
 
-        if (!FriendshipEnumExtensions.TryParse(args[2], out FriendshipEnum friendship, ignoreCase: true))
+        if (!FriendshipEnumExtensions.TryParse(args[2], out FriendshipEnum next, ignoreCase: true))
         {
-            error = $"Could not parse {args[2]} as valid friendship value.";
-            return false;
+            @event.LogCommandErrorAndSkip(args, $"Could not parse {args[2]} as valid friendship value.");
+            return;
         }
 
-        if (!FriendshipEnumExtensions.IsDefined(friendship))
+        if (!FriendshipEnumExtensions.IsDefined(next))
         {
-            error = $"Could not parse {args[2]} as valid friendship value.";
-            return false;
+            @event.LogCommandErrorAndSkip(args, $"Could not parse {args[2]} as valid friendship value.");
+            return;
         }
 
-        if (friendship == FriendshipEnum.Engaged && Game1.player.isEngaged() && npc.Name != Game1.player.spouse)
+        if (next == FriendshipEnum.Engaged && Game1.player.isEngaged() && npc.Name != Game1.player.spouse)
         {
-            error = $"Farmer is already engaged, becoming engaged again will not end well.";
-            return false;
+            @event.LogCommandErrorAndSkip(args, $"Farmer is already engaged, becoming engaged again will not end well.");
+            return;
         }
 
         // extra value to set post-command friendship OR days until wedding.
-        if (args.Length == 4 && !int.TryParse(args[3], out _))
+        int val;
+        if (args.Length == 4)
         {
-            error = $"Could not parse {args[3]} as integer.";
-            return false;
+            // extra value to set post-command friendship OR days until wedding.
+            if (!int.TryParse(args[3], out val))
+            {
+                @event.LogCommandErrorAndSkip(args, $"Could not parse {args[3]} as integer.");
+                return;
+            }
         }
-
-        error = null;
-        return true;
-    }
-
-    /// <inheritdoc />
-    public bool Apply(Event @event, GameLocation location, GameTime time, string[] args, out string? error)
-    {
-        if (args.Length != 3 || args.Length != 4)
+        else
         {
-            error = "Event command requires exactly two or three arguments.";
-            return true;
-        }
-
-        NPC? npc = NPCCache.GetByVillagerName(args[1], searchTheater: true);
-        if (npc is null)
-        {
-            error = $"Could not find NPC by name {args[1]}";
-            return true;
+            val = next switch
+            {
+                FriendshipEnum.Engaged => 3,
+                FriendshipEnum.Friendly => 1250,
+                _ => 0
+            };
         }
 
         FriendshipEnum past;
@@ -175,40 +143,11 @@ internal sealed class SetRelationship : IEventCommand
             past = FriendshipEnum.Unmet;
         }
 
-        if (!FriendshipEnumExtensions.TryParse(args[2], out FriendshipEnum next, ignoreCase: true) || !FriendshipEnumExtensions.IsDefined(next))
-        {
-            error = $"Could not parse {args[2]} as valid friendship value.";
-            return true;
-        }
-
-        int value;
-        if (args.Length == 4)
-        {
-            if (!int.TryParse(args[3], out int tempVal))
-            {
-                error = $"Could not parse {args[3]} as integer.";
-                return true;
-            }
-            else
-            {
-                value = tempVal;
-            }
-        }
-        else
-        {
-            value = next switch
-            {
-                FriendshipEnum.Engaged => 3,
-                FriendshipEnum.Friendly => 1250,
-                _ => 0
-            };
-        }
-
         if (past == next)
         {
             ModEntry.ModMonitor.Log($"No change needed for {args[1]} - {args[2]}");
-            error = null;
-            return true;
+            @event.CurrentCommand++;
+            return;
         }
 
         // previously unmet
@@ -225,7 +164,7 @@ internal sealed class SetRelationship : IEventCommand
                 if (past is FriendshipEnum.Dating or FriendshipEnum.Engaged)
                 {
                     Game1.Multiplayer.globalChatInfoMessage("BreakUp", Game1.player.Name, npc.displayName);
-                    friendship.Points = value;
+                    friendship.Points = val;
 
                     // make sure to break off the engagement too.
                     friendship.WeddingDate = null;
@@ -246,7 +185,7 @@ internal sealed class SetRelationship : IEventCommand
                 friendship.Status = FriendshipStatus.Engaged;
                 Game1.player.spouse = npc.Name;
                 WorldDate weddingDate = new(Game1.Date);
-                weddingDate.TotalDays += value;
+                weddingDate.TotalDays += val;
                 while (!Game1.canHaveWeddingOnDay(weddingDate.DayOfMonth, weddingDate.Season))
                 {
                     weddingDate.TotalDays++;
@@ -267,7 +206,7 @@ internal sealed class SetRelationship : IEventCommand
                 friendship.Status = FriendshipStatus.Divorced;
                 friendship.RoommateMarriage = false;
                 Game1.player.spouse = null;
-                friendship.Points = value;
+                friendship.Points = val;
                 break;
             case FriendshipEnum.Unmet:
                 Game1.player.friendshipData.Remove(npc.Name);
@@ -322,8 +261,7 @@ internal sealed class SetRelationship : IEventCommand
             }
         }
 
-        error = null;
-        return true;
+        @event.CurrentCommand++;
     }
 
     /// <summary>
@@ -331,13 +269,8 @@ internal sealed class SetRelationship : IEventCommand
     /// </summary>
     /// <param name="sender">smapi</param>
     /// <param name="e">event args.</param>
-    internal void ProcessMoveRequest(object? sender, ModMessageReceivedEventArgs e)
+    internal void ProcessMoveRequest(ModMessageReceivedEventArgs e)
     {
-        if (!Context.IsMainPlayer || e.FromModID != this.UniqueID || e.Type != RequestNPCMove)
-        {
-            return;
-        }
-
         string message = e.ReadAs<string>();
 
         if (!message.TrySplitOnce(Sep, out ReadOnlySpan<char> first, out ReadOnlySpan<char> second))
@@ -408,7 +341,7 @@ internal sealed class SetRelationship : IEventCommand
 
     private void SendMoveRequest(string message)
     {
-        this.Multiplayer.SendMessage(
+        multiplayer.SendMessage(
             message: message,
             messageType: RequestNPCMove,
             modIDs: new[] { this.UniqueID },

@@ -82,16 +82,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         helper.Events.Multiplayer.PeerConnected += this.Multiplayer_PeerConnected;
         helper.Events.Multiplayer.ModMessageReceived += this.Multiplayer_ModMessageReceived;
 
-        EventCommandManager.Add(new RemoveMail("atravita_" + nameof(RemoveMail), this.Monitor));
         EventCommandManager.Add(new AllowRepeatAfter("atravita_" + nameof(AllowRepeatAfter), this.Monitor));
-
-        SetRelationship setrelationship = new("atravita_" + nameof(SetRelationship), this.Monitor, this.Helper.Multiplayer, this.ModManifest.UniqueID);
-        EventCommandManager.Add(setrelationship);
-        helper.Events.Multiplayer.ModMessageReceived += setrelationship.ProcessMoveRequest;
-
-        SetInvisible invisible = new("atravita_" + nameof(SetInvisible), this.Monitor, this.Helper.Multiplayer, this.ModManifest.UniqueID);
-        EventCommandManager.Add(invisible);
-        helper.Events.Multiplayer.ModMessageReceived += invisible.ProcessSetInvisibleRequest;
 
         CommandManager.Register(helper.ConsoleCommands);
 
@@ -106,6 +97,9 @@ internal sealed class ModEntry : BaseMod<ModEntry>
 
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
     {
+        // apply harmony.
+        this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
+
         // initialize data caches
         DataToItemMap.Init(this.Helper.GameContent);
         this.Helper.Events.Content.AssetsInvalidated += this.OnAssetInvalidation;
@@ -113,8 +107,15 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         // add event commands and preconditions.
         Event.RegisterCustomPrecondition("atravita_PlayerRelationship", PlayerRelationshipPreconditions.PlayerRelationshipStatus);
         Event.RegisterCustomCommand("atravita_FacePlayer", FacePlayer.FacePlayerCommand);
+        Event.RegisterCustomCommand("atravita_RemoveMail", RemoveMail.RemoveMailCommand);
 
-        this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
+        SetInvisible invisible = new( this.Helper.Multiplayer, this.ModManifest.UniqueID);
+        Event.RegisterCustomCommand("atravita_" + nameof(SetInvisible), invisible.ApplyInvisibility);
+        MultiplayerDispatch.Register(SetInvisible.RequestSetInvisible, invisible.ProcessSetInvisibleRequest);
+
+        SetRelationship setrelationship = new(this.Helper.Multiplayer, this.ModManifest.UniqueID);
+        Event.RegisterCustomCommand("atravita_" + nameof(SetRelationship), setrelationship.ApplySetRelationship);
+        MultiplayerDispatch.Register(SetRelationship.RequestNPCMove, setrelationship.ProcessMoveRequest);
 
         // actions
         GameLocation.RegisterTileAction("atravita.Teleport", TeleportPlayer.ApplyCommand);

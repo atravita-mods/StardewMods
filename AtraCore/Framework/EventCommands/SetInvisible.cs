@@ -3,13 +3,10 @@
 using AtraBase.Toolkit.Extensions;
 
 using AtraCore.Framework.Caches;
-using AtraCore.Interfaces;
-
-using AtraShared.Utils.Extensions;
-
-using Microsoft.Xna.Framework;
 
 using StardewModdingAPI.Events;
+
+using StardewValley.Delegates;
 
 /// <summary>
 /// Used to set an NPC invisible for a specific number of days.
@@ -17,88 +14,56 @@ using StardewModdingAPI.Events;
 /// <remarks>
 /// Initializes a new instance of the <see cref="SetInvisible"/> class.
 /// </remarks>
-/// <param name="name">Name of the command.</param>
-/// <param name="monitor">Monitor to use.</param>
 /// <param name="multiplayer">SMAPI's multiplayer helper.</param>
 /// <param name="uniqueID">This mod's uniqueID.</param>
-internal sealed class SetInvisible(string name, IMonitor monitor, IMultiplayerHelper multiplayer, string uniqueID) : IEventCommand
+internal sealed class SetInvisible(IMultiplayerHelper multiplayer, string uniqueID)
 {
-    private const string RequestSetInvisible = "RequestSetInvisible";
+    internal const string RequestSetInvisible = "RequestSetInvisible";
 
     private const char Sep = 'Ω';
 
-    /// <inheritdoc />
-    public string Name { get; init; } = name;
-
-    /// <inheritdoc />
-    public IMonitor Monitor { get; init; } = monitor;
-
     private string UniqueID { get; init; } = string.Intern(uniqueID);
 
-    /// <inheritdoc />
-    public bool Validate(Event @event, GameLocation location, GameTime time, string[] args, out string? error)
+    /// <inheritdoc cref="EventCommandDelegate"/>
+    internal void ApplyInvisibility(Event @event, string[] args, EventContext context)
     {
+        // validate
         if (args.Length is not 2 or 3)
         {
-            error = "Event command expects two arguments: the NPC's internal name and an optional number for the number of days.";
-            return false;
+            @event.LogCommandErrorAndSkip(args, "Event command expects two arguments: the NPC's internal name and an optional number for the number of days.");
+            return;
         }
-        if (NPCCache.GetByVillagerName(args[1], searchTheater: true) is null)
+        if (NPCCache.GetByVillagerName(args[1], searchTheater: true) is not NPC npc)
         {
-            error = $"Could not find NPC by name {args[1]}";
-            return false;
+            @event.LogCommandErrorAndSkip(args, $"Could not find NPC by name {args[1]}");
+            return;
         }
-        if (args.Length == 3 && !int.TryParse(args[2], out int _))
+
+        int days = 1;
+        if (args.Length == 3 && !int.TryParse(args[2], out days))
         {
-            error = $"Expected argument 2 (days) to be an integer";
-            return false;
+            @event.LogCommandErrorAndSkip(args, $"Expected argument 2 (days) to be an integer");
+            return;
         }
 
-        error = null;
-        return true;
-    }
+        npc.IsInvisible = true;
 
-    /// <inheritdoc />
-    public bool Apply(Event @event, GameLocation location, GameTime time, string[] args, out string? error)
-    {
-        try
+        if (Context.IsMainPlayer)
         {
-            NPC? npc = NPCCache.GetByVillagerName(args[1], searchTheater: true);
-            if (npc is null)
-            {
-                error = $"Could not find NPC by name {args[1]}";
-                return true;
-            }
-
-            int days = 1;
-            if (args.Length > 2 && int.TryParse(args[2], out int val) && val > 1)
-            {
-                days = val;
-            }
-
-            npc.IsInvisible = true;
-            if (Context.IsMainPlayer)
-            {
-                ModEntry.ModMonitor.Log($"Setting {npc.Name} invisible for {days} days.");
-                npc.daysUntilNotInvisible = days;
-            }
-            else
-            {
-                ModEntry.ModMonitor.Log($"Requesting {npc.Name} to be set invisible for {days} days.");
-                multiplayer.SendMessage(
-                    message: $"{npc.Name}{Sep}{days}",
-                    messageType: RequestSetInvisible,
-                    modIDs: new[] { this.UniqueID },
-                    playerIDs: new[] { Game1.MasterPlayer.UniqueMultiplayerID });
-            }
+            ModEntry.ModMonitor.Log($"Setting {npc.Name} invisible for {days} days.");
+            npc.daysUntilNotInvisible = days;
         }
-        catch (Exception ex)
+        else
         {
-            ModEntry.ModMonitor.LogError("trying to set npc invisible", ex);
+            ModEntry.ModMonitor.Log($"Requesting {npc.Name} to be set invisible for {days} days.");
+            multiplayer.SendMessage(
+                message: $"{npc.Name}{Sep}{days}",
+                messageType: RequestSetInvisible,
+                modIDs: [this.UniqueID],
+                playerIDs: [Game1.MasterPlayer.UniqueMultiplayerID]);
         }
 
-        error = null;
-        return true;
+        @event.CurrentCommand++;
     }
 
     /// <summary>
@@ -106,9 +71,9 @@ internal sealed class SetInvisible(string name, IMonitor monitor, IMultiplayerHe
     /// </summary>
     /// <param name="sender">smapi</param>
     /// <param name="e">event args.</param>
-    internal void ProcessSetInvisibleRequest(object? sender, ModMessageReceivedEventArgs e)
+    internal void ProcessSetInvisibleRequest(ModMessageReceivedEventArgs e)
     {
-        if (!Context.IsMainPlayer || e.FromModID != this.UniqueID || e.Type != RequestSetInvisible)
+        if (!Context.IsMainPlayer || e.FromModID != this.UniqueID)
         {
             return;
         }

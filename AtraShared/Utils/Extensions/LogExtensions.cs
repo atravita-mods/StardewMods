@@ -150,8 +150,6 @@ public static class LogExtensions
     /// <param name="monitor">SMAPI's logger.</param>
     /// <param name="message">Message to log.</param>
     /// <param name="level">Level to log at.</param>
-    /// <remarks>This is meant to prevent the creation of a bunch of strings if they're just going to be ignored anyways.
-    /// Must weigh the delegate against string creation, use sparingly.</remarks>
     [DebuggerHidden]
     [MethodImpl(TKConstants.Hot)]
     public static void LogIfVerbose(this IMonitor monitor, [InterpolatedStringHandlerArgument("monitor")] ref SmapiInterpolatedStringHandler message, LogLevel level = LogLevel.Trace)

@@ -1,6 +1,4 @@
-﻿using AtraCore;
-using AtraCore.Framework.EventCommands;
-using AtraCore.Framework.ReflectionManager;
+﻿using AtraCore.Framework.ReflectionManager;
 using AtraCore.Utilities;
 
 using AtraShared.ConstantsAndEnums;
@@ -169,10 +167,7 @@ internal sealed class ModEntry : Mod
         IntegrationHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, LogLevel.Trace);
         _ = helper.TryGetAPI("spacechase0.SpaceCore", "1.5.10", out spaceCoreAPI);
 
-        if (!EventCommandManager.Add(new AddSpecialOrderCommand("atravita_addSpecialOrder", this.Monitor)))
-        {
-            this.Monitor.Log($"Custom event command could not be added?", LogLevel.Warn);
-        }
+        Event.RegisterCustomCommand("atravita_addSpecialOrder", AddSpecialOrderCommand.AddSpecialOrder);
 
         if (helper.TryGetAPI("Pathoschild.ContentPatcher", "1.20.0", out IContentPatcherAPI? api))
         {

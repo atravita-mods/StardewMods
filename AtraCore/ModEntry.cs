@@ -82,8 +82,6 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         helper.Events.Multiplayer.PeerConnected += this.Multiplayer_PeerConnected;
         helper.Events.Multiplayer.ModMessageReceived += this.Multiplayer_ModMessageReceived;
 
-        EventCommandManager.Add(new AllowRepeatAfter("atravita_" + nameof(AllowRepeatAfter), this.Monitor));
-
         CommandManager.Register(helper.ConsoleCommands);
 
 #if DEBUG
@@ -108,6 +106,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         Event.RegisterCustomPrecondition("atravita_PlayerRelationship", PlayerRelationshipPreconditions.PlayerRelationshipStatus);
         Event.RegisterCustomCommand("atravita_FacePlayer", FacePlayer.FacePlayerCommand);
         Event.RegisterCustomCommand("atravita_RemoveMail", RemoveMail.RemoveMailCommand);
+        Event.RegisterCustomCommand("atravita_" + nameof(AllowRepeatAfter), AllowRepeatAfter.SetRepeatAfter);
 
         SetInvisible invisible = new( this.Helper.Multiplayer, this.ModManifest.UniqueID);
         Event.RegisterCustomCommand("atravita_" + nameof(SetInvisible), invisible.ApplyInvisibility);

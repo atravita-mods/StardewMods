@@ -2,6 +2,8 @@
 
 using AtraBase.Toolkit;
 
+using AtraShared.Utils.Extensions;
+
 using CommunityToolkit.Diagnostics;
 
 using StardewModdingAPI.Utilities;
@@ -45,8 +47,7 @@ internal static class AllowRepeatAfterHandler
     /// <param name="helper">Data helper.</param>
     internal static void Load(IDataHelper helper)
     {
-        eventsToRepeat.Value = helper.ReadGlobalData<Dictionary<int, HashSet<string>>>(SaveKey)
-            ?? new();
+        eventsToRepeat.Value = helper.ReadGlobalData<Dictionary<int, HashSet<string>>>(SaveKey) ?? [];
     }
 
     /// <summary>
@@ -67,11 +68,7 @@ internal static class AllowRepeatAfterHandler
                 }
                 else
                 {
-                    ModEntry.ModMonitor.Log($"Failed writing events file: {task.Status}", LogLevel.Error);
-                    if (task.Exception is not null)
-                    {
-                        ModEntry.ModMonitor.Log(task.Exception.ToString());
-                    }
+                    ModEntry.ModMonitor.LogError($"Failed writing events file: {task.Status}", task.Exception);
                 }
             });
     }
@@ -111,7 +108,7 @@ internal static class AllowRepeatAfterHandler
         days += SDate.Now().DaysSinceStart;
         if (!eventsToRepeat.Value.TryGetValue(days, out HashSet<string>? events))
         {
-            eventsToRepeat.Value[days] = events = new();
+            eventsToRepeat.Value[days] = events = [];
         }
 
         if (events.Add(id))

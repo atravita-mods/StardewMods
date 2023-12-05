@@ -82,7 +82,7 @@ public static class QuestTracker
             multi.SendMessage(
                 message: $"{farmer.UniqueMultiplayerID}{SEP}{questID}",
                 messageType: MESSAGETYPE,
-                modIDs: new[] { uniqueID },
+                modIDs: [uniqueID],
                 playerIDs: multi.GetConnectedPlayers().Where(p => !p.IsSplitScreen).Select(p => p.PlayerID).ToArray());
             return true;
         }
@@ -192,8 +192,8 @@ public static class QuestTracker
             multi.SendMessage(
                 message: finishedQuests,
                 messageType: BROADCAST,
-                modIDs: new[] { uniqueID },
-                playerIDs: id is null ? multi.GetConnectedPlayers().Where(p => !p.IsSplitScreen).Select(p => p.PlayerID).ToArray() : new[] { id.Value }
+                modIDs: [uniqueID],
+                playerIDs: id is null ? multi.GetConnectedPlayers().Where(p => !p.IsSplitScreen).Select(p => p.PlayerID).ToArray() : [id.Value]
             );
         }
     }

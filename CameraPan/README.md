@@ -61,4 +61,4 @@ Special notes: the vanilla map property `ViewportFollowPlayer` automatically eng
 
 ## See also
 
-[Changelog](docs/changelog.md)
+[Change log](docs/changelog.md)

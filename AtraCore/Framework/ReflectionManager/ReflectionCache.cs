@@ -229,28 +229,28 @@ public static class ReflectionCache
     /// <remarks>For a method with a signature that takes one param.</remarks>
     /// <typeparam name="T">type signature.</typeparam>
     public static MethodInfo GetCachedMethod<T>(this Type type, string fieldName, FlagTypes flags)
-        => type.GetCachedMethod(fieldName, flags, new[] { typeof(T) });
+        => type.GetCachedMethod(fieldName, flags, [typeof(T)]);
 
     public static MethodInfo GetCachedMethod<T1, T2>(this Type type, string fieldName, FlagTypes flags)
-        => type.GetCachedMethod(fieldName, flags, new[] { typeof(T1), typeof(T2) });
+        => type.GetCachedMethod(fieldName, flags, [typeof(T1), typeof(T2)]);
 
     public static MethodInfo GetCachedMethod<T1, T2, T3>(this Type type, string fieldName, FlagTypes flags)
-        => type.GetCachedMethod(fieldName, flags, new[] { typeof(T1), typeof(T2), typeof(T3) });
+        => type.GetCachedMethod(fieldName, flags, [typeof(T1), typeof(T2), typeof(T3)]);
 
     public static MethodInfo GetCachedMethod<T1, T2, T3, T4>(this Type type, string fieldName, FlagTypes flags)
-        => type.GetCachedMethod(fieldName, flags, new[] { typeof(T1), typeof(T2), typeof(T3), typeof(T4) });
+        => type.GetCachedMethod(fieldName, flags, [typeof(T1), typeof(T2), typeof(T3), typeof(T4)]);
 
     public static ConstructorInfo GetCachedConstructor<T>(this Type type, FlagTypes flags)
-        => type.GetCachedConstructor(flags, new[] { typeof(T) } );
+        => type.GetCachedConstructor(flags, [typeof(T)] );
 
     public static ConstructorInfo GetCachedConstructor<T1, T2>(this Type type, FlagTypes flags)
-        => type.GetCachedConstructor(flags, new[] { typeof(T1), typeof(T2) });
+        => type.GetCachedConstructor(flags, [typeof(T1), typeof(T2)]);
 
     public static ConstructorInfo GetCachedConstructor<T1, T2, T3>(this Type type, FlagTypes flags)
-        => type.GetCachedConstructor(flags, new[] { typeof(T1), typeof(T2), typeof(T3) });
+        => type.GetCachedConstructor(flags, [typeof(T1), typeof(T2), typeof(T3)]);
 
     public static ConstructorInfo GetCachedConstructor<T1, T2, T3, T4>(this Type type, FlagTypes flags)
-        => type.GetCachedConstructor(flags, new[] { typeof(T1), typeof(T2), typeof(T3), typeof(T4) });
+        => type.GetCachedConstructor(flags, [typeof(T1), typeof(T2), typeof(T3), typeof(T4)]);
     #endregion
 
     /// <summary>

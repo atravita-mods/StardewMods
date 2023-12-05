@@ -264,25 +264,25 @@ internal static class DrawPrismatic
         {
             ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);
 
-            helper.FindNext(new CodeInstructionWrapper[]
-            {
+            helper.FindNext(
+            [
                 (OpCodes.Call, typeof(Color).GetCachedProperty("White", ReflectionCache.FlagTypes.StaticFlags).GetGetMethod()),
-            })
+            ])
             .Advance(1)
-            .Insert(new CodeInstruction[]
-            {
+            .Insert(
+            [
                 new(OpCodes.Ldc_I4, (int)ItemTypeEnum.BigCraftable),
                 new(OpCodes.Ldarg_0),
                 new(OpCodes.Call, typeof(CraftingRecipe).GetCachedMethod(nameof(CraftingRecipe.getIndexOfMenuView), ReflectionCache.FlagTypes.InstanceFlags)),
                 new(OpCodes.Call, typeof(DrawPrismatic).GetCachedMethod<Color, ItemTypeEnum, int>(nameof(ReplaceDrawColorForItem), ReflectionCache.FlagTypes.StaticFlags)),
-            })
-            .FindNext(new CodeInstructionWrapper[]
-            {
+            ])
+            .FindNext(
+            [
                 (OpCodes.Call, typeof(Utility).GetCachedMethod(nameof(Utility.drawWithShadow), ReflectionCache.FlagTypes.StaticFlags)),
-            })
+            ])
             .Advance(1)
-            .Insert(new CodeInstruction[]
-            {
+            .Insert(
+            [
                 new(OpCodes.Ldc_I4, (int)ItemTypeEnum.BigCraftable),
                 new(OpCodes.Ldarg_0),
                 new(OpCodes.Call, typeof(CraftingRecipe).GetCachedMethod(nameof(CraftingRecipe.getIndexOfMenuView), ReflectionCache.FlagTypes.InstanceFlags)),
@@ -290,27 +290,27 @@ internal static class DrawPrismatic
                 new(OpCodes.Ldarg_2), // x
                 new(OpCodes.Ldarg_3), // y
                 new(OpCodes.Ldarga_S, 4),
-                new(OpCodes.Call, typeof(DrawPrismatic).GetCachedMethod(nameof(DrawColorMask), ReflectionCache.FlagTypes.StaticFlags, new[] { typeof(ItemTypeEnum), typeof(int), typeof(SpriteBatch), typeof(int), typeof(int), typeof(float) } )),
-            })
-            .FindNext(new CodeInstructionWrapper[]
-            {
+                new(OpCodes.Call, typeof(DrawPrismatic).GetCachedMethod(nameof(DrawColorMask), ReflectionCache.FlagTypes.StaticFlags, [typeof(ItemTypeEnum), typeof(int), typeof(SpriteBatch), typeof(int), typeof(int), typeof(float)] )),
+            ])
+            .FindNext(
+            [
                 (OpCodes.Call, typeof(Color).GetCachedProperty("White", ReflectionCache.FlagTypes.StaticFlags).GetGetMethod()),
-            })
+            ])
             .Advance(1)
-            .Insert(new CodeInstruction[]
-            {
+            .Insert(
+            [
                 new(OpCodes.Ldc_I4, (int)ItemTypeEnum.SObject),
                 new(OpCodes.Ldarg_0),
                 new(OpCodes.Call, typeof(CraftingRecipe).GetCachedMethod(nameof(CraftingRecipe.getIndexOfMenuView), ReflectionCache.FlagTypes.InstanceFlags)),
                 new(OpCodes.Call, typeof(DrawPrismatic).GetCachedMethod<Color, ItemTypeEnum, int>(nameof(ReplaceDrawColorForItem), ReflectionCache.FlagTypes.StaticFlags)),
-            })
-            .FindNext(new CodeInstructionWrapper[]
-            {
+            ])
+            .FindNext(
+            [
                 (OpCodes.Call, typeof(Utility).GetCachedMethod(nameof(Utility.drawWithShadow), ReflectionCache.FlagTypes.StaticFlags)),
-            })
+            ])
             .Advance(1)
-            .Insert(new CodeInstruction[]
-            {
+            .Insert(
+            [
                 new(OpCodes.Ldc_I4, (int)ItemTypeEnum.SObject),
                 new(OpCodes.Ldarg_0),
                 new(OpCodes.Call, typeof(CraftingRecipe).GetCachedMethod(nameof(CraftingRecipe.getIndexOfMenuView), ReflectionCache.FlagTypes.InstanceFlags)),
@@ -318,8 +318,8 @@ internal static class DrawPrismatic
                 new(OpCodes.Ldarg_2), // x
                 new(OpCodes.Ldarg_3), // y
                 new(OpCodes.Ldarga_S, 4),
-                new(OpCodes.Call, typeof(DrawPrismatic).GetCachedMethod(nameof(DrawColorMask), ReflectionCache.FlagTypes.StaticFlags, new[] { typeof(ItemTypeEnum), typeof(int), typeof(SpriteBatch), typeof(int), typeof(int), typeof(float) } )),
-            });
+                new(OpCodes.Call, typeof(DrawPrismatic).GetCachedMethod(nameof(DrawColorMask), ReflectionCache.FlagTypes.StaticFlags, [typeof(ItemTypeEnum), typeof(int), typeof(SpriteBatch), typeof(int), typeof(int), typeof(float)] )),
+            ]);
 
             // helper.Print();
             return helper.Render();
@@ -344,24 +344,24 @@ internal static class DrawPrismatic
             // first one is the bigcraftable, second one is the nonbigcraftable
             for (int i = 0; i < 2; i++)
             {
-                helper.FindNext(new CodeInstructionWrapper[]
-                {
+                helper.FindNext(
+                [
                     (OpCodes.Call, typeof(Color).GetCachedProperty(nameof(Color.White), ReflectionCache.FlagTypes.StaticFlags).GetGetMethod()),
-                })
+                ])
                 .Advance(1)
-                .Insert(new CodeInstruction[]
-                {
+                .Insert(
+                [
                     new(OpCodes.Ldarg_0),
                     new(OpCodes.Call, typeof(DrawPrismatic).GetCachedMethod<Color, Item>(nameof(ReplaceDrawColorForItem), ReflectionCache.FlagTypes.StaticFlags)),
-                })
-                .FindNext(new CodeInstructionWrapper[]
-                {
-                    (OpCodes.Callvirt, typeof(SpriteBatch).GetCachedMethod(nameof(SpriteBatch.Draw), ReflectionCache.FlagTypes.InstanceFlags, new[] { typeof(Texture2D), typeof(Vector2), typeof(Rectangle?), typeof(Color), typeof(float), typeof(Vector2), typeof(float), typeof(SpriteEffects), typeof(float) } )),
-                })
+                ])
+                .FindNext(
+                [
+                    (OpCodes.Callvirt, typeof(SpriteBatch).GetCachedMethod(nameof(SpriteBatch.Draw), ReflectionCache.FlagTypes.InstanceFlags, [typeof(Texture2D), typeof(Vector2), typeof(Rectangle?), typeof(Color), typeof(float), typeof(Vector2), typeof(float), typeof(SpriteEffects), typeof(float)] )),
+                ])
                 .ReplaceInstruction(
                     instruction: new(OpCodes.Call, typeof(DrawPrismatic).GetCachedMethod(nameof(DrawSObjectAndAlsoColorMask), ReflectionCache.FlagTypes.StaticFlags)),
                     keepLabels: true)
-                .Insert(new CodeInstruction[] { new(OpCodes.Ldarg_0) });
+                .Insert([new(OpCodes.Ldarg_0)]);
             }
 
             // helper.Print();
@@ -388,120 +388,120 @@ internal static class DrawPrismatic
 
             // bigcraftables block is first. Look for the single alone draw statement NOT in a conditional.
             // and bracket it.
-            helper.FindNext(new CodeInstructionWrapper[]
-            { // if (base.parentSheetIndex == 272)
+            helper.FindNext(
+            [ // if (base.parentSheetIndex == 272)
                 OpCodes.Ldarg_0,
                 (OpCodes.Ldfld, typeof(Item).GetCachedField(nameof(Item.parentSheetIndex), ReflectionCache.FlagTypes.InstanceFlags)),
                 OpCodes.Call, // op_Implicit
                 (OpCodes.Ldc_I4, 272),
                 OpCodes.Bne_Un,
-            })
+            ])
             .Advance(4)
             .StoreBranchDest()
             .AdvanceToStoredLabel()
             .Advance(-1)
-            .FindNext(new CodeInstructionWrapper[]
-            {
+            .FindNext(
+            [
                 OpCodes.Ldarg_1,
                 (OpCodes.Ldsfld, typeof(Game1).GetCachedField(nameof(Game1.bigCraftableSpriteSheet), ReflectionCache.FlagTypes.StaticFlags)),
                 SpecialCodeInstructionCases.LdLoc,
-            })
+            ])
             .Advance(2);
 
             CodeInstruction? destination = helper.CurrentInstruction.Clone();
 
-            helper.FindNext(new CodeInstructionWrapper[]
-            {
+            helper.FindNext(
+            [
                 (OpCodes.Call, typeof(Color).GetCachedProperty(nameof(Color.White), ReflectionCache.FlagTypes.StaticFlags).GetGetMethod()),
-            })
+            ])
             .Advance(1)
-            .Insert(new CodeInstruction[]
-            {
+            .Insert(
+            [
                 new(OpCodes.Ldarg_0),
                 new(OpCodes.Call, typeof(DrawPrismatic).GetCachedMethod<Color, Item>(nameof(ReplaceDrawColorForItem), ReflectionCache.FlagTypes.StaticFlags)),
-            })
-            .FindNext(new CodeInstructionWrapper[]
-            {
+            ])
+            .FindNext(
+            [
                 SpecialCodeInstructionCases.LdLoc,
-                (OpCodes.Callvirt, typeof(SpriteBatch).GetCachedMethod(nameof(SpriteBatch.Draw), ReflectionCache.FlagTypes.InstanceFlags, new[] { typeof(Texture2D), typeof(Rectangle), typeof(Rectangle?), typeof(Color), typeof(float), typeof(Vector2), typeof(SpriteEffects), typeof(float) } )),
-            });
+                (OpCodes.Callvirt, typeof(SpriteBatch).GetCachedMethod(nameof(SpriteBatch.Draw), ReflectionCache.FlagTypes.InstanceFlags, [typeof(Texture2D), typeof(Rectangle), typeof(Rectangle?), typeof(Color), typeof(float), typeof(Vector2), typeof(SpriteEffects), typeof(float)] )),
+            ]);
 
             CodeInstruction? layerDepth = helper.CurrentInstruction.Clone();
 
             helper.Advance(2)
-            .Insert(new CodeInstruction[]
-            {
+            .Insert(
+            [
                 new (OpCodes.Ldarg_0),
                 new(OpCodes.Ldarg_1),
                 destination,
                 layerDepth,
                 new(OpCodes.Call, typeof(DrawPrismatic).GetCachedMethod<Item, SpriteBatch, Rectangle, float>(nameof(DrawColorMask), ReflectionCache.FlagTypes.StaticFlags)),
-            });
+            ]);
 
             // alright! Now to deal with normal SObjects
-            helper.FindNext(new CodeInstructionWrapper[]
-            {
+            helper.FindNext(
+            [
                 OpCodes.Ldarg_0,
                 (OpCodes.Ldfld, typeof(SObject).GetCachedField(nameof(SObject.fragility), ReflectionCache.FlagTypes.InstanceFlags)),
                 OpCodes.Call,
                 OpCodes.Ldc_I4_2,
                 OpCodes.Beq,
-            })
+            ])
             .Advance(4)
             .StoreBranchDest()
             .AdvanceToStoredLabel();
 
-            helper.FindNext(new CodeInstructionWrapper[]
-            {
+            helper.FindNext(
+            [
                 (OpCodes.Call, typeof(Color).GetCachedProperty(nameof(Color.White), ReflectionCache.FlagTypes.StaticFlags).GetGetMethod()),
-            })
+            ])
             .Advance(1)
-            .Insert(new CodeInstruction[]
-            {
+            .Insert(
+            [
                 new(OpCodes.Ldarg_0),
                 new(OpCodes.Call, typeof(DrawPrismatic).GetCachedMethod<Color, Item>(nameof(ReplaceDrawColorForItem), ReflectionCache.FlagTypes.StaticFlags)),
-            })
-            .FindNext(new CodeInstructionWrapper[]
-            {
-                (OpCodes.Callvirt, typeof(SpriteBatch).GetCachedMethod(nameof(SpriteBatch.Draw), ReflectionCache.FlagTypes.InstanceFlags, new[] { typeof(Texture2D), typeof(Vector2), typeof(Rectangle?), typeof(Color), typeof(float), typeof(Vector2), typeof(float), typeof(SpriteEffects), typeof(float) } )),
-            })
+            ])
+            .FindNext(
+            [
+                (OpCodes.Callvirt, typeof(SpriteBatch).GetCachedMethod(nameof(SpriteBatch.Draw), ReflectionCache.FlagTypes.InstanceFlags, [typeof(Texture2D), typeof(Vector2), typeof(Rectangle?), typeof(Color), typeof(float), typeof(Vector2), typeof(float), typeof(SpriteEffects), typeof(float)] )),
+            ])
             .ReplaceInstruction(
                 instruction: new(OpCodes.Call, typeof(DrawPrismatic).GetCachedMethod(nameof(DrawSObjectAndAlsoColorMask), ReflectionCache.FlagTypes.StaticFlags)),
                 keepLabels: true)
-            .Insert(new CodeInstruction[] { new(OpCodes.Ldarg_0) });
+            .Insert([new(OpCodes.Ldarg_0)]);
 
             // and the held item. Kill me now.
-            helper.FindNext(new CodeInstructionWrapper[]
-            { // must skip past the sprinkler section first.
+            helper.FindNext(
+            [ // must skip past the sprinkler section first.
                 OpCodes.Ldarg_0,
                 (OpCodes.Callvirt, typeof(SObject).GetCachedMethod(nameof(SObject.IsSprinkler), ReflectionCache.FlagTypes.InstanceFlags)),
                 OpCodes.Brfalse,
-            })
+            ])
             .Advance(2)
             .StoreBranchDest()
             .AdvanceToStoredLabel()
-            .FindNext(new CodeInstructionWrapper[]
-            {
+            .FindNext(
+            [
                 OpCodes.Ldarg_0,
                 (OpCodes.Ldfld, typeof(SObject).GetCachedField(nameof(SObject.heldObject), ReflectionCache.FlagTypes.InstanceFlags)),
                 (OpCodes.Callvirt, typeof(NetFieldBase<SObject, NetRef<SObject>>).GetCachedProperty("Value", ReflectionCache.FlagTypes.InstanceFlags).GetGetMethod()),
                 OpCodes.Brfalse,
-            })
+            ])
             .Copy(3, out IEnumerable<CodeInstruction>? codes)
-            .FindNext(new CodeInstructionWrapper[]
-            {
+            .FindNext(
+            [
                 (OpCodes.Call, typeof(Color).GetCachedProperty(nameof(Color.White), ReflectionCache.FlagTypes.StaticFlags).GetGetMethod()),
-            })
+            ])
             .Advance(1)
             .Insert(codes.ToArray())
-            .Insert(new CodeInstruction[]
-            {
+            .Insert(
+            [
                 new(OpCodes.Call, typeof(DrawPrismatic).GetCachedMethod<Color, Item>(nameof(ReplaceDrawColorForItem), ReflectionCache.FlagTypes.StaticFlags)),
-            })
-            .FindNext(new CodeInstructionWrapper[]
-            {
-                (OpCodes.Callvirt, typeof(SpriteBatch).GetCachedMethod(nameof(SpriteBatch.Draw), ReflectionCache.FlagTypes.InstanceFlags, new[] { typeof(Texture2D), typeof(Vector2), typeof(Rectangle?), typeof(Color), typeof(float), typeof(Vector2), typeof(float), typeof(SpriteEffects), typeof(float) } )),
-            })
+            ])
+            .FindNext(
+            [
+                (OpCodes.Callvirt, typeof(SpriteBatch).GetCachedMethod(nameof(SpriteBatch.Draw), ReflectionCache.FlagTypes.InstanceFlags, [typeof(Texture2D), typeof(Vector2), typeof(Rectangle?), typeof(Color), typeof(float), typeof(Vector2), typeof(float), typeof(SpriteEffects), typeof(float)] )),
+            ])
             .ReplaceInstruction(
                 instruction: new(OpCodes.Call, typeof(DrawPrismatic).GetCachedMethod(nameof(DrawSObjectAndAlsoColorMask), ReflectionCache.FlagTypes.StaticFlags)),
                 keepLabels: true)

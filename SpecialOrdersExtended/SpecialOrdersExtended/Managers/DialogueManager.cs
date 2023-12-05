@@ -391,7 +391,7 @@ internal class DialogueManager
 
         // Push my dialogue onto their stack.
         npc.CurrentDialogue.Push(dialogue);
-        if (ModEntry.Config.Verbose)
+        if (ModEntry.ModMonitor.IsVerbose)
         {
             ModEntry.ModMonitor.Log(I18n.Dialogue_FoundKey(dialogueKey), LogLevel.Debug);
         }
@@ -430,10 +430,11 @@ internal class DialogueManager
             return PushAndSaveDialogue(baseKey, npc);
         }
 
-        if (ModEntry.Config.Verbose)
+        if (ModEntry.ModMonitor.IsVerbose)
         {
-            ModEntry.ModMonitor.Log(I18n.Dialogue_NoKey(baseKey, npc.Name), LogLevel.Trace);
+            ModEntry.ModMonitor.Log(I18n.Dialogue_NoKey(baseKey, npc.Name));
         }
+
         return false;
     }
 }

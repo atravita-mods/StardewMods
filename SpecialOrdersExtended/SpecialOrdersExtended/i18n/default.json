@@ -7,8 +7,8 @@
   "GmcmVersionMessage": "Please update Generic Mod Config Menu (https://www.nexusmods.com/stardewvalley/mods/5098) to at least version {{version}} (Current version: {{currentversion}}). GMCM integration disabled.",
   "cp-not-installed": "Content Patcher not installed, tokens will not be available.",
 
-  "SurpressUnnecessaryBoardUpdates.title": "Suppress Unneeded Board Updates",
-  "SurpressUnnecessaryBoardUpdates.description": "Prevents the game from trying to reload the special order data before the board is even open.",
+  "SuppressUnnecessaryBoardUpdates.title": "Suppress Unneeded Board Updates",
+  "SuppressUnnecessaryBoardUpdates.description": "Prevents the game from trying to reload the special order data before the board is even open.",
   "UseTagCache.title": "Use Tag Cache",
   "UseTagCache.description": "Caches the results of tags to avoid repeated checks.",
   "AvoidRepeatingQiOrders.title": "Avoid Repeating Qi Orders",

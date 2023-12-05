@@ -5,7 +5,6 @@ using AtraShared.Utils.Extensions;
 
 using SpecialOrdersExtended.DataModels;
 
-using StardewValley.Network;
 using StardewValley.SpecialOrders;
 
 namespace SpecialOrdersExtended.Managers;

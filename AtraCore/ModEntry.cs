@@ -114,7 +114,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
 
         SetRelationship setrelationship = new(this.Helper.Multiplayer, this.ModManifest.UniqueID);
         Event.RegisterCustomCommand("atravita_" + nameof(SetRelationship), setrelationship.ApplySetRelationship);
-        MultiplayerDispatch.Register(SetRelationship.RequestNPCMove, setrelationship.ProcessMoveRequest);
+        MultiplayerDispatch.Register(SetRelationship.RequestNPCMove, SetRelationship.ProcessMoveRequest);
 
         // actions
         GameLocation.RegisterTileAction("atravita.Teleport", TeleportPlayer.ApplyCommand);

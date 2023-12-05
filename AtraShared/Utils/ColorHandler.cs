@@ -48,7 +48,7 @@ public static class ColorHandler
         return colors;
     });
 
-    private static readonly char[] Valid_Split_Chars = new[]{ '/', ',', ';', ' ' };
+    private static readonly char[] Valid_Split_Chars = ['/', ',', ';', ' '];
 
     /// <summary>
     /// Tries to parse a user string to an XNAcolor.

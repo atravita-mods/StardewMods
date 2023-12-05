@@ -1,12 +1,12 @@
-﻿using AtraBase.Toolkit.StringHandler;
+﻿namespace MuseumRewardsIn;
+
+using AtraBase.Toolkit.StringHandler;
 
 using StardewValley.Delegates;
 using StardewValley.GameData.Museum;
 using StardewValley.Internal;
 using StardewValley.ItemTypeDefinitions;
 using StardewValley.Locations;
-
-namespace MuseumRewardsIn;
 
 /// <summary>
 /// Builds the museum shop.

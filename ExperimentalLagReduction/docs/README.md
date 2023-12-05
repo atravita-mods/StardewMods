@@ -25,7 +25,7 @@ Note that the highest radius allowed is 4, and values of 2 or 3 work best.
 
 ### Translations:
 
-This mod uses SMAPI's i18n feature for translations. I'd love to get translations! Please see the wiki's guide [here](https://stardewvalleywiki.com/Modding:Translations), and feel free to message me, contact me on Discord (@atravita#9505) or send me a pull request!
+This mod uses SMAPI's i18n feature for translations. I'd love to get translations! Please see the wiki's guide [here](https://stardewvalleywiki.com/Modding:Translations), and feel free to message me, contact me on Discord (@atravita) or send me a pull request!
 
 ### Compiling from source:
 

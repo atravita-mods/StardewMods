@@ -5,9 +5,7 @@ Most users should download the mod from the [Nexus page](https://www.nexusmods.c
 
 ### Translations:
 
-This mod currently has no translations.
-
-<!--- This mod uses SMAPI's i18n feature for translations. I'd love to get translations! Please see the wiki's guide [here](https://stardewvalleywiki.com/Modding:Translations), and feel free to message me, contact me on Discord (@atravita#9505) or send me a pull request! -->
+This mod uses SMAPI's i18n feature for translations. I'd love to get translations! Please see the wiki's guide [here](https://stardewvalleywiki.com/Modding:Translations), and feel free to message me, contact me on Discord (@atravita) or send me a pull request!
 
 ### Compiling from source:
 
@@ -21,4 +19,4 @@ This project uses Pathos' multiplatform nuget, so it **should** build on any pla
 
 ....is not recommended, since AtraCore is still under development and features may change without warning.
 
-(Most of the useful stuff is in AtraBase anyways, which I'm keeping as its own [seperate repo](https://github.com/atravita-mods/AtraBase), so you could just [submodule that](https://git-scm.com/book/en/v2/Git-Tools-Submodules) :P)
+(Most of the useful stuff is in AtraBase anyways, which I'm keeping as its own [separate repo](https://github.com/atravita-mods/AtraBase), so you could just [submodule that](https://git-scm.com/book/en/v2/Git-Tools-Submodules) :P)

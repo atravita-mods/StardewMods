@@ -10,7 +10,7 @@ Retextures of this mod's icons should target `Mods/atravita/DresserMiniMenu/Icon
 
 ### Translations:
 
-This mod uses SMAPI's i18n feature for translations. I'd love to get translations! Please see the wiki's guide [here](https://stardewvalleywiki.com/Modding:Translations), and feel free to message me, contact me on Discord (@atravita#9505) or send me a pull request!
+This mod uses SMAPI's i18n feature for translations. I'd love to get translations! Please see the wiki's guide [here](https://stardewvalleywiki.com/Modding:Translations), and feel free to message me, contact me on Discord (@atravita) or send me a pull request!
 
 Additionally, the texture in `assets/icons.png` can be localized simply by creating a file with the name `assets/icons.{languageCode}.png`, ie `assets.icons.zh-CN.png` for Chinese.
 

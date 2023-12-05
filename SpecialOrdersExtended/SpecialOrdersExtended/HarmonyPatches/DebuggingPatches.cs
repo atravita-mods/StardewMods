@@ -1,22 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using AtraCore.Framework.ReflectionManager;
+﻿using AtraCore.Framework.ReflectionManager;
 
 using HarmonyLib;
 
 using StardewValley.SpecialOrders.Objectives;
 
 namespace SpecialOrdersExtended.HarmonyPatches;
+
+/// <summary>
+/// Patches for debugging.
+/// </summary>
 internal static class DebuggingPatches
 {
+    /// <summary>
+    /// Applies the patches for this class.
+    /// </summary>
+    /// <param name="harmony">Harmony instance.</param>
     internal static void Apply(Harmony harmony)
     {
 #if !DEBUG
-        if (!ModEntry.Config.Verbose)
+        if (!ModEntry.ModMonitor.IsVerbose)
         {
             return;
         }

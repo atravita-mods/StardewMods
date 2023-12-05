@@ -410,7 +410,7 @@ public sealed class GMCMHelper : IntegrationHelper
                 .First()
                 .MakeGenericMethod(typeof(TModConfig), tEnum);
         }
-        realized.Invoke(this, new object?[] { property, getConfig, fieldID });
+        realized.Invoke(this, [property, getConfig, fieldID]);
 
         return this;
     }

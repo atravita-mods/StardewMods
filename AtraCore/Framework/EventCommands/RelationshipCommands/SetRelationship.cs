@@ -25,12 +25,13 @@ namespace AtraCore.Framework.EventCommands.RelationshipCommands;
 /// <remarks>
 /// Initializes a new instance of the <see cref="SetRelationship"/> class.
 /// </remarks>
-/// <param name="name">Name of the command.</param>
-/// <param name="monitor">Monitor to use.</param>
 /// <param name="multiplayer">SMAPI's multiplayer helper.</param>
 /// <param name="uniqueID">This mod's uniqueID.</param>
 internal sealed class SetRelationship(IMultiplayerHelper multiplayer, string uniqueID)
 {
+    /// <summary>
+    /// The <see cref="MultiplayerDispatch"/> key used to request an NPC move.
+    /// </summary>
     internal const string RequestNPCMove = "RequestNPCMove";
 
     private const string DEFAULT = "DEFAULT";
@@ -49,7 +50,7 @@ internal sealed class SetRelationship(IMultiplayerHelper multiplayer, string uni
                 return null;
             }
 
-            MethodInfo? reload = freeLoveEntry.GetMethod("ReloadSpouses", AccessTools.all, binder: null, new[] { typeof(Farmer) }, null);
+            MethodInfo? reload = freeLoveEntry.GetMethod("ReloadSpouses", AccessTools.all, binder: null, [typeof(Farmer)], null);
             if (reload is null)
             {
                 return null;
@@ -267,9 +268,8 @@ internal sealed class SetRelationship(IMultiplayerHelper multiplayer, string uni
     /// <summary>
     /// Processes a move request.
     /// </summary>
-    /// <param name="sender">smapi</param>
     /// <param name="e">event args.</param>
-    internal void ProcessMoveRequest(ModMessageReceivedEventArgs e)
+    internal static void ProcessMoveRequest(ModMessageReceivedEventArgs e)
     {
         string message = e.ReadAs<string>();
 
@@ -344,7 +344,7 @@ internal sealed class SetRelationship(IMultiplayerHelper multiplayer, string uni
         multiplayer.SendMessage(
             message: message,
             messageType: RequestNPCMove,
-            modIDs: new[] { this.UniqueID },
-            playerIDs: new[] { Game1.MasterPlayer.UniqueMultiplayerID });
+            modIDs: [this.UniqueID],
+            playerIDs: [Game1.MasterPlayer.UniqueMultiplayerID]);
     }
 }

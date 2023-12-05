@@ -193,7 +193,6 @@ public class ShovelTool : Tool
                                 facingDirection: 0,
                                 name,
                                 datable: false,
-                                schedule: null,
                                 portrait: Game1.temporaryContent.Load<Texture2D>("Portraits\\" + name));
                         }
                         catch (Exception ex)

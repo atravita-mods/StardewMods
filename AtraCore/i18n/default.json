@@ -19,5 +19,8 @@
   "defense": "{{amount}} Defense",
   "immunity": "{{amount}} Immunity",
   "critchance": "{{amount}} Crit. Chance",
-  "critpower": "{{amount}} Crit. Power"
+  "critpower": "{{amount}} Crit. Power",
+
+  // fruit trees
+  "fruit-tree.forbidden": "This fruit tree is not yours."
 }

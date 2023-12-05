@@ -62,15 +62,17 @@ internal static class NPCHelpers
             effects: SpriteEffects.None,
             layerDepth: 1f);
 
+        Rectangle mug = character.getMugShotSourceRect();
+        mug.Height = 16;
         spriteBatch.Draw(
             texture: character.Sprite.Texture,
             position: arrowPos - (direction.GetVectorFacing() * 48f) - new Vector2(32f, 48f),
-            sourceRectangle: character.getMugShotSourceRect(),
+            sourceRectangle: mug,
             color: Color.White,
             rotation: 0f,
             origin: Vector2.Zero,
             layerDepth: 1f,
             effects: SpriteEffects.None,
-            scale: 2f);
+            scale: Game1.pixelZoom);
     }
 }

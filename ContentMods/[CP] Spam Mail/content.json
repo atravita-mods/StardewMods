@@ -8,5 +8,9 @@
         }
     },
     "Changes": [
+        {
+            "Action": "Include",
+            "FromFile": "assets/phonecalls.json"
+        }
     ]
 }

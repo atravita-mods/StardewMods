@@ -33,5 +33,7 @@ internal static class AllowRepeatAfter
                 AllowRepeatAfterHandler.Add(id, days);
             }
         }
+
+        @event.CurrentCommand++;
     }
 }

@@ -1,9 +1,4 @@
-﻿namespace MuseumRewardsIn;
-
-using System.Runtime.InteropServices;
-
-using AtraBase.Models.RentedArrayHelpers;
-using AtraBase.Toolkit.StringHandler;
+﻿using AtraBase.Toolkit.StringHandler;
 
 using StardewValley.Delegates;
 using StardewValley.GameData.Museum;
@@ -11,22 +6,24 @@ using StardewValley.Internal;
 using StardewValley.ItemTypeDefinitions;
 using StardewValley.Locations;
 
+namespace MuseumRewardsIn;
+
 /// <summary>
 /// Builds the museum shop.
 /// </summary>
 internal static class MuseumShopBuilder
 {
     /// <inheritdoc cref="ResolveItemQueryDelegate"/>
-    internal static IList<ItemQueryResult> MuseumQuery(string key, string? arguments, ItemQueryContext context, bool avoidRepeat, HashSet<string>? avoidItemIds, Action<string, string> logError)
+    internal static IEnumerable<ItemQueryResult> MuseumQuery(string key, string? arguments, ItemQueryContext context, bool avoidRepeat, HashSet<string>? avoidItemIds, Action<string, string> logError)
     {
         if (Game1.getLocationFromName("ArchaeologyHouse") is not LibraryMuseum library)
         {
-            return ItemQueryResolver.DefaultResolvers.ErrorResult(key, arguments, logError, "library could not be found");
+            ItemQueryResolver.Helpers.ErrorResult(key, arguments, logError, "library could not be found");
+            yield break;
         }
 
         // argument parsing
         HashSet<string>? types = null;
-        int? count = null;
 
         ReadOnlySpan<char> argsSpan = (arguments ?? string.Empty).AsSpan().Trim();
         if (argsSpan.Length > 0)
@@ -38,7 +35,8 @@ internal static class MuseumShopBuilder
 
                 if (arg.Length < 2 || arg[0] != '@')
                 {
-                    return ItemQueryResolver.DefaultResolvers.ErrorResult(key, arguments, logError, $"argument '{arg}' is not valid.");
+                    ItemQueryResolver.Helpers.ErrorResult(key, arguments, logError, $"argument '{arg}' is not valid.");
+                    yield break;
                 }
 
                 if (arg.Equals("@has_type", StringComparison.OrdinalIgnoreCase))
@@ -46,7 +44,8 @@ internal static class MuseumShopBuilder
                     ReadOnlySpan<char> remainder = args.Remainder.TrimStart();
                     if (remainder.Length == 0 || remainder[0] == '@')
                     {
-                        return ItemQueryResolver.DefaultResolvers.ErrorResult(key, arguments, logError, $"argument '{arg}' was not given values");
+                        ItemQueryResolver.Helpers.ErrorResult(key, arguments, logError, $"argument '{arg}' was not given values");
+                        yield break;
                     }
                     types ??= [];
 
@@ -60,7 +59,8 @@ internal static class MuseumShopBuilder
                         string typeString = args.Current.Word.ToString();
                         if (typeString[0] != '(' || typeString[^1] != ')' || ItemRegistry.GetTypeDefinition(typeString) is null)
                         {
-                            return ItemQueryResolver.DefaultResolvers.ErrorResult(key, arguments, logError, $"type '{typeString}' is not a valid type.");
+                            ItemQueryResolver.Helpers.ErrorResult(key, arguments, logError, $"type '{typeString}' is not a valid type.");
+                            yield break;
                         }
                         types.Add(typeString);
 
@@ -68,25 +68,10 @@ internal static class MuseumShopBuilder
                     }
                     while (remainder.Length > 0 && remainder[0] != '@');
                 }
-                else if (arg.Equals("@count", StringComparison.OrdinalIgnoreCase))
-                {
-                    if (count is not null)
-                    {
-                        return ItemQueryResolver.DefaultResolvers.ErrorResult(key, arguments, logError, $"Count argument was supplied twice.");
-                    }
-
-                    if (args.MoveNext() && int.TryParse(args.Current.Word, out int val) && val > 0)
-                    {
-                        count = val;
-                    }
-                    else
-                    {
-                        return ItemQueryResolver.DefaultResolvers.ErrorResult(key, arguments, logError, $"received invalid value for @Count");
-                    }
-                }
                 else
                 {
-                    return ItemQueryResolver.DefaultResolvers.ErrorResult(key, arguments, logError, $"argument '{arg}' is not valid.");
+                    ItemQueryResolver.Helpers.ErrorResult(key, arguments, logError, $"argument '{arg}' is not valid.");
+                    yield break;
                 }
             }
         }
@@ -99,15 +84,16 @@ internal static class MuseumShopBuilder
         }
         catch (Exception ex)
         {
-            return ItemQueryResolver.DefaultResolvers.ErrorResult(key, arguments, logError, $"could not load museum data: {ex}");
+            ItemQueryResolver.Helpers.ErrorResult(key, arguments, logError, $"could not load museum data: {ex}");
+            yield break;
         }
 
         if (museumRewardData.Count == 0)
         {
-            return ItemQueryResolver.DefaultResolvers.ErrorResult(key, arguments, logError, $"museum data appears empty");
+            ItemQueryResolver.Helpers.ErrorResult(key, arguments, logError, $"museum data appears empty");
+            yield break;
         }
 
-        List<ItemQueryResult> items = [];
         Dictionary<string, int> countsByTag = library.GetDonatedByContextTag(museumRewardData);
         HashSet<string>? repeats = avoidRepeat ? new() : null;
 
@@ -134,33 +120,8 @@ internal static class MuseumShopBuilder
             {
                 continue;
             }
-            items.Add(new(ItemRegistry.Create(item)));
+            yield return new(ItemRegistry.Create(item));
         }
-
-        if (count is null || count.Value >= items.Count)
-        {
-            return items;
-        }
-
-        // SAFETY: Do not mutate items while the shuffler is active.
-        ShuffledYielder<ItemQueryResult> shuffler = new(
-            CollectionsMarshal.AsSpan(items),
-            null,
-            context?.Random ?? Utility.CreateDaySaveRandom(Utility.GetDeterministicHashCode(key), Utility.GetDeterministicHashCode(arguments)));
-        List<ItemQueryResult> result = new(count.Value);
-
-        foreach (ItemQueryResult? item in shuffler)
-        {
-            if (item is not null)
-            {
-                result.Add(item);
-                if (result.Count >= count)
-                {
-                    break;
-                }
-            }
-        }
-        return result;
     }
 
     #region helpers
@@ -176,17 +137,10 @@ internal static class MuseumShopBuilder
         foreach (MuseumRewards reward in museumRewardData.Values)
         {
             string item = ItemRegistry.QualifyItemId(reward.RewardItemId);
-            if (string.IsNullOrEmpty(item))
+            if (!string.IsNullOrEmpty(item) && CheckAchievedReward(reward, countsByTag))
             {
-                continue;
+                yield return item;
             }
-
-            if (!CheckAchievedReward(reward, countsByTag))
-            {
-                continue;
-            }
-
-            yield return item;
         }
     }
 

@@ -10,6 +10,8 @@ using AtraCore.Framework.Caches.AssetCache;
 using AtraCore.Framework.ReflectionManager;
 using AtraCore.HarmonyPatches.CustomEquipPatches;
 
+using AtraShared.Utils.Extensions;
+
 using FastExpressionCompiler.LightExpression;
 
 using Microsoft.Xna.Framework;
@@ -168,6 +170,7 @@ public sealed class EquipEffects
         Buff buff = new(
             id: id,
             displayName: TokenParser.ParseText(attributes.DisplayName) ?? instance.DisplayName,
+            description: TokenParser.ParseText(attributes.Description) ?? instance.getDescription(),
             displaySource: instance.DisplayName,
             iconTexture: tex,
             iconSheetIndex: attributes.SpriteIndex,
@@ -183,20 +186,14 @@ public sealed class EquipEffects
     /// <param name="farmer">The farmer to add to.</param>
     internal void AddRegen(Farmer farmer) => HandleRegen(farmer, this.HealthRegen, this.StaminaRegen);
 
+    /// <summary>
+    /// Handles the regeneration for a specific amount for a player.
+    /// </summary>
+    /// <param name="currentPlayer">The player to increment for.</param>
+    /// <param name="health_regen">The amount of health.</param>
+    /// <param name="stamina_regen">The amount of stamina.</param>
     internal static void HandleRegen(Farmer currentPlayer, float health_regen, float stamina_regen)
     {
-        if (stamina_regen > 0 && currentPlayer.Stamina < currentPlayer.MaxStamina)
-        {
-            int prev = (int)currentPlayer.Stamina;
-            float amount = Math.Min(stamina_regen, currentPlayer.MaxStamina - currentPlayer.Stamina);
-            currentPlayer.Stamina += amount;
-
-            int incremented = (int)currentPlayer.Stamina - prev;
-            if (incremented > 0)
-            {
-                currentPlayer.currentLocation.debris.Add(new Debris(incremented, currentPlayer.Position, Color.Yellow, 1f, currentPlayer));
-            }
-        }
         if (health_regen > 0 && currentPlayer.health < currentPlayer.maxHealth - 1)
         {
             float amount = Math.Min(health_regen + ItemPatcher.HealthRemainder, currentPlayer.maxHealth - currentPlayer.health);
@@ -204,12 +201,32 @@ public sealed class EquipEffects
             if (toAdd > 0)
             {
                 currentPlayer.health += toAdd;
-                currentPlayer.currentLocation.debris.Add(new Debris(toAdd, currentPlayer.Position, Color.Green, 1f, currentPlayer));
+                if (ModEntry.Config.ShowRegenNumbers)
+                {
+                    currentPlayer.currentLocation.debris.Add(new Debris(toAdd, currentPlayer.Position, Color.Green, 1f, currentPlayer));
+                }
+
                 ItemPatcher.HealthRemainder = amount - toAdd;
             }
             else
             {
                 ItemPatcher.HealthRemainder = amount;
+            }
+        }
+
+        if (stamina_regen > 0 && currentPlayer.Stamina < currentPlayer.MaxStamina)
+        {
+            int prev = (int)currentPlayer.Stamina;
+            float amount = Math.Min(stamina_regen, currentPlayer.MaxStamina - currentPlayer.Stamina);
+            currentPlayer.Stamina += amount;
+
+            if (ModEntry.Config.ShowRegenNumbers)
+            {
+                int incremented = (int)currentPlayer.Stamina - prev;
+                if (incremented > 0)
+                {
+                    currentPlayer.currentLocation.debris.Add(new Debris(incremented, currentPlayer.Position, Color.Yellow, 1f, currentPlayer));
+                }
             }
         }
     }
@@ -218,8 +235,11 @@ public sealed class EquipEffects
 /// <summary>
 /// A model that represents possible buffs to the player.
 /// </summary>
+[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "Preference")]
 public sealed class BuffModel : ObjectBuffAttributesData
 {
+    #region delegates
+
     // merges the model data with the given buff effects.
     private static readonly Lazy<Action<BuffEffects, BuffModel>> _merger = new(() =>
     {
@@ -297,10 +317,11 @@ public sealed class BuffModel : ObjectBuffAttributesData
 
         BlockExpression block = Expression.Block(expressions);
         Expression<Action<BuffEffects, BuffModel>> lambda = Expression.Lambda<Action<BuffEffects, BuffModel>>(block, new ParameterExpression[] { effects, model });
-        ModEntry.ModMonitor.VerboseLog($"Ring merge function generated:\n{lambda.ToCSharpString()}");
+        ModEntry.ModMonitor.LogIfVerbose($"Ring merge function generated:\n{lambda.ToCSharpString()}");
         return lambda.CompileFast();
     });
 
+    // counts the number of extra rows needed for the tooltip.
     private static readonly Lazy<Func<BuffModel, int>> _extraRows = new(() =>
     {
         List<Expression> expressions = [];
@@ -329,10 +350,11 @@ public sealed class BuffModel : ObjectBuffAttributesData
         expressions.Add(rows);
         BlockExpression block = Expression.Block(new ParameterExpression[] { rows }, expressions);
         Expression<Func<BuffModel, int>> lambda = Expression.Lambda<Func<BuffModel, int>>(block, new ParameterExpression[] { model });
-        ModEntry.ModMonitor.VerboseLog($"Height function generated:\n{lambda.ToCSharpString()}");
+        ModEntry.ModMonitor.LogIfVerbose($"Height function generated:\n{lambda.ToCSharpString()}");
         return lambda.CompileFast();
     });
 
+    // merges two buffmodels together into the left one.
     private static readonly Lazy<Action<BuffModel, BuffModel>> _leftFold = new(() =>
     {
         List<Expression> expressions = [];
@@ -358,7 +380,7 @@ public sealed class BuffModel : ObjectBuffAttributesData
 
         BlockExpression block = Expression.Block(expressions);
         Expression<Action<BuffModel, BuffModel>> lambda = Expression.Lambda<Action<BuffModel, BuffModel>>(block, new ParameterExpression[] { left, right });
-        ModEntry.ModMonitor.VerboseLog($"Sum function generated:\n{lambda.ToCSharpString()}");
+        ModEntry.ModMonitor.LogIfVerbose($"Sum function generated:\n{lambda.ToCSharpString()}");
         return lambda.CompileFast();
     });
 
@@ -376,6 +398,8 @@ public sealed class BuffModel : ObjectBuffAttributesData
 
         return netfield.GenericTypeArguments.FirstOrDefault();
     }
+
+    #endregion
 
     /// <inheritdoc cref="BuffEffects.CombatLevel"/>
     public float CombatLevel { get; set; } = 0;
@@ -465,19 +489,28 @@ public sealed class LightData
 /// </summary>
 public sealed class BuffDisplayAttributes
 {
+    /// <summary>
+    /// Gets or sets the texture to display.
+    /// </summary>
     public string? Texture { get; set; }
 
+    /// <summary>
+    /// Gets or sets the index of that texture.
+    /// </summary>
     public int SpriteIndex { get; set; } = -1;
 
+    /// <summary>
+    /// Gets or sets the duration of the buff (in ms).
+    /// </summary>
     public int Duration { get; set; } = Game1.realMilliSecondsPerGameMinute * 10;
 
     /// <summary>
-    /// A tokenized string for the display name of a buff, or null to use the ring's name.
+    /// Gets or sets a tokenized string for the display name of a buff, or null to use the ring's name.
     /// </summary>
     public string? DisplayName { get; set; }
 
     /// <summary>
-    /// A tokenized string for the description of a buff, or null to use the ring's description.
+    /// Gets or sets a tokenized string for the description of a buff, or null to use the ring's description.
     /// </summary>
     public string? Description { get; set; }
 }

@@ -379,7 +379,7 @@
             },
             "Entries": {
                 "Sebastian_y2": "{{i18n:sebastian-y2-fair.0}}$s#$e#{{i18n:sebastian-y2-fair.1}}",
-                "Sebastian_y3": "{{i18n:sebastian-y3-fair|videogame={{i18n:video.game.{{Random:01, 02, 03, 04, 05, 06, 07, 08, 09}} }}",
+                "Sebastian_y3": "{{i18n:sebastian-y3-fair|videogame={{i18n:video.game.{{Random:01, 02, 03, 04, 05, 06, 07, 08, 09}} }} }}",
                 "Sebastian_spouse_y2": "{{i18n:sebastian-y2-fair-spouse}}$h",
                 "Sebastian_spouse_y3": "{{i18n:sebastian-y3-fair-spouse}}"
             }

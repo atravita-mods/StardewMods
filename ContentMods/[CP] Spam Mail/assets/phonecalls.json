@@ -1,0 +1,17 @@
+{
+    "$schema": "https://smapi.io/schemas/content-patcher.json",
+    "Changes": [
+        {
+            "Action": "EditData",
+            "Target": "Data/IncomingPhoneCalls",
+            "Entries": {
+                "atravita.SpamMailGold": {
+                    "TriggerCondition": "Year 2",
+                    "RingCondition": "Year 2",
+                    "Dialogue": "{{i18n: goldbug-call}}",
+                    "SimpleDialogueSplitBy": "#",
+                }
+            }
+        }
+    ]
+}

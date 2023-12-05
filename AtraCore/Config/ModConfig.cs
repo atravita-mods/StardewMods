@@ -12,4 +12,6 @@ internal sealed class ModConfig
     /// </summary>
     [GMCMDefaultIgnore]
     public bool Verbose { get; set; } = false;
+
+    public bool ShowRegenNumbers { get; set; } = true;
 }

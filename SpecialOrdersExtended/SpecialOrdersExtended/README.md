@@ -35,7 +35,7 @@ Also adds a way to override the duration of special orders. Edit the asset `Mods
 
 Finally, adds dialogue keys. Their documentation can be found [here](docs/DialogueKeys.MD).
 
-[Changelog](docs/CHANGELOG.MD).
+[Change log](docs/CHANGELOG.MD).
 
 ### Known issues:
 1. I suspect (but am not absolutely sure) that if you complete two ship orders at the same time, only one will finish. This should only rarely happen in vanilla because there's only a few quests with ship requirements or have multi-week duration, but if you add a lot of multi-week ship orders you may run into this as well. This mod doesn't affect that part of the code though - it just patches CheckTag.

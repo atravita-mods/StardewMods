@@ -1,7 +1,5 @@
 ﻿using AtraBase.Toolkit.Extensions;
 
-using AtraCore;
-
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
 
@@ -30,7 +28,7 @@ internal static class GameLocationPatches
 #pragma warning restore SA1310 // Field names should not contain underscore
 
     /// <summary>
-    /// Resets the dropchance, once per day.
+    /// Resets the drop chance, once per day.
     /// </summary>
     internal static void Reinitialize() => DropChance.Value = DEFAULT_DROP_CHANCE;
 
@@ -62,7 +60,7 @@ internal static class GameLocationPatches
                                 targetLocation: who.Position)));
                 }
             }
-            while(passes-- > 0 && who.isWearingRing(Ring.burglarsRing));
+            while(passes-- > 0 && who.isWearingRing(Ring.BurglarsRingId));
         }
         catch (Exception ex)
         {

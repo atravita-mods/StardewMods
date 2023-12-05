@@ -10,6 +10,10 @@
                     "RingCondition": "Year 2",
                     "Dialogue": "{{i18n: goldbug-call}}",
                     "SimpleDialogueSplitBy": "#",
+                },
+                "atravita.SpamMailOnline": {
+                    "Dialogue": "{{i18n: online-shopping-call}}",
+                    "SimpleDialogueSplitBy": "#",
                 }
             }
         }

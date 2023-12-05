@@ -1,9 +1,12 @@
-﻿using AtraBase.Toolkit.Extensions;
+﻿namespace AtraCore.HarmonyPatches.FruitTreePatches;
+
+using AtraBase.Toolkit.Extensions;
 using AtraBase.Toolkit.Reflection;
 
 using AtraCore.Framework.Caches;
 using AtraCore.Framework.ReflectionManager;
 
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
 
 using HarmonyLib;
@@ -11,12 +14,16 @@ using HarmonyLib;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using StardewModdingAPI.Utilities;
+
 using StardewValley.Extensions;
 using StardewValley.TerrainFeatures;
 
-namespace AtraCore.HarmonyPatches.FruitTreePatches;
-
+/// <summary>
+/// Patches against fruit trees.
+/// </summary>
 [HarmonyPatch(typeof(FruitTree))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class FruitTreePatches
 {
     #region delegates
@@ -24,6 +31,9 @@ internal static class FruitTreePatches
         typeof(FruitTree).GetCachedField("maxShake", ReflectionCache.FlagTypes.InstanceFlags)
         .GetInstanceFieldSetter<FruitTree, float>());
     #endregion
+
+    private static readonly PerScreen<int> Ticks = new(static () => -1);
+    private static readonly PerScreen<int> Attempts = new(static () => 0);
 
     [HarmonyPrefix]
     [HarmonyPatch(nameof(FruitTree.shake))]
@@ -33,7 +43,22 @@ internal static class FruitTreePatches
         int y = (int)__instance.Tile.Y;
         if (__instance.Location?.doesTileHaveProperty(x, y, "atravita.FruitTreeShake", "Back") is string message)
         {
-            ShowMessage(message);
+            if (Game1.ticks > Ticks.Value + 120)
+            {
+                Attempts.Value = 0;
+                Ticks.Value = Game1.ticks;
+            }
+            else
+            {
+                Attempts.Value++;
+            }
+
+            if (Attempts.Value > 2)
+            {
+                ShowMessage(message);
+                Attempts.Value = 0;
+            }
+
             ShakeTree(__instance);
             return false;
         }

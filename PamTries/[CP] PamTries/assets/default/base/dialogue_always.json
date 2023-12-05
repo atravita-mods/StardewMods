@@ -17,9 +17,9 @@
         "LogName": "Base dialogue - inlaw, good marriage",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Pam",
-        "When": 
+        "When":
         {
-            "Hearts:Penny": "11,12,13,14", 
+            "Hearts:Penny": "11,12,13,14",
             "Relationship:Penny": "Married"
         },
         "Entries": {
@@ -56,6 +56,16 @@
             "Query: {{TheMightyAmondee.CustomTokens/YearsMarried}} >= 1": true,
             "Hearts:Penny": "0,1,2,3,4,5,6",
             "Relationship:Penny": "Married"
+        }
+    },
+
+    // small edits to other NPCs
+    {
+        "Action": "EditData",
+        "LogName": "Harvey",
+        "Target": "Characters/Dialogue/Harvey",
+        "Entries": {
+            "PamTriesRehabDelay": "Hey, thanks for hearing me out. It'd mean a lot for Pam."
         }
     }
 ]}

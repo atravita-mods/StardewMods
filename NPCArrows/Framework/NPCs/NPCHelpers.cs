@@ -63,7 +63,7 @@ internal static class NPCHelpers
             layerDepth: 1f);
 
         Rectangle mug = character.getMugShotSourceRect();
-        mug.Height = Math.Min(32, mug.Height);
+        mug.Height = Math.Min(24, mug.Height);
         spriteBatch.Draw(
             texture: character.Sprite.Texture,
             position: arrowPos - (direction.GetVectorFacing() * 48f) - new Vector2(32f, 48f),

@@ -7,8 +7,12 @@
             "Entries": {
                 // first group - aquarium and circus.
                 "17786000/z spring/z summer/f Vincent 1000/A atravita.SpamMail.Aquarium/r 0.1/x atravita.SpamMail.CircusMail": "null",
-                "17786001/z spring/f Vincent 500/A atravita.SpamMail.Circus/r 0.1/x atravita.SpamMail.Aquarium": "null"
-            }
-        }
+                "17786001/z spring/f Vincent 500/A atravita.SpamMail.Circus/r 0.1/x atravita.SpamMail.Aquarium": "null",
+
+
+                // joja group
+                "17786010/z spring/r 0.1/x atravita.SpamMail.JojaSummer": "null"
+            },
+        },
     ]
 }

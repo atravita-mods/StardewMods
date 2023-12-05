@@ -9,11 +9,15 @@
                     "TriggerCondition": "Year 2",
                     "RingCondition": "Year 2",
                     "Dialogue": "{{i18n: goldbug-call}}",
-                    "SimpleDialogueSplitBy": "#",
+                    "SimpleDialogueSplitBy": "#"
                 },
                 "atravita.SpamMailOnline": {
                     "Dialogue": "{{i18n: online-shopping-call}}",
-                    "SimpleDialogueSplitBy": "#",
+                    "SimpleDialogueSplitBy": "#"
+                },
+                "atravita.SpamMailAuto": {
+                    "Dialogue": "{{i18n:auto-insurance-call}}",
+                    "SimpleDialogueSplitBy": "#"
                 }
             }
         }

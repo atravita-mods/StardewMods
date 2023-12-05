@@ -1,0 +1,15 @@
+{
+    "$schema": "https://smapi.io/schemas/content-patcher.json",
+    "Changes": [
+        {
+            "Action": "EditData",
+            "Target": "Data/Mail",
+            "Entries": {
+                "atravita.SpamMail.CircusMail": "{{i18n:CircusMail.Text}} %item conversationTopic atravita.SpamMail.CircusMail 28 %% [#]{{i18n:CircusMail.Title}}",
+                "atravita.SpamMail.Aquarium": "{{i18n:Aquarium.Text}} %item conversationTopic atravita.SpamMail.Aquarium 28 %% [#]{{i18n:Aquarium.Title}}",
+                "atravita.SpamMail.Zoo": "{{i18n:Zoo.Text}} %item conversationTopic atravita.SpamMail.Zoo 28 %% [#]{{i18n:Zoo.Title}}",
+                "atravita.SpamMail.Zoo2": "{{i18n:Zoo2.Text}} %item conversationTopic atravita.SpamMail.Zoo2 28 %% [#]{{i18n:Zoo2.Title}}",
+            }
+        }
+    ]
+}

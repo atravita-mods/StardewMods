@@ -1,5 +1,13 @@
 {
     "spellchecker.ignoreWordsList": [
-        "capitalitalists"
+        "atravita",
+        "CircusMail",
+        "conversationTopic",
+        "EditData",
+        "i18n",
+        "IncomingPhoneCalls",
+        "SimpleDialogueSplitBy",
+        "SpamMail",
+        "Zuzu",
     ]
 }

@@ -7,6 +7,8 @@ using NPCArrows.Framework.NPCs;
 
 using StardewModdingAPI.Events;
 
+using StardewValley.Characters;
+
 /// <inheritdoc />
 internal sealed class ModEntry : BaseMod<ModEntry>
 {
@@ -38,7 +40,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         {
             foreach (NPC? character in characters)
             {
-                if (character?.CanSocialize == true)
+                if (character?.CanSocialize == true || character is Child)
                 {
                     character.DrawArrow(e.SpriteBatch);
                 }

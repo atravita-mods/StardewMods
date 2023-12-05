@@ -4,17 +4,25 @@
     * **********************/
     "config.ExpectedPlayTime.name": "Expected Play Time",
 
-    /*********
-    * Mail
-    **********/
-
+    /***********************
+    * Circus
+    ***********************/
     "CircusMail.Title": "The Greatest Show On Earth",
     "CircusMail.Text": "Two weeks only, the Cirque de La Lune's in town! Featuring death-defying acrobatics, ferocious tamed lions, mind-bending magic shows, and, of course, clowns! Visit us in Zuzu City while we're here!",
 
+    "vincent-circus-before": "Mom won't bring me to the cirus.$s",
+
+    /*************************
+    * Aquarium
+    *************************/
     "Aquarium.Title": "Zuzu City Aquarium Presents: Denizens of the Deep!",
     "Aquarium.Text": "Ever interested in the crazy weird creatures that inhabit the depths of the ocean! Now you have an opportunity to meet them! For two weeks only, our Denizens of the Deep exhibit will let you see anglerfish, rattails, and even vampire squid!",
 
-    // zoo?
+    "vincent-aquarium": "Miss Penny's gonna bring Jas and me to the Aquarium next Friday!$h#$b#I'm so excited.$h",
+
+    /*************************
+    * Zoo
+    *************************/
     "Zoo.Title": "New Exhibits at the Zuzu City Zoo!",
     "Zoo.Text": "Just for this summer, we've got some panda visitors! Bring your kids to meet these lovely fluffy critters before they go extinct.",
 
@@ -93,14 +101,11 @@
     "Craft.Title": "70% off yarn!",
     "Craft.Text": "Come in this weekend for 70% off most of our stock! Yarn, glitter, cake decorations, anything to unlock your creativity!",
 
-    /*********
-    * Dialogue
-    *********/
-
     /*************
     * Phone calls
     ************/
 
     "goldbug-call": "Worried about inflation? Just buy gold!#Selling genuine gold bars, 500g each!",
     "online-shopping-call": "Get your farming supplies online at Farming-dot-com, for absurdly cheap!#But hurry, this won't last long, we're not sure how long the venture capitalists will continue giving us money...",
+    "auto-insurance-call": "Have you re-priced your auto insurance lately? Maybe you should get to that.#We might be cheaper than your current plan. Or not. We'll tell you honestly. We promise."
 }

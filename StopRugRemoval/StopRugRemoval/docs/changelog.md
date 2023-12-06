@@ -19,6 +19,7 @@
 * Remove no longer needed code for
     - Preventing music crashes
     - Preventing the Statue of Fortune from crashing when NPCs had invalid gift tastes.
+    - Preventing stack overflows in `parseMasterSchedule`.
 
 #### Version 1.1.3
 * Fix integration with GrowableGiantCrops/MoreGrassStarters.

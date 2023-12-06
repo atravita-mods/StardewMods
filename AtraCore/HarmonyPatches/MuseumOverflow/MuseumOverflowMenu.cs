@@ -234,71 +234,81 @@ internal sealed class MuseumOverflowMenu : IClickableMenu
         for (int i = 0; i < this.boxen.Length; i++)
         {
             ClickableComponent box = this.boxen[i];
-            if (box.containsPoint(x, y))
+            if (!box.containsPoint(x, y))
             {
-                if (this.baseMenu.heldItem is { } held)
+                continue;
+            }
+
+            if (this.baseMenu.heldItem is { } held)
+            {
+                if (Game1.currentLocation is LibraryMuseum library && library.isItemSuitableForDonation(held))
                 {
-                    if (Game1.currentLocation is LibraryMuseum library && library.isItemSuitableForDonation(held))
+                    bool holdingMuseumPiece = _holdingMuseumPieceGetter.Value(this.baseMenu);
+                    int lastRewardsCount = !holdingMuseumPiece ? library.getRewardsForPlayer(Game1.player).Count : 0;
+                    this.inventory.Add(held.getOne());
+                    Play("stoneStep");
+
+                    var idxOfAddedItem = this.inventory.Count - 1 - (this.row * 12);
+                    if (idxOfAddedItem >= 36)
                     {
-                        bool holdingMuseumPiece = _holdingMuseumPieceGetter.Value(this.baseMenu);
-                        int lastRewardsCount = !holdingMuseumPiece ? library.getRewardsForPlayer(Game1.player).Count : 0;
-                        this.inventory.Add(held.getOne());
-                        Play("stoneStep");
-                        if (!holdingMuseumPiece && library.getRewardsForPlayer(Game1.player).Count > lastRewardsCount)
+                        this.row++;
+                        idxOfAddedItem -= 12;
+                        this.SetScrollBarToCurrentIndex();
+                    }
+
+                    if (!holdingMuseumPiece && library.getRewardsForPlayer(Game1.player).Count > lastRewardsCount)
+                    {
+                        this.sparkleText = new SparklingText(Game1.dialogueFont, Game1.content.LoadString("Strings\\StringsFromCSFiles:NewReward"), Color.MediumSpringGreen, Color.White);
+                        Play("reward");
+                        ClickableComponent boxToShow = this.boxen[Math.Clamp(idxOfAddedItem, 0, MAX_BOXEN)];
+                        this.locationOfSparkleText = new Vector2(boxToShow.bounds.X + 32 - (this.sparkleText.textWidth / 2) + this.xPositionOnScreen, boxToShow.bounds.Y - 12 + this.yPositionOnScreen + this.offset);
+                    }
+                    else
+                    {
+                        Play("newArtifact");
+                    }
+
+                    Game1.player.completeQuest("24");
+                    this.baseMenu.heldItem.Stack--;
+                    if (this.baseMenu.heldItem.Stack <= 0)
+                    {
+                        this.baseMenu.heldItem = null;
+                    }
+
+                    if (!holdingMuseumPiece)
+                    {
+                        // broadcast multiplayer messages.
+                        int pieces = library.museumPieces.Length + this.inventory.Count;
+                        Game1.stats.checkForArchaeologyAchievements();
+                        if (pieces == LibraryMuseum.totalArtifacts)
                         {
-                            this.sparkleText = new SparklingText(Game1.dialogueFont, Game1.content.LoadString("Strings\\StringsFromCSFiles:NewReward"), Color.MediumSpringGreen, Color.White);
-                            Play("reward");
-                            var idxOfAddedItem = Math.Clamp(this.inventory.Count - 1 - (this.row * 12), 0, 36);
-                            var boxToShow = this.boxen[idxOfAddedItem];
-                            this.locationOfSparkleText = new Vector2(boxToShow.bounds.X + 32 - (this.sparkleText.textWidth / 2) + this.xPositionOnScreen, boxToShow.bounds.Y - 12 + this.yPositionOnScreen + this.offset);
+                            Game1.Multiplayer.globalChatInfoMessage("MuseumComplete", Game1.player.farmName.Value);
+                        }
+                        else if (pieces == 40)
+                        {
+                            Game1.Multiplayer.globalChatInfoMessage("Museum40", Game1.player.farmName.Value);
                         }
                         else
                         {
-                            Play("newArtifact");
+                            Game1.Multiplayer.globalChatInfoMessage("donation", Game1.player.Name, "object:" + held.ItemId);
                         }
-
-                        Game1.player.completeQuest("24");
-                        this.baseMenu.heldItem.Stack--;
-                        if (this.baseMenu.heldItem.Stack <= 0)
-                        {
-                            this.baseMenu.heldItem = null;
-                        }
-
-                        if (!holdingMuseumPiece)
-                        {
-                            // broadcast multiplayer messages.
-                            int pieces = library.museumPieces.Length + this.inventory.Count;
-                            Game1.stats.checkForArchaeologyAchievements();
-                            if (pieces == LibraryMuseum.totalArtifacts)
-                            {
-                                Game1.Multiplayer.globalChatInfoMessage("MuseumComplete", Game1.player.farmName.Value);
-                            }
-                            else if (pieces == 40)
-                            {
-                                Game1.Multiplayer.globalChatInfoMessage("Museum40", Game1.player.farmName.Value);
-                            }
-                            else
-                            {
-                                Game1.Multiplayer.globalChatInfoMessage("donation", Game1.player.Name, "object:" + held.ItemId);
-                            }
-                        }
-                        this.baseMenu.ReturnToDonatableItems();
-
-                        return true;
                     }
-                }
+                    this.baseMenu.ReturnToDonatableItems();
 
-                if (this.GetItem(i) is Item item && this.baseMenu.heldItem is null)
-                {
-                    this.baseMenu.heldItem = item;
-                    _holdingMuseumPieceSetter.Value(this.baseMenu, true);
-                    this.inventory.Remove(item);
-
-                    this.baseMenu.menuMovingDown = true;
-                    this.baseMenu.reOrganizing = false; // ?
+                    return true;
                 }
-                return true;
             }
+
+            if (this.GetItem(i) is Item item && this.baseMenu.heldItem is null)
+            {
+                this.baseMenu.heldItem = item;
+                _holdingMuseumPieceSetter.Value(this.baseMenu, true);
+                this.inventory.Remove(item);
+
+                this.baseMenu.menuMovingDown = true;
+                this.baseMenu.reOrganizing = false; // ?
+            }
+            return true;
         }
 
         return false;
@@ -423,7 +433,7 @@ internal sealed class MuseumOverflowMenu : IClickableMenu
         {
             case State.Extending:
             {
-                this.offset += 3;
+                this.offset += 4;
                 if (this.offset >= ShownOffset)
                 {
                     this.offset = ShownOffset;
@@ -433,7 +443,7 @@ internal sealed class MuseumOverflowMenu : IClickableMenu
             }
             case State.Retracting:
             {
-                this.offset -= 3;
+                this.offset -= 4;
                 if (this.offset <= HiddenOffset)
                 {
                     this.offset = HiddenOffset;

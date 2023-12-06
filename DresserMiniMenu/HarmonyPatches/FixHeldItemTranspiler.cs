@@ -29,22 +29,21 @@ internal static class FixHeldItemTranspiler
         try
         {
             ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);
-            helper.FindLast(new CodeInstructionWrapper[]
-            { // this._isStorageShop
+            helper.FindLast([ // this._isStorageShop
                 OpCodes.Ldarg_0,
                 (OpCodes.Ldfld, typeof(ShopMenu).GetCachedField("_isStorageShop", ReflectionCache.FlagTypes.InstanceFlags)),
                 OpCodes.Brtrue_S,
-            })
+            ])
             .Push()
             .Advance(3)
             .DefineAndAttachLabel(out Label jumpPast)
             .Pop()
-            .Insert(new CodeInstruction[]
-            {
+            .Insert(
+            [
                 new(OpCodes.Ldarg_0),
                 new(OpCodes.Call, typeof(DresserMenuDoll).GetCachedMethod<ShopMenu>(nameof(DresserMenuDoll.IsActive), ReflectionCache.FlagTypes.StaticFlags)),
                 new(OpCodes.Brtrue_S, jumpPast),
-            });
+            ]);
 
             // helper.Print();
             return helper.Render();

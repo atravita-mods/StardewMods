@@ -14,18 +14,16 @@ using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 
 using DresserMiniMenu.Framework;
+
 using HarmonyLib;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
 using StardewModdingAPI.Utilities;
 
 using StardewValley.Menus;
 using StardewValley.Objects;
-
-using static StardewValley.Menus.CoopMenu;
 
 /// <summary>
 /// Holds patches against ShopMenu to make minimenu a thing.

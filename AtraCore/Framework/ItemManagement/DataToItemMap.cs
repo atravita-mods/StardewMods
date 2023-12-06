@@ -155,7 +155,7 @@ public static class DataToItemMap
                         }
 
                         string name = data.Name;
-                        (string id, bool duplicate) val = CollectionsMarshal.GetValueRefOrAddDefault(mapping, name, out bool exists);
+                        ref (string id, bool duplicate) val = ref CollectionsMarshal.GetValueRefOrAddDefault(mapping, name, out bool exists);
                         if (exists)
                         {
                             val.duplicate = true;
@@ -183,7 +183,7 @@ public static class DataToItemMap
                         }
 
                         string name = data.Name;
-                        (string id, bool duplicate) val = CollectionsMarshal.GetValueRefOrAddDefault(mapping, name, out bool exists);
+                        ref (string id, bool duplicate) val = ref CollectionsMarshal.GetValueRefOrAddDefault(mapping, name, out bool exists);
                         if (exists)
                         {
                             val.duplicate = true;
@@ -214,7 +214,7 @@ public static class DataToItemMap
                         ModEntry.ModMonitor.Log($"Boots with id {id} has no internal name.");
                         continue;
                     }
-                    (string id, bool duplicate) val = CollectionsMarshal.GetValueRefOrAddDefault(mapping, name, out bool exists);
+                    ref (string id, bool duplicate) val = ref CollectionsMarshal.GetValueRefOrAddDefault(mapping, name, out bool exists);
                     if (exists)
                     {
                         val.duplicate = true;
@@ -270,7 +270,7 @@ public static class DataToItemMap
                     }
 
                     string name = data.Name;
-                    (string id, bool duplicate) val = CollectionsMarshal.GetValueRefOrAddDefault(mapping, name, out bool exists);
+                    ref (string id, bool duplicate) val = ref CollectionsMarshal.GetValueRefOrAddDefault(mapping, name, out bool exists);
                     if (exists)
                     {
                         val.duplicate = true;
@@ -315,7 +315,7 @@ public static class DataToItemMap
                         ModEntry.ModMonitor.Log($"Shirt with id {id} has no internal name.");
                         continue;
                     }
-                    (string id, bool duplicate) val = CollectionsMarshal.GetValueRefOrAddDefault(mapping, data.Name, out bool exists);
+                    ref (string id, bool duplicate) val = ref CollectionsMarshal.GetValueRefOrAddDefault(mapping, data.Name, out bool exists);
                     if (exists)
                     {
                         val.duplicate = true;
@@ -344,7 +344,7 @@ public static class DataToItemMap
                         ModEntry.ModMonitor.Log($"Pants with id {id} has no internal name.");
                         continue;
                     }
-                    (string id, bool duplicate) val = CollectionsMarshal.GetValueRefOrAddDefault(mapping, data.Name, out bool exists);
+                    ref (string id, bool duplicate) val = ref CollectionsMarshal.GetValueRefOrAddDefault(mapping, data.Name, out bool exists);
                     if (exists)
                     {
                         val.duplicate = true;
@@ -373,7 +373,7 @@ public static class DataToItemMap
                         ModEntry.ModMonitor.Log($"Furniture with id {id} has no internal name.");
                         continue;
                     }
-                    (string id, bool duplicate) val = CollectionsMarshal.GetValueRefOrAddDefault(mapping, name, out bool exists);
+                    ref (string id, bool duplicate) val = ref CollectionsMarshal.GetValueRefOrAddDefault(mapping, name, out bool exists);
                     if (exists)
                     {
                         val.duplicate = true;
@@ -403,7 +403,7 @@ public static class DataToItemMap
                         ModEntry.ModMonitor.Log($"Hat with id {id} has no internal name.");
                         continue;
                     }
-                    (string id, bool duplicate) val = CollectionsMarshal.GetValueRefOrAddDefault(mapping, name, out bool exists);
+                    ref (string id, bool duplicate) val = ref CollectionsMarshal.GetValueRefOrAddDefault(mapping, name, out bool exists);
                     if (exists)
                     {
                         val.duplicate = true;
@@ -434,7 +434,7 @@ public static class DataToItemMap
                         ModEntry.ModMonitor.Log($"Hat with id {id} has no internal name.");
                         continue;
                     }
-                    (string id, bool duplicate) val = CollectionsMarshal.GetValueRefOrAddDefault(mapping, name, out bool exists);
+                    ref (string id, bool duplicate) val = ref CollectionsMarshal.GetValueRefOrAddDefault(mapping, name, out bool exists);
                     if (exists)
                     {
                         val.duplicate = true;

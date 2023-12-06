@@ -95,24 +95,43 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         }
         if (e.NewLocation is LibraryMuseum)
         {
-            Vector2 tile = Config.BoxLocation;
-
-            this.Monitor.DebugOnlyLog($"Adding box to {tile}", LogLevel.Info);
-
-            // add box
-            e.NewLocation.temporarySprites.Add(new TemporaryAnimatedSprite
+            void AddBox()
             {
-                texture = Game1.mouseCursors2,
-                sourceRect = new Rectangle(129, 210, 13, 16),
-                animationLength = 1,
-                sourceRectStartingPos = new Vector2(129f, 210f),
-                interval = 50000f,
-                totalNumberOfLoops = 9999,
-                position = (new Vector2(tile.X, tile.Y - 1) * Game1.tileSize) + (new Vector2(3f, 0f) * Game1.pixelZoom),
-                scale = Game1.pixelZoom,
-                layerDepth = Math.Clamp((((tile.Y - 0.5f) * Game1.tileSize) / 10000f) + 0.01f, 0f, 1.0f), // a little offset so it doesn't show up on the floor.
-                id = 777,
-            });
+                Vector2 tile = Config.BoxLocation;
+
+                this.Monitor.DebugOnlyLog($"Adding box to {tile}", LogLevel.Info);
+
+                // add box
+                e.NewLocation.temporarySprites.Add(new TemporaryAnimatedSprite
+                {
+                    texture = Game1.mouseCursors2,
+                    sourceRect = new Rectangle(129, 210, 13, 16),
+                    animationLength = 1,
+                    sourceRectStartingPos = new Vector2(129f, 210f),
+                    interval = 50000f,
+                    totalNumberOfLoops = 9999,
+                    position = (new Vector2(tile.X, tile.Y - 1) * Game1.tileSize) + (new Vector2(3f, 0f) * Game1.pixelZoom),
+                    scale = Game1.pixelZoom,
+                    layerDepth = Math.Clamp((((tile.Y - 0.5f) * Game1.tileSize) / 10000f) + 0.01f, 0f, 1.0f), // a little offset so it doesn't show up on the floor.
+                    id = 777,
+                });
+            }
+
+            if (Game1.CurrentEvent is { } evt)
+            {
+                if (evt.onEventFinished is { } action)
+                {
+                    action += AddBox;
+                }
+                else
+                {
+                    evt.onEventFinished = AddBox;
+                }
+            }
+            else
+            {
+                AddBox();
+            }
         }
         else
         {

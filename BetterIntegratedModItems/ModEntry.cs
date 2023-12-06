@@ -125,7 +125,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
             this.Helper.Multiplayer.SendMessage(
                 message: LocationWatcher,
                 messageType: DATAPACKAGE,
-                modIDs: new[] { this.ModManifest.UniqueID },
+                modIDs: [this.ModManifest.UniqueID],
                 playerIDs: this.Helper.Multiplayer.GetConnectedPlayers().Where(p => !p.IsSplitScreen).Select(p => p.PlayerID).ToArray());
         }
     }
@@ -135,7 +135,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
     {
         if (e.IsLocalPlayer && !e.NewLocation.IsUnsavedLocation() && LocationWatcher?.SeenLocations.Add(e.NewLocation.Name) == true)
         {
-            this.Helper.Multiplayer.SendMessage(e.NewLocation.Name, LOCATIONNAME, new[] { this.ModManifest.UniqueID });
+            this.Helper.Multiplayer.SendMessage(e.NewLocation.Name, LOCATIONNAME, [this.ModManifest.UniqueID]);
             this.OnLocationSeen?.RaiseSafe(null, new LocationSeenEventArgs(e.NewLocation.Name));
         }
     }

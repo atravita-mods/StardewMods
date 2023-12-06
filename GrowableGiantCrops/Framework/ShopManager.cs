@@ -87,7 +87,7 @@ internal static class ShopManager
 
         stringUtils = new(ModEntry.ModMonitor);
 
-        List<string> nodesList = new();
+        List<string> nodesList = [];
         foreach ((string index, ObjectData? data) in Game1.objectData)
         {
             if (index == "390")
@@ -183,7 +183,7 @@ internal static class ShopManager
                 totalNumberOfLoops = 9999,
                 scale = 4f,
                 layerDepth = MathF.BitIncrement((((tile.Y - 0.5f) * Game1.tileSize) / 10000f) + 0.01f), // a little offset so it doesn't show up on the floor.
-                id = 777f,
+                id = 777,
             });
         }
         else if (e.NewLocation.Name.Equals("WitchHut", StringComparison.OrdinalIgnoreCase))
@@ -205,7 +205,7 @@ internal static class ShopManager
                 totalNumberOfLoops = 9999,
                 scale = 4f,
                 layerDepth = (((tile.Y - 0.5f) * Game1.tileSize) / 10000f) + 0.01f, // a little offset so it doesn't show up on the floor.
-                id = 777f,
+                id = 777,
             });
         }
     }

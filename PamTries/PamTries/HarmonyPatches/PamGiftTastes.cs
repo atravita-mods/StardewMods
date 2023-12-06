@@ -1,12 +1,12 @@
-﻿using AtraShared.Caching;
+﻿namespace PamTries.HarmonyPatches;
+
+using AtraShared.Caching;
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils;
 
 using AtraShared.Utils.Extensions;
 
 using HarmonyLib;
-
-namespace PamTries.HarmonyPatches;
 
 /// <summary>
 /// Makes it so Pam doesn't like alcohol items.
@@ -15,7 +15,7 @@ namespace PamTries.HarmonyPatches;
 [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class PamGiftTastes
 {
-    private static readonly TickCache<bool> HasSeenNineHeart = new(() => FarmerHelpers.GetFarmers().Any(farmer => farmer.eventsSeen.Contains("503180")));
+    private static readonly TickCache<bool> HasSeenNineHeart = new(() => FarmerHelpers.GetFarmers().Any(static farmer => farmer.eventsSeen.Contains("503180")));
 
     [HarmonyPrefix]
     [HarmonyPriority(Priority.High)]

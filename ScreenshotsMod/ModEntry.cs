@@ -56,19 +56,21 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         I18n.Init(this.Helper.Translation);
 
         Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
-        this.Parse(Config);
 
-        helper.Events.GameLoop.GameLaunched += this.RegisterGMCM;
+        helper.Events.GameLoop.GameLaunched += this.OnGameLaunch;
 
         helper.Events.Player.Warped += this.OnWarp;
         helper.Events.GameLoop.DayStarted += this.OnDayStart;
         helper.Events.Input.ButtonPressed += this.OnButtonPressed;
+        helper.Events.GameLoop.SaveLoaded += this.ValidateMapRules;
         AbstractScreenshotter.Init();
     }
 
-    private void RegisterGMCM(object? sender, GameLaunchedEventArgs e)
+    private void OnGameLaunch(object? sender, GameLaunchedEventArgs e)
     {
-        var helper = new GMCMHelper(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
+        this.Parse(Config);
+
+        GMCMHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
         if (!helper.TryGetAPI())
         {
             return;
@@ -339,6 +341,21 @@ internal sealed class ModEntry : BaseMod<ModEntry>
             this._rules[mapName] = prev = [];
         }
         prev.Add(rule);
+    }
+
+    // we must wait until the save is loaded for maps to be loaded. This just
+    // gives the rules a once-over to double check they're usable, and warns if not.
+    private void ValidateMapRules(object? sender, SaveLoadedEventArgs e)
+    {
+        foreach (string mapName in this._rules.Keys)
+        {
+            // check if rule is valid.
+            if (mapName is not "Mines" and not "Quarry" and not "SkullCavern" and not "Volcano"
+                && Game1.getLocationFromName(mapName) is null && !Game1.locationContextData.ContainsKey(mapName))
+            {
+                this.Monitor.Log($"Map {mapName} may correspond to a location that does not exist.", LogLevel.Warn);
+            }
+        }
     }
 
     #endregion

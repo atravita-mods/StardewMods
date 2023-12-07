@@ -469,7 +469,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
             }
         }
 
-        if (Game1.CurrentEvent is null)
+        if (Game1.CurrentEvent is null && Game1.displayHUD)
         {
             CameraButton.Value?.draw(e.SpriteBatch, enabled.Value && ViewportAdjustmentPatches.ShouldOffset() ? Color.White : Color.Gray, 0.99f);
             int mouseX = Game1.getMouseX(true);

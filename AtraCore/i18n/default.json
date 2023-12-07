@@ -24,5 +24,9 @@
   "critpower": "{{amount}} Crit. Power",
 
   // fruit trees
-  "fruit-tree.forbidden": "This fruit tree is not yours."
+  "fruit-tree.forbidden": "This fruit tree is not yours.",
+
+  // museum
+  "donate-all": "Donate All",
+  "museum-returned":  "Your {{item}} has been returned to the overflow area of the museum."
 }

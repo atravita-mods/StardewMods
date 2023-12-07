@@ -27,7 +27,7 @@ internal sealed class MuseumOverflowMenu : IClickableMenu
     private const int REGION = 49754;
 
     #region delegates
-    private static readonly Lazy<Func<MuseumMenu, bool>> _holdingMuseumPieceGetter = new(static () =>
+    internal static readonly Lazy<Func<MuseumMenu, bool>> _holdingMuseumPieceGetter = new(static () =>
         typeof(MuseumMenu).GetCachedField("holdingMuseumPiece", ReflectionCache.FlagTypes.InstanceFlags)
                           .GetInstanceFieldGetter<MuseumMenu, bool>());
 
@@ -48,6 +48,7 @@ internal sealed class MuseumOverflowMenu : IClickableMenu
 
     // buttons
     private readonly ClickableTextureComponent dresserButton;
+    private readonly ClickableTextureComponent donateAll;
 
     // scrolling
     private readonly ClickableTextureComponent upArrow;
@@ -100,7 +101,7 @@ internal sealed class MuseumOverflowMenu : IClickableMenu
             };
         }
 
-        this.xPositionOnScreen = ((Game1.uiViewport.Width - this.width) / 2) - 12;
+        this.xPositionOnScreen = ((Game1.uiViewport.Width - this.width) / 2) - 24;
         this.yPositionOnScreen = 20;
 
         this.upArrow = new ClickableTextureComponent(
@@ -118,6 +119,17 @@ internal sealed class MuseumOverflowMenu : IClickableMenu
             Game1.mouseCursors,
             new Rectangle(435, 463, 6, 10),
             Game1.pixelZoom);
+        this.donateAll = new(
+            "DonateAll",
+            new Rectangle(this.xPositionOnScreen - 128, this.yPositionOnScreen + 128, 64, 64),
+            string.Empty,
+            I18n.DonateAll(),
+            Game1.mouseCursors,
+            new Rectangle(162, 440, 16, 16),
+            Game1.pixelZoom)
+        {
+            myID = 500,
+        };
 
         this.dresserButton = new ClickableTextureComponent(
             new Rectangle(this.xPositionOnScreen - 128, this.yPositionOnScreen, 64, 64),
@@ -148,8 +160,15 @@ internal sealed class MuseumOverflowMenu : IClickableMenu
         this.upArrow.tryHover(x, y);
         this.downArrow.tryHover(x, y);
         this.dresserButton.tryHover(x, y);
+        this.donateAll.tryHover(x, y);
 
         base.performHoverAction(x, y);
+        if (this.donateAll.containsPoint(x, y))
+        {
+            this.hoverText = this.donateAll.hoverText;
+            this.hoverItem = null;
+            return;
+        }
 
         // offset to match where these boxes "actually" are.
         x -= this.xPositionOnScreen;
@@ -159,7 +178,7 @@ internal sealed class MuseumOverflowMenu : IClickableMenu
         {
             if (this.boxen[i].containsPoint(x, y))
             {
-                var item = this.GetItem(i);
+                Item? item = this.GetItem(i);
                 if (!ReferenceEquals(this.hoverItem, item))
                 {
                     this.hoverText = item?.getDescription() ?? string.Empty;
@@ -214,14 +233,77 @@ internal sealed class MuseumOverflowMenu : IClickableMenu
         if (this.upArrow.containsPoint(x, y))
         {
             this.row = Math.Max(0, this.row - 1);
+            this.upArrow.scale = this.upArrow.baseScale;
             this.SetScrollBarToCurrentIndex();
+            Play("shwip");
             return true;
         }
 
         if (this.downArrow.containsPoint(x, y))
         {
             int maxRow = Math.Max(0, this.MaxRows - 2);
+            this.downArrow.scale = this.downArrow.baseScale;
             this.row = Math.Min(this.row + 1, maxRow);
+            this.SetScrollBarToCurrentIndex();
+            Play("shwip");
+            return true;
+        }
+
+        if (this.baseMenu.heldItem is null && this.donateAll.containsPoint(x, y))
+        {
+            if (Game1.currentLocation is not LibraryMuseum library)
+            {
+                return false;
+            }
+
+            var playerInventory = Game1.player.Items;
+            var lastRewardsCount = library.getRewardsForPlayer(Game1.player).Count;
+            var prevPieces = library.museumPieces.Length + this.inventory.Count;
+            for (int i = 0; i < playerInventory.Count; i++)
+            {
+                var proposed = playerInventory[i];
+                if (!library.isItemSuitableForDonation(proposed))
+                {
+                    continue;
+                }
+
+                this.inventory.Add(proposed.getOne());
+                proposed.Stack--;
+                if (proposed.Stack <= 0)
+                {
+                    playerInventory[i] = null;
+                }
+
+                Game1.Multiplayer.globalChatInfoMessage("donation", Game1.player.Name, "object:" + proposed.ItemId);
+            }
+
+            int rewardsCount = library.getRewardsForPlayer(Game1.player).Count;
+            int currentPieces = library.museumPieces.Length + this.inventory.Count;
+            if (currentPieces == LibraryMuseum.totalArtifacts)
+            {
+                Game1.Multiplayer.globalChatInfoMessage("MuseumComplete", Game1.player.farmName.Value);
+            }
+            else if (prevPieces < 40 && currentPieces >= 40)
+            {
+                Game1.Multiplayer.globalChatInfoMessage("Museum40", Game1.player.farmName.Value);
+            }
+
+            if (rewardsCount > lastRewardsCount)
+            {
+                this.sparkleText = new SparklingText(Game1.dialogueFont, Game1.content.LoadString("Strings\\StringsFromCSFiles:NewReward"), Color.MediumSpringGreen, Color.White);
+                Play("reward");
+                this.locationOfSparkleText = new(this.xPositionOnScreen + (this.width / 2) - (this.sparkleText.textWidth / 2), this.yPositionOnScreen + (this.height / 2) - 12);
+            }
+            else
+            {
+                Play("newArtifact");
+            }
+
+            Game1.player.completeQuest("24");
+            Game1.stats.checkForArchaeologyAchievements();
+
+            int maxRow = this.MaxRows;
+            this.row = Math.Max(0, maxRow - 2);
             this.SetScrollBarToCurrentIndex();
             return true;
         }
@@ -248,7 +330,7 @@ internal sealed class MuseumOverflowMenu : IClickableMenu
                     this.inventory.Add(held.getOne());
                     Play("stoneStep");
 
-                    var idxOfAddedItem = this.inventory.Count - 1 - (this.row * 12);
+                    int idxOfAddedItem = this.inventory.Count - 1 - (this.row * 12);
                     if (idxOfAddedItem >= 36)
                     {
                         this.row++;
@@ -299,7 +381,7 @@ internal sealed class MuseumOverflowMenu : IClickableMenu
                 }
             }
 
-            if (this.GetItem(i) is Item item && this.baseMenu.heldItem is null)
+            if (this.GetItem(i) is Item item && this.baseMenu.heldItem is null && Game1.player.couldInventoryAcceptThisItem(item))
             {
                 this.baseMenu.heldItem = item;
                 _holdingMuseumPieceSetter.Value(this.baseMenu, true);
@@ -401,6 +483,8 @@ internal sealed class MuseumOverflowMenu : IClickableMenu
 
         if (this.state == State.Extended)
         {
+            this.donateAll.draw(b);
+
             drawTextureBox(
                 b,
                 Game1.mouseCursors,
@@ -466,13 +550,14 @@ internal sealed class MuseumOverflowMenu : IClickableMenu
 
     private void Reposition(Rectangle newBounds)
     {
-        this.xPositionOnScreen = ((newBounds.Width - this.width) / 2) - 12;
+        this.xPositionOnScreen = ((newBounds.Width - this.width) / 2) - 24;
         this.yPositionOnScreen = 20;
 
         this.upArrow.setPosition(new(this.xPositionOnScreen + this.width + 32, this.yPositionOnScreen));
         this.downArrow.setPosition(new(this.xPositionOnScreen + this.width + 32, this.yPositionOnScreen + this.height - 48));
 
         this.dresserButton.setPosition(new(this.xPositionOnScreen - 128, this.yPositionOnScreen - 20));
+        this.donateAll.setPosition(new(this.xPositionOnScreen - 128, this.yPositionOnScreen + 128));
 
         this.scrollBarRunner = new Rectangle(this.upArrow.bounds.X + 12, this.upArrow.bounds.Y + this.upArrow.bounds.Height + 4, this.scrollBar.bounds.Width, this.downArrow.bounds.Y - this.upArrow.bounds.Y - this.downArrow.bounds.Height - 20);
 
@@ -481,13 +566,18 @@ internal sealed class MuseumOverflowMenu : IClickableMenu
 
     private void SetScrollToPosition(int y)
     {
+        int prev = this.row;
         y = Math.Clamp(y, this.scrollBarRunner.Y, this.scrollBarRunner.Y + this.scrollBarRunner.Height - this.scrollBar.bounds.Height);
         int maxRows = Math.Max(this.MaxRows - 2, 0);
 
-        var total = this.scrollBarRunner.Height - this.scrollBar.bounds.Height;
-        var percentage = (y - this.scrollBarRunner.Y) * 1f / total;
+        int total = this.scrollBarRunner.Height - this.scrollBar.bounds.Height;
+        float percentage = (y - this.scrollBarRunner.Y) * 1f / total;
 
         this.row = Math.Clamp((int)Math.Floor(percentage * maxRows), 0, maxRows);
+        if (prev != this.row)
+        {
+            Game1.playSound("shiny4");
+        }
         this.SetScrollBarToCurrentIndex();
     }
 

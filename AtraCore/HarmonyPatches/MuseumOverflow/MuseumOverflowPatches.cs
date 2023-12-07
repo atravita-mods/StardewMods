@@ -15,6 +15,7 @@ using Netcode;
 
 using StardewModdingAPI.Utilities;
 using StardewValley.Inventories;
+using StardewValley.ItemTypeDefinitions;
 using StardewValley.Locations;
 using StardewValley.Menus;
 using StardewValley.Network;
@@ -37,6 +38,23 @@ internal static class MuseumOverflowPatches
 
     private static int GetDonatedLength => Game1.player.team.GetOrCreateGlobalInventory(INVENTORY_NAME).Count;
 
+    private static bool TryGetInventory([NotNullWhen(true)] out Inventory? inventory)
+    {
+        if (Game1.player.team.globalInventories.TryGetValue(INVENTORY_NAME, out inventory))
+        {
+            inventory.RemoveEmptySlots();
+            if (inventory.Count > 0)
+            {
+                return true;
+            }
+
+            Game1.player.team.globalInventories.Remove(INVENTORY_NAME);
+            inventory = null;
+            return false;
+        }
+        return false;
+    }
+
     #region menu patches
 
     [HarmonyPostfix]
@@ -56,11 +74,17 @@ internal static class MuseumOverflowPatches
         }
     }
 
-    [HarmonyPostfix]
+    [HarmonyPrefix]
     [HarmonyPatch(typeof(MuseumMenu), "cleanupBeforeExit")]
-    private static void PostfixCleanup()
+    private static void PrefixCleanup(MuseumMenu __instance)
     {
         menu.Value = null;
+        if (MuseumOverflowMenu._holdingMuseumPieceGetter.Value(__instance) && __instance.heldItem is { } item && item.Stack == 1)
+        {
+            Game1.showGlobalMessage(I18n.MuseumReturned(item.DisplayName));
+            Game1.player.team.GetOrCreateGlobalInventory(INVENTORY_NAME).Add(item);
+            __instance.heldItem = null;
+        }
     }
 
     [HarmonyPostfix]
@@ -135,13 +159,28 @@ internal static class MuseumOverflowPatches
     #endregion
 
     [HarmonyPostfix]
+    [HarmonyPatch(typeof(LibraryMuseum), nameof(LibraryMuseum.HasDonatedArtifacts))]
+    private static void PostfixHasDonatedItems(ref bool __result)
+    {
+        if (!__result && TryGetInventory(out Inventory? storage))
+        {
+            if (storage.Count > 0)
+            {
+                __result = true;
+            }
+        }
+    }
+
+    [HarmonyPostfix]
     [HarmonyPatch(typeof(LibraryMuseum), nameof(LibraryMuseum.GetDonatedByContextTag))]
     private static void PostfixMuseumItems(Dictionary<string, int> __result)
     {
         try
         {
-            Inventory storage = Game1.player.team.GetOrCreateGlobalInventory(INVENTORY_NAME);
-            storage.RemoveEmptySlots();
+            if (!TryGetInventory(out Inventory? storage))
+            {
+                return;
+            }
 
             if (storage.Count == 0)
             {
@@ -155,7 +194,7 @@ internal static class MuseumOverflowPatches
             {
                 foreach (string? tag in ItemContextTagManager.GetBaseContextTags(item.ItemId))
                 {
-                    if (__result.TryGetValue(tag, out var value))
+                    if (__result.TryGetValue(tag, out int value))
                     {
                         __result[tag] = value + 1;
                     }
@@ -172,11 +211,9 @@ internal static class MuseumOverflowPatches
     [HarmonyPatch(typeof(LibraryMuseum), nameof(LibraryMuseum.HasDonatedArtifact))]
     private static void PostfixHasDonated(string? itemId, ref bool __result)
     {
-        if (!__result && itemId is not null)
+        if (!__result && itemId is not null && TryGetInventory(out Inventory? inventory))
         {
-            var qualified = ItemRegistry.ManuallyQualifyItemId(itemId, ItemRegistry.type_object);
-            var inventory = Game1.player.team.GetOrCreateGlobalInventory(INVENTORY_NAME);
-
+            string qualified = ItemRegistry.ManuallyQualifyItemId(itemId, ItemRegistry.type_object);
             if (inventory.Any(item => item.QualifiedItemId == qualified))
             {
                 __result = true;
@@ -232,6 +269,84 @@ internal static class MuseumOverflowPatches
                 new(OpCodes.Call, typeof(MuseumOverflowPatches).GetCachedProperty(nameof(GetDonatedLength), ReflectionCache.FlagTypes.StaticFlags).GetGetMethod(true)),
                 new(OpCodes.Add),
             ]);
+
+            // helper.Print();
+            return helper.Render();
+        }
+        catch (Exception ex)
+        {
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
+        }
+        return null;
+    }
+
+    private static int FromDrawerQueries(string[] query, int filterIndex)
+    {
+        if (!TryGetInventory(out Inventory? inventory))
+        {
+            return 0;
+        }
+
+        if (query.Length <= filterIndex)
+        {
+            return inventory.Count;
+        }
+
+        int count = 0;
+        foreach (Item? item in inventory)
+        {
+            ParsedItemData data = ItemRegistry.GetDataOrErrorItem(item.ItemId);
+            if (data.IsErrorItem || data?.ObjectType is null)
+            {
+                continue;
+            }
+            for (int i = filterIndex; i < query.Length; i++)
+            {
+                if (data.ObjectType == query[i])
+                {
+                    count++;
+                    break;
+                }
+            }
+        }
+
+        return count;
+    }
+
+    [HarmonyTranspiler]
+    [HarmonyPatch(typeof(GameStateQuery.DefaultResolvers), nameof(GameStateQuery.DefaultResolvers.MUSEUM_DONATIONS))]
+    [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:Split parameters should start on line after declaration", Justification = "Preference.")]
+    private static IEnumerable<CodeInstruction>? TranspileGSQ(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
+    {
+        try
+        {
+            ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);
+            helper.FindNext([
+                OpCodes.Ldc_I4_3,
+                new(SpecialCodeInstructionCases.StLoc),
+            ])
+            .Advance(1);
+
+            CodeInstruction filterIndex = helper.CurrentInstruction.ToLdLoc();
+
+            helper.FindLast([
+                new(SpecialCodeInstructionCases.LdLoc),
+                new(SpecialCodeInstructionCases.LdLoc),
+                OpCodes.Blt_S,
+            ]);
+
+            CodeInstruction ldCount = helper.CurrentInstruction.Clone();
+            CodeInstruction stCount = helper.CurrentInstruction.ToStLoc();
+
+            helper.GetLabels(out IList<Label>? labelsToMove)
+                .Insert([
+                new(OpCodes.Ldarg_0), // query
+                filterIndex,
+                new(OpCodes.Call, typeof(MuseumOverflowPatches).GetCachedMethod(nameof(FromDrawerQueries), ReflectionCache.FlagTypes.StaticFlags)),
+                ldCount,
+                new(OpCodes.Add),
+                stCount,
+            ], withLabels: labelsToMove);
 
             // helper.Print();
             return helper.Render();

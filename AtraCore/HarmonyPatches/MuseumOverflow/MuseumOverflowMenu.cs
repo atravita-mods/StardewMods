@@ -52,7 +52,7 @@ internal sealed class MuseumOverflowMenu : IClickableMenu
     // scrolling
     private readonly ClickableTextureComponent upArrow;
     private readonly ClickableTextureComponent downArrow;
-    private readonly ClickableTextureComponent scrollBar;
+    private readonly ClickableComponent scrollBar;
     private Rectangle scrollBarRunner;
     private bool scrolling;
     private int row = 0;
@@ -113,11 +113,7 @@ internal sealed class MuseumOverflowMenu : IClickableMenu
             Game1.mouseCursors,
             new Rectangle(421, 472, 11, 12),
             Game1.pixelZoom);
-        this.scrollBar = new ClickableTextureComponent(
-            new Rectangle(this.upArrow.bounds.X + 12, this.upArrow.bounds.Y + this.upArrow.bounds.Height + 4, 24, 40),
-            Game1.mouseCursors,
-            new Rectangle(435, 463, 6, 10),
-            Game1.pixelZoom);
+        this.scrollBar = new(new Rectangle(this.upArrow.bounds.X + 12, this.upArrow.bounds.Y + this.upArrow.bounds.Height + 4, 24, 40), "scrollbar");
         this.donateAll = new(
             "DonateAll",
             new Rectangle(this.xPositionOnScreen - 128, this.yPositionOnScreen + 128, 64, 64),
@@ -496,7 +492,44 @@ internal sealed class MuseumOverflowMenu : IClickableMenu
                 4f);
             this.upArrow.draw(b);
             this.downArrow.draw(b);
-            this.scrollBar.draw(b);
+
+            // draw the scrollbar
+            const int sourceX = 435;
+            const int sourceY = 463;
+            const int sourceWidth = 6;
+            // height is 10
+            Rectangle bounds = this.scrollBar.bounds;
+
+            // draw the middle of the scrollbar, the middle pixels.
+            b.Draw(
+                Game1.mouseCursors,
+                new Rectangle(bounds.X, bounds.Y + 8, bounds.Width, bounds.Height - 16),
+                new Rectangle(sourceX, sourceY + 2, sourceWidth, 6),
+                Color.White);
+
+            // draw the top of the scrollbar, the top eight pixels.
+            b.Draw(
+                Game1.mouseCursors,
+                new Vector2(bounds.X, bounds.Y),
+                new Rectangle(sourceX, sourceY, sourceWidth, 2),
+                Color.White,
+                0f,
+                Vector2.Zero,
+                Game1.pixelZoom,
+                SpriteEffects.None,
+                0);
+
+            // draw the bottom of the scrollbar, the bottom eight pixels.
+            b.Draw(
+                Game1.mouseCursors,
+                new Vector2(bounds.X, bounds.Bottom - 8),
+                new Rectangle(sourceX, sourceY + 8, sourceWidth, 2),
+                Color.White,
+                0f,
+                Vector2.Zero,
+                Game1.pixelZoom,
+                SpriteEffects.None,
+                0);
 
             this.sparkleText?.draw(b, this.locationOfSparkleText);
 
@@ -591,7 +624,7 @@ internal sealed class MuseumOverflowMenu : IClickableMenu
         float fraction = (maxRows == 0) ? 0 : this.row / maxRows;
         float offset = fraction * (this.scrollBarRunner.Height - this.scrollBar.bounds.Height);
 
-        this.scrollBar.setPosition(new(this.scrollBarRunner.X, this.scrollBarRunner.Y + offset));
+        this.scrollBar.bounds.Y = this.scrollBarRunner.Y + (int)offset;
     }
 
     private Item? GetItem(int i)

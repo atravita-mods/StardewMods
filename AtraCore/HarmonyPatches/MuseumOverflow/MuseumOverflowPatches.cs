@@ -48,7 +48,6 @@ internal static class MuseumOverflowPatches
                 return true;
             }
 
-            Game1.player.team.globalInventories.Remove(INVENTORY_NAME);
             inventory = null;
             return false;
         }

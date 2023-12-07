@@ -36,7 +36,6 @@ internal sealed class MuseumOverflowMenu : IClickableMenu
                       .GetInstanceFieldSetter<MuseumMenu, bool>());
     #endregion
 
-
     private readonly MuseumMenu baseMenu;
     private readonly Inventory inventory;
 

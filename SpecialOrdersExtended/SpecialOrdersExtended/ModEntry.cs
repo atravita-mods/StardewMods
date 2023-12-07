@@ -26,7 +26,7 @@ namespace SpecialOrdersExtended;
 /// <inheritdoc />
 internal sealed class ModEntry : Mod
 {
-    private static readonly string[] ModsThatHandleTheBoard = new string[] { "Rafseazz.RidgesideVillage", "PurrplingCat.QuestFramework", "Esca.EMP" };
+    private static readonly string[] ModsThatHandleTheBoard = ["Rafseazz.RidgesideVillage", "PurrplingCat.QuestFramework", "Esca.EMP"];
     private bool hasModsThatHandleBoard = false;
 
     private PlayerTeamWatcher? watcher;

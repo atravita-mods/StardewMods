@@ -1,8 +1,10 @@
 ﻿namespace NPCArrows;
 
+using AtraCore.Framework.Caches;
 using AtraCore.Framework.Internal;
 
 using NPCArrows.Framework;
+using NPCArrows.Framework.Monitors;
 using NPCArrows.Framework.NPCs;
 
 using StardewModdingAPI.Events;
@@ -24,6 +26,17 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         helper.Events.Content.AssetsInvalidated += static (_, e) => AssetManager.Reset(e.NamesWithoutLocale);
 
         helper.Events.Display.RenderedHud += this.Display_RenderedHud;
+
+        helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
+    }
+
+    private void OnSaveLoaded(object? sender, SaveLoadedEventArgs e)
+    {
+        var lewis = NPCCache.GetByVillagerName("Lewis", true);
+
+        var lewisFriendship = Game1.player.friendshipData["Lewis"];
+
+        var monitor = new BasicFriendshipMonitor(lewisFriendship, lewis!);
     }
 
     private void Display_RenderedHud(object? sender, RenderedHudEventArgs e)

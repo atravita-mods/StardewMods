@@ -120,7 +120,7 @@ internal sealed class MuseumOverflowMenu : IClickableMenu
             string.Empty,
             I18n.DonateAll(),
             Game1.mouseCursors,
-            new Rectangle(162, 440, 16, 16),
+            new Rectangle(103, 469, 16, 16),
             Game1.pixelZoom)
         {
             myID = 500,
@@ -131,7 +131,6 @@ internal sealed class MuseumOverflowMenu : IClickableMenu
             texture: Game1.content.Load<Texture2D>("Tilesheets/furniture"),
             new Rectangle(0, 352, 32, 32),
             2f);
-        this.scrollBarRunner = new Rectangle(this.scrollBar.bounds.X, this.upArrow.bounds.Y + this.upArrow.bounds.Height + 4, this.scrollBar.bounds.Width, this.height - 64 - this.upArrow.bounds.Height - 28);
 
         this.Reposition(Game1.uiViewport.ToXNARectangle());
     }
@@ -251,13 +250,13 @@ internal sealed class MuseumOverflowMenu : IClickableMenu
                 return false;
             }
 
-            var playerInventory = Game1.player.Items;
-            var lastRewardsCount = library.getRewardsForPlayer(Game1.player).Count;
-            var prevPieces = library.museumPieces.Length + this.inventory.Count;
+            Inventory playerInventory = Game1.player.Items;
+            int lastRewardsCount = library.getRewardsForPlayer(Game1.player).Count;
+            int prevPieces = library.museumPieces.Length + this.inventory.Count;
             for (int i = 0; i < playerInventory.Count; i++)
             {
-                var proposed = playerInventory[i];
-                if (!library.isItemSuitableForDonation(proposed))
+                Item proposed = playerInventory[i];
+                if (this.baseMenu.inventory.highlightMethod(proposed) && !library.isItemSuitableForDonation(proposed))
                 {
                     continue;
                 }
@@ -487,7 +486,7 @@ internal sealed class MuseumOverflowMenu : IClickableMenu
                 this.scrollBarRunner.X,
                 this.scrollBarRunner.Y,
                 this.scrollBarRunner.Width,
-                this.scrollBarRunner.Height + 4,
+                this.scrollBarRunner.Height,
                 Color.White,
                 4f);
             this.upArrow.draw(b);
@@ -591,7 +590,11 @@ internal sealed class MuseumOverflowMenu : IClickableMenu
         this.dresserButton.setPosition(new(this.xPositionOnScreen - 128, this.yPositionOnScreen - 20));
         this.donateAll.setPosition(new(this.xPositionOnScreen - 128, this.yPositionOnScreen + 128));
 
-        this.scrollBarRunner = new Rectangle(this.upArrow.bounds.X + 12, this.upArrow.bounds.Y + this.upArrow.bounds.Height + 4, this.scrollBar.bounds.Width, this.downArrow.bounds.Y - this.upArrow.bounds.Y - this.downArrow.bounds.Height - 20);
+        this.scrollBarRunner = new Rectangle(
+            this.scrollBar.bounds.X,
+            this.upArrow.bounds.Bottom + 4,
+            this.scrollBar.bounds.Width,
+            this.downArrow.bounds.Y - this.upArrow.bounds.Bottom - 12);
 
         this.SetScrollBarToCurrentIndex();
     }

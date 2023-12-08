@@ -276,12 +276,15 @@ internal sealed class CompleteScreenshotter : AbstractScreenshotter
             int chunks_wide = (int)Math.Ceiling(this.scaledWidth / (float)scaled_chunk_size);
             int chunks_high = (int)Math.Ceiling(this.scaledHeight / (float)scaled_chunk_size);
 
-            render_target = new(Game1.graphics.GraphicsDevice, chunk_size, chunk_size, mipMap: false, SurfaceFormat.Color, DepthFormat.None, 0, RenderTargetUsage.DiscardContents);
-            if (this.Scale != 1f)
-            {
-                ModEntry.ModMonitor.TraceOnlyLog($"Scaling requested, creating scaled render target", LogLevel.Info);
-                scaled_render_target = new(Game1.graphics.GraphicsDevice, scaled_chunk_size, scaled_chunk_size, mipMap: false, SurfaceFormat.Color, DepthFormat.None, 0, RenderTargetUsage.DiscardContents);
-            }
+            render_target = new(
+                Game1.graphics.GraphicsDevice,
+                Math.Min(this.width, chunk_size),
+                Math.Min(this.height, chunk_size),
+                mipMap: false,
+                SurfaceFormat.Color,
+                DepthFormat.None,
+                0,
+                RenderTargetUsage.DiscardContents);
 
             // okay, safe to start the skia transfers now.
             new Thread(this.HandleSkiaTransfers).Start();
@@ -330,12 +333,29 @@ internal sealed class CompleteScreenshotter : AbstractScreenshotter
                     {
                         if (current_height != scaled_chunk_size || current_width != scaled_chunk_size)
                         {
-                            target = new(Game1.graphics.GraphicsDevice, current_width, current_height, mipMap: false, SurfaceFormat.Color, DepthFormat.None, 0, RenderTargetUsage.DiscardContents);
+                            target = new(
+                                Game1.graphics.GraphicsDevice,
+                                current_width,
+                                current_height,
+                                mipMap: false,
+                                SurfaceFormat.Color,
+                                DepthFormat.None,
+                                0,
+                                RenderTargetUsage.DiscardContents);
                             dispose_target = true;
                         }
                         else
                         {
-                            target = scaled_render_target!;
+                            scaled_render_target ??= new(
+                                Game1.graphics.GraphicsDevice,
+                                scaled_chunk_size,
+                                scaled_chunk_size,
+                                mipMap: false,
+                                SurfaceFormat.Color,
+                                DepthFormat.None,
+                                0,
+                                RenderTargetUsage.DiscardContents);
+                            target = scaled_render_target;
                         }
 
                         Game1.game1.GraphicsDevice.SetRenderTarget(target);

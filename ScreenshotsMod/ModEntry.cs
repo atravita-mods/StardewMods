@@ -106,6 +106,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         this.TakeScreenshotImpl(Game1.currentLocation, "keybind", Config.KeyBindFileName, Config.KeyBindScale, true);
     }
 
+    [EventPriority(EventPriority.Low - 1000)] // use a low event priority so we're "closer" to our next tick.
     private void OnDayStart(object? sender, DayStartedEventArgs e)
     {
         if (Game1.currentLocation is null || Game1.game1.takingMapScreenshot || (Game1.currentLocation.IsTemporary && Game1.CurrentEvent?.isFestival != true))
@@ -116,6 +117,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         this.ProcessRules(Game1.currentLocation);
     }
 
+    [EventPriority(EventPriority.Low - 1000)]
     private void OnWarp(object? sender, WarpedEventArgs e)
     {
         // it's possible for this event to be raised for a "false warp".

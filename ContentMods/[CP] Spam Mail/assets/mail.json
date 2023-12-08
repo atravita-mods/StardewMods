@@ -22,7 +22,17 @@
                 "atravita.SpamMail.JojaSelfStirring": "{{i18n:JojaMail.SelfStirring.Text.1}}^{{i18n:JojaMail.SelfStirring.Text.2}} %item conversationTopic atravita.SpamMail.JojaSelfStirring {{Spacer}} %% [#]{{i18n:JojaMail.SelfStirring.Title}}",
 
                 // Medications
-                "atravita.SpamMail.SkinImplants": "{{i18n:SkinImplants.Text.1}}^{{i18n:SkinImplants.Text.2}} %item conversationTopic atravita.SpamMail.SkinImplants {{Spacer}} %% [#]{{i18n:SkinImplants.Title}}"
+                "atravita.SpamMail.SkinImplants": "{{i18n:SkinImplants.Text.1}}^{{i18n:SkinImplants.Text.2}} %item conversationTopic atravita.SpamMail.SkinImplants {{Spacer}} %% [#]{{i18n:SkinImplants.Title}}",
+
+                // Resort
+                "atravita.SpamMail.IslandVacation": "{{i18n:IslandVacation.Text.1}}^{{i18n:IslandVacation.Text.2}} %item conversationTopic atravita.SpamMail.IslandVacation {{Spacer}} %% [#]{{i18n:IslandVacation.Title}}",
+
+                // Casino
+                "atravita.SpamMail.Casino": "{{i18n:Casino.Text.1}}^{{i18n:Casino.Text.2}} %item conversationTopic atravita.SpamMail.Casino {{Spacer}} %% [#]{{i18n:Casino.Title}}",
+
+                // Shopping Block.
+                "atravita.SpamMail.Composter": "{{i18n:Composter.Text.1}}%item conversationTopic atravita.SpamMail.Composter {{Spacer}} %% [#]{{i18n:Composter.Title}}",
+                "atravita.SpamMail.Clothing": "{{i18n:Clothing.Text.1}}^{{i18n:Clothing.Text.2}} %item conversationTopic atravita.SpamMail.Clothing {{Spacer}} %% [#]{{i18n:Clothing.Title}}"
             }
         }
     ]

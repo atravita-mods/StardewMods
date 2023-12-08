@@ -160,7 +160,7 @@ This is different if there's a mod calling that function. In which case, well. I
 
 First things first: there's no reason to do file system operations on the main thread. So saving to disk gets kicked to a task. Immediate win!
 
-Also, because C# is a GC'ed language, the runtime has to keep track of everything we allocate, so it's usually a win to reuse as much as possible. I call this "buffer hoisting", I'm not quite sure the actual technical term, but the tl;dr is don't allocate in a loop if possible.
+Also, because C# is a GC'ed language, the runtime has to keep track of everything we allocate, so it's usually a win to reuse as much as possible. I call this "buffer hoisting", I'm not quite sure the actual technical term, but the tl;dr is don't allocate in a loop if possible. There is no need to re-declare the original render texture for example, it never changes size.
 
 Finally, we don't necessarily have to re-render, so skipping that step when unnecessary saves time.
 

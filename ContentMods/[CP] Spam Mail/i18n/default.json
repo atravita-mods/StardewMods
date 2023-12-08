@@ -80,14 +80,22 @@
 
     // Casino
     "Casino.Title": "Come Try Your Luck",
-    "Casino.Text.00": "Come try your luck at the Calico Desert's Casino! Featuring blackjack and many slot machines!",
-    "Casino.Text.01": "Adults only, open all hours.",
+    "Casino.Text.1": "Come try your luck at the Calico Desert's Casino! Featuring blackjack and many slot machines!",
+    "Casino.Text.2": "Adults only, open all hours.",
 
-    // composter
+    /*************
+    * Composter
+    ***************/
     "Composter.Title": "Kitchen Countertop Composter - Cheap and Easy!",
     "Composter.Text.1": "Tired of food scraps stinking up your kitchen? Just buy our patented Electric Kitchen Countertop Composter. With just nine payments of 1000$, you can create compost in hours!",
 
-    // clothing?
+    "jodi-composter": "Look, @, I bought that composter that's been all over the news lately.$h#$b#Works wonders, takes care of all my food scraps!",
+    "emily-composter": "Gosh, I don't know why people keep falling for greenwashing.#$b#That composter they keep advertising, it uses electricity, so it really doesn't help the environment any.$s",
+
+    /**************
+    * Clothing
+    ****************/
+
     "Clothing.Title": "Half-off Bridal!",
     "Clothing.Text.1": "Starting from now to the end of the year, all bridal gowns are half-off! Including all Diane's, all Les Dames, and all Bridal-Gear-For-Less!",
     "Clothing.Text.2": "Does not include the skirt.",

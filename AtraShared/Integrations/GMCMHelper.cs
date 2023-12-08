@@ -48,7 +48,7 @@ public sealed class GMCMHelper : IntegrationHelper
 #endregion
 
     private readonly IManifest manifest;
-    private readonly List<string> pages = new();
+    private readonly List<string> pages = [];
 
     private IGenericModConfigMenuApi? modMenuApi;
     private IGMCMOptionsAPI? gmcmOptionsApi;
@@ -955,8 +955,8 @@ public sealed class GMCMHelper : IntegrationHelper
     [MethodImpl(MethodImplOptions.AggressiveOptimization)]
     public GMCMHelper GenerateDefaultGMCM<TModConfig>(Func<TModConfig> getConfig)
     {
-        List<PropertyInfo> uncategorized = new();
-        DefaultDict<(int order, string name), List<PropertyInfo>> categories = new();
+        List<PropertyInfo> uncategorized = [];
+        DefaultDict<(int order, string name), List<PropertyInfo>> categories = [];
 
         // look through, assign to categories.
         foreach (PropertyInfo? property in typeof(TModConfig).GetProperties())

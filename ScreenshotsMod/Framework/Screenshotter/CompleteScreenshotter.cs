@@ -325,7 +325,7 @@ internal sealed class CompleteScreenshotter : AbstractScreenshotter
                     // if necessary, re-render to scale. We'll re-render to a correct sized texture because it's much faster to pull the image info from.
 
                     // no rescaling needed.
-                    if (current_height == chunk_size && current_width == chunk_size)
+                    if (current_height == render_target.Height && current_width == render_target.Width)
                     {
                         target = render_target;
                     }

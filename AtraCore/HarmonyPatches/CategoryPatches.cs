@@ -15,7 +15,7 @@ namespace AtraCore.HarmonyPatches;
 internal static class CategoryPatches
 {
     // qualified item ID to override.
-    private static readonly Dictionary<string, (string? title, Color? color)> _cache = new();
+    private static readonly Dictionary<string, (string? title, Color? color)> _cache = [];
 
     /// <summary>
     /// Clears the cache.

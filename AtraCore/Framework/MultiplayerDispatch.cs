@@ -12,7 +12,7 @@ internal static class MultiplayerDispatch
     /// </summary>
     internal static string UniqueId { get; private set; } = null!;
 
-    private static Dictionary<string, Action<ModMessageReceivedEventArgs>> _actions = new();
+    private static Dictionary<string, Action<ModMessageReceivedEventArgs>> _actions = [];
 
     /// <summary>
     /// Initializes this class.

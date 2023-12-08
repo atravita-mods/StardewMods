@@ -9,22 +9,12 @@ namespace AtraShared.Caching;
 /// </summary>
 /// <typeparam name="T">Type of the value.</typeparam>
 /// <remarks>Constraining to just value types since reference types should run through a WeakReference.</remarks>
-public struct TickCache<T>
+/// <param name="get">Function that will get the value.</param>
+public struct TickCache<T>(Func<T> get)
     where T : struct
 {
-    private readonly Func<T> get;
-
     private int lastTick = -1;
     private T result = default;
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="TickCache{T}"/> struct.
-    /// </summary>
-    /// <param name="get">Function that will get the value.</param>
-    public TickCache(Func<T> get)
-    {
-        this.get = get;
-    }
 
     /// <summary>
     /// Gets the value.
@@ -36,7 +26,7 @@ public struct TickCache<T>
         if ((Game1.ticks & ~0b11) != this.lastTick)
         {
             this.lastTick = Game1.ticks & ~0b11;
-            this.result = this.get();
+            this.result = get();
         }
         return this.result;
     }

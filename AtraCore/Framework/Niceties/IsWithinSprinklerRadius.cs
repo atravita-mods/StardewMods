@@ -24,8 +24,8 @@ public sealed class IsWithinSprinklerRadiusHelper
     private static ILineSprinklersApi? lineSprinklersApi;
     private static IBetterSprinklersApi? betterSprinklersApi;
 
-    private readonly HashSet<Tile> wateredTiles = new();
-    private readonly HashSet<string> processedMaps = new();
+    private readonly HashSet<Tile> wateredTiles = [];
+    private readonly HashSet<string> processedMaps = [];
 
     // helpers
     private readonly IMonitor monitor;

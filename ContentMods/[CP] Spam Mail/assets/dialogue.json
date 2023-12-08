@@ -8,6 +8,20 @@
                 "atravita.SpamMail.Aquarium": "{{i18n: vincent-aquarium}}",
                 "atravita.SpamMail.Circus": "{{i18n:vincent-circus-before}}"
             }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Jodi",
+            "Entries": {
+                "atravita.SpamMail.Composter": "{{i18n: jodi-composter}}",
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Emily",
+            "Entries": {
+                "atravita.SpamMail.Composter": "{{i18n: emily-composter}}"
+            }
         }
     ]
 }

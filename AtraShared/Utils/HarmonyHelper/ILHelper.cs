@@ -25,9 +25,9 @@ namespace AtraShared.Utils.HarmonyHelper;
 public sealed class ILHelper
 {
     // All locals.
-    private readonly SortedList<int, LocalVariableInfo> locals = new();
+    private readonly SortedList<int, LocalVariableInfo> locals = [];
 
-    private readonly Counter<Label> importantLabels = new();
+    private readonly Counter<Label> importantLabels = [];
 
     private Label? label = null;
 

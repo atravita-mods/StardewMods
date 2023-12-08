@@ -32,8 +32,8 @@ namespace AtraCore.HarmonyPatches.DrawPrismaticPatches;
 [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class DrawPrismatic
 {
-    private static readonly SortedList<ItemTypeEnum, Dictionary<string, Lazy<Texture2D>>> PrismaticMasks = new();
-    private static readonly SortedList<ItemTypeEnum, HashSet<string>> PrismaticFull = new();
+    private static readonly SortedList<ItemTypeEnum, Dictionary<string, Lazy<Texture2D>>> PrismaticMasks = [];
+    private static readonly SortedList<ItemTypeEnum, HashSet<string>> PrismaticFull = [];
 
     private static readonly Harmony harmony = new("atravita.AtraCore.PrismaticDraw");
 
@@ -69,7 +69,7 @@ internal static class DrawPrismatic
             {
                 if (!PrismaticFull.TryGetValue(model.ItemType, out HashSet<string>? set))
                 {
-                    PrismaticFull[model.ItemType] = set = new();
+                    PrismaticFull[model.ItemType] = set = [];
                 }
                 set.Add(id);
             }
@@ -78,7 +78,7 @@ internal static class DrawPrismatic
                 // handle the ones that have masks.
                 if (!PrismaticMasks.TryGetValue(model.ItemType, out Dictionary<string, Lazy<Texture2D>>? masks))
                 {
-                    PrismaticMasks[model.ItemType] = masks = new();
+                    PrismaticMasks[model.ItemType] = masks = [];
                 }
                 if (!masks.TryAdd(id, new(() => Game1.content.Load<Texture2D>(model.Mask))))
                 {

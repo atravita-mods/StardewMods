@@ -7,31 +7,16 @@ namespace AtraShared.Menuing;
 /// <summary>
 /// Shamelessly stolen from RSV: https://github.com/Rafseazz/Ridgeside-Village-Mod/blob/main/Ridgeside%20SMAPI%20Component%202.0/RidgesideVillage/DialogueMenu.cs.
 /// </summary>
-public sealed class DialogueAndAction : DialogueBox
+/// <param name="dialogue">Initial dialogue.</param>
+/// <param name="responses">List of responses.</param>
+/// <param name="actions">List of associated actions.</param>
+/// <param name="inputHelper">SMAPI's input helper.</param>
+public sealed class DialogueAndAction(string dialogue, Response[] responses, Action?[] actions, IInputHelper inputHelper) : DialogueBox(dialogue, responses)
 {
-    private readonly Action?[] actions;
-
-    private readonly IInputHelper inputHelper;
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="DialogueAndAction"/> class.
-    /// </summary>
-    /// <param name="dialogue">Initial dialogue.</param>
-    /// <param name="responses">List of responses.</param>
-    /// <param name="actions">List of associated actions.</param>
-    /// <param name="inputHelper">SMAPI's input helper.</param>
-    public DialogueAndAction(string dialogue, Response[] responses, Action?[] actions, IInputHelper inputHelper)
-        : base(dialogue, responses)
-    {
-        this.actions = actions;
-        this.inputHelper = inputHelper;
-    }
-
     /// <summary>
     /// Handles a key press.
     /// </summary>
     /// <param name="key">Key.</param>
-    [UsedImplicitly]
     public override void receiveKeyPress(Keys key)
     {
         base.receiveKeyPress(key);
@@ -43,10 +28,10 @@ public sealed class DialogueAndAction : DialogueBox
         {
             if (this.responses[i].hotkey == key)
             {
-                if (i < this.actions.Length)
+                if (i < actions.Length)
                 {
-                    this.inputHelper.Suppress(key.ToSButton());
-                    this.actions[i]?.Invoke();
+                    inputHelper.Suppress(key.ToSButton());
+                    actions[i]?.Invoke();
                     this.closeDialogue();
                     break;
                 }
@@ -60,12 +45,11 @@ public sealed class DialogueAndAction : DialogueBox
     /// <param name="x">x location clicked.</param>
     /// <param name="y">y location clicked.</param>
     /// <param name="playSound">whether or not to play sounds.</param>
-    [UsedImplicitly]
     public override void receiveLeftClick(int x, int y, bool playSound = true)
     {
-        if (this.safetyTimer <= 0 && this.selectedResponse >= 0 && this.selectedResponse < this.actions.Length)
+        if (this.safetyTimer <= 0 && this.selectedResponse >= 0 && this.selectedResponse < actions.Length)
         {
-            this.actions[this.selectedResponse]?.Invoke();
+            actions[this.selectedResponse]?.Invoke();
         }
         if (Game1.activeClickableMenu is not null)
         {

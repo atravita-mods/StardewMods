@@ -15,8 +15,8 @@
 
                 // late - castle and water park.
                 "17786004/n atravita.SpamMail.Aquarium/A atravita.SpamMail.Aquarium/A atravita.SpamMail.Zoo/r 0.1{{LateYearConstraint}}/x atravita.SpamMail.Castle": "null",
+                "17786004/n atravita.SpamMail.CircusMail/A atravita.SpamMail.CircusMail/A atravita.SpamMail.Zoo2/r 0.1{{LateYearConstraint}}/x atravita.SpamMail.WaterPark": "null",
 
-                
                 // joja group
                 "17786010/z spring/z fall/z winter/r 0.1/x atravita.SpamMail.JojaSummer": "null",
                 "17786011/z spring/z summer/z winter/r 0.1/A atravita.SpamMail.JojaSummer/x atravita.SpamMail.JojaFall": "null",
@@ -31,6 +31,34 @@
             "Target": "Data/Events/Hospital",
             "Entries": {
                 "17786020/r 0.1/x atravita.SpamMail.SkinImplants": "null"
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Data/Events/IslandSouth",
+            "Entries": {
+                "17786030/z spring/z summer/r 0.1/x atravita.SpamMail.IslandVacation": "null"
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Data/Events/SandyHouse",
+            "Entries": {
+                "17786040/z fall/z winter/r 0.1/x atravita.SpamMail.Casino": "null"
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Data/Events/SeedShop",
+            "Entries": {
+                "17786050/z spring/z summer/r 0.1{{MidYearConstraint}}/x atravita.SpamMail.Composter": "null"
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Data/Events/Farm",
+            "Entries": {
+                "17786100/r 0.1/n SeaAmulet/x atravita.SpamMail.Clothing": "null"
             }
         }
     ]

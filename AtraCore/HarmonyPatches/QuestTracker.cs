@@ -26,7 +26,7 @@ public static class QuestTracker
 
     private const char SEP = 'Ω';
 
-    private static Dictionary<long, HashSet<string>> finishedQuests = new();
+    private static Dictionary<long, HashSet<string>> finishedQuests = [];
     private static IMultiplayerHelper multi = null!;
     private static string uniqueID = null!;
 
@@ -75,7 +75,7 @@ public static class QuestTracker
     {
         if (!finishedQuests.TryGetValue(farmer.UniqueMultiplayerID, out HashSet<string>? set))
         {
-            finishedQuests[farmer.UniqueMultiplayerID] = set = new();
+            finishedQuests[farmer.UniqueMultiplayerID] = set = [];
         }
         if (set.Add(questID))
         {
@@ -97,7 +97,7 @@ public static class QuestTracker
     {
         if (Context.IsMainPlayer)
         {
-            finishedQuests = helper.ReadSaveData<Dictionary<long, HashSet<string>>>(MESSAGETYPE) ?? new();
+            finishedQuests = helper.ReadSaveData<Dictionary<long, HashSet<string>>>(MESSAGETYPE) ?? [];
             Broadcast();
         }
     }
@@ -105,7 +105,7 @@ public static class QuestTracker
     /// <summary>
     /// Resets the quest tracker.
     /// </summary>
-    internal static void Reset() => finishedQuests = new();
+    internal static void Reset() => finishedQuests = [];
 
     /// <summary>
     /// Writes the quest tracker to the save.
@@ -163,7 +163,7 @@ public static class QuestTracker
                     (long id, string questID) = pair.Value;
                     if (!finishedQuests.TryGetValue(id, out HashSet<string>? set))
                     {
-                        finishedQuests[id] = set = new();
+                        finishedQuests[id] = set = [];
                     }
                     set.Add(questID);
                 }

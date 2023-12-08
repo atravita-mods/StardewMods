@@ -5,18 +5,22 @@
             "Action": "EditData",
             "Target": "Data/IncomingPhoneCalls",
             "Entries": {
-                "atravita.SpamMailGold": {
+                "atravita.SpamMail.Gold": {
                     "TriggerCondition": "Year 2",
                     "RingCondition": "Year 2",
                     "Dialogue": "{{i18n: goldbug-call}}",
                     "SimpleDialogueSplitBy": "#"
                 },
-                "atravita.SpamMailOnline": {
+                "atravita.SpamMail.Online": {
                     "Dialogue": "{{i18n: online-shopping-call}}",
                     "SimpleDialogueSplitBy": "#"
                 },
-                "atravita.SpamMailAuto": {
+                "atravita.SpamMail.Auto": {
                     "Dialogue": "{{i18n:auto-insurance-call}}",
+                    "SimpleDialogueSplitBy": "#"
+                },
+                "atravita.SpamMail.Romance": {
+                    "Dialogue": "{{i18n:romance-call}}",
                     "SimpleDialogueSplitBy": "#"
                 }
             }

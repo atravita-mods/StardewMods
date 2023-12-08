@@ -10,7 +10,7 @@
     "Changes": [
         {
             "Action": "Include",
-            "FromFile": "assets/dialogue.json, assets/mail.json, assets/phonecalls.json"
+            "FromFile": "assets/dialogue.json, assets/mail.json, assets/phonecalls.json, assets/sendmail.json"
         }
     ]
 }

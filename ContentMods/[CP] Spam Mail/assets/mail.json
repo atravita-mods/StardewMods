@@ -9,6 +9,7 @@
                 "atravita.SpamMail.Aquarium": "{{i18n:Aquarium.Text}} %item conversationTopic atravita.SpamMail.Aquarium 28 %% [#]{{i18n:Aquarium.Title}}",
                 "atravita.SpamMail.Zoo": "{{i18n:Zoo.Text}} %item conversationTopic atravita.SpamMail.Zoo 28 %% [#]{{i18n:Zoo.Title}}",
                 "atravita.SpamMail.Zoo2": "{{i18n:Zoo2.Text}} %item conversationTopic atravita.SpamMail.Zoo2 28 %% [#]{{i18n:Zoo2.Title}}",
+                "atravita.SpamMail.Castle": "{{i18n:Castle.Text}} %item conversationTopic atravita.SpamMail.Castle 28 %% [#]{{i18n:Castle.Title}}",
 
                 // Joja block
                 "atravita.SpamMail.JojaSummer": "{{i18n:JojaMail.Summer.Text.1}} %item conversationTopic atravita.SpamMail.JojaSummer 28 %% [#]{{i18n:JojaMail.Summer.Title}}",

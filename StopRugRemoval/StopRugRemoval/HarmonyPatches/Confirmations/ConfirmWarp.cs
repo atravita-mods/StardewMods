@@ -173,7 +173,7 @@ internal static class ConfirmWarp
 
         WarpLocation locationEnum = (WarpLocation)__instance.ParentSheetIndex;
 
-        if (Game1.getLocationFromName(locationEnum.ToString()) is not GameLocation loc)
+        if (Game1.getLocationFromName(locationEnum.ToStringFast()) is not GameLocation loc)
         { // Something went very wrong. I cannot find the location at all....
             ModEntry.ModMonitor.Log($"Failed to find {locationEnum}!", LogLevel.Error);
             return true;

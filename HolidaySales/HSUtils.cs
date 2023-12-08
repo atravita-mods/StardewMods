@@ -24,18 +24,17 @@ internal static class HSUtils
     internal static void AdjustIsFestivalCall(this ILHelper helper)
     {
         helper.ForEachMatch(
-            new CodeInstructionWrapper[]
-            {
+            [
                 new(OpCodes.Call, typeof(Utility).GetCachedMethod(nameof(Utility.isFestivalDay), ReflectionCache.FlagTypes.StaticFlags, Type.EmptyTypes)),
-            },
+            ],
             (helper) =>
             {
                 helper.ReplaceOperand(typeof(HSUtils).GetCachedMethod(nameof(IsFestivalDayAdjustedForConfig), ReflectionCache.FlagTypes.StaticFlags));
-                helper.Insert(new CodeInstruction[]
-                {
+                helper.Insert(
+                [
                     new(OpCodes.Call, typeof(Game1).GetCachedProperty(nameof(Game1.currentLocation), ReflectionCache.FlagTypes.StaticFlags).GetGetMethod()),
                     new(OpCodes.Callvirt, typeof(GameLocation).GetCachedProperty(nameof(GameLocation.Name), ReflectionCache.FlagTypes.InstanceFlags).GetGetMethod()),
-                });
+                ]);
                 return true;
             });
     }
@@ -47,18 +46,17 @@ internal static class HSUtils
     internal static void AdjustIsFestivalCallForTown(this ILHelper helper)
     {
         helper.ForEachMatch(
-            new CodeInstructionWrapper[]
-            {
+            [
                 new(OpCodes.Call, typeof(Utility).GetCachedMethod(nameof(Utility.isFestivalDay), ReflectionCache.FlagTypes.StaticFlags, Type.EmptyTypes)),
-            },
+            ],
             (helper) =>
             {
                 helper.ReplaceOperand(typeof(HSUtils).GetCachedMethod(nameof(IsFestivalDayAdjustedForConfig), ReflectionCache.FlagTypes.StaticFlags))
                       .GetLabels(out var labelsToMove)
-                      .Insert(new CodeInstruction[]
-                {
+                      .Insert(
+                [
                     new CodeInstruction(OpCodes.Ldstr, "Town").WithLabels(labelsToMove),
-                });
+                ]);
                 return true;
         });
     }

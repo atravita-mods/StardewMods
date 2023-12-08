@@ -7,6 +7,55 @@
             "Default": "3",
         }
     },
+    "DynamicTokens": [
+        {
+            "Name": "Spacer",
+            "Value": "56"
+        },
+        {
+            "Name": "Spacer",
+            "Value": "28",
+            "When": {
+                "ExpectedPlayTime": "3"
+            }
+        },
+        {
+            "Name": "Spacer",
+            "Value": "14",
+            "When": {
+                "ExpectedPlayTime": "1"
+            }
+        },
+        {
+            "Name": "LateYearConstraint",
+            "Value": "/y {{ExpectedPlayTime}}"
+        },
+        {
+            "Name": "LateYearConstraint",
+            "Value": "",
+            "When": {
+                "ExpectedPlayTime": "1"
+            }
+        },
+        {
+            "Name": "MidYearConstraint",
+            "Value": "/y 3",
+        },
+        {
+            "Name": "MidYearConstraint",
+            "Value": "/y 2",
+            "When": {
+                "ExpectedPlayTime": "3",
+            }
+        },
+        {
+            "Name": "MidYearConstraint",
+            "Value": "",
+            "When": {
+                "ExpectedPlayTime": "1"
+            }
+        }
+    ],
     "Changes": [
         {
             "Action": "Include",

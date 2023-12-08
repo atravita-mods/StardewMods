@@ -9,10 +9,29 @@
                 "17786000/z spring/z summer/f Vincent 1000/A atravita.SpamMail.Aquarium/r 0.1/x atravita.SpamMail.CircusMail": "null",
                 "17786001/z spring/f Vincent 500/A atravita.SpamMail.Circus/r 0.1/x atravita.SpamMail.Aquarium": "null",
 
+                // zoo group
+                "17786002/z spring/z summer/z fall/f Jas 1000/f Vincent 1000/n atravita.SpamMail.CircusMail/x atravita.SpamMail.Zoo": "null",
+                "17786003/z winter{{MidYearConstraint}}/n atravita.SpamMail.Zoo/A atravita.SpamMail.Zoo/r 0.1/x atravita.SpamMail.Zoo2": "null",
 
+                // late - castle and water park.
+                "17786004/n atravita.SpamMail.Aquarium/A atravita.SpamMail.Aquarium/A atravita.SpamMail.Zoo/r 0.1{{LateYearConstraint}}/x atravita.SpamMail.Castle": "null",
+
+                
                 // joja group
-                "17786010/z spring/r 0.1/x atravita.SpamMail.JojaSummer": "null"
+                "17786010/z spring/z fall/z winter/r 0.1/x atravita.SpamMail.JojaSummer": "null",
+                "17786011/z spring/z summer/z winter/r 0.1/A atravita.SpamMail.JojaSummer/x atravita.SpamMail.JojaFall": "null",
+                "17786012/z spring/z summer/z fall/r 0.1/A atravita.SpamMail.JojaFall/x atravita.SpamMail.JojaWinter": "null",
+
+                "17786013/n atravita.SpamMail.JojaSummer/A atravita.SpamMail.JojaSummer/r 0.1{{MidYearConstraint}}/x atravita.SpamMail.JojaVirtualPet": "null",
+                "17786014/n atravita.SpamMail.JojaFall/A atravita.SpamMail.JojaFall/z spring/z winter/r 0.1{{MidYearConstraint}}/x atravita.SpamMail.JojaSneakers": "null",
             },
         },
+        {
+            "Action": "EditData",
+            "Target": "Data/Events/Hospital",
+            "Entries": {
+                "17786020/r 0.1/x atravita.SpamMail.SkinImplants": "null"
+            }
+        }
     ]
 }

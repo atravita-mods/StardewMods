@@ -37,6 +37,12 @@
     "Castle.Title": "Jousting, Knights, and Festivities!",
     "Castle.Text": "Come see an unique attraction in Castle Times! Featuring dynamic jousts, expert horsemanship, and a feast fit for kings! Only 1000$ per person!",
 
+    /*********************
+    * Water Park
+    *********************/
+    "WaterPark.Title": "Get Wet and Wild With Us!",
+    "WaterPark.Text": "Brand new to Zuzu City, welcome to AquaThrills! Featuring a turbulent lazy river, refurbished rides, and a pool we swear we got inspected this year!",
+
     /**************************
     * Joja mailers
     ****************************/
@@ -57,6 +63,10 @@
     "JojaMail.Sneakers.Title": "New Light Up Sneakers!",
     "JojaMail.Sneakers.Text.1": "Stride into the new school year with our fashionable light up sneakers! Now 30 percent off!",
     "JojaMail.Sneakers.Text.2": "One per person. Returns not accepted. These products do not carry a warranty. Void where illegal.",
+
+    "JojaMail.SelfStirring.Title": "Introducing...The Self-Stirring Mug!",
+    "JojaMail.SelfStirring.Text.1": "Ever been too lazy to stir your coffee in the morning? Well, Joja has your back! Introducing our new self-stirring coffee mug! It'll do the work for you!",
+    "JojaMail.SelfStirring.Text.2": "Requires six batteries. Not dishwasher safe. Should not be used with liquids over 75 degrees C",
 
     // Medications, because WTF America
     "SkinImplants.Title": "Fix Your Jawline!",
@@ -119,8 +129,9 @@
     * Phone calls
     ************/
 
-    "goldbug-call": "Worried about inflation? Just buy gold!#Selling genuine gold bars, 500g each!",
-    "online-shopping-call": "Get your farming supplies online at Farming-dot-com, for absurdly cheap!#But hurry, this won't last long, we're not sure how long the venture capitalists will continue giving us money...",
     "auto-insurance-call": "Have you re-priced your auto insurance lately? Maybe you should get to that.#We might be cheaper than your current plan. Or not. We'll tell you honestly. We promise.",
+    "goldbug-call": "Worried about inflation? Just buy gold!#Selling genuine gold bars, 500g each!",
+    "joja-call": "Buy anything online from Joja.#Now with free two day shipping!",
+    "online-shopping-call": "Get your farming supplies online at Farming-dot-com, for absurdly cheap!#But hurry, this won't last long, we're not sure how long the venture capitalists will continue giving us money...",
     "romance-call": "Single...ladies...near you...may be interested in your company.#Look, Jane, what IS this script you're having me read? What IS this? No, I can't possibly SAY that.#I QUIT."
 }

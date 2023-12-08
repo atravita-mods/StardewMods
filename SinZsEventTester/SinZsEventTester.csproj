@@ -11,7 +11,7 @@
     <UniqueId>sinZandAtravita.$(AssemblyName)</UniqueId>
     <Description>Automated way to run events.</Description>
     <Version>0.1.0</Version>
-    <UpdateKeys>-1</UpdateKeys>
+    <UpdateKeys>Nexus:19458</UpdateKeys>
   </PropertyGroup>
 
   <ItemGroup>

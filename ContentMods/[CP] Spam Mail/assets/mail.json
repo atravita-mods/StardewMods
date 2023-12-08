@@ -23,6 +23,7 @@
 
                 // Medications
                 "atravita.SpamMail.SkinImplants": "{{i18n:SkinImplants.Text.1}}^{{i18n:SkinImplants.Text.2}} %item conversationTopic atravita.SpamMail.SkinImplants {{Spacer}} %% [#]{{i18n:SkinImplants.Title}}",
+                "atravita.SpamMail.HairInjection": "{{i18n:HairInjection.Text.1}}^{{i18n:HairInjection.Text.2}} %item conversationTopic atravita.SpamMail.HairInjection {{Spacer}} %% [#]{{i18n:HairInjection.Title}}",
 
                 // Resort
                 "atravita.SpamMail.IslandVacation": "{{i18n:IslandVacation.Text.1}}^{{i18n:IslandVacation.Text.2}} %item conversationTopic atravita.SpamMail.IslandVacation {{Spacer}} %% [#]{{i18n:IslandVacation.Title}}",

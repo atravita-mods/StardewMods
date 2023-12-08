@@ -39,6 +39,11 @@ internal sealed class ModEntry : Mod
         helper.Events.Content.AssetsInvalidated += static (_, e) => CustomEmoji.Reset(e.NamesWithoutLocale);
 
         this.ApplyPatches(new (this.ModManifest.UniqueID));
+
+        helper.ConsoleCommands.Add(
+            "es.ring_phone",
+            "rings the phone",
+            PhoneRingCommand.RingPhone);
     }
 
     private void ApplyPatches(Harmony harmony)

@@ -14,7 +14,7 @@ using Netcode;
 internal abstract class AbstractFriendshipMonitor : IDisposable
 {
     protected Friendship friendship { get; private set; }
-    protected NPC npc { get; private set; };
+    protected NPC npc { get; private set; }
 
     private bool disposedValue;
 

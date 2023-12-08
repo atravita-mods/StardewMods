@@ -24,20 +24,22 @@
 
                 "17786013/n atravita.SpamMail.JojaSummer/A atravita.SpamMail.JojaSummer/r 0.1{{MidYearConstraint}}/x atravita.SpamMail.JojaVirtualPet": "null",
                 "17786014/n atravita.SpamMail.JojaFall/A atravita.SpamMail.JojaFall/z spring/z winter/r 0.1{{MidYearConstraint}}/x atravita.SpamMail.JojaSneakers": "null",
+                "17786015/n atravita.SpamMail.JojaWinter/A atravita.SpamMail.JojaWinter/z spring/z winter/r 0.1{{MidYearConstraint}}/x atravita.SpamMail.JojaSelfStirring": "null",
             },
         },
         {
             "Action": "EditData",
             "Target": "Data/Events/Hospital",
             "Entries": {
-                "17786020/r 0.1/x atravita.SpamMail.SkinImplants": "null"
+                "17786020/r 0.2/x atravita.SpamMail.SkinImplants": "null",
+                "17786021/r 0.5/n atravita.SpamMail.SkinImplants/A atravita.SpamMail.SkinImplants/x atravita.SpamMail.HairInjection": "null",
             }
         },
         {
             "Action": "EditData",
             "Target": "Data/Events/IslandSouth",
             "Entries": {
-                "17786030/z spring/z summer/r 0.1/x atravita.SpamMail.IslandVacation": "null"
+                "17786030/n Island_Resort/z spring/z summer/r 0.2/x atravita.SpamMail.IslandVacation": "null"
             }
         },
         {

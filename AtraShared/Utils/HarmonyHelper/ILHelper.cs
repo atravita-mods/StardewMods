@@ -101,7 +101,7 @@ public sealed class ILHelper
     /// <summary>
     /// Gets the current instruction pointer stack.
     /// </summary>
-    public Stack<int> PointerStack { get; private set; } = new();
+    public Stack<int>? PointerStack { get; private set; }
 
     /// <summary>
     /// Points to the current location in the instructions list.
@@ -171,6 +171,7 @@ public sealed class ILHelper
     /// <returns>this.</returns>
     public ILHelper Push()
     {
+        this.PointerStack ??= [];
         this.PointerStack.Push(this.Pointer);
         return this;
     }
@@ -181,6 +182,11 @@ public sealed class ILHelper
     /// <returns>this.</returns>
     public ILHelper Pop()
     {
+        if (this.PointerStack is null)
+        {
+            return ThrowHelper.ThrowInvalidOperationException<ILHelper>("Pointer stack never pushed to.");
+        }
+
         this.Pointer = this.PointerStack.Pop();
         return this;
     }

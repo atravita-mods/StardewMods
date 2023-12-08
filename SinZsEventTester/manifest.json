@@ -15,6 +15,6 @@
   "MinimumApiVersion": "3.18",
   "EntryDll": "SinZsEventTester.dll",
   "UpdateKeys": [
-    "-1"
+    "Nexus:19458"
   ]
 }

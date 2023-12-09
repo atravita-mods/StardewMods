@@ -163,9 +163,8 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         if (this.hasSeeds.Value && e.IsLocalPlayer && Context.IsPlayerFree && Config.DisplayOption == DisplayOptions.OnFirstWarp)
         {
             this.hasSeeds.Value = false;
-            Dictionary<string, string>? maildata = DataLoader.Mail(Game1.content);
 
-            if (maildata.TryGetValue(AssetManager.MailFlag, out string? mail))
+            if (DataLoader.Mail(Game1.content).TryGetValue(AssetManager.MailFlag, out string? mail))
             {
                 Game1.activeClickableMenu = new LetterViewerMenu(mail, AssetManager.MailFlag);
             }

@@ -54,7 +54,7 @@ internal static class GameLocationPatches
                         monster.ModifyMonsterLoot(
                             new Debris(
                                 item: new SObject(
-                                    parentSheetIndex: fertilizerToDrop,
+                                    fertilizerToDrop,
                                     initialStack: Random.Shared.Next(1, Math.Clamp(monster.MaxHealth / MIN_MONSTER_HEALTH, 1, 4))),
                                 debrisOrigin: new Vector2(x, y),
                                 targetLocation: who.Position)));

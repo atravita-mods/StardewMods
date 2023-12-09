@@ -41,6 +41,12 @@
 
                 // Tools
                 "atravita.SpamMail.ToolsShop": "{{i18n:ToolsShop.Title}}^^{{i18n:ToolsShop.Text.1}}^^{{i18n:ToolsShop.Text.2}} %item conversationTopic atravita.SpamMail.ToolsShop {{Spacer}} %% [#]{{i18n:ToolsShop.Title}}",
+                "atravita.SpamMail.ToolsShop2": "{{i18n:ToolsShop2.Title}}^^{{i18n:ToolsShop2.Text.1}}^^{{i18n:ToolsShop2.Text.2}} %item conversationTopic atravita.SpamMail.ToolsShop2 {{Spacer}} %% [#]{{i18n:ToolsShop2.Title}}",
+
+                "atravita.SpamMail.GoldShop": "{{i18n:GoldShop.Title}}^^{{i18n:GoldShop.Text}} %item conversationTopic atravita.SpamMail.GoldShop {{Spacer}} %% [#]{{i18n:GoldShop.Title}}",
+                "atravita.SpamMail.TV": "{{i18n:TV.Title}}^^{{i18n:TV.Text}} %item conversationTopic atravita.SpamMail.TV {{Spacer}} %% [#]{{i18n:TV.Title}}",
+
+                "atravita.SpamMail.Craft": "{{i18n:Craft.Title}}^^{{i18n:Craft.Text}} %item conversationTopic atravita.SpamMail.Craft {{Spacer}} %% [#]{{i18n:Craft.Title}}"
             }
         }
     ]

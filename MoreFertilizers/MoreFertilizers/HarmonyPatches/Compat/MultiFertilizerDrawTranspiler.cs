@@ -43,13 +43,12 @@ internal static class MultiFertilizerDrawTranspiler
             helper.JumpTo(0)
             .GetLabels(out IList<Label>? labels, clear: true)
             .Insert(
-                new CodeInstruction[]
-            {
+                [
                 new (OpCodes.Ldarg_0),
                 new (OpCodes.Ldarg_2),
                 new (OpCodes.Ldarg_S, 10),
                 new (OpCodes.Call, typeof(MultiFertilizerDrawTranspiler).StaticMethodNamed(nameof(DrawThisFertilzer))),
-            }, withLabels: labels);
+            ], withLabels: labels);
             return helper.Render();
         }
         catch (Exception ex)

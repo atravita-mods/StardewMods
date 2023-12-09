@@ -54,7 +54,8 @@
             "Target": "Data/Events/SeedShop",
             "Entries": {
                 "17786050/z spring/z summer/r 0.1{{MidYearConstraint}}/x atravita.SpamMail.Composter": "null",
-                "17786051/z fall/z winter/r 0.2{{MidYearConstraint}}/x atravita.SpamMail.VPN": "null"
+                "17786051/z fall/z winter/r 0.2{{MidYearConstraint}}/x atravita.SpamMail.VPN": "null",
+                "17786052/z winter/z spring/r 0.2{{LateYearConstraint}}/x atravita.SpamMail.GoldShop": "null"
             }
         },
         {
@@ -76,7 +77,22 @@
             "Action": "EditData",
             "Target": "Data/Events/ScienceHouse",
             "Entries": {
-                "17786210/r 0.2/z spring/z summer{{MidYearConstraint}}/x atravita.SpamMail.ToolsShop": "null"
+                "17786210/r 0.2/z spring/z summer{{MidYearConstraint}}/x atravita.SpamMail.ToolsShop": "null",
+                "17786211/r 0.2/z spring/z summer/z fall/n atravita.SpamMail.ToolsShop/A atravita.SpamMail.ToolsShop/x atravita.SpamMail.ToolsShop2": "null"
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Data/Events/JoshHouse",
+            "Entries": {
+                "17786220/r 0.2/z summer{{LateYearConstraint}}/x atravita.SpamMail.TV": "null"
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Data/Events/HaleyHouse",
+            "Entries": {
+                "17786230/r 0.2{{LateYearConstraint}}/n atravita.SpamMail.Clothing/A atravita.SpamMail.Clothing/x atravita.SpamMail.Craft": "null"
             }
         }
     ]

@@ -3,7 +3,8 @@
 /// <summary>
 /// Represents an ambient sound to play.
 /// </summary>
-public sealed class AmbientSound: LocationArea
+public sealed class AmbientSound
+    : LocationArea
 {
     /// <summary>
     /// The trigger to use.
@@ -11,12 +12,12 @@ public sealed class AmbientSound: LocationArea
     public SpawnTrigger Trigger { get; set; }
 
     /// <summary>
-    /// The sound to play.
+    /// Gets or sets the sound to play.
     /// </summary>
     public string Sound { get; set; } = string.Empty;
 
     /// <summary>
-    /// If given, a list of pitches to use.
+    /// Gets or sets if given, a list of pitches to use.
     /// </summary>
     public List<int>? Pitches { get; set; }
 }

@@ -16,7 +16,12 @@ public abstract class BaseEntry
     /// <summary>
     /// Gets or sets the chance this entry should apply.
     /// </summary>
-    public float Chance { get; set; } = 0f;
+    public float Chance { get; set; } = 1f;
+
+    /// <summary>
+    /// Gets or sets a value indicating when this entry should apply.
+    /// </summary>
+    public TimeRange Time { get; set; } = new(600, 2600);
 
     /// <summary>
     /// Checks to see if the conditions associated with this entry are satisfied.
@@ -33,6 +38,12 @@ public abstract class BaseEntry
         {
             return false;
         }
+
+        if (Game1.timeOfDay < this.Time.StartTime || Game1.timeOfDay > this.Time.EndTime)
+        {
+            return false;
+        }
+
         return GameStateQuery.CheckConditions(this.Conditions, location, player);
     }
 }

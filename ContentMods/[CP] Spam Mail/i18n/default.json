@@ -8,7 +8,7 @@
     * Circus
     ***********************/
     "CircusMail.Title": "The Greatest Show On Earth",
-    "CircusMail.Text": "Two weeks only, the Cirque de La Lune's in town! Featuring death-defying acrobatics, ferocious tamed lions, mind-bending magic shows, and, of course, clowns! Visit us in Zuzu City while we're here!",
+    "CircusMail.Text": "Two weeks only, the Cirque de La Lune's in town! Featuring death-defying acrobatics, ferocious tamed lions, mind-bending magic shows, and, of course, clowns!^^Visit us in Zuzu City while we're here!",
 
     "vincent-circus-before": "Mom won't bring me to the circus.$s",
 
@@ -121,7 +121,7 @@
     "EnergyDrink.Text.01": "Not recommended for pregnant women or anyone with heart issues.",
 
     "EnergyDrink2.Title": "Introducing...Fahrenheit!",
-    "EnergyDrink2.Text.00": "Now with even more caffeine, guaranteed to get you going all day long.",
+    "EnergyDrink2.Text": "Now with even more caffeine, guaranteed to get you going all day long. And probably for tomorrow, too. Anddddd maybe the next day. There's a lot caffeine.",
 
     // Tools Shop
     "ToolsShop.Title": "Air Compressors For Less",

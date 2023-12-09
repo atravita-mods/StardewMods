@@ -5,35 +5,39 @@
             "Action": "EditData",
             "Target": "Data/Mail",
             "Entries": {
-                "atravita.SpamMail.CircusMail": "{{i18n:CircusMail.Text}} %item conversationTopic atravita.SpamMail.CircusMail {{Spacer}} %% [#]{{i18n:CircusMail.Title}}",
-                "atravita.SpamMail.Aquarium": "{{i18n:Aquarium.Text}} %item conversationTopic atravita.SpamMail.Aquarium {{Spacer}} %% [#]{{i18n:Aquarium.Title}}",
-                "atravita.SpamMail.Zoo": "{{i18n:Zoo.Text}} %item conversationTopic atravita.SpamMail.Zoo {{Spacer}} %% [#]{{i18n:Zoo.Title}}",
-                "atravita.SpamMail.Zoo2": "{{i18n:Zoo2.Text}} %item conversationTopic atravita.SpamMail.Zoo2 {{Spacer}} %% [#]{{i18n:Zoo2.Title}}",
-                "atravita.SpamMail.Castle": "{{i18n:Castle.Text}} %item conversationTopic atravita.SpamMail.Castle {{Spacer}} %% [#]{{i18n:Castle.Title}}",
-                "atravita.SpamMail.WaterPark": "{{i18n:WaterPark.Text}} %item conversationTopic atravita.SpamMail.WaterPark {{Spacer}} %% [#]{{i18n:WaterPark.Title}}",
+                "atravita.SpamMail.CircusMail": "{{i18n:CircusMail.Title}}^^{{i18n:CircusMail.Text}} %item conversationTopic atravita.SpamMail.CircusMail {{Spacer}} %% [#]{{i18n:CircusMail.Title}}",
+                "atravita.SpamMail.Aquarium": "{{i18n:Aquarium.Title}}^^{{i18n:Aquarium.Text}} %item conversationTopic atravita.SpamMail.Aquarium {{Spacer}} %% [#]{{i18n:Aquarium.Title}}",
+                "atravita.SpamMail.Zoo": "{{i18n:Zoo.Title}}^^{{i18n:Zoo.Text}} %item conversationTopic atravita.SpamMail.Zoo {{Spacer}} %% [#]{{i18n:Zoo.Title}}",
+                "atravita.SpamMail.Zoo2": "{{i18n:Zoo2.Title}}^^{{i18n:Zoo2.Text}} %item conversationTopic atravita.SpamMail.Zoo2 {{Spacer}} %% [#]{{i18n:Zoo2.Title}}",
+                "atravita.SpamMail.Castle": "{{i18n:Castle.Title}}^^{{i18n:Castle.Text}} %item conversationTopic atravita.SpamMail.Castle {{Spacer}} %% [#]{{i18n:Castle.Title}}",
+                "atravita.SpamMail.WaterPark": "{{i18n:WaterPark.Title}}^^{{i18n:WaterPark.Text}} %item conversationTopic atravita.SpamMail.WaterPark {{Spacer}} %% [#]{{i18n:WaterPark.Title}}",
 
                 // Joja block
-                "atravita.SpamMail.JojaSummer": "{{i18n:JojaMail.Summer.Text.1}} %item conversationTopic atravita.SpamMail.JojaSummer {{Spacer}} %% [#]{{i18n:JojaMail.Summer.Title}}",
-                "atravita.SpamMail.JojaFall": "{{i18n:JojaMail.Fall.Text.1}} %item conversationTopic atravita.SpamMail.JojaFall {{Spacer}} %% [#]{{i18n:JojaMail.Fall.Title}}",
-                "atravita.SpamMail.JojaWinter": "{{i18n:JojaMail.Winter.Text.1}}^{{i18n:JojaMail.Winter.Text.2}} %item conversationTopic atravita.SpamMail.JojaWinter {{Spacer}} %% [#]{{i18n:JojaMail.Winter.Title}}",
+                "atravita.SpamMail.JojaSummer": "{{i18n:JojaMail.Summer.Title}}^^{{i18n:JojaMail.Summer.Text.1}} %item conversationTopic atravita.SpamMail.JojaSummer {{Spacer}} %% [#]{{i18n:JojaMail.Summer.Title}}",
+                "atravita.SpamMail.JojaFall": "{{i18n:JojaMail.Fall.Title}}^^{{i18n:JojaMail.Fall.Text.1}} %item conversationTopic atravita.SpamMail.JojaFall {{Spacer}} %% [#]{{i18n:JojaMail.Fall.Title}}",
+                "atravita.SpamMail.JojaWinter": "{{i18n:JojaMail.Winter.Title}}^^{{i18n:JojaMail.Winter.Text.1}}^^{{i18n:JojaMail.Winter.Text.2}} %item conversationTopic atravita.SpamMail.JojaWinter {{Spacer}} %% [#]{{i18n:JojaMail.Winter.Title}}",
 
-                "atravita.SpamMail.JojaVirtualPet": "{{i18n:JojaMail.VirtualPet.Text}} %item conversationTopic atravita.SpamMail.VirtualPet {{Spacer}} %% [#]{{i18n:JojaMail.VirtualPet.Title}}",
-                "atravita.SpamMail.JojaSneakers": "{{i18n:JojaMail.Sneakers.Text.1}}^{{i18n:JojaMail.Sneakers.Text.2}} %item conversationTopic atravita.SpamMail.JojaSneakers {{Spacer}} %% [#]{{i18n:JojaMail.Sneakers.Title}}",
-                "atravita.SpamMail.JojaSelfStirring": "{{i18n:JojaMail.SelfStirring.Text.1}}^{{i18n:JojaMail.SelfStirring.Text.2}} %item conversationTopic atravita.SpamMail.JojaSelfStirring {{Spacer}} %% [#]{{i18n:JojaMail.SelfStirring.Title}}",
+                "atravita.SpamMail.JojaVirtualPet": "{{i18n:JojaMail.VirtualPet.Title}}^^{{i18n:JojaMail.VirtualPet.Text}} %item conversationTopic atravita.SpamMail.VirtualPet {{Spacer}} %% [#]{{i18n:JojaMail.VirtualPet.Title}}",
+                "atravita.SpamMail.JojaSneakers": "{{i18n:JojaMail.Sneakers.Title}}^^{{i18n:JojaMail.Sneakers.Text.1}}^^{{i18n:JojaMail.Sneakers.Text.2}} %item conversationTopic atravita.SpamMail.JojaSneakers {{Spacer}} %% [#]{{i18n:JojaMail.Sneakers.Title}}",
+                "atravita.SpamMail.JojaSelfStirring": "{{i18n:JojaMail.SelfStirring.Title}}^^{{i18n:JojaMail.SelfStirring.Text.1}}^^{{i18n:JojaMail.SelfStirring.Text.2}} %item conversationTopic atravita.SpamMail.JojaSelfStirring {{Spacer}} %% [#]{{i18n:JojaMail.SelfStirring.Title}}",
 
                 // Medications
-                "atravita.SpamMail.SkinImplants": "{{i18n:SkinImplants.Text.1}}^{{i18n:SkinImplants.Text.2}} %item conversationTopic atravita.SpamMail.SkinImplants {{Spacer}} %% [#]{{i18n:SkinImplants.Title}}",
-                "atravita.SpamMail.HairInjection": "{{i18n:HairInjection.Text.1}}^{{i18n:HairInjection.Text.2}} %item conversationTopic atravita.SpamMail.HairInjection {{Spacer}} %% [#]{{i18n:HairInjection.Title}}",
+                "atravita.SpamMail.SkinImplants": "{{i18n:SkinImplants.Title}}^^{{i18n:SkinImplants.Text.1}}^^{{i18n:SkinImplants.Text.2}} %item conversationTopic atravita.SpamMail.SkinImplants {{Spacer}} %% [#]{{i18n:SkinImplants.Title}}",
+                "atravita.SpamMail.HairInjection": "{{i18n:HairInjection.Title}}^^{{i18n:HairInjection.Text.1}}^^{{i18n:HairInjection.Text.2}} %item conversationTopic atravita.SpamMail.HairInjection {{Spacer}} %% [#]{{i18n:HairInjection.Title}}",
 
                 // Resort
-                "atravita.SpamMail.IslandVacation": "{{i18n:IslandVacation.Text.1}}^{{i18n:IslandVacation.Text.2}} %item conversationTopic atravita.SpamMail.IslandVacation {{Spacer}} %% [#]{{i18n:IslandVacation.Title}}",
+                "atravita.SpamMail.IslandVacation": "{{i18n:IslandVacation.Title}}^^{{i18n:IslandVacation.Text.1}}^^{{i18n:IslandVacation.Text.2}} %item conversationTopic atravita.SpamMail.IslandVacation {{Spacer}} %% [#]{{i18n:IslandVacation.Title}}",
 
                 // Casino
-                "atravita.SpamMail.Casino": "{{i18n:Casino.Text.1}}^{{i18n:Casino.Text.2}} %item conversationTopic atravita.SpamMail.Casino {{Spacer}} %% [#]{{i18n:Casino.Title}}",
+                "atravita.SpamMail.Casino": "{{i18n:Casino.Title}}^^{{i18n:Casino.Text.1}}^^{{i18n:Casino.Text.2}} %item conversationTopic atravita.SpamMail.Casino {{Spacer}} %% [#]{{i18n:Casino.Title}}",
 
                 // Shopping Block.
-                "atravita.SpamMail.Composter": "{{i18n:Composter.Text.1}}%item conversationTopic atravita.SpamMail.Composter {{Spacer}} %% [#]{{i18n:Composter.Title}}",
-                "atravita.SpamMail.Clothing": "{{i18n:Clothing.Text.1}}^{{i18n:Clothing.Text.2}} %item conversationTopic atravita.SpamMail.Clothing {{Spacer}} %% [#]{{i18n:Clothing.Title}}"
+                "atravita.SpamMail.Composter": "{{i18n:Composter.Title}}^^{{i18n:Composter.Text.1}}%item conversationTopic atravita.SpamMail.Composter {{Spacer}} %% [#]{{i18n:Composter.Title}}",
+                "atravita.SpamMail.Clothing": "{{i18n:Clothing.Title}}^^{{i18n:Clothing.Text.1}}^^{{i18n:Clothing.Text.2}} %item conversationTopic atravita.SpamMail.Clothing {{Spacer}} %% [#]{{i18n:Clothing.Title}}",
+                "atravita.SpamMail.VPN": "{{i18n:VPN.Title}}^^{{i18n:VPN.Text}} %item conversationTopic atravita.SpamMail.VPN {{Spacer}} %% [#]{{i18n:VPN.Title}}",
+
+                "atravita.SpamMail.EnergyDrink": "{{i18n:EnergyDrink.Title}}^^{{i18n:EnergyDrink.Text.1}}^^{{i18n:EnergyDrink.Text.2}} %item conversationTopic atravita.SpamMail.EnergyDrink {{Spacer}} %% [#]{{i18n:EnergyDrink.Title}}",
+                "atravita.SpamMail.EnergyDrink2": "{{i18n:EnergyDrink2.Title}}^^{{i18n:EnergyDrink2.Text}} %item conversationTopic atravita.SpamMail.EnergyDrink2 {{Spacer}} %% [#]{{i18n:EnergyDrink2.Title}}",
             }
         }
     ]

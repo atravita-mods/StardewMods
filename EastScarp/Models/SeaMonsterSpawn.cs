@@ -7,5 +7,5 @@ public sealed class SeaMonsterSpawn : LocationArea
 {
     public SpawnTrigger Trigger { get; set; } = SpawnTrigger.OnEntry;
 
-    public float Chance { get; set; } = 0f;
+    public float Chance { get; set; } = 1f;
 }

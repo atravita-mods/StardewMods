@@ -6,8 +6,6 @@ using AtraCore.Framework.ReflectionManager;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-
-using StardewValley;
 using StardewValley.BellsAndWhistles;
 using StardewValley.Inventories;
 using StardewValley.Locations;
@@ -256,7 +254,7 @@ internal sealed class MuseumOverflowMenu : IClickableMenu
             for (int i = 0; i < playerInventory.Count; i++)
             {
                 Item proposed = playerInventory[i];
-                if (this.baseMenu.inventory.highlightMethod(proposed) && !library.isItemSuitableForDonation(proposed))
+                if (!this.baseMenu.inventory.highlightMethod(proposed) || !library.isItemSuitableForDonation(proposed))
                 {
                     continue;
                 }
@@ -446,32 +444,35 @@ internal sealed class MuseumOverflowMenu : IClickableMenu
             this.xPositionOnScreen - (hpadding / 2),
             this.yPositionOnScreen - (vpadding / 2) + this.offset,
             this.width + hpadding,
-            this.height + vpadding - 4,
+            this.height + vpadding,
             Color.White,
             Game1.pixelZoom);
 
-        // slots
-        Rectangle inventoryBox = Game1.getSourceRectForStandardTileSheet(Game1.menuTexture, 10);
-        for (int i = 0; i < this.boxen.Length; i++)
+        if (this.state != State.Hidden)
         {
-            ClickableComponent box = this.boxen[i];
-            Rectangle bounds = box.bounds;
-            Vector2 location = new(this.xPositionOnScreen + bounds.X, this.yPositionOnScreen + bounds.Y + this.offset + 12);
-            b.Draw(
-                Game1.menuTexture,
-                location,
-                inventoryBox,
-                Color.White,
-                0f,
-                Vector2.Zero,
-                1f,
-                SpriteEffects.None,
-                1f);
-
-            // item
-            if (this.GetItem(i) is Item item)
+            // slots
+            Rectangle inventoryBox = Game1.getSourceRectForStandardTileSheet(Game1.menuTexture, 10);
+            for (int i = 0; i < this.boxen.Length; i++)
             {
-                item.drawInMenu(b, location, box.scale);
+                ClickableComponent box = this.boxen[i];
+                Rectangle bounds = box.bounds;
+                Vector2 location = new(this.xPositionOnScreen + bounds.X, this.yPositionOnScreen + bounds.Y + this.offset + 12);
+                b.Draw(
+                    Game1.menuTexture,
+                    location,
+                    inventoryBox,
+                    Color.White,
+                    0f,
+                    Vector2.Zero,
+                    1f,
+                    SpriteEffects.None,
+                    1f);
+
+                // item
+                if (this.GetItem(i) is Item item)
+                {
+                    item.drawInMenu(b, location, box.scale);
+                }
             }
         }
 

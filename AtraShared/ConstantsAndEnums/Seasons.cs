@@ -125,7 +125,7 @@ public static partial class SeasonExtensions
     /// </summary>
     /// <param name="season">season.</param>
     /// <returns>my season enum.</returns>
-    public static StardewSeasons ConvertFromGameSeason(Season season)
+    public static StardewSeasons ConvertFromGameSeason(this Season season)
         => season switch
         {
             Season.Spring => StardewSeasons.Spring,

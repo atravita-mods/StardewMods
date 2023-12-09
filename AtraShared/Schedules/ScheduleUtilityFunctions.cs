@@ -236,7 +236,7 @@ public class ScheduleUtilityFunctions(
                         .Tokens(new { schedulepoint, npc = npc.Name }), LogLevel.Info);
 
                     // If the NPC has a sleep animation, use it.
-                    Dictionary<string, string> animationData = Game1.content.Load<Dictionary<string, string>>("Data\\animationDescriptions");
+                    Dictionary<string, string> animationData = DataLoader.AnimationDescriptions(Game1.content);
                     string? sleepanimation = npc.Name.ToLowerInvariant() + "_sleep";
                     sleepanimation = animationData.ContainsKey(sleepanimation) ? sleepanimation : null;
                     SchedulePathDescription path2bed = npc.pathfindToNextScheduleLocation(

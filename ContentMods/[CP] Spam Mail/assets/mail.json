@@ -38,6 +38,9 @@
 
                 "atravita.SpamMail.EnergyDrink": "{{i18n:EnergyDrink.Title}}^^{{i18n:EnergyDrink.Text.1}}^^{{i18n:EnergyDrink.Text.2}} %item conversationTopic atravita.SpamMail.EnergyDrink {{Spacer}} %% [#]{{i18n:EnergyDrink.Title}}",
                 "atravita.SpamMail.EnergyDrink2": "{{i18n:EnergyDrink2.Title}}^^{{i18n:EnergyDrink2.Text}} %item conversationTopic atravita.SpamMail.EnergyDrink2 {{Spacer}} %% [#]{{i18n:EnergyDrink2.Title}}",
+
+                // Tools
+                "atravita.SpamMail.ToolsShop": "{{i18n:ToolsShop.Title}}^^{{i18n:ToolsShop.Text.1}}^^{{i18n:ToolsShop.Text.2}} %item conversationTopic atravita.SpamMail.ToolsShop {{Spacer}} %% [#]{{i18n:ToolsShop.Title}}",
             }
         }
     ]

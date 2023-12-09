@@ -84,7 +84,7 @@ public static class AssetLoader
 
     private static Dictionary<string, string> GenerateToolTips()
     {
-        Dictionary<string, string> tooltipdata = new();
+        Dictionary<string, string> tooltipdata = [];
 
         // Do nothing if the world is not ready yet.
         // For some reason trying to load the translations too early jacks them up
@@ -97,8 +97,13 @@ public static class AssetLoader
         // the journal scrap 1008 is the only in-game descriptions of enchantments. We'll need to grab data from there.
         try
         {
-            IDictionary<int, string> secretnotes = Game1.content.Load<Dictionary<int, string>>(@"Data\SecretNotes");
-            StreamSplit secretNote8 = secretnotes[1008].StreamSplit('^', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+            if (DataLoader.SecretNotes(Game1.content)?.TryGetValue(1008, out string? note) != true || note is null)
+            {
+                ModEntry.ModMonitor.Log($"Could not find journal scrap 1008 to edit, skipping.");
+                return tooltipdata;
+            }
+
+            StreamSplit secretNote8 = note.StreamSplit('^', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
             // The secret note, of course, has its data in the localized name. We'll need to map that to the internal name.
             // Using a dictionary with a StringComparer for the user's current language to make that a little easier.

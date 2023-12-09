@@ -19,7 +19,7 @@ internal static class HatPicker
     {
         ModEntry.ModMonitor.DebugOnlyLog("Picked hats");
 
-        if (!Game1.content.Load<Dictionary<string, ShopData>>(@"Data\Shops").TryGetValue("HatMouse", out ShopData? shop))
+        if (!DataLoader.Shops(Game1.content).TryGetValue("HatMouse", out ShopData? shop))
         {
             return null;
         }

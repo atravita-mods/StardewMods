@@ -206,7 +206,7 @@ public static class DataToItemMap
                 ModEntry.ModMonitor.DebugOnlyLog("Building map to resolve Boots", LogLevel.Info);
 
                 Dictionary<string, (string id, bool duplicate)> mapping = new(20);
-                foreach ((string id, string data) in Game1.content.Load<Dictionary<string, string>>(enumToAssetMap[ItemTypeEnum.Boots].BaseName))
+                foreach ((string id, string data) in DataLoader.Boots(Game1.content))
                 {
                     string name = data.GetNthChunk('/').ToString();
                     if (name.Length == 0)
@@ -365,7 +365,7 @@ public static class DataToItemMap
                 ModEntry.ModMonitor.DebugOnlyLog("Building map to resolve Furniture", LogLevel.Info);
 
                 Dictionary<string, (string id, bool duplicate)> mapping = new(300);
-                foreach ((string id, string data) in Game1.content.Load<Dictionary<string, string>>(enumToAssetMap[ItemTypeEnum.Furniture].BaseName))
+                foreach ((string id, string data) in DataLoader.Furniture(Game1.content))
                 {
                     string name = data.GetNthChunk('/').ToString();
                     if (name.Length == 0)
@@ -395,7 +395,7 @@ public static class DataToItemMap
 
                 Dictionary<string, (string id, bool duplicate)> mapping = new(100);
 
-                foreach ((string id, string data) in Game1.content.Load<Dictionary<string, string>>(enumToAssetMap[ItemTypeEnum.Hat].BaseName))
+                foreach ((string id, string data) in DataLoader.Hats(Game1.content))
                 {
                     string name = data.GetNthChunk('/').ToString();
                     if (name.Length == 0)

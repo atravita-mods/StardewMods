@@ -94,7 +94,7 @@ internal static class PantryStockManager
     private static List<int> GetNeededIngredients()
     {
         List<int> neededIngredients = new(24);
-        Dictionary<string, string> recipes = Game1.content.Load<Dictionary<string, string>>("Data/CookingRecipes");
+        Dictionary<string, string> recipes = DataLoader.CookingRecipes(Game1.content);
         foreach ((string learned_recipe, int number_made) in Game1.player.cookingRecipes.Pairs)
         {
             if (number_made != 0 )

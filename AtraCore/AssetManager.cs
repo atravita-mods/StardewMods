@@ -165,6 +165,11 @@ internal static class AssetManager
     internal static EquipmentExtModel? GetEquipData(string ringID)
         => _ringData.Value.GetValueOrDefault(ringID);
 
+    /// <summary>
+    /// Gets the data associated with category extensions.
+    /// </summary>
+    /// <param name="category">The integer category number.</param>
+    /// <returns>The data, or null if invalid.</returns>
     internal static CategoryExtension? GetCategoryExtension(int category)
         => Game1.content.Load<Dictionary<int, CategoryExtension>>(categoryExtensions.BaseName).GetValueOrDefault(category);
 }

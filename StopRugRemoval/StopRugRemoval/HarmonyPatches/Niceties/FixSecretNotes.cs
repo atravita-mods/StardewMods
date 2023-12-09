@@ -94,7 +94,7 @@ internal static class FixSecretNotes
         }
 
         const string secretNoteName = "Secret Note #";
-        Dictionary<int, string> secretNoteData = Game1.content.Load<Dictionary<int, string>>(noteLoc.BaseName);
+        Dictionary<int, string> secretNoteData = DataLoader.SecretNotes(Game1.content);
 
         // Get list of seen notes and add notes in inventory.
         Seen.Value ??= new();
@@ -162,7 +162,7 @@ internal static class FixSecretNotes
         }
 
         const string journalName = "Journal Scrap #";
-        Dictionary<int, string> secretNoteData = Game1.content.Load<Dictionary<int, string>>(noteLoc.BaseName);
+        Dictionary<int, string> secretNoteData = DataLoader.SecretNotes(Game1.content);
 
         // get seen notes and add any note the farmer has in their inventory.
         Seen.Value ??= new();

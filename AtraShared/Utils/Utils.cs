@@ -207,7 +207,4 @@ public static class Utils
             return (season, day + 1);
         }
     }
-
-    public static Dictionary<string, MachineData> GetMachineData()
-        => Game1.content.Load<Dictionary<string, MachineData>>("Data\\Machines");
 }

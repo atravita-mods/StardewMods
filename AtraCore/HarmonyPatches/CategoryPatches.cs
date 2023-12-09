@@ -5,6 +5,7 @@ using HarmonyLib;
 using Microsoft.Xna.Framework;
 
 using StardewValley.Extensions;
+using StardewValley.GameData.Objects;
 
 namespace AtraCore.HarmonyPatches;
 
@@ -22,9 +23,37 @@ internal static class CategoryPatches
     /// </summary>
     internal static void Reset() => _cache.Clear();
 
+    [HarmonyPrefix]
+    [HarmonyPatch(nameof(SObject.getCategoryName))]
+    private static bool OverrideCategoryName(SObject __instance, ref string __result)
+    {
+        (string? title, Color? _) = __instance.Evaluate();
 
+        if (title is not null)
+        {
+            __result = title;
+            return false;
+        }
 
-    private static (string? title, Color? color)? Evaluate(this SObject obj)
+        return true;
+    }
+
+    [HarmonyPrefix]
+    [HarmonyPatch(nameof(SObject.getCategoryColor))]
+    private static bool OverrideCategoryColor(SObject __instance, ref Color __result)
+    {
+        (string? _, Color? color) = __instance.Evaluate();
+
+        if (color is not null)
+        {
+            __result = color.Value;
+            return false;
+        }
+
+        return true;
+    }
+
+    private static (string? title, Color? color) Evaluate(this SObject obj)
     {
         if (!obj.HasTypeObject())
         {
@@ -39,7 +68,7 @@ internal static class CategoryPatches
         string? title = null;
         Color? color = null;
 
-        if (Game1.objectData.TryGetValue(obj.ItemId, out StardewValley.GameData.Objects.ObjectData? objectData) && objectData.CustomFields is { } fields)
+        if (Game1.objectData.TryGetValue(obj.ItemId, out ObjectData? objectData) && objectData.CustomFields is { } fields)
         {
             if (fields.TryGetValue("atravita.CategoryNameOverride", out string? tokenizedTitle) && TokenParser.ParseText(tokenizedTitle) is string proposedTitle
                 && !string.IsNullOrWhiteSpace(proposedTitle))

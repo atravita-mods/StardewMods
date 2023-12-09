@@ -41,13 +41,13 @@ public sealed class ModConfig
     /// Mapping is between qualified item ids->whether or not it should be enabled.
     /// </summary>
     [GMCMDefaultIgnore]
-    public Dictionary<string, bool> VanillaMachines { get; set; } = new();
+    public Dictionary<string, bool> VanillaMachines { get; set; } = [];
 
     /// <summary>
     /// Gets or sets a mapping that sets whether coloration of PFM machines should be enabled.
     /// </summary>
     [GMCMDefaultIgnore]
-    public Dictionary<string, bool> ProducerFrameworkModMachines { get; set; } = new();
+    public Dictionary<string, bool> ProducerFrameworkModMachines { get; set; } = [];
 
     /// <summary>
     /// Gets or sets a value indicating whether or not machine pulsing should be disabled.
@@ -56,7 +56,7 @@ public sealed class ModConfig
 
     internal void Populate()
     {
-        foreach (var (machine, data) in Game1.content.Load<Dictionary<string, MachineData>>("Data\\Machines"))
+        foreach ((string machine, MachineData data) in DataLoader.Machines(Game1.content))
         {
             this.VanillaMachines.TryAdd(machine, !data.IsIncubator);
         }

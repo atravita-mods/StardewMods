@@ -11,6 +11,7 @@ using AtraShared.Wrappers;
 
 using StardewModdingAPI.Events;
 
+using StardewValley.GameData.Crops;
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 
@@ -91,7 +92,7 @@ internal static class RadioactiveFertilizerHandler
 
         ModEntry.ModMonitor.DebugOnlyLog($"Using farmer {bestfarmer.Name} with profession {bestProfession}");
 
-        Dictionary<int, string>? cropData = Game1.content.Load<Dictionary<int, string>>(crops.BaseName);
+        Dictionary<string, CropData> cropData = DataLoader.Crops(Game1.content);
 
         Utility.ForEachLocation((location) =>
         {

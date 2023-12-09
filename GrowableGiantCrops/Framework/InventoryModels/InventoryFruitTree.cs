@@ -430,7 +430,7 @@ public sealed class InventoryFruitTree : SObject
 
         try
         {
-            Dictionary<int, string> data = Game1.content.Load<Dictionary<int, string>>(@"Data\fruitTrees");
+            var data = DataLoader.FruitTrees(Game1.content);
             if (!data.TryGetValue(this.ParentSheetIndex, out string? treeInfo)
                 || !int.TryParse(treeInfo.GetNthChunk('/'), out treeIndex))
             {

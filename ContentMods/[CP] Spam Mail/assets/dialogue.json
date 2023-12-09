@@ -20,7 +20,8 @@
             "Action": "EditData",
             "Target": "Characters/Dialogue/Emily",
             "Entries": {
-                "atravita.SpamMail.Composter": "{{i18n: emily-composter}}"
+                "atravita.SpamMail.Composter": "{{i18n: emily-composter}}",
+                "atravita.SpamMail.Clothing": "{{i18n: emily-clothing}}"
             }
         },
         {
@@ -28,7 +29,15 @@
             "Target": "Characters/Dialogue/Kent",
             "Entries": {
                 "atravita.SpamMail.HairInjection": "{{i18n: kent-hair-injection}}$s"
+            },
+            "When": {
+                "Hearts:Kent|contains={{Range:0,5}}": false
             }
+        },
+        {
+            "Action": "Include",
+            "FromFile": "assets/haley.json",
+            "When": {"Hearts:Haley|contains={{Range:0,5}}": false}
         }
     ]
 }

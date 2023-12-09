@@ -370,12 +370,12 @@ internal sealed class ModEntry : Mod
         {
             ModMonitor.Log(I18n.LoadSaveFirst(), LogLevel.Warn);
         }
-        Dictionary<string, SpecialOrderData> order_data = Game1.content.Load<Dictionary<string, SpecialOrderData>>(@"Data\SpecialOrders");
+        Dictionary<string, SpecialOrderData> order_data = DataLoader.SpecialOrders(Game1.content);
         List<string> keys = AtraUtils.ContextSort(order_data.Keys);
         ModMonitor.Log(I18n.NumberFound(count: keys.Count), LogLevel.Debug);
 
-        List<string> validkeys = new();
-        List<string> unseenkeys = new();
+        List<string> validkeys = [];
+        List<string> unseenkeys = [];
 
         foreach (string key in keys)
         {

@@ -80,7 +80,7 @@ internal static class MuseumShopBuilder
         Dictionary<string, MuseumRewards> museumRewardData;
         try
         {
-            museumRewardData = Game1.content.Load<Dictionary<string, MuseumRewards>>("Data\\MuseumRewards");
+            museumRewardData = DataLoader.MuseumRewards(Game1.content);
         }
         catch (Exception ex)
         {
@@ -151,7 +151,7 @@ internal static class MuseumShopBuilder
             yield break;
         }
 
-        Dictionary<string, string> mail = Game1.content.Load<Dictionary<string, string>>("Data/mail");
+        Dictionary<string, string> mail = DataLoader.Mail(Game1.content);
 
         foreach (string? mailflag in Game1.player.mailReceived)
         {

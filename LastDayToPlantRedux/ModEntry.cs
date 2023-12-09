@@ -163,7 +163,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         if (this.hasSeeds.Value && e.IsLocalPlayer && Context.IsPlayerFree && Config.DisplayOption == DisplayOptions.OnFirstWarp)
         {
             this.hasSeeds.Value = false;
-            Dictionary<string, string>? maildata = Game1.content.Load<Dictionary<string, string>>(AssetManager.DataMail.BaseName);
+            Dictionary<string, string>? maildata = DataLoader.Mail(Game1.content);
 
             if (maildata.TryGetValue(AssetManager.MailFlag, out string? mail))
             {

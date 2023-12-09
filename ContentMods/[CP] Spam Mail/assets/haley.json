@@ -1,0 +1,32 @@
+{
+    "$schema": "https://smapi.io/schemas/content-patcher.json",
+    "Changes": [
+        {
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Haley",
+            "Entries": {
+                "atravita.SpamMail.Clothing": "{{i18n: haley-clothing-unmarried}}$h"
+            },
+        },
+        {
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Haley",
+            "Entries": {
+                "atravita.SpamMail.Clothing": "{{i18n: haley-clothing-married-other}}$h"
+            },
+            "When": {
+                "Spouse:anyPlayer": "Haley"
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Haley",
+            "Entries": {
+                "atravita.SpamMail.Clothing": "{{i18n: haley-clothing-married-player}}$l"
+            },
+            "When": {
+                "Relationship:Haley": "Married"
+            }
+        }
+    ]
+}

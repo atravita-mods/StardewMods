@@ -22,6 +22,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
     /// <summary>
     /// String key used for the museum shop's item resolver.
     /// </summary>
+    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:Field names should not contain underscore", Justification = "Preference.")]
     internal const string MUSEUM_RESOLVER = "atravita_MUSEUM_SHOP";
 
     /// <summary>
@@ -52,7 +53,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
     {
         // Register custom item resolver
-        ItemQueryResolver.ItemResolvers[MUSEUM_RESOLVER] = MuseumShopBuilder.MuseumQuery;
+        ItemQueryResolver.Register(MUSEUM_RESOLVER, MuseumShopBuilder.MuseumQuery);
 
         // move the default one to the left for SVE.
         Vector2 shopLoc = this.Helper.ModRegistry.IsLoaded("FlashShifter.SVECode") ? new(3, 9) : new(4, 9);

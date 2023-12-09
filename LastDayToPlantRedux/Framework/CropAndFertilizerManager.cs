@@ -1,12 +1,9 @@
-﻿namespace LastDayToPlantRedux.Framework;
-
+﻿
 using System.Collections.ObjectModel;
 using System.Text;
 
 using AtraBase.Collections;
 using AtraBase.Toolkit;
-using AtraBase.Toolkit.Extensions;
-using AtraBase.Toolkit.StringHandler;
 
 using AtraShared.Caching;
 using AtraShared.ConstantsAndEnums;
@@ -14,8 +11,10 @@ using AtraShared.Utils.Extensions;
 using AtraShared.Utils.Shims;
 using AtraShared.Wrappers;
 
+using StardewValley.GameData.Crops;
 using StardewValley.GameData.Objects;
 
+namespace LastDayToPlantRedux.Framework;
 // fertilizers are filtered while loading, while seeds (which I expect more change for) are filtered while calculating.
 
 /// <summary>
@@ -338,7 +337,7 @@ SUCCESS:
             seasonDict[new CropCondition(profession, 0)] = unfertilized;
         }
 
-        var farm = Game1.getFarm();
+        Farm farm = Game1.getFarm();
         // set up unfertilized.
         foreach (int crop in currentCrops)
         {
@@ -414,7 +413,7 @@ SUCCESS:
             return false;
         }
 
-        if (!Game1Wrappers.ObjectData.TryGetValue(crop, out var data))
+        if (!Game1Wrappers.ObjectData.TryGetValue(crop, out ObjectData? data))
         {
             return false;
         }
@@ -486,31 +485,19 @@ SUCCESS:
 
         cropsNeedRefreshing = false;
 
-        Dictionary<int, CropEntry> ret = new();
+        Dictionary<int, CropEntry> ret = [];
 
-        Dictionary<int, string> cropData = Game1.content.Load<Dictionary<int, string>>(AssetManager.CropName.BaseName);
-        foreach ((int index, string vals) in cropData)
+        Dictionary<string, CropData> cropData = DataLoader.Crops(Game1.content);
+        foreach ((string index, CropData? vals) in cropData)
         {
-            ReadOnlySpan<char> seasons = vals.GetNthChunk('/', 1).Trim();
-
             StardewSeasons seasonEnum = StardewSeasons.None;
-            foreach (SpanSplitEntry season in seasons.StreamSplit(null, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
+            foreach (var s in vals.Seasons)
             {
-                if (StardewSeasonsExtensions.TryParse(season, value: out StardewSeasons s, ignoreCase: true))
-                {
-                    seasonEnum |= s;
-                }
-                else
-                {
-                    ModEntry.ModMonitor.Log($"Crop {index} - {vals} seems to have unparseable season data, skipping", LogLevel.Warn);
-                    goto breakcontinue;
-                }
+                seasonEnum |= s.ConvertFromGameSeason();
             }
 
-            string? growthData = vals.GetNthChunk('/', 0).Trim().ToString();
+            var growthData = vals.DaysInPhase;
             ret[index] = new CropEntry(seasonEnum, growthData);
-breakcontinue:
-            ;
         }
 
         bool changed = !ret.IsEquivalentTo(crops);
@@ -534,7 +521,7 @@ breakcontinue:
 
         DummyHoeDirt dirt = new("null");
 
-        foreach ((string? index, var data) in Game1Wrappers.ObjectData)
+        foreach ((string? index, ObjectData? data) in Game1Wrappers.ObjectData)
         {
             if (data.Category is not SObject.fertilizerCategory)
             {

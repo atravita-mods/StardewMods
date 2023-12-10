@@ -1,22 +1,26 @@
-<Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="..\..\csproj_common" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\csproj_common" />
 
   <PropertyGroup>
-    <EnableHarmony>True</EnableHarmony>
     <ImplicitUsings>enable</ImplicitUsings>
+    <EnableHarmony>true</EnableHarmony>
   </PropertyGroup>
 
   <PropertyGroup>
-    <Name>Panning Framework</Name>
+    <Name>Item Spawn Extended</Name>
+    <Description>Adds more ways for items to spawn.</Description>
     <Version>0.1.0</Version>
-    <Description>A framework to allow adding things to panning.</Description>
     <UpdateKeys>-1</UpdateKeys>
-    <BaseManifest>..\..\base_dependencies.json</BaseManifest>
+    <BaseManifest>..\base_dependencies.json</BaseManifest>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\AtraCore\AtraCore.csproj" private="false" />
-    <ProjectReference Include="..\..\Pintail\Pintail\Pintail.csproj" private="false" />
+    <None Remove="i18n\default.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AtraCore\AtraCore.csproj" private="false" />
+    <ProjectReference Include="..\Pintail\Pintail\Pintail.csproj" private="false" />
   </ItemGroup>
 
   <ItemGroup>
@@ -31,6 +35,10 @@
 
   <ItemGroup>
     <PackageReference Update="JetBrains.Annotations" Version="2023.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Framework\" />
   </ItemGroup>
 
 </Project>

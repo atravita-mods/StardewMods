@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32516.85
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PanningFramework", "PanningFramework\PanningFramework\PanningFramework.csproj", "{ADEAC784-5C0D-4C5C-8AF3-583C5922DF9C}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PelicanTownFoodBank", "PelicanTownFoodBank\PelicanTownFoodBank\PelicanTownFoodBank.csproj", "{5815ABD0-0749-46B2-8A19-1D6DCEAA0864}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pintail", "Pintail\Pintail\Pintail.csproj", "{AEAA0E76-B879-4B57-9018-763B644E9B5F}"
@@ -138,7 +136,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SinZsEventTester", "SinZsEv
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScreenshotsMod", "ScreenshotsMod\ScreenshotsMod.csproj", "{7B6527CD-6CD9-4EBF-84E7-E21B0E94DFC5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ColorfulFishingRods", "ColorfulFishingRods\ColorfulFishingRods.csproj", "{0C50674B-F3FF-4794-A36B-AC83AC3A4CA0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ColorfulFishingRods", "ColorfulFishingRods\ColorfulFishingRods.csproj", "{0C50674B-F3FF-4794-A36B-AC83AC3A4CA0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ItemSpawnExtended", "ItemSpawnExtended\ItemSpawnExtended.csproj", "{267C1D6D-3160-4E79-BE66-B521A77A0724}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -146,10 +146,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{ADEAC784-5C0D-4C5C-8AF3-583C5922DF9C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{ADEAC784-5C0D-4C5C-8AF3-583C5922DF9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{ADEAC784-5C0D-4C5C-8AF3-583C5922DF9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{ADEAC784-5C0D-4C5C-8AF3-583C5922DF9C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5815ABD0-0749-46B2-8A19-1D6DCEAA0864}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5815ABD0-0749-46B2-8A19-1D6DCEAA0864}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5815ABD0-0749-46B2-8A19-1D6DCEAA0864}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -374,6 +370,10 @@ Global
 		{0C50674B-F3FF-4794-A36B-AC83AC3A4CA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0C50674B-F3FF-4794-A36B-AC83AC3A4CA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0C50674B-F3FF-4794-A36B-AC83AC3A4CA0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{267C1D6D-3160-4E79-BE66-B521A77A0724}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{267C1D6D-3160-4E79-BE66-B521A77A0724}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{267C1D6D-3160-4E79-BE66-B521A77A0724}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{267C1D6D-3160-4E79-BE66-B521A77A0724}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,8 +1,7 @@
-﻿// #define TRACELOG
+﻿#define TIMING
+// #define TRACELOG
 
-namespace ExperimentalLagReduction.HarmonyPatches;
-
-#if DEBUG
+#if TIMING
 using System.Diagnostics;
 #endif
 
@@ -20,6 +19,8 @@ using HarmonyLib;
 using StardewValley.Locations;
 using StardewValley.Pathfinding;
 
+
+namespace ExperimentalLagReduction.HarmonyPatches;
 /// <summary>
 /// Re-does the scheduler so it's faster.
 /// </summary>
@@ -34,7 +35,7 @@ internal static class Rescheduler
 
     private static bool preCached = false;
 
-    private static readonly ConcurrentDictionary<(string start, string end, Gender gender), string[]?> PathCache = new();
+    private static readonly ConcurrentDictionary<(string start, string end), PathSet> PathCache = new();
 
     private static readonly ThreadLocal<HashSet<string>> _visited = new(static () => new(capacity: 32));
 
@@ -42,7 +43,7 @@ internal static class Rescheduler
 
     private static readonly ThreadLocal<HashSet<string>> _dedup = new(static () => new());
 
-#if DEBUG
+#if TIMING
     private static readonly ThreadLocal<Stopwatch> _stopwatch = new(() => new(), trackAllValues: true);
 
     private static int cacheHits = 0;
@@ -75,11 +76,29 @@ internal static class Rescheduler
     internal static bool ClearNulls()
     {
         bool ret = false;
-        foreach (((string start, string end, Gender gender) k, string[]? v) in PathCache)
+        foreach (((string start, string end) k, PathSet v) in PathCache)
         {
-            if (v is null)
+            if (v.MalePath?.Length == 0)
             {
-                ret |= PathCache.TryRemove(k, out _);
+                v.MalePath = null;
+                ret = true;
+            }
+
+            if (v.FemalePath?.Length == 0)
+            {
+                v.FemalePath = null;
+                ret = true;
+            }
+
+            if (v.UndefinedPath?.Length == 0)
+            {
+                v.UndefinedPath = null;
+                ret = true;
+            }
+
+            if (v.MalePath is null && v.FemalePath is null && v.UndefinedPath is null)
+            {
+                PathCache.TryRemove(k, out _);
             }
         }
         return ret;
@@ -111,7 +130,7 @@ internal static class Rescheduler
 
         preCached = true;
 
-#if DEBUG
+#if TIMING
         _stopwatch.Value ??= new();
         _stopwatch.Value.Start();
 #endif
@@ -124,8 +143,8 @@ internal static class Rescheduler
             {
                 Game1._locationLookup.TryAdd(location.Name, location);
             }
+#if TIMING
             ModEntry.ModMonitor.TraceOnlyLog($"Locations cache prepopulated with {Game1._locationLookup.Count} entries.");
-#if DEBUG
             ModEntry.ModMonitor.TraceOnlyLog($"This took {_stopwatch.Value.Elapsed.TotalMilliseconds:F2} ms");
 #endif
         }
@@ -173,7 +192,7 @@ internal static class Rescheduler
             }
         }
 
-#if DEBUG
+#if TIMING
         _stopwatch.Value.Stop();
         ModEntry.ModMonitor.Log($"Total time so far: {_stopwatch.Value.Elapsed.TotalMilliseconds:F2} ms, {PathCache.Count} total routes cached. Prefetch started.", LogLevel.Info);
 #endif
@@ -188,16 +207,17 @@ internal static class Rescheduler
     /// <param name="end">End location.</param>
     /// <param name="gender">Gender constraint, or <see cref="NPC.undefined"/> for not constrained.</param>
     /// <param name="path">The path, if found.</param>
-    /// <returns>True if found, false otherwise.</returns>
+    /// <returns>True if cached, false otherwise.</returns>
+    /// <remarks>Returning true with path as null represents an INVALID path.</remarks>
     internal static bool TryGetPathFromCache(string start, string end, int gender, out string[]? path)
     {
         static string[]? ShorterNonNull(string[]? left, string[]? right)
         {
-            if (left is null)
+            if (left is null || left.Length == 0)
             {
                 return right;
             }
-            if (right is null)
+            if (right is null || right.Length == 0)
             {
                 return left;
             }
@@ -205,20 +225,30 @@ internal static class Rescheduler
             return left.Length <= right.Length ? left : right;
         }
 
-        bool found = PathCache.TryGetValue((start, end, Ungendered), out path);
-        if (gender != NPC.female && PathCache.TryGetValue((start, end, Gender.Male), out string[]? male))
+        path = null;
+        if (!PathCache.TryGetValue((start, end), out PathSet? set))
         {
-            found = true;
-            path = ShorterNonNull(path, male);
+            return false;
         }
 
-        if (gender != NPC.male && PathCache.TryGetValue((start, end, Gender.Female), out string[]? female))
+        path = set.UndefinedPath;
+
+        if (gender != NPC.female)
         {
-            found = true;
-            path = ShorterNonNull(path, female);
+            path = ShorterNonNull(path, set.MalePath);
         }
 
-        return found;
+        if (gender != NPC.male)
+        {
+            path = ShorterNonNull(path, set.FemalePath);
+        }
+
+        if (path?.Length == 0)
+        {
+            path = null;
+        }
+
+        return true;
     }
 
     /// <summary>
@@ -228,10 +258,25 @@ internal static class Rescheduler
     {
         Counter<int> counter = [];
 
-        foreach (((string start, string end, Gender gender) key, string[]? value) in PathCache.OrderBy(static kvp => kvp.Key.start).ThenBy(static kvp => kvp.Value?.Length ?? -1))
+        foreach (((string start, string end) key, PathSet set) in PathCache.OrderBy(static kvp => kvp.Key.start).ThenBy(static kvp => kvp.Value.MaxLength()))
         {
-            ModEntry.ModMonitor.Log($"( {key.start} -> {key.end} ({key.gender.ToStringFast()})) == " + (value is not null ? string.Join("->", value) + $" [{value.Length}]" : "no path found" ), LogLevel.Info);
-            counter[value?.Length ?? 0]++;
+            if (set.UndefinedPath is { } undefined)
+            {
+                ModEntry.ModMonitor.Log($"( {key.start} -> {key.end} (Undefined)) == " + (undefined.Length != 0 ? string.Join("->", undefined) + $" [{undefined.Length}]" : "no path found"), LogLevel.Info);
+                counter[undefined.Length]++;
+            }
+
+            if (set.FemalePath is { } female)
+            {
+                ModEntry.ModMonitor.Log($"( {key.start} -> {key.end} (Female)) == " + (female.Length != 0 ? string.Join("->", female) + $" [{female.Length}]" : "no path found"), LogLevel.Info);
+                counter[female.Length]++;
+            }
+
+            if (set.MalePath is { } male)
+            {
+                ModEntry.ModMonitor.Log($"( {key.start} -> {key.end} (Female)) == " + (male.Length != 0 ? string.Join("->", male) + $" [{male.Length}]" : "no path found"), LogLevel.Info);
+                counter[male.Length]++;
+            }
         }
 
         ModEntry.ModMonitor.Log($"In total: {PathCache.Count} routes cached for {Game1.locations.Count} locations.", LogLevel.Info);
@@ -300,7 +345,7 @@ internal static class Rescheduler
 
                 // insert into cache
                 string[] route = Unravel(node);
-                PathCache.TryAdd((start.Name, node.Name, node.GenderConstraint), route);
+                InsertRoute(start.Name, node.Name, node.GenderConstraint, route);
 
                 if (ret is not null)
                 {
@@ -320,7 +365,7 @@ internal static class Rescheduler
                             do
                             {
                                 string[] segment = route[index..];
-                                PathCache.TryAdd((segment[0], segment[^1], Ungendered), segment);
+                                InsertRoute(segment[0], segment[^1], Ungendered, segment);
                                 index--;
                             }
                             while (index > 0);
@@ -328,34 +373,44 @@ internal static class Rescheduler
 
                         ret = route;
                     }
-                    else if (allowPartialPaths)
+
+                    // if we have A->B and B->D, then we can string the path together already.
+                    // avoiding trivial one-step stitching because this is more expensive to do.
+                    // this isn't technically correct (especially for cycles) but it works pretty well most of the time.
+                    else if (allowPartialPaths && PathCache.TryGetValue((node.Name, end.Name), out PathSet? set))
                     {
-                        // if we have A->B and B->D, then we can string the path together already.
-                        // avoiding trivial one-step stitching because this is more expensive to do.
-                        // this isn't technically correct (especially for cycles) but it works pretty well most of the time.
-                        if (PathCache.TryGetValue((node.Name, end.Name, Ungendered), out string[]? prev) && prev is not null
-                            && prev.Length > 2 && CompletelyDistinct(route, prev))
+                        if (set.UndefinedPath is { } prev)
                         {
-                            ModEntry.ModMonitor.TraceOnlyLog($"Partial route found: {start.Name} -> {node.Name} + {node.Name} -> {end.Name}", LogLevel.Info);
-                            string[] routeStart = new string[route.Length + prev.Length - 1];
-                            Array.Copy(route, routeStart, route.Length - 1);
-                            Array.Copy(prev, 0, routeStart, route.Length - 1, prev.Length);
+                            if (prev.Length > 2 && CompletelyDistinct(route, prev))
+                            {
+                                ModEntry.ModMonitor.TraceOnlyLog($"Partial route found: {start.Name} -> {node.Name} + {node.Name} -> {end.Name}", LogLevel.Info);
+                                string[] routeStart = new string[route.Length + prev.Length - 1];
+                                Array.Copy(route, routeStart, route.Length - 1);
+                                Array.Copy(prev, 0, routeStart, route.Length - 1, prev.Length);
 
-                            PathCache.TryAdd((start.Name, end.Name, node.GenderConstraint), routeStart);
-
-                            ret = routeStart;
+                                InsertRoute(start.Name, end.Name, node.GenderConstraint, routeStart);
+                                ret = routeStart;
+                            }
                         }
-                        else if (PathCache.TryGetValue((node.Name, end.Name, genderConstrainedToCurrentSearch), out string[]? genderedPrev) && genderedPrev is not null
-                            && genderedPrev.Length > 2 && CompletelyDistinct(route, genderedPrev))
+                        else
                         {
-                            ModEntry.ModMonitor.TraceOnlyLog($"Partial route found: {start.Name} -> {node.Name} + {node.Name} -> {end.Name}", LogLevel.Info);
-                            string[] routeStart = new string[route.Length + genderedPrev.Length - 1];
-                            Array.Copy(route, routeStart, route.Length - 1);
-                            Array.Copy(genderedPrev, 0, routeStart, route.Length - 1, genderedPrev.Length);
+                            string[]? genderedPrev = genderConstrainedToCurrentSearch switch
+                            {
+                                Gender.Male => set.MalePath,
+                                Gender.Female => set.FemalePath,
+                                _ => null
+                            };
 
-                            PathCache.TryAdd((start.Name, end.Name, genderConstrainedToCurrentSearch), routeStart);
+                            if (genderedPrev is not null && genderedPrev.Length > 2 && CompletelyDistinct(route, genderedPrev))
+                            {
+                                ModEntry.ModMonitor.TraceOnlyLog($"Partial route found: {start.Name} -> {node.Name} + {node.Name} -> {end.Name}", LogLevel.Info);
+                                string[] routeStart = new string[route.Length + genderedPrev.Length - 1];
+                                Array.Copy(route, routeStart, route.Length - 1);
+                                Array.Copy(genderedPrev, 0, routeStart, route.Length - 1, genderedPrev.Length);
 
-                            ret = routeStart;
+                                InsertRoute(start.Name, end.Name, genderConstrainedToCurrentSearch, routeStart);
+                                ret = routeStart;
+                            }
                         }
                     }
                 }
@@ -386,7 +441,7 @@ internal static class Rescheduler
                 };
 
                 ModEntry.ModMonitor.Log($"Scheduler could not find route from {start.Name} to {end.Name} while honoring gender {genderstring}", LogLevel.Warn);
-                PathCache.TryAdd((start.Name, end.Name, gender), null);
+                InsertRoute(start.Name, end.Name, gender, Array.Empty<string>());
             }
             return null;
         }
@@ -399,6 +454,41 @@ internal static class Rescheduler
         }
     }
 
+    private static void InsertRoute(string start, string end, Gender constraint, string[] route)
+    {
+        PathCache.AddOrUpdate(
+            (start, end),
+            _ => GetNewPathSet(constraint, route),
+            (_, prev) => UpdatePathSetFor(constraint, prev, route));
+    }
+
+    private static PathSet GetNewPathSet(Gender genderConstraint, string[] route)
+        => genderConstraint switch
+        {
+            Gender.Male => new(route, null, null),
+            Gender.Female => new(null, route, null),
+            Gender.Undefined => new(null, null, route),
+            _ => new(null, null, null),
+        };
+
+    private static PathSet UpdatePathSetFor(Gender genderConstraint, PathSet prev, string[] route)
+    {
+        switch (genderConstraint)
+        {
+            case Gender.Male:
+                prev.MalePath = route;
+                break;
+            case Gender.Female:
+                prev.FemalePath = route;
+                break;
+            case Gender.Undefined:
+                prev.UndefinedPath = route;
+                break;
+        }
+
+        return prev;
+    }
+
     #region harmony
 
     [HarmonyPrefix]
@@ -408,7 +498,7 @@ internal static class Rescheduler
     {
         try
         {
-#if DEBUG
+#if TIMING
             if (_stopwatch.Values.Count > 0)
             {
                 ModEntry.ModMonitor.Log($"Resetting all timers.", LogLevel.Info);
@@ -418,9 +508,9 @@ internal static class Rescheduler
                 }
             }
 
-            ModEntry.ModMonitor.Log(new StackTrace().ToString(), LogLevel.Info);
 #endif
 
+            ModEntry.ModMonitor.TraceOnlyLog(new StackTrace().ToString(), LogLevel.Info);
             ClearCache();
 
             for (int i = 1; i <= Game1.netWorldState.Value.HighestPlayerLimit; i++)
@@ -445,7 +535,7 @@ internal static class Rescheduler
 
     private static void Prefetch(GameLocation loc, int limit)
     {
-#if DEBUG
+#if TIMING
         ModEntry.ModMonitor.Log($"Prefetch started for {loc.Name} on thread {Environment.CurrentManagedThreadId}.", LogLevel.Info);
         _stopwatch.Value ??= new();
         _stopwatch.Value.Start();
@@ -453,7 +543,7 @@ internal static class Rescheduler
 
         _ = GetPathFor(loc, null, Ungendered, false, limit);
 
-#if DEBUG
+#if TIMING
         _stopwatch.Value.Stop();
         ModEntry.ModMonitor.Log($"Prefetch done for {loc.Name}. Total time so far: {_stopwatch.Value.Elapsed.TotalMilliseconds:F2} ms, {PathCache.Count} total routes cached.", LogLevel.Info);
 #endif
@@ -467,7 +557,7 @@ internal static class Rescheduler
     {
         if (TryGetPathFromCache(startingLocation, endingLocation, gender, out __result))
         {
-#if DEBUG
+#if TIMING
             Interlocked.Increment(ref cacheHits);
 #endif
 
@@ -523,7 +613,7 @@ internal static class Rescheduler
 
         #endregion
 
-#if DEBUG
+#if TIMING
         _stopwatch.Value ??= new();
         _stopwatch.Value.Start();
 
@@ -534,7 +624,7 @@ internal static class Rescheduler
         {
             ModEntry.ModMonitor.LogOnce($"Requested path from {startingLocation} to {endingLocation} for gender {gender} where no valid path was found.", LogLevel.Warn);
         }
-#if DEBUG
+#if TIMING
         else
         {
             ModEntry.ModMonitor.TraceOnlyLog($"Found path from {startingLocation} to {endingLocation} (gender '{gender}'): {string.Join("->", __result)} with {__result.Length} segments.");
@@ -547,7 +637,7 @@ internal static class Rescheduler
         return false;
     }
 
-#endregion
+    #endregion
 
     #region helpers
 
@@ -704,5 +794,34 @@ internal static class Rescheduler
             this.GenderConstraint = genderConstraint;
             this.Depth = prev?.Depth is int previousDepth ? previousDepth + 1 : 0;
         }
+    }
+}
+
+/// <summary>
+/// Represents a set of paths.
+/// </summary>
+/// <remarks>If a field is set to null, that means we have no info on it. If a field set to Array.Empty, that means there is no valid path.</remarks>
+internal class PathSet(string[]? malePath, string[]? femalePath, string[]? undefinedPath)
+{
+    internal string[]? MalePath { get; set; } = malePath;
+
+    internal string[]? FemalePath { get; set; } = femalePath;
+
+    internal string[]? UndefinedPath { get; set; } = undefinedPath;
+
+    internal int MaxLength()
+    {
+        int length = this.MalePath?.Length ?? 0;
+        if (this.FemalePath is { } female)
+        {
+            length = Math.Max(female.Length, length);
+        }
+
+        if (this.UndefinedPath is { } undefined)
+        {
+            length = Math.Max(undefined.Length, length);
+        }
+
+        return length;
     }
 }

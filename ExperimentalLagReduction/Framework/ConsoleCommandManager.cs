@@ -1,4 +1,6 @@
-﻿using AtraCore.Framework.Caches;
+﻿#define TRACELOG
+
+using AtraCore.Framework.Caches;
 using AtraCore.Framework.ItemManagement;
 
 using AtraShared.ConstantsAndEnums;
@@ -120,7 +122,7 @@ internal static class ConsoleCommandManager
         ModEntry.ModMonitor.Log($"Total locations: {Game1.locations.Count}", LogLevel.Info);
         ModEntry.ModMonitor.Log($"Cached routes: {Rescheduler.CacheCount}", LogLevel.Info);
 
-#if DEBUG
+#if TRACELOG
         ModEntry.ModMonitor.Log($"Timing: {string.Join(", ", Rescheduler.Watches.Select(static watch => $"{watch.Elapsed.TotalMilliseconds:F2} ms"))}", LogLevel.Info);
         ModEntry.ModMonitor.Log($"Total: {Rescheduler.Watches.Sum(static watch => watch.Elapsed.TotalMilliseconds):F2} ms", LogLevel.Info);
 

@@ -14,7 +14,7 @@ namespace PelicanTownFoodBank;
 /// </summary>
 internal static class PantryStockManager
 {
-    private static readonly PerScreen<Lazy<List<int>>> PerScreenedSellables = new(() => new Lazy<List<int>>(SetUpInventory));
+    private static readonly PerScreen<Lazy<List<int>>> PerScreenedSellables = new(() => new Lazy<List<string>>(SetUpInventory));
     private static readonly PerScreen<HashSet<ISalable>> PerScreenedBuyBacks = new(() => new HashSet<ISalable>());
 
     /// <summary>
@@ -30,8 +30,8 @@ internal static class PantryStockManager
     /// <summary>
     /// Gets the categories of SObject the food bank deals with...
     /// </summary>
-    internal static int[] FoodBankCategories { get; } = new int[]
-    {
+    internal static int[] FoodBankCategories { get; } =
+    [
             SObject.artisanGoodsCategory,
             SObject.CookingCategory,
             SObject.EggCategory,
@@ -46,7 +46,7 @@ internal static class PantryStockManager
             SObject.sellAtPierresAndMarnies,
             SObject.syrupCategory,
             SObject.VegetableCategory,
-    };
+    ];
 
     /// <summary>
     /// Gets the current food pantry menu.
@@ -57,7 +57,7 @@ internal static class PantryStockManager
         Dictionary<ISalable, int[]> sellables = Sellables.ToDictionary((int i) => (ISalable)new SObject(Vector2.Zero, i, 1), (_) => new int[] { 0, 1 });
         foreach (ISalable buyback in BuyBacks)
         {
-            sellables[buyback] = new[] { 0, buyback.Stack };
+            sellables[buyback] = [0, buyback.Stack];
         }
         return new(sellables, BuyBacks);
     }
@@ -68,18 +68,18 @@ internal static class PantryStockManager
     internal static void Reset()
     {
         BuyBacks.Clear();
-        PerScreenedSellables.Value = new Lazy<List<int>>(SetUpInventory);
+        PerScreenedSellables.Value = new Lazy<List<string>>(SetUpInventory);
     }
 
     /// <summary>
     /// Sets up the daily inventory.
     /// </summary>
     /// <returns>The daily inventory.</returns>
-    internal static List<int> SetUpInventory()
+    internal static List<string> SetUpInventory()
     {
         Random seededRandom = RandomUtils.GetSeededRandom(6, "atravita.CCOverhaul");
         List<int> neededIngredients = GetNeededIngredients();
-        (List<int> cookingIngredients, List<int> cookedItems) = GetOtherSellables();
+        (List<string> cookingIngredients, List<string> cookedItems) = GetOtherSellables();
         Utility.Shuffle(seededRandom, neededIngredients);
         Utility.Shuffle(seededRandom, cookingIngredients);
         Utility.Shuffle(seededRandom, cookedItems);

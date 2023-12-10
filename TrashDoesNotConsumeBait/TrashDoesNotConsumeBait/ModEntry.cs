@@ -1,23 +1,25 @@
-﻿using System.Reflection;
+﻿namespace TrashDoesNotConsumeBait;
+
+using System.Reflection;
+
+using AtraCore.Framework.Internal;
+
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
 using AtraShared.MigrationManager;
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
 using StardewModdingAPI.Events;
+
+using StardewValley.Menus;
+using StardewValley.Tools;
+
 using AtraUtils = AtraShared.Utils.Utils;
 
-namespace TrashDoesNotConsumeBait;
-
 /// <inheritdoc/>
-internal sealed class ModEntry : Mod
+internal sealed class ModEntry : BaseMod<ModEntry>
 {
     private MigrationManager? migrator;
-
-    /// <summary>
-    /// Gets the logger for this mod.
-    /// </summary>
-    internal static IMonitor ModMonitor { get; private set; } = null!;
 
     /// <summary>
     /// Gets the config instance for this mod.
@@ -32,7 +34,7 @@ internal sealed class ModEntry : Mod
     /// <inheritdoc/>
     public override void Entry(IModHelper helper)
     {
-        ModMonitor = this.Monitor;
+        base.Entry(helper);
         GameContentHelper = helper.GameContent;
         I18n.Init(helper.Translation);
         AssetEditor.Initialize(helper.GameContent);
@@ -41,15 +43,53 @@ internal sealed class ModEntry : Mod
         helper.Events.GameLoop.GameLaunched += this.SetUpConfig;
         helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
 
-        helper.Events.Content.AssetRequested += this.OnAssetRequested;
+        helper.Events.Content.AssetRequested += static (_, e) => AssetEditor.EditAssets(e);
 
-        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
+        helper.Events.Display.MenuChanged += this.OnMenuChanged;
 
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
     }
 
-    private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
-        => AssetEditor.EditAssets(e);
+    private void OnMenuChanged(object? sender, MenuChangedEventArgs e)
+    {
+        if (Game1.activeClickableMenu is not ItemGrabMenu itemGrab || itemGrab.source != ItemGrabMenu.source_fishingChest)
+        {
+            return;
+        }
+
+        for (int i = itemGrab.ItemsToGrabMenu.actualInventory.Count - 1; i >= 0; i--)
+        {
+            Item? item = itemGrab.ItemsToGrabMenu.actualInventory[i];
+
+            if (Game1.player.CurrentTool is FishingRod rod && item is SObject obj)
+            {
+                var oldAttach = rod.attach(obj);
+                if (oldAttach is not null)
+                {
+                    item = rod.attach(oldAttach);
+                }
+                else
+                {
+                    item = null;
+                }
+            }
+
+            Item remainder = Game1.player.addItemToInventory(item);
+            if (remainder is null)
+            {
+                itemGrab.ItemsToGrabMenu.actualInventory.RemoveAt(i);
+            }
+            else
+            {
+                itemGrab.ItemsToGrabMenu.actualInventory[i] = remainder;
+            }
+        }
+
+        if (itemGrab.areAllItemsTaken())
+        {
+            itemGrab.exitThisMenuNoSound();
+        }
+    }
 
     /// <summary>
     /// Sets up the GMCM for this mod.

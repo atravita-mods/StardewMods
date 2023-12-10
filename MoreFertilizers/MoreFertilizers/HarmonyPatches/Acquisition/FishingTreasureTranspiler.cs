@@ -59,8 +59,8 @@ internal static class FishingTreasureTranspiler
             helper.Advance(1)
             .GetLabels(out IList<Label>? labels, clear: true)
             .DefineAndAttachLabel(out Label finish)
-            .Insert(new CodeInstruction[]
-            { // insert if(GetPossibleRandomFertilizer() is SObject obj) treasureList.Add(obj);
+            .Insert(
+            [ // insert if(GetPossibleRandomFertilizer() is SObject obj) treasureList.Add(obj);
                 ldloc,
                 new(OpCodes.Call, typeof(FishingTreasureTranspiler).GetCachedMethod(nameof(GetPossibleRandomFertilizer), ReflectionCache.FlagTypes.StaticFlags)),
                 new(OpCodes.Dup),
@@ -69,7 +69,7 @@ internal static class FishingTreasureTranspiler
                 new(OpCodes.Br_S, finish),
                 new CodeInstruction(OpCodes.Pop).WithLabels(noObject),
                 new(OpCodes.Pop),
-            }, withLabels: labels);
+            ], withLabels: labels);
 
             return helper.Render();
         }

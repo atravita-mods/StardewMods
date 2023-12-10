@@ -9,6 +9,10 @@ internal static class AssetManager
 {
     private static IAssetName reschedulerPopulate = null!;
 
+    /// <summary>
+    /// Initializes this asset manager.
+    /// </summary>
+    /// <param name="parser">Game content parser.</param>
     internal static void Initialize(IGameContentHelper parser)
         => reschedulerPopulate = parser.ParseAssetName("Mods/atravita/Rescheduler_Populate");
 

@@ -38,7 +38,6 @@ internal static class EventPatches
     }
 
     // transpile the festival update method to account for the fact that I've removed Pam from the festival, lol.
-#pragma warning disable SA1116 // Split parameters should start on line after declaration. Reviewed.
     [HarmonyPatch(nameof(Event.festivalUpdate))]
     private static IEnumerable<CodeInstruction>? Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
     {
@@ -99,5 +98,4 @@ internal static class EventPatches
         }
         return null;
     }
-#pragma warning restore SA1116 // Split parameters should start on line after declaration
 }

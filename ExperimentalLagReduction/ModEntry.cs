@@ -43,6 +43,8 @@ internal sealed class ModEntry : BaseMod<ModEntry>
 
         AssetManager.Initialize(helper.GameContent);
         helper.Events.Content.AssetRequested += static (_, e) => AssetManager.Apply(e);
+
+        this.Monitor.Log($"We seem to have been allowed {Environment.ProcessorCount} processors.", LogLevel.Debug);
     }
 
     /// <inheritdoc />

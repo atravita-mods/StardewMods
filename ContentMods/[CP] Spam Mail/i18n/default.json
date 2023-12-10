@@ -125,8 +125,12 @@
     "EnergyDrink.Text.1": "All you need is a single sip of our patented Bungle Blaster and you'll run faster than you've ever in your life!",
     "EnergyDrink.Text.2": "Not recommended for pregnant women or anyone with heart issues.",
 
+    "harvey-energy-drink": "The amount of caffeine in energy drinks, it can't be safe...$s#$b#You'll stay away from them, won't you, @?",
+
     "EnergyDrink2.Title": "Introducing...Fahrenheit!",
     "EnergyDrink2.Text": "Now with even more caffeine, guaranteed to get you going all day long. And probably for tomorrow, too. Anddddd maybe the next day. There's a lot caffeine.",
+
+    "harvey-energy-drink-2": "Gosh, I think it's time for the regulators to step in and cap the amount of caffeine allowed in an energy drink. Did you see that Fahrenheit has 300mg per can?",
 
     // Tools Shop
     "ToolsShop.Title": "Air Compressors For Less",
@@ -136,6 +140,8 @@
     "ToolsShop2.Title": "Get The Guy In Your Life Something",
     "ToolsShop2.Text.1": "It's almost the Winter Star! You should probably get the guy in your life something. Got no ideas? What about getting him a tool?",
     "ToolsShop2.Text.2": "Instead of figuring out what he already had and what projects he's planning, why not just get him a screwdriver set? We're selling them for cheap. Ta!",
+
+    "demetrius-toolsShop2": "I wish we could just skip the whole gift giving thing and just buy what we want, @.#$b#It'd be so much more efficient....#$b#Say, you have an idea of what I should get for Robin this year?",
 
     "GoldShop.Title": "The World's Ending!",
     "GoldShop.Text": "You can't trust the financial system, so trust us instead! Buy gold from us, we promise we aren't overcharging you! Just 500$/bar.",
@@ -155,6 +161,7 @@
     "auto-insurance-call": "Have you re-priced your auto insurance lately? Maybe you should get to that.#We might be cheaper than your current plan. Or not. We'll tell you honestly. We promise.",
     "goldbug-call": "Worried about inflation? Just buy gold!#Selling genuine gold bars, 500g each!",
     "joja-call": "Buy anything online from Joja.#Now with free two day shipping!",
+    "joja-call2": "You have the whole world at your fingertips with Joja at your side!#Just pop online and order, it'll be there in two days.#Anything you want, on your doorstep, you don't even need to go outside.",
     "online-shopping-call": "Get your farming supplies online at Farming-dot-com, for absurdly cheap!#But hurry, this won't last long, we're not sure how long the venture capitalists will continue giving us money...",
     "romance-call": "Single...ladies...near you...may be interested in your company.#Look, Jane, what IS this script you're having me read? What IS this? No, I can't possibly SAY that.#I QUIT."
 }

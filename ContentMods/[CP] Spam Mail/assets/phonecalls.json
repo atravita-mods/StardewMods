@@ -26,6 +26,10 @@
                 "atravita.SpamMail.Joja": {
                     "Dialogue": "{{i18n:joja-call}}",
                     "SimpleDialogueSplitBy": "#"
+                },
+                "atravita.SpamMail.Joja2": {
+                    "Dialogue": "{{i18n:joja-call2}}",
+                    "SimpleDialogueSplitBy": "#"
                 }
             }
         }

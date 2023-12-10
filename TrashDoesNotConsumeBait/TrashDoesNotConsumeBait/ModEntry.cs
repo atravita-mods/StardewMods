@@ -45,50 +45,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
 
         helper.Events.Content.AssetRequested += static (_, e) => AssetEditor.EditAssets(e);
 
-        helper.Events.Display.MenuChanged += this.OnMenuChanged;
-
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
-    }
-
-    private void OnMenuChanged(object? sender, MenuChangedEventArgs e)
-    {
-        if (Game1.activeClickableMenu is not ItemGrabMenu itemGrab || itemGrab.source != ItemGrabMenu.source_fishingChest)
-        {
-            return;
-        }
-
-        for (int i = itemGrab.ItemsToGrabMenu.actualInventory.Count - 1; i >= 0; i--)
-        {
-            Item? item = itemGrab.ItemsToGrabMenu.actualInventory[i];
-
-            if (Game1.player.CurrentTool is FishingRod rod && item is SObject obj)
-            {
-                var oldAttach = rod.attach(obj);
-                if (oldAttach is not null)
-                {
-                    item = rod.attach(oldAttach);
-                }
-                else
-                {
-                    item = null;
-                }
-            }
-
-            Item remainder = Game1.player.addItemToInventory(item);
-            if (remainder is null)
-            {
-                itemGrab.ItemsToGrabMenu.actualInventory.RemoveAt(i);
-            }
-            else
-            {
-                itemGrab.ItemsToGrabMenu.actualInventory[i] = remainder;
-            }
-        }
-
-        if (itemGrab.areAllItemsTaken())
-        {
-            itemGrab.exitThisMenuNoSound();
-        }
     }
 
     /// <summary>

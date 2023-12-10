@@ -1,13 +1,12 @@
 ﻿#define TIMING
 // #define TRACELOG
 
-#if TIMING
-using System.Diagnostics;
-#endif
-
 using System.Collections.Concurrent;
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
 
 using AtraBase.Collections;
+using AtraBase.Toolkit;
 
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
@@ -16,11 +15,12 @@ using ExperimentalLagReduction.Framework;
 
 using HarmonyLib;
 
+using StardewValley.GameData.Characters;
 using StardewValley.Locations;
 using StardewValley.Pathfinding;
 
-
 namespace ExperimentalLagReduction.HarmonyPatches;
+
 /// <summary>
 /// Re-does the scheduler so it's faster.
 /// </summary>
@@ -33,15 +33,15 @@ internal static class Rescheduler
 
     #region fields
 
-    private static bool preCached = false;
-
-    private static readonly ConcurrentDictionary<(string start, string end), PathSet> PathCache = new();
+    private static readonly ConcurrentDictionary<(string start, string end), PathSet> PathCache = new(capacity: 256, concurrencyLevel: Environment.ProcessorCount);
 
     private static readonly ThreadLocal<HashSet<string>> _visited = new(static () => new(capacity: 32));
 
     private static readonly ThreadLocal<Queue<MacroNode>> _queue = new(static () => new(capacity: 32));
 
-    private static readonly ThreadLocal<HashSet<string>> _dedup = new(static () => new());
+    private static readonly ThreadLocal<HashSet<string>> _dedup = new(static () => new(16));
+
+    private static bool preCached = false;
 
 #if TIMING
     private static readonly ThreadLocal<Stopwatch> _stopwatch = new(() => new(), trackAllValues: true);
@@ -149,6 +149,7 @@ internal static class Rescheduler
 #endif
         }
 
+        List<(GameLocation center, int radius)> centers = [];
         foreach ((string center, string radius) in AssetManager.GetPrepopulate())
         {
             GameLocation? loc = Game1.getLocationFromName(center);
@@ -169,27 +170,16 @@ internal static class Rescheduler
                 limit = Math.Clamp(limit, 1, 4);
             }
 
-            Task task = new(() => Prefetch(loc, limit));
-            task.ContinueWith(
-                    continuationAction: (t, _) =>
-                    {
-                        if (t.Status == TaskStatus.Faulted)
-                        {
-                            ModEntry.ModMonitor.Log($"Cache prepopulation failed. Check log for details.", LogLevel.Error);
-                            ModEntry.ModMonitor.Log(t.Exception?.ToString() ?? "no stack trace?");
-                        }
-                    },
-                    state: null,
-                    continuationOptions: TaskContinuationOptions.OnlyOnFaulted);
+            centers.Add((loc, limit));
+        }
 
-            if (parallel)
-            {
-                task.Start();
-            }
-            else
-            {
-                task.RunSynchronously();
-            }
+        if (parallel)
+        {
+            new Thread(PrefetchWorker).Start(centers);
+        }
+        else
+        {
+            PrefetchWorker(centers);
         }
 
 #if TIMING
@@ -198,6 +188,68 @@ internal static class Rescheduler
 #endif
 
         return true;
+    }
+
+    private static void PrefetchWorker(object? obj)
+    {
+
+#if TIMING
+        ModEntry.ModMonitor.Log($"Prefetch started on thread {Environment.CurrentManagedThreadId}.", LogLevel.Info);
+        _stopwatch.Value ??= new();
+        _stopwatch.Value.Start();
+#endif
+
+        Stopwatch timer = Stopwatch.StartNew();
+        HashSet<string> handled = [];
+
+        try
+        {
+            List<(GameLocation center, int radius)> work = (List<(GameLocation center, int radius)>)obj!;
+            foreach ((GameLocation center, int radius) in work)
+            {
+                handled.Add(center.Name);
+                _ = GetPathFor(center, null, Ungendered, false, radius);
+
+#if TIMING && TRACELOG
+                ModEntry.ModMonitor.Log($"Prefetch done for {center.NameOrUniqueName}. Total time: {_stopwatch.Value.Elapsed.TotalMilliseconds:F2} ms, {PathCache.Count} total routes cached.", LogLevel.Info);
+#endif
+            }
+
+            ModEntry.ModMonitor.TraceOnlyLog($"Okay, finished with data-driven prefetch, now prefetching from NPC locations.");
+
+            IDictionary<string, CharacterData> characterData = Game1.characterData;
+
+            foreach ((string name, CharacterData data) in characterData)
+            {
+                if (timer.ElapsedMilliseconds > 250)
+                {
+                    break;
+                }
+
+                if (data.Home?.Count is null or 0)
+                {
+                    continue;
+                }
+
+                string home = data.Home[^1].Location;
+                if (!handled.Add(home) || Game1.getLocationFromName(home) is not GameLocation homeLocation)
+                {
+                    continue;
+                }
+
+                ModEntry.ModMonitor.TraceOnlyLog($"Prefetching for {name} at {home} - time {timer.ElapsedMilliseconds:F2} with {PathCache.Count}.", LogLevel.Trace);
+                _ = GetPathFor(homeLocation, null, Ungendered, false, 2);
+            }
+
+#if TIMING
+            _stopwatch.Value.Stop();
+            ModEntry.ModMonitor.Log($"Prefetch done. Total time: {_stopwatch.Value.Elapsed.TotalMilliseconds:F2} ms, {PathCache.Count} total routes cached.", LogLevel.Info);
+#endif
+        }
+        catch (Exception ex)
+        {
+            ModEntry.ModMonitor.LogError("pre-populating cache", ex);
+        }
     }
 
     /// <summary>
@@ -364,7 +416,14 @@ internal static class Rescheduler
                             int index = route.Length - 2;
                             do
                             {
+                                if (PathCache.ContainsKey((route[index], route[^1])))
+                                {
+                                    index--;
+                                    continue;
+                                }
+
                                 string[] segment = route[index..];
+                                ModEntry.ModMonitor.TraceOnlyLog($"Backtrack inserting path from {segment[0]} to {segment[^1]}", LogLevel.Trace);
                                 InsertRoute(segment[0], segment[^1], Ungendered, segment);
                                 index--;
                             }
@@ -441,7 +500,7 @@ internal static class Rescheduler
                 };
 
                 ModEntry.ModMonitor.Log($"Scheduler could not find route from {start.Name} to {end.Name} while honoring gender {genderstring}", LogLevel.Warn);
-                InsertRoute(start.Name, end.Name, gender, Array.Empty<string>());
+                InsertRoute(start.Name, end.Name, gender, []);
             }
             return null;
         }
@@ -454,6 +513,7 @@ internal static class Rescheduler
         }
     }
 
+    [MethodImpl(TKConstants.Hot)]
     private static void InsertRoute(string start, string end, Gender constraint, string[] route)
     {
         PathCache.AddOrUpdate(
@@ -462,6 +522,7 @@ internal static class Rescheduler
             (_, prev) => UpdatePathSetFor(constraint, prev, route));
     }
 
+    [MethodImpl(TKConstants.Hot)]
     private static PathSet GetNewPathSet(Gender genderConstraint, string[] route)
         => genderConstraint switch
         {
@@ -471,6 +532,7 @@ internal static class Rescheduler
             _ => new(null, null, null),
         };
 
+    [MethodImpl(TKConstants.Hot)]
     private static PathSet UpdatePathSetFor(Gender genderConstraint, PathSet prev, string[] route)
     {
         switch (genderConstraint)
@@ -533,29 +595,24 @@ internal static class Rescheduler
         }
     }
 
-    private static void Prefetch(GameLocation loc, int limit)
-    {
-#if TIMING
-        ModEntry.ModMonitor.Log($"Prefetch started for {loc.Name} on thread {Environment.CurrentManagedThreadId}.", LogLevel.Info);
-        _stopwatch.Value ??= new();
-        _stopwatch.Value.Start();
-#endif
-
-        _ = GetPathFor(loc, null, Ungendered, false, limit);
-
-#if TIMING
-        _stopwatch.Value.Stop();
-        ModEntry.ModMonitor.Log($"Prefetch done for {loc.Name}. Total time so far: {_stopwatch.Value.Elapsed.TotalMilliseconds:F2} ms, {PathCache.Count} total routes cached.", LogLevel.Info);
-#endif
-    }
-
     [HarmonyPrefix]
     [HarmonyPatch(nameof(WarpPathfindingCache.GetLocationRoute))]
     [HarmonyPriority(Priority.VeryLow)]
     [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1123:Do not place regions within elements", Justification = "Preference.")]
     private static bool PrefixGetLocationRoute(string startingLocation, string endingLocation, int gender, ref string[]? __result)
     {
-        if (TryGetPathFromCache(startingLocation, endingLocation, gender, out __result))
+#if TIMING
+        _stopwatch.Value ??= new();
+        _stopwatch.Value.Start();
+#endif
+
+        bool found = TryGetPathFromCache(startingLocation, endingLocation, gender, out __result);
+
+#if TIMING
+        _stopwatch.Value.Stop();
+#endif
+
+        if (found)
         {
 #if TIMING
             Interlocked.Increment(ref cacheHits);
@@ -614,9 +671,7 @@ internal static class Rescheduler
         #endregion
 
 #if TIMING
-        _stopwatch.Value ??= new();
         _stopwatch.Value.Start();
-
         Interlocked.Increment(ref cacheMisses);
 #endif
         __result = GetPathFor(start, end, (Gender)gender, ModEntry.Config.AllowPartialPaths);
@@ -660,6 +715,7 @@ internal static class Rescheduler
         return true;
     }
 
+    [MethodImpl(TKConstants.Hot)]
     private static string[] Unravel(MacroNode node)
     {
         string[] ret = new string[node.Depth + 1];
@@ -678,12 +734,12 @@ internal static class Rescheduler
     /// <summary>
     /// Gets the locations leaving a specific place, keeping in mind the locations already visited.
     /// </summary>
-    /// <param name="start">Node to start from.</param>
+    /// <param name="node">Node to start from.</param>
     /// <param name="location">Location to look at.</param>
     /// <param name="visited">Previous visited locations.</param>
     /// <param name="gender">Current gender constraint for the path.</param>
     /// <param name="queue">Queue to add to.</param>
-    private static void FindWarpsFrom(MacroNode start, GameLocation? location, HashSet<string> visited, Gender gender, Queue<MacroNode> queue)
+    private static void FindWarpsFrom(MacroNode node, GameLocation? location, HashSet<string> visited, Gender gender, Queue<MacroNode> queue)
     {
         if (location is null)
         {
@@ -701,7 +757,7 @@ internal static class Rescheduler
                     Gender genderConstraint = GetTightestGenderConstraint(gender, GetGenderConstraint(name));
                     if (genderConstraint != Gender.Invalid)
                     {
-                        queue.Enqueue(new(name, start, genderConstraint));
+                        queue.Enqueue(new(name, node, genderConstraint));
                     }
                 }
             }
@@ -716,7 +772,7 @@ internal static class Rescheduler
                     Gender genderConstraint = GetTightestGenderConstraint(gender, GetGenderConstraint(name));
                     if (genderConstraint != Gender.Invalid)
                     {
-                        queue.Enqueue(new(name, start, genderConstraint));
+                        queue.Enqueue(new(name, node, genderConstraint));
                     }
                 }
             }

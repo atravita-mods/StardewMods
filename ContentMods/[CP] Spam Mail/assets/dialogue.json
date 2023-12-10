@@ -38,6 +38,26 @@
             "Action": "Include",
             "FromFile": "assets/haley.json",
             "When": {"Hearts:Haley|contains={{Range:0,5}}": false}
+        },
+        {
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Harvey",
+            "Entries": {
+                "atravita.SpamMail.EnergyDrink": "{{i18n:harvey-energy-drink}}$s",
+                "atravita.SpamMail.EnergyDrink2": "{{i18n:harvey-energy-drink-2}}$s"
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Demetrius",
+            "Entries": {
+                "atravita.SpamMail.ToolsShop2": "{{i18n: demetrius-toolsShop2}}"
+            },
+            "When": {
+                "Season": "winter",
+                "Day|contains=26,27,28": false,
+                "Hearts:Demetrius|contains={{Range:0,5}}": false
+            }
         }
     ]
 }

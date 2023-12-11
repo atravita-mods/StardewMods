@@ -11,6 +11,8 @@
 
   //GMCM
 
+  "EmptyFishingChests.title": "Empty Fishing Chests",
+  "EmptyFishingChests.description": "If enabled, fishing chests will be automatically emptied into your inventory",
   "AutomaticRefill.title": "Automatic Refill",
   "AutomaticRefill.description": "Automatically refills your bait and replaces your tackle when it breaks. Takes from inventory; will do nothing if you do not have more bait/tackles in your inventory.",
   "SameTackleOnly.title": "Same Tackle Only",

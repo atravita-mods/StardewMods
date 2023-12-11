@@ -3,6 +3,7 @@
 
 ### Version 0.3.0
 * Updated to Stardew 1.6
+* Now has option to automatically grab items from fishing treasure chests (including stacking bait into your rod's bait slot.)
 
 ### Version 0.2.1
 * Internal improvements

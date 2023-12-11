@@ -17,7 +17,7 @@ internal static class TreasureMenuPatches
     [HarmonyPatch(nameof(FishingRod.openTreasureMenuEndFunction))]
     private static void Postfix()
     {
-        if (Game1.activeClickableMenu is not ItemGrabMenu itemGrab || itemGrab.source != ItemGrabMenu.source_fishingChest)
+        if (Game1.activeClickableMenu is not ItemGrabMenu itemGrab || itemGrab.source != ItemGrabMenu.source_fishingChest || !ModEntry.Config.EmptyFishingChests)
         {
             return;
         }

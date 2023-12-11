@@ -8,11 +8,10 @@ using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
 using AtraShared.MigrationManager;
 using AtraShared.Utils.Extensions;
-using HarmonyLib;
-using StardewModdingAPI.Events;
 
-using StardewValley.Menus;
-using StardewValley.Tools;
+using HarmonyLib;
+
+using StardewModdingAPI.Events;
 
 using AtraUtils = AtraShared.Utils.Utils;
 

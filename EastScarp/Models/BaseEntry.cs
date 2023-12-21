@@ -21,7 +21,7 @@ public abstract class BaseEntry
     /// <summary>
     /// Gets or sets a value indicating when this entry should apply.
     /// </summary>
-    public TimeRange Time { get; set; } = new(600, 2600);
+    public TimeRange Time { get; set; } = new (600, 2600);
 
     /// <summary>
     /// Checks to see if the conditions associated with this entry are satisfied.
@@ -34,7 +34,7 @@ public abstract class BaseEntry
         player ??= Game1.player;
         location ??= Game1.currentLocation ?? player.currentLocation;
 
-        if (location is null || Random.Shared.NextBool(this.Chance))
+        if (location is null || !Random.Shared.NextBool(this.Chance))
         {
             return false;
         }

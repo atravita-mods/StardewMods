@@ -12,6 +12,8 @@
                     "SimpleDialogueSplitBy": "#"
                 },
                 "atravita.SpamMail.Online": {
+                    "TriggerCondition": "PLAYER_HAS_FLAG Any atravita.SpamMail.JojaVirtualPet",
+                    "RingCondition": "PLAYER_HAS_FLAG Current atravita.SpamMail.JojaVirtualPet",
                     "Dialogue": "{{i18n: online-shopping-call}}",
                     "SimpleDialogueSplitBy": "#"
                 },
@@ -20,15 +22,51 @@
                     "SimpleDialogueSplitBy": "#"
                 },
                 "atravita.SpamMail.Romance": {
+                    "TriggerCondition": "PLAYER_HAS_FLAG Any atravita.SpamMail.IslandVacation",
+                    "RingCondition": "PLAYER_HAS_FLAG Current atravita.SpamMail.IslandVacation",
                     "Dialogue": "{{i18n:romance-call}}",
                     "SimpleDialogueSplitBy": "#"
                 },
                 "atravita.SpamMail.Joja": {
+                    "TriggerCondition": "PLAYER_HAS_FLAG Any atravita.SpamMail.JojaSneakers",
+                    "RingCondition": "PLAYER_HAS_FLAG Current atravita.SpamMail.JojaSneakers",
                     "Dialogue": "{{i18n:joja-call}}",
                     "SimpleDialogueSplitBy": "#"
                 },
                 "atravita.SpamMail.Joja2": {
+                    "TriggerCondition": "PLAYER_HAS_FLAG Any atravita.SpamMail.JojaFunnelCakes",
+                    "RingCondition": "PLAYER_HAS_FLAG Current atravita.SpamMail.JojaFunnelCakes",
                     "Dialogue": "{{i18n:joja-call2}}",
+                    "SimpleDialogueSplitBy": "#"
+                },
+                "atravita.SpamMail.House": {
+                    "Dialogue": "{{i18n:house-sales}}",
+                    "SimpleDialogueSplitBy": "#"
+                },
+                "atravita.SpamMail.Music": {
+                    "Dialogue": "{{i18n:music-tickets}}",
+                    "SimpleDialogueSplitBy": "#"
+                },
+                "atravita.SpamMail.Pizza": {
+                    "Dialogue": "{{i18n:pizza-call}}",
+                    "SimpleDialogueSplitBy": "#"
+                },
+                "atravita.SpamMail.Casino": {
+                    "TriggerCondition": "PLAYER_HAS_FLAG Any atravita.SpamMail.Casino",
+                    "RingCondition": "PLAYER_HAS_FLAG Current atravita.SpamMail.Casino",
+                    "Dialogue": "{{i18n: gambling-call}}",
+                    "SimpleDialogueSplitBy": "#",
+                },
+                "atravita.SpamMail.LawyerCall": {
+                    "TriggerCondition": "PLAYER_CURRENT_MONEY Any 30000",
+                    "RingCondition": "PLAYER_CURRENT_MONEY Current 30000",
+                    "Dialogue": "{{i18n: lawyer-call}}",
+                    "SimpleDialogueSplitBy": "#"
+                },
+                "atravita.SpamMail.Eyebrows": {
+                    "TriggerCondition": "Year 2",
+                    "RingCondition": "Year 2",
+                    "Dialogue": "{{i18n: eyebrows-call}}",
                     "SimpleDialogueSplitBy": "#"
                 }
             }

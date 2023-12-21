@@ -37,8 +37,8 @@ internal static class Extensions
             {
                 X = Math.Clamp(rectangle.X, 0, layer.LayerWidth),
                 Y = Math.Clamp(rectangle.Y, 0, layer.LayerHeight),
-                Width = Math.Clamp(0, rectangle.Width, layer.LayerHeight - rectangle.X),
-                Height = Math.Clamp(0, rectangle.Height, layer.LayerHeight - rectangle.Y),
+                Width = Math.Clamp(rectangle.Width, 0, layer.LayerHeight - rectangle.X),
+                Height = Math.Clamp(rectangle.Height, 0,  layer.LayerHeight - rectangle.Y),
             };
         }
     }

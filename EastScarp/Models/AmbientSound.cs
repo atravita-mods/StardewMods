@@ -7,7 +7,7 @@ public sealed class AmbientSound
     : LocationArea
 {
     /// <summary>
-    /// The trigger to use.
+    /// Gets or sets the trigger to use.
     /// </summary>
     public SpawnTrigger Trigger { get; set; }
 

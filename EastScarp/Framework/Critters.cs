@@ -52,7 +52,7 @@ internal static class Critters
 
             for (int i = 0; i < clusters; i++)
             {
-                Vector2 center = new(
+                Vector2 center = new (
                     Random.Shared.Next(area.Left, area.Right + 1),
                     Random.Shared.Next(area.Top, area.Bottom + 1));
 
@@ -80,13 +80,13 @@ internal static class Critters
                     int tileX = (int)tile.X;
                     int tileY = (int)tile.Y;
 
-                    var waterTile = location.isWaterTile(tileX, tileY) && location.doesTileHaveProperty(tileX, tileY, "Passable", "Buildings") is null;
+                    bool waterTile = location.isWaterTile(tileX, tileY) && location.doesTileHaveProperty(tileX, tileY, "Passable", "Buildings") is null;
                     if (!waterTile && location.CanItemBePlacedHere(tile, false, CollisionMask.All, CollisionMask.Flooring))
                     {
                         continue;
                     }
 
-                    var chance = waterTile ? spawn.ChanceOnWater : spawn.ChanceOnLand;
+                    float chance = waterTile ? spawn.ChanceOnWater : spawn.ChanceOnLand;
                     if (Random.Shared.NextBool(chance))
                     {
                         Critter? critter = spawn.Critter switch
@@ -122,7 +122,7 @@ internal static class Critters
                             CritterType.Rabbit =>
                                 new Rabbit(location, tile, flip: Game1.random.NextDouble() < 0.5),
                             CritterType.Seagull =>
-                                new Seagull((tile * 64f) + new Vector2(32f, 32f), startingState: waterTile ? 2 : 3),
+                                new Seagull((tile * 64f) + new Vector2(32f, 32f), startingState: waterTile ? Seagull.swimming : Seagull.stopped),
                             CritterType.Squirrel =>
                                 new Squirrel(tile, flip: Game1.random.NextDouble() < 0.5),
                             _ => null,

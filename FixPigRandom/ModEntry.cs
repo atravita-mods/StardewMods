@@ -3,9 +3,7 @@ using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 
 using AtraBase.Toolkit;
-using AtraBase.Toolkit.Reflection;
 
-using AtraCore;
 using AtraCore.Framework.ReflectionManager;
 
 using AtraShared.ConstantsAndEnums;
@@ -84,22 +82,22 @@ internal sealed class ModEntry : Mod
         {
             ILHelper helper = new(original, instructions, modMonitor, gen);
 
-            helper.FindNext(new CodeInstructionWrapper[]
-            { // find the creation of the random and replace it with our own.
+            helper.FindNext(
+            [ // find the creation of the random and replace it with our own.
                 OpCodes.Ldarg_0,
                 (OpCodes.Ldfld, typeof(FarmAnimal).GetCachedField(nameof(FarmAnimal.myID), ReflectionCache.FlagTypes.InstanceFlags)),
                 OpCodes.Callvirt,
                 OpCodes.Conv_R8,
-            })
+            ])
             .Advance(1)
-            .RemoveIncluding(new CodeInstructionWrapper[]
-            {
+            .RemoveIncluding(
+            [
                 (OpCodes.Call, typeof(Utility).GetCachedMethod(nameof(Utility.CreateRandom), ReflectionCache.FlagTypes.StaticFlags)),
-            })
-            .Insert(new CodeInstruction[]
-            {
+            ])
+            .Insert(
+            [
                 new(OpCodes.Call, typeof(ModEntry).GetCachedMethod<FarmAnimal>(nameof(GetRandom), ReflectionCache.FlagTypes.StaticFlags)),
-            });
+            ]);
 
 #if DEBUG
             helper.FindNext(new CodeInstructionWrapper[]

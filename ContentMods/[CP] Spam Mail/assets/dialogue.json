@@ -6,7 +6,15 @@
             "Target": "Characters/Dialogue/Vincent",
             "Entries": {
                 "atravita.SpamMail.Aquarium": "{{i18n: vincent-aquarium}}",
-                "atravita.SpamMail.Circus": "{{i18n:vincent-circus-before}}"
+                "atravita.SpamMail.Circus": "{{i18n:vincent-circus-before}}",
+                "atravita.SpamMail.JojaSneakers": "{{i18n:vincent-sneakers}}"
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Jas",
+            "Entries": {
+                "atravita.SpamMail.Zoo2": "{{i18n: jas-zoo2}}$h"
             }
         },
         {
@@ -21,7 +29,8 @@
             "Target": "Characters/Dialogue/Emily",
             "Entries": {
                 "atravita.SpamMail.Composter": "{{i18n: emily-composter}}",
-                "atravita.SpamMail.Clothing": "{{i18n: emily-clothing}}"
+                "atravita.SpamMail.Clothing": "{{i18n: emily-clothing}}",
+                "atravita.SpamMail.WinterStarCraft": "{{i18n: emily-winter-star-crafts}}",
             }
         },
         {
@@ -49,7 +58,18 @@
         },
         {
             "Action": "EditData",
+            "Target": "Characters/Dialogue/Harvey",
+            "Entries": {
+                "atravita.SpamMail.SkinImplants": "{{i18:harvey-skin-implants}}",
+            },
+            "When": {
+                "Hearts: Harvey|contains={{Range:0,5}}": false
+            }
+        },
+        {
+            "Action": "EditData",
             "Target": "Characters/Dialogue/Demetrius",
+            "LogName": "Demetrius Winter Star Gifts.",
             "Entries": {
                 "atravita.SpamMail.ToolsShop2": "{{i18n: demetrius-toolsShop2}}"
             },
@@ -57,6 +77,16 @@
                 "Season": "winter",
                 "Day|contains=26,27,28": false,
                 "Hearts:Demetrius|contains={{Range:0,5}}": false
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Lewis",
+            "Entries": {
+                "atravita.SpamMail.VPN": "{{i18n: lewis-vpn}}"
+            },
+            "When": {
+                "Hearts:Lewis|contains={{Range:0,5}}": false
             }
         }
     ]

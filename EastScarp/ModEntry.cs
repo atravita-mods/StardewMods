@@ -116,11 +116,13 @@ internal sealed class ModEntry : Mod
 
         if (e.NewLocation is null || !AssetManager.Data.TryGetValue(e.NewLocation.Name, out LocationDataModel? data))
         {
+            this.Monitor.VerboseLog($"No active data for {e.NewLocation?.Name ?? "null location"}.");
             this.activeModel.Value = null;
             return;
         }
 
         this.activeModel.Value = data;
+        this.Monitor.VerboseLog($"Found data for {e.NewLocation.Name}.");
 
         // check for valid water color.
         foreach (WaterColor color in data.WaterColor)

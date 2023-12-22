@@ -159,8 +159,8 @@ internal static class AssetManager
         var editor = asset.AsDictionary<string, EquipmentExtModel>().Data;
         editor[$"{ItemRegistry.type_object}{ModEntry.ButterflyRing}"] = new()
         {
-            Effects = new()
-            {
+            Effects =
+            [
                 new()
                 {
                     BaseEffects = new()
@@ -168,13 +168,13 @@ internal static class AssetManager
                         MagneticRadius = 128,
                     },
                 },
-            },
+            ],
         };
 
         editor[$"{ItemRegistry.type_object}{ModEntry.FireFlyRing}"] = new()
         {
-            Effects = new()
-            {
+            Effects =
+            [
                 new()
                 {
                     Light = new()
@@ -182,7 +182,7 @@ internal static class AssetManager
                         Radius = 12,
                     },
                 },
-            },
+            ],
         };
     }
 
@@ -218,8 +218,8 @@ internal static class AssetManager
         const int RING_COST = 2_500;
         const int LATE_RING_COST = 5_000;
 
-        const string HasSkullKey = "PLAYER_HAS_READ_LETTER Current HasSkullKey";
-        const string HasMagicInk = $"{HasSkullKey}, PLAYER_HAS_READ_LETTER Current HasMagicInk";
+        const string HasSkullKey = "PLAYER_HAS_MAIL Current HasSkullKey";
+        const string HasMagicInk = $"{HasSkullKey}, PLAYER_HAS_MAIL Current HasMagicInk";
 
         shop.Items.Add(new()
         {

@@ -7,6 +7,7 @@
             "Entries": {
                 // pre-festival advertising
                 "atravita.SpamMail.JojaChocolate": {
+                    "Id": "atravita.SpamMail.JojaChocolate",
                     "Trigger": "DayEnding",
                     "Condition": "SEASON spring, DAY_OF_MONTH 10 11 12",
                     "Action": "AddMail Current atravita.SpamMail.JojaChocolate",
@@ -14,11 +15,13 @@
 
                 // first vacation group
                 "atravita.SpamMail.CircusMail": {
+                    "Id": "atravita.SpamMail.CircusMail",
                     "Trigger": "DayEnding",
                     "Condition": "SEASON fall winter, PLAYER_FRIENDSHIP_POINTS Current Vincent 1000, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMail.Aquarium, RANDOM 0.1",
                     "Action": "AddMail Current atravita.SpamMail.CircusMail"
                 },
                 "atravita.SpamMail.Aquarium": {
+                    "Id": "atravita.SpamMail.Aquarium",
                     "Trigger": "DayEnding",
                     "Condition": "!SEASON spring, PLAYER_FRIENDSHIP_POINTS Current Vincent 500, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMail.CircusMail, RANDOM 0.1",
                     "Action": "AddMail Current atravita.SpamMail.Aquarium"
@@ -26,11 +29,13 @@
 
                 // Zoo group
                 "atravita.SpamMail.Zoo": {
+                    "Id": "atravita.SpamMail.Zoo",
                     "Trigger": "DayEnding",
                     "Condition": "SEASON winter, PLAYER_FRIENDSHIP_POINTS Current Jas 1000, PLAYER_FRIENDSHIP_POINTS Current Vincent 1000, PLAYER_HAS_MAIL Current atravita.SpamMail.CircusMail received, RANDOM 0.1",
                     "Action": "AddMail Current atravita.SpamMail.Zoo"
                 },
                 "atravita.SpamMail.Zoo2": {
+                    "Id": "atravita.SpamMail.Zoo2",
                     "Trigger": "DayEnding",
                     "Condition": "!SEASON winter, {{MidYearConstraint}}, PLAYER_HAS_MAIL Current atravita.SpamMail.Zoo received, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMail.Zoo, RANDOM 0.1",
                     "Action": "AddMail Current atravita.SpamMail.Zoo2"
@@ -38,11 +43,13 @@
 
                 // late vacations - castle and water park
                 "atravita.SpamMail.Castle": {
+                    "Id": "atravita.SpamMail.Castle",
                     "Trigger": "DayEnding",
                     "Condition": "PLAYER_HAS_MAIL Current atravita.SpamMail.Aquarium received, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMail.Aquarium, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMail.Zoo, RANDOM 0.1, {{LateYearConstraint}}",
                     "Action": "AddMail Current atravita.SpamMail.Castle"
                 },
                 "atravita.SpamMail.WaterPark": {
+                    "Id": "atravita.SpamMail.WaterPark",
                     "Trigger": "DayEnding",
                     "Condition": "PLAYER_HAS_MAIL Current atravita.SpamMail.CircusMail received, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMail.CircusMail, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMail.Zoo2, RANDOM 0.1, {{LateYearConstraint}}",
                     "Action": "AddMail Current atravita.SpamMail.WaterPark"
@@ -50,48 +57,63 @@
 
                 // joja group
                 "atravita.SpamMail.JojaSummer": {
+                    "Id": "atravita.SpamMail.JojaSummer",
                     "Trigger": "DayEnding",
                     "Condition": "SEASON summer, PLAYER_HAS_MAIL Current beachBridgeFixed, RANDOM 0.1",
                     "Action": "AddMail Current atravita.SpamMail.JojaSummer"
                 },
                 "atravita.SpamMail.JojaFall": {
+                    "Id": "atravita.SpamMail.JojaFall",
                     "Trigger": "DayEnding",
                     "Condition": "SEASON fall, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMail.JojaSummer, PLAYER_HAS_MAIL Current atravita.SpamMail.JojaSummer received, RANDOM 0.1",
                     "Action": "AddMail Current atravita.SpamMail.JojaFall"
                 },
                 "atravita.SpamMail.JojaWinter": {
+                    "Id": "atravita.SpamMail.JojaWinter",
                     "Trigger": "DayEnding",
                     "Condition": "SEASON winter, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMail.JojaFall, PLAYER_HAS_MAIL Current atravita.SpamMail.JojaFall received, RANDOM 0.1",
                     "Action": "AddMail Current atravita.SpamMail.JojaWinter"
                 },
                 "atravita.SpamMail.JojaVirtualPet": {
+                    "Id": "atravita.SpamMail.JojaVirtualPet",
                     "Trigger": "DayEnding",
                     "Condition": "PLAYER_HAS_MAIL Current atravita.SpamMail.Summer received, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMail.Summer, RANDOM 0.1, {{MidYearConstraint}}",
                     "Action": "AddMail Current atravita.SpamMail.JojaVirtualPet",
                 },
                 "atravita.SpamMail.JojaSneakers": {
+                    "Id": "atravita.SpamMail.JojaSneakers",
                     "Trigger": "DayEnding",
                     "Condition": "PLAYER_HAS_MAIL Current atravita.SpamMail.JojaFall received, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMail.JojaFall, SEASON summer fall, RANDOM 0.1, {{MidYearConstraint}}",
                     "Action": "AddMail Current atravita.SpamMail.JojaSneakers",
                 },
                 "atravita.SpamMail.JojaSelfStirring": {
+                    "Id": "atravita.SpamMail.JojaSelfStirring",
                     "Trigger": "DayEnding",
                     "Condition": "PLAYER_HAS_MAIL Current atravita.SpamMail.JojaWinter received, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMail.JojaWinter, SEASON summer fall, RANDOM 0.1, {{MidYearConstraint}}",
                     "Action": "AddMail Current atravita.SpamMail.JojaSelfStirring",
                 },
+                "atravita.SpamMail.JojaFunnelCakes": {
+                    "Id": "atravita.SpamMail.JojaFunnelCakes",
+                    "Trigger": "DayEnding",
+                    "Condition": "SEASON summer fall, RANDOM 0.2, {{LateYearConstraint}}, PLAYER_HAS_MAIL Current atravita.SpamMail.JojaSelfStirring, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMail.JojaSelfStirring",
+                    "Action": "AddMail Current, atravita.SpamMail.JojaSelfStirring"
+                }
 
                 // Base triggers block
                 "atravita.SpamMail.Clothing": {
+                    "Id": "atravita.SpamMail.Clothing",
                     "Trigger": "DayEnding",
                     "Condition": "PLAYER_HAS_MAIL Current SeaAmulet, RANDOM 0.1",
                     "Action": "AddMail Current atravita.SpamMail.Clothing"
                 },
                 "atravita.SpamMail.PennyStocks": {
+                    "Id": "atravita.SpamMail.PennyStocks",
                     "Trigger": "DayEnding",
                     "Condition": "PLAYER_HAS_MAIL Current ccVault, RANDOM 0.1",
                     "Action": "AddMail Current atravita.SpamMail.PennyStocks"
                 },
                 "atravita.SpamMail.VideoGames": {
+                    "Id": "atravita.SpamMail.VideoGames",
                     "Trigger": "DayEnding",
                     "Condition": "PLAYER_HAS_MAIL Current willyBackRoomInvitation, RANDOM 0.1, {{MidYearConstraint}}",
                     "Action": "AddMail Current atravita.SpamMail.VideoGames"
@@ -99,18 +121,21 @@
 
                 // Hospital block.
                 "atravita.SpamMail.SkinImplants": {
+                    "Id": "atravita.SpamMail.SkinImplants",
                     "Trigger": "LocationChanged",
                     "Location": "Hospital",
                     "Condition": "PLAYER_HAS_MAIL Current guildMember, RANDOM 0.1",
                     "Action": "AddMail Current atravita.SpamMail.SkinImplants"
                 },
                 "atravita.SpamMail.HairInjection": {
+                    "Id": "atravita.SpamMail.HairInjection",
                     "Trigger": "LocationChanged",
                     "Location": "Hospital",
                     "Condition": "PLAYER_HAS_MAIL Current atravita.SpamMail.SkinImplants received, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMail.SkinImplants, RANDOM 0.25, {{MidYearConstraint}}",
                     "Action": "AddMail Current atravita.SpamMail.HairInjection"
                 },
-                "atravita.SpamMail.EnergyDrink2": {
+                "atravita.SpamMail.EnergyDrink3": {
+                    "Id": "atravita.SpamMail.EnergyDrink3",
                     "Trigger": "LocationChanged",
                     "Location": "Hospital",
                     "Condition": "RANDOM 0.25, {{LateYearConstraint}}, PLAYER_HAS_MAIL Current atravita.SpamMail.EnergyDrink2 received, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMail.EnergyDrink2",
@@ -119,12 +144,14 @@
 
                 // Resort block
                 "atravita.SpamMail.IslandVacation": {
+                    "Id": "atravita.SpamMail.IslandVacation",
                     "Trigger": "LocationChanged",
                     "Location": "IslandSouth",
                     "Condition": "RANDOM 0.08, PLAYER_HAS_MAIL Current Island_Resort, SEASON fall winter",
                     "Action": "AddMail Current atravita.SpamMail.IslandVacation"
                 },
                 "atravita.SpamMail.Cruise": {
+                    "Id": "atravita.SpamMail.Cruise",
                     "Trigger": "LocationChanged",
                     "Location": "IslandSouth",
                     "Condition": "RANDOM 0.1, PLAYER_HAS_MAIL Current atravita.SpamMail.IslandVacation received, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMail.IslandVacation",
@@ -133,12 +160,14 @@
 
                 // Sandy block
                 "atravita.SpamMail.Casino": {
+                    "Id": "atravita.SpamMail.Casino",
                     "Trigger": "LocationChanged",
                     "Location": "SandyHouse",
                     "Condition": "RANDOM 0.05, SEASON spring summer",
                     "Action": "AddMail Current atravita.SpamMail.Casino"
                 },
                 "atravita.SpamMail.Spices": {
+                    "Id": "atravita.SpamMail.Spices",
                     "Trigger": "LocationChanged",
                     "Location": "SandyHouse",
                     "Condition": "RANDOM 0.05, SEASON fall winter",
@@ -147,54 +176,104 @@
 
                 // Pierre block
                 "atravita.SpamMail.Composter": {
+                    "Id": "atravita.SpamMail.Composter",
                     "Trigger": "LocationChanged",
                     "Location": "SeedShop",
                     "Condition": "SEASON fall winter, RANDOM 0.05, {{MidYearConstraint}}",
                     "Action": "AddMail Current atravita.SpamMail.Composter"
+                },
+                "atravita.SpamMail.VPN": {
+                    "Id": "atravita.SpamMail.VPN",
+                    "Trigger": "LocationChanged",
+                    "Location": "SeedShop",
+                    "Condition": "SEASON spring summer, RANDOM 0.1, {{LateYearConstraint}}, PLAYER_HAS_MAIL Current atravita.SpamMail.Composter received, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMail.Composter",
+                    "Action": "AddMail Current atravita.SpamMail.VPN"
+                },
+                "atravita.SpamMail.GoldShop": {
+                    "Id": "atravita.SpamMail.GoldShop",
+                    "Trigger": "LocationChanged",
+                    "Location": "SeedShop",
+                    "Condition": "SEASON summer fall, RANDOM 0.05, {{MidYearConstraint}}, PLAYER_HAS_MAIL Current atravita.SpamMail.PennyStocks received, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMail.PennyStocks",
+                    "Action": "AddMail Current atravita.SpamMail.GoldShop",
+                },
+                "atravita.SpamMail.Book": {
+                    "Id": "atravita.SpamMail.Book",
+                    "Trigger": "LocationChanged",
+                    "Location": "SeedShop",
+                    "Condition": "SEASON fall winter, RANDOM 0.1, {{LateYearConstraint}}, PLAYER_HAS_MAIL Current atravita.SpamMail.GoldShop received, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMail.GoldShop",
+                    "Action": "AddMail Current atravita.SpamMail.Book"
+                },
+
+                // Saloon block
+                "atravita.SpamMail.EnergyDrink": {
+                    "Id": "atravita.SpamMail.EnergyDrink",
+                    "Trigger": "LocationChanged",
+                    "Location": "Saloon",
+                    "Condition": "PLAYER_HAS_MAIL Current CarolineTea received, {{MidYearConstraint}}, RANDOM 0.05",
+                    "Action": "AddMail Current atravita.SpamMail.EnergyDrink",
+                },
+                "atravita.SpamMail.EnergyDrink2": {
+                    "Id": "atravita.SpamMail.EnergyDrink2",
+                    "Trigger": "LocationChanged",
+                    "Location": "Saloon",
+                    "Condition": "PLAYER_HAS_MAIL Current atravita.SpamMail.EnergyDrink received, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMail.EnergyDrink, RANDOM 0.05",
+                    "Action": "AddMail Current atravita.SpamMail.EnergyDrink2"
+                },
+                "atravita.SpamMail.Pizza": {
+                    "Id": "atravita.SpamMail.Pizza",
+                    "Trigger": "LocationChanged",
+                    "Location": "Saloon",
+                    "Condition": "PLAYER_HAS_MAIL Current galaxySword, RANDOM 0.05",
+                    "Action": "AddMail Current atravita.SpamMail.Pizza"
+                },
+                "atravita.SpamMail.Therapy": {
+                    "Id": "atravita.SpamMail.Therapy",
+                    "Trigger": "LocationChanged",
+                    "Location": "Saloon",
+                    "Condition": "PLAYER_HAS_MAIL Current atravita.SpamMail.Pizza received, !PLAYER_HAS_CONVERSATION_TOPIC atravita.SpamMail.Pizza, {{MidYearConstraint}}, RANDOM 0.05",
+                    "Action": "AddMail Current atravita.SpamMail.Therapy"
+                },
+
+                // ScienceHouse block. 
+                "atravita.SpamMail.ToolsShop": {
+                    "Id": "atravita.SpamMail.ToolsShop",
+                    "Trigger": "LocationChanged",
+                    "Location": "ScienceHouse",
+                    "Condition": "SEASON fall winter, RANDOM 0.1, {{MidYearConstraint}}",
+                    "Action": "AddMail Current atravita.SpamMail.ToolsShop"
+                },
+                "atravita.SpamMail.ToolsShop2": {
+                    "Id": "atravita.SpamMail.ToolsShop2",
+                    "Trigger": "LocationChanged",
+                    "Location": "ScienceHouse",
+                    "Condition": "SEASON winter, PLAYER_HAS_MAIL Current atravita.SpamMail.ToolsShop received, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMail.ToolsShop",
+                    "Action": "AddMail Current atravita.SpamMail.ToolsShop2"
+                },
+
+                // JoshHouse
+                "atravita.SpamMail.TV": {
+                    "Id": "atravita.SpamMail.TV",
+                    "Trigger": "LocationChanged",
+                    "Location": "JoshHouse",
+                    "Condition": "!SEASON summer, {{LateYearConstraint}}, RANDOM 0.1",
+                    "Action": "AddMail Current atravita.SpamMail.TV"
+                },
+
+                // HaleyHouse
+                "atravita.SpamMail.Craft": {
+                    "Id": "atravita.SpamMail.Craft",
+                    "Trigger": "LocationChanged",
+                    "Location": "HaleyHouse",
+                    "Condition": "PLAYER_HAS_MAIL Current atravita.SpamMail.Clothing received, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMail.Clothing, RANDOM 0.1, {{MidYearConstraint}}",
+                    "Action": "AddMail Current atravita.SpamMail.Craft"
+                },
+                "atravita.SpamMail.WinterStarCraft": {
+                    "Id": "atravita.SpamMail.WinterStarCraft",
+                    "Trigger": "LocationChanged",
+                    "Location": "HaleyHouse",
+                    "Condition": "PLAYER_HAS_MAIL Current atravita.SpamMail.Craft received, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMail.Craft, RANDOM 0.5, {{LateYearConstraint}}, SEASON winter",
+                    "Action": "AddMail Current atravita.SpamMail.WinterStarCraft"
                 }
-            }
-        },
-        {
-            "Action": "EditData",
-            "Target": "Data/Events/SeedShop",
-            "Entries": {
-                "17786051/z fall/z winter/r 0.1{{LateYearConstraint}}/n atravita.SpamMail.Composter/A atravita.SpamMail.Composter/x atravita.SpamMail.VPN": "null",
-                "17786052/z winter/z spring/r 0.05{{MidYearConstraint}}/n atravita.SpamMail.PennyStocks/A atravita.SpamMail.PennyStocks/x atravita.SpamMail.GoldShop": "null",
-                "17786053/z spring/z summer/r 0.1{{LateYearConstraint}}/n atravita.SpamMail.GoldShop/A atravita.SpamMail.GoldShop/x atravita.SpamMail.Book": "null",
-                "17786054/z winter/z spring/r 0.1{{LateYearConstraint}}/n atravita.SpamMail.JojaSelfStirring/A atravita.SpamMail/JojaSelfStirring/x atravita.SpamMail.JojaFunnelCakes": "null",
-            }
-        },
-        {
-            "Action": "EditData",
-            "Target": "Data/Events/Saloon",
-            "Entries": {
-                "17786200/r 0.05/n CarolineTea{{MidYearConstraint}}/x atravita.SpamMail.EnergyDrink": "null",
-                "17786201/r 0.05/n atravita.SpamMail.EnergyDrink/x atravita.SpamMail.EnergyDrink2": "null",
-                "17786202/r 0.05/n galaxySword/x atravita.SpamMail.Pizza": "null",
-                "17786203/r 0.05{{MidYearConstraint}}/n atravita.SpamMail.Pizza/A atravita.SpamMail.Pizza/x atravita.SpamMail.Therapy": "null"
-            }
-        },
-        {
-            "Action": "EditData",
-            "Target": "Data/Events/ScienceHouse",
-            "Entries": {
-                "17786210/r 0.1/z spring/z summer{{MidYearConstraint}}/x atravita.SpamMail.ToolsShop": "null",
-                "17786211/r 0.1/z spring/z summer/z fall/n atravita.SpamMail.ToolsShop/A atravita.SpamMail.ToolsShop/x atravita.SpamMail.ToolsShop2": "null"
-            }
-        },
-        {
-            "Action": "EditData",
-            "Target": "Data/Events/JoshHouse",
-            "Entries": {
-                "17786220/r 0.1/z summer{{LateYearConstraint}}/x atravita.SpamMail.TV": "null"
-            }
-        },
-        {
-            "Action": "EditData",
-            "Target": "Data/Events/HaleyHouse",
-            "Entries": {
-                "17786230/r 0.1{{LateYearConstraint}}/n atravita.SpamMail.Clothing/A atravita.SpamMail.Clothing/x atravita.SpamMail.Craft": "null",
-                "17786231/r 0.5{{LateYearConstraint}}/n atravita.SpamMail.Craft/A atravita.SpamMail.Craft/z spring/z summer/z winter/x atravita.SpamMail.WinterStarCraft": "null"
             }
         }
     ]

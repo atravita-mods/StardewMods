@@ -46,7 +46,7 @@ internal sealed class GSQTester(IMonitor monitor, IReflectionHelper reflector)
         {
             Type[] types = t.GetGenericArguments();
 
-            var dataType = types.Last();
+            Type dataType = types.Last();
             if (dataType == typeof(string) || (dataType.IsValueType && dataType.AssemblyQualifiedName!.Contains("System", StringComparison.OrdinalIgnoreCase)))
             {
                 monitor.VerboseLog($"{breadcrumbs.Render()} appears to be a simple asset, skipping.");
@@ -55,22 +55,18 @@ internal sealed class GSQTester(IMonitor monitor, IReflectionHelper reflector)
 
             if (t.GetGenericTypeDefinition() == typeof(Dictionary<,>))
             {
-                Type tkey = t.GetGenericArguments().First();
-                Type tvalue = t.GetGenericArguments().Last();
-                MethodInfo processor = this.GetType().GetMethod(nameof(this.ProcessDictionary), BindingFlags.Instance | BindingFlags.NonPublic)!.MakeGenericMethod(tkey, tvalue)!;
+                Type tkey = types.First();
+                MethodInfo processor = this.GetType().GetMethod(nameof(this.ProcessDictionary), BindingFlags.Instance | BindingFlags.NonPublic)!.MakeGenericMethod(tkey, dataType)!;
                 processor.Invoke(this, [data, breadcrumbs]);
             }
             else if (t.GetGenericTypeDefinition() == typeof(List<>))
             {
-                Type type = t.GetGenericArguments().First();
-
-                MethodInfo processor = this.GetType().GetMethod(nameof(this.ProcessList), BindingFlags.Instance | BindingFlags.NonPublic)!.MakeGenericMethod(type);
+                MethodInfo processor = this.GetType().GetMethod(nameof(this.ProcessList), BindingFlags.Instance | BindingFlags.NonPublic)!.MakeGenericMethod(dataType);
                 processor.Invoke(this, [data, breadcrumbs]);
-
             }
             else
             {
-                throw new InvalidDataException($"Type {t} was not expected in data.");
+                throw new InvalidDataException($"Type {t} was not expected in data at {breadcrumbs.Render()}.");
             }
         }
         else
@@ -110,8 +106,7 @@ internal sealed class GSQTester(IMonitor monitor, IReflectionHelper reflector)
     {
         foreach ((TKey k, TValue v) in data)
         {
-            string[] crumbs = [.. breadcrumbs, k.ToString()!];
-            this.Process(v!, crumbs);
+            this.Process(v!, [.. breadcrumbs, k.ToString()!]);
         }
     }
 
@@ -135,7 +130,7 @@ internal sealed class GSQTester(IMonitor monitor, IReflectionHelper reflector)
 
     private void CheckGSQ(string? gsq, string[] breadcrumbs)
     {
-        if (gsq is null)
+        if (string.IsNullOrEmpty(gsq))
         {
             return;
         }

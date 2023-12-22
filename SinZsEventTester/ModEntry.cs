@@ -83,6 +83,9 @@ public sealed class ModEntry : Mod
             "Forgets mail",
             this.ForgetMail);
         helper.ConsoleCommands.Add(
+            "sinz.forget_triggers",
+            this.ForgetTriggers);
+        helper.ConsoleCommands.Add(
             "sinz.checkGSQ",
             "Checks over the game's GSQ",
             (_, _) =>
@@ -756,6 +759,17 @@ Outer: ;
             if (Game1.player.mailReceived.Remove(mail))
             {
                 this.Monitor.Log($"Forgetting {mail} for {Game1.player.Name}", LogLevel.Debug);
+            }
+        }
+    }
+
+    private void ForgetTriggers(string command, string[] triggers)
+    {
+        foreach (string trigger in triggers)
+        {
+            if (Game1.player.triggerActionsRun.Remove(trigger))
+            {
+                this.Monitor.Log($"Forgetting trigger {trigger} for {Game1.player.Name}", LogLevel.Debug);
             }
         }
     }

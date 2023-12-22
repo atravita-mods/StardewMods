@@ -167,7 +167,7 @@ internal sealed class ModEntry : Mod
         IntegrationHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, LogLevel.Trace);
         _ = helper.TryGetAPI("spacechase0.SpaceCore", "1.5.10", out spaceCoreAPI);
 
-        Event.RegisterCustomCommand("atravita_addSpecialOrder", AddSpecialOrderCommand.AddSpecialOrder);
+        Event.RegisterCommand("atravita_addSpecialOrder", AddSpecialOrderCommand.AddSpecialOrder);
 
         if (helper.TryGetAPI("Pathoschild.ContentPatcher", "1.20.0", out IContentPatcherAPI? api))
         {

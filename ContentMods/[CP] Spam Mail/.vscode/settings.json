@@ -65,6 +65,7 @@
         "kent",
         "LateYearConstraint",
         "LawyerCall",
+        "LoanCall",
         "LocationChanged",
         "MidYearConstraint",
         "norovirus",

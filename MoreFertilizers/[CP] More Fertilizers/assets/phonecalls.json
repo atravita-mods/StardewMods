@@ -12,8 +12,8 @@
                     "Dialogue": "{{i18n: sandy-call}}",
                 },
                 "atravita.MoreFertilizers.PierreCall": {
-                    "TriggerCondition": "PLAYER_HAS_READ_LETTER Any atravita_OrganicCrops_Reward",
-                    "RingCondition": "PLAYER_HAS_READ_LETTER Any atravita_OrganicCrops_Reward",
+                    "TriggerCondition": "PLAYER_HAS_MAIL Any atravita_OrganicCrops_Reward Received",
+                    "RingCondition": "PLAYER_HAS_MAIL Any atravita_OrganicCrops_Reward Received",
                     "FromNpc": "Lewis",
                     "Dialogue": "{{i18n: lewis-call}}"
                 }

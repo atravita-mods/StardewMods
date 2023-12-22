@@ -234,7 +234,7 @@
                     "Action": "AddMail Current atravita.SpamMail.Therapy"
                 },
 
-                // ScienceHouse block. 
+                // ScienceHouse block.
                 "atravita.SpamMail.ToolsShop": {
                     "Id": "atravita.SpamMail.ToolsShop",
                     "Trigger": "LocationChanged",

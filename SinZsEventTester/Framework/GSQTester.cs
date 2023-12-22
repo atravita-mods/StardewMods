@@ -9,12 +9,19 @@ namespace SinZsEventTester.Framework;
 /// <param name="reflector">SMAPI's reflection helper.</param>
 internal sealed class GSQTester(IMonitor monitor, IReflectionHelper reflector)
 {
+    private readonly SObject puffer = new("420", 1);
+
     /// <summary>
     /// Checks <see cref="DataLoader"/>'s assets' GSQ.
     /// </summary>
     /// <param name="content">The localized content manager to use.</param>
     internal void Check(LocalizedContentManager content)
     {
+        if (!Context.IsWorldReady)
+        {
+            monitor.Log($"A save has not been loaded. Some queries may not resolve correctly.", LogLevel.Warn);
+        }
+
         foreach (MethodInfo method in typeof(DataLoader).GetMethods())
         {
             ParameterInfo[] p = method.GetParameters();
@@ -26,7 +33,7 @@ internal sealed class GSQTester(IMonitor monitor, IReflectionHelper reflector)
                     continue;
                 }
 
-                string[] breadcrumbs = [method.Name];
+                string[] breadcrumbs = [$"Data/{method.Name.Replace('_', '/')}"];
 
                 this.Process(data, breadcrumbs);
             }
@@ -47,7 +54,7 @@ internal sealed class GSQTester(IMonitor monitor, IReflectionHelper reflector)
             Type[] types = t.GetGenericArguments();
 
             Type dataType = types.Last();
-            if (dataType == typeof(string) || (dataType.IsValueType && dataType.AssemblyQualifiedName!.Contains("System", StringComparison.OrdinalIgnoreCase)))
+            if (dataType == typeof(string) || (dataType.IsValueType && dataType.AssemblyQualifiedName?.Contains("System", StringComparison.OrdinalIgnoreCase) == true))
             {
                 monitor.VerboseLog($"{breadcrumbs.Render()} appears to be a simple asset, skipping.");
                 return;
@@ -73,10 +80,10 @@ internal sealed class GSQTester(IMonitor monitor, IReflectionHelper reflector)
         {
             foreach (FieldInfo field in t.GetFields())
             {
-                if (field.Name == "Condition" && field.FieldType == typeof(string))
+                if (field.Name.IsPossibleGSQString() && field.FieldType == typeof(string))
                 {
-                    string gsq = (string)field.GetValue(data)!;
-                    this.CheckGSQ(gsq, breadcrumbs);
+                    string? gsq = (string?)field.GetValue(data);
+                    this.CheckGSQ(gsq, [..breadcrumbs, field.Name]);
                 }
                 else if (!field.FieldType.IsValueType && (field.FieldType.IsGenericType || field.FieldType.Assembly!.GetName()!.Name!.Contains("StardewValley", StringComparison.OrdinalIgnoreCase)))
                 {
@@ -87,10 +94,10 @@ internal sealed class GSQTester(IMonitor monitor, IReflectionHelper reflector)
 
             foreach (PropertyInfo prop in t.GetProperties())
             {
-                if (prop.Name == "Condition" && prop.PropertyType == typeof(string))
+                if (prop.Name.IsPossibleGSQString() && prop.PropertyType == typeof(string))
                 {
-                    string gsq = (string)prop.GetValue(data)!;
-                    this.CheckGSQ(gsq, breadcrumbs);
+                    string? gsq = (string?)prop.GetValue(data);
+                    this.CheckGSQ(gsq, [..breadcrumbs, prop.Name]);
                 }
                 else if (!prop.PropertyType.IsValueType && (prop.PropertyType.IsGenericType || prop.PropertyType.Assembly!.GetName()!.Name!.Contains("StardewValley", StringComparison.OrdinalIgnoreCase)))
                 {
@@ -136,11 +143,21 @@ internal sealed class GSQTester(IMonitor monitor, IReflectionHelper reflector)
         }
 
         monitor.Log($"Checking: {gsq}\n{breadcrumbs.Render()}", LogLevel.Info);
-        GameStateQuery.CheckConditions(gsq);
+        GameStateQuery.CheckConditions(gsq, null, null, this.puffer, this.puffer, Random.Shared);
     }
 }
 
 file static class Extensions
 {
     internal static string Render(this string[] breadcrumbs) => string.Join("->", breadcrumbs);
+
+    internal static bool IsPossibleGSQString(this string name)
+    {
+        if (name.EndsWith("Condition"))
+        {
+            return true;
+        }
+
+        return name is "CanSocialize" or "CanVisitIsland" or "ItemDeliveryQuest" or "WinterStarParticipant" or "MinecartsUnlocked";
+    }
 }

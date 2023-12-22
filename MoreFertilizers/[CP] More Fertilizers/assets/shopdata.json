@@ -237,7 +237,7 @@
                     "IgnoreShopPriceModifiers": true
                 },
                 "atravita.CP.MoreFertilizers.RadioactiveFertilizer": {
-                    "Condition": "YEAR 3, PLAYER_HAS_FLAG Current HasMagicInk Received",
+                    "Condition": "YEAR 3, PLAYER_HAS_MAIL Current HasMagicInk Received",
                     "Price": 250,
                     "ItemId": "atravita.CP.MoreFertilizers.RadioactiveFertilizer",
                     "IgnoreShopPriceModifiers": true

@@ -97,7 +97,7 @@
                     "Trigger": "DayEnding",
                     "Condition": "SEASON summer fall, RANDOM 0.2, {{LateYearConstraint}}, PLAYER_HAS_MAIL Current atravita.SpamMail.JojaSelfStirring, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMail.JojaSelfStirring",
                     "Action": "AddMail Current, atravita.SpamMail.JojaSelfStirring"
-                }
+                },
 
                 // Base triggers block
                 "atravita.SpamMail.Clothing": {

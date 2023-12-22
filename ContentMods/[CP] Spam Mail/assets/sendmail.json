@@ -158,7 +158,6 @@
             "Action": "EditData",
             "Target": "Data/Events/SeedShop",
             "Entries": {
-                "17786050/z spring/z summer/r 0.05{{MidYearConstraint}}/x atravita.SpamMail.Composter": "null",
                 "17786051/z fall/z winter/r 0.1{{LateYearConstraint}}/n atravita.SpamMail.Composter/A atravita.SpamMail.Composter/x atravita.SpamMail.VPN": "null",
                 "17786052/z winter/z spring/r 0.05{{MidYearConstraint}}/n atravita.SpamMail.PennyStocks/A atravita.SpamMail.PennyStocks/x atravita.SpamMail.GoldShop": "null",
                 "17786053/z spring/z summer/r 0.1{{LateYearConstraint}}/n atravita.SpamMail.GoldShop/A atravita.SpamMail.GoldShop/x atravita.SpamMail.Book": "null",

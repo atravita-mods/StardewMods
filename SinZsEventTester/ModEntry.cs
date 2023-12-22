@@ -82,6 +82,14 @@ public sealed class ModEntry : Mod
             "sinz.forget_mail",
             "Forgets mail",
             this.ForgetMail);
+        helper.ConsoleCommands.Add(
+            "sinz.checkGSQ",
+            "Checks over the game's GSQ",
+            (_, _) =>
+            {
+                GSQTester checker = new(this.Monitor, this.Helper.Reflection);
+                checker.Check(Game1.content);
+            });
     }
 
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)

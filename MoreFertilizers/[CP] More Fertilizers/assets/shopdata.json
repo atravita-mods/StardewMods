@@ -8,13 +8,13 @@
             "TargetField": ["SeedShop", "Items"],
             "Entries": {
                 "atravita.CP.MoreFertilizers.BountifulFertilizer": {
-                    "Condition": "YEAR 2, PLAYER_HAS_FLAG Host MSB_Pierre, DAY_OF_WEEK Wed Sun",
+                    "Condition": "YEAR 2, PLAYER_HAS_MAIL Host MSB_Pierre, DAY_OF_WEEK Wed Sun",
                     "Price": 150,
                     "ItemId": "(O)atravita.CP.MoreFertilizers.BountifulFertilizer",
                     "IgnoreShopPriceModifiers": true
                 },
                 "atravita.CP.MoreFertilizers.OrganicFertilizer": {
-                    "Condition": "YEAR 2, PLAYER_HAS_FLAG Host MSB_Pierre, DAY_OF_WEEK Wed Sun",
+                    "Condition": "YEAR 2, PLAYER_HAS_MAIL Host MSB_Pierre, DAY_OF_WEEK Wed Sun",
                     "Price": 150,
                     "ItemId": "(O)atravita.CP.MoreFertilizers.OrganicFertilizer",
                     "IgnoreShopPriceModifiers": true
@@ -54,7 +54,7 @@
                     "IgnoreShopPriceModifiers": true
                 },
                 "atravita.CP.MoreFertilizers.DeluxeFruitTreeFertilizer": {
-                    "Condition": "YEAR 2, PLAYER_HAS_FLAG Current qiCave",
+                    "Condition": "YEAR 2, PLAYER_HAS_MAIL Current qiCave",
                     "Price": 200,
                     "ItemId": "(O)atravita.CP.MoreFertilizers.DeluxeFruitTreeFertilizer",
                     "IgnoreShopPriceModifiers": true
@@ -74,13 +74,13 @@
                     "IgnoreShopPriceModifiers": true
                 },
                 "atravita.CP.MoreFertilizers.DeluxeJojaFertilizer": {
-                    "Condition": "atravita.AtraCore_HAS_EARNED_MONEY CURRENT 1000000, PLAYER_HAS_FLAG Host jojaMember, DAY_OF_WEEK Wed Sat Sun",
+                    "Condition": "atravita.AtraCore_HAS_EARNED_MONEY CURRENT 1000000, PLAYER_HAS_MAIL Host jojaMember, DAY_OF_WEEK Wed Sat Sun",
                     "Price": 200,
                     "ItemId": "(O)atravita.CP.MoreFertilizers.DeluxeJojaFertilizer",
                     "IgnoreShopPriceModifiers": true
                 },
                 "atravita.CP.MoreFertilizers.SecretJojaFertilizer": {
-                    "Condition": "atravita.AtraCore_HAS_EARNED_MONEY CURRENT 1000000, PLAYER_HAS_FLAG Host ccMovieTheaterJoja, SYNCED_RANDOM day secret_joja 0.15",
+                    "Condition": "atravita.AtraCore_HAS_EARNED_MONEY CURRENT 1000000, PLAYER_HAS_MAIL Host ccMovieTheaterJoja, SYNCED_RANDOM day secret_joja 0.15",
                     "Price": 500,
                     "AvailableStock": 2,
                     "ItemId": "(O)atravita.CP.MoreFertilizers.SecretJojaFertilizer",
@@ -94,13 +94,13 @@
             "TargetField": ["FishShop", "Items"],
             "Entries": {
                 "atravita.CP.MoreFertilizers.DomesticatedFishFoodFertilizer": {
-                    "Condition": "YEAR 2, PLAYER_HAS_FLAG Host willyBugWadCutscene, DAY_OF_WEEK Sat Sun",
+                    "Condition": "YEAR 2, PLAYER_HAS_MAIL Host willyBugWadCutscene, DAY_OF_WEEK Sat Sun",
                     "Price": 200,
                     "ItemId": "(O)atravita.CP.MoreFertilizers.DomesticatedFishFoodFertilizer",
                     "IgnoreShopPriceModifiers": true
                 },
                 "atravita.CP.MoreFertilizers.FishFood": {
-                    "Condition": "PLAYER_HAS_FLAG Host ccFishTank, !PLAYER_HAS_FLAG Host jojaMember, DAY_OF_WEEK Wed Sat Sun",
+                    "Condition": "PLAYER_HAS_MAIL Host ccFishTank, !PLAYER_HAS_MAIL Host jojaMember, DAY_OF_WEEK Wed Sat Sun",
                     "Price": 500,
                     "ItemId": "(O)atravita.CP.MoreFertilizers.FishFood",
                     "IgnoreShopPriceModifiers": true
@@ -113,13 +113,13 @@
             "TargetField": ["Carpenter", "Items"],
             "Entries": {
                 "atravita.CP.MoreFertilizers.SeedyFertilizer": {
-                    "Condition": "YEAR 2, PLAYER_HAS_FLAG Host georgeGifts, DAY_OF_WEEK Wed Sun, PLAYER_HEARTS George 6",
+                    "Condition": "YEAR 2, PLAYER_HAS_MAIL Host georgeGifts, DAY_OF_WEEK Wed Sun, PLAYER_HEARTS George 6",
                     "Price": 150,
                     "ItemId": "(O)atravita.CP.MoreFertilizers.SeedyFertilizer",
                     "IgnoreShopPriceModifiers": true
                 },
                 "atravita.CP.MoreFertilizers.TreeTapperFertilizer": {
-                    "Condition": "YEAR 2, PLAYER_HAS_FLAG Host robinResource, DAY_OF_WEEK Wed Sun, PLAYER_HEARTS Robin 6",
+                    "Condition": "YEAR 2, PLAYER_HAS_MAIL Host robinResource, DAY_OF_WEEK Wed Sun, PLAYER_HEARTS Robin 6",
                     "Price": 150,
                     "ItemId": "(O)atravita.CP.MoreFertilizers.TreeTapperFertilizer",
                     "IgnoreShopPriceModifiers": true
@@ -237,13 +237,13 @@
                     "IgnoreShopPriceModifiers": true
                 },
                 "atravita.CP.MoreFertilizers.RadioactiveFertilizer": {
-                    "Condition": "YEAR 3, PLAYER_HAS_READ_LETTER Current HasMagicInk",
+                    "Condition": "YEAR 3, PLAYER_HAS_FLAG Current HasMagicInk Received",
                     "Price": 250,
                     "ItemId": "atravita.CP.MoreFertilizers.RadioactiveFertilizer",
                     "IgnoreShopPriceModifiers": true
                 },
                 "atravita.CP.MoreFertilizers.PrismaticFertilizer": {
-                    "Condition": "PLAYER_HAS_FLAG CURRENT atravita.PrismaticFertilizerMuseum", // picked up the reward from the museum
+                    "Condition": "PLAYER_HAS_MAIL CURRENT atravita.PrismaticFertilizerMuseum", // picked up the reward from the museum
                     "Price": 100,
                     "ItemId": "atravita.CP.MoreFertilizers.PrismaticFertilizer",
                     "IgnoreShopPriceModifiers": true
@@ -271,7 +271,7 @@
                     "IgnoreShopPriceModifiers": true
                 },
                 "atravita.CP.MoreFertilizers.SecretJojaFertilizer": {
-                    "Condition": "PLAYER_HAS_FLAG Host ccMovieTheaterJoja, IS_JOJA_MART_COMPLETE",
+                    "Condition": "PLAYER_HAS_MAIL Host ccMovieTheaterJoja, IS_JOJA_MART_COMPLETE",
                     "Price": 1500,
                     "AvailableStock": 4,
                     "ItemId": "(O)atravita.CP.MoreFertilizers.SecretJojaFertilizer",

@@ -28,29 +28,22 @@
         },
         {
             "Name": "LateYearConstraint",
-            "Value": "/y {{ExpectedPlayTime}}"
-        },
-        {
-            "Name": "LateYearConstraint",
-            "Value": "",
-            "When": {
-                "ExpectedPlayTime": "1"
-            }
+            "Value": "YEAR {{ExpectedPlayTime}}"
         },
         {
             "Name": "MidYearConstraint",
-            "Value": "/y 3",
+            "Value": "YEAR 3",
         },
         {
             "Name": "MidYearConstraint",
-            "Value": "/y 2",
+            "Value": "YEAR 2",
             "When": {
                 "ExpectedPlayTime": "3",
             }
         },
         {
             "Name": "MidYearConstraint",
-            "Value": "",
+            "Value": "YEAR 1",
             "When": {
                 "ExpectedPlayTime": "1"
             }

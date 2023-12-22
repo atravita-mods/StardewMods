@@ -103,17 +103,17 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         this.Helper.Events.Content.AssetsInvalidated += this.OnAssetInvalidation;
 
         // add event commands and preconditions.
-        Event.RegisterCustomPrecondition("atravita_PlayerRelationship", PlayerRelationshipPreconditions.PlayerRelationshipStatus);
-        Event.RegisterCustomCommand("atravita_FacePlayer", FacePlayer.FacePlayerCommand);
-        Event.RegisterCustomCommand("atravita_RemoveMail", RemoveMail.RemoveMailCommand);
-        Event.RegisterCustomCommand("atravita_" + nameof(AllowRepeatAfter), AllowRepeatAfter.SetRepeatAfter);
+        Event.RegisterPrecondition("atravita_PlayerRelationship", PlayerRelationshipPreconditions.PlayerRelationshipStatus);
+        Event.RegisterCommand("atravita_FacePlayer", FacePlayer.FacePlayerCommand);
+        Event.RegisterCommand("atravita_RemoveMail", RemoveMail.RemoveMailCommand);
+        Event.RegisterCommand("atravita_" + nameof(AllowRepeatAfter), AllowRepeatAfter.SetRepeatAfter);
 
         SetInvisible invisible = new( this.Helper.Multiplayer, this.ModManifest.UniqueID);
-        Event.RegisterCustomCommand("atravita_" + nameof(SetInvisible), invisible.ApplyInvisibility);
+        Event.RegisterCommand("atravita_" + nameof(SetInvisible), invisible.ApplyInvisibility);
         MultiplayerDispatch.Register(SetInvisible.RequestSetInvisible, invisible.ProcessSetInvisibleRequest);
 
         SetRelationship setrelationship = new(this.Helper.Multiplayer, this.ModManifest.UniqueID);
-        Event.RegisterCustomCommand("atravita_" + nameof(SetRelationship), setrelationship.ApplySetRelationship);
+        Event.RegisterCommand("atravita_" + nameof(SetRelationship), setrelationship.ApplySetRelationship);
         MultiplayerDispatch.Register(SetRelationship.RequestNPCMove, SetRelationship.ProcessMoveRequest);
 
         // actions

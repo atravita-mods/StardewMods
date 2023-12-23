@@ -26,6 +26,8 @@ using AtraCore.HarmonyPatches.DrawPrismaticPatches;
 using AtraCore.Utilities;
 
 using AtraShared.ConstantsAndEnums;
+using AtraShared.Integrations;
+using AtraShared.Integrations.Interfaces;
 using AtraShared.MigrationManager;
 using AtraShared.Utils.Extensions;
 
@@ -133,6 +135,15 @@ internal sealed class ModEntry : BaseMod<ModEntry>
             else
             {
                 GameStateQuery.Register(query, del);
+            }
+        }
+
+        // integrations
+        {
+            IntegrationHelper integration = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry);
+            if (integration.TryGetAPI<IEventTesterAPI>("sinZandAtravita.SinZsEventTester", "0.1.2", out IEventTesterAPI? eventTester))
+            {
+                eventTester.RegisterAsset(this.Helper.GameContent.ParseAssetName(AtraCoreConstants.EquipData));
             }
         }
     }

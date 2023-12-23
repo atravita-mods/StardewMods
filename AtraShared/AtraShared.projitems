@@ -27,6 +27,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\GMCMAttributes\GMCMDefaultVectorAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\IntegrationHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)integrations\interfaces\ICameraAPI.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\IEventTesterAPI.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\IGrowableGiantCrops.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\IGiantCropTweaksAPI.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\IGrowableBushesAPI.cs" />

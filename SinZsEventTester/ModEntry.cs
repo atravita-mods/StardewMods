@@ -96,6 +96,9 @@ public sealed class ModEntry : Mod
             this.ForgetTriggers);
     }
 
+    /// <inheritdoc />
+    public override object? GetApi(IModInfo mod) => new Api(mod, this.Monitor);
+
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
     {
         if (this.Helper.ModRegistry.GetApi<IGenericModConfigMenuApi>("spacechase0.GenericModConfigMenu") is IGenericModConfigMenuApi api)
@@ -199,10 +202,10 @@ public sealed class ModEntry : Mod
             string startsWidth = arg[..^1];
             filter = (a) => a.StartsWith(startsWidth);
         }
-        else if (arg.TrySplitOnce('*', out var first, out var second))
+        else if (arg.TrySplitOnce('*', out ReadOnlySpan<char> first, out ReadOnlySpan<char> second))
         {
-            var firstS = first.ToString();
-            var secondS = second.ToString();
+            string firstS = first.ToString();
+            string secondS = second.ToString();
             filter = (a) => a.StartsWith(firstS) && a.EndsWith(secondS);
         }
 

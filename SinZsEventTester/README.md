@@ -26,6 +26,9 @@ Command | Usage | Example
 `sinz.forget_event <eventID>` | Removes the event key from the player's `eventsSeen`
 `sinz.forget_triggers <triggerID>` | Removes the trigger ID from the player's `triggerActionsRun`
 
+## C# API
+As of version 0.1.2, mods can add their own assets to the GSQ checker. Please see documentation at [the API interface](..\IEventTesterAPI.cs).
+
 ## Config
 The single config option `EventSpeedRatio` allows you to speed up events.
 

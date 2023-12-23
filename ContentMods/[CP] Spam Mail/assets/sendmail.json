@@ -246,7 +246,7 @@
                 "atravita.SpamMail.Craft": {
                     "Id": "atravita.SpamMail.Craft",
                     "Trigger": "DayEnding",
-                    "Condition": "PLAYER_VISITED_LOCATION HaleyHouse, PLAYER_FRIENDSHIP_POINTS Current Emily 500, Current atravita.SpamMail.Clothing received, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMail.Clothing, RANDOM 0.1, {{MidYearConstraint}}",
+                    "Condition": "PLAYER_VISITED_LOCATION HaleyHouse, PLAYER_FRIENDSHIP_POINTS Current Emily 500, PLAYER_HAS_MAIL atravita.SpamMail.Clothing received, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMail.Clothing, RANDOM 0.1, {{MidYearConstraint}}",
                     "Action": "AddMail Current atravita.SpamMail.Craft"
                 },
                 "atravita.SpamMail.WinterStarCraft": {

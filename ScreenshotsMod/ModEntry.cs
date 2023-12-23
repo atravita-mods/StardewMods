@@ -121,9 +121,15 @@ internal sealed class ModEntry : BaseMod<ModEntry>
     private void OnWarp(object? sender, WarpedEventArgs e)
     {
         // it's possible for this event to be raised for a "false warp".
-        if (e.NewLocation is null || ReferenceEquals(e.NewLocation, e.OldLocation) || !e.IsLocalPlayer || this.modTriggeredWarp.Value
+        if (e.NewLocation is null || ReferenceEquals(e.NewLocation, e.OldLocation) || !e.IsLocalPlayer
             || (e.NewLocation.IsTemporary && Game1.CurrentEvent?.isFestival != true) || Game1.game1.takingMapScreenshot)
         {
+            return;
+        }
+
+        if (this.modTriggeredWarp.Value)
+        {
+            this.modTriggeredWarp.Value = false;
             return;
         }
 
@@ -155,16 +161,12 @@ internal sealed class ModEntry : BaseMod<ModEntry>
                 {
                     // we may have to warp players BACK to the original map after an event.
                     // this lets us delay a screenshot to after an event.
-                    void WarpBack()
+                    evt.onEventFinished += () =>
                     {
-                        if (location.isStructure.Value)
-                        {
-                            return; // welp, buildings are weird. Bail.
-                        }
-                        if (Game1.currentLocation.Name != location.Name)
+                        if (Game1.currentLocation.NameOrUniqueName != location.NameOrUniqueName)
                         {
                             this.Monitor.Log($"Warping farmer back to original map after event {evt.id} for screenshots.");
-                            LocationRequest locationRequest = new(location.Name, location.isStructure.Value, location);
+                            LocationRequest locationRequest = new(location.NameOrUniqueName, location.isStructure.Value, location);
                             locationRequest.OnLoad += () =>
                             {
                                 this.TakeScreenshotImpl(location, rule.Name, rule.Path, rule.Scale, rule.DuringEvents);
@@ -181,16 +183,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
                             this.Monitor.Log($"Taking event-delayed screenshot after {evt.id} for {rule.Name}.");
                             this.TakeScreenshotImpl(location, rule.Name, rule.Path, rule.Scale, rule.DuringEvents);
                         }
-                    }
-
-                    if (evt.onEventFinished is { } act)
-                    {
-                        act += WarpBack;
-                    }
-                    else
-                    {
-                        evt.onEventFinished = WarpBack;
-                    }
+                    };
                 }
                 else
                 {

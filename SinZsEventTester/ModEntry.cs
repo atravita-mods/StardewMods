@@ -63,16 +63,24 @@ public sealed class ModEntry : Mod
             "Plays a specific event id at speed, including all branches.",
             this.EventById);
         helper.ConsoleCommands.Add(
-            "sinz.check_preconditions",
-            "checks over all preconditions",
-            this.CheckPreconditions);
-        helper.ConsoleCommands.Add(
             "sinz.empty_event_queue",
             "Clears the event queue.",
             (_, _) =>
             {
                 this.current = null;
                 this.evts.Clear();
+            });
+        helper.ConsoleCommands.Add(
+            "sinz.check_preconditions",
+            "checks over all preconditions",
+            this.CheckPreconditions);
+        helper.ConsoleCommands.Add(
+            "sinz.check_gsq",
+            "Checks over the game's GSQ",
+            (_, _) =>
+            {
+                GSQTester checker = new(this.Monitor, this.Helper.Reflection);
+                checker.Check(Game1.content);
             });
         helper.ConsoleCommands.Add(
             "sinz.forget_event",
@@ -84,15 +92,8 @@ public sealed class ModEntry : Mod
             this.ForgetMail);
         helper.ConsoleCommands.Add(
             "sinz.forget_triggers",
+            "Forgets triggers",
             this.ForgetTriggers);
-        helper.ConsoleCommands.Add(
-            "sinz.checkGSQ",
-            "Checks over the game's GSQ",
-            (_, _) =>
-            {
-                GSQTester checker = new(this.Monitor, this.Helper.Reflection);
-                checker.Check(Game1.content);
-            });
     }
 
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
@@ -198,6 +199,12 @@ public sealed class ModEntry : Mod
             string startsWidth = arg[..^1];
             filter = (a) => a.StartsWith(startsWidth);
         }
+        else if (arg.TrySplitOnce('*', out var first, out var second))
+        {
+            var firstS = first.ToString();
+            var secondS = second.ToString();
+            filter = (a) => a.StartsWith(firstS) && a.EndsWith(secondS);
+        }
 
         if (filter is null)
         {
@@ -205,6 +212,7 @@ public sealed class ModEntry : Mod
             {
                 if (!string.IsNullOrEmpty(candidate) && Utility.fuzzyLocationSearch(candidate) is GameLocation location)
                 {
+                    this.Monitor.Log($"Pushing events in {location.Name}");
                     this.PushEvents(location, this.evts);
                 }
             }
@@ -271,11 +279,14 @@ Outer: ;
                 Game1.CurrentEvent?.Update(Game1.currentLocation, Game1.currentGameTime);
                 Game1.currentMinigame?.tick(Game1.currentGameTime);
 
-                ScreenFade? fade = this.Helper.Reflection.GetField<ScreenFade>(typeof(Game1), "screenFade")?.GetValue();
-                fade?.UpdateFade(Game1.currentGameTime);
-                if (Game1.globalFade)
+                if (Context.IsMainPlayer)
                 {
-                    fade?.UpdateGlobalFade();
+                    ScreenFade? fade = this.Helper.Reflection.GetField<ScreenFade>(typeof(Game1), "screenFade")?.GetValue();
+                    fade?.UpdateFade(Game1.currentGameTime);
+                    if (Game1.globalFade)
+                    {
+                        fade?.UpdateGlobalFade();
+                    }
                 }
             }
         }
@@ -589,12 +600,6 @@ Outer: ;
 
         while (this.evts.TryPop(out EventRecord pair))
         {
-            if (this.completed.Contains(pair))
-            {
-                this.Monitor.Log($"Already seen {pair} before this session.", LogLevel.Info);
-                continue;
-            }
-
             this.LaunchEvent(pair);
             return;
         }

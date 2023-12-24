@@ -36,10 +36,6 @@ internal static class DrawCulling
     private static Lazy<Func<Projectile, NetPosition>> _getProjectilePosition = new(() =>
         typeof(Projectile).GetCachedField("position", ReflectionCache.FlagTypes.InstanceFlags)
                           .GetInstanceFieldGetter<Projectile, NetPosition>());
-
-    private static Lazy<Func<Projectile, float>> _getProjectileAlpha = new(() =>
-        typeof(Projectile).GetCachedField("startingAlpha", ReflectionCache.FlagTypes.InstanceFlags)
-                          .GetInstanceFieldGetter<Projectile, float>());
     #endregion
 
     [HarmonyPrefix]
@@ -87,5 +83,5 @@ internal static class DrawCulling
     [HarmonyPatch(typeof(Projectile), nameof(Projectile.draw), new[] { typeof(SpriteBatch)})]
     private static bool PrefixProjectileDraw(Projectile __instance)
         => !ModEntry.Config.CullDraws
-            || (Utility.isOnScreen(_getProjectilePosition.Value(__instance).Value, 256) && _getProjectileAlpha.Value(__instance) > 0f);
+            || Utility.isOnScreen(_getProjectilePosition.Value(__instance).Value, 256);
 }

@@ -21,25 +21,25 @@ internal static class FruitTreesAvoidHoe
         try
         {
             ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);
-            helper.FindNext(new CodeInstructionWrapper[]
-            {
+            _ = helper.FindNext(
+            [
                 new(OpCodes.Brtrue_S),
                 new(OpCodes.Ldarg_1),
                 new(OpCodes.Isinst, typeof(Hoe)),
                 new(OpCodes.Brtrue_S),
                 new(OpCodes.Ldarg_1),
                 new(OpCodes.Isinst, typeof(MeleeWeapon)),
-            })
+            ])
             .Remove(6)
-            .FindNext(new CodeInstructionWrapper[]
-            {
+            .FindNext(
+            [
                 new(OpCodes.Brtrue_S),
                 new(OpCodes.Ldarg_1),
                 new(OpCodes.Callvirt, typeof(Tool).GetCachedProperty(nameof(Tool.BaseName), ReflectionCache.FlagTypes.InstanceFlags).GetGetMethod()),
                 new(OpCodes.Ldstr, "Hoe"),
                 new(OpCodes.Callvirt, typeof(string).GetCachedMethod<string>(nameof(string.Contains), ReflectionCache.FlagTypes.InstanceFlags)),
-                new(OpCodes.Brfalse_S),
-            })
+                new(OpCodes.Brfalse),
+            ])
             .Remove(5);
 
             return helper.Render();

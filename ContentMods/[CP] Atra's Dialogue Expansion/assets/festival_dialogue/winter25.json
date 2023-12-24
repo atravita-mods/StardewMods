@@ -8,10 +8,10 @@
                 "EnableFor": "Abigail"
             },
             "Entries": {
-                "Abigail_y2": "{{i18n:abby-y2-xmas.00}}",
-                "Abigail_y3": "{{i18n:abby-y3-xmas.00}}",
-                "Abigail_spouse_y2": "{{i18n:abby-y2-xmas-spouse}}#$b#{{i18n:abby-y2-xmas-spouse.00}}$l",
-                "Abigail_spouse_y3": "{{i18n:abby-y3-xmas-spouse}}"
+                "Abigail_y3": "{{i18n:abby-y2-xmas.00}}",
+                "Abigail_y4": "{{i18n:abby-y3-xmas.00}}",
+                "Abigail_spouse_y3": "{{i18n:abby-y2-xmas-spouse}}#$b#{{i18n:abby-y2-xmas-spouse.00}}$l",
+                "Abigail_spouse_y4": "{{i18n:abby-y3-xmas-spouse}}"
             }
         },
         {
@@ -22,11 +22,11 @@
                 "EnableFor": "Alex"
             },
             "Entries": {
-                "Alex_y2": "{{i18n:alex-y2-xmas.00}}",
-                "Alex_y3": "{{i18n:alex-y3-xmas.00}}",
-                "Alex_spouse_y2": "{{i18n:alex-y2-xmas-spouse}}$h",
-                "Alex_spouse_y3": "{{i18n:alex-y3-xmas-spouse}}",
-                "Alex_spouse_y4": "{{i18n:alex-y4-xmas-spouse}}$l"
+                "Alex_y3": "{{i18n:alex-y2-xmas.00}}",
+                "Alex_y4": "{{i18n:alex-y3-xmas.00}}",
+                "Alex_spouse_y3": "{{i18n:alex-y2-xmas-spouse}}$h",
+                "Alex_spouse_y4": "{{i18n:alex-y3-xmas-spouse}}",
+                "Alex_spouse_y5": "{{i18n:alex-y4-xmas-spouse}}$l"
             }
         },
         {
@@ -37,8 +37,8 @@
                 "EnableFor": "Caroline"
             },
             "Entries": {
-                "Caroline_y2": "{{i18n:caroline-y2-xmas}}$h",
-                "Caroline_y3": "{{i18n:caroline-y3-xmas}}$s"
+                "Caroline_y3": "{{i18n:caroline-y2-xmas}}$h",
+                "Caroline_y4": "{{i18n:caroline-y3-xmas}}$s"
             }
         },
         {
@@ -50,7 +50,7 @@
                 "Relationship: Abigail": "Married, Engaged"
             },
             "Entries": {
-                "Caroline_y2": "{{i18n:caroline-y2-xmas-married-to-abby}}$h"
+                "Caroline_y3": "{{i18n:caroline-y2-xmas-married-to-abby}}$h"
             }
         },
         {
@@ -59,7 +59,7 @@
             "Target": "Data/Festivals/winter25",
             "When": {"EnableFor":"Clint"},
             "Entries": {
-                "Clint_y2": "{{i18n:clint-y2-xmas}}$s"
+                "Clint_y3": "{{i18n:clint-y2-xmas}}$s"
             }
         },
         {
@@ -68,8 +68,8 @@
             "Target": "Data/Festivals/winter25",
             "When": {"EnableFor":"Demetrius"},
             "Entries": {
-                "Demetrius_y2": "{{i18n:demetrius-y2-xmas.01}}$h#$e#{{i18n:demetrius-y2-xmas.02}}",
-                "Demetrius_y3": "{{i18n:demetrius-y3-xmas}}"
+                "Demetrius_y3": "{{i18n:demetrius-y2-xmas.01}}$h#$e#{{i18n:demetrius-y2-xmas.02}}",
+                "Demetrius_y4": "{{i18n:demetrius-y3-xmas}}"
             }
         },
         {
@@ -78,9 +78,9 @@
             "Target": "Data/Festivals/winter25",
             "When": {"EnableFor": "Elliott"},
             "Entries": {
-                "Elliott_y2": "{{i18n:elliott-y2-xmas}}$h",
-                "Elliott_y3": "{{i18n:elliott-y3-xmas}}$h",
-                "Elliott_spouse_y2": "{{i18n:elliott-y2-xmas-spouse}}$h#$b#{{i18n:elliott-y2-xmas-spouse.00}}"
+                "Elliott_y3": "{{i18n:elliott-y2-xmas}}$h",
+                "Elliott_y4": "{{i18n:elliott-y3-xmas}}$h",
+                "Elliott_spouse_y3": "{{i18n:elliott-y2-xmas-spouse}}$h#$b#{{i18n:elliott-y2-xmas-spouse.00}}"
             }
         },
         {
@@ -89,9 +89,9 @@
             "Target": "Data/Festivals/winter25",
             "When": {"EnableFor": "Emily"},
             "Entries": {
-                "Emily_y2": "{{i18n:emily-y2-xmas.01}}$h#$e#{{i18n:emily-y2-xmas.02}}",
+                "Emily_y3": "{{i18n:emily-y2-xmas.01}}$h#$e#{{i18n:emily-y2-xmas.02}}",
                 "Emily_spouse": "{{i18n:emily-y1-xmas-spouse}}$l",
-                "Emily_spouse_y2": "{{i18n:emily-y2-xmas-spouse}}$h"
+                "Emily_spouse_y3": "{{i18n:emily-y2-xmas-spouse}}$h"
             }
         },
         {
@@ -100,7 +100,7 @@
             "Target": "Data/Festivals/winter25",
             "When": {"EnableFor": "Evelyn"},
             "Entries": {
-                "Evelyn_y2": "{{i18n:evelyn-y2-xmas.01}}$h#$e#{{i18n:evelyn-y2-xmas.02}}"
+                "Evelyn_y3": "{{i18n:evelyn-y2-xmas.01}}$h#$e#{{i18n:evelyn-y2-xmas.02}}"
             }
         },
         {
@@ -112,7 +112,7 @@
                 "Relationship: Alex": "Married, Engaged"
             },
             "Entries": {
-                "Evelyn_y3": "{{i18n:evelyn-y3-xmas.01}}$h#$e#{{i18n:evelyn-y3-xmas.02}}"
+                "Evelyn_y4": "{{i18n:evelyn-y3-xmas.01}}$h#$e#{{i18n:evelyn-y3-xmas.02}}"
             }
         },
         {
@@ -123,7 +123,7 @@
                 "EnableFor": "George"
             },
             "Entries": {
-                "George_y2": "{{i18n:george-y2-xmas}}"
+                "George_y3": "{{i18n:george-y2-xmas}}"
             }
         },
         {
@@ -134,8 +134,8 @@
                 "EnableFor": "Gus"
             },
             "Entries": {
-                "Gus_y2": "{{i18n:gus-y2-xmas.00}}$h#$e#{{i18n:gus-y2-xmas.01}}#$e#{{i18n:gus-y2-xmas.02}}#$b#{{i18n:gus-y2-xmas.03}}#$e#{{i18n:gus-y2-xmas.04}}#$b#{{i18n:gus-y2-xmas.05}}$h",
-                "Gus_y3": "{{i18n:gus-y3-xmas.00}}$h#$b#{{i18n:gus-y3-xmas.01}}#$e#{{i18n:gus-y3-xmas.02}}#$b#{{i18n:gus-y3-xmas.03}}$h"
+                "Gus_y3": "{{i18n:gus-y2-xmas.00}}$h#$e#{{i18n:gus-y2-xmas.01}}#$e#{{i18n:gus-y2-xmas.02}}#$b#{{i18n:gus-y2-xmas.03}}#$e#{{i18n:gus-y2-xmas.04}}#$b#{{i18n:gus-y2-xmas.05}}$h",
+                "Gus_y4": "{{i18n:gus-y3-xmas.00}}$h#$b#{{i18n:gus-y3-xmas.01}}#$e#{{i18n:gus-y3-xmas.02}}#$b#{{i18n:gus-y3-xmas.03}}$h"
             }
         },
         {
@@ -146,9 +146,9 @@
                 "EnableFor": "Haley"
             },
             "Entries": {
-                "Haley_y2": "{{i18n:haley-y2-xmas.00}}$h#$e#{{i18n:haley-y2-xmas.01}}",
-                "Haley_y3": "{{i18n:haley-y3-xmas.00}}$h",
-                "Haley_spouse_y2": "{{i18n:haley-y2-xmas-spouse}}$h"
+                "Haley_y3": "{{i18n:haley-y2-xmas.00}}$h#$e#{{i18n:haley-y2-xmas.01}}",
+                "Haley_y4": "{{i18n:haley-y3-xmas.00}}$h",
+                "Haley_spouse_y3": "{{i18n:haley-y2-xmas-spouse}}$h"
             }
         },
         {
@@ -159,8 +159,8 @@
                 "EnableFor": "Harvey"
             },
             "Entries": {
-                "Harvey_y2": "{{i18n:harvey-y2-xmas.00}}$h#$e#{{i18n:harvey-y2-xmas.01}}",
-                "Harvey_spouse_y2": "{{i18n:harvey-y2-xmas-spouse}}$h#$b#{{i18n:harvey-y2-xmas-spouse.00}}$h"
+                "Harvey_y3": "{{i18n:harvey-y2-xmas.00}}$h#$e#{{i18n:harvey-y2-xmas.01}}",
+                "Harvey_spouse_y3": "{{i18n:harvey-y2-xmas-spouse}}$h#$b#{{i18n:harvey-y2-xmas-spouse.00}}$h"
             }
         },
         {
@@ -171,9 +171,9 @@
                 "EnableFor": "Jas"
             },
             "Entries": {
-                "Jas_y2": "{{i18n:jas-y2-xmas|title={{Title}}}}$h",
-                "Jas_y3": "{{i18n:jas-y3-xmas}}$h",
-                "Jas_y4": "{{i18n:jas-y4-xmas}}$h"
+                "Jas_y3": "{{i18n:jas-y2-xmas|title={{Title}}}}$h",
+                "Jas_y4": "{{i18n:jas-y3-xmas}}$h",
+                "Jas_y5": "{{i18n:jas-y4-xmas}}$h"
             }
         },
         // Jodi family gets special stuff for Y2
@@ -198,9 +198,9 @@
                 "Year|contains=1,2": false
             },
             "Entries": {
-                "Jodi_y2": "{{i18n:jodi-y2-xmas}}$h",
-                "Jodi_y3": "{{i18n:jodi-y3-xmas}}$h",
-                "Jodi_y4": "{{i18n:jodi-y4-xmas}}$h"
+                "Jodi_y3": "{{i18n:jodi-y2-xmas}}$h",
+                "Jodi_y4": "{{i18n:jodi-y3-xmas}}$h",
+                "Jodi_y5": "{{i18n:jodi-y4-xmas}}$h"
             }
         },
         {
@@ -212,7 +212,7 @@
                 "Relationship: Sam": "Married, Engaged"
             },
             "Entries": {
-                "Jodi_y3": "{{i18n:jodi-y3-xmas-married-to-sam}}$h"
+                "Jodi_y4": "{{i18n:jodi-y3-xmas-married-to-sam}}$h"
             }
         },
         {
@@ -236,9 +236,9 @@
                 "Year|contains=1,2,3": false
             },
             "Entries": {
-                "Kent_y2": "{{i18n:kent-y2-xmas}}",
-                "Kent_y3": "{{i18n:kent-y3-xmas.01}}#$e#{{i18n:kent-y3-xmas.02}}$h",
-                "Kent_y4": "{{i18n:kent-y4-xmas}}$h"
+                "Kent_y3": "{{i18n:kent-y2-xmas}}",
+                "Kent_y4": "{{i18n:kent-y3-xmas.01}}#$e#{{i18n:kent-y3-xmas.02}}$h",
+                "Kent_y5": "{{i18n:kent-y4-xmas}}$h"
             }
         },
         {
@@ -249,10 +249,10 @@
                 "EnableFor": "Leah"
             },
             "Entries": {
-                "Leah_y2": "{{i18n:leah-y2-xmas.00}}#$e#{{i18n:leah-y2-xmas.01}}$h",
-                "Leah_y3": "{{i18n:leah-y3-xmas}}$h",
-                "Leah_spouse_y2": "{{i18n:leah-y2-xmas-spouse}}$h",
-                "Leah_spouse_y3": "{{i18n:leah-y3-xmas-spouse}}$h"
+                "Leah_y3": "{{i18n:leah-y2-xmas.00}}#$e#{{i18n:leah-y2-xmas.01}}$h",
+                "Leah_y4": "{{i18n:leah-y3-xmas}}$h",
+                "Leah_spouse_y3": "{{i18n:leah-y2-xmas-spouse}}$h",
+                "Leah_spouse_y4": "{{i18n:leah-y3-xmas-spouse}}$h"
             }
         },
         {
@@ -264,7 +264,7 @@
                 "ChildStatus": "Multiple"
             },
             "Entries": {
-                "Leah_spouse_y2": "{{i18n:leah-y2-xmas-spouse-kids}}$h"
+                "Leah_spouse_y3": "{{i18n:leah-y2-xmas-spouse-kids}}$h"
             }
         },
         {
@@ -275,7 +275,7 @@
                 "EnableFor": "Leo"
             },
             "Entries": {
-                "Leo_y2": "{{i18n:leo-y2-xmas}}"
+                "Leo_y3": "{{i18n:leo-y2-xmas}}"
             }
         },
         {
@@ -287,8 +287,8 @@
                 "Query: {{Hearts:Leo}} >= 8": true
             },
             "Entries": {
-                "Leo_y3": "{{i18n:leo-y3-xmas}}$s",
-                "Leo_y4": "{{i18n:leo-y4-xmas}}$h#$e#{{i18n:leo-y4-xmas.00}}"
+                "Leo_y4": "{{i18n:leo-y3-xmas}}$s",
+                "Leo_y5": "{{i18n:leo-y4-xmas}}$h#$e#{{i18n:leo-y4-xmas.00}}"
             }
         },
         {
@@ -297,7 +297,7 @@
             "Target": "Data/Festivals/winter25",
             "When": { "EnableFor": "Lewis"},
             "Entries": {
-                "Lewis_y2": "{{i18n:lewis-y2-xmas}}#$e#{{i18n:lewis-y2-xmas.00}}"
+                "Lewis_y3": "{{i18n:lewis-y2-xmas}}#$e#{{i18n:lewis-y2-xmas.00}}"
             }
         },
         {
@@ -309,7 +309,7 @@
                 "IsCommunityCenterComplete": true
             },
             "Entries": {
-                "Lewis_y3": "{{i18n:lewis-y3-xmas}}$h#$e#{{i18n:lewis-y3-xmas.01}}"
+                "Lewis_y4": "{{i18n:lewis-y3-xmas}}$h#$e#{{i18n:lewis-y3-xmas.01}}"
             }
         },
         {
@@ -318,8 +318,8 @@
             "Target": "Data/Festivals/winter25",
             "When": {"EnableFor": "Linus"},
             "Entries": {
-                "Linus_y2": "{{i18n:linus-y2-xmas}}$h",
-                "Linus_y3": "{{i18n:linus-y3-xmas}}$h"
+                "Linus_y3": "{{i18n:linus-y2-xmas}}$h",
+                "Linus_y4": "{{i18n:linus-y3-xmas}}$h"
             }
         },
         {
@@ -330,7 +330,7 @@
                 "EnableFor": "Marlon"
             },
             "Entries": {
-                "Marlon_y2": "{{i18n:marlon-y2-xmas}}"
+                "Marlon_y3": "{{i18n:marlon-y2-xmas}}"
             }
         },
         {
@@ -339,8 +339,8 @@
             "Target": "Data/Festivals/winter25",
             "When": {"EnableFor": "Marnie"},
             "Entries": {
-                "Marnie_y2": "{{i18n:marnie-y2-xmas}}",
-                "Marnie_y3": "{{i18n:marnie-y3-xmas-better}}$h#$e#{{i18n:marnie-y3-xmas-better.00}}"
+                "Marnie_y3": "{{i18n:marnie-y2-xmas}}",
+                "Marnie_y4": "{{i18n:marnie-y3-xmas-better}}$h#$e#{{i18n:marnie-y3-xmas-better.00}}"
             }
         },
         {
@@ -349,8 +349,8 @@
             "Target": "Data/Festivals/winter25",
             "When": {"EnableFor": "Maru"},
             "Entries": {
-                "Maru_y2": "{{i18n:maru-y2-xmas.00}}#$b#{{i18n:maru-y2-xmas.01}}",
-                "Maru_spouse_y2": "{{i18n:maru-y2-xmas-spouse}}$h"
+                "Maru_y3": "{{i18n:maru-y2-xmas.00}}#$b#{{i18n:maru-y2-xmas.01}}",
+                "Maru_spouse_y3": "{{i18n:maru-y2-xmas-spouse}}$h"
             }
         },
         {
@@ -359,7 +359,7 @@
             "Target": "Data/Festivals/winter25",
             "When": {"EnableFor": "Pam"},
             "Entries": {
-                "Pam_y2": "{{i18n:pam-y2-xmas}}$h"
+                "Pam_y3": "{{i18n:pam-y2-xmas}}$h"
             }
         },
         {
@@ -368,9 +368,9 @@
             "Target": "Data/Festivals/winter25",
             "When": {"EnableFor": "Penny"},
             "Entries": {
-                "Penny_y2": "{{i18n:penny-y2-xmas.00}}$s",
-                "Penny_y3": "{{i18n:penny-y3-xmas.00}}#$b#{{i18n:penny-y3-xmas.01}}",
-                "Penny_spouse_y2": "{{i18n:penny-y2-xmas-spouse}}$s#$b#{{i18n:penny-y2-xmas-spouse.00}}"
+                "Penny_y3": "{{i18n:penny-y2-xmas.00}}$s",
+                "Penny_y4": "{{i18n:penny-y3-xmas.00}}#$b#{{i18n:penny-y3-xmas.01}}",
+                "Penny_spouse_y3": "{{i18n:penny-y2-xmas-spouse}}$s#$b#{{i18n:penny-y2-xmas-spouse.00}}"
             }
         },
         {
@@ -383,7 +383,7 @@
                 "Query: {{Hearts:Penny}} >= 12": true
             },
             "Entries": {
-                "Penny_spouse_y3": "{{i18n:penny-y3-xmas-spouse}}$h#$b#{{i18n:penny-y3-xmas-spouse.00}}"
+                "Penny_spouse_y4": "{{i18n:penny-y3-xmas-spouse}}$h#$b#{{i18n:penny-y3-xmas-spouse.00}}"
             }
         },
         {
@@ -395,7 +395,7 @@
                 "Spouse:anyPlayer": "Penny"
             },
             "Entries": {
-                "Penny_y2": "{{i18n:penny-y2-xmas-married-other}}$s"
+                "Penny_y3": "{{i18n:penny-y2-xmas-married-other}}$s"
             }
         },
         {
@@ -404,9 +404,9 @@
             "Target": "Data/Festivals/winter25",
             "When": {"EnableFor": "Pierre"},
             "Entries": {
-                "Pierre_y2": "{{i18n:pierre-y2-xmas}}$h",
-                "Pierre_y3": "{{i18n:pierre-y3-xmas}}$h",
-                "Pierre_y4": "{{i18n:pierre-y4-xmas}}$h"
+                "Pierre_y3": "{{i18n:pierre-y2-xmas}}$h",
+                "Pierre_y4": "{{i18n:pierre-y3-xmas}}$h",
+                "Pierre_y5": "{{i18n:pierre-y4-xmas}}$h"
             }
         },
         {
@@ -415,8 +415,8 @@
             "Target": "Data/Festivals/winter25",
             "When": {"EnableFor": "Robin"},
             "Entries": {
-                "Robin_y2": "{{i18n:robin-y2-xmas}}$h",
-                "Robin_y3": "{{i18n:robin-y3-xmas}}$h"
+                "Robin_y3": "{{i18n:robin-y2-xmas}}$h",
+                "Robin_y4": "{{i18n:robin-y3-xmas}}$h"
             }
         },
         {
@@ -441,7 +441,7 @@
                 "ChildStatus": "Multiple"
             },
             "Entries": {
-                "Robin_y3": "{{i18n:robin-y3-xmas-inlaw-kids}}$h"
+                "Robin_y4": "{{i18n:robin-y3-xmas-inlaw-kids}}$h"
             }
         },
         {
@@ -452,8 +452,8 @@
                 "EnableFor": "Sam"
             },
             "Entries": {
-                "Sam_y2": "{{i18n:sam-y2-xmas}}$h",
-                "Sam_spouse_y2": "{{i18n:sam-y2-xmas-spouse}}$l"
+                "Sam_y3": "{{i18n:sam-y2-xmas}}$h",
+                "Sam_spouse_y3": "{{i18n:sam-y2-xmas-spouse}}$l"
             }
         },
         {
@@ -465,8 +465,8 @@
                 "ChildStatus": "Multiple"
             },
             "Entries": {
-                "Sam_spouse_y2": "{{i18n:sam-y2-xmas-spouse-kids}}$h",
-                "Sam_spouse_y3": "{{i18n:sam-y3-xmas-spouse-kids}}$h"
+                "Sam_spouse_y3": "{{i18n:sam-y2-xmas-spouse-kids}}$h",
+                "Sam_spouse_y4": "{{i18n:sam-y3-xmas-spouse-kids}}$h"
             }
         },
         {
@@ -475,8 +475,8 @@
             "Target": "Data/Festivals/winter25",
             "When": {"EnableFor": "Sebastian"},
             "Entries": {
-                "Sebastian_y2": "{{i18n:sebastian-y2-xmas.00}}$s",
-                "Sebastian_spouse_y2": "{{i18n:sebastian-y2-xmas-spouse}}"
+                "Sebastian_y3": "{{i18n:sebastian-y2-xmas.00}}$s",
+                "Sebastian_spouse_y3": "{{i18n:sebastian-y2-xmas-spouse}}"
             }
         },
         {
@@ -488,7 +488,7 @@
                 "ChildStatus": "Multiple"
             },
             "Entries": {
-                "Sebastian_spouse_y2": "{{i18n:sebastian-y2-xmas-spouse-kids}}"
+                "Sebastian_spouse_y3": "{{i18n:sebastian-y2-xmas-spouse-kids}}"
             }
         },
         {
@@ -497,7 +497,7 @@
             "Target": "Data/Festivals/winter25",
             "When": {"EnableFor": "Shane"},
             "Entries": {
-                "Shane_y2": "{{i18n:shane-y2-xmas.00}}$h",
+                "Shane_y3": "{{i18n:shane-y2-xmas.00}}$h",
                 "Shane_spouse": "{{i18n:shane-y1-xmas-spouse.00}}#$b#{{i18n:shane-y1-xmas-spouse.01}}$h"
             }
         },
@@ -522,8 +522,8 @@
                 "Year|contains=1,2": false
             },
             "Entries": {
-                "Vincent_y2": "{{i18n:vincent-y2-xmas}}",
-                "Vincent_y3": "{{i18n:vincent-y3-xmas}}"
+                "Vincent_y3": "{{i18n:vincent-y2-xmas}}",
+                "Vincent_y4": "{{i18n:vincent-y3-xmas}}"
             }
         },
         {
@@ -532,8 +532,8 @@
             "Target": "Data/Festivals/winter25",
             "When": {"EnableFor": "Willy"},
             "Entries": {
-                "Willy_y2": "{{i18n:willy-y2-xmas}}$h",
-                "Willy_y3": "{{i18n:willy-y3-xmas}}$h"
+                "Willy_y3": "{{i18n:willy-y2-xmas}}$h",
+                "Willy_y4": "{{i18n:willy-y3-xmas}}$h"
             }
         }
     ]

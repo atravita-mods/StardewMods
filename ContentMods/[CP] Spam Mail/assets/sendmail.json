@@ -216,7 +216,7 @@
                 "atravita.SpamMail.Therapy": {
                     "Id": "atravita.SpamMail.Therapy",
                     "Trigger": "LocationChanged",
-                    "Condition": "LOCATION_NAME Here Saloon, PLAYER_HAS_MAIL Current atravita.SpamMail.Pizza received, !PLAYER_HAS_CONVERSATION_TOPIC atravita.SpamMail.Pizza, {{MidYearConstraint}}, RANDOM 0.05",
+                    "Condition": "LOCATION_NAME Here Saloon, PLAYER_HAS_MAIL Current atravita.SpamMail.Pizza received, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMail.Pizza, {{MidYearConstraint}}, RANDOM 0.05",
                     "Action": "AddMail Current atravita.SpamMail.Therapy"
                 },
 

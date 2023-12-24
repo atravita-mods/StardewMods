@@ -8,9 +8,9 @@
             "EnableFor": "Abigail"
         },
         "Entries": {
-            "Abigail_y2": "{{i18n:abby-y2-luau.00}}",
-            "Abigail_y3": "{{i18n:abby-y3-luau.00}}$s",
-            "Abigail_spouse_y2": "{{i18n:abby-y2-luau-spouse}}#$b#{{i18n:abby-y2-luau-spouse.00}}$s"
+            "Abigail_y3": "{{i18n:abby-y2-luau.00}}",
+            "Abigail_y4": "{{i18n:abby-y3-luau.00}}$s",
+            "Abigail_spouse_y3": "{{i18n:abby-y2-luau-spouse}}#$b#{{i18n:abby-y2-luau-spouse.00}}$s"
         }
     },
     {
@@ -21,9 +21,9 @@
             "EnableFor": "Alex"
         },
         "Entries": {
-            "Alex_y2": "{{i18n:alex-y2-luau.00}}$h",
-            "Alex_spouse_y2": "{{i18n:alex-y2-luau-spouse}}$h",
-            "Alex_spouse_y3": "{{i18n:alex-y3-luau-spouse}}$h"
+            "Alex_y3": "{{i18n:alex-y2-luau.00}}$h",
+            "Alex_spouse_y3": "{{i18n:alex-y2-luau-spouse}}$h",
+            "Alex_spouse_y4": "{{i18n:alex-y3-luau-spouse}}$h"
         }
     },
     {
@@ -35,7 +35,7 @@
             "Query: {{Hearts:Alex}} > 5": true
         },
         "Entries": {
-            "Alex_y3": "{{i18n:alex-y3-luau.00}}$h"
+            "Alex_y4": "{{i18n:alex-y3-luau.00}}$h"
         }
     },
     {
@@ -46,9 +46,9 @@
             "EnableFor": "Caroline"
         },
         "Entries": {
-            "Caroline_y2": "{{i18n:caroline-y2-luau}}$h",
-            "Caroline_y3": "{{i18n:caroline-y3-luau}}$s",
-            "Caroline_y4": "{{i18n:caroline-y4-luau}}$h#$e#{{i18n:caroline-y4-luau.00}}"
+            "Caroline_y3": "{{i18n:caroline-y2-luau}}$h",
+            "Caroline_y4": "{{i18n:caroline-y3-luau}}$s",
+            "Caroline_y5": "{{i18n:caroline-y4-luau}}$h#$e#{{i18n:caroline-y4-luau.00}}"
         }
     },
     {
@@ -59,9 +59,9 @@
             "EnableFor": "Clint"
         },
         "Entries": {
-            "Clint_y2": "{{i18n:clint-y2-luau}}",
-            "Clint_y3": "{{i18n:clint-y3-luau.00}}$s#$e{{i18n:clint-y3-luau.01}}",
-            "Clint_y4": "{{i18n:clint-y4-luau}}$h"
+            "Clint_y3": "{{i18n:clint-y2-luau}}",
+            "Clint_y4": "{{i18n:clint-y3-luau.00}}$s#$e{{i18n:clint-y3-luau.01}}",
+            "Clint_y5": "{{i18n:clint-y4-luau}}$h"
         }
     },
     {
@@ -72,9 +72,9 @@
             "EnableFor": "Demetrius"
         },
         "Entries": {
-            "Demetrius_y2": "{{i18n:demetrius-y2-luau}}$s",
-            "Demetrius_y3": "{{i18n:demetrius-y3-luau}}$s",
-            "Demetrius_y4": "{{i18n:demetrius-y4-luau.00}}$s#$e#{{i18n:demetrius-y4-luau.01}}"
+            "Demetrius_y3": "{{i18n:demetrius-y2-luau}}$s",
+            "Demetrius_y4": "{{i18n:demetrius-y3-luau}}$s",
+            "Demetrius_y5": "{{i18n:demetrius-y4-luau.00}}$s#$e#{{i18n:demetrius-y4-luau.01}}"
         }
     },
     {
@@ -85,9 +85,9 @@
             "EnableFor": "Elliott"
         },
         "Entries": {
-            "Elliott_y2": "{{i18n:elliott-y2-luau.00}}#$b${{i18n:elliott-y2-luau.01}}$s",
-            "Elliott_y3": "{{i18n:elliott-y3-luau}}$h",
-            "Elliott_spouse_y2": "{{i18n:elliott-y2-luau-spouse}}#$b#{{i18n:elliott-y2-luau-spouse.01}}$s"
+            "Elliott_y3": "{{i18n:elliott-y2-luau.00}}#$b${{i18n:elliott-y2-luau.01}}$s",
+            "Elliott_y4": "{{i18n:elliott-y3-luau}}$h",
+            "Elliott_spouse_y3": "{{i18n:elliott-y2-luau-spouse}}#$b#{{i18n:elliott-y2-luau-spouse.01}}$s"
         }
     },
     {
@@ -98,9 +98,9 @@
             "EnableFor": "Emily"
         },
         "Entries": {
-            "Emily_y2": "{{i18n:emily-y2-luau.00}}#$b${{i18n:emily-y2-luau.01}}$h",
+            "Emily_y3": "{{i18n:emily-y2-luau.00}}#$b${{i18n:emily-y2-luau.01}}$h",
             "Emily_spouse": "{{i18n:emily-y1-luau-spouse}}$h",
-            "Emily_spouse_y2": "{{i18n:emily-y2-luau-spouse}}$h"
+            "Emily_spouse_y3": "{{i18n:emily-y2-luau-spouse}}$h"
         }
     },
     {
@@ -111,9 +111,9 @@
             "EnableFor": "Evelyn"
         },
         "Entries": {
-            "Evelyn_y2": "{{i18n:evelyn-y2-luau}}",
-            "Evelyn_y3": "{{i18n:evelyn-y3-luau}}$s",
-            "Evelyn_y4": "{{i18n:evelyn-y4-luau}}$h"
+            "Evelyn_y3": "{{i18n:evelyn-y2-luau}}",
+            "Evelyn_y4": "{{i18n:evelyn-y3-luau}}$s",
+            "Evelyn_y5": "{{i18n:evelyn-y4-luau}}$h"
         }
     },
     {
@@ -124,9 +124,9 @@
             "EnableFor": "George"
         },
         "Entries": {
-            "George_y2": "{{i18n:george-y2-luau}}$h",
-            "George_y3": "{{i18n:george-y3-luau}}$s",
-            "George_y4": "{{i18n:george-y4-luau}}$h"
+            "George_y3": "{{i18n:george-y2-luau}}$h",
+            "George_y4": "{{i18n:george-y3-luau}}$s",
+            "George_y5": "{{i18n:george-y4-luau}}$h"
         }
     },
     {
@@ -150,9 +150,9 @@
             "EnableFor": "Gus"
         },
         "Entries": {
-            "Gus_y2": "{{i18n:gus-y2-luau}}$h",
-            "Gus_y3": "{{i18n:gus-y3-luau}}$h",
-            "Gus_y4": "{{i18n:gus-y4-luau}}$s"
+            "Gus_y3": "{{i18n:gus-y2-luau}}$h",
+            "Gus_y4": "{{i18n:gus-y3-luau}}$h",
+            "Gus_y5": "{{i18n:gus-y4-luau}}$s"
         }
     },
     {
@@ -163,9 +163,9 @@
             "EnableFor": "Haley"
         },
         "Entries": {
-            "Haley_y2": "{{i18n:haley-y2-luau.00}}#$b${{i18n:haley-y2-luau.01}}",
-            "Haley_spouse_y2": "{{i18n:haley-y2-luau-spouse}}$h",
-            "Haley_spouse_y3": "{{i18n:haley-y3-luau-spouse}}$h"
+            "Haley_y3": "{{i18n:haley-y2-luau.00}}#$b${{i18n:haley-y2-luau.01}}",
+            "Haley_spouse_y3": "{{i18n:haley-y2-luau-spouse}}$h",
+            "Haley_spouse_y4": "{{i18n:haley-y3-luau-spouse}}$h"
         }
     },
     {
@@ -177,8 +177,8 @@
             "EnableFor": "Harvey"
         },
         "Entries": {
-            "Harvey_y2": "{{i18n:harvey-y2-luau}}",
-            "Harvey_spouse_y2": "{{i18n:harvey-y2-luau-spouse}}"
+            "Harvey_y3": "{{i18n:harvey-y2-luau}}",
+            "Harvey_spouse_y3": "{{i18n:harvey-y2-luau-spouse}}"
         }
     },
     {
@@ -189,8 +189,8 @@
             "EnableFor": "Jas"
         },
         "Entries": {
-            "Jas_y2": "{{i18n:jas-y2-luau.00}}$s#$e#{{i18n:jas-y2-luau.01|title={{Title}} }}",
-            "Jas_y3": "{{i18n:jas-y3-luau}}$s"
+            "Jas_y3": "{{i18n:jas-y2-luau.00}}$s#$e#{{i18n:jas-y2-luau.01|title={{Title}} }}",
+            "Jas_y4": "{{i18n:jas-y3-luau}}$s"
         }
     },
     {
@@ -201,9 +201,9 @@
             "EnableFor": "Jodi"
         },
         "Entries": {
-            "Jodi_y2": "{{i18n:jodi-y2-luau}}",
-            "Jodi_y3": "{{i18n:jodi-y3-luau}}",
-            "Jodi_y4": "{{i18n:jodi-y4-luau}}$s"
+            "Jodi_y3": "{{i18n:jodi-y2-luau}}",
+            "Jodi_y4": "{{i18n:jodi-y3-luau}}",
+            "Jodi_y5": "{{i18n:jodi-y4-luau}}$s"
         }
     },
     {
@@ -214,8 +214,8 @@
             "EnableFor": "Kent"
         },
         "Entries": {
-            "Kent_y2": "{{i18n:kent-y2-luau}}",
-            "Kent_y3": "{{i18n:kent-y3-luau}}$s"
+            "Kent_y3": "{{i18n:kent-y2-luau}}",
+            "Kent_y4": "{{i18n:kent-y3-luau}}$s"
         }
     },
     {
@@ -226,8 +226,8 @@
             "EnableFor": "Leah"
         },
         "Entries": {
-            "Leah_y2": "{{i18n:leah-y2-luau}}$h",
-            "Leah_spouse_y2": "{{i18n:leah-y2-luau-spouse}}$s#$b#{{i18n:leah-y2-luau-spouse.00}}"
+            "Leah_y3": "{{i18n:leah-y2-luau}}$h",
+            "Leah_spouse_y3": "{{i18n:leah-y2-luau-spouse}}$s#$b#{{i18n:leah-y2-luau-spouse.00}}"
         }
     },
     {
@@ -238,8 +238,8 @@
             "EnableFor": "Leo"
         },
         "Entries": {
-            "Leo_y2": "{{i18n:leo-y2-luau}}",
-            "Leo_y3": "{{i18n:leo-y3-luau}}$h"
+            "Leo_y3": "{{i18n:leo-y2-luau}}",
+            "Leo_y4": "{{i18n:leo-y3-luau}}$h"
         }
     },
     {
@@ -250,8 +250,8 @@
             "EnableFor": "Lewis"
         },
         "Entries": {
-            "Lewis_y2": "{{i18n:lewis-y2-luau}}",
-            "Lewis_y3": "{{i18n:lewis-y3-luau}}$h#$e#{{i18n:lewis-y3-luau.00}}"
+            "Lewis_y3": "{{i18n:lewis-y2-luau}}",
+            "Lewis_y4": "{{i18n:lewis-y3-luau}}$h#$e#{{i18n:lewis-y3-luau.00}}"
         }
     },
     {
@@ -262,8 +262,8 @@
             "EnableFor": "Linus"
         },
         "Entries": {
-            "Linus_y2": "{{i18n:linus-y2-luau}}$h",
-            "Linus_y3": "{{i18n:linus-y3-luau}}$h"
+            "Linus_y3": "{{i18n:linus-y2-luau}}$h",
+            "Linus_y4": "{{i18n:linus-y3-luau}}$h"
         }
     },
     {
@@ -274,7 +274,7 @@
             "EnableFor": "Marlon"
         },
         "Entries": {
-            "Marlon_y2": "{{i18n:marlon-y2-luau}}"
+            "Marlon_y3": "{{i18n:marlon-y2-luau}}"
         }
     },
     {
@@ -285,8 +285,8 @@
             "EnableFor": "Marnie"
         },
         "Entries": {
-            "Marnie_y2": "{{i18n:marnie-y2-luau}}$h",
-            "Marnie_y3": "{{i18n:marnie-y3-luau}}$h"
+            "Marnie_y3": "{{i18n:marnie-y2-luau}}$h",
+            "Marnie_y4": "{{i18n:marnie-y3-luau}}$h"
         }
     },
     {
@@ -297,8 +297,8 @@
             "EnableFor": "Maru"
         },
         "Entries": {
-            "Maru_y2": "{{i18n:maru-y2-luau}}$h",
-            "Maru_spouse_y2": "{{i18n:maru-y2-luau-spouse}}$s"
+            "Maru_y3": "{{i18n:maru-y2-luau}}$h",
+            "Maru_spouse_y3": "{{i18n:maru-y2-luau-spouse}}$s"
         }
     },
     {
@@ -309,7 +309,7 @@
             "EnableFor": "Pam"
         },
         "Entries": {
-            "Pam_y2": "{{i18n:pam-y2-luau}}$h"
+            "Pam_y3": "{{i18n:pam-y2-luau}}$h"
         }
     },
     {
@@ -320,8 +320,8 @@
             "EnableFor": "Penny"
         },
         "Entries": {
-            "Penny_y2": "{{i18n:penny-y2-luau}}#$e#{{i18n:penny-y2-luau.00}}$s",
-            "Penny_spouse_y2": "{{i18n:penny-y2-luau-spouse}}"
+            "Penny_y3": "{{i18n:penny-y2-luau}}#$e#{{i18n:penny-y2-luau.00}}$s",
+            "Penny_spouse_y3": "{{i18n:penny-y2-luau-spouse}}"
         }
     },
     {
@@ -333,8 +333,8 @@
             "IsJojaMartComplete": false
         },
         "Entries": {
-            "Pierre_y2": "{{i18n:pierre-y2-luau}}",
-            "Pierre_y3": "{{i18n:pierre-y3-luau}}$h"
+            "Pierre_y3": "{{i18n:pierre-y2-luau}}",
+            "Pierre_y4": "{{i18n:pierre-y3-luau}}$h"
         }
     },
     {
@@ -346,8 +346,8 @@
             "IsJojaMartComplete": true
         },
         "Entries": {
-            "Pierre_y2": "{{i18n:pierre-y2-luau-joja}}$s#$e#{{i18n:pierre-y2-luau-joja.00}}",
-            "Pierre_y3": "{{i18n:pierre-y3-luau-joja}}$s"
+            "Pierre_y3": "{{i18n:pierre-y2-luau-joja}}$s#$e#{{i18n:pierre-y2-luau-joja.00}}",
+            "Pierre_y4": "{{i18n:pierre-y3-luau-joja}}$s"
         }
     },
     {
@@ -358,9 +358,9 @@
             "EnableFor": "Robin"
         },
         "Entries": {
-            "Robin_y2": "{{i18n:robin-y2-luau}}$h",
-            "Robin_y3": "{{i18n:robin-y3-luau}}$h#$e#{{i18n:robin-y3-luau.01}}",
-            "Robin_y4": "{{i18n:robin-y4-luau.00}}$s"
+            "Robin_y3": "{{i18n:robin-y2-luau}}$h",
+            "Robin_y4": "{{i18n:robin-y3-luau}}$h#$e#{{i18n:robin-y3-luau.01}}",
+            "Robin_y5": "{{i18n:robin-y4-luau.00}}$s"
         }
     },
     {
@@ -371,9 +371,9 @@
             "EnableFor": "Sam"
         },
         "Entries": {
-            "Sam_y2": "{{i18n:sam-y2-luau}}$s#$e#{{i18n:sam-y2-luau.00}}$s",
-            "Sam_spouse_y2": "{{i18n:sam-y2-luau-spouse}}$l",
-            "Sam_spouse_y3": "{{i18n:sam-y3-luau-spouse}}$h"
+            "Sam_y3": "{{i18n:sam-y2-luau}}$s#$e#{{i18n:sam-y2-luau.00}}$s",
+            "Sam_spouse_y3": "{{i18n:sam-y2-luau-spouse}}$l",
+            "Sam_spouse_y4": "{{i18n:sam-y3-luau-spouse}}$h"
         }
     },
     // intentionally skip Sandy.
@@ -385,8 +385,8 @@
             "EnableFor": "Sebastian"
         },
         "Entries": {
-            "Sebastian_y2": "{{i18n:sebastian-y2-luau}}$s#$e#{{i18n:sebastian-y2-luau.000}}",
-            "Sebastian_spouse_y2": "{{i18n:sebastian-y2-luau-spouse}}$s"
+            "Sebastian_y3": "{{i18n:sebastian-y2-luau}}$s#$e#{{i18n:sebastian-y2-luau.000}}",
+            "Sebastian_spouse_y3": "{{i18n:sebastian-y2-luau-spouse}}$s"
         }
     },
     {
@@ -397,8 +397,8 @@
             "EnableFor": "Shane"
         },
         "Entries": {
-            "Shane_y2": "{{i18n:shane-y2-luau}}$h",
-            "Shane_y3": "{{i18n:shane-y3-luau}}",
+            "Shane_y3": "{{i18n:shane-y2-luau}}$h",
+            "Shane_y4": "{{i18n:shane-y3-luau}}",
             "Shane_spouse": "{{i18n:shane-y1-luau-spouse}}$h"
         }
     },
@@ -410,8 +410,8 @@
             "EnableFor": "Vincent"
         },
         "Entries": {
-            "Vincent_y2": "{{i18n:vincent-y2-luau|title={{Title}} }}",
-            "Vincent_y3": "{{i18n:vincent-y3-luau}}"
+            "Vincent_y3": "{{i18n:vincent-y2-luau|title={{Title}} }}",
+            "Vincent_y4": "{{i18n:vincent-y3-luau}}"
         }
     },
     {
@@ -422,9 +422,9 @@
             "EnableFor": "Willy"
         },
         "Entries": {
-            "Willy_y2": "{{i18n:willy-y2-luau}}$h",
-            "Willy_y3": "{{i18n:willy-y3-luau}}$s",
-            "Willy_y4": "{{i18n:willy-y4-luau}}$h"
+            "Willy_y3": "{{i18n:willy-y2-luau}}$h",
+            "Willy_y4": "{{i18n:willy-y3-luau}}$s",
+            "Willy_y5": "{{i18n:willy-y4-luau}}$h"
         }
     }
     // Wizard deliberately excluded, he has enough content.

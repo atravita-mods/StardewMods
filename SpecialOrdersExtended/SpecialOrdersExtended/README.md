@@ -15,7 +15,6 @@ Run SMAPI at least once with this mod installed to generate the `config.json`, o
 
 * `SurpressUnnecessaryBoardUpdates` prevents the board from trying to update if it's not unlocked yet. Disable this if it causes issues.
 * `UseTagCache` will use a small internal cache to prevent recalculating tags often.
-* `AvoidRepeatingQiOrders` will cause completed Qi orders to never appear on the board UNLESS you've finished all of them. Primarily put this one in because I got tired of waiting for Danger in the Deep to show up.
 
 ### For modders:
 

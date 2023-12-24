@@ -9,8 +9,8 @@
                 "EnableFor": "Abigail"
             },
             "Entries": {
-                "Abigail_y2": "%{{i18n:abby-y2-halloween.00}}#$b${{i18n:abby-y2-halloween.01}}",
-                "Abigail_spouse_y2": "{{i18n:abby-y2-halloween-spouse}}"
+                "Abigail_y3": "%{{i18n:abby-y2-halloween.00}}#$b${{i18n:abby-y2-halloween.01}}",
+                "Abigail_spouse_y3": "{{i18n:abby-y2-halloween-spouse}}"
             }
         },
         {
@@ -21,7 +21,7 @@
                 "EnableFor": "Alex"
             },
             "Entries": {
-                "Alex_y2": "{{i18n:alex-y2-halloween.00}}#$e${{i18n:alex-y2-halloween.01}}",
+                "Alex_y3": "{{i18n:alex-y2-halloween.00}}#$e${{i18n:alex-y2-halloween.01}}",
                 "Alex_spouse": "{{i18n:alex-y1-halloween-spouse}}"
             }
         },
@@ -33,8 +33,8 @@
                 "EnableFor": "Caroline"
             },
             "Entries": {
-                "Caroline_y2": "{{i18n:caroline-y2-halloween}}",
-                "Caroline_y3": "{{i18n:caroline-y3-halloween}}"
+                "Caroline_y3": "{{i18n:caroline-y2-halloween}}",
+                "Caroline_y4": "{{i18n:caroline-y3-halloween}}"
             }
         },
         {
@@ -45,7 +45,7 @@
                 "EnableFor": "Clint"
             },
             "Entries": {
-                "Clint_y2": "{{i18n:clint-y2-halloween}}$h"
+                "Clint_y3": "{{i18n:clint-y2-halloween}}$h"
             }
         },
         {
@@ -56,9 +56,9 @@
                 "EnableFor": "Demetrius"
             },
             "Entries": {
-                "Demetrius_y2": "{{i18n:demetrius-y2-halloween}}",
-                "Demetrius_y3": "{{i18n:demetrius-y3-halloween}}",
-                "Demetrius_y4": "{{i18n:demetrius-y4-halloween}}$s"
+                "Demetrius_y3": "{{i18n:demetrius-y2-halloween}}",
+                "Demetrius_y4": "{{i18n:demetrius-y3-halloween}}",
+                "Demetrius_y5": "{{i18n:demetrius-y4-halloween}}$s"
             }
         },
         {
@@ -69,8 +69,8 @@
                 "EnableFor": "Elliott"
             },
             "Entries": {
-                "Elliott_y2": "{{i18n:elliott-y2-halloween.00}}#$b${{i18n:elliott-y2-halloween.01}}$s",
-                "Elliott_spouse_y2": "{{i18n:elliott-y2-halloween-spouse}}"
+                "Elliott_y3": "{{i18n:elliott-y2-halloween.00}}#$b${{i18n:elliott-y2-halloween.01}}$s",
+                "Elliott_spouse_y3": "{{i18n:elliott-y2-halloween-spouse}}"
             }
         },
         {
@@ -81,7 +81,7 @@
                 "EnableFor": "Emily"
             },
             "Entries": {
-                "Emily_y2": "{{i18n:emily-y2-halloween.00}}#$b${{i18n:emily-y2-halloween.01}}$s",
+                "Emily_y3": "{{i18n:emily-y2-halloween.00}}#$b${{i18n:emily-y2-halloween.01}}$s",
                 "Emily_spouse": "{{i18n:emily-y2-halloween-spouse}}"
             }
         },
@@ -93,8 +93,8 @@
                 "EnableFor": "Evelyn"
             },
             "Entries": {
-                "Evelyn_y2": "{{i18n:evelyn-y2-halloween}}",
-                "Evelyn_y3": "{{i18n:evelyn-y3-halloween}}"
+                "Evelyn_y3": "{{i18n:evelyn-y2-halloween}}",
+                "Evelyn_y4": "{{i18n:evelyn-y3-halloween}}"
             }
         },
         {
@@ -105,8 +105,8 @@
                 "EnableFor": "George"
             },
             "Entries": {
-                "George_y2": "{{i18n:george-y2-halloween}}",
-                "George_y3": "{{i18n:george-y3-halloween}}$h"
+                "George_y3": "{{i18n:george-y2-halloween}}",
+                "George_y4": "{{i18n:george-y3-halloween}}$h"
             }
         },
         {
@@ -117,8 +117,8 @@
                 "EnableFor": "Gus"
             },
             "Entries": {
-                "Gus_y2": "{{i18n:gus-y2-halloween}}",
-                "Gus_y3": "{{i18n:gus-y3-halloween}}$h"
+                "Gus_y3": "{{i18n:gus-y2-halloween}}",
+                "Gus_y4": "{{i18n:gus-y3-halloween}}$h"
             }
         },
         {
@@ -129,8 +129,8 @@
                 "EnableFor": "Haley"
             },
             "Entries": {
-                "Haley_y2": "{{i18n:haley-y2-halloween}}",
-                "Haley_spouse": "{{i18n:haley-y2-halloween-spouse}}"
+                "Haley_y3": "{{i18n:haley-y2-halloween}}",
+                "Haley_spouse_y3": "{{i18n:haley-y2-halloween-spouse}}"
             }
         },
         {
@@ -143,7 +143,7 @@
                 "Spouse": "Haley"
             },
             "Entries": {
-                "Haley_spouse": "{{i18n:haley-y2-halloween-spouse-has-kid}}"
+                "Haley_spouse_y3": "{{i18n:haley-y2-halloween-spouse-has-kid}}"
             }
         },
         {
@@ -156,7 +156,7 @@
                 "Spouse": "Haley"
             },
             "Entries": {
-                "Haley_spouse": "{{i18n:haley-y2-halloween-spouse-has-kids}}"
+                "Haley_spouse_y3": "{{i18n:haley-y2-halloween-spouse-has-kids}}"
             }
         },
         {
@@ -167,8 +167,8 @@
                 "EnableFor": "Harvey"
             },
             "Entries": {
-                "Harvey_y2": "{{i18n:harvey-y2-halloween}}",
-                "Harvey_spouse_y2": "{{i18n:harvey-y2-halloween-spouse}}"
+                "Harvey_y3": "{{i18n:harvey-y2-halloween}}",
+                "Harvey_spouse_y3": "{{i18n:harvey-y2-halloween-spouse}}"
             }
         },
         {
@@ -179,8 +179,8 @@
                 "EnableFor": "Jas"
             },
             "Entries": {
-                "Jas_y2": "{{i18n:jas-y2-halloween.00}}$s#$e#{{i18n:jas-y2-halloween.01|title={{Title}} }}",
-                "Jas_y3": "{{i18n:jas-y3-halloween}}$s"
+                "Jas_y3": "{{i18n:jas-y2-halloween.00}}$s#$e#{{i18n:jas-y2-halloween.01|title={{Title}} }}",
+                "Jas_y4": "{{i18n:jas-y3-halloween}}$s"
             }
         },
         {
@@ -191,9 +191,9 @@
                 "EnableFor": "Jodi"
             },
             "Entries": {
-                "Jodi_y2": "{{i18n:jodi-y2-halloween}}",
-                "Jodi_y3": "{{i18n:jodi-y3-halloween}}",
-                "Jodi_y4": "{{i18n:jodi-y4-halloween}}$s",
+                "Jodi_y3": "{{i18n:jodi-y2-halloween}}",
+                "Jodi_y4": "{{i18n:jodi-y3-halloween}}",
+                "Jodi_y5": "{{i18n:jodi-y4-halloween}}$s",
             }
         },
         {
@@ -204,8 +204,8 @@
                 "EnableFor": "Kent"
             },
             "Entries": {
-                "Kent_y2": "{{i18n:kent-y2-halloween}}",
-                "Kent_y3": "{{i18n:kent-y3-halloween}}"
+                "Kent_y3": "{{i18n:kent-y2-halloween}}",
+                "Kent_y4": "{{i18n:kent-y3-halloween}}"
             }
         },
         {
@@ -216,8 +216,8 @@
                 "EnableFor": "Leah"
             },
             "Entries": {
-                "Leah_y2": "{{i18n:leah-y2-halloween}}$h",
-                "Leah_spouse_y2": "{{i18n:leah-y2-halloween-spouse}}"
+                "Leah_y3": "{{i18n:leah-y2-halloween}}$h",
+                "Leah_spouse_y3": "{{i18n:leah-y2-halloween-spouse}}"
             }
         },
         {
@@ -228,7 +228,7 @@
                 "EnableFor": "Leo"
             },
             "Entries": {
-                "Leo_y2": "{{i18n:leo-y2-halloween|title={{Title}} }}$s",
+                "Leo_y3": "{{i18n:leo-y2-halloween|title={{Title}} }}$s",
             }
         },
         {
@@ -239,8 +239,8 @@
                 "EnableFor": "Lewis"
             },
             "Entries": {
-                "Lewis_y2": "{{i18n:lewis-y2-halloween.00}}$h#$e#{{i18n:lewis-y2-halloween.01}}",
-                "Lewis_y3": "{{i18n:lewis-y3-halloween.00}}$h#$e#{{i18n:lewis-y3-halloween.01}}",
+                "Lewis_y3": "{{i18n:lewis-y2-halloween.00}}$h#$e#{{i18n:lewis-y2-halloween.01}}",
+                "Lewis_y4": "{{i18n:lewis-y3-halloween.00}}$h#$e#{{i18n:lewis-y3-halloween.01}}",
             }
         },
         {
@@ -251,7 +251,7 @@
                 "EnableFor": "Linus"
             },
             "Entries": {
-                "Linus_y2": "{{i18n:linus-y2-halloween}}$h",
+                "Linus_y3": "{{i18n:linus-y2-halloween}}$h",
             }
         },
         {
@@ -262,7 +262,7 @@
                 "EnableFor": "Marlon"
             },
             "Entries": {
-                "Marlon_y2": "{{i18n:marlon-y2-halloween}}",
+                "Marlon_y3": "{{i18n:marlon-y2-halloween}}",
             }
         },
         {
@@ -273,8 +273,8 @@
                 "EnableFor": "Marnie"
             },
             "Entries": {
-                "Marnie_y2": "{{i18n:marnie-y2-halloween}}$h",
-                "Marnie_y3": "{{i18n:marnie-y3-halloween}}$h"
+                "Marnie_y3": "{{i18n:marnie-y2-halloween}}$h",
+                "Marnie_y4": "{{i18n:marnie-y3-halloween}}$h"
             }
         },
         {
@@ -286,7 +286,7 @@
                 "IncreasedRealism": true
             },
             "Entries": {
-                "Marnie_y3": "{{i18n:marnie-y3-halloween-realism}}"
+                "Marnie_y4": "{{i18n:marnie-y3-halloween-realism}}"
             }
         },
         {
@@ -297,8 +297,8 @@
                 "EnableFor": "Maru"
             },
             "Entries": {
-                "Maru_y2": "{{i18n:maru-y2-halloween}}$h",
-                "Maru_spouse_y2": "{{i18n:maru-y2-halloween-spouse}}"
+                "Maru_y3": "{{i18n:maru-y2-halloween}}$h",
+                "Maru_spouse_y3": "{{i18n:maru-y2-halloween-spouse}}"
             }
         },
         {
@@ -309,7 +309,7 @@
                 "EnableFor": "Pam"
             },
             "Entries": {
-                "Pam_y2": "{{i18n:pam-y2-halloween}}$h",
+                "Pam_y3": "{{i18n:pam-y2-halloween}}$h",
             }
         },
         {
@@ -320,8 +320,8 @@
                 "EnableFor": "Penny"
             },
             "Entries": {
-                "Penny_y2": "{{i18n:penny-y2-halloween}}",
-                "Penny_spouse_y2": "{{i18n:penny-y2-halloween-spouse}}$s"
+                "Penny_y3": "{{i18n:penny-y2-halloween}}",
+                "Penny_spouse_y3": "{{i18n:penny-y2-halloween-spouse}}$s"
             }
         },
         {
@@ -333,7 +333,7 @@
             },
             "Entries": {
                 "Pierre": "{{i18n:pierre-y1-halloween}}$h",
-                "Pierre_y2": "{{i18n:pierre-y2-halloween}}",
+                "Pierre_y3": "{{i18n:pierre-y2-halloween}}",
             }
         },
         {
@@ -345,7 +345,7 @@
                 "Relationship: Abigail": "Married",
             },
             "Entries": {
-                "Pierre_y2": "{{i18n:pierre-y2-halloween-married-to-abby}}$h",
+                "Pierre_y3": "{{i18n:pierre-y2-halloween-married-to-abby}}$h",
             }
         },
         {
@@ -356,7 +356,7 @@
                 "EnableFor": "Robin"
             },
             "Entries": {
-                "Robin_y2": "{{i18n:robin-y2-halloween}}$h",
+                "Robin_y3": "{{i18n:robin-y2-halloween}}$h",
             }
         },
         {
@@ -367,8 +367,8 @@
                 "EnableFor": "Sam"
             },
             "Entries": {
-                "Sam_y2": "{{i18n:sam-y2-halloween}}",
-                "Sam_spouse_y2": "{{i18n:sam-y2-halloween-spouse}}$h"
+                "Sam_y3": "{{i18n:sam-y2-halloween}}",
+                "Sam_spouse_y3": "{{i18n:sam-y2-halloween-spouse}}$h"
             }
         },
         {
@@ -379,8 +379,8 @@
                 "EnableFor": "Sebastian"
             },
             "Entries": {
-                "Sebastian_y2": "{{i18n:sebastian-y2-halloween}}",
-                "Sebastian_spouse_y2": "{{i18n:sebastian-y2-halloween-spouse}}$h"
+                "Sebastian_y3": "{{i18n:sebastian-y2-halloween}}",
+                "Sebastian_spouse_y3": "{{i18n:sebastian-y2-halloween-spouse}}$h"
             }
         },
         {
@@ -391,9 +391,9 @@
                 "EnableFor": "Shane"
             },
             "Entries": {
-                "Shane_y2": "{{i18n:shane-y2-halloween}}$h",
-                "Shane_y3": "{{i18n:shane-y3-halloween}}",
-                "Shane_spouse_y2": "{{i18n:shane-y2-halloween-spouse}}$h"
+                "Shane_y3": "{{i18n:shane-y2-halloween}}$h",
+                "Shane_y4": "{{i18n:shane-y3-halloween}}",
+                "Shane_spouse_y3": "{{i18n:shane-y2-halloween-spouse}}$h"
             }
         },
         {
@@ -404,8 +404,8 @@
                 "EnableFor": "Vincent"
             },
             "Entries": {
-                "Vincent_y2": "{{i18n:vincent-y2-halloween|title={{Title}} }}",
-                "Vincent_y3": "{{i18n:vincent-y3-halloween}}",
+                "Vincent_y3": "{{i18n:vincent-y2-halloween|title={{Title}} }}",
+                "Vincent_y4": "{{i18n:vincent-y3-halloween}}",
             }
         },
     ]

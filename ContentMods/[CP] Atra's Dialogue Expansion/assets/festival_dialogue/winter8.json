@@ -9,9 +9,9 @@
                 "EnableFor": "Abigail"
             },
             "Entries": {
-                "Abigail_y2": "{{i18n:abby-y2-fishing.00}}",
-                "Abigail_y3": "{{i18n:abby-y3-fishing.00}}$s",
-                "Abigail_spouse_y2": "{{i18n:abby-y2-fishing-spouse}}#$b#{{i18n:abby-y2-fishing-spouse.00}}$s"
+                "Abigail_y3": "{{i18n:abby-y2-fishing.00}}",
+                "Abigail_y4": "{{i18n:abby-y3-fishing.00}}$s",
+                "Abigail_spouse_y3": "{{i18n:abby-y2-fishing-spouse}}#$b#{{i18n:abby-y2-fishing-spouse.00}}$s"
             }
         },
         {
@@ -22,10 +22,10 @@
                 "EnableFor": "Alex"
             },
             "Entries": {
-                "Alex_y2": "{{i18n:alex-y2-fishing.00}}",
-                "Alex_y3": "{{i18n:alex-y3-fishing.00}}",
-                "Alex_spouse_y2": "{{i18n:alex-y2-fishing-spouse}}$h",
-                "Alex_spouse_y3": "{{i18n:alex-y3-fishing-spouse}}"
+                "Alex_y3": "{{i18n:alex-y2-fishing.00}}",
+                "Alex_y4": "{{i18n:alex-y3-fishing.00}}",
+                "Alex_spouse_y3": "{{i18n:alex-y2-fishing-spouse}}$h",
+                "Alex_spouse_y4": "{{i18n:alex-y3-fishing-spouse}}"
             }
         },
         {
@@ -36,8 +36,8 @@
                 "EnableFor": "Caroline"
             },
             "Entries": {
-                "Caroline_y2": "{{i18n:caroline-y2-fishing}}",
-                "Caroline_y3": "{{i18n:caroline-y3-fishing}}"
+                "Caroline_y3": "{{i18n:caroline-y2-fishing}}",
+                "Caroline_y4": "{{i18n:caroline-y3-fishing}}"
             }
         },
         {
@@ -46,7 +46,7 @@
             "Target": "Data/Festivals/winter8",
             "When": {"EnableFor":"Clint"},
             "Entries": {
-                "Clint_y2": "{{i18n:clint-y2-fishing}}"
+                "Clint_y3": "{{i18n:clint-y2-fishing}}"
             }
         },
         {
@@ -67,8 +67,8 @@
             "Target": "Data/Festivals/winter8",
             "When": {"EnableFor":"Demetrius"},
             "Entries": {
-                "Demetrius_y2": "{{i18n:demetrius-y2-fishing.01}}$h#$e#{{i18n:demetrius-y2-fishing.02}}",
-                "Demetrius_y3": "{{i18n:demetrius-y3-fishing}}"
+                "Demetrius_y3": "{{i18n:demetrius-y2-fishing.01}}$h#$e#{{i18n:demetrius-y2-fishing.02}}",
+                "Demetrius_y4": "{{i18n:demetrius-y3-fishing}}"
             }
         },
         {
@@ -77,9 +77,9 @@
             "Target": "Data/Festivals/winter8",
             "When": {"EnableFor": "Elliott"},
             "Entries": {
-                "Elliott_y2": "{{i18n:elliott-y2-fishing}}$h",
-                "Elliott_y3": "{{i18n:elliott-y3-fishing}}$s",
-                "Elliott_spouse_y2": "{{i18n:elliott-y2-fishing-spouse}}$h"
+                "Elliott_y3": "{{i18n:elliott-y2-fishing}}$h",
+                "Elliott_y4": "{{i18n:elliott-y3-fishing}}$s",
+                "Elliott_spouse_y3": "{{i18n:elliott-y2-fishing-spouse}}$h"
             }
         },
         {
@@ -88,9 +88,9 @@
             "Target": "Data/Festivals/winter8",
             "When": {"EnableFor": "Emily"},
             "Entries": {
-                "Emily_y2": "{{i18n:emily-y2-fishing.01}}$h#$e#{{i18n:emily-y2-fishing.02}}",
+                "Emily_y3": "{{i18n:emily-y2-fishing.01}}$h#$e#{{i18n:emily-y2-fishing.02}}",
                 "Emily_spouse": "{{i18n:emily-y1-fishing-spouse}}$h",
-                "Emily_spouse_y2": "{{i18n:emily-y2-fishing-spouse}}$h"
+                "Emily_spouse_y3": "{{i18n:emily-y2-fishing-spouse}}$h"
             }
         },
         {
@@ -101,8 +101,8 @@
                 "EnableFor": "Evelyn"
             },
             "Entries": {
-                "Evelyn_y2": "{{i18n:evelyn-y2-fishing}}$h",
-                "Evelyn_y3": "{{i18n:evelyn-y3-fishing}}"
+                "Evelyn_y3": "{{i18n:evelyn-y2-fishing}}$h",
+                "Evelyn_y4": "{{i18n:evelyn-y3-fishing}}"
             }
         },
         {
@@ -113,8 +113,8 @@
                 "EnableFor": "George"
             },
             "Entries": {
-                "George_y2": "{{i18n:george-y2-fishing}}$s",
-                "George_y3": "{{i18n:george-y3-fishing}}$s"
+                "George_y3": "{{i18n:george-y2-fishing}}$s",
+                "George_y4": "{{i18n:george-y3-fishing}}$s"
             }
         },
         {
@@ -125,8 +125,8 @@
                 "EnableFor": "Gus"
             },
             "Entries": {
-                "Gus_y2": "{{i18n:gus-y2-fishing}}$s",
-                "Gus_y3": "{{i18n:gus-y3-fishing}}$h"
+                "Gus_y3": "{{i18n:gus-y2-fishing}}$s",
+                "Gus_y4": "{{i18n:gus-y3-fishing}}$h"
             }
         },
         {
@@ -138,7 +138,7 @@
                 "IsJojaMartComplete": true
             },
             "Entries": {
-                "Gus_y2": "{{i18n:gus-y2-fishing-joja}}$s",
+                "Gus_y3": "{{i18n:gus-y2-fishing-joja}}$s",
             }
         },
         {
@@ -149,9 +149,9 @@
                 "EnableFor": "Haley"
             },
             "Entries": {
-                "Haley_y2": "{{i18n:haley-y2-fishing.00}}$h#$e#{{i18n:haley-y2-fishing.01}}",
-                "Haley_y3": "{{i18n:haley-y3-fishing.00}}$h",
-                "Haley_spouse_y2": "{{i18n:haley-y2-fishing-spouse}}$h"
+                "Haley_y3": "{{i18n:haley-y2-fishing.00}}$h#$e#{{i18n:haley-y2-fishing.01}}",
+                "Haley_y4": "{{i18n:haley-y3-fishing.00}}$h",
+                "Haley_spouse_y3": "{{i18n:haley-y2-fishing-spouse}}$h"
             }
         },
         {
@@ -162,8 +162,8 @@
                 "EnableFor": "Harvey"
             },
             "Entries": {
-                "Harvey_y2": "{{i18n:harvey-y2-fishing.00}}#$e#{{i18n:harvey-y2-fishing.01}}",
-                "Harvey_spouse_y2": "{{i18n:harvey-y2-fishing-spouse}}$h#$b#{{i18n:harvey-y2-fishing-spouse.00}}$l"
+                "Harvey_y3": "{{i18n:harvey-y2-fishing.00}}#$e#{{i18n:harvey-y2-fishing.01}}",
+                "Harvey_spouse_y3": "{{i18n:harvey-y2-fishing-spouse}}$h#$b#{{i18n:harvey-y2-fishing-spouse.00}}$l"
             }
         },
         {
@@ -174,9 +174,9 @@
                 "EnableFor": "Jas"
             },
             "Entries": {
-                "Jas_y2": "{{i18n:jas-y2-fishing}}$s",
-                "Jas_y3": "{{i18n:jas-y3-fishing|title={{Title}} }}$h",
-                "Jas_y4": "{{i18n:jas-y4-fishing}}$h"
+                "Jas_y3": "{{i18n:jas-y2-fishing}}$s",
+                "Jas_y4": "{{i18n:jas-y3-fishing|title={{Title}} }}$h",
+                "Jas_y5": "{{i18n:jas-y4-fishing}}$h"
             }
         },
         {
@@ -187,9 +187,9 @@
                 "EnableFor": "Jodi"
             },
             "Entries": {
-                "Jodi_y2": "{{i18n:jodi-y2-fishing}}$h",
-                "Jodi_y3": "{{i18n:jodi-y3-fishing}}$h",
-                "Jodi_y4": "{{i18n:jodi-y4-fishing}}"
+                "Jodi_y3": "{{i18n:jodi-y2-fishing}}$h",
+                "Jodi_y4": "{{i18n:jodi-y3-fishing}}$h",
+                "Jodi_y5": "{{i18n:jodi-y4-fishing}}"
             }
         },
         {
@@ -200,9 +200,9 @@
                 "EnableFor": "Kent"
             },
             "Entries": {
-                "Kent_y2": "{{i18n:kent-y2-fishing}}",
-                "Kent_y3": "%{{i18n:kent-y3-fishing.00}}#$b#{{i18n:kent-y3-fishing.01}}#$e#{{i18n:kent-y3-fishing.02}}",
-                "Kent_y4": "{{i18n:kent-y4-fishing}}"
+                "Kent_y3": "{{i18n:kent-y2-fishing}}",
+                "Kent_y4": "%{{i18n:kent-y3-fishing.00}}#$b#{{i18n:kent-y3-fishing.01}}#$e#{{i18n:kent-y3-fishing.02}}",
+                "Kent_y5": "{{i18n:kent-y4-fishing}}"
             }
         },
         {
@@ -213,9 +213,9 @@
                 "EnableFor": "Leah"
             },
             "Entries": {
-                "Leah_y2": "{{i18n:leah-y2-fishing.00}}#$e#{{i18n:leah-y2-fishing.01}}",
+                "Leah_y3": "{{i18n:leah-y2-fishing.00}}#$e#{{i18n:leah-y2-fishing.01}}",
                 "Leah_spouse": "{{i18n:leah-y1-fishing-spouse.00.neutral}}$h^{{i18n:leah-y1-fishing-spouse.00.female}}$l#$b#{{i18n:leah-y1-fishing-spouse.01}}$h",
-                "Leah_spouse_y2": "{{i18n:leah-y2-fishing-spouse}}$h"
+                "Leah_spouse_y3": "{{i18n:leah-y2-fishing-spouse}}$h"
             }
         },
         {
@@ -238,9 +238,9 @@
                 "EnableFor": "Leo"
             },
             "Entries": {
-                "Leo_y2": "{{i18n:leo-y2-fishing}}",
-                "Leo_y3": "{{i18n:leo-y3-fishing}}",
-                "Leo_y4": "{{i18n:leo-y4-fishing}}$h"
+                "Leo_y3": "{{i18n:leo-y2-fishing}}",
+                "Leo_y4": "{{i18n:leo-y3-fishing}}",
+                "Leo_y5": "{{i18n:leo-y4-fishing}}$h"
             }
         },
         {
@@ -251,8 +251,8 @@
                 "EnableFor": "Lewis"
             },
             "Entries": {
-                "Lewis_y2": "{{i18n:lewis-y2-fishing}}$h#$e#{{i18n:lewis-y2-fishing.00}}",
-                "Lewis_y3": "{{i18n:lewis-y3-fishing}}$h#$e#{{i18n:lewis-y3-fishing.01}}"
+                "Lewis_y3": "{{i18n:lewis-y2-fishing}}$h#$e#{{i18n:lewis-y2-fishing.00}}",
+                "Lewis_y4": "{{i18n:lewis-y3-fishing}}$h#$e#{{i18n:lewis-y3-fishing.01}}"
             }
         },
         // I will write lines for Marlon if I can find him on the map.
@@ -262,7 +262,7 @@
             "Target": "Data/Festivals/winter8",
             "When": {"EnableFor": "Marnie"},
             "Entries": {
-                "Marnie_y2": "{{i18n:marnie-y2-fishing}}"
+                "Marnie_y3": "{{i18n:marnie-y2-fishing}}"
             }
         },
         {
@@ -271,9 +271,9 @@
             "Target": "Data/Festivals/winter8",
             "When": {"EnableFor": "Maru"},
             "Entries": {
-                "Maru_y2": "{{i18n:maru-y2-fishing.00}}#$b#{{i18n:maru-y2-fishing.01}}",
+                "Maru_y3": "{{i18n:maru-y2-fishing.00}}#$b#{{i18n:maru-y2-fishing.01}}",
                 "Maru_spouse": "{{i18n:maru-y1-fishing-spouse-male}}$h^{{i18n:maru-y1-fishing-spouse-female}}$h",
-                "Maru_spouse_y2": "{{i18n:maru-y2-fishing-spouse}}$l"
+                "Maru_spouse_y3": "{{i18n:maru-y2-fishing-spouse}}$l"
             }
         },
         {
@@ -306,7 +306,7 @@
             "Target": "Data/Festivals/winter8",
             "When": {"EnableFor": "Pam"},
             "Entries": {
-                "Pam_y2": "{{i18n:pam-y2-fishing}}$s"
+                "Pam_y3": "{{i18n:pam-y2-fishing}}$s"
             }
         },
         {
@@ -315,8 +315,8 @@
             "Target": "Data/Festivals/winter8",
             "When": {"EnableFor": "Penny"},
             "Entries": {
-                "Penny_y2": "{{i18n:penny-y2-fishing.00}}$h",
-                "Penny_spouse_y2": "{{i18n:penny-y2-fishing-spouse}}"
+                "Penny_y3": "{{i18n:penny-y2-fishing.00}}$h",
+                "Penny_spouse_y3": "{{i18n:penny-y2-fishing-spouse}}"
             }
         },
         {
@@ -325,9 +325,9 @@
             "Target": "Data/Festivals/winter8",
             "When": {"EnableFor": "Pierre"},
             "Entries": {
-                "Pierre_y2": "{{i18n:pierre-y2-fishing}}$s",
-                "Pierre_y3": "{{i18n:pierre-y3-fishing}}$s",
-                "Pierre_y4": "{{i18n:pierre-y4-fishing}}$s"
+                "Pierre_y3": "{{i18n:pierre-y2-fishing}}$s",
+                "Pierre_y4": "{{i18n:pierre-y3-fishing}}$s",
+                "Pierre_y5": "{{i18n:pierre-y4-fishing}}$s"
             }
         },
         {
@@ -336,8 +336,8 @@
             "Target": "Data/Festivals/winter8",
             "When": {"EnableFor": "Robin"},
             "Entries": {
-                "Robin_y2": "{{i18n:robin-y2-fishing}}$h",
-                "Robin_y3": "{{i18n:robin-y3-fishing}}$h",
+                "Robin_y3": "{{i18n:robin-y2-fishing}}$h",
+                "Robin_y4": "{{i18n:robin-y3-fishing}}$h",
             }
         },
         {
@@ -348,8 +348,8 @@
                 "EnableFor": "Sam"
             },
             "Entries": {
-                "Sam_y2": "{{i18n:sam-y2-fishing}}",
-                "Sam_spouse_y2": "{{i18n:sam-y2-fishing-spouse}}$h"
+                "Sam_y3": "{{i18n:sam-y2-fishing}}",
+                "Sam_spouse_y3": "{{i18n:sam-y2-fishing-spouse}}$h"
             }
         },
         {
@@ -361,7 +361,7 @@
                 "Query: {{SkillLevel: Fishing}} >= 8": true
             },
             "Entries": {
-                "Sam_y2": "{{i18n:sam-y2-fishing-high}}"
+                "Sam_y3": "{{i18n:sam-y2-fishing-high}}"
             }
         },
         {
@@ -370,8 +370,8 @@
             "Target": "Data/Festivals/winter8",
             "When": {"EnableFor": "Sebastian"},
             "Entries": {
-                "Sebastian_y2": "{{i18n:sebastian-y2-fishing.00}}$s",
-                "Sebastian_spouse_y2": "{{i18n:sebastian-y1-fishing-spouse}}"
+                "Sebastian_y3": "{{i18n:sebastian-y2-fishing.00}}$s",
+                "Sebastian_spouse_y3": "{{i18n:sebastian-y1-fishing-spouse}}"
             }
         },
         {
@@ -380,7 +380,7 @@
             "Target": "Data/Festivals/winter8",
             "When": {"EnableFor": "Shane"},
             "Entries": {
-                "Shane_y2": "{{i18n:shane-y2-fishing.00}}$s#$e#{{i18n:shane-y2-fishing.01}}",
+                "Shane_y3": "{{i18n:shane-y2-fishing.00}}$s#$e#{{i18n:shane-y2-fishing.01}}",
                 "Shane_spouse": "{{i18n:shane-y1-fishing-spouse.00}}#$b#{{i18n:shane-y1-fishing-spouse.01}}"
             }
         },
@@ -390,7 +390,7 @@
             "Target": "Data/Festivals/winter8",
             "When": {"EnableFor": "Vincent"},
             "Entries": {
-                "Vincent_y2": "{{i18n:vincent-y2-fishing|title={{Title}} }}$s"
+                "Vincent_y3": "{{i18n:vincent-y2-fishing|title={{Title}} }}$s"
             }
         },
         {
@@ -399,8 +399,8 @@
             "Target": "Data/Festivals/winter8",
             "When": {"EnableFor": "Willy"},
             "Entries": {
-                "Willy_y2": "{{i18n:willy-y2-fishing}}",
-                "Willy_y3": "{{i18n:willy-y3-fishing}}"
+                "Willy_y3": "{{i18n:willy-y2-fishing}}",
+                "Willy_y4": "{{i18n:willy-y3-fishing}}"
             }
         }
     ]

@@ -8,6 +8,8 @@ using HarmonyLib;
 
 using Microsoft.Xna.Framework;
 
+using SinZsEventTester;
+
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
 
@@ -28,6 +30,8 @@ internal sealed class ModEntry : Mod
         helper.Events.Content.AssetRequested += static (_, e) => AssetManager.Apply(e);
         helper.Events.Content.AssetsInvalidated += static (_, e) => AssetManager.Invalidate(e.NamesWithoutLocale);
 
+        helper.Events.GameLoop.GameLaunched += this.OnLaunched;
+
         helper.Events.Player.Warped += this.OnPlayerWarped;
         helper.Events.GameLoop.TimeChanged += this.OnTimeChanged;
         helper.Events.GameLoop.OneSecondUpdateTicked += this.OnSecondTicked;
@@ -44,6 +48,23 @@ internal sealed class ModEntry : Mod
             "es.ring_phone",
             "rings the phone",
             PhoneRingCommand.RingPhone);
+    }
+
+    private void OnLaunched(object? sender, GameLaunchedEventArgs e)
+    {
+        const string EventTester = "sinZandAtravita.SinZsEventTester";
+        if (this.Helper.ModRegistry.Get(EventTester) is { } mod && !mod.Manifest.Version.IsOlderThan("0.1.2"))
+        {
+            try
+            {
+                IEventTesterAPI? eventTesterAPI = this.Helper.ModRegistry.GetApi<IEventTesterAPI>(EventTester);
+                eventTesterAPI?.RegisterAsset(this.Helper.GameContent.ParseAssetName("Mods/EastScarp/LocationMetadata"));
+            }
+            catch (Exception ex)
+            {
+                this.Monitor.LogError("getting Event Tester API", ex);
+            }
+        }
     }
 
     private void ApplyPatches(Harmony harmony)

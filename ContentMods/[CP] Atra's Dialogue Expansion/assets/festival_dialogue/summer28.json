@@ -7,10 +7,10 @@
             "Target": "Data/Festivals/summer28",
             "When": {"EnableFor": "Abigail"},
             "Entries": {
-                "Abigail_y2": "{{i18n:abby-y2-jellies}}$s",
-                "Abigail_y3": "{{i18n:abby-y3-jellies}}",
+                "Abigail_y3": "{{i18n:abby-y2-jellies}}$s",
+                "Abigail_y4": "{{i18n:abby-y3-jellies}}",
                 "Abigail_spouse": "{{i18n:abby-y1-jellies-spouse}}",
-                "Abigail_spouse_y2": "{{i18n:abby-y2-jellies-spouse}}$h"
+                "Abigail_spouse_y3": "{{i18n:abby-y2-jellies-spouse}}$h"
             }
         },
         {
@@ -19,7 +19,7 @@
             "Target": "Data/Festivals/summer28",
             "When": {"EnableFor": "Alex"},
             "Entries": {
-                "Alex_y2": "{{i18n:alex-y2-jellies}}$h",
+                "Alex_y3": "{{i18n:alex-y2-jellies}}$h",
                 "Alex_spouse": "{{i18n:alex-y1-jellies-spouse}}$s"
             }
         },
@@ -29,8 +29,8 @@
             "Target": "Data/Festivals/summer28",
             "When": {"EnableFor": "Caroline"},
             "Entries": {
-                "Caroline_y2": "{{i18n:caroline-y2-jellies}}$s",
-                "Caroline_y3": "{{i18n:caroline-y3-jellies}}#$e#{{i18n:caroline-y3-jellies.00}}$s"
+                "Caroline_y3": "{{i18n:caroline-y2-jellies}}$s",
+                "Caroline_y4": "{{i18n:caroline-y3-jellies}}#$e#{{i18n:caroline-y3-jellies.00}}$s"
             }
         },
         {
@@ -39,7 +39,7 @@
             "Target": "Data/Festivals/summer28",
             "When": {"EnableFor":"Clint"},
             "Entries": {
-                "Clint_y2": "{{i18n:clint-y2-jellies}}$h"
+                "Clint_y3": "{{i18n:clint-y2-jellies}}$h"
             }
         },
         {
@@ -50,8 +50,8 @@
             "When": {"EnableFor":"Demetrius"},
             "Entries": {
                 "Demetrius": "{{i18n:demetrius-y1-jellies}}$h",
-                "Demetrius_y2": "{{i18n:demetrius-y2-jellies.01}}$h#$e#{{i18n:demetrius-y2-jellies.02}}",
-                "Demetrius_y3": "{{i18n:demetrius-y3-jellies}}"
+                "Demetrius_y3": "{{i18n:demetrius-y2-jellies.01}}$h#$e#{{i18n:demetrius-y2-jellies.02}}",
+                "Demetrius_y4": "{{i18n:demetrius-y3-jellies}}"
             }
         },
         {
@@ -64,7 +64,7 @@
                 "IsJojaMartComplete": true
             },
             "Entries": {
-                "Demetrius_y3": "{{i18n:demetrius-y3-jellies-joja}}$s"
+                "Demetrius_y4": "{{i18n:demetrius-y3-jellies-joja}}$s"
             }
         },
         {
@@ -73,8 +73,8 @@
             "Target": "Data/Festivals/summer28",
             "When": {"EnableFor": "Elliott"},
             "Entries": {
-                "Elliott_y2": "{{i18n:elliott-y2-jellies}}$h",
-                "Elliott_y3": "{{i18n:elliott-y3-jellies}}$s",
+                "Elliott_y3": "{{i18n:elliott-y2-jellies}}$h",
+                "Elliott_y4": "{{i18n:elliott-y3-jellies}}$s",
                 "Elliott_spouse": "{{i18n:elliott-y1-jellies-spouse}}$h"
             }
         },
@@ -84,7 +84,7 @@
             "Target": "Data/Festivals/summer28",
             "When": {"EnableFor": "Emily"},
             "Entries": {
-                "Emily_y2": "{{i18n:emily-y2-jellies.01}}$h#$e#{{i18n:emily-y2-jellies.02}}",
+                "Emily_y3": "{{i18n:emily-y2-jellies.01}}$h#$e#{{i18n:emily-y2-jellies.02}}",
                 "Emily_spouse": "{{i18n:emily-y2-jellies-spouse}}"
             }
         },
@@ -94,7 +94,7 @@
             "Target": "Data/Festivals/summer28",
             "When": {"EnableFor": "Evelyn"},
             "Entries": {
-                "Evelyn_y2": "{{i18n:evelyn-y2-jellies.01}}$h#$e#{{i18n:evelyn-y2-jellies.02}}"
+                "Evelyn_y3": "{{i18n:evelyn-y2-jellies.01}}$h#$e#{{i18n:evelyn-y2-jellies.02}}"
             }
         },
         {
@@ -103,7 +103,7 @@
             "Target": "Data/Festivals/summer28",
             "When": {"EnableFor": "George"},
             "Entries": {
-                "George_y2": "{{i18n:george-y2-jellies}}$s"
+                "George_y3": "{{i18n:george-y2-jellies}}$s"
             }
         },
         {
@@ -112,7 +112,7 @@
             "Target": "Data/Festivals/summer28",
             "When": {"EnableFor": "Gus"},
             "Entries": {
-                "Gus_y2": "{{i18n:gus-y2-jellies}}$s"
+                "Gus_y3": "{{i18n:gus-y2-jellies}}$s"
             }
         },
         {
@@ -121,7 +121,7 @@
             "Target": "Data/Festivals/summer28",
             "When": {"EnableFor": "Haley"},
             "Entries": {
-                "Haley_y2": "{{i18n:haley-y2-jellies.01}}$h#$e#{{i18n:haley-y2-jellies.02}}",
+                "Haley_y3": "{{i18n:haley-y2-jellies.01}}$h#$e#{{i18n:haley-y2-jellies.02}}",
                 "Haley_spouse": "{{i18n:haley-y2-jellies-spouse}}"
             }
         },
@@ -131,7 +131,7 @@
             "Target": "Data/Festivals/summer28",
             "When": {"EnableFor": "Harvey"},
             "Entries": {
-                "Harvey_y2": "{{i18n:harvey-y2-jellies}}$s",
+                "Harvey_y3": "{{i18n:harvey-y2-jellies}}$s",
                 "Harvey_spouse": "{{i18n:harvey-y2-jellies-spouse}}"
             }
         },
@@ -141,7 +141,7 @@
             "Target": "Data/Festivals/summer28",
             "When": {"EnableFor": "Jas"},
             "Entries": {
-                "Jas_y2": "{{i18n:jas-y2-jellies}}$h"
+                "Jas_y3": "{{i18n:jas-y2-jellies}}$h"
             }
         },
         {
@@ -150,7 +150,7 @@
             "Target": "Data/Festivals/summer28",
             "When": {"EnableFor": "Jodi"},
             "Entries": {
-                "Jodi_y2": "{{i18n:jodi-y2-jellies}}$h"
+                "Jodi_y3": "{{i18n:jodi-y2-jellies}}$h"
             }
         },
         {
@@ -159,7 +159,7 @@
             "Target": "Data/Festivals/summer28",
             "When": {"EnableFor": "Kent"},
             "Entries": {
-                "Kent_y2": "{{i18n:kent-y2-jellies}}$h"
+                "Kent_y3": "{{i18n:kent-y2-jellies}}$h"
             }
         },
         {
@@ -180,8 +180,8 @@
             "Target": "Data/Festivals/summer28",
             "When": {"EnableFor": "Leah"},
             "Entries": {
-                "Leah_y2": "{{i18n:leah-y2-jellies}}$s",
-                "Leah_spouse_y2": "{{i18n:leah-y2-jellies-spouse}}"
+                "Leah_y3": "{{i18n:leah-y2-jellies}}$s",
+                "Leah_spouse_y3": "{{i18n:leah-y2-jellies-spouse}}"
             }
         },
         {
@@ -190,7 +190,7 @@
             "Target": "Data/Festivals/summer28",
             "When": {"EnableFor": "Leo"},
             "Entries": {
-                "Leo_y2": "{{i18n:leo-y2-jellies}}"
+                "Leo_y3": "{{i18n:leo-y2-jellies}}"
             }
         },
         {
@@ -199,7 +199,7 @@
             "Target": "Data/Festivals/summer28",
             "When": {"EnableFor": "Lewis"},
             "Entries": {
-                "Lewis_y2": "{{i18n:lewis-y2-jellies}}"
+                "Lewis_y3": "{{i18n:lewis-y2-jellies}}"
             }
         },
         {
@@ -208,7 +208,7 @@
             "Target": "Data/Festivals/summer28",
             "When": {"EnableFor": "Linus"},
             "Entries": {
-                "Linus_y2": "{{i18n:linus-y2-jellies}}$h"
+                "Linus_y3": "{{i18n:linus-y2-jellies}}$h"
             }
         },
         {
@@ -229,7 +229,7 @@
             "Target": "Data/Festivals/summer28",
             "When": {"EnableFor": "Marnie"},
             "Entries": {
-                "Marnie_y2": "{{i18n:marnie-y2-jellies}}"
+                "Marnie_y3": "{{i18n:marnie-y2-jellies}}"
             }
         },
         {
@@ -238,7 +238,7 @@
             "Target": "Data/Festivals/summer28",
             "When": {"EnableFor": "Maru"},
             "Entries": {
-                "Maru_y2": "{{i18n:maru-y2-jellies.00}}$s#$b#{{i18n:maru-y2-jellies.01}}",
+                "Maru_y3": "{{i18n:maru-y2-jellies.00}}$s#$b#{{i18n:maru-y2-jellies.01}}",
                 "Maru_spouse": "{{i18n:maru-y1-jellies-spouse}}"
             }
         },
@@ -248,7 +248,7 @@
             "Target": "Data/Festivals/summer28",
             "When": {"EnableFor": "Pam"},
             "Entries": {
-                "Pam_y2": "{{i18n:pam-y2-jellies}}$s"
+                "Pam_y3": "{{i18n:pam-y2-jellies}}$s"
             }
         },
         {
@@ -257,7 +257,7 @@
             "Target": "Data/Festivals/summer28",
             "When": {"EnableFor": "Penny"},
             "Entries": {
-                "Penny_y2": "{{i18n:penny-y2-jellies.00}}$s#$b#{{i18n:penny-y2-jellies.01}}",
+                "Penny_y3": "{{i18n:penny-y2-jellies.00}}$s#$b#{{i18n:penny-y2-jellies.01}}",
                 "Penny_spouse": "{{i18n:penny-y1-jellies-spouse}}"
             }
         },
@@ -267,7 +267,7 @@
             "Target": "Data/Festivals/summer28",
             "When": {"EnableFor": "Pierre"},
             "Entries": {
-                "Pierre_y2": "{{i18n:pierre-y2-jellies}}$h"
+                "Pierre_y3": "{{i18n:pierre-y2-jellies}}$h"
             }
         },
         {
@@ -276,8 +276,8 @@
             "Target": "Data/Festivals/summer28",
             "When": {"EnableFor": "Robin"},
             "Entries": {
-                "Robin_y2": "{{i18n:robin-y2-jellies}}$s",
-                "Robin_y3": "{{i18n:robin-y3-jellies}}$h"
+                "Robin_y3": "{{i18n:robin-y2-jellies}}$s",
+                "Robin_y4": "{{i18n:robin-y3-jellies}}$h"
             }
         },
         {
@@ -286,7 +286,7 @@
             "Target": "Data/Festivals/summer28",
             "When": {"EnableFor": "Sam"},
             "Entries": {
-                "Sam_y2": "{{i18n:sam-y2-jellies.00}}$s#$b#{{i18n:sam-y2-jellies.01}}",
+                "Sam_y3": "{{i18n:sam-y2-jellies.00}}$s#$b#{{i18n:sam-y2-jellies.01}}",
                 "Sam_spouse": "{{i18n:sam-y1-jellies-spouse}}$s"
             }
         },
@@ -296,7 +296,7 @@
             "Target": "Data/Festivals/summer28",
             "When": {"EnableFor": "Sebastian"},
             "Entries": {
-                "Sebastian_y2": "{{i18n:sebastian-y2-jellies.00}}$h#$e#{{i18n:sebastian-y2-jellies.01}}",
+                "Sebastian_y3": "{{i18n:sebastian-y2-jellies.00}}$h#$e#{{i18n:sebastian-y2-jellies.01}}",
                 "Sebastian_spouse": "{{i18n:sebastian-y1-jellies-spouse}}"
             }
         },
@@ -306,7 +306,7 @@
             "Target": "Data/Festivals/summer28",
             "When": {"EnableFor": "Shane"},
             "Entries": {
-                "Shane_y2": "{{i18n:shane-y2-jellies.00}}$h#$e#{{i18n:shane-y2-jellies.01}}",
+                "Shane_y3": "{{i18n:shane-y2-jellies.00}}$h#$e#{{i18n:shane-y2-jellies.01}}",
                 "Shane_spouse": "{{i18n:shane-y1-jellies-spouse.00}}$h#$b#{{i18n:shane-y1-jellies-spouse.01}}"
             }
         },
@@ -316,7 +316,7 @@
             "Target": "Data/Festivals/summer28",
             "When": {"EnableFor": "Vincent"},
             "Entries": {
-                "Vincent_y2": "{{i18n:vincent-y2-jellies}}$s"
+                "Vincent_y3": "{{i18n:vincent-y2-jellies}}$s"
             }
         },
         {
@@ -328,7 +328,7 @@
             "When": {"EnableFor": "Willy"},
             "Entries": {
                 "Willy": "{{i18n:willy-y1-jellies}}",
-                "Willy_y2": "{{i18n:willy-y2-jellies}}"
+                "Willy_y3": "{{i18n:willy-y2-jellies}}"
             }
         }
         // Intentionally skipping Wizard.

@@ -13,7 +13,7 @@ internal class ChooseKQuery
     {
         if (string.IsNullOrWhiteSpace(arguments))
         {
-            ItemQueryResolver.Helpers.ErrorResult(key, arguments, logError, "arguments could not be null or whitespace");
+            ItemQueryResolver.Helpers.ErrorResult(key, arguments, logError, "arguments should not be null or whitespace");
             yield break;
         }
 

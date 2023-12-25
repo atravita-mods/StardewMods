@@ -124,6 +124,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         GameLocation.RegisterTileAction("atravita.Teleport", TeleportPlayer.ApplyCommand);
 
         ItemQueryResolver.Register("atravita_choose_k", ChooseKQuery.ChooseK);
+        ItemQueryResolver.Register("atravita_generic_flavored_item", GenericFlavoredItemQuery.Generate);
 
         AddGSQ("atravita.AtraCore_HAS_EARNED_MONEY", MoneyEarned.CheckMoneyEarned);
         AddGSQ("atravita.AtraCore_HAS_DAILY_LUCK", CurrentDailyLuck.DailyLuck);

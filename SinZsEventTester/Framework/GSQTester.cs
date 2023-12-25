@@ -11,8 +11,8 @@ internal sealed class GSQTester(IMonitor monitor, IReflectionHelper reflector)
 {
     private static Dictionary<string, Func<string, bool>> _additionalAssets = new(StringComparer.OrdinalIgnoreCase)
     {
-        ["Data/MineCarts"] = static name => name is "MinecartsUnlocked",
-        ["Data/Characters"] = static name => name is "CanSocialize" or "CanVisitIsland" or "ItemDeliveryQuest" or "WinterStarParticipant" or "MinecartsUnlocked",
+        ["Data/MineCarts"] = static name => Extensions.IsPossibleGSQString(name) || name is "MinecartsUnlocked",
+        ["Data/Characters"] = static name => Extensions.IsPossibleGSQString(name) || name is "CanSocialize" or "CanVisitIsland" or "ItemDeliveryQuest" or "WinterStarParticipant" or "MinecartsUnlocked",
 };
 
     internal static bool Register(IAssetName asset, Func<string, bool>? filter)

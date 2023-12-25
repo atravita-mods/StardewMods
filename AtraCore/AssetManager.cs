@@ -32,6 +32,8 @@ internal static class AssetManager
     private static IAssetName dataObjects = null!;
     private static IAssetName categoryExtensions = null!;
 
+    private static IAssetName shopTrigger = null!;
+
     private static Lazy<Dictionary<string, EquipmentExtModel>> _ringData = new(
         static () => Game1.content.Load<Dictionary<string, EquipmentExtModel>>(AtraCoreConstants.EquipData));
 
@@ -58,6 +60,9 @@ internal static class AssetManager
         // category extensions.
         dataObjects = parser.ParseAssetName("Data/Objects");
         categoryExtensions = parser.ParseAssetName("Mods/atravita/CategoryExtensions");
+
+        // shop trigger
+        shopTrigger = parser.ParseAssetName("Mods/atravita/ShopTriggerData");
 
         // check and populate the event locations.
         foreach (string? location in new[] { "AdventureGuild", "Blacksmith", "WitchHut", "WitchSwamp", "Summit" })

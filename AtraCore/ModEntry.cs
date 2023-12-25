@@ -19,6 +19,7 @@ using AtraCore.Framework.EventPreconditions;
 using AtraCore.Framework.GameStateQueries;
 using AtraCore.Framework.Internal;
 using AtraCore.Framework.ItemManagement;
+using AtraCore.Framework.ItemResolvers;
 using AtraCore.Framework.QueuePlayerAlert;
 using AtraCore.HarmonyPatches;
 using AtraCore.HarmonyPatches.CustomEquipPatches;
@@ -36,6 +37,7 @@ using HarmonyLib;
 using StardewModdingAPI.Events;
 
 using StardewValley.Delegates;
+using StardewValley.Internal;
 
 using AtraUtils = AtraShared.Utils.Utils;
 
@@ -107,10 +109,10 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         // add event commands and preconditions.
         Event.RegisterPrecondition("atravita_PlayerRelationship", PlayerRelationshipPreconditions.PlayerRelationshipStatus);
         Event.RegisterCommand("atravita_FacePlayer", FacePlayer.FacePlayerCommand);
-        Event.RegisterCommand("atravita_RemoveMail", RemoveMail.RemoveMailCommand);
         Event.RegisterCommand("atravita_" + nameof(AllowRepeatAfter), AllowRepeatAfter.SetRepeatAfter);
+        Event.RegisterCommand("atravita_" + nameof(BranchIf), BranchIf.BranchIfCommand);
 
-        SetInvisible invisible = new( this.Helper.Multiplayer, this.ModManifest.UniqueID);
+        SetInvisible invisible = new (this.Helper.Multiplayer, this.ModManifest.UniqueID);
         Event.RegisterCommand("atravita_" + nameof(SetInvisible), invisible.ApplyInvisibility);
         MultiplayerDispatch.Register(SetInvisible.RequestSetInvisible, invisible.ProcessSetInvisibleRequest);
 
@@ -120,6 +122,8 @@ internal sealed class ModEntry : BaseMod<ModEntry>
 
         // actions
         GameLocation.RegisterTileAction("atravita.Teleport", TeleportPlayer.ApplyCommand);
+
+        ItemQueryResolver.Register("atravita_choose_k", ChooseKQuery.ChooseK);
 
         AddGSQ("atravita.AtraCore_HAS_EARNED_MONEY", MoneyEarned.CheckMoneyEarned);
         AddGSQ("atravita.AtraCore_HAS_DAILY_LUCK", CurrentDailyLuck.DailyLuck);
@@ -141,7 +145,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         // integrations
         {
             IntegrationHelper integration = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry);
-            if (integration.TryGetAPI<IEventTesterAPI>("sinZandAtravita.SinZsEventTester", "0.1.2", out IEventTesterAPI? eventTester))
+            if (integration.TryGetAPI("sinZandAtravita.SinZsEventTester", "0.1.2", out IEventTesterAPI? eventTester))
             {
                 eventTester.RegisterAsset(this.Helper.GameContent.ParseAssetName(AtraCoreConstants.EquipData));
             }

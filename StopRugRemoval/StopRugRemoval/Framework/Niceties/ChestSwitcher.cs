@@ -1,6 +1,4 @@
-﻿using System;
-
-using AtraShared.Utils.Extensions;
+﻿using AtraShared.Utils.Extensions;
 
 using Microsoft.Xna.Framework;
 
@@ -36,56 +34,68 @@ internal static class ChestSwitcher
             return false;
         }
 
-        if (Game1.player?.ActiveObject is not { } active || !active.HasTypeBigCraftable() || !active.isPlaceable())
+        if (Game1.player?.ActiveObject is not { } active || !active.HasTypeBigCraftable() || !active.isPlaceable()
+            || active.IsTapper() || active.HasContextTag("sign_item") || active.HasContextTag("torch_item")
+            || active.QualifiedItemId is "(BC)62" or "(BC)163" or "(BC)208" or "(BC)209" or "(BC)211" or "(BC)214" or "(BC)248" or "(BC)238" // indoor pot or cask or workbench or minijukebox or woodchipper or phone
+            || DataLoader.Machines(Game1.content).ContainsKey(active.QualifiedItemId))
         {
             return false;
         }
 
-        Microsoft.Xna.Framework.Vector2 tile = e.Cursor.GrabTile;
-        if (!location.Objects.TryGetValue(tile, out SObject? obj) || obj is not Chest chest || chest.QualifiedItemId == active.QualifiedItemId)
+        Vector2 tile = e.Cursor.GrabTile;
+        if (!location.Objects.TryGetValue(tile, out SObject? obj) || obj.QualifiedItemId == active.QualifiedItemId)
         {
             return false;
         }
 
-        StardewValley.Inventories.IInventory inventory = chest.GetItemsForPlayer();
+        Chest? chest = (obj as Chest) ?? (obj.heldObject.Value as Chest);
+        if (chest is null)
+        {
+            return false;
+        }
+
+        IInventory inventory = chest.GetItemsForPlayer();
 
         if (!location.Objects.Remove(tile))
         {
             return false;
         }
 
-        if (chest.GlobalInventoryId is { } globalInventoryId)
+        NetMutex? mutex = chest.SpecialChestType == Chest.SpecialChestTypes.JunimoChest ? Game1.player.team.GetOrCreateGlobalInventoryMutex("JunimoChests") : null;
+        mutex ??= chest.GlobalInventoryId is { } globalInventoryId ? Game1.player.team.GetOrCreateGlobalInventoryMutex(globalInventoryId) : null;
+
+        if (mutex is not null)
         {
-            NetMutex mutex = Game1.player.team.GetOrCreateGlobalInventoryMutex(globalInventoryId);
             mutex.RequestLock(
-                () => MoveChestImpl(chest, tile, inventory, location, active),
+                () => MoveChestImpl(chest, tile, inventory, location, active, obj),
                 () =>
                 {
-                    ModEntry.ModMonitor.Log($"hit locked", LogLevel.Error);
                     chest.shakeTimer = 50;
                     location.Objects[tile] = chest;
                 });
         }
         else
         {
-            MoveChestImpl(chest, tile, inventory, location, active);
+            MoveChestImpl(chest, tile, inventory, location, active, obj);
         }
 
         input.Suppress(e.Button);
         return true;
     }
 
-    private static void MoveChestImpl(Chest chest, Vector2 tile, IInventory inventory, GameLocation location, SObject active)
+    private static void MoveChestImpl(Chest chest, Vector2 tile, IInventory inventory, GameLocation location, SObject active, SObject original)
     {
         try
         {
-            location.Objects.TryGetValue(tile, out var what);
-
             if (active.placementAction(location, (int)tile.X * Game1.tileSize, (int)tile.Y * Game1.tileSize, Game1.player)
-                && location.Objects.TryGetValue(tile, out SObject? other) && other is Chest newChest
+                && location.Objects.TryGetValue(tile, out SObject? other) && (other as Chest ?? other.heldObject.Value as Chest) is Chest newChest
                 && newChest.SpecialChestType != Chest.SpecialChestTypes.MiniShippingBin
                 && (newChest.GetActualCapacity() - newChest.GetItemsForPlayer().Count) >= inventory.Count)
             {
+                // copy color
+                newChest.playerChoiceColor.Value = chest.playerChoiceColor.Value;
+
+                // copy inventory
                 foreach (Item? item in inventory)
                 {
                     newChest.addItem(item);
@@ -93,9 +103,11 @@ internal static class ChestSwitcher
 
                 chest.GetItemsForPlayer().Clear();
                 chest.clearNulls();
+
+                // decrease active object.
                 chest.performRemoveAction();
                 Game1.player.reduceActiveItemByOne();
-                Item inventoryChest = chest.getOne();
+                Item inventoryChest = original.getOne();
                 if (!Game1.player.addItemToInventoryBool(inventoryChest, true))
                 {
                     location.debris.Add(new(inventoryChest, Game1.player.Position));
@@ -103,6 +115,7 @@ internal static class ChestSwitcher
             }
             else
             {
+                // huh, something went weird, replace the chest.
                 location.Objects[tile] = chest;
             }
         }

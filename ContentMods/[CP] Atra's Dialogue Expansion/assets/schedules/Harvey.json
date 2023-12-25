@@ -15,15 +15,5 @@
         "Entries": {
             "rain2": "800 HarveyRoom 19 7 0/840 Hospital 6 15 2/1200 HarveyRoom 4 5 1 harvey_radio/1400 HarveyRoom 11 5 3 harvey_read/1600 CommunityCenter 31 9 0/2200 bed"
         }
-    },
-    {
-        // disable Harvey's rain schedule on checkup days.
-        "Action": "EditData",
-        "When": {"DayOfWeek": "Tuesday, Thursday"},
-        "Target": "Characters/schedules/Harvey",
-        "Entries": {
-            "rain": null,
-            "rain2": null
-        }
     }
 ]}

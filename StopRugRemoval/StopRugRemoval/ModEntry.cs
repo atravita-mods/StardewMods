@@ -136,7 +136,8 @@ internal sealed class ModEntry : Mod
         if (MenuingExtensions.IsNormalGameplay())
         {
             _ = RecipeConsumer.ConsumeRecipeIfNeeded(e, this.Helper.Input)
-                || CropAndTreeFlipper.OnButtonPressed(e, this.Helper.Input);
+                || CropAndTreeFlipper.OnButtonPressed(e, this.Helper.Input)
+                || ChestSwitcher.Switch(e, this.Helper.Input);
         }
     }
 

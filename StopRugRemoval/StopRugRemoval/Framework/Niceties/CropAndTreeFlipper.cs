@@ -25,7 +25,7 @@ internal static class CropAndTreeFlipper
             if (Game1.currentLocation.GetHoeDirtAtTile(e.Cursor.Tile) is HoeDirt dirt
                 && dirt.crop is Crop crop)
             {
-                ModEntry.ModMonitor.DebugOnlyLog($"Flipping crop at {e.Cursor.Tile}");
+                ModEntry.ModMonitor.VerboseLog($"Flipping crop at {e.Cursor.Tile}");
                 crop.flip.Value = !crop.flip.Value;
                 helper.Suppress(e.Button);
                 return true;
@@ -33,7 +33,7 @@ internal static class CropAndTreeFlipper
             else if (Game1.currentLocation.terrainFeatures.TryGetValue(e.Cursor.Tile, out TerrainFeature? feature)
                 && feature is FruitTree tree)
             {
-                ModEntry.ModMonitor.DebugLog($"Flipping fruit tree at {e.Cursor.Tile}");
+                ModEntry.ModMonitor.VerboseLog($"Flipping fruit tree at {e.Cursor.Tile}");
                 tree.flipped.Value = !tree.flipped.Value;
                 helper.Suppress(e.Button);
                 return true;

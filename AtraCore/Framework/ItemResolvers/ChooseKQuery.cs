@@ -18,7 +18,7 @@ internal class ChooseKQuery
         }
 
         string[] args = arguments.Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-        if (ArgUtility.TryGetInt(args, 0, out int count, out string? error))
+        if (!ArgUtility.TryGetInt(args, 0, out int count, out string? error))
         {
             ItemQueryResolver.Helpers.ErrorResult(key, arguments, logError, error);
             yield break;
@@ -66,13 +66,12 @@ internal class ChooseKQuery
                 {
                     ModEntry.ModMonitor.Log($"{candidate} does not correspond to a valid item.", LogLevel.Trace);
                 }
-
-                if (j != idx)
-                {
-                    (args[j], args[idx]) = (args[idx], args[j]);
-                }
             }
 
+            if (j != idx)
+            {
+                (args[j], args[idx]) = (args[idx], args[j]);
+            }
             idx--;
         }
     }

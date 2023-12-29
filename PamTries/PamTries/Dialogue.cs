@@ -22,7 +22,7 @@ internal static class DialogueManager
         {
             return null;
         }
-        return MovieTheater.GetMovieForDate(Game1.Date)?.ID;
+        return MovieTheater.GetMovieForDate(Game1.Date)?.Id;
     }
 
     internal static string ChildCount()

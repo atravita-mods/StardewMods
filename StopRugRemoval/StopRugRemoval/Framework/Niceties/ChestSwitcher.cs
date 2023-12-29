@@ -116,13 +116,13 @@ internal static class ChestSwitcher
             else
             {
                 // huh, something went weird, replace the chest.
-                location.Objects[tile] = chest;
+                location.Objects[tile] = original;
             }
         }
         catch (Exception ex)
         {
             ModEntry.ModMonitor.LogError("swapping chests", ex);
-            location.Objects[tile] = chest;
+            location.Objects[tile] = original;
         }
     }
 }

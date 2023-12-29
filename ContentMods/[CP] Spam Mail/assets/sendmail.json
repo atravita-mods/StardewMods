@@ -118,6 +118,12 @@
                     "Condition": "PLAYER_HAS_MAIL Current willyBackRoomInvitation, RANDOM 0.1, {{MidYearConstraint}}",
                     "Action": "AddMail Current atravita.SpamMail.VideoGames"
                 },
+                "atravita.SpamMail.Ring": {
+                    "Id": "atravita.SpamMail.Ring",
+                    "Trigger": "DayEnding",
+                    "Condition": "PLAYER_FARMHOUSE_UPGRADE Current 2, RANDOM 0.1, {{MidYearConstraint}}",
+                    "Action": "AddMail Current atravita.SpamMail.Ring"
+                },
 
                 // Hospital block.
                 "atravita.SpamMail.SkinImplants": {

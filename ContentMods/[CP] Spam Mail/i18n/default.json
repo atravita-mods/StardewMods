@@ -146,6 +146,9 @@
     "Pizza.Text.1": "You've enjoyed our classic mozzarella-stuffed crust for years! But what if we bought the cheese throughout the whole crust!",
     "Pizza.Text.2": "Introducing the new Pizza Cabin Fully-Stuffed-Crust Pizza, with a layer of cheese under the whoooollllleeee pizza!",
 
+    "shane-pizza": "Hey, @, you've seen that new fully-stuffed-crust pizza? I can't wait to try it out?",
+    "gus-pizza": "@, you think I should start carrying lava cakes or something?#$b#Something to attract a younger crowd?",
+
     "Spices.Title": "Crazy Jake's Crazy Spices",
     "Spices.Text.1": "The hottest spices on this side of the Gem Sea! Guaranteed no one fresher or spicier!",
     "Spices.Text.2": "Order now and get a free mug!",
@@ -192,6 +195,9 @@
     "VideoGames.Title": "New Video Game Release",
     "VideoGames.Text": "Look, it's basically the same game we released last year, and the year before that, but you're gonna buy it anyways, and you're gonna like it.",
 
+    "shane-videogames": "The new game from Catalyst? Nah, not buying that, it's the same game they released last year.#$b#I miss when new games used to be unique.",
+    "sam-videogames": "I'm saving up as much of my salary as possible to buy the new game Catalyst just dropped!$h",
+
     // Affirm
     "TV.Title": "Just Four Easy Payments",
     "TV.Text": "Coveting that new TV your friend just bought? Don't have enough in the bank for it? Well, no worries, let Helping Hand help you out! Split anything into four easy payments! (Credit check required.)",
@@ -206,6 +212,10 @@
     "emily-winter-star-crafts": "Maybe I shouldn't try to knit Haley a sweater this year.#$b#Every year I think I'll have time to finish it but end up working late into the night the week before...",
 
     "haley-winter-star-crafts": "What should I get Emily for Winter Star this year...hmmm...choices, choices.$h#$b#A gift card to her favorite craft store is always a hit, or a nice soft skein of good sock yarn.",
+
+    "Ring.Title": "Get Your Girl the Ring She Deserves",
+    "Ring.Text.1": "Selling half caret engagement rings for only 100,000$. Remember, if you don't get her a ring that costs at least three months salary, you really don't love her enough.",
+    "Ring.Text.2": "Make sure she has a stone that'll make all her friends jealous.",
 
     /*************
     * Phone calls

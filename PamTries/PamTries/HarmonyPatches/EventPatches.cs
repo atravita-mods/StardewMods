@@ -3,6 +3,8 @@ using System.Reflection.Emit;
 
 using AtraBase.Toolkit.Reflection;
 
+using AtraCore.Framework.ReflectionManager;
+
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
@@ -70,7 +72,7 @@ internal static class EventPatches
             .FindNext(
             [ // the other pam block lol
                 new(OpCodes.Ldarg_0),
-                new(OpCodes.Ldfld, typeof(Event).InstanceFieldNamed("oldTime")),
+                new(OpCodes.Ldfld, typeof(Event).GetCachedField(nameof(Event.festivalTimer), ReflectionCache.FlagTypes.InstanceFlags)),
                 new(OpCodes.Ldc_I4, 45900),
             ])
             .FindNext(

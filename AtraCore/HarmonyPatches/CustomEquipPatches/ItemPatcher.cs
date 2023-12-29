@@ -1,4 +1,4 @@
-﻿#define TRACELOG
+﻿// #define TRACELOG
 
 namespace AtraCore.HarmonyPatches.CustomEquipPatches;
 
@@ -672,7 +672,7 @@ internal static class ItemPatcher
                 stamina_regen += effect.StaminaRegen;
             }
 
-            ModEntry.ModMonitor.DebugOnlyLog($"Health regen {health_regen}, stamina regen {stamina_regen}.");
+            ModEntry.ModMonitor.TraceOnlyLog($"Health regen {health_regen}, stamina regen {stamina_regen}.");
 
             EquipEffects.HandleRegen(currentPlayer, health_regen, stamina_regen);
         }

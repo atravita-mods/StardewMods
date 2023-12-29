@@ -92,6 +92,31 @@
             "When": {
                 "Hearts:Pam|contains={{Range:0,5}}": false
             }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Shane",
+            "Entries": {
+                "atravita.SpamMail.Pizza": "{{i18n: shane-pizza}}$h",
+                "atravita.SpamMail.VideoGames": "{{i18n: shane-videogames}}"
+            },
+            "When": {
+                "Hearts:Shane|contains={{Range:0,5}}": false,
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Gus",
+            "Entries": {
+                "atravita.SpamMail.Pizza": "{{i18n: gus-pizza}}"
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Sam",
+            "Entries": {
+                "atravita.SpamMail.VideoGames": "{{i18n:sam-videogames}}"
+            }
         }
     ]
 }

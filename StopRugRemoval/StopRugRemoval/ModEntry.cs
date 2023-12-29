@@ -19,6 +19,7 @@ using HarmonyLib;
 using StardewModdingAPI.Enums;
 using StardewModdingAPI.Events;
 
+using StardewValley.Buildings;
 using StardewValley.Locations;
 using StardewValley.Objects;
 
@@ -142,7 +143,6 @@ internal sealed class ModEntry : Mod
     }
 
     /// <inheritdoc cref="ISpecializedEvents.LoadStageChanged"/>
-    /// <remarks>Unfucks the inventory size. Which I might have fucked up in a PR to JA.</remarks>
     [EventPriority(EventPriority.Low)]
     private void OnLoadStageChanged(object? sender, LoadStageChangedEventArgs e)
     {
@@ -161,6 +161,31 @@ internal sealed class ModEntry : Mod
 
                 this.Monitor.Log($"Checking for nulls in player quest log for {player.Name}");
                 player.questLog.ClearNulls();
+            }
+
+            foreach (GameLocation? location in Game1.locations)
+            {
+                if (location is AnimalHouse)
+                {
+                    continue;
+                }
+
+                foreach ((long id, FarmAnimal? animal) in location.animals.Pairs)
+                {
+                    if (animal.home is null)
+                    {
+                        this.Monitor.Log($"{animal.displayName} appears to be homeless.", LogLevel.Warn);
+                        foreach (Building? building in location.buildings)
+                        {
+                            if (building.GetIndoors() is AnimalHouse animalHouse && animalHouse.animalsThatLiveHere.Contains(id))
+                            {
+                                animal.home = building;
+                                this.Monitor.Log($"{animal.displayName} assigned home {animalHouse.NameOrUniqueName}", LogLevel.Info);
+                                break;
+                            }
+                        }
+                    }
+                }
             }
         }
     }

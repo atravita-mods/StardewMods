@@ -74,4 +74,24 @@ public static partial class SkillsExtensions
         ThrowHelper.ThrowArgumentOutOfRangeException($"{skills.ToStringFast()} does not correspond to a single vanilla skill!");
         return 0;
     }
+
+    /// <summary>
+    /// Converts from a Skills enum to the game constant.
+    /// </summary>
+    /// <param name="skills">The skill enum.</param>
+    /// <returns>The game constant.</returns>
+    public static int ToGameConstant(this Skills skills)
+    {
+        Guard.IsEqualTo(PopCount((uint)skills), 1);
+        return skills switch
+        {
+            Skills.Farming => Farmer.farmingSkill,
+            Skills.Mining => Farmer.miningSkill,
+            Skills.Foraging => Farmer.foragingSkill,
+            Skills.Combat => Farmer.combatSkill,
+            Skills.Fishing => Farmer.fishingSkill,
+            Skills.Luck => Farmer.luckSkill,
+            _ => ThrowHelper.ThrowArgumentOutOfRangeException<int>($"{skills.ToStringFast()} does not correspond to a single vanilla skill!"),
+        };
+    }
 }

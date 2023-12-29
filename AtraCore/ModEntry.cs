@@ -108,9 +108,10 @@ internal sealed class ModEntry : BaseMod<ModEntry>
 
         // add event commands and preconditions.
         Event.RegisterPrecondition("atravita_PlayerRelationship", PlayerRelationshipPreconditions.PlayerRelationshipStatus);
-        Event.RegisterCommand("atravita_FacePlayer", FacePlayer.FacePlayerCommand);
+        Event.RegisterCommand("atravita_" + nameof(FacePlayer), FacePlayer.FacePlayerCommand);
         Event.RegisterCommand("atravita_" + nameof(AllowRepeatAfter), AllowRepeatAfter.SetRepeatAfter);
         Event.RegisterCommand("atravita_" + nameof(BranchIf), BranchIf.BranchIfCommand);
+        Event.RegisterCommand("atravita_" + nameof(GainExperience), GainExperience.Command);
 
         SetInvisible invisible = new (this.Helper.Multiplayer, this.ModManifest.UniqueID);
         Event.RegisterCommand("atravita_" + nameof(SetInvisible), invisible.ApplyInvisibility);

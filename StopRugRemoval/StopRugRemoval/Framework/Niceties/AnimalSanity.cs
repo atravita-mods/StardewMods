@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace StopRugRemoval.Framework.Niceties;
 
 using AtraShared.Utils.Extensions;
 
-namespace StopRugRemoval.Framework.Niceties;
+/// <summary>
+/// Fixes up animals at the end of day if weird things happen.
+/// </summary>
 internal static class AnimalSanity
 {
     /// <summary>
@@ -19,7 +17,7 @@ internal static class AnimalSanity
             return;
         }
 
-        foreach (var location in Game1.locations)
+        foreach (GameLocation? location in Game1.locations)
         {
             if (location is AnimalHouse || location?.animals.Count() is null or 0)
             {
@@ -28,11 +26,11 @@ internal static class AnimalSanity
 
             ModEntry.ModMonitor.Log($"Found {location.animals.Count()} animals outside on {location.NameOrUniqueName}", LogLevel.Info);
 
-            foreach (var animal in location.animals.Values.ToArray())
+            foreach (FarmAnimal? animal in location.animals.Values.ToArray())
             {
                 try
                 {
-                    animal.warpHome(location, animal);
+                    animal.warpHome();
                 }
                 catch (Exception ex)
                 {

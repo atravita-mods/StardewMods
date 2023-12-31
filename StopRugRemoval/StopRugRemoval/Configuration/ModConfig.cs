@@ -20,11 +20,6 @@ internal sealed class ModConfig
     #region rugs
 
     /// <summary>
-    /// Gets or sets a value indicating whether or not rugs should not be removed from under things.
-    /// </summary>
-    public bool PreventRugRemoval { get; set; } = true;
-
-    /// <summary>
     /// Gets or sets a value indicating whether or not I should be able to place rugs outside.
     /// </summary>
     public bool CanPlaceRugsOutside { get; set; } = false;
@@ -60,6 +55,9 @@ internal sealed class ModConfig
     /// </summary>
     [GMCMSection("Placement", 0)]
     public bool JukeboxesEverywhere { get; set; } = true;
+
+    [GMCMSection("Placement", 0)]
+    public bool ChestSwap { get; set; } = true;
 
     /// <summary>
     /// Gets or sets a value indicating whether golden coconuts should be allowed to appear off the island, if you've cracked at least one before.

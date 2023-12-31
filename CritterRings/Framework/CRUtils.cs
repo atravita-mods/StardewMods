@@ -84,7 +84,7 @@ internal static class CRUtils
     /// <param name="loc">Game location to check.</param>
     /// <returns>True if we should spawn butterflies, false otherwise.</returns>
     internal static bool ShouldSpawnButterflies([NotNullWhen(true)] this GameLocation? loc)
-        => loc is not null && !Game1.isDarkOut()
+        => loc is not null && !Game1.isDarkOut(loc)
             && (ModEntry.Config.ButterfliesSpawnInRain || !loc.IsOutdoors || !Game1.IsRainingHere(loc));
 
     /// <summary>
@@ -93,7 +93,7 @@ internal static class CRUtils
     /// <param name="loc">Game location to check.</param>
     /// <returns>True if okay to spawn owls.</returns>
     internal static bool ShouldSpawnOwls([NotNullWhen(true)] this GameLocation? loc)
-        => loc is not null && (Game1.isDarkOut() || ModEntry.Config.OwlsSpawnDuringDay)
+        => loc is not null && (Game1.isDarkOut(loc) || ModEntry.Config.OwlsSpawnDuringDay)
             && (ModEntry.Config.OwlsSpawnIndoors || loc.IsOutdoors);
 
     /// <summary>

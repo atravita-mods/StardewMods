@@ -218,7 +218,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
     [EventPriority(EventPriority.Low)]
     private void OnWarp(object? sender, WarpedEventArgs e)
     {
-        if (!e.IsLocalPlayer)
+        if (!e.IsLocalPlayer || ReferenceEquals(e.OldLocation, e.NewLocation))
         {
             return;
         }
@@ -237,7 +237,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         {
             return;
         }
-        if (Game1.isDarkOut())
+        if (Game1.isDarkOut(e.NewLocation))
         {
             if (Game1.player.isWearingRing(FireFlyRing))
             {
@@ -281,7 +281,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         {
             return;
         }
-        if (Game1.isDarkOut())
+        if (Game1.isDarkOut(Game1.currentLocation))
         {
             CRUtils.SpawnFirefly(critters, Game1.player.GetEffectsOfRingMultiplier(FireFlyRing));
         }

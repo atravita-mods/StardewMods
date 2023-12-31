@@ -27,11 +27,11 @@ internal static class OwlColorTranspiler
     [MethodImpl(TKConstants.Hot)]
     private static Color GetColorForTime(Color prevcolor)
     {
-        if (Game1.isDarkOut())
+        if (Game1.isDarkOut(Game1.currentLocation))
         {
             return prevcolor;
         }
-        if (Game1.isStartingToGetDarkOut())
+        if (Game1.isStartingToGetDarkOut(Game1.currentLocation))
         {
             return Color.LightSteelBlue;
         }
@@ -44,15 +44,15 @@ internal static class OwlColorTranspiler
         try
         {
             ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);
-            helper.FindNext(new CodeInstructionWrapper[]
-            {
+            helper.FindNext(
+            [
                 (OpCodes.Call, typeof(Color).GetCachedProperty(nameof(Color.MediumBlue), ReflectionCache.FlagTypes.StaticFlags).GetGetMethod()),
-            })
+            ])
             .Advance(1)
-            .Insert(new CodeInstruction[]
-            {
+            .Insert(
+            [
                 new (OpCodes.Call, typeof(OwlColorTranspiler).GetCachedMethod(nameof(GetColorForTime), ReflectionCache.FlagTypes.StaticFlags)),
-            });
+            ]);
 
             // helper.Print();
             return helper.Render();

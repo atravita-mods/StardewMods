@@ -134,7 +134,7 @@ internal sealed class ModEntry : Mod
     [EventPriority(EventPriority.High)]
     private void OnButtonPressed(object? sender, ButtonPressedEventArgs e)
     {
-        if (MenuingExtensions.IsNormalGameplay())
+        if (MenuingExtensions.IsNormalGameplay() && Config.Enabled)
         {
             _ = RecipeConsumer.ConsumeRecipeIfNeeded(e, this.Helper.Input)
                 || CropAndTreeFlipper.OnButtonPressed(e, this.Helper.Input)

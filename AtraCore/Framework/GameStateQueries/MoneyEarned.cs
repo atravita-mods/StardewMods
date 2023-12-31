@@ -1,5 +1,7 @@
 ﻿namespace AtraCore.Framework.GameStateQueries;
 
+using StardewValley.Delegates;
+
 using static StardewValley.GameStateQuery;
 
 /// <summary>
@@ -9,7 +11,7 @@ internal static class MoneyEarned
 {
     /// <inheritdoc cref="T:StardewValley.Delegates.GameStateQueryDelegate"/>
     /// <remarks>Checks if the given player has the specified amount of money earned, inclusive.</remarks>
-    internal static bool CheckMoneyEarned(string[] query, GameLocation location, Farmer player, Item targetItem, Item inputItem, Random random)
+    internal static bool CheckMoneyEarned(string[] query, GameStateQueryContext context)
     {
         uint max = uint.MaxValue;
         if (!ArgUtility.TryGet(query, 1, out string? playerKey, out string? error)
@@ -20,7 +22,7 @@ internal static class MoneyEarned
             return Helpers.ErrorResult(query, error);
         }
 
-        return Helpers.WithPlayer(player, playerKey, (Farmer target) => target.totalMoneyEarned >= min && target.totalMoneyEarned <= max);
+        return Helpers.WithPlayer(context.Player, playerKey, (Farmer target) => target.totalMoneyEarned >= min && target.totalMoneyEarned <= max);
     }
 
     private static bool TryParseUInt(string str, out uint value, out string error)

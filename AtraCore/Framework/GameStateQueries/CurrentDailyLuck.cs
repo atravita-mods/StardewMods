@@ -1,5 +1,7 @@
 ﻿namespace AtraCore.Framework.GameStateQueries;
 
+using StardewValley.Delegates;
+
 using static StardewValley.GameStateQuery;
 
 /// <summary>
@@ -9,7 +11,7 @@ internal static class CurrentDailyLuck
 {
     /// <inheritdoc cref="T:StardewValley.Delegates.GameStateQueryDelegate"/>
     /// <remarks>Checks if the given player the specified daily luck, inclusive.</remarks>
-    internal static bool DailyLuck(string[] query, GameLocation location, Farmer player, Item targetItem, Item inputItem, Random random)
+    internal static bool DailyLuck(string[] query, GameStateQueryContext context)
     {
         if (!ArgUtility.TryGet(query, 1, out string? playerKey, out string? error)
             || !ArgUtility.TryGetFloat(query, 2, out float min, out error)
@@ -18,6 +20,6 @@ internal static class CurrentDailyLuck
             return Helpers.ErrorResult(query, error);
         }
 
-        return Helpers.WithPlayer(player, playerKey, (Farmer target) => target.DailyLuck >= min && target.DailyLuck <= max);
+        return Helpers.WithPlayer(context.Player, playerKey, (Farmer target) => target.DailyLuck >= min && target.DailyLuck <= max);
     }
 }

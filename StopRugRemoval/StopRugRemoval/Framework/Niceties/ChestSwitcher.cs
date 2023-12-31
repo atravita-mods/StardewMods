@@ -29,21 +29,26 @@ internal static class ChestSwitcher
             return false;
         }
 
-        if (Game1.currentLocation is not { } location)
+        if (!ModEntry.Config.ChestSwap || Game1.currentLocation is not { } location)
         {
             return false;
         }
 
-        if (Game1.player?.ActiveObject is not { } active || !active.HasTypeBigCraftable() || !active.isPlaceable()
-            || active.IsTapper() || active.HasContextTag("sign_item") || active.HasContextTag("torch_item")
-            || active.QualifiedItemId is "(BC)62" or "(BC)163" or "(BC)208" or "(BC)209" or "(BC)211" or "(BC)214" or "(BC)248" or "(BC)238" // indoor pot or cask or workbench or minijukebox or woodchipper or phone
-            || DataLoader.Machines(Game1.content).ContainsKey(active.QualifiedItemId))
+        if (Game1.player?.ActiveObject is not { } active)
         {
             return false;
         }
 
         Vector2 tile = e.Cursor.GrabTile;
         if (!location.Objects.TryGetValue(tile, out SObject? obj) || obj.QualifiedItemId == active.QualifiedItemId)
+        {
+            return false;
+        }
+
+        if (!active.HasTypeBigCraftable() || !active.isPlaceable()
+            || active.IsTapper() || active.HasContextTag("sign_item") || active.HasContextTag("torch_item")
+            || active.QualifiedItemId is "(BC)62" or "(BC)163" or "(BC)208" or "(BC)209" or "(BC)211" or "(BC)214" or "(BC)248" or "(BC)238" // indoor pot or cask or workbench or minijukebox or woodchipper or phone
+            || DataLoader.Machines(Game1.content).ContainsKey(active.QualifiedItemId))
         {
             return false;
         }
@@ -61,8 +66,7 @@ internal static class ChestSwitcher
             return false;
         }
 
-        NetMutex? mutex = chest.SpecialChestType == Chest.SpecialChestTypes.JunimoChest ? Game1.player.team.GetOrCreateGlobalInventoryMutex("JunimoChests") : null;
-        mutex ??= chest.GlobalInventoryId is { } globalInventoryId ? Game1.player.team.GetOrCreateGlobalInventoryMutex(globalInventoryId) : null;
+        NetMutex? mutex = (chest.SpecialChestType == Chest.SpecialChestTypes.JunimoChest || chest.GlobalInventoryId is not null) ? chest.GetMutex() : null;
 
         if (mutex is not null)
         {

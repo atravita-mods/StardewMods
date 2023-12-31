@@ -10,7 +10,7 @@
     <Authors>SinZ and atravita</Authors>
     <UniqueId>sinZandAtravita.$(AssemblyName)</UniqueId>
     <Description>Automated way to run events.</Description>
-    <Version>0.1.2</Version>
+    <Version>0.1.3</Version>
     <UpdateKeys>Nexus:19458</UpdateKeys>
   </PropertyGroup>
 

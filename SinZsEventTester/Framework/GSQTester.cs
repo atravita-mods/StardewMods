@@ -1,5 +1,7 @@
 ﻿using System.Reflection;
 
+using StardewValley.Delegates;
+
 namespace SinZsEventTester.Framework;
 
 /// <summary>
@@ -9,22 +11,25 @@ namespace SinZsEventTester.Framework;
 /// <param name="reflector">SMAPI's reflection helper.</param>
 internal sealed class GSQTester(IMonitor monitor, IReflectionHelper reflector)
 {
-    private static Dictionary<string, Func<string, bool>> _additionalAssets = new(StringComparer.OrdinalIgnoreCase)
+    private static readonly Dictionary<string, Func<string, bool>> _additionalAssets = new(StringComparer.OrdinalIgnoreCase)
     {
         ["Data/MineCarts"] = static name => Extensions.IsPossibleGSQString(name) || name is "MinecartsUnlocked",
         ["Data/Characters"] = static name => Extensions.IsPossibleGSQString(name) || name is "CanSocialize" or "CanVisitIsland" or "ItemDeliveryQuest" or "WinterStarParticipant" or "MinecartsUnlocked",
-};
+    };
 
+    private readonly SObject puffer = new("420", 1);
+
+    /// <inheritdoc cref="IEventTesterAPI.RegisterAsset(IAssetName, Func{string, bool}?)"/>
     internal static bool Register(IAssetName asset, Func<string, bool>? filter)
         => _additionalAssets.TryAdd(asset.BaseName, filter ?? Extensions.IsPossibleGSQString);
 
+    /// <inheritdoc cref="IEventTesterAPI.RegisterAsset(IAssetName, HashSet{string})"/>
     internal static bool Register(IAssetName asset, HashSet<string> additional)
         => _additionalAssets.TryAdd(asset.BaseName, name => Extensions.IsPossibleGSQString(name) || additional.Contains(name));
 
+    /// <inheritdoc cref="IEventTesterAPI.RemoveAsset(IAssetName)"/>
     internal static bool Remove(IAssetName assets)
         => _additionalAssets.Remove(assets.BaseName);
-
-    private readonly SObject puffer = new("420", 1);
 
     /// <summary>
     /// Checks <see cref="DataLoader"/>'s assets' GSQ.
@@ -204,6 +209,8 @@ internal sealed class GSQTester(IMonitor monitor, IReflectionHelper reflector)
             return;
         }
 
+        GameStateQueryContext context = new(location, player, this.puffer, this.puffer, Random.Shared);
+
         foreach (GameStateQuery.ParsedGameStateQuery query in parsed)
         {
             // the ANY query is checked separately.
@@ -218,7 +225,7 @@ internal sealed class GSQTester(IMonitor monitor, IReflectionHelper reflector)
 
             try
             {
-                query.Resolver(query.Query, location, player, this.puffer, this.puffer, Random.Shared);
+                query.Resolver(query.Query, context);
             }
             catch (Exception ex)
             {

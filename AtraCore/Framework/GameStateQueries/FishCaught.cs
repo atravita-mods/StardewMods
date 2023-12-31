@@ -1,5 +1,7 @@
 ﻿namespace AtraCore.Framework.GameStateQueries;
 
+using StardewValley.Delegates;
+
 using static StardewValley.GameStateQuery;
 
 /// <summary>
@@ -9,7 +11,7 @@ internal static class FishCaught
 {
     /// <inheritdoc cref="T:StardewValley.Delegates.GameStateQueryDelegate"/>
     /// <remarks>Checks if the given player has caught the specified percentage of total fish, inclusive.</remarks>
-    internal static bool FishCaughtPercent(string[] query, GameLocation location, Farmer player, Item targetItem, Item inputItem, Random random)
+    internal static bool FishCaughtPercent(string[] query, GameStateQueryContext context)
     {
         if (!ArgUtility.TryGet(query, 1, out string? playerKey, out string? error)
             || !ArgUtility.TryGetFloat(query, 2, out float min, out error)
@@ -19,7 +21,7 @@ internal static class FishCaught
         }
 
         return Helpers.WithPlayer(
-            player,
+            context.Player,
             playerKey,
             (Farmer target) =>
                 {

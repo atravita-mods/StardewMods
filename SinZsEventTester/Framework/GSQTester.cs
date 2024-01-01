@@ -1,8 +1,9 @@
 ﻿using System.Reflection;
+using System.Reflection.PortableExecutable;
 
-using StardewValley.Characters;
 using StardewValley.Delegates;
 using StardewValley.GameData;
+using StardewValley.GameData.Machines;
 using StardewValley.Internal;
 
 namespace SinZsEventTester.Framework;
@@ -20,7 +21,7 @@ internal sealed class GSQTester(IMonitor monitor, IReflectionHelper reflector)
         ["Data/Characters"] = static name => Extensions.IsPossibleGSQString(name) || name is "CanSocialize" or "CanVisitIsland" or "ItemDeliveryQuest" or "WinterStarParticipant" or "MinecartsUnlocked",
     };
 
-    private readonly SObject puffer = new("420", 1);
+    private readonly SObject puffer = new("128", 1);
 
     /// <inheritdoc cref="IEventTesterAPI.RegisterAsset(IAssetName, Func{string, bool}?)"/>
     internal static bool Register(IAssetName asset, Func<string, bool>? filter)
@@ -197,7 +198,7 @@ internal sealed class GSQTester(IMonitor monitor, IReflectionHelper reflector)
         {
             foreach (string? candidate in ids)
             {
-                var data = ItemRegistry.GetData(candidate);
+                StardewValley.ItemTypeDefinitions.ParsedItemData? data = ItemRegistry.GetData(candidate);
                 if (data is null)
                 {
                     monitor.Log($"Could not find valid item for '{candidate}'.", LogLevel.Warn);
@@ -206,9 +207,19 @@ internal sealed class GSQTester(IMonitor monitor, IReflectionHelper reflector)
             return;
         }
 
+        // special handling for machines.
+        if (spawnable is MachineItemOutput machineData && machineData.OutputMethod is { } method)
+        {
+            if (!StaticDelegateBuilder.TryCreateDelegate<MachineOutputDelegate>(method, out _, out string? error2))
+            {
+                monitor.Log($"Invalid item output method '{method}': {error2}", LogLevel.Error);
+            }
+            return;
+        }
+
         ItemQueryContext context = new(Game1.currentLocation, Game1.player, Random.Shared);
         ItemQueryResult[] result = ItemQueryResolver.TryResolve(
-            spawnable.ItemId.Replace("BOBBER_X", " 4").Replace("BOBBER_Y", "6").Replace("DROP_IN_ID", "(O)69").Replace("DROP_IN_PRESERVE", "(O)69").Replace("NEARBY_FLOWER_ID", "597").Replace("DROP_IN_QUALITY", "4"),
+            spawnable.ItemId.Replace("BOBBER_X", "4").Replace("BOBBER_Y", "6").Replace("WATER_DEPTH", "5").Replace("DROP_IN_ID", "(O)69").Replace("DROP_IN_PRESERVE", "(O)69").Replace("NEARBY_FLOWER_ID", "597").Replace("DROP_IN_QUALITY", "4"),
             context,
             ItemQuerySearchMode.All,
             spawnable.PerItemCondition,

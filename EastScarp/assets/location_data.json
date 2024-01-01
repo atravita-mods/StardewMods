@@ -39,7 +39,7 @@
     "WaterColor": [
       {
         "Color": "#00660066", //uses the stardew string to color utility function
-        "Conditions": "SEASON summer/DAY_OF_MONTH 12 13 14"
+        "Conditions": "SEASON summer,DAY_OF_MONTH 12 13 14"
       }
     ]
   }

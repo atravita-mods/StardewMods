@@ -2,6 +2,8 @@
 
 using AtraShared.Utils.Extensions;
 
+using StardewValley.Buildings;
+
 /// <summary>
 /// Fixes up animals at the end of day if weird things happen.
 /// </summary>
@@ -30,6 +32,17 @@ internal static class AnimalSanity
             {
                 try
                 {
+                    if (animal.home is null)
+                    {
+                        foreach (Building? building in location.buildings)
+                        {
+                            if (building?.GetIndoors() is AnimalHouse house && house.animalsThatLiveHere.Contains(animal.myID.Value))
+                            {
+                                animal.home = building;
+                                break;
+                            }
+                        }
+                    }
                     animal.warpHome();
                 }
                 catch (Exception ex)

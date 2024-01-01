@@ -28,5 +28,8 @@
 
   // museum
   "donate-all": "Donate All",
-  "museum-returned":  "Your {{item}} has been returned to the overflow area of the museum."
+  "museum-returned": "Your {{item}} has been returned to the overflow area of the museum.",
+
+  // category
+  "any":  "{{category}} (Any)"
 }

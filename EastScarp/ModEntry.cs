@@ -58,7 +58,7 @@ internal sealed class ModEntry : Mod
             try
             {
                 IEventTesterAPI? eventTesterAPI = this.Helper.ModRegistry.GetApi<IEventTesterAPI>(EventTester);
-                eventTesterAPI?.RegisterAsset(this.Helper.GameContent.ParseAssetName("Mods/EastScarp/LocationMetadata"));
+                eventTesterAPI?.RegisterAsset(this.Helper.GameContent.ParseAssetName("Mods/EastScarp/LocationMetadata"), static (s) => s == "Conditions");
             }
             catch (Exception ex)
             {

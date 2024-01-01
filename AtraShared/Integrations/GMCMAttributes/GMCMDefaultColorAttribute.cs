@@ -3,41 +3,30 @@
 /// <summary>
 /// Attribute to set the default color for a GMCM element.
 /// </summary>
+/// <param name="r">red component.</param>
+/// <param name="g">green component.</param>
+/// <param name="b">blue component.</param>
+/// <param name="a">alpha.</param>
 [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
-public sealed class GMCMDefaultColorAttribute : Attribute
+public sealed class GMCMDefaultColorAttribute(byte r, byte g, byte b, byte a) : Attribute
 {
-    /// <summary>
-    /// Initializes a new instance of the <see cref="GMCMDefaultColorAttribute"/> class.
-    /// </summary>
-    /// <param name="r">red component.</param>
-    /// <param name="g">green component.</param>
-    /// <param name="b">blue component.</param>
-    /// <param name="a">alpha.</param>
-    public GMCMDefaultColorAttribute(byte r, byte g, byte b, byte a)
-    {
-        this.R = r;
-        this.G = g;
-        this.B = b;
-        this.A = a;
-    }
-
     /// <summary>
     /// Gets the red component.
     /// </summary>
-    internal byte R { get; init; }
+    internal byte R { get; init; } = r;
 
     /// <summary>
     /// Gets the green component.
     /// </summary>
-    internal byte G { get; init; }
+    internal byte G { get; init; } = g;
 
     /// <summary>
     /// Gets the blue component.
     /// </summary>
-    internal byte B { get; init; }
+    internal byte B { get; init; } = b;
 
     /// <summary>
     /// Gets the alpha.
     /// </summary>
-    internal byte A { get; init; }
+    internal byte A { get; init; } = a;
 }

@@ -113,13 +113,13 @@
             "TargetField": ["Carpenter", "Items"],
             "Entries": {
                 "atravita.CP.MoreFertilizers.SeedyFertilizer": {
-                    "Condition": "YEAR 2, PLAYER_HAS_MAIL Host georgeGifts, DAY_OF_WEEK Wed Sun, PLAYER_HEARTS George 6",
+                    "Condition": "YEAR 2, PLAYER_HAS_MAIL Host georgeGifts, DAY_OF_WEEK Wed Sun, PLAYER_HEARTS Current George 6",
                     "Price": 150,
                     "ItemId": "(O)atravita.CP.MoreFertilizers.SeedyFertilizer",
                     "IgnoreShopPriceModifiers": true
                 },
                 "atravita.CP.MoreFertilizers.TreeTapperFertilizer": {
-                    "Condition": "YEAR 2, PLAYER_HAS_MAIL Host robinResource, DAY_OF_WEEK Wed Sun, PLAYER_HEARTS Robin 6",
+                    "Condition": "YEAR 2, PLAYER_HAS_MAIL Host robinResource, DAY_OF_WEEK Wed Sun, PLAYER_HEARTS Current Robin 6",
                     "Price": 150,
                     "ItemId": "(O)atravita.CP.MoreFertilizers.TreeTapperFertilizer",
                     "IgnoreShopPriceModifiers": true

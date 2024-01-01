@@ -56,7 +56,7 @@ public static class ColorHandler
     /// <param name="colorname">user string.</param>
     /// <param name="color">XNAcolor.</param>
     /// <returns>True if successful, false otherwise.</returns>
-    public static bool TryParseColor(string colorname, out XNAColor color)
+    public static bool TryParseColor(string? colorname, out XNAColor color)
     {
         if (string.IsNullOrWhiteSpace(colorname))
         {

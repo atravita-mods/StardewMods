@@ -23,6 +23,14 @@
             "Entries": {
                 "atravita.SpamMail.Composter": "{{i18n: jodi-composter}}",
                 "atravita.SpamMail.WaterPark": "{{i18n: jodi-waterpark}}",
+                "atravita.SpamMail.JojaChocolate": "{{i18n: jodi-jojachocolate}}$s"
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Abigail",
+            "Entries": {
+                "atravita.SpamMail.JojaFall": "{{i18n: abby-jojafall}}$s"
             }
         },
         {
@@ -88,7 +96,8 @@
             "Action": "EditData",
             "Target": "Characters/Dialogue/Pam",
             "Entries": {
-                "atravita.SpamMail.PennyStocks": "{{i18n: pam-pennystocks}}"
+                "atravita.SpamMail.PennyStocks": "{{i18n: pam-pennystocks}}",
+                "atravita.SpamMail.Casino": "{{i18n:pam-casino}}"
             },
             "When": {
                 "Hearts:Pam|contains={{Range:0,5}}": false

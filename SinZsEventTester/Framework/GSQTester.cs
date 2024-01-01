@@ -1,6 +1,9 @@
 ﻿using System.Reflection;
 
+using StardewValley.Characters;
 using StardewValley.Delegates;
+using StardewValley.GameData;
+using StardewValley.Internal;
 
 namespace SinZsEventTester.Framework;
 
@@ -93,6 +96,11 @@ internal sealed class GSQTester(IMonitor monitor, IReflectionHelper reflector)
             return;
         }
 
+        if (data is ISpawnItemData spawnable)
+        {
+            this.CheckItemSpawn(spawnable, breadcrumbs);
+        }
+
         Type t = data.GetType();
 
         if (t.IsGenericType)
@@ -178,6 +186,40 @@ internal sealed class GSQTester(IMonitor monitor, IReflectionHelper reflector)
             id ??= i.ToString()!;
 
             this.Process(v!, [.. breadcrumbs, id], filter);
+        }
+    }
+
+    private void CheckItemSpawn(ISpawnItemData spawnable, string[] breadcrumbs)
+    {
+        monitor.Log($"Checking: {spawnable.ItemId} - {spawnable.PerItemCondition ?? "no per item condition"}\n{breadcrumbs.Render()}", LogLevel.Info);
+
+        if (spawnable.RandomItemId is { } ids)
+        {
+            foreach (string? candidate in ids)
+            {
+                var data = ItemRegistry.GetData(candidate);
+                if (data is null)
+                {
+                    monitor.Log($"Could not find valid item for '{candidate}'.", LogLevel.Warn);
+                }
+            }
+            return;
+        }
+
+        ItemQueryContext context = new(Game1.currentLocation, Game1.player, Random.Shared);
+        ItemQueryResult[] result = ItemQueryResolver.TryResolve(
+            spawnable.ItemId.Replace("BOBBER_X", " 4").Replace("BOBBER_Y", "6").Replace("DROP_IN_ID", "(O)69").Replace("DROP_IN_PRESERVE", "(O)69").Replace("NEARBY_FLOWER_ID", "597").Replace("DROP_IN_QUALITY", "4"),
+            context,
+            ItemQuerySearchMode.All,
+            spawnable.PerItemCondition,
+            null,
+            avoidRepeat: false,
+            null,
+            (string _, string queryError) => monitor.Log("Failed parsing that query: " + queryError, LogLevel.Error));
+        if (result.Length == 0)
+        {
+            monitor.Log("That query did not match any items.", LogLevel.Info);
+            return;
         }
     }
 

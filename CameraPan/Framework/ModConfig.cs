@@ -1,6 +1,9 @@
-﻿using AtraBase.Toolkit;
+﻿using System.Text.Json.Serialization;
+
+using AtraBase.Toolkit;
 
 using AtraShared.Integrations.GMCMAttributes;
+using AtraShared.Niceties;
 
 using Microsoft.Xna.Framework;
 
@@ -32,6 +35,7 @@ public sealed class ModConfig
     /// <summary>
     /// Gets or sets the color for which to draw the Mozilla Arrows TM.
     /// </summary>
+    [JsonConverter(typeof(ColorConverter))]
     [GMCMDefaultColor(127, 255, 0, 255)]
     public Color ClickAndDragColor { get; set; } = Color.Chartreuse;
 

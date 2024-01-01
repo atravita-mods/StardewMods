@@ -1,5 +1,7 @@
 ﻿using AtraBase.Toolkit.Extensions;
 
+using AtraShared.Utils.Extensions;
+
 using CommunityToolkit.Diagnostics;
 
 using Newtonsoft.Json;
@@ -130,7 +132,7 @@ public record struct TimeRange : IComparable<TimeRange>
 /// <summary>
 /// Converts a time range to and from json.
 /// </summary>
-public class TimeRangeConverter : JsonConverter
+public sealed class TimeRangeConverter : JsonConverter
 {
     /// <inheritdoc />
     public override bool CanConvert(Type objectType)
@@ -144,17 +146,16 @@ public class TimeRangeConverter : JsonConverter
             case JsonToken.StartObject:
             {
                 JObject obj = JObject.Load(reader);
-                JToken? startToken = obj.GetValue(nameof(TimeRange.StartTime), StringComparison.OrdinalIgnoreCase);
-                JToken? endToken = obj.GetValue(nameof(TimeRange.EndTime), StringComparison.OrdinalIgnoreCase);
-                if (startToken is not null && endToken is not null)
+                if (obj.TryGetValueIgnoreCase<int>(nameof(TimeRange.StartTime), out int startTime)
+                    && obj.TryGetValueIgnoreCase<int>(nameof(TimeRange.EndTime), out int endTime))
                 {
-                    return new TimeRange(startToken.Value<int>(), endToken.Value<int>());
+                    return new TimeRange(startTime, endTime);
                 }
 
                 break;
             }
             case JsonToken.String:
-                if (TimeRange.TryParse((string?)reader.Value, out var range))
+                if (TimeRange.TryParse((string?)reader.Value, out TimeRange range))
                 {
                     return range;
                 }

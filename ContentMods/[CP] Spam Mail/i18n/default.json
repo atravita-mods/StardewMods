@@ -57,6 +57,8 @@
     "JojaMail.Fall.Title": "Back to School!",
     "JojaMail.Fall.Text.1": "Get all the school supplies your child needs cheap from Joja! Loose leaf paper, binders, and new spirals all around!",
 
+    "abby-jojafall": "Ugh, classes again, @.$s#$b#I'd much rather have fun exploring.",
+
     "JojaMail.Winter.Title": "Hot Chocolate For All!",
     "JojaMail.Winter.Text.1": "Come in to your local JojaMart, get a free cup of hot cocoa on us!",
     "JojaMail.Winter.Text.2": "Required minimum 2000$ purchase to qualify for free hot cocoa.",
@@ -83,6 +85,8 @@
     "JojaMail.Chocolate.Title": "50% Off Chocolate!",
     "JojaMail.Chocolate.Text.1": "It's nearly the Egg Festival, and you'll certainly want some chocolate to hand out to the kids...or maybe take for yourself. So. Chocolate from a master chocolatier with a hundred years of history who definitely has NOT been skimping on ingredient quality lately is on sale!",
     "JojaMail.Chocolate.Text.2": "Look, even if you don't have a child near you, don't you want some cheap chocolate for the next time you have a bad day?",
+
+    "jodi-jojachocolate": "Is it just me, or do these chocolates I ordered taste...off?",
 
     // Medications, because WTF America
     "SkinImplants.Title": "Fix Your Jawline!",
@@ -114,6 +118,8 @@
     "Casino.Title": "Come Try Your Luck",
     "Casino.Text.1": "Come try your luck at the Calico Desert's Casino! Featuring blackjack and many slot machines!",
     "Casino.Text.2": "Adults only, open all hours.",
+
+    "pam-casino": "Ma used to really love gambling. She'd go up to the casino whenever she could.#$b#I miss her.$s",
 
     /*************
     * Composter

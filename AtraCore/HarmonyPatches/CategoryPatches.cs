@@ -6,28 +6,36 @@ using Microsoft.Xna.Framework;
 
 using StardewValley.Extensions;
 using StardewValley.GameData.Objects;
+using StardewValley.ItemTypeDefinitions;
 
 namespace AtraCore.HarmonyPatches;
 
 /// <summary>
-/// Holds patches against <see cref="SObject"/> to apply custom category names and colors.
+/// Holds patches to apply custom category names and colors.
 /// </summary>
-[HarmonyPatch(typeof(SObject))]
+[HarmonyPatch]
 internal static class CategoryPatches
 {
-    // qualified item ID to override.
-    private static readonly Dictionary<string, (string? title, Color? color)> _cache = [];
+    // unqualified item ID to override.
+    private static readonly Dictionary<string, (string? title, Color? color, string? icon)> _cache = [];
+
+    // category (negative int.)
+    private static readonly Dictionary<int, (string? title, Color? color, string? icon)> _category_cache = [];
 
     /// <summary>
     /// Clears the cache.
     /// </summary>
-    internal static void Reset() => _cache.Clear();
+    internal static void Reset()
+    {
+        _cache.Clear();
+        _category_cache.Clear();
+    }
 
     [HarmonyPrefix]
-    [HarmonyPatch(nameof(SObject.getCategoryName))]
+    [HarmonyPatch(typeof(SObject), nameof(SObject.getCategoryName))]
     private static bool OverrideCategoryName(SObject __instance, ref string __result)
     {
-        (string? title, Color? _) = __instance.Evaluate();
+        (string? title, Color? _, string? _) = __instance.Evaluate();
 
         if (title is not null)
         {
@@ -39,10 +47,10 @@ internal static class CategoryPatches
     }
 
     [HarmonyPrefix]
-    [HarmonyPatch(nameof(SObject.getCategoryColor))]
+    [HarmonyPatch(typeof(SObject), nameof(SObject.getCategoryColor))]
     private static bool OverrideCategoryColor(SObject __instance, ref Color __result)
     {
-        (string? _, Color? color) = __instance.Evaluate();
+        (string? _, Color? color, string? _) = __instance.Evaluate();
 
         if (color is not null)
         {
@@ -53,22 +61,108 @@ internal static class CategoryPatches
         return true;
     }
 
-    private static (string? title, Color? color) Evaluate(this SObject obj)
+    [HarmonyPrefix]
+    [HarmonyPatch(typeof(CraftingRecipe), nameof(CraftingRecipe.getSpriteIndexFromRawIndex))]
+    private static bool OverrideCategoryIcon(string item_id, ref string __result)
+    {
+        if (int.TryParse(item_id, out int cat) && cat < 0)
+        {
+            string? title = null;
+            Color? color = null;
+            string? iconS = null;
+            Evaluate(cat, ref title, ref color, ref iconS);
+            if (iconS is not null)
+            {
+                __result = iconS;
+                return false;
+            }
+
+            return true;
+        }
+
+        ParsedItemData? data = ItemRegistry.GetDataOrErrorItem(item_id);
+        if (data?.ItemType is not ObjectDataDefinition)
+        {
+            return true;
+        }
+
+        (string? _, Color? _, string? icon) = Evaluate(data.ItemId, data.Category);
+
+        ModEntry.ModMonitor.VerboseLog($"Overriding {data.ItemId}/{data.Category} with icon {icon}.");
+
+        if (icon is not null)
+        {
+            ParsedItemData? iconData = ItemRegistry.GetData(icon);
+            if (iconData is not null)
+            {
+                __result = iconData.QualifiedItemId;
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    [HarmonyPrefix]
+    [HarmonyPatch(typeof(CraftingRecipe), nameof(CraftingRecipe.getNameFromIndex))]
+    private static bool OverrideCategoryCrafting(string item_id, ref string __result)
+    {
+        if (int.TryParse(item_id, out int cat) && cat < 0)
+        {
+            string? titleC = null;
+            Color? color = null;
+            string? icon = null;
+            Evaluate(cat, ref titleC, ref color, ref icon);
+            if (titleC is not null)
+            {
+                __result = titleC;
+                return false;
+            }
+
+            return true;
+        }
+
+        ParsedItemData? data = ItemRegistry.GetDataOrErrorItem(item_id);
+        if (data?.ItemType is not ObjectDataDefinition)
+        {
+            return true;
+        }
+
+        (string? title, Color? _, string? _) = Evaluate(data.ItemId, data.Category);
+
+        ModEntry.ModMonitor.VerboseLog($"Overriding {data.ItemId}/{data.Category} with title {title}.");
+
+        if (title is not null)
+        {
+            __result = I18n.Any(title);
+            return false;
+        }
+
+        return true;
+    }
+
+    private static (string? title, Color? color, string? icon) Evaluate(this SObject obj)
     {
         if (!obj.HasTypeObject())
         {
-            return (null, null);
+            return (null, null, null);
         }
 
-        if (_cache.TryGetValue(obj.QualifiedItemId, out (string? title, Color? color) val))
+        return Evaluate(obj.ItemId, obj.Category);
+    }
+
+    private static (string? title, Color? color, string? icon) Evaluate(string unqualified, int category)
+    {
+        if (_cache.TryGetValue(unqualified, out (string? title, Color? color, string? icon) val))
         {
             return val;
         }
 
         string? title = null;
         Color? color = null;
+        string? icon = null;
 
-        if (Game1.objectData.TryGetValue(obj.ItemId, out ObjectData? objectData) && objectData.CustomFields is { } fields)
+        if (Game1.objectData.TryGetValue(unqualified, out ObjectData? objectData) && objectData.CustomFields is { } fields)
         {
             if (fields.TryGetValue("atravita.CategoryNameOverride", out string? tokenizedTitle) && TokenParser.ParseText(tokenizedTitle) is string proposedTitle
                 && !string.IsNullOrWhiteSpace(proposedTitle))
@@ -79,26 +173,40 @@ internal static class CategoryPatches
             {
                 color = proposedColor;
             }
+            if (fields.TryGetValue("atravita.CategoryIconOverride", out string? iconS) && iconS is not null)
+            {
+                icon = iconS;
+            }
         }
 
-        if (title is not null && color is not null)
+        if (title is not null && color is not null && icon is not null)
         {
-            return _cache[obj.QualifiedItemId] = (title, color);
+            return _cache[unqualified] = (title, color, icon);
         }
 
-        if (AssetManager.GetCategoryExtension(obj.Category) is { } categoryOverride)
+        Evaluate(category, ref title, ref color, ref icon);
+        return (title, color, icon);
+    }
+
+    private static void Evaluate(int category, ref string? title, ref Color? color, ref string? icon)
+    {
+        if (AssetManager.GetCategoryExtension(category) is { } categoryOverride)
         {
-            if (categoryOverride.CategoryNameOverride is string tokenizedTitle && TokenParser.ParseText(tokenizedTitle) is string proposedTitle
+            if (title is null && categoryOverride.CategoryNameOverride is string tokenizedTitle && TokenParser.ParseText(tokenizedTitle) is string proposedTitle
                 && !string.IsNullOrWhiteSpace(proposedTitle))
             {
                 title = proposedTitle;
             }
-            if (categoryOverride.CategoryColorOverride is string sColor && ColorHandler.TryParseColor(sColor, out Color proposedColor))
+            if (color is null && categoryOverride.CategoryColorOverride is string sColor && ColorHandler.TryParseColor(sColor, out Color proposedColor))
             {
                 color = proposedColor;
             }
+            if (icon is null && categoryOverride.CategoryItemOverride is string sIcon)
+            {
+                icon = sIcon;
+            }
         }
 
-        return _cache[obj.QualifiedItemId] = (title, color);
+        _category_cache[category] = (title, color, icon);
     }
 }

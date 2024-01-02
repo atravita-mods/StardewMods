@@ -24,7 +24,7 @@ internal static class MRUtils
             {
                 break;
             }
-            var remainder = mailSpan[(startIndex + "%item".Length)..];
+            ReadOnlySpan<char> remainder = mailSpan[(startIndex + "%item".Length)..];
 
             int endIndex = remainder.IndexOf("%%", StringComparison.Ordinal);
             if (endIndex < 0)

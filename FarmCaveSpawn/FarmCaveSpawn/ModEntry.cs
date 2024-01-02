@@ -359,7 +359,7 @@ END:
         List<string> fruitNames = [];
         foreach (string objectID in this.GetTreeFruits())
         {
-            if (Game1Wrappers.ObjectData.TryGetValue(objectID, out var data))
+            if (Game1Wrappers.ObjectData.TryGetValue(objectID, out StardewValley.GameData.Objects.ObjectData? data))
             {
                 fruitNames.Add(TokenParser.ParseText(data.DisplayName));
             }

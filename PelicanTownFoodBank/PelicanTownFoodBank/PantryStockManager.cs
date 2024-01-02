@@ -120,10 +120,10 @@ internal static class PantryStockManager
     {
         List<string> cookingIngredients = new(24);
         List<string> cookedItems = new(24);
-        foreach ((var index, var data) in Game1Wrappers.ObjectData)
+        foreach ((string? index, StardewValley.GameData.Objects.ObjectData? data) in Game1Wrappers.ObjectData)
         {
-            var cat = data.Category;
-            var price = data.Price;
+            int cat = data.Category;
+            int price = data.Price;
 
             if (FoodBankCategories.Contains(cat) && price < 250)
             {

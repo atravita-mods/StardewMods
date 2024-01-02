@@ -37,8 +37,8 @@ internal static class RedirectPhoneCall
             }
         }
 
-        var inners = typeof(DefaultPhoneHandler).GetNestedTypes(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
-        foreach (var inner in inners)
+        Type[] inners = typeof(DefaultPhoneHandler).GetNestedTypes(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+        foreach (Type inner in inners)
         {
             if (!inner.Name.StartsWith("<>c", StringComparison.Ordinal))
             {

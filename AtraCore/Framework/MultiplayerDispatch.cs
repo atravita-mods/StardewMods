@@ -7,12 +7,12 @@ namespace AtraCore.Framework;
 /// </summary>
 internal static class MultiplayerDispatch
 {
+    private static readonly Dictionary<string, Action<ModMessageReceivedEventArgs>> _actions = [];
+
     /// <summary>
     /// Gets this mod's unique ID.
     /// </summary>
     internal static string UniqueId { get; private set; } = null!;
-
-    private static readonly Dictionary<string, Action<ModMessageReceivedEventArgs>> _actions = [];
 
     /// <summary>
     /// Initializes this class.

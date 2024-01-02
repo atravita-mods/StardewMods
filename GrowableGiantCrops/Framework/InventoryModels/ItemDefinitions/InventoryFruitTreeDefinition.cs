@@ -25,7 +25,7 @@ public class InventoryFruitTreeDefinition : BaseItemDataDefinition
     /// <inheritdoc />
     public override ParsedItemData? GetData(string itemId)
     {
-        if (Game1.fruitTreeData.TryGetValue(itemId, out var fruitTree))
+        if (Game1.fruitTreeData.TryGetValue(itemId, out StardewValley.GameData.FruitTrees.FruitTreeData? fruitTree))
         {
             var internalName = Game1.objectInformation.TryGetValue(itemId, out var data) ? data.GetNthChunk('/').ToString() : "UNKNOWN NAME";
 

@@ -74,7 +74,7 @@ public static class Program
                     return;
                 }
 
-                if (!queues.TryGetValue(model.ContentPackFor.UniqueID, out var queue))
+                if (!queues.TryGetValue(model.ContentPackFor.UniqueID, out ConcurrentQueue<Manifest>? queue))
                 {
                     queues[model.ContentPackFor.UniqueID] = queue = new ();
                 }

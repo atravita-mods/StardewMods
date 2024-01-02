@@ -31,7 +31,7 @@ internal sealed class PetHudMessage : HUDMessage
     {
         this.spawnedItem = spawnedItem;
         this.messageWidth = ModEntry.StringUtils.MeasureWord(Game1.smallFont, this.message);
-        pet.GetPetIcon(out var assetName, out this.petRect);
+        pet.GetPetIcon(out string? assetName, out this.petRect);
 
         if (assetName is not null)
         {

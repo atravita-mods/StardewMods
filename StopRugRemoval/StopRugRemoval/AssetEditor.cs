@@ -149,14 +149,14 @@ internal static class AssetEditor
 
     private static void EditWildTrees(IAssetData data)
     {
-        var editor = data.AsDictionary<string, WildTreeData>().Data;
+        IDictionary<string, WildTreeData> editor = data.AsDictionary<string, WildTreeData>().Data;
         EditCoconut(editor, "6");
         EditCoconut(editor, "9");
     }
 
     private static void EditCoconut(IDictionary<string, WildTreeData> editor, string id)
     {
-        if (editor.TryGetValue(id, out var bigPalm)
+        if (editor.TryGetValue(id, out WildTreeData? bigPalm)
             && bigPalm.SeedDropItems.FirstOrDefault(item => item.Id == "GoldenCoconut") is { } entry && entry.Condition is not null)
         {
             entry.Condition = entry.Condition.Replace("LOCATION_CONTEXT Target Island", "WORLD_STATE_FIELD GoldenCoconutCracked true");

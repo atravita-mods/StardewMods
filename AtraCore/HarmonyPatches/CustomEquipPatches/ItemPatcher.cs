@@ -33,6 +33,7 @@ using StardewValley.Objects;
 /// </summary>
 [HarmonyPatch]
 [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
+[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1202:Elements should be ordered by access", Justification = "Preference.")]
 internal static class ItemPatcher
 {
     private const string LightKey = "atravita.EquipLight";
@@ -618,6 +619,7 @@ internal static class ItemPatcher
     /// <summary>
     /// Updates the current lights.
     /// </summary>
+    /// <param name="e">Update ticked event args.</param>
     [MethodImpl(TKConstants.Hot)]
     internal static void UpdateEquips(UpdateTickedEventArgs e)
     {

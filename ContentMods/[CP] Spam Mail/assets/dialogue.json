@@ -127,6 +127,13 @@
             "Entries": {
                 "atravita.SpamMail.VideoGames": "{{i18n:sam-videogames}}"
             }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Robin",
+            "Entries": {
+                "atravita.SpamMail.ToolsShop": "{{i18n: robin-toolshop}}"
+            }
         }
     ]
 }

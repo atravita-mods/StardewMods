@@ -80,7 +80,7 @@ public class RawDataRented : IRawTextureData, IDisposable
     /// <summary>
     /// Disposes a <see cref="RawDataRented" /> by returning the internal <see cref="ArrayPool{Color}" />.
     /// </summary>
-    /// <param name="disposing">Whether this was called by the <see cref="Dispose" /> method or the finalizer.</param>
+    /// <param name="disposing">Whether this was called by the <see cref="Dispose()" /> method or the finalizer.</param>
     protected virtual void Dispose(bool disposing)
     {
         if (!this.disposed)

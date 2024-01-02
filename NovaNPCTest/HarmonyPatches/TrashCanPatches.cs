@@ -26,7 +26,7 @@ internal static class TrashCanPatches
         }
 
         if (environment.doesTileHaveProperty((int)tileLocation.X, (int)tileLocation.Y, "Action", "Buildings") is string s
-            && int.TryParse(s.GetNthChunk(' ', 1), out var whichCan))
+            && int.TryParse(s.GetNthChunk(' ', 1), out int whichCan))
         {
             NetArray<bool, NetBool> garbageChecked = ModEntry.ReflectionHelper.GetField<NetArray<bool, NetBool>>((object)environment, "garbageChecked", true).GetValue();
             if (whichCan >= 0 && whichCan < garbageChecked.Length)

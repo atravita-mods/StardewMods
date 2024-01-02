@@ -24,7 +24,7 @@ internal static class AnimalProductPicker
     {
         ModEntry.ModMonitor.DebugOnlyLog("Picked Animal Products");
 
-        var data = Game1.farmAnimalData;
+        IDictionary<string, FarmAnimalData> data = Game1.farmAnimalData;
         if (data.Count == 0)
         {
             return null;

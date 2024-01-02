@@ -85,7 +85,7 @@ internal static class AssetManager
 
     private static void AddObjects(IAssetData asset)
     {
-        var editor = asset.AsDictionary<string, ObjectData>().Data;
+        IDictionary<string, ObjectData> editor = asset.AsDictionary<string, ObjectData>().Data;
 
         editor[ModEntry.PrismaticSlimeEgg] = new()
         {

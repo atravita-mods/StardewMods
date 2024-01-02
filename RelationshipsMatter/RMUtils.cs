@@ -31,9 +31,9 @@ internal static class RMUtils
     {
         Dictionary<string, HashSet<string>>? ret = new();
 
-        var dispos = Game1.characterData;
+        IDictionary<string, StardewValley.GameData.Characters.CharacterData> dispos = Game1.characterData;
 
-        foreach((string npc, var dispo) in dispos)
+        foreach((string npc, StardewValley.GameData.Characters.CharacterData? dispo) in dispos)
         {
             HashSet<string> relations = new();
 
@@ -46,7 +46,7 @@ internal static class RMUtils
             }
 
             // get other relatives - this is of the form `name 'relationship'` ie `Marnie 'aunt'`.
-            foreach (var relative in dispo.FriendsAndFamily.Keys)
+            foreach (string relative in dispo.FriendsAndFamily.Keys)
             {
                 if (NPCCache.GetByVillagerName(relative) is not null)
                 {

@@ -8,7 +8,7 @@ public class BaseAssetHolder<TAsset> : IAssetHolder<TAsset>
     where TAsset : class
 {
     private readonly IAssetName assetName;
-    private readonly object LockObj = new();
+    private readonly object lockObj = new();
 
     /// <summary>
     /// Whether the asset should be refreshed before it's accessed again.
@@ -53,7 +53,7 @@ public class BaseAssetHolder<TAsset> : IAssetHolder<TAsset>
     /// <inheritdoc />
     public virtual void Refresh()
     {
-        lock (this.LockObj)
+        lock (this.lockObj)
         {
             this.asset = Game1.content.Load<TAsset>(this.assetName.BaseName);
             this.dirty = false;

@@ -107,7 +107,7 @@ internal static class AssetManager
     private static bool TryParseToRing(ReadOnlySpan<char> span, [NotNullWhen(true)] out string? ringID)
     {
         string id = ringID = span.Trim().ToString();
-        if (!Game1.objectData.TryGetValue(id, out var data))
+        if (!Game1.objectData.TryGetValue(id, out StardewValley.GameData.Objects.ObjectData? data))
         {
             ringID = DataToItemMap.GetID(ItemTypeEnum.Ring, span.ToString());
             if (ringID is not null)

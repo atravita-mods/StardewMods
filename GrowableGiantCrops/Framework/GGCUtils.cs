@@ -218,7 +218,7 @@ internal static class GGCUtils
     /// <param name="idx">index of that SOBject.</param>
     /// <returns>Name or placeholder if not found.</returns>
     internal static string GetNameOfSObject(string idx)
-        => Game1Wrappers.ObjectData.TryGetValue(idx, out var data)
+        => Game1Wrappers.ObjectData.TryGetValue(idx, out StardewValley.GameData.Objects.ObjectData? data)
             ? data.Name
             : "NoNameFound";
 

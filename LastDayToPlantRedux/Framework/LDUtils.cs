@@ -13,8 +13,8 @@ internal static class LDUtils
     /// <returns>id/type tuple, or null for not found.</returns>
     internal static (string id, int type)? ResolveIDAndType(string identifier)
     {
-        var candidate = identifier;
-        if (!Game1Wrappers.ObjectData.TryGetValue(identifier, out var data))
+        string? candidate = identifier;
+        if (!Game1Wrappers.ObjectData.TryGetValue(identifier, out StardewValley.GameData.Objects.ObjectData? data))
         {
             candidate = DataToItemMap.GetID(ItemTypeEnum.SObject, identifier);
             if (candidate is null || !Game1Wrappers.ObjectData.TryGetValue(candidate, out data))

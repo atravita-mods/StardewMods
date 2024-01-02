@@ -150,7 +150,7 @@ public class TimeRangeConverter : JsonConverter
                 break;
             }
             case JsonToken.String:
-                if (TimeRange.TryParse((string?)reader.Value, out var range))
+                if (TimeRange.TryParse((string?)reader.Value, out TimeRange range))
                 {
                     return range;
                 }

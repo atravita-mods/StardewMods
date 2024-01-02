@@ -69,11 +69,10 @@ internal sealed class SetInvisible(IMultiplayerHelper multiplayer, string unique
     /// <summary>
     /// Processes a request to set an NPC invisible.
     /// </summary>
-    /// <param name="sender">smapi</param>
     /// <param name="e">event args.</param>
     internal void ProcessSetInvisibleRequest(ModMessageReceivedEventArgs e)
     {
-        if (!Context.IsMainPlayer || e.FromModID != this.UniqueID)
+        if (!Context.IsMainPlayer)
         {
             return;
         }

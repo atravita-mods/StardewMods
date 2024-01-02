@@ -32,11 +32,11 @@ internal sealed class ModEntry : BaseMod<ModEntry>
 
     private void OnSaveLoaded(object? sender, SaveLoadedEventArgs e)
     {
-        var lewis = NPCCache.GetByVillagerName("Lewis", true);
+        NPC? lewis = NPCCache.GetByVillagerName("Lewis", true);
 
-        var lewisFriendship = Game1.player.friendshipData["Lewis"];
+        Friendship lewisFriendship = Game1.player.friendshipData["Lewis"];
 
-        var monitor = new BasicFriendshipMonitor(lewisFriendship, lewis!);
+        BasicFriendshipMonitor monitor = new BasicFriendshipMonitor(lewisFriendship, lewis!);
     }
 
     private void Display_RenderedHud(object? sender, RenderedHudEventArgs e)

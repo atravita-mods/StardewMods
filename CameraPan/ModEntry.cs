@@ -675,7 +675,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
 
         offset.Value = new(xAdjustment, yAdjustment);
 
-        var standingPoint = Game1.player.StandingPixel;
+        Point standingPoint = Game1.player.StandingPixel;
 
         int x = standingPoint.X + xAdjustment;
         int y = standingPoint.Y + yAdjustment;

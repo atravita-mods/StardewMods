@@ -203,7 +203,7 @@ internal static class RadioactiveFertilizerHandler
 
             if (data.GetNthChunk('/', 1).Contains(season, StringComparison.OrdinalIgnoreCase)
                 && int.TryParse(data.GetNthChunk('/', 3), out int obj)
-                && Game1Wrappers.ObjectData.TryGetValue(obj, out var objData))
+                && Game1Wrappers.ObjectData.TryGetValue(obj, out StardewValley.GameData.Objects.ObjectData objData))
             {
                 ReadOnlySpan<char> name = objData.GetNthChunk('/', SObject.objectInfoNameIndex);
                 if (name.Contains("Qi", StringComparison.OrdinalIgnoreCase))

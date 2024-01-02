@@ -124,7 +124,7 @@ internal class RecentSOManager
         }
 
         // Grab my completed orders
-        var completedOrders = Game1.player?.team?.completedSpecialOrders;
+        Netcode.NetStringHashSet? completedOrders = Game1.player?.team?.completedSpecialOrders;
 
         if (completedOrders is null)
         { // This should not happen, but just in case?

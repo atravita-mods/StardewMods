@@ -167,7 +167,7 @@ public class PackedDayConverter : JsonConverter
     /// <inheritdoc />
     public override void WriteJson(JsonWriter writer, object? value, JsonSerializer serializer)
     {
-        var packed = (PackedDay)value!;
+        PackedDay packed = (PackedDay)value!;
         writer.WriteValue(packed.ToString());
     }
 }

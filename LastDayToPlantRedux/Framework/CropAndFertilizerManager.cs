@@ -487,12 +487,12 @@ SUCCESS:
         foreach ((string index, CropData? vals) in cropData)
         {
             StardewSeasons seasonEnum = StardewSeasons.None;
-            foreach (var s in vals.Seasons)
+            foreach (Season s in vals.Seasons)
             {
                 seasonEnum |= s.ConvertFromGameSeason();
             }
 
-            var growthData = vals.DaysInPhase;
+            List<int> growthData = vals.DaysInPhase;
             ret[index] = new CropEntry(seasonEnum, growthData);
         }
 

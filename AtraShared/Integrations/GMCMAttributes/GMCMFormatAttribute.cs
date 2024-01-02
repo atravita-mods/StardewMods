@@ -3,18 +3,12 @@
 /// <summary>
 /// Sets the format string for a numeric GMCM option.
 /// </summary>
+/// <param name="formatString">format string.</param>
 [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
-public class GMCMFormatAttribute : Attribute
+public class GMCMFormatAttribute(string formatString) : Attribute
 {
-    /// <summary>
-    /// Initializes a new instance of the <see cref="GMCMFormatAttribute"/> class.
-    /// </summary>
-    /// <param name="formatString">format string.</param>
-    public GMCMFormatAttribute(string formatString)
-        => this.FormatString = formatString;
-
     /// <summary>
     /// Gets the c-style format string.
     /// </summary>
-    internal string FormatString { get; init; }
+    internal string FormatString { get; init; } = formatString;
 }

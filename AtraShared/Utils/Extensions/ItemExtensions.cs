@@ -4,6 +4,9 @@ using CommunityToolkit.Diagnostics;
 
 namespace AtraShared.Utils.Extensions;
 
+/// <summary>
+/// Extension methods for items.
+/// </summary>
 public static class ItemExtensions
 {
     public static bool MatchesTagList(this Item item, string tagList)

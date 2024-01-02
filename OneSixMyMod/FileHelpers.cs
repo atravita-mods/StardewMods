@@ -31,7 +31,7 @@ internal static class FileHelpers
             return false;
         }
 
-        var candidates = dir.GetFiles(fileName);
+        FileInfo[] candidates = dir.GetFiles(fileName);
         if (candidates.Length == 1)
         {
             file = candidates[0];

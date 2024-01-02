@@ -33,10 +33,10 @@ internal abstract class AbstractFriendshipMonitor : IDisposable
         this.friendship = friendship;
         this.npc = npc;
 
-        var giftsToday = _giftsTodayGetter.Value(friendship);
+        NetInt giftsToday = _giftsTodayGetter.Value(friendship);
         giftsToday.fieldChangeEvent += this.GiftsGiven;
 
-        var talkedTo = _talkedToGetter.Value(friendship);
+        NetBool talkedTo = _talkedToGetter.Value(friendship);
         talkedTo.fieldChangeEvent += this.TalkedTo;
     }
 
@@ -66,10 +66,10 @@ internal abstract class AbstractFriendshipMonitor : IDisposable
         {
             if (disposing)
             {
-                var giftsToday = _giftsTodayGetter.Value(this.friendship);
+                NetInt giftsToday = _giftsTodayGetter.Value(this.friendship);
                 giftsToday.fieldChangeEvent -= this.GiftsGiven;
 
-                var talkedTo = _talkedToGetter.Value(this.friendship);
+                NetBool talkedTo = _talkedToGetter.Value(this.friendship);
                 talkedTo.fieldChangeEvent -= this.TalkedTo;
             }
 

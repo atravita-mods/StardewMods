@@ -129,9 +129,9 @@ internal static class FileNameParser
 
     private static string? GetSpecialWindowsFolder(ReadOnlySpan<char> token)
     {
-        if (token.StartsWith("my") && Enum.TryParse<Environment.SpecialFolder>(token, true, out var folder))
+        if (token.StartsWith("my") && Enum.TryParse<Environment.SpecialFolder>(token, true, out Environment.SpecialFolder folder))
         {
-            var proposed = Environment.GetFolderPath(folder);
+            string proposed = Environment.GetFolderPath(folder);
             if (!string.IsNullOrEmpty(proposed))
             {
                 return proposed;

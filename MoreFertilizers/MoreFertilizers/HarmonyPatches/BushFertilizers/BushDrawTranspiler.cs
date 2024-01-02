@@ -53,7 +53,7 @@ internal static class BushDrawTranspiler
         {
             if (bush.modData?.GetBool(CanPlaceHandler.BountifulBush) == true)
             {
-                var season = bush.IsSheltered() ? Season.Spring : bush.Location.GetSeason();
+                Season season = bush.IsSheltered() ? Season.Spring : bush.Location.GetSeason();
 
                 return season switch
                 {

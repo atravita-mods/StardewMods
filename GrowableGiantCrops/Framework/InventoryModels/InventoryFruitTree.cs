@@ -430,7 +430,7 @@ public sealed class InventoryFruitTree : SObject
 
         try
         {
-            var data = DataLoader.FruitTrees(Game1.content);
+            Dictionary<string, StardewValley.GameData.FruitTrees.FruitTreeData> data = DataLoader.FruitTrees(Game1.content);
             if (!data.TryGetValue(this.ParentSheetIndex, out string? treeInfo)
                 || !int.TryParse(treeInfo.GetNthChunk('/'), out treeIndex))
             {

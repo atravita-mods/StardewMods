@@ -209,15 +209,15 @@ internal sealed class GSQTester(IMonitor monitor, IReflectionHelper reflector)
             string[] newBreadcrumbs = [.. breadcrumbs, "RandomItemId"];
             foreach (string? candidate in ids)
             {
-                CheckItemQuery(monitor, candidate, spawnable.PerItemCondition, [..newBreadcrumbs, candidate]);
+                this.CheckItemQuery(monitor, candidate, spawnable.PerItemCondition, [..newBreadcrumbs, candidate]);
             }
             return;
         }
 
-        CheckItemQuery(monitor, spawnable.ItemId, spawnable.PerItemCondition, breadcrumbs);
+        this.CheckItemQuery(monitor, spawnable.ItemId, spawnable.PerItemCondition, breadcrumbs);
     }
 
-    private static void CheckItemQuery(IMonitor monitor, string query, string? perItemCondition, string[] breadcrumbs)
+    private void CheckItemQuery(IMonitor monitor, string query, string? perItemCondition, string[] breadcrumbs)
     {
         ItemQueryContext context = new(Game1.currentLocation, Game1.player, Random.Shared);
         string tokenized_query = query.Replace("BOBBER_X", "4").Replace("BOBBER_Y", "6").Replace("WATER_DEPTH", "5").Replace("DROP_IN_ID", "(O)69").Replace("DROP_IN_PRESERVE", "(O)69").Replace("NEARBY_FLOWER_ID", "597").Replace("DROP_IN_QUALITY", "4");
@@ -255,7 +255,7 @@ internal sealed class GSQTester(IMonitor monitor, IReflectionHelper reflector)
                         continue;
                     }
 
-                    monitor.Log($"Checking {actual.QualifiedItemId} against {perItemCondition} yields {GameStateQuery.CheckConditions(perItemCondition, null, null, actual)}", LogLevel.Info);
+                    monitor.Log($"Checking {actual.QualifiedItemId} against {perItemCondition} yields {GameStateQuery.CheckConditions(perItemCondition, null, null, actual)}", LogLevel.Debug);
                 }
             }
 

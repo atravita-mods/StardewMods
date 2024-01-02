@@ -22,7 +22,7 @@ internal static class SeasonalCropPicker
     {
         ModEntry.ModMonitor.DebugOnlyLog("Picked Seasonal Crops");
 
-        var content = Game1.cropData.Values.Where(static crop => crop.Seasons.Contains(Game1.season)).ToList();
+        List<CropData> content = Game1.cropData.Values.Where(static crop => crop.Seasons.Contains(Game1.season)).ToList();
 
         if (content.Count == 0)
         {
@@ -32,8 +32,8 @@ internal static class SeasonalCropPicker
         int tries = 3;
         do
         {
-            var entry = content[random.Next(content.Count)];
-            var id = entry.HarvestItemId;
+            CropData entry = content[random.Next(content.Count)];
+            string id = entry.HarvestItemId;
 
             // confirm the item exists.
             if (Utils.ForbiddenFromRandomPicking(id))
@@ -50,7 +50,7 @@ internal static class SeasonalCropPicker
                 }
             }
 
-            var candidate = ItemRegistry.Create(ItemRegistry.type_object + id);
+            Item? candidate = ItemRegistry.Create(ItemRegistry.type_object + id);
             if (candidate is not null)
             {
                 return candidate;

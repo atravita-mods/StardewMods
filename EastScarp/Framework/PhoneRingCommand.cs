@@ -22,8 +22,8 @@ internal static class PhoneRingCommand
             }
         }
 
-        var notActuallyRandom = new DeterministicRandom();
-        var call = Phone.PhoneHandlers.Select(handler => handler.CheckForIncomingCall(notActuallyRandom)).FirstOrDefault();
+        DeterministicRandom notActuallyRandom = new DeterministicRandom();
+        string? call = Phone.PhoneHandlers.Select(handler => handler.CheckForIncomingCall(notActuallyRandom)).FirstOrDefault();
         if (call is not null)
         {
             ModEntry.ModMonitor.Log($"Ringing phone for {call}");

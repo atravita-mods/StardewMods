@@ -539,7 +539,7 @@ internal static class ShopManager
 
     private static int? GetPriceOfProduct(string idx)
     {
-        if (Game1Wrappers.ObjectData.TryGetValue(idx, out var info))
+        if (Game1Wrappers.ObjectData.TryGetValue(idx, out ObjectData? info))
         {
             // qi fruit exception
             if (idx == "890")
@@ -552,7 +552,7 @@ internal static class ShopManager
     }
 
     private static int? PriceNode(string idx)
-        => Game1Wrappers.ObjectData.TryGetValue(idx, out var info)
+        => Game1Wrappers.ObjectData.TryGetValue(idx, out ObjectData? info)
             ? info.Name.Equals("Stone", StringComparison.OrdinalIgnoreCase) ? 2_750 : 1_000
             : null;
 

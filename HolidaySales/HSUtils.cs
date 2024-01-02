@@ -52,7 +52,7 @@ internal static class HSUtils
             (helper) =>
             {
                 helper.ReplaceOperand(typeof(HSUtils).GetCachedMethod(nameof(IsFestivalDayAdjustedForConfig), ReflectionCache.FlagTypes.StaticFlags))
-                      .GetLabels(out var labelsToMove)
+                      .GetLabels(out IList<Label>? labelsToMove)
                       .Insert(
                 [
                     new CodeInstruction(OpCodes.Ldstr, "Town").WithLabels(labelsToMove),

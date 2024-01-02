@@ -454,7 +454,7 @@ internal static class TagManager
                     case "walnutcount":
                     {
                         // walnutcount_X, walnutcount_under_X
-                        if (HandleIntermediateUnder(second, out _, out var inverse, out var walnutCount))
+                        if (HandleIntermediateUnder(second, out _, out bool inverse, out int walnutCount))
                         {
                             __result = Game1.netWorldState.Value.GoldenWalnutsFound >= walnutCount;
                             if (inverse)
@@ -468,7 +468,7 @@ internal static class TagManager
                     case "specialorderscompleted":
                     {
                         // specialorderscompleted_X, specialorderscompleted_under_X
-                        if (HandleIntermediateUnder(second, out _, out var inverse, out var required))
+                        if (HandleIntermediateUnder(second, out _, out bool inverse, out int required))
                         {
                             __result = Game1.player.team.completedSpecialOrders.Count() >= required;
                             if (inverse)
@@ -482,7 +482,7 @@ internal static class TagManager
                     case "slots":
                     {
                         // slots_X, slots_under_X
-                        if (HandleIntermediateUnder(second, out _, out var inverse, out var required))
+                        if (HandleIntermediateUnder(second, out _, out bool inverse, out int required))
                         {
                             __result = Club.timesPlayedSlots >= required;
                             if (inverse)
@@ -496,7 +496,7 @@ internal static class TagManager
                     case "blackjack":
                     {
                         // blackjack_X, blackjac_under_X
-                        if (HandleIntermediateUnder(second, out _, out var inverse, out var required))
+                        if (HandleIntermediateUnder(second, out _, out bool inverse, out int required))
                         {
                             __result = Club.timesPlayedCalicoJack >= required;
                             if (inverse)

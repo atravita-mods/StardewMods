@@ -58,7 +58,7 @@ internal static class AdjustDartNumberTranspiler
                 new(OpCodes.Callvirt, typeof(FarmerTeam).GetCachedMethod(nameof(FarmerTeam.GetDroppedLimitedNutCount), ReflectionCache.FlagTypes.InstanceFlags)),
             });
 
-            var pointer = helper.Pointer;
+            int pointer = helper.Pointer;
             helper.FindNext(new CodeInstructionWrapper[]
             {
                 new(OpCodes.Ldc_I4_S, 15),

@@ -135,7 +135,7 @@ internal static class AssetManager
 
     private static void EditWildTrees(IAssetData data)
     {
-        var editor = data.AsDictionary<string, WildTreeData>().Data;
+        IDictionary<string, WildTreeData> editor = data.AsDictionary<string, WildTreeData>().Data;
 
         if (editor.TryGetValue(Tree.palmTree, out WildTreeData? valleyTree))
         {

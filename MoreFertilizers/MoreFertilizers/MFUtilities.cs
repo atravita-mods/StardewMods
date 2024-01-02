@@ -111,7 +111,7 @@ internal static class MFUtilities
     internal static string? ResolveID(string identifier)
     {
         string? itemID = identifier;
-        if (!Game1.objectData.TryGetValue(identifier, out var data))
+        if (!Game1.objectData.TryGetValue(identifier, out StardewValley.GameData.Objects.ObjectData? data))
         {
             itemID = DataToItemMap.GetID(ItemTypeEnum.SObject, identifier);
             if (itemID is not null)

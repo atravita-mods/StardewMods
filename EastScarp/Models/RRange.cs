@@ -93,7 +93,7 @@ public class RRangeConverter : JsonConverter
                 break;
             }
             case JsonToken.String:
-                if (RRange.TryParse((string?)reader.Value, out var val))
+                if (RRange.TryParse((string?)reader.Value, out RRange? val))
                 {
                     return val;
                 }

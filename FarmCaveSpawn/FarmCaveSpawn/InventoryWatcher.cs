@@ -67,7 +67,7 @@ internal static class InventoryWatcher
     {
         foreach (Item item in e.Added)
         {
-            if (item.HasTypeObject() && item is SObject obj && obj.isSapling() && Game1Wrappers.ObjectData.TryGetValue(obj.ItemId, out var data))
+            if (item.HasTypeObject() && item is SObject obj && obj.isSapling() && Game1Wrappers.ObjectData.TryGetValue(obj.ItemId, out StardewValley.GameData.Objects.ObjectData? data))
             {
                 string name = data.Name;
                 if (!string.IsNullOrWhiteSpace(name) && model?.Saplings?.Add(name) == true)
@@ -86,7 +86,7 @@ internal static class InventoryWatcher
     /// <returns>If the sapling has been viewed.</returns>
     internal static bool HaveSeen(string itemID)
     {
-        if (Game1Wrappers.ObjectData.TryGetValue(itemID, out var data))
+        if (Game1Wrappers.ObjectData.TryGetValue(itemID, out StardewValley.GameData.Objects.ObjectData? data))
         {
             string name = data.Name;
             return model?.Saplings?.Contains(name) == true;

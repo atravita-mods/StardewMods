@@ -24,7 +24,7 @@ internal static class ProcessJsonAssets
         ConcurrentDictionary<string, string> itemMap = new();
 
         // load objects
-        var objects = new DirectoryInfo(Path.Combine(modDir.FullName, "Objects"));
+        DirectoryInfo objects = new DirectoryInfo(Path.Combine(modDir.FullName, "Objects"));
         if (objects.Exists)
         {
             await Parallel.ForEachAsync(
@@ -40,7 +40,7 @@ internal static class ProcessJsonAssets
         }
 
         // Load crops
-        var crops = new DirectoryInfo(Path.Combine(modDir.FullName, "Crops"));
+        DirectoryInfo crops = new DirectoryInfo(Path.Combine(modDir.FullName, "Crops"));
         if (crops.Exists)
         {
             await Parallel.ForEachAsync(
@@ -62,10 +62,10 @@ internal static class ProcessJsonAssets
         }
 
         // Load shirts
-        var shirts = new DirectoryInfo(Path.Combine(modDir.FullName, "Shirts"));
+        DirectoryInfo shirts = new DirectoryInfo(Path.Combine(modDir.FullName, "Shirts"));
         if (shirts.Exists)
         {
-            foreach (var shirt in shirts.EnumerateDirectories())
+            foreach (DirectoryInfo shirt in shirts.EnumerateDirectories())
             {
                 if (shirt.Name.StartsWith('.') || !shirt.TryGetSingleFile("shirt.json", out FileInfo? file))
                 {
@@ -81,7 +81,7 @@ internal static class ProcessJsonAssets
         }
 
         // Forge cannot be ported at this time.
-        var forge = new DirectoryInfo(Path.Combine(modDir.FullName, "Forge"));
+        DirectoryInfo forge = new DirectoryInfo(Path.Combine(modDir.FullName, "Forge"));
         if (forge.Exists && forge.GetDirectories().Any())
         {
             manifest.MigrationFailureReason.Add("Forge recipes cannot be converted.");

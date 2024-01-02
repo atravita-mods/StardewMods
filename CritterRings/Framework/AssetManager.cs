@@ -156,7 +156,7 @@ internal static class AssetManager
 
     private static void AddRingData(IAssetData asset)
     {
-        var editor = asset.AsDictionary<string, EquipmentExtModel>().Data;
+        IDictionary<string, EquipmentExtModel> editor = asset.AsDictionary<string, EquipmentExtModel>().Data;
         editor[$"{ItemRegistry.type_object}{ModEntry.ButterflyRing}"] = new()
         {
             Effects =

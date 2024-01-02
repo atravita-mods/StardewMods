@@ -89,7 +89,7 @@ internal sealed class ModEntry : Mod
             return;
         }
 
-        if (config.Map.TryGetValue(__instance.QualifiedItemId, out var color) || _cache.TryGetValue(__instance.QualifiedItemId, out color))
+        if (config.Map.TryGetValue(__instance.QualifiedItemId, out Color color) || _cache.TryGetValue(__instance.QualifiedItemId, out color))
         {
             __result = color;
         }

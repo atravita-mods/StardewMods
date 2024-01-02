@@ -187,8 +187,8 @@ internal sealed class MuseumOverflowMenu : IClickableMenu
     /// <summary>
     /// Handles a left click.
     /// </summary>
-    /// <param name="x">pixel x</param>
-    /// <param name="y">pixel y</param>
+    /// <param name="x">pixel x.</param>
+    /// <param name="y">pixel y.</param>
     /// <param name="playSound">whether or not to play sounds.</param>
     /// <returns>true if handled, false otherwise.</returns>
     public bool LeftClickImpl(int x, int y, bool playSound = true)
@@ -645,8 +645,14 @@ internal sealed class MuseumOverflowMenu : IClickableMenu
 /// <summary>
 /// Extensions for this class.
 /// </summary>
+[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1400:Access modifier should be declared", Justification = "file is a valid access modifier.")]
 file static class Extensions
 {
+    /// <summary>
+    /// Converts an xTile rectangle to an XNA rectangle.
+    /// </summary>
+    /// <param name="original">xtile rectangle.</param>
+    /// <returns>XNA rectangle.</returns>
     internal static Rectangle ToXNARectangle(this xTile.Dimensions.Rectangle original)
         => new(original.X, original.Y, original.Width, original.Height);
 }

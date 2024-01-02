@@ -28,7 +28,7 @@ internal static class GenericFlavoredItemQuery
             return Enumerable.Empty<ItemQueryResult>();
         }
 
-        var splits = arguments.StreamSplit();
+        StreamSplit splits = arguments.StreamSplit();
 
         if (!splits.MoveNext())
         {
@@ -36,7 +36,7 @@ internal static class GenericFlavoredItemQuery
         }
 
         string baseID = splits.Current;
-        var basedata = ItemRegistry.GetData(baseID);
+        StardewValley.ItemTypeDefinitions.ParsedItemData? basedata = ItemRegistry.GetData(baseID);
         if (basedata is null)
         {
             return ItemQueryResolver.Helpers.ErrorResult(key, arguments, logError, "base ingredient ID is not a valid object ID.");
@@ -48,7 +48,7 @@ internal static class GenericFlavoredItemQuery
         }
 
         string ingredientID = splits.Current;
-        var data = ItemRegistry.GetData(ingredientID);
+        StardewValley.ItemTypeDefinitions.ParsedItemData data = ItemRegistry.GetData(ingredientID);
         if (data?.QualifiedItemId.StartsWith(ItemRegistry.type_object) != true)
         {
             return ItemQueryResolver.Helpers.ErrorResult(key, arguments, logError, "flavor ingredient ID is not a valid object ID.");
@@ -69,14 +69,14 @@ internal static class GenericFlavoredItemQuery
             if (arg.Equals("@color", StringComparison.OrdinalIgnoreCase))
             {
                 splits.TrimStart();
-                var remainder = splits.Remainder;
+                ReadOnlySpan<char> remainder = splits.Remainder;
 
                 if (remainder.Length == 0 || remainder[0] == '@')
                 {
                     return ItemQueryResolver.Helpers.ErrorResult(key, arguments, logError, $"argument '{arg}' was not given values");
                 }
 
-                var idx = remainder.IndexOf('@');
+                int idx = remainder.IndexOf('@');
                 if (idx > 0)
                 {
                     remainder = remainder[..idx];
@@ -84,7 +84,7 @@ internal static class GenericFlavoredItemQuery
 
                 if (remainder.Trim().Equals("copy", StringComparison.OrdinalIgnoreCase))
                 {
-                    var item = ItemRegistry.Create(data.QualifiedItemId);
+                    Item item = ItemRegistry.Create(data.QualifiedItemId);
                     color = TailoringMenu.GetDyeColor(item);
 
                     if (color is null)
@@ -93,7 +93,7 @@ internal static class GenericFlavoredItemQuery
                     }
                     splits.Skip(remainder.Length);
                 }
-                else if (ColorHandler.TryParseColor(remainder.ToString(), out var proposedColor))
+                else if (ColorHandler.TryParseColor(remainder.ToString(), out Color proposedColor))
                 {
                     color = proposedColor;
                     splits.Skip(remainder.Length);
@@ -106,7 +106,7 @@ internal static class GenericFlavoredItemQuery
             }
             else if (arg.Equals("@price", StringComparison.OrdinalIgnoreCase))
             {
-                var remainder = splits.Remainder.TrimStart();
+                ReadOnlySpan<char> remainder = splits.Remainder.TrimStart();
                 if (remainder.Length == 0 || remainder[0] == '@')
                 {
                     price = original_price;

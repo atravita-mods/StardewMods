@@ -72,7 +72,7 @@ internal static class TooltipTranspiler
                 OpCodes.Ret,
             ])
             .Advance(1)
-            .GetLabels(out var labels)
+            .GetLabels(out IList<Label>? labels)
             .Insert(new CodeInstruction[]
             {
                 new(OpCodes.Ldarg, 9), // HoveredItem

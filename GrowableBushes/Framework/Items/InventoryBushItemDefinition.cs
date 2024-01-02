@@ -23,7 +23,7 @@ public sealed class InventoryBushItemDefinition : BaseItemDataDefinition
     public override Item CreateItem(ParsedItemData data) => throw new NotImplementedException();
 
     /// <inheritdoc />
-    public override bool Exists(string itemId) => BushSizesExtensions.TryParse(itemId, out var size) && size != BushSizes.Invalid;
+    public override bool Exists(string itemId) => BushSizesExtensions.TryParse(itemId, out BushSizes size) && size != BushSizes.Invalid;
 
     /// <inheritdoc />
     public override IEnumerable<string> GetAllIds() => BushSizesExtraExtensions.GetValid();
@@ -31,7 +31,7 @@ public sealed class InventoryBushItemDefinition : BaseItemDataDefinition
     /// <inheritdoc />
     public override ParsedItemData? GetData(string itemId)
     {
-        if (!BushSizesExtensions.TryParse(itemId, out var size))
+        if (!BushSizesExtensions.TryParse(itemId, out BushSizes size))
         {
             return null;
         }

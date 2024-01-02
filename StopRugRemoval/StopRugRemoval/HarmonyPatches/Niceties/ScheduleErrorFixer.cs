@@ -47,7 +47,7 @@ internal static class ScheduleErrorFixer
         ModEntry.ModMonitor.Log($"Multiplayer: {Context.IsMultiplayer}? Host: {Context.IsMainPlayer}? The current day is {SDate.Now()}.", LogLevel.Info);
 
         NetLocationRef backing = _getLocationRef.Value(__instance);
-        var expectedName = backing.LocationName;
+        string expectedName = backing.LocationName;
         if (!string.IsNullOrWhiteSpace(expectedName))
         {
             ModEntry.ModMonitor.Log($"Location Ref has value {expectedName}, marking dirty.", LogLevel.Info);
@@ -76,10 +76,10 @@ internal static class ScheduleErrorFixer
         { // Attempt to first just assign their position from their default map.
             __instance.currentLocation = location;
         }
-        else if (Game1.characterData.TryGetValue(__instance.Name, out var dispo))
+        else if (Game1.characterData.TryGetValue(__instance.Name, out StardewValley.GameData.Characters.CharacterData? dispo))
         {
             // Okay, if that didn't work, try getting from NPCDispositions.
-            foreach (var home in dispo.Home)
+            foreach (StardewValley.GameData.Characters.CharacterHomeData? home in dispo.Home)
             {
                 if (home is not null && GameStateQuery.CheckConditions(home.Condition))
                 {
@@ -128,7 +128,7 @@ internal static class ScheduleErrorFixer
         if (character.currentLocation is null)
         {
             NetLocationRef backing = _getLocationRef.Value(character);
-            var currLoc = backing.LocationName;
+            string currLoc = backing.LocationName;
             ModEntry.ModMonitor.Log($"{character.Name} has null currentLocation while attempting to warp. NetLocationRef reports {currLoc}", LogLevel.Info);
             if (!string.IsNullOrEmpty(currLoc))
             {

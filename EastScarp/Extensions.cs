@@ -12,14 +12,14 @@ internal static class Extensions
     /// <summary>
     /// Given a Rectangle area, clamps it to the current map.
     /// </summary>
-    /// <param name="rectangle"></param>
-    /// <param name="location"></param>
-    /// <returns></returns>
+    /// <param name="rectangle">rectangle.</param>
+    /// <param name="location">map to clamp to.</param>
+    /// <returns>clamped rectangle.</returns>
     internal static Rectangle ClampMap(this Rectangle rectangle, GameLocation location)
     {
         if (location?.Map?.GetLayer("Back") is not { } layer)
         {
-            ModEntry.ModMonitor.LogOnce($"{location?.NameOrUniqueName ?? "Unknown Location"} appears to be missing 'back' layer");
+            ModEntry.ModMonitor.LogOnce($"{location?.NameOrUniqueName ?? "Unknown Location"} appears to be missing 'back' layer.", LogLevel.Warn);
             return Rectangle.Empty;
         }
         else
@@ -65,7 +65,7 @@ internal static class Extensions
     /// <param name="second">The part that is after the deliminator.</param>
     /// <returns>True if successful, false otherwise.</returns>
     [Pure]
-    public static bool TrySplitOnce(this ReadOnlySpan<char> str, char deliminator, out ReadOnlySpan<char> first, out ReadOnlySpan<char> second)
+    internal static bool TrySplitOnce(this ReadOnlySpan<char> str, char deliminator, out ReadOnlySpan<char> first, out ReadOnlySpan<char> second)
     {
         int idx = str.IndexOf(deliminator);
 

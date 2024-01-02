@@ -33,10 +33,10 @@ using StardewValley.Objects;
 internal static class DresserMenuDoll
 {
     private static readonly PerScreen<MiniFarmerMenu?> MiniMenu = new();
-    private static readonly PerScreen<int> LastKeyboardTick = new(() => 0);
+    private static readonly PerScreen<int> LastKeyboardTick = new(static () => 0);
 
     #region delegates
-    private static readonly Lazy<Func<ShopMenu, int>> _getCurrentTab = new(() =>
+    private static readonly Lazy<Func<ShopMenu, int>> CurrentTabGetter = new(() =>
         typeof(ShopMenu).GetCachedField("currentTab", ReflectionCache.FlagTypes.InstanceFlags)
         .GetInstanceFieldGetter<ShopMenu, int>()
     );
@@ -108,7 +108,7 @@ internal static class DresserMenuDoll
     {
         try
         {
-            if (__instance.ShopId == ShopMenuPatcher.DRESSER && _getCurrentTab.Value(__instance) == 6)
+            if (__instance.ShopId == ShopMenuPatcher.DRESSER && CurrentTabGetter.Value(__instance) == 6)
             {
                 __instance.forSale.Clear();
                 foreach (ISalable? item in __instance.itemPriceAndStock.Keys)

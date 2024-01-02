@@ -50,7 +50,6 @@ internal static class AdjustDartNumberTranspiler
     {
         try
         {
-
             ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);
             helper.FindNext(new CodeInstructionWrapper[]
             { // find team.GetDroppedLimitNutCount("Darts");
@@ -59,10 +58,10 @@ internal static class AdjustDartNumberTranspiler
             });
 
             int pointer = helper.Pointer;
-            helper.FindNext(new CodeInstructionWrapper[]
-            {
+            helper.FindNext(
+            [
                 new(OpCodes.Ldc_I4_S, 15),
-            })
+            ])
             .ReplaceInstruction(OpCodes.Call, typeof(AdjustDartNumberTranspiler).GetCachedMethod(nameof(GetMidddleDartNumber), ReflectionCache.FlagTypes.StaticFlags), keepLabels: true)
             .JumpTo(pointer)
             .FindNext(new CodeInstructionWrapper[]

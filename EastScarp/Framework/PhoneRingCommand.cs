@@ -3,8 +3,17 @@
 using StardewValley.Objects;
 
 namespace EastScarp.Framework;
+
+/// <summary>
+/// A console command to ring the phone.
+/// </summary>
 internal static class PhoneRingCommand
 {
+    /// <summary>
+    /// Causes the phone to ring.
+    /// </summary>
+    /// <param name="command">command name.</param>
+    /// <param name="args">arguments.</param>
     internal static void RingPhone(string command, string[] args)
     {
         if (Game1.currentLocation is not GameLocation loc)
@@ -22,7 +31,7 @@ internal static class PhoneRingCommand
             }
         }
 
-        DeterministicRandom notActuallyRandom = new DeterministicRandom();
+        DeterministicRandom notActuallyRandom = new ();
         string? call = Phone.PhoneHandlers.Select(handler => handler.CheckForIncomingCall(notActuallyRandom)).FirstOrDefault();
         if (call is not null)
         {

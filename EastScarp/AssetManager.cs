@@ -12,7 +12,7 @@ using StardewValley.GameData.Characters;
 internal static class AssetManager
 {
     private static IAssetName locationExtendedModelLocation = null!;
-    private static Lazy<Dictionary<string, LocationDataModel>> _data = new(() => Game1.content.Load<Dictionary<string, LocationDataModel>>(locationExtendedModelLocation.BaseName));
+    private static Lazy<Dictionary<string, LocationDataModel>> data = new (static () => Game1.content.Load<Dictionary<string, LocationDataModel>>(locationExtendedModelLocation.BaseName));
 
     private static IAssetName durationOverride = null!;
 
@@ -24,13 +24,17 @@ internal static class AssetManager
     /// <summary>
     /// Gets the orders to make untimed.
     /// </summary>
-    internal static Lazy<HashSet<string>> Untimed { get; private set; } = new(GetUntimed);
+    internal static Lazy<HashSet<string>> Untimed { get; private set; } = new (GetUntimed);
 
     /// <summary>
-    /// The location extension data.
+    /// Gets the location extension data.
     /// </summary>
-    internal static Dictionary<string, LocationDataModel> Data => _data.Value;
+    internal static Dictionary<string, LocationDataModel> Data => data.Value;
 
+    /// <summary>
+    /// Initializes this asset manager.
+    /// </summary>
+    /// <param name="parser">game content helper.</param>
     internal static void Init(IGameContentHelper parser)
     {
         locationExtendedModelLocation = parser.ParseAssetName("Mods/EastScarp/LocationMetadata");
@@ -76,11 +80,11 @@ internal static class AssetManager
     {
         if (assets is null || assets.Contains(locationExtendedModelLocation))
         {
-            _data = new (() => Game1.content.Load<Dictionary<string, LocationDataModel>>(locationExtendedModelLocation.BaseName));
+            data = new (static () => Game1.content.Load<Dictionary<string, LocationDataModel>>(locationExtendedModelLocation.BaseName));
         }
         if (Untimed.IsValueCreated && (assets is null || assets.Contains(durationOverride)))
         {
-            Untimed = new(GetUntimed);
+            Untimed = new (GetUntimed);
         }
     }
 

@@ -12,12 +12,12 @@ internal static class AssetManager
     private static IAssetName iconName = null!;
     private static string directoryPath = null!;
 
-    private static Lazy<Texture2D> _icons = new(() => Game1.content.Load<Texture2D>(iconName.BaseName));
+    private static Lazy<Texture2D> icons = new(() => Game1.content.Load<Texture2D>(iconName.BaseName));
 
     /// <summary>
     /// Gets the texture used for our icons.
     /// </summary>
-    internal static Texture2D Icons => _icons.Value;
+    internal static Texture2D Icons => icons.Value;
 
     /// <summary>
     /// Initializes this asset manager.
@@ -60,9 +60,9 @@ internal static class AssetManager
     /// <inheritdoc cref="IContentEvents.AssetsInvalidated"/>
     internal static void Reset(IReadOnlySet<IAssetName>? assets = null)
     {
-        if (_icons.IsValueCreated && (assets is null || assets.Contains(iconName)))
+        if (icons.IsValueCreated && (assets is null || assets.Contains(iconName)))
         {
-            _icons = new(() => Game1.temporaryContent.Load<Texture2D>(iconName.BaseName));
+            icons = new(() => Game1.temporaryContent.Load<Texture2D>(iconName.BaseName));
         }
     }
 }

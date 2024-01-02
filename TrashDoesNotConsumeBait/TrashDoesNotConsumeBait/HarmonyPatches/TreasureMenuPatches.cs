@@ -33,7 +33,7 @@ internal static class TreasureMenuPatches
                     continue;
                 }
 
-                var original = item.Stack;
+                int original = item.Stack;
                 Item? remainder = item;
                 if (Game1.player.CurrentTool is FishingRod rod && item is SObject obj)
                 {

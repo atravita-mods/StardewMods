@@ -16,16 +16,16 @@ internal static class AssetManager
     internal const string MailFlag = "atravita_LastDayLetter";
 
     #region denylist and allowlist
-    private static readonly HashSet<int> AllowedFertilizersValue = new();
-    private static readonly HashSet<int> DeniedFertilizersValue = new();
-    private static readonly HashSet<int> AllowedSeedsValue = new();
-    private static readonly HashSet<int> DeniedSeedsValue = new();
+    private static readonly HashSet<string> AllowedFertilizersValue = [];
+    private static readonly HashSet<string> DeniedFertilizersValue = [];
+    private static readonly HashSet<string> AllowedSeedsValue = [];
+    private static readonly HashSet<string> DeniedSeedsValue = [];
     private static bool accessProcessed = false;
 
     /// <summary>
     /// Gets fertilizers that should always be allowed.
     /// </summary>
-    internal static HashSet<int> AllowedFertilizers
+    internal static HashSet<string> AllowedFertilizers
     {
         get
         {
@@ -37,7 +37,7 @@ internal static class AssetManager
     /// <summary>
     /// Gets fertilizers that should always be hidden.
     /// </summary>
-    internal static HashSet<int> DeniedFertilizers
+    internal static HashSet<string> DeniedFertilizers
     {
         get
         {
@@ -49,7 +49,7 @@ internal static class AssetManager
     /// <summary>
     /// Gets seeds that should always be allowed.
     /// </summary>
-    internal static HashSet<int> AllowedSeeds
+    internal static HashSet<string> AllowedSeeds
     {
         get
         {
@@ -61,7 +61,7 @@ internal static class AssetManager
     /// <summary>
     /// Gets seeds that should always be hidden.
     /// </summary>
-    internal static HashSet<int> DeniedSeeds
+    internal static HashSet<string> DeniedSeeds
     {
         get
         {
@@ -175,12 +175,12 @@ internal static class AssetManager
 
         foreach ((string item, string access) in Game1.content.Load<Dictionary<string, string>>(AssetManager.accessLists.BaseName))
         {
-            (int id, int type)? tup = LDUtils.ResolveIDAndType(item);
+            (string id, int type)? tup = LDUtils.ResolveIDAndType(item);
             if (tup is null)
             {
                 continue;
             }
-            int id = tup.Value.id;
+            string id = tup.Value.id;
             int type = tup.Value.type;
 
             ReadOnlySpan<char> trimmed = access.AsSpan().Trim();

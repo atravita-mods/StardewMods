@@ -27,7 +27,7 @@ public interface ILastDayToPlantAPI
     /// <returns>The available data.</returns>
     /// <remarks>Note that profession data is not calculated if there's no player with that profession, and fertilizer data is dependent on player config.
     /// No data = not calculated.</remarks>
-    public IReadOnlyDictionary<int, int>? GetAll(Profession profession, int fertilizer, StardewSeasons season);
+    public IReadOnlyDictionary<string, int>? GetAll(Profession profession, string fertilizer, StardewSeasons season);
 
     /// <summary>
     /// Gets the grow conditions for a specific crop.
@@ -35,13 +35,13 @@ public interface ILastDayToPlantAPI
     /// <param name="crop">Crop to check.</param>
     /// <param name="season">The season to check for.</param>
     /// <returns>(profession, fertilizer) => days.</returns>
-    public KeyValuePair<KeyValuePair<Profession, int>, int>[]? GetConditionsPerCrop(int crop, StardewSeasons season);
+    public KeyValuePair<KeyValuePair<Profession, string?>, int>[]? GetConditionsPerCrop(string crop, StardewSeasons season);
 
     /// <summary>
     /// Get the crops we have tracked.
     /// </summary>
     /// <returns>int array of tracked crops.</returns>
-    public int[]? GetTrackedCrops();
+    public string[]? GetTrackedCrops();
 }
 
 /// <summary>

@@ -18,7 +18,7 @@ internal static class PFMMachineHandler
 {
     private static readonly PerScreen<Dictionary<string, MachineStatus>> ValidMachinesPerScreen = new(() => new Dictionary<string, MachineStatus>());
     private static readonly DefaultDict<string, HashSet<PFMMachineData>> Recipes = new(() => new HashSet<PFMMachineData>());
-    private static readonly HashSet<string> HasUnconditionalRecipe = new();
+    private static readonly HashSet<string> HasUnconditionalRecipe = [];
     private static IProducerFrameworkModAPI? pfmAPI = null;
 
     /// <summary>

@@ -194,42 +194,71 @@ internal sealed class GSQTester(IMonitor monitor, IReflectionHelper reflector)
     {
         monitor.Log($"Checking: {spawnable.ItemId} - {spawnable.PerItemCondition ?? "no per item condition"}\n{breadcrumbs.Render()}", LogLevel.Info);
 
-        if (spawnable.RandomItemId is { } ids)
-        {
-            foreach (string? candidate in ids)
-            {
-                StardewValley.ItemTypeDefinitions.ParsedItemData? data = ItemRegistry.GetData(candidate);
-                if (data is null)
-                {
-                    monitor.Log($"Could not find valid item for '{candidate}'.", LogLevel.Warn);
-                }
-            }
-            return;
-        }
-
         // special handling for machines.
         if (spawnable is MachineItemOutput machineData && machineData.OutputMethod is { } method)
         {
             if (!StaticDelegateBuilder.TryCreateDelegate<MachineOutputDelegate>(method, out _, out string? error2))
             {
-                monitor.Log($"Invalid item output method '{method}': {error2}", LogLevel.Error);
+                monitor.Log($"Invalid item output method '{method}' at {breadcrumbs.Render()}:\n\n{error2}", LogLevel.Error);
             }
             return;
         }
 
+        if (spawnable.RandomItemId is { } ids)
+        {
+            string[] newBreadcrumbs = [.. breadcrumbs, "RandomItemId"];
+            foreach (string? candidate in ids)
+            {
+                CheckItemQuery(monitor, candidate, spawnable.PerItemCondition, [..newBreadcrumbs, candidate]);
+            }
+            return;
+        }
+
+        CheckItemQuery(monitor, spawnable.ItemId, spawnable.PerItemCondition, breadcrumbs);
+    }
+
+    private static void CheckItemQuery(IMonitor monitor, string query, string? perItemCondition, string[] breadcrumbs)
+    {
         ItemQueryContext context = new(Game1.currentLocation, Game1.player, Random.Shared);
+        string tokenized_query = query.Replace("BOBBER_X", "4").Replace("BOBBER_Y", "6").Replace("WATER_DEPTH", "5").Replace("DROP_IN_ID", "(O)69").Replace("DROP_IN_PRESERVE", "(O)69").Replace("NEARBY_FLOWER_ID", "597").Replace("DROP_IN_QUALITY", "4");
         ItemQueryResult[] result = ItemQueryResolver.TryResolve(
-            spawnable.ItemId.Replace("BOBBER_X", "4").Replace("BOBBER_Y", "6").Replace("WATER_DEPTH", "5").Replace("DROP_IN_ID", "(O)69").Replace("DROP_IN_PRESERVE", "(O)69").Replace("NEARBY_FLOWER_ID", "597").Replace("DROP_IN_QUALITY", "4"),
+            tokenized_query,
             context,
             ItemQuerySearchMode.All,
-            spawnable.PerItemCondition,
+            perItemCondition,
             null,
             avoidRepeat: false,
             null,
-            (string _, string queryError) => monitor.Log("Failed parsing that query: " + queryError, LogLevel.Error));
+            (string _, string queryError) => monitor.Log($"Failed parsing query '{query}' at {breadcrumbs.Render()}: {queryError}", LogLevel.Error));
         if (result.Length == 0)
         {
-            monitor.Log("That query did not match any items.", LogLevel.Info);
+            monitor.Log($"Query '{query}' with condition '{perItemCondition}' did not match any items at {breadcrumbs.Render()}.", LogLevel.Warn);
+
+            if (perItemCondition is not null)
+            {
+                ItemQueryResult[] candidates = ItemQueryResolver.TryResolve(
+                    tokenized_query,
+                    context,
+                    ItemQuerySearchMode.All,
+                    null,
+                    null,
+                    avoidRepeat: false,
+                    null,
+                    (string _, string queryError) => monitor.Log($"Failed parsing query '{query}' at {breadcrumbs.Render()}: {queryError}", LogLevel.Error));
+
+                monitor.Log($"Without filtering, {candidates.Length} candidates found", LogLevel.Info);
+
+                foreach (ItemQueryResult item in candidates)
+                {
+                    if (item.Item is not Item actual)
+                    {
+                        continue;
+                    }
+
+                    monitor.Log($"Checking {actual.QualifiedItemId} against {perItemCondition} yields {GameStateQuery.CheckConditions(perItemCondition, null, null, actual)}", LogLevel.Info);
+                }
+            }
+
             return;
         }
     }

@@ -7,13 +7,13 @@ namespace LastDayToPlantRedux.Framework;
 /// </summary>
 internal sealed class ModConfig
 {
-    private readonly HashSet<int> allowedSeeds = new();
-    private readonly HashSet<int> allowedFertilizers = new();
+    private readonly HashSet<string> allowedSeeds = [];
+    private readonly HashSet<string> allowedFertilizers = [];
 
     private bool seedsNeedReset = true;
     private bool fertilizersNeedReset = true;
-    private List<string> allowSeedsList = new();
-    private List<string> allowFertilizersList = new();
+    private List<string> allowSeedsList = [];
+    private List<string> allowFertilizersList = [];
 
     private CropOptions cropsToDisplay = CropOptions.Purchaseable;
     private FertilizerOptions fertilizersToDisplay = FertilizerOptions.Seen;
@@ -82,7 +82,10 @@ internal sealed class ModConfig
         }
     }
 
-    internal HashSet<int> GetAllowedSeeds()
+    /// <summary>
+    /// Gets seeds allowed by config.
+    /// </summary>
+    internal HashSet<string> GetAllowedSeeds()
     {
         if (this.seedsNeedReset)
         {
@@ -90,12 +93,12 @@ internal sealed class ModConfig
 
             foreach (string? item in this.AllowSeedsList)
             {
-                (int id, int type)? tup = LDUtils.ResolveIDAndType(item);
+                (string id, int type)? tup = LDUtils.ResolveIDAndType(item);
                 if (tup is null)
                 {
                     continue;
                 }
-                int id = tup.Value.id;
+                string id = tup.Value.id;
                 int type = tup.Value.type;
 
                 if (type != SObject.SeedsCategory)
@@ -111,7 +114,10 @@ internal sealed class ModConfig
         return this.allowedSeeds;
     }
 
-    internal HashSet<int> GetAllowedFertilizers()
+    /// <summary>
+    /// Gets the fertilizers allowed by the config.
+    /// </summary>
+    internal HashSet<string> GetAllowedFertilizers()
     {
         if (this.fertilizersNeedReset)
         {
@@ -119,12 +125,12 @@ internal sealed class ModConfig
 
             foreach (string? item in this.AllowFertilizersList)
             {
-                (int id, int type)? tup = LDUtils.ResolveIDAndType(item);
+                (string id, int type)? tup = LDUtils.ResolveIDAndType(item);
                 if (tup is null)
                 {
                     continue;
                 }
-                int id = tup.Value.id;
+                string id = tup.Value.id;
                 int type = tup.Value.type;
 
                 if (type != SObject.fertilizerCategory)

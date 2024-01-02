@@ -15,12 +15,12 @@ public sealed class InventoryManagerModel
     /// <summary>
     /// Gets or sets a hashset of seeds the player has seen before.
     /// </summary>
-    public HashSet<string> Seeds { get; set; } = new();
+    public HashSet<string> Seeds { get; set; } = [];
 
     /// <summary>
     /// Gets or sets a hashset of fertilizers the player has seen before.
     /// </summary>
-    public HashSet<string> Fertilizers { get; set; } = new();
+    public HashSet<string> Fertilizers { get; set; } = [];
 }
 
 /// <summary>

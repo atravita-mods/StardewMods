@@ -21,7 +21,7 @@ namespace LastDayToPlantRedux;
 /// <inheritdoc />
 internal sealed class ModEntry : BaseMod<ModEntry>
 {
-    private readonly PerScreen<bool> hasSeeds = new(() => false);
+    private readonly PerScreen<bool> hasSeeds = new(static () => false);
     private MigrationManager? migrator;
 
     /// <summary>

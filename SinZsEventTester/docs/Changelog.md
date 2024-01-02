@@ -1,6 +1,9 @@
 ﻿Changelog
 ===============
 
+### Version 0.1.4
+* Now also checks item queries (first pass, may miss some tokenization, let me know!)
+
 ### Version 0.1.3
 * Fix checker for `Data/MineCarts` and `Data/Characters`.
 * Update for `GameStateQueryContext`.

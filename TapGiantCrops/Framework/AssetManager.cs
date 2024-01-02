@@ -158,7 +158,7 @@ internal static class AssetManager
         {
             if (overrides.IsValueCreated)
             {
-                overrides = new(() => Game1.content.Load<Dictionary<string, ObjectDefinition>>(overrideAsset.BaseName));
+                overrides = new(static () => Game1.content.Load<Dictionary<string, ObjectDefinition>>(overrideAsset.BaseName));
             }
             OverridesCache.Clear();
         }
@@ -199,7 +199,7 @@ internal static class AssetManager
             catch (Exception ex)
             {
                 ModEntry.ModMonitor.LogError("reading big craftable data", ex);
-                return new Dictionary<string, float>();
+                return [];
             }
         }
 
@@ -238,13 +238,13 @@ internal static class AssetManager
 
             machineData.OutputRules.Add(new()
             {
-                Triggers = new()
-                {
+                Triggers =
+                [
                     new()
                     {
-                        Trigger = MachineOutputTrigger.DayUpdate,
+                        Trigger = MachineOutputTrigger.DayUpdate | MachineOutputTrigger.OutputCollected | MachineOutputTrigger.MachinePutDown,
                     },
-                },
+                ],
             });
         }
     }

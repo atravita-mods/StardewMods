@@ -29,7 +29,7 @@ internal static class AssetManager
         textureLocation = parser.ParseAssetName("Mods/atravita/GiantCropFertilizer/Object");
     }
 
-    ///<inheritdoc cref="IContentEvents.AssetRequested"/>
+    /// <inheritdoc cref="IContentEvents.AssetRequested"/>
     internal static void Apply(AssetRequestedEventArgs e)
     {
         if (ModEntry.Config.AllowGiantCropsOffFarm && e.DataType == typeof(xTile.Map))

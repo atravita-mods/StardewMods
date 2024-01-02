@@ -8,16 +8,16 @@ namespace NovaNPCTest;
 public static class StreamSplitExtensions
 {
     public static StreamSplit StreamSplit(this string str, char splitchar, StringSplitOptions options = StringSplitOptions.None)
-        => new(str, splitchar, options);
+        => new (str, splitchar, options);
 
     public static StreamSplit StreamSplit(this string str, char[]? splitchars = null, StringSplitOptions options = StringSplitOptions.None)
-        => new(str, splitchars, options);
+        => new (str, splitchars, options);
 
     public static StreamSplit StreamSplit(this ReadOnlySpan<char> str, char splitchar, StringSplitOptions options = StringSplitOptions.None)
-        => new(str, splitchar, options);
+        => new (str, splitchar, options);
 
     public static StreamSplit StreamSplit(this ReadOnlySpan<char> str, char[]? splitchars = null, StringSplitOptions options = StringSplitOptions.None)
-        => new(str, splitchars, options);
+        => new (str, splitchars, options);
 }
 
 /// <summary>

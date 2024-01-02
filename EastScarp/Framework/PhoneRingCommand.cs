@@ -1,8 +1,8 @@
-﻿using Microsoft.Xna.Framework;
+﻿namespace EastScarp.Framework;
+
+using Microsoft.Xna.Framework;
 
 using StardewValley.Objects;
-
-namespace EastScarp.Framework;
 
 /// <summary>
 /// A console command to ring the phone.

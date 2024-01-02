@@ -1,5 +1,4 @@
-﻿
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Text;
 
 using AtraBase.Collections;
@@ -15,6 +14,7 @@ using StardewValley.GameData.Crops;
 using StardewValley.GameData.Objects;
 
 namespace LastDayToPlantRedux.Framework;
+
 // fertilizers are filtered while loading, while seeds (which I expect more change for) are filtered while calculating.
 
 /// <summary>
@@ -24,7 +24,7 @@ namespace LastDayToPlantRedux.Framework;
 [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1202:Elements should be ordered by access", Justification = "Keeping like methods together.")]
 internal static class CropAndFertilizerManager
 {
-    private static readonly TickCache<bool> HasStocklist = new(() => Game1.MasterPlayer.hasOrWillReceiveMail("PierreStocklist"));
+    private static readonly TickCache<bool> HasStocklist = new(static () => Game1.MasterPlayer.hasOrWillReceiveMail("PierreStocklist"));
 
     // Map conditions to the number of days it takes to grow a crop, per season.
     private static readonly Dictionary<CropCondition, Dictionary<string, int>>[] DaysPerCondition =

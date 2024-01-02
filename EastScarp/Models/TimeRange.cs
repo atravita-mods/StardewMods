@@ -65,9 +65,10 @@ public record struct TimeRange : IComparable<TimeRange>
             && int.TryParse(first, out int start)
             && int.TryParse(second, out int end))
         {
-            result = new(start, end);
+            result = new (start, end);
             return true;
         }
+
         result = default;
         return false;
     }
@@ -110,7 +111,7 @@ public record struct TimeRange : IComparable<TimeRange>
             TimeRange current = times[i];
             if (current.StartTime <= prev.EndTime)
             {
-                prev = new(prev.StartTime, Math.Max(prev.EndTime, current.EndTime));
+                prev = new (prev.StartTime, Math.Max(prev.EndTime, current.EndTime));
             }
             else
             {
@@ -118,6 +119,7 @@ public record struct TimeRange : IComparable<TimeRange>
                 prev = current;
             }
         }
+
         proposed.Add(prev);
         return proposed.ToArray();
     }
@@ -149,15 +151,18 @@ public class TimeRangeConverter : JsonConverter
 
                 break;
             }
+
             case JsonToken.String:
+            {
                 if (TimeRange.TryParse((string?)reader.Value, out TimeRange range))
                 {
                     return range;
                 }
                 break;
+            }
         }
 
-        throw new InvalidDataException($"Could not parse {nameof(TimeRange)} from {reader.Value} at {reader.Path}");
+        throw new InvalidDataException($"Could not parse {nameof(TimeRange)} from {reader.Value} at {reader.Path}.");
     }
 
     /// <inheritdoc />

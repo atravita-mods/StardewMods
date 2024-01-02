@@ -103,19 +103,6 @@ internal static class AssetEditor
         return denylist;
     }
 
-    /// <summary>
-    /// Handles editing special order dialogue. This is separate so it's only
-    /// registered if necessary.
-    /// </summary>
-    /// <param name="e">event args.</param>
-    internal static void EditSpecialOrderDialogue(AssetRequestedEventArgs e)
-    {
-        if (HasSeenBoat.GetValue() && e.NameWithoutLocale.IsEquivalentTo(LEWIS_DIALOGUE))
-        {
-            e.Edit(EditLewisDialogueImpl, AssetEditPriority.Early);
-        }
-    }
-
     #region editors
 
     private static void EditPrismaticMasks(IAssetData asset)
@@ -132,12 +119,6 @@ internal static class AssetEditor
         {
             ModEntry.ModMonitor.Log("Could not add prismatic fertilizer to DrawPrismatic", LogLevel.Warn);
         }
-    }
-
-    private static void EditLewisDialogueImpl(IAssetData asset)
-    {
-        IAssetDataForDictionary<string, string>? editor = asset.AsDictionary<string, string>();
-        editor.Data["atravita.OrganicCrops_InProgress"] = I18n.Specialorder_Organic_LewisInprogress();
     }
 
     #endregion

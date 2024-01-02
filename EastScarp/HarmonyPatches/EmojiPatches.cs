@@ -20,8 +20,8 @@ using StardewValley.Menus;
 [HarmonyPatch(typeof(SpecialOrdersBoard))]
 internal static class CustomEmoji
 {
-    private static readonly HashSet<string> Failed = new(); // hashset of failed loads.
-    private static readonly Dictionary<string, KeyValuePair<Texture2D, Rectangle>> Cache = new();
+    private static readonly HashSet<string> Failed = []; // hashset of failed loads.
+    private static readonly Dictionary<string, KeyValuePair<Texture2D, Rectangle>> Cache = [];
 
     private static IGameContentHelper parser = null!;
 
@@ -103,6 +103,7 @@ internal static class CustomEmoji
             {
                 return null;
             }
+
             try
             {
                 Texture2D? tex = Game1.content.Load<Texture2D>(texLoc.BaseName);

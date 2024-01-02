@@ -1,0 +1,14 @@
+{
+    "$schema": "https://smapi.io/schemas/content-patcher.json",
+    "Changes": [
+        {
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Harvey",
+            "Entries": {
+                "atravita.SpamMail.EnergyDrink": "{{i18n:harvey-energy-drink}}$s",
+                "atravita.SpamMail.EnergyDrink2": "{{i18n:harvey-energy-drink-2}}$s",
+                "atravita.SpamMail.SkinImplants": "{{i18n:harvey-skin-implants}}",
+            }
+        },
+    ]
+}

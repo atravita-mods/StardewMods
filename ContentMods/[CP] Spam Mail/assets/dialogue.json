@@ -3,15 +3,6 @@
     "Changes": [
         {
             "Action": "EditData",
-            "Target": "Characters/Dialogue/Vincent",
-            "Entries": {
-                "atravita.SpamMail.Aquarium": "{{i18n: vincent-aquarium}}",
-                "atravita.SpamMail.Circus": "{{i18n:vincent-circus-before}}",
-                "atravita.SpamMail.JojaSneakers": "{{i18n:vincent-sneakers}}"
-            }
-        },
-        {
-            "Action": "EditData",
             "Target": "Characters/Dialogue/Jas",
             "Entries": {
                 "atravita.SpamMail.Zoo2": "{{i18n: jas-zoo2}}$h"
@@ -58,16 +49,14 @@
             "When": {"Hearts:Haley|contains={{Range:0,5}}": false}
         },
         {
-            "Action": "EditData",
-            "Target": "Characters/Dialogue/Harvey",
-            "Entries": {
-                "atravita.SpamMail.EnergyDrink": "{{i18n:harvey-energy-drink}}$s",
-                "atravita.SpamMail.EnergyDrink2": "{{i18n:harvey-energy-drink-2}}$s",
-                "atravita.SpamMail.SkinImplants": "{{i18n:harvey-skin-implants}}",
-            },
-            "When": {
-                "Hearts: Harvey|contains={{Range:0,5}}": false
-            }
+            "Action": "Include",
+            "FromFile": "assets/dialogue/harvey.json",
+            "When": {"Hearts: Harvey|contains={{Range:0,5}}": false}
+        },
+        {
+            "Action": "Include",
+            "FromFile": "assets/dialogue/vincent.json",
+            "When": {"Hearts:Vincent|contains={{Range:0,5}}": false}
         },
         {
             "Action": "EditData",

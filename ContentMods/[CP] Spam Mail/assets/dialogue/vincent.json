@@ -1,0 +1,14 @@
+{
+    "$schema": "https://smapi.io/schemas/content-patcher.json",
+    "Changes": [
+        {
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Vincent",
+            "Entries": {
+                "atravita.SpamMail.Aquarium": "{{i18n: vincent-aquarium}}",
+                "atravita.SpamMail.Circus": "{{i18n:vincent-circus-before}}",
+                "atravita.SpamMail.JojaSneakers": "{{i18n:vincent-sneakers}}"
+            }
+        },
+    ]
+}

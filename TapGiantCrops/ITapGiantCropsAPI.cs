@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿// Ignore Spelling: loc
+
+using Microsoft.Xna.Framework;
 using StardewValley.TerrainFeatures;
 
 namespace TapGiantCrops;
@@ -13,6 +15,7 @@ public interface ITapGiantCropsAPI
     /// </summary>
     /// <param name="loc">Game location.</param>
     /// <param name="tile">Tile.</param>
+    /// <param name="obj">Object to place.</param>
     /// <returns>True if placeable, false otherwise.</returns>
     public bool CanPlaceTapper(GameLocation loc, Vector2 tile, SObject obj);
 
@@ -21,6 +24,7 @@ public interface ITapGiantCropsAPI
     /// </summary>
     /// <param name="loc">GameLocation.</param>
     /// <param name="tile">Tile.</param>
+    /// <param name="obj">Object to place.</param>
     /// <returns>True if successfully placed, false otherwise.</returns>
     public bool TryPlaceTapper(GameLocation loc, Vector2 tile, SObject obj);
 

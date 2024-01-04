@@ -1,0 +1,25 @@
+{
+    "$schema": "https://smapi.io/schemas/content-patcher.json",
+    "Changes": [
+        {
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Demetrius",
+            "LogName": "Demetrius Winter Star Gifts.",
+            "Entries": {
+                "atravita.SpamMail.ToolsShop2": "{{i18n: demetrius-toolsShop2}}"
+            },
+            "When": {
+                "Season": "winter",
+                "Day|contains=26,27,28": false,
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Demetrius",
+            "LogName": "Demetrius - regular",
+            "Entries": {
+                "atravita.SpamMail.Aquarium": "{{i18n:demetrius-aquarium}}$s"
+            }
+        },
+    ]
+}

@@ -10,15 +10,6 @@
         },
         {
             "Action": "EditData",
-            "Target": "Characters/Dialogue/Jodi",
-            "Entries": {
-                "atravita.SpamMail.Composter": "{{i18n: jodi-composter}}",
-                "atravita.SpamMail.WaterPark": "{{i18n: jodi-waterpark}}",
-                "atravita.SpamMail.JojaChocolate": "{{i18n: jodi-jojachocolate}}$s"
-            }
-        },
-        {
-            "Action": "EditData",
             "Target": "Characters/Dialogue/Abigail",
             "Entries": {
                 "atravita.SpamMail.JojaFall": "{{i18n: abby-jojafall}}$s"
@@ -45,6 +36,11 @@
         },
         {
             "Action": "Include",
+            "FromFile": "assets/dialogue/demetrius.json",
+            "When": {"Hearts:Demetrius|contains={{Range:0,5}}": false}
+        },
+        {
+            "Action": "Include",
             "FromFile": "assets/dialogue/haley.json",
             "When": {"Hearts:Haley|contains={{Range:0,5}}": false}
         },
@@ -55,21 +51,13 @@
         },
         {
             "Action": "Include",
-            "FromFile": "assets/dialogue/vincent.json",
-            "When": {"Hearts:Vincent|contains={{Range:0,5}}": false}
+            "FromFile": "assets/dialogue/jodi.json",
+            "When": {"Hearts: Jodi|contains={{Range:0,5}}": false}
         },
         {
-            "Action": "EditData",
-            "Target": "Characters/Dialogue/Demetrius",
-            "LogName": "Demetrius Winter Star Gifts.",
-            "Entries": {
-                "atravita.SpamMail.ToolsShop2": "{{i18n: demetrius-toolsShop2}}"
-            },
-            "When": {
-                "Season": "winter",
-                "Day|contains=26,27,28": false,
-                "Hearts:Demetrius|contains={{Range:0,5}}": false
-            }
+            "Action": "Include",
+            "FromFile": "assets/dialogue/vincent.json",
+            "When": {"Hearts:Vincent|contains={{Range:0,5}}": false}
         },
         {
             "Action": "EditData",
@@ -79,6 +67,13 @@
             },
             "When": {
                 "Hearts:Lewis|contains={{Range:0,5}}": false
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Maru",
+            "Entries": {
+                "atravita.SpamMail.Ring": "{{i18n:maru-ring}}"
             }
         },
         {

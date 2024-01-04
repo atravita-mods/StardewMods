@@ -18,7 +18,7 @@ internal sealed class ShopItemTriggerDefinition : BaseItemDataDefinition
     public override string StandardDescriptor { get; } = "atravita.ShopItem";
 
     /// <inheritdoc/>
-    public override Item CreateItem(ParsedItemData data) => throw new NotImplementedException();
+    public override Item CreateItem(ParsedItemData data) => new ShopItemTrigger(data.ItemId);
 
     /// <inheritdoc/>
     public override bool Exists(string itemId) => throw new NotImplementedException();

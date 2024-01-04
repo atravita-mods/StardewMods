@@ -73,26 +73,26 @@ internal static class TooltipTranspiler
             ])
             .Advance(1)
             .GetLabels(out IList<Label>? labels)
-            .Insert(new CodeInstruction[]
-            {
+            .Insert(
+            [
                 new(OpCodes.Ldarg, 9), // HoveredItem
                 new(OpCodes.Call, typeof(TooltipTranspiler).GetCachedMethod(nameof(GetTooltipDuration), ReflectionCache.FlagTypes.StaticFlags)),
                 new(OpCodes.Stloc, duration),
-            }, withLabels: labels)
-            .FindNext(new CodeInstructionWrapper[]
-            { // first block for (if buffIconsToDisplay is not null)
+            ], withLabels: labels)
+            .FindNext(
+            [ // first block for (if buffIconsToDisplay is not null)
                 (OpCodes.Ldarg_S, 8), // buffIconsToDisplay
                 OpCodes.Brfalse_S,
-            })
+            ])
             .Advance(1)
             .StoreBranchDest()
             .AdvanceToStoredLabel()
-            .FindPrev(new CodeInstructionWrapper[]
-            {
+            .FindPrev(
+            [
                 SpecialCodeInstructionCases.LdLoc,
                 OpCodes.Ldc_I4_4,
                 OpCodes.Add,
-            })
+            ])
             .Copy(4, out IEnumerable<CodeInstruction>? codes);
 
             // this part will increment the required height if needed.
@@ -111,11 +111,11 @@ internal static class TooltipTranspiler
             // now we want the third block for (if buffIconsToDisplay is not null)
             for (int i = 0; i < 2; i++)
             {
-                helper.FindNext(new CodeInstructionWrapper[]
-                {
+                helper.FindNext(
+                [
                     (OpCodes.Ldarg_S, 8), // buffIconsToDisplay
                     new (SpecialCodeInstructionCases.Wildcard, static (instr) => instr.opcode == OpCodes.Brfalse_S || instr.opcode == OpCodes.Brfalse),
-                })
+                ])
                 .Advance(1)
                 .StoreBranchDest()
                 .AdvanceToStoredLabel();
@@ -123,36 +123,36 @@ internal static class TooltipTranspiler
 
             // we need to dig out the locals x and y here.
             // ahh this function is weird.
-            helper.Push()
-            .FindPrev(new CodeInstructionWrapper[]
-            {
+            _ = helper.Push()
+            .FindPrev(
+            [
                 SpecialCodeInstructionCases.LdLoc,
                 (OpCodes.Ldc_I4_S, 34),
                 OpCodes.Add,
-            })
+            ])
             .Copy(4, out IEnumerable<CodeInstruction>? incrementY);
 
             CodeInstruction y = helper.CurrentInstruction.Clone();
 
-            helper.FindPrev(new CodeInstructionWrapper[]
-            {
+            helper.FindPrev(
+            [
                 SpecialCodeInstructionCases.LdLoc,
                 (OpCodes.Ldc_I4_S, 16),
                 OpCodes.Add,
                 (OpCodes.Ldc_I4_S, 34),
-            });
+            ]);
 
             CodeInstruction x = helper.CurrentInstruction.Clone();
             helper.Pop()
-            .Insert(new CodeInstruction[]
-            {
+            .Insert(
+            [
                 new(OpCodes.Ldarg_0), // spritebatch
                 new(OpCodes.Ldarg_2), // font
                 x,
                 y,
                 new(OpCodes.Ldloc, duration),
                 new(OpCodes.Call, typeof(TooltipTranspiler).GetCachedMethod(nameof(DrawDuration), ReflectionCache.FlagTypes.StaticFlags)),
-            })
+            ])
             .Insert(incrementY.ToArray());
 
             // helper.Print();

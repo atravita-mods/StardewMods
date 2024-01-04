@@ -1,6 +1,4 @@
-﻿using AtraShared.Utils.Extensions;
-
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace ScreenshotsMod.Framework.ModModels;
 
@@ -10,6 +8,7 @@ namespace ScreenshotsMod.Framework.ModModels;
 /// <param name="name">The name of the rule.</param>
 /// <param name="path">The path the rule corresponds to.</param>
 /// <param name="scale">The scale to use.</param>
+/// <param name="duringEvents">Whether or not this rule should wait for events to be over.</param>
 /// <param name="triggers">A list of processed triggers.</param>
 internal sealed class ProcessedRule(string name, string path, float scale, bool duringEvents, ProcessedTrigger[] triggers)
 {

@@ -17,13 +17,13 @@ internal class GingerIslandTimeSlot
     /// <summary>
     /// Location dancers can be in relation to a musician, if one is found.
     /// </summary>
-    private static readonly Point[] DanceDeltas = new[]
-    {
+    private static readonly Point[] DanceDeltas =
+    [
         new Point(1, 1),
         new Point(-1, -1),
         new Point(2, 0),
         new Point(0, 2),
-    };
+    ];
 
     /// <summary>
     /// Where the bartender should stand.
@@ -33,7 +33,7 @@ internal class GingerIslandTimeSlot
     /// <summary>
     /// Activity for drinking (The adults only!). Should only happen if a bartender is around.
     /// </summary>
-    private static readonly PossibleIslandActivity Drinking = new(possiblepoints: new[] { new Point(12, 23), new Point(15, 23) },
+    private static readonly PossibleIslandActivity Drinking = new(possiblepoints: [new Point(12, 23), new Point(15, 23)],
         chanceMap: (NPC npc) => npc.Age == NPC.adult ? 0.5 : 0,
         animation: "beach_drink",
         animation_required: false,
@@ -42,7 +42,7 @@ internal class GingerIslandTimeSlot
     private static readonly PossibleIslandActivity Music = PossibleActivities[0];
     private static readonly PossibleIslandActivity Dance = PossibleActivities[1];
 
-    private static readonly PossibleIslandActivity IslandNorth = new(possiblepoints: new[] { new Point(33, 83), new Point(34, 73), new Point(48, 81), new Point(52, 73) },
+    private static readonly PossibleIslandActivity IslandNorth = new(possiblepoints: [new Point(33, 83), new Point(34, 73), new Point(48, 81), new Point(52, 73)],
         map: "IslandNorth",
         basechance: 0.5,
         dialogueKey: "Resort_IslandNorth",
@@ -60,15 +60,15 @@ internal class GingerIslandTimeSlot
     private readonly Random random;
     private readonly List<NPC> visitors;
 
-    private readonly Dictionary<NPC, SchedulePoint> assignments = new();
+    private readonly Dictionary<NPC, SchedulePoint> assignments = [];
 
     /// <summary>
     /// Location points already used, to avoid sticking two NPCs on top of each other...
     /// </summary>
     /// <remarks>Doesn't actually distinguish between different maps! This should be okay as different maps are shaped very differently.</remarks>
-    private readonly HashSet<Point> usedPoints = new();
+    private readonly HashSet<Point> usedPoints = [];
 
-    private readonly Dictionary<NPC, string> animations = new();
+    private readonly Dictionary<NPC, string> animations = [];
 
     /// <summary>
     /// Initializes a new instance of the <see cref="GingerIslandTimeSlot"/> class.
@@ -114,7 +114,7 @@ internal class GingerIslandTimeSlot
         // Get a list of possible dancers (who have _beach_dance as a possible animation).
         HashSet<NPC> dancers = (this.musician is not null)
             ? this.visitors.Where((NPC npc) => animationDescriptions.ContainsKey($"{npc.Name.ToLowerInvariant()}_beach_dance")).ToHashSet()
-            : new();
+            : [];
 
         // assign bartenders and drinkers.
         if (this.bartender is not null)
@@ -303,31 +303,31 @@ CONTINUELOOP:
     [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1204:Static elements should appear before instance elements", Justification = "Reviewed")]
     private static PossibleIslandActivity[] GenerateIslandActivtyList()
     {
-        return new[]
-        {
+        return
+        [
             // towel lounging
             new PossibleIslandActivity(
-                possiblepoints: new[] { new Point(14, 27), new Point(17, 28), new Point(20, 27), new Point(23, 28) },
+                possiblepoints: [new Point(14, 27), new Point(17, 28), new Point(20, 27), new Point(23, 28)],
                 basechance: 0.6,
                 dialogueKey: "Resort_Towel",
                 animation_required: true,
                 animation: "beach_towel"),
             // dancing
             new PossibleIslandActivity(
-                possiblepoints: new[] { new Point(18, 26), new Point(21, 30), new Point(25, 25) },
+                possiblepoints: [new Point(18, 26), new Point(21, 30), new Point(25, 25)],
                 chanceMap: static (NPC npc) => npc.Name.Equals("Emily", StringComparison.OrdinalIgnoreCase) ? 0.7 : 0.5,
                 dialogueKey: "Resort_Dance",
                 animation: "beach_dance",
                 animation_required: true),
             // wandering
             new PossibleIslandActivity(
-                possiblepoints: new[] { new Point(7, 16), new Point(31, 24), new Point(18, 13), new Point(24, 15) },
+                possiblepoints: [new Point(7, 16), new Point(31, 24), new Point(18, 13), new Point(24, 15)],
                 basechance: 0.4,
                 dialogueKey: "Resort_Wander",
                 animation: "square_3_3"),
             // fishing
             new PossibleIslandActivity(
-                possiblepoints: new[] { new Point(21, 44) },
+                possiblepoints: [new Point(21, 44)],
 #if DEBUG
                 basechance: 1,
 #else
@@ -338,14 +338,14 @@ CONTINUELOOP:
                 animation: "beach_fish"),
             // under umbrella
             new PossibleIslandActivity(
-                possiblepoints: new[] { new Point(26, 26), new Point(28, 29), new Point(10, 27) },
+                possiblepoints: [new Point(26, 26), new Point(28, 29), new Point(10, 27)],
                 chanceMap: static (NPC npc) => npc.Name.Equals("Abigail", StringComparison.OrdinalIgnoreCase) ? 0.5 : 0.3,
                 dialogueKey: "Resort_Umbrella",
                 animation: "beach_umbrella",
                 animation_required: false),
             // sitting on chair
             new PossibleIslandActivity(
-                possiblepoints: new[] { new Point(20, 24), new Point(30, 29) },
+                possiblepoints: [new Point(20, 24), new Point(30, 29)],
                 dialogueKey: "Resort_Chair",
                 basechance: 0.6,
                 chanceMap: static (NPC npc) => (npc.Age == NPC.adult || (npc.Age == NPC.teen && npc.SocialAnxiety == NPC.shy)) ? 0.6 : 0,
@@ -364,20 +364,20 @@ CONTINUELOOP:
 #endif
             // shore points
             new PossibleIslandActivity(
-                possiblepoints: new[] { new Point(6, 34), new Point(9, 33), new Point(13, 33), new Point(17, 33), new Point(24, 33), new Point(28, 32), new Point(32, 31), new Point(37, 31) },
+                possiblepoints: [new Point(6, 34), new Point(9, 33), new Point(13, 33), new Point(17, 33), new Point(24, 33), new Point(28, 32), new Point(32, 31), new Point(37, 31)],
                 dialogueKey: "Resort_Shore",
                 basechance: 0.25,
                 animation: "beach_shore",
                 animation_required: false),
             // pier points
             new PossibleIslandActivity(
-                possiblepoints: new[] { new Point(22, 43), new Point(22, 40) },
+                possiblepoints: [new Point(22, 43), new Point(22, 40)],
                 dialogueKey: "Resort_Pier",
                 basechance: 0.25,
                 direction: Game1.right,
                 animation: "beach_pier",
                 animation_required: false,
                 chanceMap: static (NPC npc) => npc.Age == NPC.adult ? 0.5 : 0),
-        };
+        ];
     }
 }

@@ -77,10 +77,20 @@ public sealed class ModEntry : Mod
         helper.ConsoleCommands.Add(
             "sinz.check_gsq",
             "Checks over the game's GSQ",
-            (_, _) =>
+            (_, args) =>
             {
                 GSQTester checker = new(this.Monitor, this.Helper.Reflection);
-                checker.Check(Game1.content);
+                if (args.Length == 0)
+                {
+                    checker.Check(Game1.content);
+                }
+                else
+                {
+                    foreach (var arg in args)
+                    {
+                        checker.Check(Game1.content, arg);
+                    }
+                }
             });
         helper.ConsoleCommands.Add(
             "sinz.forget_event",

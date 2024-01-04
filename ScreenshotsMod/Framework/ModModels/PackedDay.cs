@@ -11,7 +11,7 @@ namespace ScreenshotsMod.Framework.ModModels;
 /// A struct that represents a packed format of a day/season constraint.
 /// </summary>
 [JsonConverter(typeof(PackedDayConverter))]
-internal readonly record struct PackedDay
+internal readonly struct PackedDay(uint value)
 {
     /// <summary>
     /// Represents all mondays.
@@ -20,21 +20,15 @@ internal readonly record struct PackedDay
     private const uint AllDays = 0x0FFF_FFFF;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="PackedDay"/> class.
+    /// Initializes a new instance of the <see cref="PackedDay"/> struct.
     /// Gets the packed day representation of the current day.
     /// </summary>
     public PackedDay()
-        => this.value = (1u << (Math.Clamp(Game1.seasonIndex, 0, 3) + 28)) | (1u << ((Game1.dayOfMonth % 28) - 1));
+        : this((Math.Clamp((uint)Game1.seasonIndex, 0u, 3u) + 28u) | (1u << ((Game1.dayOfMonth % 28) - 1)))
+    {
+    }
 
-    /// <summary>
-    /// Initializes a new instance of the <see cref="PackedDay"/> class.
-    /// Gets the packed day representation of the given value.
-    /// </summary>
-    /// <param name="value">the internal value representation.</param>
-    public PackedDay(uint value)
-        => this.value = value;
-
-    private readonly uint value;
+    private uint Value => value;
 
     /// <summary>
     /// Parses days and seasons to the PackedDay struct.
@@ -126,7 +120,7 @@ internal readonly record struct PackedDay
     }
 
     /// <inheritdoc />
-    public override string ToString() => this.value.ToString("X8");
+    public override string ToString() => value.ToString("X8");
 
     /// <summary>
     /// Checks to see if the current day is allowed by this value.
@@ -134,7 +128,7 @@ internal readonly record struct PackedDay
     /// <param name="current">The current day.</param>
     /// <returns>True if allowed, false otherwise.</returns>
     internal bool Check(PackedDay current)
-        => (current.value & this.value) == current.value;
+        => (current.Value & value) == current.Value;
 }
 
 /// <summary>

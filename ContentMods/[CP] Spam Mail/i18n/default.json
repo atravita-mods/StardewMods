@@ -20,6 +20,8 @@
 
     "vincent-aquarium": "Miss Penny's gonna bring Jas and me to the Aquarium next Friday!$h#$b#I'm so excited.$h",
 
+    "demetrius-aquarium": "I wonder, @, if it's ethical to keep such intelligent creatures such as orca in an aquarium?",
+
     /*************************
     * Zoo
     *************************/
@@ -216,6 +218,8 @@
     "Craft.Title": "70% off yarn!",
     "Craft.Text": "Come in this weekend for 70% off most of our stock! Yarn, glitter, cake decorations, anything to unlock your creativity!",
 
+    "haley-crafts": "Hey, @, do you think Emily would appreciate this kit to make a Winter Star snow globe?",
+
     "Craft.WinterStar.Title": "Get Ready For Winter Star!",
     "Craft.WinterStar.Text": "Nearly 70% off foam snowmen, fake snow, tinsel, and plastic trees! Because if you don't start now, you definitely won't get your Winter Star decorations done in time!",
 
@@ -226,6 +230,16 @@
     "Ring.Title": "Get Your Girl the Ring She Deserves",
     "Ring.Text.1": "Selling half caret engagement rings for only 100,000$. Remember, if you don't get her a ring that costs at least three months salary, you really don't love her enough.",
     "Ring.Text.2": "Make sure she has a stone that'll make all her friends jealous.",
+
+    "maru-ring": "Diamonds, because they're made of pure carbon, are actually quite flammable.",
+
+    /**************
+    * Friendship Block
+    ***************/
+
+    // Art museum?
+    // Science museum?
+    // Coffee shop?
 
     /*************
     * Phone calls

@@ -90,6 +90,28 @@ internal sealed class GSQTester(IMonitor monitor, IReflectionHelper reflector)
         }
     }
 
+    internal void Check(LocalizedContentManager content, string asset)
+    {
+        // create a new asset manager to avoid poisoning the one we're given.
+        var temp = content.CreateTemporary();
+
+        try
+        {
+            object? data = temp.Load<object>(asset);
+            if (data is null)
+            {
+                monitor.Log($"'{asset}' doesn't seem to exist.", LogLevel.Warn);
+                return;
+            }
+
+            this.Process(data, [asset], _additionalAssets.GetValueOrDefault(asset) ?? Extensions.IsPossibleGSQString);
+        }
+        finally
+        {
+            temp.Dispose();
+        }
+    }
+
     private void Process(object data, string[] breadcrumbs, Func<string, bool> filter)
     {
         if (data is null)

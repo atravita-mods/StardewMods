@@ -4,6 +4,7 @@ using AtraBase.Collections;
 using AtraBase.Toolkit.Extensions;
 
 using AtraCore.Framework.Models;
+using AtraCore.Framework.Triggers;
 using AtraCore.HarmonyPatches;
 
 using AtraShared.Utils.Extensions;
@@ -26,7 +27,6 @@ internal static class AssetManager
     private static IAssetName equipBuffIcons = null!;
 
     private static IAssetName musicOverride = null!;
-    
     private static IAssetName prismatic = null!;
 
     private static IAssetName dataObjects = null!;
@@ -108,6 +108,10 @@ internal static class AssetManager
         {
             e.LoadFrom(EmptyContainers.GetEmptyDictionary<int, CategoryExtension>, AssetLoadPriority.Exclusive);
         }
+        else if (e.NameWithoutLocale.IsEquivalentTo(shopTrigger))
+        {
+            e.LoadFrom(EmptyContainers.GetEmptyDictionary<string, ShopItemTriggerModel>, AssetLoadPriority.Exclusive);
+        }
         else if (e.NameWithoutLocale.StartsWith(dataEvents, false, false))
         {
             string loc = e.NameWithoutLocale.BaseName.GetNthChunk('/', 2).ToString();
@@ -177,4 +181,10 @@ internal static class AssetManager
     /// <returns>The data, or null if invalid.</returns>
     internal static CategoryExtension? GetCategoryExtension(int category)
         => Game1.content.Load<Dictionary<int, CategoryExtension>>(categoryExtensions.BaseName).GetValueOrDefault(category);
+
+    /// <summary>
+    /// Gets the data associated with shop item triggers.
+    /// </summary>
+    /// <returns>The underlying data.</returns>
+    internal static Dictionary<string, ShopItemTriggerModel> GetShopItemTriggers() => Game1.content.Load<Dictionary<string, ShopItemTriggerModel>>(shopTrigger.BaseName);
 }

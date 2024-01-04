@@ -1,3 +1,5 @@
+namespace AtraShared.ConstantsAndEnums;
+
 using AtraBase.Toolkit;
 
 using CommunityToolkit.Diagnostics;
@@ -5,8 +7,6 @@ using CommunityToolkit.Diagnostics;
 using NetEscapades.EnumGenerators;
 
 using static System.Numerics.BitOperations;
-
-namespace AtraShared.ConstantsAndEnums;
 
 /// <summary>
 /// Skills as flags....
@@ -55,24 +55,16 @@ public static partial class SkillsExtensions
     {
         Guard.IsEqualTo(PopCount((uint)skills), 1);
 
-        switch (skills)
+        return skills switch
         {
-            case Skills.Mining:
-                return includeBuffs ? farmer.MiningLevel : farmer.miningLevel.Value;
-            case Skills.Farming:
-                return includeBuffs ? farmer.FarmingLevel : farmer.farmingLevel.Value;
-            case Skills.Foraging:
-                return includeBuffs ? farmer.ForagingLevel : farmer.foragingLevel.Value;
-            case Skills.Combat:
-                return includeBuffs ? farmer.CombatLevel : farmer.combatLevel.Value;
-            case Skills.Fishing:
-                return includeBuffs ? farmer.FishingLevel : farmer.fishingLevel.Value;
-            case Skills.Luck:
-                return includeBuffs ? farmer.LuckLevel : farmer.luckLevel.Value;
-        }
-
-        ThrowHelper.ThrowArgumentOutOfRangeException($"{skills.ToStringFast()} does not correspond to a single vanilla skill!");
-        return 0;
+            Skills.Mining => includeBuffs ? farmer.MiningLevel : farmer.miningLevel.Value,
+            Skills.Farming => includeBuffs ? farmer.FarmingLevel : farmer.farmingLevel.Value,
+            Skills.Foraging => includeBuffs ? farmer.ForagingLevel : farmer.foragingLevel.Value,
+            Skills.Combat => includeBuffs ? farmer.CombatLevel : farmer.combatLevel.Value,
+            Skills.Fishing => includeBuffs ? farmer.FishingLevel : farmer.fishingLevel.Value,
+            Skills.Luck => includeBuffs ? farmer.LuckLevel : farmer.luckLevel.Value,
+            _ => ThrowHelper.ThrowArgumentOutOfRangeException<int>($"{skills.ToStringFast()} does not correspond to a single vanilla skill!"),
+        };
     }
 
     /// <summary>

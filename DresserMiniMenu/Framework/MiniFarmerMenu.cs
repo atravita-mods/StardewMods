@@ -74,8 +74,8 @@ internal sealed class MiniFarmerMenu : IClickableMenu
         this.FarmerRef.faceDirection(Game1.down);
 
         // color filters
-        this.colorFilters = new BaseColorFilter[]
-        {
+        this.colorFilters =
+        [
             new RegularColorFilter(Color.Black),
             new RegularColorFilter(Color.Gray),
             new RegularColorFilter(Color.White),
@@ -86,7 +86,7 @@ internal sealed class MiniFarmerMenu : IClickableMenu
             new RegularColorFilter(Color.Purple),
             new UnDyedColorFilter(),
             new PrismaticColorFilter(),
-        };
+        ];
 
         this.AssignClickableComponents();
 

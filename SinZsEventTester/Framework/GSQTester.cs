@@ -1,6 +1,8 @@
 ﻿using System.Reflection;
 using System.Reflection.PortableExecutable;
 
+using Microsoft.Xna.Framework.Content;
+
 using StardewValley.Delegates;
 using StardewValley.GameData;
 using StardewValley.GameData.Machines;
@@ -90,10 +92,15 @@ internal sealed class GSQTester(IMonitor monitor, IReflectionHelper reflector)
         }
     }
 
+    /// <summary>
+    /// Checks the gsq of a single asset.
+    /// </summary>
+    /// <param name="content">Content manager (to copy from).</param>
+    /// <param name="asset">Asset to check.</param>
     internal void Check(LocalizedContentManager content, string asset)
     {
         // create a new asset manager to avoid poisoning the one we're given.
-        var temp = content.CreateTemporary();
+        LocalizedContentManager temp = content.CreateTemporary();
 
         try
         {
@@ -105,6 +112,10 @@ internal sealed class GSQTester(IMonitor monitor, IReflectionHelper reflector)
             }
 
             this.Process(data, [asset], _additionalAssets.GetValueOrDefault(asset) ?? Extensions.IsPossibleGSQString);
+        }
+        catch (ContentLoadException)
+        {
+            monitor.Log($"'{asset}' doesn't seem to exist.", LogLevel.Warn);
         }
         finally
         {

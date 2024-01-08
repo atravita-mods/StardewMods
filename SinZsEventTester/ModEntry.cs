@@ -617,7 +617,7 @@ Outer: ;
             return;
         }
 
-        this.Monitor.Log("Done, unhooking.");
+        this.Monitor.Log("Done, unhooking.", LogLevel.Info);
         this.UnHook();
         this.Helper.Data.WriteGlobalData("finished-events", this.completed);
     }

@@ -16,7 +16,9 @@
     * Aquarium
     *************************/
     "Aquarium.Title": "Zuzu City Aquarium Presents: Denizens of the Deep!",
-    "Aquarium.Text": "Ever interested in the crazy weird creatures that inhabit the depths of the ocean! Now you have an opportunity to meet them! For two weeks only, our Denizens of the Deep exhibit will let you see anglerfish, rattails, and even vampire squid!",
+    "Aquarium.Text.1": "Ever interested in the crazy weird creatures that inhabit the depths of the ocean? Now you have an opportunity to meet them! For two weeks only, our Denizens of the Deep exhibit will let you see anglerfish, rattails, and even vampire squid! Get to know the extremophiles that survive despite crushing pressure and frigid waters!",
+
+    "Aquarium.Text.2": "Brought to you by Fahrenheit! No one's more extremmeeee than Fahrenheit Energy Drinks!",
 
     "vincent-aquarium": "Miss Penny's gonna bring Jas and me to the Aquarium next Friday!$h#$b#I'm so excited.$h",
 
@@ -89,6 +91,13 @@
     "JojaMail.Chocolate.Text.2": "Look, even if you don't have a child near you, don't you want some cheap chocolate for the next time you have a bad day?",
 
     "jodi-jojachocolate": "Is it just me, or do these chocolates I ordered taste...off?",
+
+    "JojaMail.PlantBased.Title": "Try Our New Plant-Based Foods!",
+    "JojaMail.PlantBased.Text": "Seaweed chips, tofu burgers, and bean-based fake fish, feel better about yourself AND the environment when you buy these plant-based snacks!",
+
+    "demetrius-plant-based": "You know, @, I've gotta take issue with this ad for plant-based foods.#$b#Algae is not a plant and Joja should know that already.",
+
+    "emily-plant-based": "I'm glad that the big corporations are taking the environment more seriously, but sodium-packed processed foods aren't the answer.",
 
     // Medications, because WTF America
     "SkinImplants.Title": "Fix Your Jawline!",

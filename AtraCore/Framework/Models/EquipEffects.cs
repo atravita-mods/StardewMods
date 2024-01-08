@@ -21,6 +21,7 @@ using Netcode;
 
 using StardewValley.Buffs;
 using StardewValley.GameData.Objects;
+using StardewValley.TokenizableStrings;
 
 /// <summary>
 /// The possible times to trigger a buff from the equipment.

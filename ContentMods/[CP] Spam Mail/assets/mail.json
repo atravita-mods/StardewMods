@@ -6,7 +6,7 @@
             "Target": "Data/Mail",
             "Entries": {
                 "atravita.SpamMail.CircusMail": "{{i18n:CircusMail.Title}}^^{{i18n:CircusMail.Text}} %item conversationTopic atravita.SpamMail.CircusMail {{Spacer}} %% [#]{{i18n:CircusMail.Title}}",
-                "atravita.SpamMail.Aquarium": "{{i18n:Aquarium.Title}}^^{{i18n:Aquarium.Text}} %item conversationTopic atravita.SpamMail.Aquarium {{Spacer}} %% [#]{{i18n:Aquarium.Title}}",
+                "atravita.SpamMail.Aquarium": "{{i18n:Aquarium.Title}}^^{{i18n:Aquarium.Text.1}}^^{{i18n:Aquarium.Text.2}} %item conversationTopic atravita.SpamMail.Aquarium {{Spacer}} %% [#]{{i18n:Aquarium.Title}}",
                 "atravita.SpamMail.Zoo": "{{i18n:Zoo.Title}}^^{{i18n:Zoo.Text}} %item conversationTopic atravita.SpamMail.Zoo {{Spacer}} %% [#]{{i18n:Zoo.Title}}",
                 "atravita.SpamMail.Zoo2": "{{i18n:Zoo2.Title}}^^{{i18n:Zoo2.Text}} %item conversationTopic atravita.SpamMail.Zoo2 {{Spacer}} %% [#]{{i18n:Zoo2.Title}}",
                 "atravita.SpamMail.Castle": "{{i18n:Castle.Title}}^^{{i18n:Castle.Text}} %item conversationTopic atravita.SpamMail.Castle {{Spacer}} %% [#]{{i18n:Castle.Title}}",
@@ -20,8 +20,10 @@
                 "atravita.SpamMail.JojaVirtualPet": "{{i18n:JojaMail.VirtualPet.Title}}^^{{i18n:JojaMail.VirtualPet.Text}} %item conversationTopic atravita.SpamMail.JojaVirtualPet {{Spacer}} %% [#]{{i18n:JojaMail.VirtualPet.Title}}",
                 "atravita.SpamMail.JojaSneakers": "{{i18n:JojaMail.Sneakers.Title}}^^{{i18n:JojaMail.Sneakers.Text.1}}^^{{i18n:JojaMail.Sneakers.Text.2}} %item conversationTopic atravita.SpamMail.JojaSneakers {{Spacer}} %% [#]{{i18n:JojaMail.Sneakers.Title}}",
                 "atravita.SpamMail.JojaSelfStirring": "{{i18n:JojaMail.SelfStirring.Title}}^^{{i18n:JojaMail.SelfStirring.Text.1}}^^{{i18n:JojaMail.SelfStirring.Text.2}} %item conversationTopic atravita.SpamMail.JojaSelfStirring {{Spacer}} %% [#]{{i18n:JojaMail.SelfStirring.Title}}",
-                "atravita.SpamMail.JojaFunnelCakes": "{{i18n:JojaMail.FunnelCakes.Title}}^^{{i18n:JojaMail.FunnelCakes.Text}} %item conversationTopic atravita.SpamMail.FunnelCakes {{Spacer}} %% [#]{{i18n:JojaMail.FunnelCakes.Title}}",
+                "atravita.SpamMail.JojaFunnelCakes": "{{i18n:JojaMail.FunnelCakes.Title}}^^{{i18n:JojaMail.FunnelCakes.Text}} %item conversationTopic atravita.SpamMail.JojaFunnelCakes {{Spacer}} %% [#]{{i18n:JojaMail.FunnelCakes.Title}}",
                 "atravita.SpamMail.JojaChocolate": "{{i18n:JojaMail.Chocolate.Title}}^^{{i18n:JojaMail.Chocolate.Text.1}}^^{{i18n:JojaMail.Chocolate.Text.2}} %item conversationTopic atravita.SpamMail.JojaChocolate {{Spacer}} %% [#]{{i18n:JojaMail.Chocolate.Title}}",
+
+                "atravita.SpamMail.JojaPlantBased": "{{i18n:JojaMail.PlantBased.Title}}^^{{i18n:JojaMail.PlantBased.Text}} %item conversationTopic atravita.SpamMail.JojaPlantBased {{Spacer}} %% [#]{{i18n:JojaMail.PlantBased.Title}}",
 
                 // Medications
                 "atravita.SpamMail.SkinImplants": "{{i18n:SkinImplants.Title}}^^{{i18n:SkinImplants.Text.1}}^^{{i18n:SkinImplants.Text.2}} %item conversationTopic atravita.SpamMail.SkinImplants {{Spacer}} %% [#]{{i18n:SkinImplants.Title}}",

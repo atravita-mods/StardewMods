@@ -1,4 +1,6 @@
-﻿namespace AtraShared.Utils.Extensions;
+﻿using StardewValley.TokenizableStrings;
+
+namespace AtraShared.Utils.Extensions;
 
 /// <summary>
 /// Just some extension methods for token parsing.

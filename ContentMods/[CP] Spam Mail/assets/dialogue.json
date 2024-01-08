@@ -22,6 +22,7 @@
                 "atravita.SpamMail.Composter": "{{i18n: emily-composter}}",
                 "atravita.SpamMail.Clothing": "{{i18n: emily-clothing}}",
                 "atravita.SpamMail.WinterStarCraft": "{{i18n: emily-winter-star-crafts}}",
+                "atravita.SpamMail.JojaPlantBased": "{{i18n: emily-plant-based}}$s"
             }
         },
         {

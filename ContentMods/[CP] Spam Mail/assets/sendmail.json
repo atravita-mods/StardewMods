@@ -99,6 +99,14 @@
                     "Action": "AddMail Current, atravita.SpamMail.JojaSelfStirring"
                 },
 
+                // Joja - base triggers
+                "atravita.SpamMail.JojaPlantBased": {
+                    "Id": "atravita.SpamMail.JojaPlantBased",
+                    "Trigger": "DayEnding",
+                    "Condition": "{{MidYearConstraint}}, PLAYER_HAS_MAIL Current qiChallengeComplete, PLAYER_VISITED_LOCATION Current JojaMart, Random 0.1",
+                    "Action": "AddMail Current atravita.SpamMail.JojaPlantBased"
+                },
+
                 // Base triggers block
                 "atravita.SpamMail.Clothing": {
                     "Id": "atravita.SpamMail.Clothing",

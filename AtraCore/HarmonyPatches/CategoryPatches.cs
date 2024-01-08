@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using StardewValley.Extensions;
 using StardewValley.GameData.Objects;
 using StardewValley.ItemTypeDefinitions;
+using StardewValley.TokenizableStrings;
 
 namespace AtraCore.HarmonyPatches;
 

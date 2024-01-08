@@ -16,7 +16,7 @@ public static class RandomUtils
     /// <remarks>Comes prewarmed.</remarks>
     /// <returns>A seeded random.</returns>
     public static Random GetSeededRandom(int dayFactor, string initial)
-        => GetSeededRandom(dayFactor, initial.GetStableHashCode());
+        => GetSeededRandom(dayFactor, Game1.hash.GetDeterministicHashCode(initial));
 
     /// <summary>
     /// Gets a random seeded by the days played, the unique ID, and another initial factor.

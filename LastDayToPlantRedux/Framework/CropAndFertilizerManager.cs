@@ -12,6 +12,7 @@ using AtraShared.Wrappers;
 
 using StardewValley.GameData.Crops;
 using StardewValley.GameData.Objects;
+using StardewValley.TokenizableStrings;
 
 namespace LastDayToPlantRedux.Framework;
 

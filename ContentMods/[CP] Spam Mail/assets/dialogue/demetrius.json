@@ -18,7 +18,8 @@
             "Target": "Characters/Dialogue/Demetrius",
             "LogName": "Demetrius - regular",
             "Entries": {
-                "atravita.SpamMail.Aquarium": "{{i18n:demetrius-aquarium}}$s"
+                "atravita.SpamMail.Aquarium": "{{i18n:demetrius-aquarium}}$s",
+                "atravita.SpamMail.JojaPlantBased": "{{i18n: demetrius-plant-based}}$s"
             }
         },
     ]

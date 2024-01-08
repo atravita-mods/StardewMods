@@ -4,6 +4,8 @@ using AtraShared.Utils.Extensions;
 
 using HarmonyLib;
 
+using StardewValley.TokenizableStrings;
+
 [HarmonyPatch(typeof(Utility))]
 internal static class MusicTrackOverride
 {

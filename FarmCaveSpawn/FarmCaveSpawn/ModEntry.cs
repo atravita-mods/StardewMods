@@ -24,6 +24,7 @@ using StardewValley.Extensions;
 using StardewValley.GameData.FruitTrees;
 using StardewValley.Internal;
 using StardewValley.Locations;
+using StardewValley.TokenizableStrings;
 
 using AtraUtils = AtraShared.Utils.Utils;
 using XLocation = xTile.Dimensions.Location;

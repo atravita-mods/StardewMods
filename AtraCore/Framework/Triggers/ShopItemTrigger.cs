@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using StardewValley.Delegates;
+using StardewValley.TokenizableStrings;
 using StardewValley.Triggers;
 
 namespace AtraCore.Framework.Triggers;
@@ -62,7 +63,7 @@ public class ShopItemTrigger : Item
                             continue;
                         }
 
-                        this.actions.Add(new(splits, handler));
+                        this.actions.Add(new(splits, handler, null, false));
                     }
                 }
 

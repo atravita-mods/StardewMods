@@ -281,14 +281,14 @@ internal class DialogueManager
     /// </summary>
     /// <param name="__result">Result from the original function.</param>
     /// <param name="__instance">NPC in question.</param>
-    /// <param name="__0">NPC heart level.</param>
-    /// <param name="__1">NoPreface in vanilla code - to preface with season or not.</param>
-    internal static void PostfixCheckDialogue(ref bool __result, ref NPC __instance, int __0, bool __1)
+    /// <param name="heartLevel">NPC heart level.</param>
+    /// <param name="noPreface">NoPreface in vanilla code - to preface with season or not.</param>
+    internal static void PostfixCheckDialogue(ref bool __result, ref NPC __instance, int heartLevel, bool noPreface, bool __runOriginal)
     {
         try
         {
-            // have already found a New Current Dialogue
-            if (__result)
+            // have already found a New Current Dialogue, or some other mod caused the original to be skipped.
+            if (__result || !__runOriginal)
             {
                 return;
             }
@@ -301,7 +301,7 @@ internal class DialogueManager
                     continue;
                 }
 
-                string baseKey = __1 ? specialOrder.questKey.Value : Game1.currentSeason + specialOrder.questKey.Value;
+                string baseKey = noPreface ? specialOrder.questKey.Value : Game1.currentSeason + specialOrder.questKey.Value;
                 baseKey += specialOrder.questState.Value switch
                 {
                     SpecialOrderStatus.InProgress => "_InProgress",
@@ -309,7 +309,7 @@ internal class DialogueManager
                     SpecialOrderStatus.Complete => "_Completed",
                     _ => throw new UnexpectedEnumValueException<SpecialOrderStatus>(specialOrder.questState.Value),
                 };
-                __result = FindBestDialogue(baseKey, __instance, __0);
+                __result = FindBestDialogue(baseKey, __instance, heartLevel);
                 if (__result)
                 {
                     return;
@@ -318,7 +318,7 @@ internal class DialogueManager
                 // Handle repeat orders!
                 if (specialOrder.questState.Value == SpecialOrderStatus.InProgress && Game1.player.team.completedSpecialOrders.Contains(specialOrder.questKey.Value))
                 {
-                    __result = FindBestDialogue((__1 ? specialOrder.questKey.Value : Game1.currentSeason + specialOrder.questKey.Value) + "_RepeatOrder", __instance, __0);
+                    __result = FindBestDialogue((noPreface ? specialOrder.questKey.Value : Game1.currentSeason + specialOrder.questKey.Value) + "_RepeatOrder", __instance, heartLevel);
                     if (__result)
                     {
                         return;
@@ -331,7 +331,7 @@ internal class DialogueManager
             {
                 foreach (string cacheOrder in cacheOrders)
                 {
-                    __result = FindBestDialogue(cacheOrder + "_Completed", __instance, __0);
+                    __result = FindBestDialogue(cacheOrder + "_Completed", __instance, heartLevel);
                     if (__result)
                     {
                         return;
@@ -352,7 +352,7 @@ internal class DialogueManager
 
                     if (!currentOrders.Contains(specialOrder.questKey.Value))
                     {
-                        __result = FindBestDialogue(specialOrder.questKey.Value + "_IsAvailable", __instance, __0);
+                        __result = FindBestDialogue(specialOrder.questKey.Value + "_IsAvailable", __instance, heartLevel);
                         if (__result)
                         {
                             return;

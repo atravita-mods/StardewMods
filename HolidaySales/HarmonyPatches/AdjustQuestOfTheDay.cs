@@ -47,9 +47,10 @@ internal static class AdjustQuestOfTheDay
                 {
                     quest.reloadObjective();
                     quest.reloadDescription();
-                    Game1.netWorldState.Value.SetQuestOfTheDay(quest);
-                    return false;
                 }
+
+                Game1.netWorldState.Value.SetQuestOfTheDay(quest);
+                return false;
             }
             catch (Exception ex)
             {

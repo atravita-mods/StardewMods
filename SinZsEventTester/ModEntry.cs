@@ -73,7 +73,7 @@ public sealed class ModEntry : Mod
         helper.ConsoleCommands.Add(
             "sinz.check_preconditions",
             "checks over all preconditions",
-            this.CheckPreconditions);
+            (_, _) => new SimpleConsoleCommand(this.Monitor).CheckPreconditions());
         helper.ConsoleCommands.Add(
             "sinz.check_gsq",
             "Checks over the game's GSQ",
@@ -86,7 +86,7 @@ public sealed class ModEntry : Mod
                 }
                 else
                 {
-                    foreach (var arg in args)
+                    foreach (string arg in args)
                     {
                         checker.Check(Game1.content, arg);
                     }
@@ -95,15 +95,15 @@ public sealed class ModEntry : Mod
         helper.ConsoleCommands.Add(
             "sinz.forget_event",
             "Forgets events",
-            this.ForgetEvents);
+            (_, args) => new SimpleConsoleCommand(this.Monitor).ForgetEvents(args));
         helper.ConsoleCommands.Add(
             "sinz.forget_mail",
             "Forgets mail",
-            this.ForgetMail);
+            (_, args) => new SimpleConsoleCommand(this.Monitor).ForgetMail(args));
         helper.ConsoleCommands.Add(
             "sinz.forget_triggers",
             "Forgets triggers",
-            this.ForgetTriggers);
+            (_, args) => new SimpleConsoleCommand(this.Monitor).ForgetTriggers(args));
     }
 
     /// <inheritdoc />
@@ -545,6 +545,7 @@ Outer: ;
                 }
 
                 this.Monitor.VerboseLog("Clicking on the dialogue box");
+                db.safetyTimer = 0;
                 db.receiveLeftClick(0, 0);
             }
             else if (Game1.activeClickableMenu is NamingMenu nm)
@@ -628,6 +629,7 @@ Outer: ;
         this.Monitor.Log($"Meaningless choice, skipping.");
         db.selectedResponse = Game1.random.Next(db.responses.Length);
 
+        db.safetyTimer = 0;
         this.Monitor.VerboseLog("Clicking on the dialogue box.");
         db.receiveLeftClick(0, 0);
     }
@@ -754,71 +756,6 @@ Outer: ;
         /// This node has not been visited before, but should only queue a single (also blue) child.
         /// </summary>
         Blue,
-    }
-
-    #endregion
-
-    #region helpers
-    private void ForgetEvents(string command, string[] evts)
-    {
-        foreach (string evt in evts)
-        {
-            if (Game1.player.eventsSeen.Remove(evt))
-            {
-                this.Monitor.Log($"Forgetting {evt} for {Game1.player.Name}", LogLevel.Debug);
-            }
-        }
-    }
-
-    private void ForgetMail(string command, string[] mails)
-    {
-        foreach (string mail in mails)
-        {
-            if (Game1.player.mailReceived.Remove(mail))
-            {
-                this.Monitor.Log($"Forgetting {mail} for {Game1.player.Name}", LogLevel.Debug);
-            }
-        }
-    }
-
-    private void ForgetTriggers(string command, string[] triggers)
-    {
-        foreach (string trigger in triggers)
-        {
-            if (Game1.player.triggerActionsRun.Remove(trigger))
-            {
-                this.Monitor.Log($"Forgetting trigger {trigger} for {Game1.player.Name}", LogLevel.Debug);
-            }
-        }
-    }
-
-    private void CheckPreconditions(string command, string[] args)
-    {
-        foreach (GameLocation? location in Game1.locations)
-        {
-            if (!location.TryGetLocationEvents(out string? assetName, out Dictionary<string, string>? events) || events.Count == 0)
-            {
-                this.Monitor.Log($"No events for {location.Name}.");
-                continue;
-            }
-
-            foreach (string evt in events.Keys)
-            {
-                string[] splits = evt.Split('/');
-                if (splits.Length < 2)
-                {
-                    this.Monitor.Log($"{evt} is either fork or has no preconditions.");
-                    continue;
-                }
-
-                this.Monitor.Log($"Checking preconditions for {evt}", LogLevel.Info);
-                string key = splits[0];
-                foreach (string? s in splits.AsSpan(1))
-                {
-                    Event.CheckPrecondition(location, key, s);
-                }
-            }
-        }
     }
 
     #endregion

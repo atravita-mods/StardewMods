@@ -2,11 +2,8 @@
 
 using AtraCore.Framework.Internal;
 
-using AtraShared.ConstantsAndEnums;
 using AtraShared.Menuing;
 using AtraShared.Utils.Extensions;
-
-using HarmonyLib;
 
 using ReviveDeadCrops.Framework;
 
@@ -36,8 +33,6 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         base.Entry(helper);
         helper.Events.Input.ButtonPressed += this.OnButtonPressed;
         helper.Events.GameLoop.DayEnding += this.OnDayEnd;
-
-        this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
     }
 
     /// <inheritdoc />
@@ -67,7 +62,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
                     if (terrain is HoeDirt dirt && dirt.modData?.GetBool(ReviveDeadCropsApi.REVIVED_PLANT_MARKER) == true
                         && dirt.crop is not null && dirt.fertilizer.Value != EverlastingID)
                     {
-                        this.Monitor.DebugOnlyLog($"Found dirt with marker at {dirt.Tile} with crop {dirt.crop?.indexOfHarvest ?? "null"}");
+                        this.Monitor.DebugOnlyLog($"Found dirt with marker at {dirt.Tile} with crop {dirt.crop?.indexOfHarvest.Value ?? "null"}");
                         dirt.modData?.SetBool(ReviveDeadCropsApi.REVIVED_PLANT_MARKER, false, false);
                         dirt.crop?.Kill();
                     }
@@ -79,7 +74,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
                         && dirt.modData?.GetBool(ReviveDeadCropsApi.REVIVED_PLANT_MARKER) == true
                         && dirt.crop is not null && dirt.fertilizer.Value != EverlastingID)
                     {
-                        this.Monitor.DebugOnlyLog($"Found dirt with marker at {dirt.Tile} with crop {dirt.crop?.indexOfHarvest ?? "null"}");
+                        this.Monitor.DebugOnlyLog($"Found dirt with marker at {dirt.Tile} with crop {dirt.crop?.indexOfHarvest.Value ?? "null"}");
                         dirt.modData?.SetBool(ReviveDeadCropsApi.REVIVED_PLANT_MARKER, false, false);
                         dirt.crop?.Kill();
                     }
@@ -87,23 +82,6 @@ internal sealed class ModEntry : BaseMod<ModEntry>
 
                 return true;
             });
-    }
-
-    /// <summary>
-    /// Applies the patches for this mod.
-    /// </summary>
-    /// <param name="harmony">This mod's harmony instance.</param>
-    private void ApplyPatches(Harmony harmony)
-    {
-        try
-        {
-            harmony.PatchAll(typeof(ModEntry).Assembly);
-        }
-        catch (Exception ex)
-        {
-            ModMonitor.Log(string.Format(ErrorMessageConsts.HARMONYCRASH, ex), LogLevel.Error);
-        }
-        harmony.Snitch(this.Monitor, this.ModManifest.UniqueID, transpilersOnly: true);
     }
 
     private void OnButtonPressed(object? sender, ButtonPressedEventArgs e)

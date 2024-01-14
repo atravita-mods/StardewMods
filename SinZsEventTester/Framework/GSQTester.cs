@@ -99,6 +99,11 @@ internal sealed class GSQTester(IMonitor monitor, IReflectionHelper reflector)
     /// <param name="asset">Asset to check.</param>
     internal void Check(LocalizedContentManager content, string asset)
     {
+        if (!Context.IsWorldReady)
+        {
+            monitor.Log($"A save has not been loaded. Some queries may not resolve correctly.", LogLevel.Warn);
+        }
+
         // create a new asset manager to avoid poisoning the one we're given.
         LocalizedContentManager temp = content.CreateTemporary();
 

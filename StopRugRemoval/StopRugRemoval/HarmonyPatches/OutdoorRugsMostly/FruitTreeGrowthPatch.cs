@@ -28,28 +28,22 @@ internal static class FruitTreeGrowthPatch
         try
         {
             ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);
-            helper.FindLast(new CodeInstructionWrapper[]
-                    {
-                    new (SpecialCodeInstructionCases.LdArg),
-                    new (SpecialCodeInstructionCases.LdLoc),
-                    new (OpCodes.Ldfld),
-                    new (OpCodes.Conv_I4),
-                    new (SpecialCodeInstructionCases.LdLoc),
-                    new (OpCodes.Ldfld),
-                    new (OpCodes.Conv_I4),
-                    new (OpCodes.Callvirt, typeof(GameLocation).GetCachedMethod<int, int>(nameof(GameLocation.getObjectAtTile), ReflectionCache.FlagTypes.InstanceFlags)),
-                    })
-                .FindNext(new CodeInstructionWrapper[]
-                    {
+            helper.FindLast(
+                    [
+                    new (OpCodes.Ldc_I4_0),
+                    new (OpCodes.Callvirt, typeof(GameLocation).GetCachedMethod<int, int, bool>(nameof(GameLocation.getObjectAtTile), ReflectionCache.FlagTypes.InstanceFlags)),
+                    ])
+                .FindNext(
+                    [
                     new (SpecialCodeInstructionCases.StLoc, typeof(SObject)),
                     new (SpecialCodeInstructionCases.LdLoc, typeof(SObject)),
                     new (OpCodes.Brfalse_S),
-                    })
+                    ])
                 .Advance(2)
-                .Insert(new CodeInstruction[]
-                    {
+                .Insert(
+                    [
                     new (OpCodes.Call, typeof(FruitTreeGrowthPatch).StaticMethodNamed(nameof(IsNotRugOrNull))),
-                    });
+                    ]);
             return helper.Render();
         }
         catch (Exception ex)
@@ -60,5 +54,5 @@ internal static class FruitTreeGrowthPatch
     }
 
     private static bool IsNotRugOrNull(SObject? obj)
-        => !(obj is null || (obj is Furniture f && f.furniture_type.Value == Furniture.rug));
+        => obj is not null && (obj is not Furniture f || f.furniture_type.Value != Furniture.rug);
 }

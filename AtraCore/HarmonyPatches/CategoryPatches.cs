@@ -68,10 +68,7 @@ internal static class CategoryPatches
     {
         if (int.TryParse(item_id, out int cat) && cat < 0)
         {
-            string? title = null;
-            Color? color = null;
-            string? iconS = null;
-            Evaluate(cat, ref title, ref color, ref iconS);
+            (string? _, Color? _, string? iconS) = EvaluateCategory(cat);
             if (iconS is not null)
             {
                 __result = iconS;
@@ -110,10 +107,7 @@ internal static class CategoryPatches
     {
         if (int.TryParse(item_id, out int cat) && cat < 0)
         {
-            string? titleC = null;
-            Color? color = null;
-            string? icon = null;
-            Evaluate(cat, ref titleC, ref color, ref icon);
+            (string? titleC, Color? _, string? _) = EvaluateCategory(cat);
             if (titleC is not null)
             {
                 __result = titleC;
@@ -154,60 +148,69 @@ internal static class CategoryPatches
 
     private static (string? title, Color? color, string? icon) Evaluate(string unqualified, int category)
     {
-        if (_cache.TryGetValue(unqualified, out (string? title, Color? color, string? icon) val))
+        if (!_cache.TryGetValue(unqualified, out (string? title, Color? color, string? icon) val))
+        {
+            string? title = null;
+            Color? color = null;
+            string? icon = null;
+
+            if (Game1.objectData.TryGetValue(unqualified, out ObjectData? objectData) && objectData.CustomFields is { } fields)
+            {
+                if (fields.TryGetValue("atravita.CategoryNameOverride", out string? tokenizedTitle) && TokenParser.ParseText(tokenizedTitle) is string proposedTitle
+                    && !string.IsNullOrWhiteSpace(proposedTitle))
+                {
+                    title = proposedTitle;
+                }
+                if (fields.TryGetValue("atravita.CategoryColorOverride", out string? sColor) && ColorHandler.TryParseColor(sColor, out Color proposedColor))
+                {
+                    color = proposedColor;
+                }
+                if (fields.TryGetValue("atravita.CategoryIconOverride", out string? iconS) && iconS is not null)
+                {
+                    icon = iconS;
+                }
+            }
+
+            _cache[unqualified] = val = (title, color, icon);
+        }
+
+        if (val.title is not null && val.color is not null && val.icon is not null)
         {
             return val;
         }
 
-        string? title = null;
-        Color? color = null;
-        string? icon = null;
-
-        if (Game1.objectData.TryGetValue(unqualified, out ObjectData? objectData) && objectData.CustomFields is { } fields)
-        {
-            if (fields.TryGetValue("atravita.CategoryNameOverride", out string? tokenizedTitle) && TokenParser.ParseText(tokenizedTitle) is string proposedTitle
-                && !string.IsNullOrWhiteSpace(proposedTitle))
-            {
-                title = proposedTitle;
-            }
-            if (fields.TryGetValue("atravita.CategoryColorOverride", out string? sColor) && ColorHandler.TryParseColor(sColor, out Color proposedColor))
-            {
-                color = proposedColor;
-            }
-            if (fields.TryGetValue("atravita.CategoryIconOverride", out string? iconS) && iconS is not null)
-            {
-                icon = iconS;
-            }
-        }
-
-        if (title is not null && color is not null && icon is not null)
-        {
-            return _cache[unqualified] = (title, color, icon);
-        }
-
-        Evaluate(category, ref title, ref color, ref icon);
-        return (title, color, icon);
+        (string? title, Color? color, string? icon) cat = EvaluateCategory(category);
+        return (val.title ?? cat.title, val.color ?? cat.color, val.icon ?? cat.icon);
     }
 
-    private static void Evaluate(int category, ref string? title, ref Color? color, ref string? icon)
+    private static (string? title, Color? color, string? icon) EvaluateCategory(int category)
     {
-        if (AssetManager.GetCategoryExtension(category) is { } categoryOverride)
+        if (!_category_cache.TryGetValue(category, out (string? title, Color? color, string? icon) val))
         {
-            if (title is null && categoryOverride.CategoryNameOverride is string tokenizedTitle && TokenParser.ParseText(tokenizedTitle) is string proposedTitle
-                && !string.IsNullOrWhiteSpace(proposedTitle))
+            string? cat_title = null;
+            Color? cat_color = null;
+            string? cat_icon = null;
+
+            if (AssetManager.GetCategoryExtension(category) is { } categoryOverride)
             {
-                title = proposedTitle;
+                if (categoryOverride.CategoryNameOverride is string tokenizedTitle && TokenParser.ParseText(tokenizedTitle) is string proposedTitle
+                    && !string.IsNullOrWhiteSpace(proposedTitle))
+                {
+                    cat_title = proposedTitle;
+                }
+                if (categoryOverride.CategoryColorOverride is string sColor && ColorHandler.TryParseColor(sColor, out Color proposedColor))
+                {
+                    cat_color = proposedColor;
+                }
+                if (categoryOverride.CategoryItemOverride is string sIcon)
+                {
+                    cat_icon = sIcon;
+                }
             }
-            if (color is null && categoryOverride.CategoryColorOverride is string sColor && ColorHandler.TryParseColor(sColor, out Color proposedColor))
-            {
-                color = proposedColor;
-            }
-            if (icon is null && categoryOverride.CategoryItemOverride is string sIcon)
-            {
-                icon = sIcon;
-            }
+
+            _category_cache[category] = val = (cat_title, cat_color, cat_icon);
         }
 
-        _category_cache[category] = (title, color, icon);
+        return val;
     }
 }

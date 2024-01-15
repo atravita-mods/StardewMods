@@ -132,6 +132,8 @@
 
     "pam-casino": "Ma used to really love gambling. She'd go up to the casino whenever she could.#$b#I miss her.$s",
 
+    "robin-casino": "Demetrius and I went to a casino once. He spent the entire night trying to calculate the optimal way to win at the slot machines.",
+
     /*************
     * Composter
     ***************/
@@ -140,6 +142,7 @@
 
     "jodi-composter": "Look, @, I bought that composter that's been all over the news lately.$h#$b#Works wonders, takes care of all my food scraps!",
     "emily-composter": "Gosh, I don't know why people keep falling for greenwashing.#$b#That composter they keep advertising, it uses electricity, so it really doesn't help the environment any.$s",
+    "demetrius-composter": "Composting is so much better for our environment than leaving our food scraps to rot in a landfill.",
 
     /**************
     * Clothing

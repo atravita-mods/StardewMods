@@ -131,6 +131,13 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         AddGSQ("atravita.AtraCore_HAS_DAILY_LUCK", CurrentDailyLuck.DailyLuck);
         AddGSQ("atravita.AtraCore_RECIPES_COOKED_PERCENT", RecipesCooked.RecipesCookedPercent);
         AddGSQ("atravita.AtraCore_FISH_CAUGHT_PERCENT", FishCaught.FishCaughtPercent);
+        AddGSQ("atravita.AtraCore_NPC_WAS_GIFTED", NPCWasGifted.Query);
+
+        // various NPC queries
+        AddGSQ("atravita.AtraCore_NPC_WAS_TALKED_TO", NPCQueries.WasTalkedTo);
+        AddGSQ("atravita.AtraCore_NPC_WAS_LAST_GIFTED", NPCQueries.WasLastGifted);
+        AddGSQ("atravita.AtraCore_NPC_DAYS_SINCE_MARRIAGE", NPCQueries.DaysSinceMarriage);
+        AddGSQ("atravita.AtraCore_NPC_IS_ANNIVERSARY", NPCQueries.IsAnniversaryOfMarriage);
 
         void AddGSQ(string query, GameStateQueryDelegate del)
         {

@@ -117,7 +117,8 @@
             "Action": "EditData",
             "Target": "Characters/Dialogue/Robin",
             "Entries": {
-                "atravita.SpamMail.ToolsShop": "{{i18n: robin-toolshop}}"
+                "atravita.SpamMail.ToolsShop": "{{i18n: robin-toolshop}}",
+                "atravita.SpamMail.Casino": "{{i18n: robin-casino}}"
             }
         }
     ]

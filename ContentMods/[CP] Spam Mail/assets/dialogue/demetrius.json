@@ -20,7 +20,8 @@
             "Entries": {
                 "atravita.SpamMail.Aquarium": "{{i18n:demetrius-aquarium}}$s",
                 "atravita.SpamMail.JojaPlantBased": "{{i18n: demetrius-plant-based}}$s",
-                "atravita.SpamMail.Ring": "{{i18n: demetrius-ring}}"
+                "atravita.SpamMail.Ring": "{{i18n: demetrius-ring}}",
+                "atravita.SpamMail.Composter": "{{i18n: demetrius-composter}}"
             }
         },
     ]

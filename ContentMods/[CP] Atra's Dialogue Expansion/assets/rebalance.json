@@ -1,0 +1,23 @@
+{
+    "Changes": [
+        {
+            "Action": "EditData",
+            "Target": "Data/Shops",
+            "TargetField": ["SeedShop", "PriceModifiers"],
+            "Entries": {
+                "atravita.DivorcedFromAbby": {
+                    "Id": "atravita.DivorcedFromAbby",
+                    "Modification": "Multiply",
+                    "Amount": "2.0",
+                    "Condition": "PLAYER_NPC_RELATIONSHIP Any Abigail Divorced"
+                },
+                "atravita.PierreFriendship": {
+                    "Id": "atravita.PierreFriendship",
+                    "Modification": "Multiply",
+                    "Condition": "!PLAYER_NPC_RELATIONSHIP Any Abigail Divorced",
+                    "Amount": "{{Query: 2 - {{Hearts:Pierre}}/9 }}"
+                }
+            }
+        }
+    ]
+}

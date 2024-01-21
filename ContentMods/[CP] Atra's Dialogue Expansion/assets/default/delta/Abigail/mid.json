@@ -103,7 +103,9 @@
 
             // before egg hunt
             "spring_12{{YearRemainder}}": "$y 'Think I should let the kids win the egg hunt this year?_Yes_Hmmph, I guess....I'll consider it._No_You're right, @, they'll know if I pander to them.'",
-            
+
+            "fall_Tue6": "I've got my language class today, @.#$b#Why does my degree program have a language requirement anyways?#$e#Say, @, how many languages do you know?",
+
             "6_2": "Oh, looks like %name Taylor is performing in Grampleton next Friday. Should I get tickets?",
             "7_2": "Math has never been my strong suit, unfortunately.#$b#Wish pops wasn't pushing me so hard to get a business degree.$s",
             "12_2": "All our town events are so boring. I wish we had more interesting things to do..."

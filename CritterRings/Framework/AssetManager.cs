@@ -107,6 +107,7 @@ internal static class AssetManager
             Price = PRICE,
             Texture = ringTextureLocation.BaseName,
             SpriteIndex = 3,
+            ContextTags = ["color_gray"],
         };
         editor[ModEntry.ButterflyRing] = new()
         {
@@ -118,6 +119,7 @@ internal static class AssetManager
             Price = PRICE,
             Texture = ringTextureLocation.BaseName,
             SpriteIndex = 0,
+            ContextTags = ["color_purple"],
         };
         editor[ModEntry.FireFlyRing] = new()
         {
@@ -129,6 +131,7 @@ internal static class AssetManager
             Price = PRICE,
             Texture = ringTextureLocation.BaseName,
             SpriteIndex = 1,
+            ContextTags = ["color_orange"],
         };
         editor[ModEntry.FrogRing] = new()
         {
@@ -140,6 +143,7 @@ internal static class AssetManager
             Price = PRICE,
             Texture = ringTextureLocation.BaseName,
             SpriteIndex = 5,
+            ContextTags = ["color_green"],
         };
         editor[ModEntry.OwlRing] = new()
         {
@@ -151,6 +155,7 @@ internal static class AssetManager
             Price = PRICE,
             Texture = ringTextureLocation.BaseName,
             SpriteIndex = 4,
+            ContextTags = ["color_brown"],
         };
     }
 

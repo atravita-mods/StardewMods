@@ -3,6 +3,104 @@
         {
             "Action": "EditData",
             "Target": "Data/Shops",
+            "TargetField": ["AmimalShop", "PriceModifiers"],
+            "Entries": {
+                "atravita.DivorcedFromShane": {
+                    "Id": "atravita.DivorcedFromShane",
+                    "Modification": "Multiply",
+                    "Amount": "2.0",
+                    "Condition": "PLAYER_NPC_RELATIONSHIP Any Shane Divorced"
+                },
+                "atravita.MarnieFriendship": {
+                    "Id": "atravita.MarnieFriendship",
+                    "Modification": "Multiply",
+                    "Amount": "{{Query: 2 - {{Hearts:Marnie}} / 9 }}",
+                    "Condition": "!PLAYER_NPC_RELATIONSHIP Any Shane Divorced"
+                }
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Data/Shops",
+            "TargetField": ["Blacksmith", "PriceModifiers"],
+            "Entries": {
+                "atravita.ClintFriendship": {
+                    "Id": "atravita.ClintFriendship",
+                    "Modification": "Multiply",
+                    "Amount": "{{Query: 2 - {{Hearts:Clint}}/9 }}"
+                }
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Data/Shops",
+            "TargetField": ["ClintUpgrade", "PriceModifiers"],
+            "Entries": {
+                "atravita.ClintFriendship": {
+                    "Id": "atravita.ClintFriendship",
+                    "Modification": "Multiply",
+                    "Amount": "{{Query: 2 - {{Hearts:Clint}}/9 }}"
+                }
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Data/Shops",
+            "TargetField": ["Carpenter", "PriceModifiers"],
+            "Entries": {
+                "atravita.DivorcedFromMaruOrSebastian": {
+                    "Id": "atravita.DivorcedFromMaruOrSebastian",
+                    "Modification": "Multiply",
+                    "Amount": "2.0",
+                    "Condition": "ANY \"PLAYER_NPC_RELATIONSHIP Any Maru Divorced\" \"PLAYER_NPC_RELATIONSHIP Any Sebastian Divorced\""
+                },
+                "atravita.RobinFriendship": {
+                    "Id": "atravita.RobinFriendship",
+                    "Modification": "Multiply",
+                    "Amount": "{{Query: 2 - {{Hearts:Robin}} / 9 }}",
+                    "Condition": "!PLAYER_NPC_RELATIONSHIP Any Maru Divorced, !PLAYER_NPC_RELATIONSHIP Any Sebastian Divorced"
+                }
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Data/Shops",
+            "TargetField": ["Dwarf", "PriceModifiers"],
+            "Entries": {
+                "atravita.DwarfFriendship": {
+                    "Id": "atravita.DwarfFriendship",
+                    "Modification": "Multiply",
+                    "Amount": "{{Query: 2 - {{Hearts:Dwarf}}/9 }}"
+                }
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Data/Shops",
+            "TargetField": ["FishShop", "PriceModifiers"],
+            "Entries": {
+                "atravita.WillyFriendship": {
+                    "Id": "atravita.WillyFriendship",
+                    "Modification": "Multiply",
+                    "Amount": "{{Query: 2 - {{Hearts:Willy}}/9 }}"
+                }
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Data/Shops",
+            "TargetField": ["Saloon", "PriceModifiers"],
+            "Entries": {
+                "atravita.GusFriendship": {
+                    "Id": "atravita.GusFriendship",
+                    "Modification": "Multiply",
+                    "Amount": "{{Query: 2 - {{Hearts:Willy}}/9 }}"
+                }
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Data/Shops",
             "TargetField": ["SeedShop", "PriceModifiers"],
             "Entries": {
                 "atravita.DivorcedFromAbby": {
@@ -16,6 +114,30 @@
                     "Modification": "Multiply",
                     "Condition": "!PLAYER_NPC_RELATIONSHIP Any Abigail Divorced",
                     "Amount": "{{Query: 2 - {{Hearts:Pierre}}/9 }}"
+                }
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Data/Shops",
+            "TargetField": ["ShadowShop", "PriceModifiers"],
+            "Entries": {
+                "atravita.KrobusFriendship": {
+                    "Id": "atravita.KrobusFriendship",
+                    "Modification": "Multiply",
+                    "Amount": "{{Query: 2 - {{Hearts:Krobus}}/9 }}"
+                }
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Data/Shops",
+            "TargetField": ["VolcanoShop", "PriceModifiers"],
+            "Entries": {
+                "atravita.DwarfFriendship": {
+                    "Id": "atravita.DwarfFriendship",
+                    "Modification": "Multiply",
+                    "Amount": "{{Query: 2 - {{Hearts:Dwarf}}/9 }}"
                 }
             }
         }

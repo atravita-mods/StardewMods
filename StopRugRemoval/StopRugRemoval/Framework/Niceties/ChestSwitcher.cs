@@ -54,7 +54,17 @@ internal static class ChestSwitcher
         }
 
         Chest? chest = (obj as Chest) ?? (obj.heldObject.Value as Chest);
-        if (chest is null)
+        if (chest is null || !chest.playerChest.Value)
+        {
+            return false;
+        }
+
+        // If someone else has the lock, bail.
+        // This isn't perfect - someone can grab the lock in the short period between this and when I actually do things.
+        // but it's the best I can do.
+        NetMutex m = chest.GetMutex();
+        m.Update(location);
+        if (m.IsLocked() && !m.IsLockHeld())
         {
             return false;
         }
@@ -66,12 +76,14 @@ internal static class ChestSwitcher
             return false;
         }
 
+        SObject? originalHeldItem = ReferenceEquals(chest, obj) ? obj.heldObject.Value : null;
+
         NetMutex? mutex = (chest.SpecialChestType == Chest.SpecialChestTypes.JunimoChest || chest.GlobalInventoryId is not null) ? chest.GetMutex() : null;
 
         if (mutex is not null)
         {
             mutex.RequestLock(
-                () => MoveChestImpl(chest, tile, inventory, location, active, obj),
+                () => MoveChestImpl(chest, tile, inventory, location, active, obj, originalHeldItem),
                 () =>
                 {
                     chest.shakeTimer = 50;
@@ -80,14 +92,14 @@ internal static class ChestSwitcher
         }
         else
         {
-            MoveChestImpl(chest, tile, inventory, location, active, obj);
+            MoveChestImpl(chest, tile, inventory, location, active, obj, originalHeldItem);
         }
 
         input.Suppress(e.Button);
         return true;
     }
 
-    private static void MoveChestImpl(Chest chest, Vector2 tile, IInventory inventory, GameLocation location, SObject active, SObject original)
+    private static void MoveChestImpl(Chest chest, Vector2 tile, IInventory inventory, GameLocation location, SObject active, SObject original, SObject? originalHeldItem = null)
     {
         try
         {
@@ -107,6 +119,18 @@ internal static class ChestSwitcher
 
                 chest.GetItemsForPlayer().Clear();
                 chest.clearNulls();
+
+                if (originalHeldItem is not null)
+                {
+                    if (newChest.heldObject.Value is not null)
+                    {
+                        newChest.addItem(originalHeldItem);
+                    }
+                    else
+                    {
+                        newChest.heldObject.Value = originalHeldItem;
+                    }
+                }
 
                 // decrease active object.
                 chest.performRemoveAction();

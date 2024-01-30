@@ -8,6 +8,8 @@ using AtraShared.Wrappers;
 
 using ExperimentalLagReduction.HarmonyPatches;
 
+using NetEscapades.EnumGenerators;
+
 namespace ExperimentalLagReduction.Framework;
 
 /// <summary>
@@ -30,7 +32,7 @@ internal static class ConsoleCommandManager
 
         commandHelper.Add(
             name: $"{Prefix}get_path_from",
-            documentation: "Gets the path between two locations, using the following gender constraints.",
+            documentation: "Gets the path between two locations, using the following PathfindingGender constraints.",
             callback: GetPath);
 
         commandHelper.Add(
@@ -62,17 +64,17 @@ internal static class ConsoleCommandManager
             }
         }
 
-        Gender gender = Gender.Undefined;
+        PathfindingGender gender = PathfindingGender.Undefined;
         if (args.Length > 2)
         {
-            if (!GenderExtensions.TryParse(args[2], out gender, ignoreCase: true) || !GenderExtensions.IsDefined(gender) || gender == Gender.Invalid)
+            if (!PathfindingGenderExtensions.TryParse(args[2], out gender, ignoreCase: true) || !PathfindingGenderExtensions.IsDefined(gender) || gender == PathfindingGender.Invalid)
             {
-                ModEntry.ModMonitor.Log($"Could not parse {args[2]} as a valid gender.", LogLevel.Error);
-                gender = Gender.Undefined;
+                ModEntry.ModMonitor.Log($"Could not parse {args[2]} as a valid PathfindingGender.", LogLevel.Error);
+                gender = PathfindingGender.Undefined;
             }
         }
 
-        if (Rescheduler.TryGetPathFromCache(args[0], args[1], (int)gender, out string[]? path))
+        if (Rescheduler.TryGetPathFromCache(args[0], args[1], (Gender)gender, out string[]? path))
         {
             if (path is not null)
             {

@@ -4,6 +4,7 @@
 ### Version 0.1.5
 * GSQ checker now allows checking a single asset
 * Event keys ending in a slash are now properly treated as correct.
+* Fix issues clicking on dialogue boxes.
 
 ### Version 0.1.4
 * Now also checks item queries (first pass, may miss some tokenization, let me know!)

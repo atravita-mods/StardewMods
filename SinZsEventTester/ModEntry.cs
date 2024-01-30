@@ -335,7 +335,11 @@ Outer: ;
 
             if (Game1.activeClickableMenu is DialogueBox db)
             {
-                db.SpeedUp();
+                if (db.safetyTimer > 10)
+                {
+                    db.SpeedUp();
+                    return;
+                }
 
                 if (db.isQuestion && db.selectedResponse == -1 && !this._seen.TryGetValue(db, out _))
                 {

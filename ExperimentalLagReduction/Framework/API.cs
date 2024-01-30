@@ -15,7 +15,7 @@ public sealed class API : IExperimentalLagReductionAPI
     public bool ClearPathNulls() => Rescheduler.ClearNulls();
 
     /// <inheritdoc />
-    public string[]? GetPathFor(GameLocation start, GameLocation end, int gender, bool allowPartialPaths)
+    public string[]? GetPathFor(GameLocation start, GameLocation end, Gender gender, bool allowPartialPaths)
     {
         Guard.IsNotNull(start);
         Guard.IsNotNull(end);
@@ -24,7 +24,7 @@ public sealed class API : IExperimentalLagReductionAPI
         {
             return path;
         }
-        return Rescheduler.GetPathFor(start, end, (Gender)gender, allowPartialPaths);
+        return Rescheduler.GetPathFor(start, end, (PathfindingGender)gender, allowPartialPaths);
     }
 
     /// <inheritdoc />

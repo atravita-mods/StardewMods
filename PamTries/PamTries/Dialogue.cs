@@ -54,8 +54,10 @@ internal static class DialogueManager
         {
             List<string> kidnames = children.Select((Child child) => child.displayName).ToList();
             return $"{string.Join(", ", kidnames, 0, kidnames.Count - 1)}, {and} {kidnames[kidnames.Count]}";
-        }// deal with the possibility other countries have different grammer later.
+        }// deal with the possibility other countries have different grammar later.
     }
+
+    // TODO: make this case insensitive.
 
     internal static NPC? GetChildbyGender(string gender)
     {
@@ -63,18 +65,13 @@ internal static class DialogueManager
         {
             return null;
         }
-        int gender_int;
-        switch (gender)
+
+        Gender gender_int = gender switch
         {
-            case "girl":
-                gender_int = 1;
-                break;
-            case "boy":
-                gender_int = 0;
-                break;
-            default:
-                return null;
-        }
+            "girl" => Gender.Female,
+            "boy" => Gender.Male,
+            _ => Gender.Undefined,
+        };
         foreach (NPC child in Game1.player.getChildren())
         {
             if (child.Gender == gender_int)

@@ -48,8 +48,13 @@ internal static class Extensions
     /// <param name="db">the dialogue box to speed up.</param>
     public static void SpeedUp(this DialogueBox db)
     {
+        if (db.safetyTimer < 12)
+        {
+            return;
+        }
+
         db.finishTyping();
-        db.safetyTimer = 0;
+        db.safetyTimer = 10;
 
         if (db.transitioningBigger)
         {

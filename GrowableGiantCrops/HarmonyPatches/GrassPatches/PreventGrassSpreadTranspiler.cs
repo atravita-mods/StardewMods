@@ -31,8 +31,8 @@ internal static class PreventGrassSpreadTranspiler
         try
         {
             ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);
-            helper.FindNext(new CodeInstructionWrapper[]
-            { // find if ((int)((Grass)kvp.Value).numberOfWeeds >= 4
+            helper.FindNext(
+            [ // find if ((int)((Grass)kvp.Value).numberOfWeeds >= 4
                 OpCodes.Ldloca_S,
                 (OpCodes.Call, typeof(KeyValuePair<Vector2, TerrainFeature>).GetCachedProperty("Value", ReflectionCache.FlagTypes.InstanceFlags).GetGetMethod()),
                 (OpCodes.Castclass, typeof(Grass)),
@@ -40,7 +40,7 @@ internal static class PreventGrassSpreadTranspiler
                 OpCodes.Call, // op_implicit
                 OpCodes.Ldc_I4_4,
                 OpCodes.Blt,
-            })
+            ])
             .Advance(3)
             .Push()
             .Advance(3);
@@ -49,11 +49,11 @@ internal static class PreventGrassSpreadTranspiler
             Label jumpPoint = (Label)helper.CurrentInstruction.operand;
             helper.Pop()
             .Remove(4)
-            .Insert(new CodeInstruction[]
-            {
+            .Insert(
+            [
                 new (OpCodes.Call, typeof(PreventGrassSpreadTranspiler).GetCachedMethod(nameof(ShouldSkipThisGrass), ReflectionCache.FlagTypes.StaticFlags)),
                 new(OpCodes.Brtrue, jumpPoint),
-            });
+            ]);
 
             // helper.Print();
             return helper.Render();

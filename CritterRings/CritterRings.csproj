@@ -34,6 +34,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="BUTR.Harmony.Analyzer" Version="1.0.1.50">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Update="JetBrains.Annotations" Version="2023.3.0" />
   </ItemGroup>
 

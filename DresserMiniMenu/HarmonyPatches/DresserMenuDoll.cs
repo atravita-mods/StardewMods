@@ -22,6 +22,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using StardewModdingAPI.Utilities;
 
+using StardewValley;
 using StardewValley.Menus;
 using StardewValley.Objects;
 
@@ -34,13 +35,6 @@ internal static class DresserMenuDoll
 {
     private static readonly PerScreen<MiniFarmerMenu?> MiniMenu = new();
     private static readonly PerScreen<int> LastKeyboardTick = new(static () => 0);
-
-    #region delegates
-    private static readonly Lazy<Func<ShopMenu, int>> CurrentTabGetter = new(() =>
-        typeof(ShopMenu).GetCachedField("currentTab", ReflectionCache.FlagTypes.InstanceFlags)
-        .GetInstanceFieldGetter<ShopMenu, int>()
-    );
-    #endregion
 
     /// <summary>
     /// Checks to see whether or not this instance of a ShopMenu has an active MiniFarmerMenu associated with it.
@@ -82,16 +76,17 @@ internal static class DresserMenuDoll
             else if (__instance.ShopId == ShopMenuPatcher.DRESSER)
             {
                 MiniMenu.Value = new(__instance, Game1.player);
-                __instance.tabButtons.Add(new ClickableTextureComponent(
+                __instance.tabButtons.Add(new ShopMenu.ShopTabClickableTextureComponent(
                     new Rectangle(0, 0, 64, 64),
                     AssetManager.Icons,
                     new Rectangle(53, 96, 16, 16),
                     4f)
                 {
-                    myID = 99999 + __instance.tabButtons.Count,
-                    upNeighborID = -99998,
-                    downNeighborID = -99998,
-                    rightNeighborID = 3546,
+                    myID = ShopMenu.region_tabStartIndex + __instance.tabButtons.Count,
+                    upNeighborID = ClickableComponent.SNAP_AUTOMATIC,
+                    downNeighborID = ClickableComponent.SNAP_AUTOMATIC,
+                    rightNeighborID = ShopMenu.region_shopButtonModifier,
+                    Filter = ApplyFilter,
                 });
                 __instance.repositionTabs();
             }
@@ -102,44 +97,23 @@ internal static class DresserMenuDoll
         }
     }
 
-    [HarmonyPostfix]
-    [HarmonyPatch(nameof(ShopMenu.applyTab))]
-    private static void Postfix(ShopMenu __instance)
+    private static bool ApplyFilter(ISalable salable)
     {
-        try
+        if (salable is not Item actual)
         {
-            if (__instance.ShopId == ShopMenuPatcher.DRESSER && CurrentTabGetter.Value(__instance) == 6)
-            {
-                __instance.forSale.Clear();
-                foreach (ISalable? item in __instance.itemPriceAndStock.Keys)
-                {
-                    if (item is not Item actual)
-                    {
-                        __instance.forSale.Add(item);
-                        continue;
-                    }
-                    if (actual is Clothing)
-                    {
-                        // tabs 2 and 3
-                        continue;
-                    }
-                    switch (actual.Category)
-                    {
-                        case SObject.hatCategory: // tab 1
-                        case SObject.bootsCategory: // tab 4
-                        case SObject.ringCategory: // tab 5
-                            continue;
-                        default:
-                            __instance.forSale.Add(item);
-                            break;
-                    }
-                }
-            }
+            return true;
         }
-        catch (Exception ex)
+        if (actual is Clothing)
         {
-            ModEntry.ModMonitor.LogError("Adjusting for misc tab", ex);
+            // tabs 2 and 3
+            return false;
         }
+        return actual.Category switch
+        {
+            // tab 1, tab 4, and tab 5
+            SObject.hatCategory or SObject.bootsCategory or SObject.ringCategory => false,
+            _ => true,
+        };
     }
 
     [HarmonyPostfix]

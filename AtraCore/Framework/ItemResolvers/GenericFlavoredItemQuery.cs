@@ -115,7 +115,8 @@ internal static class GenericFlavoredItemQuery
                         }
                         if (double.TryParse(splits.Current.Word, out double segment))
                         {
-                            price *= original_price + segment;
+                            price *= original_price;
+                            price += segment;
                         }
                     }
                     while (remainder.Length > 0 && remainder[0] != '@');

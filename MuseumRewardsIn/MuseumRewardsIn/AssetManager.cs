@@ -162,7 +162,6 @@ internal static class AssetManager
         });
     }
 
-
     private static HashSet<string> GetMailFlagsForStore()
         => Game1.temporaryContent.Load<Dictionary<string, string>>(letters.BaseName).Keys.ToHashSet(StringComparer.OrdinalIgnoreCase);
 }

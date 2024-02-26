@@ -117,7 +117,7 @@ internal static class FixSecretNotes
         }
 
         // find a note that the farmer has not seen.
-        Unseen.Value ??= new();
+        Unseen.Value ??= [];
         Unseen.Value.Clear();
         foreach (int id in secretNoteData.Keys)
         {
@@ -165,7 +165,7 @@ internal static class FixSecretNotes
         Dictionary<int, string> secretNoteData = DataLoader.SecretNotes(Game1.content);
 
         // get seen notes and add any note the farmer has in their inventory.
-        Seen.Value ??= new();
+        Seen.Value ??= [];
         Seen.Value.Clear();
 
         foreach (int id in who.secretNotesSeen)
@@ -185,7 +185,7 @@ internal static class FixSecretNotes
         }
 
         // find a scrap that the farmer has not seen.
-        Unseen.Value ??= new();
+        Unseen.Value ??= [];
         Unseen.Value.Clear();
         foreach (int id in secretNoteData.Keys)
         {

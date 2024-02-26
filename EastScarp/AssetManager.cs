@@ -69,6 +69,7 @@ internal static class AssetManager
                     return;
                 }
 
+                data.CustomFields ??= new();
                 data.CustomFields["EastScarpe.NPCScale"] = "0.75";
             });
         }

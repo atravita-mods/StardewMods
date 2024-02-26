@@ -20,7 +20,7 @@ internal sealed class GSQTester(IMonitor monitor, IReflectionHelper reflector)
     private static readonly Dictionary<string, Func<string, bool>> _additionalAssets = new(StringComparer.OrdinalIgnoreCase)
     {
         ["Data/MineCarts"] = static name => Extensions.IsPossibleGSQString(name) || name is "MinecartsUnlocked",
-        ["Data/Characters"] = static name => Extensions.IsPossibleGSQString(name) || name is "CanSocialize" or "CanVisitIsland" or "ItemDeliveryQuest" or "WinterStarParticipant" or "MinecartsUnlocked",
+        ["Data/Characters"] = static name => Extensions.IsPossibleGSQString(name) || name is "CanSocialize" or "CanVisitIsland" or "ItemDeliveryQuest" or "WinterStarParticipant" or "MinecartsUnlocked" || name.StartsWith("Spouse"),
     };
 
     private readonly SObject puffer = new("128", 1);
@@ -359,6 +359,7 @@ internal sealed class GSQTester(IMonitor monitor, IReflectionHelper reflector)
 /// <summary>
 /// The extension methods for this class.
 /// </summary>
+[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1400:Access modifier should be declared", Justification = "file is a valid access modifier.")]
 file static class Extensions
 {
     internal static string Render(this string[] breadcrumbs) => string.Join("->", breadcrumbs);

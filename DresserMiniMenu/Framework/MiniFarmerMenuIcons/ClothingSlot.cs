@@ -47,7 +47,5 @@ internal sealed class ClothingSlot : InventorySlot<Clothing>
             Clothing.ClothesType.SHIRT => this.Type == InventorySlotType.Shirt,
             _ => false,
         };
-
-#warning - check if clothing needs to do the onequip/ondequip thing.
     }
 }

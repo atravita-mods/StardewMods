@@ -28,12 +28,12 @@ internal static class ShouldDamageMonsterTranspiler
         try
         {
             ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);
-            helper.FindNext(new CodeInstructionWrapper[]
-            {
+            helper.FindNext(
+            [
                 OpCodes.Ldarg_0,
                 (OpCodes.Call, typeof(Tool).GetCachedMethod(nameof(Tool.isHeavyHitter), ReflectionCache.FlagTypes.InstanceFlags)),
                 OpCodes.Brfalse_S,
-            })
+            ])
             .Push()
             .Advance(2)
             .StoreBranchDest()
@@ -41,12 +41,12 @@ internal static class ShouldDamageMonsterTranspiler
             .DefineAndAttachLabel(out Label jumpPoint)
             .Pop()
             .GetLabels(out IList<Label>? labelsToMove)
-            .Insert(new CodeInstruction[]
-            {
+            .Insert(
+            [
                 new(OpCodes.Ldarg_0),
                 new(OpCodes.Call, typeof(ShouldDamageMonsterTranspiler).GetCachedMethod(nameof(ShouldSkipDamagingMonster), ReflectionCache.FlagTypes.StaticFlags)),
                 new(OpCodes.Brtrue, jumpPoint),
-            }, withLabels: labelsToMove);
+            ], withLabels: labelsToMove);
 
             // helper.Print();
             return helper.Render();

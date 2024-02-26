@@ -20,6 +20,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Netcode;
 
 using StardewValley.Buffs;
+using StardewValley.GameData.Buffs;
 using StardewValley.GameData.Objects;
 using StardewValley.TokenizableStrings;
 
@@ -237,7 +238,7 @@ public sealed class EquipEffects
 /// A model that represents possible buffs to the player.
 /// </summary>
 [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "Preference")]
-public sealed class BuffModel : ObjectBuffAttributesData
+public sealed class BuffModel : BuffAttributesData
 {
     #region delegates
 

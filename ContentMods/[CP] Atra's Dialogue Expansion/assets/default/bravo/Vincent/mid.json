@@ -30,7 +30,8 @@
                 "18{{YearRemainder}}": "Mom let us have pizza yesterday!$h",
                 "19{{YearRemainder}}": "Mom bought us some grapes! Here, have one![398]$h#$b#Grapes are my favorite!",
                 "20{{YearRemainder}}": "Miss Penny was teaching me my times tables!#$b#She says adults use these all the time. {{Title}} @, do you use times tables?",
-                "22{{YearRemainder}}": "Mom and Dad dragged us out to the city yesterday.#$b#Only good thing was that I got to have {{i18n: dishes.dessert.{{Random:01,02,03,04,05,06,07,08,09}} }}."
+                "22{{YearRemainder}}": "Mom and Dad dragged us out to the city yesterday.#$b#Only good thing was that I got to have {{i18n: dishes.dessert.{{Random:01,02,03,04,05,06,07,08,09}} }}.",
+                "23{{YearRemainder}}": "@, look what I found![770]$h", // mixed seeds
             }
         },
         {

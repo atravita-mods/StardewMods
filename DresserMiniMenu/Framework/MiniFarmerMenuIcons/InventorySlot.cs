@@ -65,7 +65,7 @@ internal class InventorySlot<TObject> : IInventorySlot<TObject>
     protected Action<TObject?> SetItem { get; init; }
 
     /// <summary>
-    /// Gets a value indicating whether this inventory slot should be interactable.
+    /// Gets a value indicating whether this inventory slot should be interact-able.
     /// </summary>
     protected bool IsActive { get; init; }
 
@@ -142,6 +142,8 @@ internal class InventorySlot<TObject> : IInventorySlot<TObject>
         if (this.IsActive && this.CanAcceptItem(item))
         {
             prev = this.GetItem();
+            prev?.onDetachedFromParent();
+            item?.onDetachedFromParent();
             Game1.player.Equip(prev as TObject, item as TObject, this.SetItem);
 
             if (playSound)

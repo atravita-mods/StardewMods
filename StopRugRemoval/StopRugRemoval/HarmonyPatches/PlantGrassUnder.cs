@@ -37,7 +37,7 @@ internal static class PlantGrassUnder
         foreach (Type t in typeof(SObject).GetAssignableTypes(publiconly: true, includeAbstract: false))
         {
             if (t != typeof(CrabPot) // does not make sense to place under crab pots.
-                && t.DeclaredInstanceMethodNamedOrNull(nameof(SObject.performObjectDropInAction), new Type[] { typeof(Item), typeof(bool), typeof(Farmer) }) is MethodBase method
+                && t.DeclaredInstanceMethodNamedOrNull(nameof(SObject.performObjectDropInAction), [typeof(Item), typeof(bool), typeof(Farmer), typeof(bool)]) is MethodBase method
                 && method.DeclaringType == t)
             {
                 yield return method;

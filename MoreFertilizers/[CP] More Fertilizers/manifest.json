@@ -1,0 +1,22 @@
+{
+  "$schema": "https://smapi.io/schemas/manifest.json",
+  "UniqueID": "atravita.CP.MoreFertilizers",
+  "Name": "[CP] More Fertilizers",
+  "Author": "atravita",
+  "Version": "0.4.0",
+  "Description": "Adds more fertilizers to the game.",
+  "MinimumApiVersion": "3.18",
+  "ContentPackFor": {
+    "UniqueID": "Pathoschild.ContentPatcher"
+  },
+//  "Dependencies": [
+//    {
+//      "UniqueID": "atravita.MoreFertilizers",
+//      "MinimumVersion": "0.3.9",
+//      "IsRequired": true
+//    }
+//  ],
+  "UpdateKeys": [
+    "Nexus:11837"
+  ]
+}

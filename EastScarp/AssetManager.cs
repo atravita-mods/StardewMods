@@ -57,23 +57,6 @@ internal static class AssetManager
         {
             e.LoadFromModFile<Dictionary<string, string>>("assets/duration_override.json", AssetLoadPriority.Exclusive);
         }
-#if DEBUG
-        else if (e.NameWithoutLocale.IsEquivalentTo("Data/Characters"))
-        {
-            e.Edit(static asset =>
-            {
-                var editor = asset.AsDictionary<string, CharacterData>().Data;
-                if (!editor.TryGetValue("Lewis", out var data))
-                {
-                    ModEntry.ModMonitor.Log($"Huh, where's Lewis");
-                    return;
-                }
-
-                data.CustomFields ??= new();
-                data.CustomFields["EastScarpe.NPCScale"] = "0.75";
-            });
-        }
-#endif
     }
 
     /// <inheritdoc cref="IContentEvents.AssetsInvalidated"/>

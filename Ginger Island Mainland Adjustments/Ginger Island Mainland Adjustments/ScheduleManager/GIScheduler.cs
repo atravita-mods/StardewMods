@@ -31,7 +31,7 @@ namespace GingerIslandMainlandAdjustments.ScheduleManager;
 /// </summary>
 internal static class GIScheduler
 {
-    private static readonly int[] TIMESLOTS = new int[] { 1200, 1400, 1600 };
+    private static readonly int[] TIMESLOTS = [1200, 1400, 1600];
 
     /// <summary>
     /// The starting point where NPCs staged at the saloon start.
@@ -144,8 +144,10 @@ internal static class GIScheduler
 #endif
         Random random = RandomUtils.GetSeededRandom(3, "atravita.GingerIslandMainlandAdjustments");
 
-        (HashSet<NPC> explorers, string explorerGroupName) = GenerateExplorerGroup(random);
-        if (explorers.Count > 0)
+        (HashSet<NPC> group, string groupname)? tup = GenerateExplorerGroup(random);
+        HashSet<NPC>? explorers = tup?.group;
+        string? explorerGroupName = tup?.groupname;
+        if (explorers?.Count > 0 && explorerGroupName is not null)
         {
             Globals.ModMonitor.DebugOnlyLog($"Found explorer group: {string.Join(", ", explorers.Select((NPC npc) => npc.Name))}.");
             IslandNorthScheduler.Schedule(random, explorers, explorerGroupName);
@@ -211,10 +213,17 @@ internal static class GIScheduler
     /// </summary>
     /// <param name="random">Seeded random.</param>
     /// <returns>An explorer group (of up to three explorers), or an empty hashset if there's no group today.</returns>
-    private static (HashSet<NPC> group, string groupname) GenerateExplorerGroup(Random random)
+    private static (HashSet<NPC> group, string groupname)? GenerateExplorerGroup(Random random)
     {
-        if (random.OfChance(Globals.Config.ExplorerChance))
+        if (random.OfChance(Globals.Config.ExplorerChance) && ExplorerGroups.Count > 0)
         {
+            var kvp = ExplorerGroups.ElementAtOrDefault(random.Next(ExplorerGroups.Count));
+            if (kvp.Key is null)
+            {
+                return null;
+            }
+            CurrentAdventureGroup = kvp.Key;
+
             List<string> explorerGroups = ExplorerGroups.Keys.ToList();
             if (explorerGroups.Count > 0)
             {
@@ -223,7 +232,7 @@ internal static class GIScheduler
                 return (CurrentAdventurers, CurrentAdventureGroup);
             }
         }
-        return (new HashSet<NPC>(), string.Empty); // just return an empty hashset.
+        return null; 
     }
 
     /// <summary>
@@ -234,7 +243,7 @@ internal static class GIScheduler
     /// <param name="explorers">Hashset of explorers.</param>
     /// <returns>Visitor List.</returns>
     /// <remarks>For a deterministic island list, use a Random seeded with the uniqueID + number of days played.</remarks>
-    private static List<NPC> GenerateVisitorList(Random random, int capacity, HashSet<NPC> explorers)
+    private static List<NPC> GenerateVisitorList(Random random, int capacity, HashSet<NPC>? explorers)
     {
         CurrentGroup = null;
         CurrentVisitingGroup = null;
@@ -247,7 +256,7 @@ internal static class GIScheduler
         // For some reason, Utility.GetAllCharacters searches the farm too.
         foreach (NPC npc in NPCHelpers.GetNPCs())
         {
-            if (npc is not null && IslandSouth.CanVisitIslandToday(npc) && !explorers.Contains(npc))
+            if (npc is not null && IslandSouth.CanVisitIslandToday(npc) && explorers?.Contains(npc) != true)
             {
                 valid_visitors.Add(npc);
             }

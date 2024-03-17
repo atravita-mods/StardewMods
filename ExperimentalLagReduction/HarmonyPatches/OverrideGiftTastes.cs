@@ -302,9 +302,8 @@ universal:
     [HarmonyPrefix]
     [HarmonyPriority(Priority.Last)]
     [HarmonyPatch(nameof(NPC.getGiftTasteForThisItem))]
-    private static bool GetGiftTastePrefix(NPC __instance, Item item, ref int __result, out bool __state)
+    private static bool GetGiftTastePrefix(NPC __instance, Item item, ref int __result)
     {
-        __state = false;
         if (!ModEntry.Config.OverrideGiftTastes)
         {
             return true;
@@ -318,8 +317,7 @@ universal:
 
         if (ModEntry.Config.UseGiftTastesCache && Cache.TryGetValue((__instance.Name, obj.QualifiedItemId), out int cacheTaste))
         {
-            ModEntry.ModMonitor.TraceOnlyLog($"Got gift taste for {obj.Name} for {__instance.Name} from cache.");
-            __state = true;
+            ModEntry.ModMonitor.TraceOnlyLog($"Got gift taste for {obj.Name} ({obj.QualifiedItemId}) for {__instance.Name} from cache.");
             __result = cacheTaste;
             return false;
         }
@@ -327,6 +325,10 @@ universal:
         try
         {
             __result = GetGiftTaste(__instance, obj);
+            if (ModEntry.Config.UseGiftTastesCache)
+            {
+                Cache[(__instance.Name, item.QualifiedItemId)] = __result;
+            }
             return false;
         }
         catch (Exception ex)
@@ -334,17 +336,6 @@ universal:
             ModEntry.ModMonitor.LogError($"overriding gift tastes for {item.QualifiedItemId}", ex);
         }
         return true;
-    }
-
-    // use a postfix to cache so other mods can also harmony patch this.
-    [HarmonyPriority(Priority.Last)]
-    [HarmonyPatch(nameof(NPC.getGiftTasteForThisItem))]
-    private static void Postfix(NPC __instance, Item item, ref int __result, bool __state)
-    {
-        if (ModEntry.Config.UseGiftTastesCache && !__state)
-        {
-            Cache[(__instance.Name, item.QualifiedItemId)] = __result;
-        }
     }
 
     /// <summary>

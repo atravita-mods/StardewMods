@@ -94,7 +94,7 @@ internal static class AssetManager
     private static void AddRings(IAssetData asset)
     {
         const string RING = "Ring";
-        const int RING_ID = -96;
+        const int RING_ID = SObject.ringCategory;
         const int PRICE = 1000;
         IDictionary<string, ObjectData> editor = asset.AsDictionary<string, ObjectData>().Data;
         editor[ModEntry.BunnyRing] = new()

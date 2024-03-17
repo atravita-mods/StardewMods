@@ -28,8 +28,8 @@ internal static class SayHiToPatch
     [HarmonyPrefix]
     [HarmonyPriority(Priority.Last)] // run after every other prefix.
     [HarmonyPatch(nameof(NPC.performTenMinuteUpdate))]
-    private static bool PrefixTenMinuteUpdate(GameLocation l)
-        => l == Game1.player.currentLocation;
+    private static bool PrefixTenMinuteUpdate(GameLocation location)
+        => location == Game1.player.currentLocation;
 
     // Get the NPCs to pretty frequently greet each other in the saloon?
     [HarmonyPostfix]

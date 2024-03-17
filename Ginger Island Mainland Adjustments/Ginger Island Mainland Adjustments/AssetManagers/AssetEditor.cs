@@ -122,10 +122,6 @@ internal static class AssetEditor
         {
             e.Edit(EditTrailerBig, AssetEditPriority.Late);
         }
-        else if (e.NameWithoutLocale.IsEquivalentTo(chairTiles))
-        {
-            e.Edit(EditChairTiles, AssetEditPriority.Late);
-        }
         else if (e.NameWithoutLocale.StartsWith("Characters/schedules/", false, false))
         {
             e.Edit(CheckSpringSchedule, AssetEditPriority.Late + 100);
@@ -223,16 +219,6 @@ internal static class AssetEditor
     {
         IAssetDataForDictionary<string, string>? editor = e.AsDictionary<string, string>();
         editor.Data["Resort"] = I18n.WizardResort();
-    }
-
-    /// <summary>
-    /// Makes that one chair in IslandWest sit-able.
-    /// </summary>
-    /// <param name="e">Chair asset.</param>
-    private static void EditChairTiles(IAssetData e)
-    {
-        IAssetDataForDictionary<string, string>? editor = e.AsDictionary<string, string>();
-        editor.Data.TryAdd("island_tilesheet_1/6/41", "1/1/down/default/-1/-1/false");
     }
 
     private static void EditPhone(IAssetData e)

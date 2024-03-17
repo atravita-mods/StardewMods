@@ -57,7 +57,7 @@ internal static class IslandNorthScheduler
             Point[] farPoints = whichFarpoint ? TentAdventurousPoint : VolcanoAdventurousPoint;
             string whichDialogue = whichFarpoint ? "Tent" : "Volcano";
             NPC[] explorerList = explorers.ToArray();
-            Dictionary<NPC, StringBuilder> schedules = new();
+            Dictionary<NPC, StringBuilder> schedules = [];
             int explorerIndex = 0;
 
             foreach (NPC explorer in explorers)

@@ -39,7 +39,7 @@ internal sealed class ModEntry : Mod
         try
         {
             harmony.Patch(
-                original: typeof(FarmAnimal).GetCachedMethod("findTruffle", ReflectionCache.FlagTypes.InstanceFlags),
+                original: typeof(FarmAnimal).GetCachedMethod(nameof(FarmAnimal.DigUpProduce), ReflectionCache.FlagTypes.InstanceFlags),
                 transpiler: new(typeof(ModEntry).GetCachedMethod(nameof(Transpiler), ReflectionCache.FlagTypes.StaticFlags)));
         }
         catch (Exception ex)

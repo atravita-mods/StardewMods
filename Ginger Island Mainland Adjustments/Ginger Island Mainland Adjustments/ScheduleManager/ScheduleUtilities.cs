@@ -198,7 +198,7 @@ internal static class ScheduleUtilities
             // For a Child2NPC, we must handle their scheduling ourselves.
             if (Globals.UtilitySchedulingFunctions.TryFindGOTOschedule(npc, SDate.Now(), rawData, out string scheduleString))
             {
-                Dictionary<int, SchedulePathDescription>? schedule = Globals.UtilitySchedulingFunctions.ParseSchedule(key, scheduleString, npc, "BusStop", new Point(0, 23), 610, Globals.Config.EnforceGITiming);
+                Dictionary<int, SchedulePathDescription>? schedule = Globals.UtilitySchedulingFunctions.ParseSchedule(key, scheduleString, npc, "BusStop", new Point(-1, 23), 610, Globals.Config.EnforceGITiming);
                 if (schedule is not null)
                 {
                     npc.TryLoadSchedule(key, schedule);
@@ -257,7 +257,7 @@ internal static class ScheduleUtilities
         {
             Dictionary<int, SchedulePathDescription>? schedule = null;
 
-            if (!rawData.StartsWith("0 ") && npc.currentLocation.Name != npc.DefaultMap && npc.DefaultPosition != Vector2.Zero)
+            if (!rawData.StartsWith("0 ") && npc.DefaultPosition != Vector2.Zero && (npc.currentLocation.Name != npc.DefaultMap || npc.DefaultPosition != npc.Position))
             {
                 Globals.ModMonitor.Log($"Warping {npc.Name} back to their default location....");
                 GameLocation? location = Game1.getLocationFromName(npc.DefaultMap);

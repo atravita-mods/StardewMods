@@ -5,6 +5,9 @@
 
 using System.Collections.Concurrent;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
+
+using AtraBase.Toolkit.StringHandler;
 
 using AtraShared.Utils.Extensions;
 
@@ -531,16 +534,23 @@ internal sealed class CompleteScreenshotter : AbstractScreenshotter
         this.writeFileTask = new(() =>
         {
             ModEntry.ModMonitor.TraceOnlyLog($"Start write to disk for {this.Name}.", LogLevel.Debug);
-
-            // ensure the directory is made.
-            string? directory = Path.GetDirectoryName(this.Filename);
-            if (!string.IsNullOrEmpty(directory))
+            try
             {
-                Directory.CreateDirectory(directory);
-            }
 
-            using FileStream fs = new(this.Filename, FileMode.OpenOrCreate);
-            this.surface.Snapshot().Encode().SaveTo(fs);
+                // ensure the directory is made.
+                string? directory = Path.GetDirectoryName(this.Filename);
+                if (!string.IsNullOrEmpty(directory))
+                {
+                    Directory.CreateDirectory(directory);
+                }
+
+                using FileStream fs = new(this.Filename, FileMode.OpenOrCreate);
+                this.surface.Snapshot().Encode().SaveTo(fs);
+            }
+            catch (IOException ex)
+            {
+                string filename = SanitizeFilename(this.Filename);
+            }
         });
         this.writeFileTask.Start();
     }
@@ -570,5 +580,33 @@ internal sealed class CompleteScreenshotter : AbstractScreenshotter
         GL.PixelStore(PixelStoreParameter.PackAlignment, colorSize);
 
         GL.GetTexImageInternal(TextureTarget.Texture2D, 0, texture.glFormat, texture.glType, bitmap.GetPixels());
+    }
+
+    private static string SanitizeFilename(string originalFilename)
+    {
+        // sanitize output, hopefully
+        Span<char> buffer = stackalloc char[Math.Min(256, originalFilename.Length)];
+        ValueStringBuilder builder = new(buffer);
+
+        Regex regex = new(@"^[A - Z]:|^\\\\[.?]\\");
+
+        if (regex.Match(originalFilename) is Match match)
+        {
+            originalFilename = match.Value;
+        }
+
+        // TODO: handle the start of paths correctly
+        foreach (SpanSplitEntry item in originalFilename.StreamSplit(Path.GetInvalidFileNameChars()))
+        {
+            builder.Append(item.Word);
+            builder.Append(item.Separator switch
+            {
+                "" => string.Empty,
+                ":" or "/" or "\\" => item.Separator,
+                _ => "_"
+            });
+        }
+
+        return builder.ToString();
     }
 }

@@ -3,6 +3,9 @@
 using System.IO;
 using System.Text.RegularExpressions;
 
+using AtraBase.Toolkit;
+using AtraBase.Toolkit.StringHandler;
+
 using StardewModdingAPI.Utilities;
 
 using StardewValley;
@@ -47,9 +50,7 @@ internal static class FileNameParser
     internal static string GetFilename(string tokenized, GameLocation currentLocation, string ruleName)
     {
         // we must pass in the currentLocation because occasionally Game1.currentLocation is null in multiplayer when farmhands warp.
-        string ret = string.Join(
-                '_',
-                _parser.Replace(tokenized, MatchEvaluator).Split(Path.GetInvalidPathChars()));
+        string ret = _parser.Replace(tokenized, MatchEvaluator);
 
         if (Constants.TargetPlatform != GamePlatform.Windows)
         {
@@ -70,7 +71,6 @@ internal static class FileNameParser
 
         string MatchEvaluator(Match match)
         {
-
             if (match.Value.StartsWith("{{"))
             {
                 ReadOnlySpan<char> token = match.Groups[1].ValueSpan.Trim();
@@ -97,14 +97,14 @@ internal static class FileNameParser
                     "context" => currentLocation.GetLocationContextId(),
                     "date" => $"{Game1.year:D2}_{Game1.seasonIndex + 1:D2}_{Game1.dayOfMonth:D2}", // year_month_day for sorting
                     "default" => Game1.game1.GetScreenshotFolder(false),
-                    "farm" => Game1.player.farmName.Value,
-                    "location" => currentLocation.NameOrUniqueName,
-                    "name" => Game1.player.Name,
-                    "rule" => ruleName,
-                    "save" => $"{Game1.player.farmName.Value}_{Game1.uniqueIDForThisGame}",
+                    "farm" => Game1.player.farmName.Value.SanitizeFilePart(),
+                    "location" => currentLocation.NameOrUniqueName.SanitizeFilePart(),
+                    "name" => Game1.player.Name.SanitizeFilePart(),
+                    "rule" => ruleName.SanitizeFilePart(),
+                    "save" => $"{Game1.player.farmName.Value.SanitizeFilePart()}_{Game1.uniqueIDForThisGame}",
                     "time" => $"{Game1.timeOfDay:D4}",
                     "timestamp" => $"{DateTime.Now:yyyy.MM.dd HH-mm-ss}",
-                    "weather" => currentLocation.GetWeather().Weather,
+                    "weather" => currentLocation.GetWeather().Weather.SanitizeFilePart(),
                     _ => GetSpecialWindowsFolder(token) ?? match.Value,
                 };
             }
@@ -129,7 +129,7 @@ internal static class FileNameParser
 
     private static string? GetSpecialWindowsFolder(ReadOnlySpan<char> token)
     {
-        if (token.StartsWith("my") && Enum.TryParse<Environment.SpecialFolder>(token, true, out Environment.SpecialFolder folder))
+        if (token.StartsWith("my") && Enum.TryParse(token, true, out Environment.SpecialFolder folder))
         {
             string proposed = Environment.GetFolderPath(folder);
             if (!string.IsNullOrEmpty(proposed))
@@ -140,4 +140,6 @@ internal static class FileNameParser
 
         return null;
     }
+
+    private static string SanitizeFilePart(this string filePart) => string.Join('_', filePart.Split(Path.GetInvalidFileNameChars()));
 }

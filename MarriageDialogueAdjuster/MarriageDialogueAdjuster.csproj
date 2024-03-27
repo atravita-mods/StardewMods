@@ -7,9 +7,9 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <Name>East Scarp C#</Name>
-    <Description>ES C# component</Description>
-    <Version>0.1.1</Version>
+    <Name>Marriage Dialogue Adjuster</Name>
+    <Description>whatever this is for lyoko</Description>
+    <Version>0.1.0</Version>
     <UpdateKeys>-1</UpdateKeys>
   </PropertyGroup>
 

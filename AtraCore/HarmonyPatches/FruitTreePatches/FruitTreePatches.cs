@@ -1,10 +1,8 @@
 ﻿namespace AtraCore.HarmonyPatches.FruitTreePatches;
 
 using AtraBase.Toolkit.Extensions;
-using AtraBase.Toolkit.Reflection;
 
 using AtraCore.Framework.Caches;
-using AtraCore.Framework.ReflectionManager;
 
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
@@ -26,12 +24,6 @@ using StardewValley.TerrainFeatures;
 [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class FruitTreePatches
 {
-    #region delegates
-    private static readonly Lazy<Action<FruitTree, float>> _maxShake = new(static () =>
-        typeof(FruitTree).GetCachedField("maxShake", ReflectionCache.FlagTypes.InstanceFlags)
-        .GetInstanceFieldSetter<FruitTree, float>());
-    #endregion
-
     private static readonly PerScreen<int> Ticks = new(static () => -1);
     private static readonly PerScreen<int> Attempts = new(static () => 0);
 
@@ -111,11 +103,11 @@ internal static class FruitTreePatches
                     return;
                 }
             }
-            Game1.DrawDialogue(new(npc, null, second.Trim().ToString()));
+            Game1.DrawDialogue(new(npc, null,  second.Trim().ToString().ParseTokens()));
         }
         else
         {
-            Game1.drawObjectDialogue(message.Trim());
+            Game1.drawObjectDialogue(message.Trim().ParseTokens());
         }
     }
 
@@ -124,6 +116,6 @@ internal static class FruitTreePatches
         Farmer player = Game1.player;
 
         tree.shakeLeft.Value = player.StandingPixel.X > (tree.Tile.X + 0.5f) * 64f || (player.Tile.X == tree.Tile.X && Game1.random.NextBool());
-        _maxShake.Value(tree, tree.growthStage.Value >= 4 ? MathF.PI / 128.0f : MathF.PI / 64f);
+        tree.maxShake = tree.growthStage.Value >= 4 ? MathF.PI / 128.0f : MathF.PI / 64f;
     }
 }

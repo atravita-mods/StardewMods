@@ -155,6 +155,11 @@ public static class DataToItemMap
                         }
 
                         string name = data.Name;
+                        if (name is null)
+                        {
+                            ModEntry.ModMonitor.Log($"Huh, object {id} has no name. Skipping", LogLevel.Warn);
+                            continue;
+                        }
                         ref (string id, bool duplicate) val = ref CollectionsMarshal.GetValueRefOrAddDefault(mapping, name, out bool exists);
                         if (exists)
                         {
@@ -183,6 +188,12 @@ public static class DataToItemMap
                         }
 
                         string name = data.Name;
+
+                        if (name is null)
+                        {
+                            ModEntry.ModMonitor.Log($"Huh, ring {id} has no name. Skipping", LogLevel.Warn);
+                            continue;
+                        }
                         ref (string id, bool duplicate) val = ref CollectionsMarshal.GetValueRefOrAddDefault(mapping, name, out bool exists);
                         if (exists)
                         {
@@ -270,6 +281,13 @@ public static class DataToItemMap
                     }
 
                     string name = data.Name;
+
+                    if (name is null)
+                    {
+                        ModEntry.ModMonitor.Log($"Huh, bigcraftable {id} has no name. Skipping", LogLevel.Warn);
+                        continue;
+                    }
+
                     ref (string id, bool duplicate) val = ref CollectionsMarshal.GetValueRefOrAddDefault(mapping, name, out bool exists);
                     if (exists)
                     {

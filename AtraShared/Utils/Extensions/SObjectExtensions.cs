@@ -87,7 +87,7 @@ public static class SObjectExtensions
     /// <returns>True if alcohol.</returns>
     public static bool IsAlcoholItem(this SObject obj)
         => obj.HasContextTag("alcohol_item") || obj.QualifiedItemId is "(O)346" or "(O)348" or "(O)459" or "(O)303"
-            || Game1Wrappers.ObjectData.GetValueOrGetDefault(obj.ItemId)?.Buff?.BuffId == "17";
+            || Game1Wrappers.ObjectData.GetValueOrGetDefault(obj.ItemId)?.Buffs?.Any(static buff => buff.BuffId == "17") == true;
 
     /// <summary>
     /// Consumes a recipe by teaching the player the recipe.

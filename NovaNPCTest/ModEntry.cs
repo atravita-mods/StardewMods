@@ -58,7 +58,7 @@ internal sealed class ModEntry : Mod
             return;
         }
 
-        if (Game1.IsVisitingIslandToday(npc.Name))
+        if (Game1.IsVisitingIslandToday(npc.Name) || npc.islandScheduleName.Value is not null)
         {
             ModMonitor.Log($"{npc.Name} is going to the island, have fun!");
             return;
@@ -71,6 +71,7 @@ internal sealed class ModEntry : Mod
         if (scheduleKey is null)
         {
             npc.TryLoadSchedule();
+            scheduleKey = npc.dayScheduleName.Value;
         }
 
         if (scheduleKey is null)

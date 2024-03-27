@@ -11,6 +11,8 @@ using AtraShared.Utils.Extensions;
 
 using HarmonyLib;
 
+using StardewValley;
+
 /// <summary>
 /// Overrides the NPC gift tastes.
 /// </summary>
@@ -60,6 +62,11 @@ internal static class OverrideGiftTastes
     {
         int? context_taste = null;
         int? category_taste = null;
+
+        if (obj.QualifiedItemId == "(O)StardropTea")
+        {
+            return NPC.gift_taste_stardroptea;
+        }
 
         // handle individual tastes.
         if (Game1.NPCGiftTastes.TryGetValue(npc.Name, out string? taste) && !string.IsNullOrWhiteSpace(taste))

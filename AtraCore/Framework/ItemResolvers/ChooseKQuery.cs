@@ -24,7 +24,7 @@ internal class ChooseKQuery
             yield break;
         }
 
-        HashSet<string>? prev = avoidRepeat ? new() : null;
+        HashSet<string>? prev = avoidRepeat ? [] : null;
 
         if (args.Length - 1 <= count)
         {
@@ -44,6 +44,7 @@ internal class ChooseKQuery
                     ModEntry.ModMonitor.Log($"{candidate} does not correspond to a valid item.", LogLevel.Trace);
                 }
             }
+            yield break;
         }
 
         int idx = args.Length - 1;
@@ -53,7 +54,7 @@ internal class ChooseKQuery
 
         while (idx > final)
         {
-            int j = random.Next(idx + 1);
+            int j = random.Next(1, idx + 1);
             string candidate = args[j];
 
             if (avoidItemIds?.Contains(candidate) != true && prev?.Add(candidate) != true)

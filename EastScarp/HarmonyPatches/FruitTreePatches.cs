@@ -10,6 +10,7 @@ using StardewModdingAPI.Utilities;
 using StardewValley.Extensions;
 using StardewValley.TerrainFeatures;
 using StardewValley.TokenizableStrings;
+using StardewValley.Tools;
 
 /// <summary>
 /// Patches against fruit trees.
@@ -54,8 +55,13 @@ internal static class FruitTreePatches
 
     [HarmonyPrefix]
     [HarmonyPatch(nameof(FruitTree.performToolAction))]
-    private static bool PrefixCut(FruitTree __instance)
+    private static bool PrefixCut(FruitTree __instance, Tool t)
     {
+        if (t is MeleeWeapon || __instance.health.Value <= -99f)
+        {
+            return true;
+        }
+
         int x = (int)__instance.Tile.X;
         int y = (int)__instance.Tile.Y;
         if (__instance.Location?.doesTileHaveProperty(x, y, "EastScarpe.FruitTreeCut", "Back") is string message)
@@ -97,6 +103,7 @@ internal static class FruitTreePatches
                     return;
                 }
             }
+
             Game1.DrawDialogue(new(npc, null, TokenParser.ParseText(second.Trim().ToString())));
         }
         else

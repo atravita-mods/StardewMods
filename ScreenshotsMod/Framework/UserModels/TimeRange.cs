@@ -146,8 +146,8 @@ public sealed class TimeRangeConverter : JsonConverter
             case JsonToken.StartObject:
             {
                 JObject obj = JObject.Load(reader);
-                if (obj.TryGetValueIgnoreCase<int>(nameof(TimeRange.StartTime), out int startTime)
-                    && obj.TryGetValueIgnoreCase<int>(nameof(TimeRange.EndTime), out int endTime))
+                if (obj.TryGetValueIgnoreCase(nameof(TimeRange.StartTime), out int startTime)
+                    && obj.TryGetValueIgnoreCase(nameof(TimeRange.EndTime), out int endTime))
                 {
                     return new TimeRange(startTime, endTime);
                 }

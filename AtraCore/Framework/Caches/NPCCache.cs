@@ -66,7 +66,7 @@ public static class NPCCache
         {
             foreach (NPC? character in Game1.currentLocation.characters)
             {
-                if (!character.eventActor && character.isVillager() && character.Name == name)
+                if (!character.EventActor && character.IsVillager && character.Name == name)
                 {
                     if (character.GetType() == typeof(NPC))
                     {
@@ -102,7 +102,7 @@ public static class NPCCache
             ModEntry.ModMonitor.Log($"Searching movie theater for npc {name}.");
             foreach (NPC? character in theater.characters)
             {
-                if (!character.eventActor && character.isVillager() && character.Name == name)
+                if (!character.EventActor && character.IsVillager && character.Name == name)
                 {
                     npc = character;
                     break;

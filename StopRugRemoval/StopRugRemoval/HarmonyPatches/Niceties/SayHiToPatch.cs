@@ -35,22 +35,22 @@ internal static class SayHiToPatch
     [HarmonyPostfix]
     [HarmonyPriority(Priority.Low)]
     [HarmonyPatch(nameof(NPC.performTenMinuteUpdate))]
-    private static void PostfixTenMinuteUpdate(NPC __instance, GameLocation l, int ___textAboveHeadTimer)
+    private static void PostfixTenMinuteUpdate(NPC __instance, GameLocation location, int ___textAboveHeadTimer)
     {
         try
         {
-            if (Game1.player.currentLocation == l && l.Name.Equals("Saloon", StringComparison.OrdinalIgnoreCase)
-                && __instance.isVillager())
+            if (Game1.player.currentLocation == location && location.Name == "Saloon"
+                && __instance.IsVillager)
             {
                 if (__instance.isMoving() && ___textAboveHeadTimer < 0 && Random.Shared.OfChance(0.6))
                 {
                     // Invert the check here to favor the farmer. :(
                     // Goddamnit greet me more often plz.
-                    Character? c = Utility.isThereAFarmerWithinDistance(__instance.Tile, 4, l);
+                    Character? c = Utility.isThereAFarmerWithinDistance(__instance.Tile, 4, location);
                     if (c is null)
                     {
                         Vector2 loc = __instance.Tile;
-                        foreach (NPC npc in l.characters)
+                        foreach (NPC npc in location.characters)
                         {
                             if ((npc.Tile - loc).LengthSquared() <= 16 && __instance.isFacingToward(npc.Tile))
                             {

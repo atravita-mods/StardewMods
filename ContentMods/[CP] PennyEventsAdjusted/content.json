@@ -1,6 +1,6 @@
 {
     "$schema": "https://smapi.io/schemas/content-patcher.json",
-    "Format": "1.29.0",
+    "Format": "2.0.0",
     "ConfigSchema": {
         "DisableInWinter": {
             "AllowValues": "true, false",

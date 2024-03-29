@@ -342,7 +342,7 @@ END:
     private bool CanSpawnFruitHere(GameLocation location, Vector2 tile)
         => this.Random.OfChance(this.config.SpawnChance / 100f)
             && location.IsTileViewable(new XLocation((int)tile.X, (int)tile.Y), Game1.viewport)
-            && location.CanItemBePlacedHere(tile);
+            && location.CanItemBePlacedHere(tile, ignorePassables: CollisionMask.Flooring | CollisionMask.Furniture);
 
     /// <summary>
     /// Console command to list valid fruits for spawning.

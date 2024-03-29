@@ -1,11 +1,11 @@
 {
     "$schema": "https://smapi.io/schemas/content-patcher.json",
-    "Format": "1.29.0",
+    "Format": "2.0.0",
     "Changes": [
         {
             "Action": "Load",
             "FromFile": "assets/{{TargetWithoutPath}}.png",
-            "Target": "Buildings/Fish Pond_PaintMask, Buildings/Gold Clock_PaintMask, Buildings/Greenhouse_PaintMask, Buildings/Junimo Hut_PaintMask, Buildings/Mill_PaintMask, Buildings/Shipping Bin_PaintMask, Buildings/Silo_PaintMask, Buildings/Slime Hutch_PaintMask, Buildings/Well_PaintMask, Buildings/Desert Obelisk_PaintMask, Buildings/Earth Obelisk_PaintMask, Buildings/Island Obelisk_PaintMask, Buildings/Water Obelisk_PaintMask",
+            "Target": "Buildings/Fish Pond_PaintMask, Buildings/Gold Clock_PaintMask, Buildings/Greenhouse_PaintMask, Buildings/Junimo Hut_PaintMask, Buildings/Mill_PaintMask, Buildings/Shipping Bin_PaintMask, Buildings/Silo_PaintMask, Buildings/Slime Hutch_PaintMask, Buildings/Well_PaintMask, Buildings/Desert Obelisk_PaintMask, Buildings/Earth Obelisk_PaintMask, Buildings/Island Obelisk_PaintMask, Buildings/Water Obelisk_PaintMask, Buildings/Hay Pet Bowl_PaintMask, Buildings/Pet Bowl_PaintMask, Buildings/Stone Pet Bowl_PaintMask",
         },
         {
             "Action": "EditData",
@@ -23,7 +23,43 @@
                 "Desert Obelisk": "Base/-25 5/Roof/-25 0/Greenery/-15 0",
                 "Earth Obelisk": "Base/-25 5/Roof/-25 0/Mushrooms/-15 0",
                 "Island Obelisk": "Base/-25 5/Roof/-25 0/Greenery/-15 0",
-                "Water Obelisk": "Water/-25 5/Roof/-25 0/Sand/-15 0"
+                "Water Obelisk": "Water/-25 5/Roof/-25 0/Sand/-15 0",
+
+                "Hay Pet Bowl": "Base/-25 5/Bowl/-25 0/Water/-25 5",
+                "Pet Bowl": "Base/-25 5/Bowl/-25 0/Water/-25 5",
+                "Stone Pet Bowl": "Base/-25 5/Bowl/-25 0/Water/-25 5"
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Strings/Buildings",
+            "Entries": {
+                // Fish pond
+                "Paint_Region_Rim": "{{i18n: rim}}",
+                "Paint_Region_Water": "{{i18n: water}}",
+                "Paint_Region_Decor": "{{i18n: decor}}",
+
+                // Gold clock
+                "Paint_Region_Face": "{{i18n: face}}",
+                "Paint_Region_Gems": "{{i18n: gems}}",
+
+                // Junimo Hut
+                "Paint_Region_Bag": "{{i18n: bag}}",
+
+                //Slime Hutch
+                "Paint_Region_Goo": "{{i18n:goo}}",
+                "Paint_Region_Door": "{{i18n:door}}",
+
+                // Well
+                "Paint_Region_Base": "{{i18n: base}}",
+
+                // Obelisks
+                "Paint_Region_Greenery": "{{i18n: greenery}}",
+                "Paint_Region_Mushrooms": "{{i18n: mushrooms}}",
+                "Paint_Region_Sand": "{{i18n: sand}}",
+
+                // Pet Bowls
+                "Paint_Region_Bowl": "{{i18n: bowl}}"
             }
         }
     ]

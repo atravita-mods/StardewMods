@@ -11,7 +11,26 @@
             "Action": "EditData",
             "Target": "Characters/Dialogue/Demetrius",
             "Entries": {
-                "FarmCave": "{{i18n:demetrius.{{DialogueVariant}}.{{Season}}.{{Random:00,01,02,03,04,05,06,07,08,09,10}} }}"
+                "FarmCave": "{{i18n:demetrius.{{DialogueVariant}}.{{Season}}.{{Random:00,01,02,03,04,05,06,07,08,09,10}} }}",
+
+                // visiting maps.
+                "firstVisit_IslandSouth": "{{i18n: dialogue.firstvisit.islandSouth}}",
+
+                // catching fish
+                "fishCaught_142": "{{i18n: dialogue.fishcaught.carp}}",
+                "fishCaught_698": "{{i18n: dialogue.fishcaught.sturgeon}}",
+                "fishCaught_Goby": "{{i18n: dialogue.fishcaught.goby}}",
+                "fishCaught_148": "{{i18n: dialogue.fishcaught.eel}}",
+                "fishCaught_149": "{{i18n: dialogue.fishcaught.octopus}}",
+                "fishCaught_151": "{{i18n: dialogue.fishcaught.squid}}",
+
+                // the farmcave event
+                "eventSeen_65_memory_fourweeks": "{{i18n: demetrius.farmcave.fourweeks.{{DialogueVariant}} }}",
+                "eventSeen_65_memory_eightweeks": "{{i18n: demetrius.farmcave.eightweeks.{{DialogueVariant}} }}",
+                "eventSeen_65_memory_oneyear": "{{i18n: demetrius.farmcave.oneyear}}",
+
+                // quests
+                "questComplete_100": "{{i18n: demetrius.robin.axe}}"
             },
             "When": {
                 "EnableDialogue": true

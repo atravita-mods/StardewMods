@@ -172,6 +172,7 @@ internal static class ConsoleCommandManager
                 NPC.gift_taste_neutral => "neutral",
                 NPC.gift_taste_like => "like",
                 NPC.gift_taste_love => "love",
+                NPC.gift_taste_stardroptea => "stardrop tea",
             };
 
             ModEntry.ModMonitor.Log($"For {npc.Name}, {obj.Name} is a {taste}", LogLevel.Info);

@@ -28,6 +28,7 @@
   <PropertyGroup>
     <IgnoreModFilePatterns>\.xcf$</IgnoreModFilePatterns>
     <EnableModZip Condition="$(Configuration) == 'Debug'">False</EnableModZip>
+    <ManifestWarningsAsErrors Condition="$(Configuration) == 'Release'">true</ManifestWarningsAsErrors>
     <ModZipPath>$(SolutionDir)\_releases</ModZipPath>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>

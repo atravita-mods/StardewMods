@@ -12,7 +12,8 @@
                 "1{{YearRemainder}}": "Hi, {{Title}} @! Did you know that when cows are happy, they make a purring sound? Almost like cats!",
                 "2{{YearRemainder}}": "Miss Maru showed us a crazy science experiment. She set her hand on fire and it didn't burn!",
                 "3{{YearRemainder}}": "Auntie Marnie says I'm learning lots from Miss Penny.",
-                "4{{YearRemainder}}": "Wonder what's in the fridge for dinner."
+                "4{{YearRemainder}}": "Wonder what Auntie Marnie left me in the fridge for dinner....$s",
+                "5{{YearRemainder}}": "Look what I found![MixedFlowerSeeds]#$b#Think you could grow them, {{Title}} @?"
             }
         },
         {

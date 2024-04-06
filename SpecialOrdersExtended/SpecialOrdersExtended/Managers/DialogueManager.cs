@@ -283,6 +283,7 @@ internal class DialogueManager
     /// <param name="__instance">NPC in question.</param>
     /// <param name="heartLevel">NPC heart level.</param>
     /// <param name="noPreface">NoPreface in vanilla code - to preface with season or not.</param>
+    /// <param name="__runOriginal">If the original method was run or not.</param>
     internal static void PostfixCheckDialogue(ref bool __result, ref NPC __instance, int heartLevel, bool noPreface, bool __runOriginal)
     {
         try

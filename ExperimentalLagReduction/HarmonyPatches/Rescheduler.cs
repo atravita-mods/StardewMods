@@ -403,9 +403,9 @@ internal static class Rescheduler
                     continue;
                 }
 
-                PathfindingGender PathfindingGenderConstrainedToCurrentSearch = GetTightestPathfindingGenderConstraint(PathfindingGender, node.PathfindingGenderConstraint);
+                PathfindingGender pathfindingGenderConstrainedToCurrentSearch = GetTightestPathfindingGenderConstraint(PathfindingGender, node.PathfindingGenderConstraint);
 
-                if (PathfindingGenderConstrainedToCurrentSearch != PathfindingGender.Invalid && end is not null)
+                if (pathfindingGenderConstrainedToCurrentSearch != PathfindingGender.Invalid && end is not null)
                 {
                     // found destination, return it.
                     if (end.Name == node.Name)
@@ -452,7 +452,7 @@ internal static class Rescheduler
                         }
                         else
                         {
-                            string[]? PathfindingGenderedPrev = PathfindingGenderConstrainedToCurrentSearch switch
+                            string[]? PathfindingGenderedPrev = pathfindingGenderConstrainedToCurrentSearch switch
                             {
                                 PathfindingGender.Male => set.MalePath,
                                 PathfindingGender.Female => set.FemalePath,
@@ -466,7 +466,7 @@ internal static class Rescheduler
                                 Array.Copy(route, routeStart, route.Length - 1);
                                 Array.Copy(PathfindingGenderedPrev, 0, routeStart, route.Length - 1, PathfindingGenderedPrev.Length);
 
-                                InsertRoute(start.Name, end.Name, PathfindingGenderConstrainedToCurrentSearch, routeStart);
+                                InsertRoute(start.Name, end.Name, pathfindingGenderConstrainedToCurrentSearch, routeStart);
                                 ret = routeStart;
                             }
                         }
@@ -553,7 +553,7 @@ internal static class Rescheduler
     #region harmony
 
     [HarmonyPrefix]
-    [HarmonyPriority(Priority.VeryLow)]
+    [HarmonyPriority(Priority.LowerThanNormal)]
     [HarmonyPatch(nameof(WarpPathfindingCache.PopulateCache))]
     private static bool PrefixPopulateRoutes()
     {
@@ -596,7 +596,7 @@ internal static class Rescheduler
 
     [HarmonyPrefix]
     [HarmonyPatch(nameof(WarpPathfindingCache.GetLocationRoute))]
-    [HarmonyPriority(Priority.VeryLow)]
+    [HarmonyPriority(Priority.LowerThanNormal)]
     [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1123:Do not place regions within elements", Justification = "Preference.")]
     private static bool PrefixGetLocationRoute(string startingLocation, string endingLocation, Gender gender, ref string[]? __result)
     {
@@ -753,10 +753,10 @@ internal static class Rescheduler
             {
                 if (GetActualLocation(warp.TargetName) is string name && _dedup.Value.Add(name) && !visited.Contains(name))
                 {
-                    PathfindingGender PathfindingGenderConstraint = GetTightestPathfindingGenderConstraint(PathfindingGender, GetPathfindingGenderConstraint(name));
-                    if (PathfindingGenderConstraint != PathfindingGender.Invalid)
+                    PathfindingGender pathfindingGenderConstraint1 = GetTightestPathfindingGenderConstraint(PathfindingGender, GetPathfindingGenderConstraint(name));
+                    if (pathfindingGenderConstraint1 != PathfindingGender.Invalid)
                     {
-                        queue.Enqueue(new(name, node, PathfindingGenderConstraint));
+                        queue.Enqueue(new(name, node, pathfindingGenderConstraint1));
                     }
                 }
             }
@@ -856,7 +856,7 @@ internal static class Rescheduler
 /// Represents a set of paths.
 /// </summary>
 /// <remarks>If a field is set to null, that means we have no info on it. If a field set to Array.Empty, that means there is no valid path.</remarks>
-internal class PathSet(string[]? malePath, string[]? femalePath, string[]? undefinedPath)
+internal sealed class PathSet(string[]? malePath, string[]? femalePath, string[]? undefinedPath)
 {
     internal string[]? MalePath { get; set; } = malePath;
 

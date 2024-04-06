@@ -462,6 +462,10 @@
     "sebastian-rain.01": "Somewhere like this, it lets me think.$h",
     "sebastian-rain.02": "@, do you enjoy being alone with your thoughts sometimes?",
 
+    // Willy chats about fish if you've been catching some.
+    "willy-caught-fish-carp": "Ah, I see you've been fishing! Caught anything interesting yet?",
+    "willy-caught-fish-catfish": "@, heard you caught your first catfish.#$b#She's a beauty, isn't she?$h",
+
 /***************
 * Anniversary!
 ***************/

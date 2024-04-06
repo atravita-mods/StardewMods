@@ -7,7 +7,7 @@
     },
     {
       "UniqueId": "Digus.ProducerFrameworkMod",
-      "IsRequired": false,
+      "IsRequired": false
     }
   ]
 }

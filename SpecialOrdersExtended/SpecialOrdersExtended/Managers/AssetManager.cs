@@ -6,6 +6,11 @@ using StardewModdingAPI.Events;
 
 namespace SpecialOrdersExtended.Managers;
 
+/// <summary>
+/// A record to hold emoji data.
+/// </summary>
+/// <param name="AssetName">The asset to point to.</param>
+/// <param name="Location">The x,y coordinates of the top left of the emoji.</param>
 [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "This is are record.")]
 public record EmojiData(string AssetName, Point Location);
 

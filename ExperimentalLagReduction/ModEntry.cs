@@ -54,7 +54,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
     private void OnGameLaunch(object? sender, GameLaunchedEventArgs e)
     {
         this.Helper.Events.Content.AssetsInvalidated += (_, e) => OverrideGiftTastes.Reset(e.NamesWithoutLocale);
-        this.Helper.Events.GameLoop.DayEnding += (_, _) => OverrideGiftTastes.Reset();
+        this.Helper.Events.GameLoop.DayEnding += static (_, _) => OverrideGiftTastes.Reset();
 
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
 

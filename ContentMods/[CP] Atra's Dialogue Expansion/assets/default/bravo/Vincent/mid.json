@@ -40,7 +40,8 @@
             "Target": "Characters/Dialogue/Vincent",
             "When": { "YearModulus": "2" },
             "Entries": {
-                "10_2": "Mom let me have fries!$h"
+                "10_2": "Mom let me have fries!$h",
+                "11_2": "Hey, look what I found, {{Title}} @![Moss]#$b#It's so slimy! Isn't it fun?"
             }
         },
         {

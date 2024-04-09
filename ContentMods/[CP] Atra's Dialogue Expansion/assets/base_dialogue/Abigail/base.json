@@ -1,0 +1,11 @@
+{
+    "Changes": [
+        {
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Abigail",
+            "Entries": {
+                "mineArea_77377": "{{i18n: abby-quarry}}"
+            }
+        }
+    ]
+}

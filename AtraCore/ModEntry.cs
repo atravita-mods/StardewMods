@@ -126,6 +126,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
 
         ItemQueryResolver.Register("atravita_choose_k", ChooseKQuery.ChooseK);
         ItemQueryResolver.Register("atravita_generic_flavored_item", GenericFlavoredItemQuery.Generate);
+        ItemQueryResolver.Register("atravita_raccoon_seed", RaccoonSeedQuery.Query);
 
         AddGSQ("atravita.AtraCore_HAS_EARNED_MONEY", MoneyEarned.CheckMoneyEarned);
         AddGSQ("atravita.AtraCore_HAS_DAILY_LUCK", CurrentDailyLuck.DailyLuck);

@@ -278,6 +278,8 @@
     // divorce strings
     "caroline-divorced-from-abby": "I'm taking Abigail's side in your divorce, I hope you understand.",
 
+    "demetrius-divorced-maru": "My little girl is worth ten of you, you...bastard!",
+    "demetrius-divorced-maru-oneweek": "We're so much better off without you in our family.",
     "demetrius-divorced-from-maru-a": "Well, I wish you hadn't broken my dear Maru's heart.",
     "demetrius-divorced-from-maru-b": "I have nothing to say to you.",
     "demetrius-divorced-from-sebastian-a": "I don't think Sebastian wants to see you.",
@@ -368,9 +370,14 @@
     "penny-greet-Pam": "Mom, how are you?/Mom, you home?/Mom! I'm here to visit!",
 
     // conversation topics
+    "abby-quarry": "You went beyond the bridge to the old quarry? What's in there? Dad never let me visit.",
+
     "demetrius-movie-start": "Oh, a movie theater?",
     "demetrius-movie-a": "Sorry, I'm not one for movies anymore.",
     "demetrius-movie-b": "I don't usually watch movies, @, unless it's with Robin.",
+
+    "demetrius-bed-event-one-week": "@, Robin's still mad at me over that bed. I'm not sure what to do.",
+    "demetrius-quarry": "You know, @, I've never been to that place beyond the bridge. It's been broken since we've moved here.#$b#I've heard stories, though.",
 
     // winter rain
     "alex-married-nonwinter-rain": "Make sure to stay dry as best you can today, %endearment!",
@@ -1089,6 +1096,7 @@
     "abby-y3-dance.00": "I really wouldn't dance if my dad didn't make me, but he thinks we should try harder to be part of the community.",
     "abby-y1-dance-spouse": "Ugh, @, dance with me? That way I won't feel so awkward.",
     "abby-y2-dance-spouse": "I wish dad didn't expect me to participate in this dance, especially now that I'm married.",
+    "abby-dance-spouse-accept": "I guess we have to dance, don't we? Sure. Let's get this over with.",
     "alex-y2-dance.00": "Everyone looks fantastic today.",
     "alex-y1-dance-spouse": "You look great as always, my love. Dance with me?",
     "alex-y2-dance-spouse": "Wanna dance? Or do you want to just get out of here?",
@@ -1150,6 +1158,7 @@
     "leah-y1-dance-spouse.00": "When I first moved here, I was so afraid no one would want to dance with me.",
     "leah-y1-dance-spouse.01": "I'm glad I have you now. Come, dance?",
     "leah-y2-dance-spouse": "You look dashing, @. Care to dance?",
+    "leah-flower-dance-decline-men": "I'm sorry, @, but I'm just not interested.$s",
     "leo-y2-dance": "Parrots, too, dance with their mates. I guess we're more similar than I thought?",
     "leo-y3-dance": "Mrs. Evelyn has been working so hard on these flowers! They're lovely.",
     "leo-y4-dance": "@, do you think they'll make me go up there and dance some day?",
@@ -1489,6 +1498,7 @@
     "abby-y3-fair.02": "He's been working on that grange display for weeks.",
     "abby-y2-fair-spouse": "Gosh, aren't fair games supposed to be weighted against you? These are too easy!",
     "abby-y3-fair-spouse": "Mmm, I wonder what Gus's cooking up this year.",
+    "abby-fair-judged-won": "Dad was so sure he'd win this year!",
     "alex-y2-fair": "I got a perfect score in the slingshot game!",
     "alex-y3-fair": "I'm gonna figure out this fishing game even if it takes me every bit of money I have.",
     "alex-y2-fair-spouse": "Let's see how good of a score I can get on the strength game this year!",

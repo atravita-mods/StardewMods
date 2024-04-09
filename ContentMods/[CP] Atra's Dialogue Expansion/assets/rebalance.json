@@ -140,6 +140,36 @@
                     "Amount": "{{Query: 2 - {{Hearts:Dwarf}}/9 }}"
                 }
             }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Data/Shops",
+            "TargetField": ["Traveler", "PriceModifiers"],
+            "Entries": {
+                "atravita.Traveler.Inflation" :{
+                    "Id": "atravita.Traveler.Inflation",
+                    "Modification": "Multiply",
+                    "Amount": "1.5"
+                }
+            },
+            "When": {
+                "Year|contains=1": false
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Data/Shops",
+            "TargetField": ["Traveler", "PriceModifiers"],
+            "Entries": {
+                "atravita.Traveler.Economy" :{
+                    "Id": "atravita.Traveler.Economy",
+                    "Modification": "Multiply",
+                    "Amount": "1.5"
+                }
+            },
+            "When": {
+                "YearModulus": "3,4"
+            }
         }
     ]
 }

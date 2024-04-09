@@ -29,6 +29,14 @@
         },
         {
             "Action": "EditData",
+            "LogName": "Abby - normal dialogue file",
+            "Target": "Characters/Dialogue/Abigail",
+            "Entries": {
+                "FlowerDance_Accept_Spouse": "{{i18n:abby-dance-spouse-accept}}"
+            }
+        },
+        {
+            "Action": "EditData",
             "LogName": "Alex - normal",
             "Target": "Data/Festivals/spring24",
             "When": {
@@ -332,6 +340,17 @@
                 "Kent_y3": "{{i18n:kent-y2-dance}}",
                 "Kent_y4": "%{{i18n:kent-y3-dance.00}}#$b#{{i18n:kent-y3-dance.01}}#$b#{{i18n:kent-y3-dance.02}}$u",
                 "Kent_y5": "{{i18n:kent-y4-dance}}"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Leah - normal dialogue file",
+            "Target": "Characters/Dialogue/Leah",
+            "When": {
+                "PlayerGender": "Male"
+            },
+            "Entries": {
+                "FlowerDance_Decline": "{{i18n: leah-flower-dance-decline-men}}"
             }
         },
         {

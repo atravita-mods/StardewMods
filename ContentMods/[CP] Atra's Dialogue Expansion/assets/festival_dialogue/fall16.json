@@ -17,6 +17,18 @@
         },
         {
             "Action": "EditData",
+            "LogName": "Abby - normal dialogue file",
+            "Target": "Characters/Dialogue/Abigail",
+            "When": {
+                "EnableFor" : "Abigail",
+                "Relationship: Abigail | contains=Divorced": false
+            },
+            "Entries": {
+                "Fair_Judged_PlayerWon": "{{i18n:abby-fair-judged-won}}",
+            }
+        },
+        {
+            "Action": "EditData",
             "LogName": "Alex - normal",
             "Target": "Data/Festivals/fall16",
             "When": {

@@ -11,6 +11,14 @@
         },
         {
             "Action": "Include",
+            "LogName": "Abby - base",
+            "FromFile": "assets/base_dialogue/Abigail/base.json",
+            "When": {
+                "EnableFor": "Abigail"
+            }
+        },
+        {
+            "Action": "Include",
             "LogName": "Abigail - adventurer",
             "FromFile": "assets/base_dialogue/Abigail/adventurer.json",
             "When": {

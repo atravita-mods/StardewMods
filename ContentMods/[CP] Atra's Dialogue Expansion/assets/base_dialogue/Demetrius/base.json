@@ -20,7 +20,7 @@
                 "Fri4": "{{i18n:demetrius-fri4.00}}#$e#{{i18n:demetrius-fri4.01}}$u",
                 "winter_Sat": "{{i18n:demetrius-winter-sat.00}}#$e#{{i18n:demetrius-winter-sat.01}}#$e#{{i18n:demetrius-winter-sat.02}}$u",
 
-                // headed into the moonlight jellies festival. 
+                // headed into the moonlight jellies festival.
                 "summer_25{{YearRemainder}}": "{{i18n:demetrius-summer-end.{{YearModulus}} }}",
                 "summer_27{{YearRemainder}}": "{{i18n: demetrius-jellies-pre.01}}#$b#{{i18n: demetrius-jellies-pre.02}}",
 
@@ -28,6 +28,9 @@
 
                 // some CTs
                 "movieTheater": "{{i18n:demetrius-movie-start}}#$e#$c 0.5#{{i18n:demetrius-movie-a}}#{{i18n:demetrius-movie-b}}",
+                "divorced_Maru": "{{i18n:demetrius-divorced-maru}}$a",
+                "eventSeen_1053978_memory_oneweek": "{{i18n: demetrius-bed-event-one-week}}$s",
+                "mineArea_77377": "{{i18n: demetrius-quarry}}"
             }
         },
         {
@@ -51,7 +54,8 @@
             "When": {"Relationship: Maru": "Divorced"},
             "Entries": {
                 "ScienceHouse": "{{i18n: demetrius-divorced-from-maru-a}}$s",
-                "Mountain": "{{i18n: demetrius-divorced-from-maru-b}}$s"
+                "Mountain": "{{i18n: demetrius-divorced-from-maru-b}}$s",
+                "divorced_Maru_memory_oneweek": "{{i18n: demetrius-divorced-maru-oneweek}}$s"
             }
         },
         {

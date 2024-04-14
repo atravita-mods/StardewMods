@@ -1,0 +1,27 @@
+{
+    "$schema": "https://smapi.io/schemas/content-patcher.json",
+    "Format": "2.0.0",
+    "Changes": [
+        {
+            "Action": "EditData",
+            "Target": "Data/Pets",
+            "TargetField": [
+                "Dog",
+                "Breeds"
+            ],
+            "Entries": {
+                "atravita.Bella": {
+                    "Id": "atravita.Bella",
+                    "Texture": "{{InternalAssetKey: Bella.png}}",
+                    "IconTexture": "{{InternalAssetKey: Bella_icon.png}}",
+                    "IconSourceRect": {
+                        "X": 0,
+                        "Y": 0,
+                        "Width": 16,
+                        "Height": 16
+                    }
+                }
+            }
+        }
+    ]
+}

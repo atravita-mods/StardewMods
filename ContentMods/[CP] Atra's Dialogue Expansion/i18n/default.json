@@ -242,7 +242,7 @@
 
     // locational
     "harvey-bed": "Did you happen to bring any coffee with you?",
-    
+
     // gridball.
     "george-sports.sun": "@, you gonna watch the game? The {{first}} are playing the {{second}}!",
     "george-sports.mon": "Hey, @, did you catch the game last night? Wasn't it {{reaction}}?",
@@ -352,6 +352,8 @@
     "penny-winter-3.00": "Oh, it's winter again, isn't it? What are you planning on doing this winter?",
     "penny-winter-3.01": "I trust you to handle the finances, %endearment.",
 
+    "penny-end-of-spring": "Guess I should start putting away our winter clothing, eh, @?#$b#The weather's been lovely lately.",
+
     "harvey-summer-2a": "Sometimes, I'd love to give out some discounts on healthcare, but I can't.",
     "harvey-summer-2b": "If I don't charge the patient, I'm not allowed to charge their insurance.",
 
@@ -378,6 +380,16 @@
 
     "demetrius-bed-event-one-week": "@, Robin's still mad at me over that bed. I'm not sure what to do.",
     "demetrius-quarry": "You know, @, I've never been to that place beyond the bridge. It's been broken since we've moved here.#$b#I've heard stories, though.",
+
+    "marnie-barn.00": "You know, @, cows can have quite the personalities.",
+    "marnie-barn.01": "Used to have one ole' gal who'd love to eat my hat.",
+
+    "marnie-stable-oneweek": "Your horse is so smart! I can't believe he can find his way home so easily!",
+    "marnie-pet-one-month": "Say, @, how is little %pet doing? Are they settling in well?",
+    "marnie-goat-event-oneweek": "Thank you again for those delicious cave carrots! I don't think I've ever seen my goats happier!",
+
+    // green rain
+    "george-greenrain-finished": "By Yoba, @! I'm glad we survived that!",
 
     // winter rain
     "alex-married-nonwinter-rain": "Make sure to stay dry as best you can today, %endearment!",
@@ -423,6 +435,9 @@
     // Change Evelyn line after she gives you the cookie recipe.
     "evelyn-thu.00": "I'll be baking cookies today, @",
     "evelyn-thu.01": "Say, did you ever make any cookies with the recipe I gave you?",
+
+    // give george a line for the night market so he's not talking about his TV OUTSIDE his house.
+    "george-nightmarket": "@, got yourself something nice at the night market this year?#$b#Don't tell Evelyn, but I got her a new pearl necklace.$h",
 
     // gus gives you something on new years.
     "gus-new-years-resort.00": "Happy New Year, @! Have one on me today. May the next year be even better!",

@@ -90,7 +90,7 @@ public static class NPCCache
         }
 
         NPC? npc = Game1.getCharacterFromName(name, mustBeVillager: true);
-        if (npc is not null && npc.GetType() == typeof(NPC))
+        if (npc is not null && npc.GetType() == typeof(NPC) && npc.currentLocation?.IsActiveLocation() == true)
         {
             cache[string.IsInterned(name) ?? name] = new(npc);
         }

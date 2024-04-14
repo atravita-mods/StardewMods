@@ -8,8 +8,20 @@
             "Relationship: Shane|contains=Divorced": false
         },
         "Entries": {
-            "summer_12": "{{i18n:marnie-summer-12}}$h", 
+            "summer_12": "{{i18n:marnie-summer-12}}$h",
             "fall_27": "{{i18n:marnie-fall-27}}"
+        }
+    },
+    {
+        "LogName": "Marnie base",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Marnie",
+        "Entries": {
+            "structureBuilt_Barn_memory_oneday": "{{i18n:marnie-barn.00}}#$b#{{i18n:marnie-barn.01}}",
+            "structureBuilt_Stable_memory_oneweek": "{{i18n: marnie-stable-oneweek}}",
+
+            "gotPet_memory_fourweeks": "{{i18n:marnie-pet-one-month}}$h",
+            "eventSeen_92_memory_oneweek": "{{i18n: marnie-goat-event-oneweek}}$h"
         }
     },
     {

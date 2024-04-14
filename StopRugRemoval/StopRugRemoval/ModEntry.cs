@@ -163,6 +163,9 @@ internal sealed class ModEntry : Mod
                 player.questLog.ClearNulls();
             }
 
+            this.Monitor.VerboseLog($"Attempting to clear nulls from returned donations");
+            Game1.player.team.returnedDonations.ClearNulls();
+
             foreach (GameLocation? location in Game1.locations)
             {
                 if (location is AnimalHouse)

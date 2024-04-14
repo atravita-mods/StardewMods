@@ -135,6 +135,10 @@ public static class JsonAssetsShims
         }
 
         object? inst = ja.StaticFieldNamed("instance").GetValue(null);
+        if (inst is null)
+        {
+            return null;
+        }
         object? cropdata = ja.InstanceFieldNamed("Crops").GetValue(inst)!;
 
         if (cropdata is not IReadOnlyList<object> cropList)

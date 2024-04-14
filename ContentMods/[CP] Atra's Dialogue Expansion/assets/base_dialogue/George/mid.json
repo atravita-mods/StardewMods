@@ -1,12 +1,16 @@
 {
     "Changes": [
         {
-            "LogName": "George mid-hearts - post sports",
+            "LogName": "George mid-hearts",
             "Action": "EditData",
             "Target": "Characters/Dialogue/George",
             "Entries": {
                 "JoshHouse_Entry": "{{i18n:george-homecoming}}",
-                "IslandSouth_Entry": "{{i18n:george-vacation-bubbles}}"
+                "IslandSouth_Entry": "{{i18n:george-vacation-bubbles}}",
+
+                "GreenRainFinished": "{{i18n:george-greenrain-finished}}$h",
+
+                "winter_17_{{YearRemainder}}": "{{i18n: george-nightmarket}}"
             }
         },
         {

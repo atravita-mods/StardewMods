@@ -1,9 +1,4 @@
-﻿namespace ForgeMenuChoice;
-
-using AtraBase.Toolkit.Reflection;
-
-using AtraCore.Framework.Internal;
-using AtraCore.Framework.ReflectionManager;
+﻿using AtraCore.Framework.Internal;
 
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
@@ -14,11 +9,11 @@ using ForgeMenuChoice.HarmonyPatches;
 
 using HarmonyLib;
 
-using Microsoft.Xna.Framework.Graphics;
-
 using StardewModdingAPI.Events;
 
 using AtraUtils = AtraShared.Utils.Utils;
+
+namespace ForgeMenuChoice;
 
 /// <inheritdoc/>
 internal sealed class ModEntry : BaseMod<ModEntry>
@@ -98,45 +93,6 @@ internal sealed class ModEntry : BaseMod<ModEntry>
             {
                 this.Monitor.Log("Applying compat patches for Enchantable Scythes.", LogLevel.Debug);
                 GetEnchantmentPatch.ApplyPatch(harmony);
-            }
-
-            if (this.Helper.ModRegistry.Get("spacechase0.SpaceCore") is not IModInfo spacecore)
-            {
-                this.Monitor.Log($"Spacecore not installed, compat patches unnecessary.", LogLevel.Trace);
-            }
-            else
-            {
-                if (AccessTools.TypeByName("SpaceCore.Interface.NewForgeMenu") is Type spaceforge)
-                {
-                    this.Monitor.Log($"Got spacecore's forge for compat patching.", LogLevel.Debug);
-                    harmony.Patch(
-                        original: spaceforge.GetCachedMethod("cleanupBeforeExit", ReflectionCache.FlagTypes.InstanceFlags),
-                        prefix: new HarmonyMethod(typeof(ForgeMenuPatches), nameof(ForgeMenuPatches.PrefixBeforeExit)));
-                    harmony.Patch(
-                        original: spaceforge.GetCachedMethod("IsValidCraft", ReflectionCache.FlagTypes.InstanceFlags),
-                        prefix: new HarmonyMethod(typeof(ForgeMenuPatches), nameof(ForgeMenuPatches.PrefixIsValidCraft)));
-                    harmony.Patch(
-                        original: spaceforge.GetCachedMethod("draw", ReflectionCache.FlagTypes.InstanceFlags, new Type[] { typeof(SpriteBatch) }),
-                        postfix: new HarmonyMethod(typeof(ForgeMenuPatches), nameof(ForgeMenuPatches.PostfixDraw)));
-                    harmony.Patch(
-                        original: spaceforge.GetCachedMethod("receiveLeftClick", ReflectionCache.FlagTypes.InstanceFlags),
-                        postfix: new HarmonyMethod(typeof(ForgeMenuPatches), nameof(ForgeMenuPatches.PostFixLeftClick)));
-                    harmony.Patch(
-                        original: spaceforge.GetCachedMethod("receiveRightClick", ReflectionCache.FlagTypes.InstanceFlags),
-                        postfix: new HarmonyMethod(typeof(ForgeMenuPatches), nameof(ForgeMenuPatches.PostfixRightClick)));
-                    harmony.Patch(
-                        original: spaceforge.GetCachedMethod("gameWindowSizeChanged", ReflectionCache.FlagTypes.InstanceFlags),
-                        postfix: new HarmonyMethod(typeof(ForgeMenuPatches), nameof(ForgeMenuPatches.PostfixGameWindowSizeChanged)));
-                    harmony.Patch(
-                        original: spaceforge.GetCachedMethod("performHoverAction", ReflectionCache.FlagTypes.InstanceFlags),
-                        postfix: new HarmonyMethod(typeof(ForgeMenuPatches), nameof(ForgeMenuPatches.PostfixPerformHoverAction)));
-
-                    IsSpaceForge = spaceforge.GetTypeIs();
-                }
-                else
-                {
-                    this.Monitor.Log($"Failed to grab Spacecore for compat patching, this mod may not work.", LogLevel.Warn);
-                }
             }
         }
         catch (Exception ex)

@@ -74,7 +74,8 @@
         "Action": "EditData",
         "Target": "Characters/Dialogue/MarriageDialoguePenny",
         "Entries": {
-            "winter_3": "{{i18n: penny-winter-3.00}}#$b#{{i18n: penny-winter-3.01}}"
+            "winter_3": "{{i18n: penny-winter-3.00}}#$b#{{i18n: penny-winter-3.01}}",
+            "spring_28": "{{i18n: penny-end-of-spring}}"
         },
         "When": {
             "Year|contains = 1,2": false

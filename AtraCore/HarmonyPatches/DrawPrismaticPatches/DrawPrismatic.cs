@@ -28,7 +28,7 @@ namespace AtraCore.HarmonyPatches.DrawPrismaticPatches;
 /// <summary>
 /// Draws things with a prismatic tint or overlay.
 /// </summary>
-[HarmonyPatch]
+// [HarmonyPatch]
 [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class DrawPrismatic
 {

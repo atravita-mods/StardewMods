@@ -12,7 +12,7 @@
   "Author": "SinZ and atravita",
   "Version": "0.1.5",
   "Description": "Automated way to run events.",
-  "MinimumApiVersion": "3.18",
+  "MinimumApiVersion": "4.0.7",
   "EntryDll": "SinZsEventTester.dll",
   "UpdateKeys": [
     "Nexus:19458"

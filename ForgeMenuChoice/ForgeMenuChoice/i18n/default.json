@@ -22,4 +22,7 @@
 
   "RightArrow.title": "Right Arrow",
   "RightArrow.description": "A button that corresponds to the right arrow on the menu.",
+  "OverrideInnateEnchantments.title": "Override Innate Enchantments",
+  "OverrideInnateEnchantments.description":  "If this is enabled, you will be able to pick from innate enchantments in the forge menu."
+
 }

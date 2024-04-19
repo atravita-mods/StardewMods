@@ -47,8 +47,8 @@ public static class NPCExtensions
         bool add = false,
         bool clearOnMovement = false)
     {
-        Dialogue dialogue = new MarriageDialogueReference("MarriageDialogue", dialogueKey).GetDialogue(npc);
-        if (dialogue.TranslationKey is not null)
+        Dialogue? dialogue = npc.tryToGetMarriageSpecificDialogue(dialogueKey);
+        if (dialogue is not null)
         {
             if (!add)
             {

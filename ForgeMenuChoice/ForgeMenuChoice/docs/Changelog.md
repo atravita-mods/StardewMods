@@ -11,6 +11,8 @@
 
 #### Version 1.2.0
 * Update to Stardew 1.6
+* Added innate enchantments.
+* Performance optimizations.
 
 #### Version 1.1.3
 * Fixes missing translations, my apologies!

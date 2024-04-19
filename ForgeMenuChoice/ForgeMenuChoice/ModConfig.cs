@@ -49,5 +49,7 @@ internal sealed class ModConfig
     /// Gets a button that refers to clicking rightwards.
     /// </summary>
     public KeybindList RightArrow { get; set; } = KeybindList.Parse("RightShoulder, Right");
+
+    public bool OverrideInnateEnchantments { get; set; } = true;
 }
 #pragma warning restore SA1623 // Property summary documentation should match accessors

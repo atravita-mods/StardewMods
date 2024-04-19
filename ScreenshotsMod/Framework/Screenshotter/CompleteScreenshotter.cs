@@ -534,22 +534,33 @@ internal sealed class CompleteScreenshotter : AbstractScreenshotter
         this.writeFileTask = new(() =>
         {
             ModEntry.ModMonitor.TraceOnlyLog($"Start write to disk for {this.Name}.", LogLevel.Debug);
-            try
+            string filename = this.Filename;
+            for (int i = 0; i < 2; i++)
             {
-
-                // ensure the directory is made.
-                string? directory = Path.GetDirectoryName(this.Filename);
-                if (!string.IsNullOrEmpty(directory))
+                try
                 {
-                    Directory.CreateDirectory(directory);
-                }
+                    // ensure the directory is made.
+                    string? directory = Path.GetDirectoryName(this.Filename);
+                    if (!string.IsNullOrEmpty(directory))
+                    {
+                        Directory.CreateDirectory(directory);
+                    }
 
-                using FileStream fs = new(this.Filename, FileMode.OpenOrCreate);
-                this.surface.Snapshot().Encode().SaveTo(fs);
-            }
-            catch (IOException ex)
-            {
-                string filename = SanitizeFilename(this.Filename);
+                    using FileStream fs = new(this.Filename, FileMode.OpenOrCreate);
+                    this.surface.Snapshot().Encode().SaveTo(fs);
+                    break;
+                }
+                catch (IOException ex)
+                {
+                    if (i == 0)
+                    {
+                        filename = SanitizeFilename(this.Filename);
+                    }
+                    else
+                    {
+                        ModEntry.ModMonitor.LogError($"writing to disk", ex);
+                    }
+                }
             }
         });
         this.writeFileTask.Start();

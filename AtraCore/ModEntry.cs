@@ -140,6 +140,9 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         AddGSQ("atravita.AtraCore_NPC_DAYS_SINCE_MARRIAGE", NPCQueries.DaysSinceMarriage);
         AddGSQ("atravita.AtraCore_NPC_IS_ANNIVERSARY", NPCQueries.IsAnniversaryOfMarriage);
 
+        AddGSQ("atravita.AtraCore_IS_SEED_GROWING_IN", IsSeedGrowingIn.SeedQuery);
+        AddGSQ("atravita.AtraCore_IS_SAPLING_GROWING_IN", IsSeedGrowingIn.SaplingQuery);
+
         void AddGSQ(string query, GameStateQueryDelegate del)
         {
             if (GameStateQuery.Exists(query))

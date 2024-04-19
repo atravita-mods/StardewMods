@@ -21,7 +21,6 @@ using Netcode;
 
 using StardewValley.Buffs;
 using StardewValley.GameData.Buffs;
-using StardewValley.GameData.Objects;
 using StardewValley.TokenizableStrings;
 
 /// <summary>

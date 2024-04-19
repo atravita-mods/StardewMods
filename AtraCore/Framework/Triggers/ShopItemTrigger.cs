@@ -105,7 +105,7 @@ public class ShopItemTrigger : Item
     {
         if (!base.actionWhenPurchased(shopId) && this.actions is not null)
         {
-            foreach (var action in this.actions)
+            foreach (CachedAction action in this.actions)
             {
                 // action.Handler.Invoke(actions, shopId);
             }

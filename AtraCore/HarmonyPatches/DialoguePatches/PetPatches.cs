@@ -27,6 +27,7 @@ internal static class PetPatches
         try
         {
             string specificTopic = $"atravita.gotPet_{__instance.petType.Value}";
+            string breedTopic = $"atravita.gotPet_{__instance.petType.Value}_{__instance.whichBreed.Value}";
             foreach (Farmer? farmer in Game1.getAllFarmers())
             {
                 farmer.activeDialogueEvents.Remove("gotPet");
@@ -34,14 +35,19 @@ internal static class PetPatches
 
                 farmer.activeDialogueEvents.Remove(specificTopic);
                 farmer.removeActiveDialogMemoryEvents(specificTopic);
+
+                farmer.activeDialogueEvents.Remove(breedTopic);
+                farmer.removeActiveDialogMemoryEvents(breedTopic);
             }
 
             who.autoGenerateActiveDialogueEvent("atravita.butterflied_pet");
             who.autoGenerateActiveDialogueEvent($"atravita.butterflied_pet_{__instance.petType.Value}");
+
+            who.stats.Increment("PetsButterflied");
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.LogError("editing active converation topics", ex);
+            ModEntry.ModMonitor.LogError("editing active conversation topics", ex);
         }
     }
 
@@ -50,19 +56,19 @@ internal static class PetPatches
     private static void PostfixEventNamePet()
     {
         AddConversationTopic(Game1.player.whichPetType);
+        AddConversationTopic($"{Game1.player.whichPetType}_{Game1.player.whichPetBreed}");
     }
 
     [HarmonyPostfix]
     [HarmonyPatch(typeof(PetLicense), "namePet")]
     private static void PostfixPetLicense(string name)
     {
-        ReadOnlySpan<char> petType = name.GetNthChunk('|', 0);
-        if (petType.Length == 0)
-        {
-            return;
-        }
 
-        AddConversationTopic(petType);
+        if (name.TrySplitOnce('|', out ReadOnlySpan<char> petType, out ReadOnlySpan<char> petBreed))
+        {
+            AddConversationTopic(petType);
+            AddConversationTopic($"{petType}_{petBreed}");
+        }
     }
 
     private static void AddConversationTopic(ReadOnlySpan<char> petType)

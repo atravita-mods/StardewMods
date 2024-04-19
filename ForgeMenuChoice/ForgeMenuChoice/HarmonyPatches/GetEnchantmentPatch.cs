@@ -11,6 +11,7 @@ using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
 
 using StardewValley.Enchantments;
+using StardewValley.Tools;
 
 namespace ForgeMenuChoice.HarmonyPatches;
 
@@ -65,22 +66,39 @@ internal static class GetEnchantmentPatch
         return BaseEnchantment.GetEnchantmentFromItem(base_item, item);
     }
 
+    private static Item SubstituteInnateEnchantment(Item weapon, Random r, bool force, List<BaseEnchantment>? enchantsToReRoll = null)
+    {
+        if (weapon is not MeleeWeapon w || ForgeMenuPatches.CurrentSelection is not { } selection)
+        {
+            return MeleeWeapon.attemptAddRandomInnateEnchantment(weapon, r, force, enchantsToReRoll);
+        }
+        w.enchantments.Add(ForgeMenuPatches.CurrentSelection);
+        ForgeMenuPatches.TrashMenu();
+
+        return weapon;
+    }
+
     [HarmonyPatch(nameof(Tool.Forge))]
     private static IEnumerable<CodeInstruction>? Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
     {
         try
         {
             ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);
-            helper.FindFirst(new CodeInstructionWrapper[]
-            {
+            helper.FindFirst(
+            [
                 new(OpCodes.Ldarg_0),
                 new(SpecialCodeInstructionCases.LdArg),
                 new(OpCodes.Call, typeof(BaseEnchantment).GetCachedMethod(nameof(BaseEnchantment.GetEnchantmentFromItem), ReflectionCache.FlagTypes.StaticFlags)),
                 new(SpecialCodeInstructionCases.StLoc),
                 new(SpecialCodeInstructionCases.LdLoc),
-            })
+            ])
             .Advance(2)
-            .ReplaceOperand(typeof(GetEnchantmentPatch).GetCachedMethod(nameof(GetEnchantmentPatch.SubstituteEnchantment), ReflectionCache.FlagTypes.StaticFlags));
+            .ReplaceOperand(typeof(GetEnchantmentPatch).GetCachedMethod(nameof(SubstituteEnchantment), ReflectionCache.FlagTypes.StaticFlags))
+            .FindNext(
+                [
+                    new(OpCodes.Call, typeof(MeleeWeapon).GetCachedMethod(nameof(MeleeWeapon.attemptAddRandomInnateEnchantment), ReflectionCache.FlagTypes.StaticFlags))
+                ])
+            .ReplaceOperand(typeof(GetEnchantmentPatch).GetCachedMethod(nameof(SubstituteInnateEnchantment), ReflectionCache.FlagTypes.StaticFlags));
             return helper.Render();
         }
         catch (Exception ex)

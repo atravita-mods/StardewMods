@@ -12,7 +12,7 @@
   "Author": "atravita",
   "Version": "0.1.1",
   "Description": "ES C# component",
-  "MinimumApiVersion": "3.18",
+  "MinimumApiVersion": "4.0.7",
   "EntryDll": "EastScarp.dll",
   "UpdateKeys": [
     "-1"

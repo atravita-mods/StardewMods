@@ -95,7 +95,7 @@ internal static class NPCQueries
             return Helpers.ErrorResult(query, error);
         }
 
-        if (!TimeFrameExtensions.TryParse(modulusKey, out var timeFrame, ignoreCase: true))
+        if (!TimeFrameExtensions.TryParse(modulusKey, out TimeFrame timeFrame, ignoreCase: true))
         {
             return Helpers.ErrorResult(query, $"could not parse '{modulusKey}' as a valid time frame");
         }

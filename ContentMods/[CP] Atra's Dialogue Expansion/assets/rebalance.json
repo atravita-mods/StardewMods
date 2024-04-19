@@ -3,7 +3,7 @@
         {
             "Action": "EditData",
             "Target": "Data/Shops",
-            "TargetField": ["AmimalShop", "PriceModifiers"],
+            "TargetField": ["AnimalShop", "PriceModifiers"],
             "Entries": {
                 "atravita.DivorcedFromShane": {
                     "Id": "atravita.DivorcedFromShane",
@@ -169,6 +169,27 @@
             },
             "When": {
                 "YearModulus": "3,4"
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Data/Shops",
+            "TargetField": ["Traveler", "Items"],
+            "Entries": {
+                "atravita.NextMonthsSeeds": {
+                    "Id": "atravita.NextMonthsSeeds",
+                    "ItemId": "ALL_ITEMS (O) @requirePrice",
+                    "PerItemCondition": "atravita.AtraCore_IS_SEED_GROWING_IN Target Next",
+                    "PriceModifiers": [
+                        {
+                            "Id": "DefaultMarkup",
+                            "Modification": "Multiply",
+                            "RandomAmount": [2.0, 3.0, 4.0]
+                        }
+                    ],
+                    "AvoidRepeat": true,
+                    "MaxItems": 5
+                }
             }
         }
     ]

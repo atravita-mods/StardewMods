@@ -40,10 +40,14 @@ internal sealed class ForgeSelectionMenu : IClickableMenu
     /// Initializes a new instance of the <see cref="ForgeSelectionMenu"/> class.
     /// </summary>
     /// <param name="options">A list of possible enchantments.</param>
-    internal ForgeSelectionMenu(List<BaseEnchantment> options)
+    /// <param name="tool">The tool instance this menu was created for.</param>
+    /// <param name="isInnate">Whether or not this menu is for innate enchantments.</param>
+    internal ForgeSelectionMenu(List<BaseEnchantment> options, Tool tool, bool isInnate)
         : base(GetXPosFromViewport(Game1.uiViewport.Width), GetYPosFromViewport(Game1.viewport.Height), Width, Height)
     {
         this.options = options;
+        this.Tool = tool;
+        this.IsInnate = isInnate;
 
         this.inherentWidth = (int)ModEntry.StringUtils.MeasureWord(Game1.dialogueFont, "Matador de Insetos") + 12;
 
@@ -55,6 +59,16 @@ internal sealed class ForgeSelectionMenu : IClickableMenu
         this.shouldShowTooltip = ModEntry.Config.TooltipBehavior == TooltipBehavior.On
             || (ModEntry.Config.TooltipBehavior == TooltipBehavior.Immersive && Utility.HasAnyPlayerSeenSecretNote(1008));
     }
+
+    /// <summary>
+    /// Gets the tool instance this menu was created for.
+    /// </summary>
+    internal Tool Tool { get; init; }
+
+    /// <summary>
+    /// Gets a value indicating whether whether or not this is an innate enchantment.
+    /// </summary>
+    internal bool IsInnate { get; init; }
 
     /// <summary>
     /// Gets the currently selected enchantment.

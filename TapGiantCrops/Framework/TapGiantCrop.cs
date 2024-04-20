@@ -199,7 +199,9 @@ public sealed class TapGiantCrop : ITapGiantCropsAPI
     /// Initializes the API (gets the keg instance used to find the output).
     /// </summary>
     internal void Init()
-        => this.keg = new(Vector2.Zero, "12");
+    {
+        this.keg = new(Vector2.Zero, "12");
+    }
 
     private static GiantCrop? GetGiantCropAt(GameLocation loc, Vector2 tile)
     {

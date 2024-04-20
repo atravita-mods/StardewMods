@@ -140,7 +140,7 @@ internal static class AssetManager
     {
         if (e.NameWithoutLocale.IsEquivalentTo(overrideAsset))
         {
-            e.LoadFrom(EmptyContainers.GetEmptyDictionary<int, ObjectDefinition>, AssetLoadPriority.Exclusive);
+            e.LoadFrom(EmptyContainers.GetEmptyDictionary<string, ObjectDefinition>, AssetLoadPriority.Exclusive);
         }
         // else if (e.NameWithoutLocale.IsEquivalentTo(machineData))
         //{
@@ -203,7 +203,7 @@ internal static class AssetManager
             }
         }
 
-        Dictionary<string, float> tappers = new();
+        Dictionary<string, float> tappers = [];
         foreach ((string key, BigCraftableData data) in craftables)
         {
             if (data.ContextTags?.Any(tag => tag == "tapper_item") == true)

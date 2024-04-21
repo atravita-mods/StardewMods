@@ -348,6 +348,11 @@
     "jobLeave-Penny-rain": "Hey, @, I'm gonna go out and take a walk to the library today! Make sure to stay dry.",
     "jobReturn-Penny-rain": "I had a great day at the library, @. I'm so glad we have it in town.",
 
+    "penny-groceries.spring": "Say, @, do you think I should grab more flour?",
+    "penny-groceries.summer": "Is there anything else we need?",
+    "penny-groceries.fall": "Oh, @! Oh gosh, the price of groceries feels really high recently, doesn't it?#$b#I know we're good for the money but I still worry.",
+    "penny-groceries.winter": "@, I wish we had more options for fresh veggies in winter.",
+
     // marriage extra
     "penny-winter-3.00": "Oh, it's winter again, isn't it? What are you planning on doing this winter?",
     "penny-winter-3.01": "I trust you to handle the finances, %endearment.",

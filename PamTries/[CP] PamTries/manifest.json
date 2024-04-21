@@ -29,10 +29,6 @@
         "IsRequired": false,
     },
     {
-        "UniqueID": "PurrplingCat.CustomGiftDialogue",
-        "IsRequired": false
-    },
-    {
         "UniqueID": "TheMightyAmondee.CustomTokens",
         "IsRequired": false,
     },

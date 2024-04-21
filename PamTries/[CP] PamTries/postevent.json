@@ -21,13 +21,13 @@
         "Action": "Include",
         "LogName": "Gift Changes - mood-based dialogue",
         "FromFile": "{{FirstValidFile: assets/{{language}}/{{PamMood}}/gifts.json, assets/default/{{PamMood}}/gifts.json, assets/default/neutral/gifts.json}}",
-        "When": {"GiftChanges": "true", "HasMod": "PurrplingCat.CustomGiftDialogue"}
+        "When": {"GiftChanges": "true"}
     },
     {
         "Action": "Include",
         "LogName": "Custom Dialogue -- Pam likes Penny's Favorites",
         "FromFile": "{{FirstValidFile: assets/{{language}}/pennyfavgiftdialogue.json, assets/default/pennyfavgiftdialogue.json}}",
-        "When": {"GiftChanges": "true", "HasMod": "PurrplingCat.CustomGiftDialogue"}
+        "When": {"GiftChanges": "true"}
     },
     {
         "Action": "Include",

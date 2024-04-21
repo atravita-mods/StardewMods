@@ -28,7 +28,7 @@ internal static class SchedulingWatcher
                 && __instance.TryGetScheduleEntry(__instance.dayScheduleName.Value, out string? rawData))
             {
                 DidPamDriveBusToday = ModEntry.ScheduleUtilityFunctions.TryFindGOTOschedule(__instance, SDate.Now(), rawData, out string? redirected)
-                    && redirected.Contains("BusStop 11 10");
+                    && redirected.Contains("BusStop 21 10");
             }
         }
         catch (Exception ex)

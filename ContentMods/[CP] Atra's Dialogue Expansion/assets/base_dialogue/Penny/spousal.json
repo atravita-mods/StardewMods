@@ -96,5 +96,13 @@
             "jobLeave_Penny": "{{i18n:jobLeave-Penny-rain}}$h",
             "jobReturn_Penny": "{{i18n:jobReturn-Penny-rain}}$h"
         }
+    },
+    {
+        "LogName": "Penny - fix her silly marriage dialogue",
+        "Action": "EditData",
+        "Target": "Strings/schedules/Penny",
+        "Entries": {
+            "marriage_Mon.001": "{{i18n: penny-groceries.{{season}}}}"
+        }
     }
 ]}

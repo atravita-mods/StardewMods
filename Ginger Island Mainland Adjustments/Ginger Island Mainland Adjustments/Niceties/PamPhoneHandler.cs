@@ -79,7 +79,7 @@ internal sealed class PamPhoneHandler : IPhoneHandler
                             Globals.ModMonitor.Log("Something very odd has happened. Pam's dayScheduleName is null", LogLevel.Debug);
                             Game1.DrawDialogue(pam, "Strings\\Characters:Pam_Other");
                         }
-                        else if (MultiplayerSharedState.PamsSchedule.Contains("BusStop 11 10"))
+                        else if (MultiplayerSharedState.PamsSchedule.Contains("BusStop 21 10"))
                         {
                             Game1.DrawDialogue(pam, $"Strings\\Characters:Pam_Bus_{Random.Shared.Next(1, 4)}");
                         }
@@ -112,7 +112,7 @@ internal sealed class PamPhoneHandler : IPhoneHandler
                                 overridePortrait = Game1.temporaryContent.Load<Texture2D>("Portraits\\AnsweringMachine"),
                             });
                         }
-                        else if (MultiplayerSharedState.PamsSchedule.Contains("BusStop 11 10"))
+                        else if (MultiplayerSharedState.PamsSchedule.Contains("BusStop 21 10"))
                         {
                             Game1.DrawDialogue(new Dialogue(pam, "Strings\\Characters:Pam_Voicemail_Bus")
                             {

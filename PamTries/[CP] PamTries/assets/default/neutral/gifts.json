@@ -1,25 +1,30 @@
-{"Changes": [
-    {
-        "Action": "EditData",
-        "LogName": "Custom Gift Dialogue",
-        "Target": "Characters/Dialogue/Pam",
-        "Entries": {
-            "GiftReaction_Beer": "*sigh* Kiddo. Stop messing with me. I'm trying to quit.$u",
-            "GiftReaction_Pale_Ale": "This wasn't necessary. I'm trying to quit, kiddo.",
-            "GiftReaction_Pale_Ale~1": "Are you playing a joke on me, kid? I'm trying to quit.$u", 
-            "GiftReaction_Piña_Colada": "Kiddo...*sigh*. I'm trying to quit. Why are you doing this to me?",
-            "GiftReaction_Wine": "Kiddo, why are you doing this to me? I'm trying to quit.",
-            "GiftReaction_Mead": "I'm trying to quit. Why are you doing this to me?$u"
+{
+    "Changes": [
+        {
+            "Action": "EditData",
+            "LogName": "Custom Gift Dialogue",
+            "Target": "Characters/Dialogue/Pam",
+            "Entries": {
+                "AcceptGift_(O)346": "*sigh* Kiddo. Stop messing with me. I'm trying to quit.$u",
+                "AcceptGift_(O)303": "{{Random: This wasn't necessary. I'm trying to quit, kiddo. ++ Are you playing a joke on me, kid? I'm trying to quit.$u |inputSeparator=++}",
+                "AcceptGift_(O)873": "Kiddo...*sigh*. I'm trying to quit. Why are you doing this to me?",
+                "AcceptGift_(O)348": "Kiddo, why are you doing this to me? I'm trying to quit.",
+                "AcceptGift_(O)459": "I'm trying to quit. Why are you doing this to me?$u",
+                "AcceptGift_alcohol_item": "By Yoba, @, why you be like this?"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Neutral custom gift dialogue, post-order",
+            "Target": "Characters/Dialogue/Pam",
+            "When": {
+                "HasFlag": "atravita_PamApology_Reward",
+                "Random: 1,2": 1
+            },
+            "Entries": {
+                "AcceptGift_(O)346": "Kiddo, I don't want none of that, okay?",
+                "AcceptGift_(O)348": "Why ya like this, kiddo? You're not being helpful."
+            }
         }
-    },
-    {
-        "Action": "EditData",
-        "LogName": "Neutral custom gift dialogue, post-order",
-        "Target": "Characters/Dialogue/Pam",
-        "When": { "HasFlag": "atravita_PamApology_Reward"},
-        "Entries":{
-            "GiftReaction_Beer~1": "Kiddo, I don't want none of that, okay?",
-            "GiftReaction_Wine~1": "Why ya like this, kiddo? You're not being helpful." 
-        }
-    }
-]}
+    ]
+}

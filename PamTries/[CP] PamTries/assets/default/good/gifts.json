@@ -4,12 +4,11 @@
         "LogName": "Custom Gift Dialogue",
         "Target": "Characters/Dialogue/Pam",
         "Entries": {
-            "GiftReaction_Beer": "Kiddo, I'm trying to quit. Why are you giving this to me?$u",
-            "GiftReaction_Pale_Ale": "*sigh*. I'm trying to quit, kiddo. Why are you tempting me like this?",
-            "GiftReaction_Pale_Ale~1": "Are you playing a joke on me, kid? I'm trying to quit.$u", 
-            "GiftReaction_Piña_Colada": "Kiddo...*sigh*. I'm trying to quit.",
-            "GiftReaction_Wine": "Kiddo, why are you doing this to me? I'm trying to quit.",
-            "GiftReaction_Mead": "I'm trying to quit. Why are you doing this to me?$u"
+            "AcceptGift_(O)346": "Kiddo, I'm trying to quit. Why are you giving this to me?$u",
+            "AcceptGift_(O)303": "{{Random:*sigh*. I'm trying to quit, kiddo. Why are you tempting me like this?++Are you playing a joke on me, kid? I'm trying to quit.$u|inputSeparator=++}}",
+            "AcceptGift_(O)873": "Kiddo...*sigh*. I'm trying to quit.",
+            "AcceptGift_(O)348": "Kiddo, why are you doing this to me? I'm trying to quit.",
+            "AcceptGift_(O)459": "I'm trying to quit. Why are you doing this to me?$u"
         }
     },
     {
@@ -17,11 +16,12 @@
         "LogName": "Post-rehab gift dialogue",
         "Target": "Characters/Dialogue/Pam",
         "Entries": {
-            "GiftReaction_Beer~1": "Kiddo, why're you tryin' to make this harder for? Please, I'm tryin' to quit.",
-            "GiftReaction_Piña_Colada~1": "Kiddo, you know I'm trying to quit, why're ya givin' me booze?"
+            "AcceptGift_(O)346": "Kiddo, why're you tryin' to make this harder for? Please, I'm tryin' to quit.",
+            "AcceptGift_(O)873": "Kiddo, you know I'm trying to quit, why're ya givin' me booze?"
         },
         "When": {
-            "HasSeenEvent": "99210002"
+            "HasSeenEvent": "99210002",
+            "Random: 1, 2": 1
         }
     }
 ]}

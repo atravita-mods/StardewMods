@@ -4,13 +4,12 @@
         "LogName": "Custom Gift Dialogue",
         "Target": "Characters/Dialogue/Pam",
         "Entries": {
-            "GiftReaction_Beer": "Thanks, kid. I needed that.",
-            "GiftReaction_Pale_Ale": "Oh, this really hits the spot.$h",
-            "GiftReaction_Piña_Colada": "Not usually my thing but I'll take it, kid. It's been a day.",
-            "GiftReaction_Wine": "Not usually my thing but I'll take it, kid. It's been a day.",
-            "GiftReaction_Wine~1": "Oh, this looks fancy. Thanks. It's been a day.",
-            "GiftReaction_Mead": "Not usually my thing but I'll take it, kid. It's been a day.",
-            "GiftReaction_Energy_Tonic": "Thanks kid. I really needed that."
+            "AcceptGift_(O)346": "Thanks, kid. I needed that.", // beer
+            "AcceptGift_(O)303": "Oh, this really hits the spot.$h", // pale ale
+            "AcceptGift_(O)873": "Not usually my thing but I'll take it, kid. It's been a day.",
+            "AcceptGift_(O)348": "{{Random: Not usually my thing but I'll take it, kid. It's been a day. ++ Oh, this looks fancy. Thanks. It's been a day.|inputSeparator=++}}",
+            "AcceptGift_(O)459": "Not usually my thing but I'll take it, kid. It's been a day.",
+            "AcceptGift_(O)349": "Thanks kid. I really needed that."
         }
     },
     {
@@ -18,8 +17,8 @@
         "LogName": "Post-rehab gift dialogue",
         "Target": "Characters/Dialogue/Pam",
         "Entries": {
-            "GiftReaction_Piña_Colada~1": "Mmm. Thanks, kiddo, this reminds me of vacation. Wish I could go more often..."
+            "AcceptGift_(O)873": "Mmm. Thanks, kiddo, this reminds me of vacation. Wish I could go more often..."
         },
-        "When": {"HasFlag": "Island_Resort"}
+        "When": {"HasFlag": "Island_Resort", "Random: 1,2": 1}
     }
 ]}

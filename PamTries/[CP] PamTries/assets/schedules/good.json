@@ -7,10 +7,10 @@
             "GIRemainder": "1800 Trailer 15 4 2 pam_sit_down/2300 Trailer 25 17 2 pam_sleep",
             "GIRemainder_Fri": "1800 Saloon 16 22 1/2200 Trailer 25 17 2 pam_sleep",
             "GIRemainder_Sun": "1800 {{PamMovieLocation}}/2200 Trailer 25 17 2 pam_sleep",
-            "bus": "630 Trailer 15 4 2 pam_sit_down/830 BusStop 11 10 2/1700 {{PamFishingLocation}}/2300 Trailer 25 17 2 pam_sleep",
+            "bus": "630 Trailer 15 4 2 pam_sit_down/830 BusStop 21 10 2/1700 {{PamFishingLocation}}/2300 Trailer 25 17 2 pam_sleep",
             "spring_25": "800 Trailer 15 4 2 pam_sit_down/1130 Hospital 4 17 2 pam_sit_down \"Strings\\schedules\\Pam:atravita.PamTries.spring_25.000\"/1330 Hospital 4 6 1 \"Strings\\schedules\\Pam:atravita.PamTries.spring_25.001\"/1600 Seedshop 37 18 0 \"Strings\\schedules\\Pam:atravita.PamTries.spring_25.good\"/2200 Trailer 25 17 2 pam_sleep",
             //night market
-            "winter_16": "630 Town 74 75 2 {{PamFishing}}/830 BusStop 11 10 2/1700 Beach 54 7 2 \"Strings\\schedules\\Pam:atravita.PamTries.winter_16\"/2200 Trailer 25 17 2 pam_sleep"
+            "winter_16": "630 Town 74 75 2 {{PamFishing}}/830 BusStop 21 10 2/1700 Beach 54 7 2 \"Strings\\schedules\\Pam:atravita.PamTries.winter_16\"/2200 Trailer 25 17 2 pam_sleep"
         }
     },
     {
@@ -19,8 +19,8 @@
         "Target": "Characters/schedules/Pam",
         "When": {"HasSeenEvent": "99210002", "BusReliability": "false"},
         "Entries": {
-            "6": "630 Trailer 15 4 2 pam_sit_down/830 BusStop 11 10 2/a1600 Hospital 19 5 0 \"Strings\\schedules\\Pam:atravita.PamTries.therapy\"/1900 Trailer 9 7 0/2300 Trailer 25 17 2 pam_sleep",
-            "16": "630 Trailer 15 4 2 pam_sit_down/830 BusStop 11 10 2/a1430 Hospital 9 15 3 \"Strings\\schedules\\Pam:atravita.PamTries.medications\"/a1600 Hospital 19 5 0 \"Strings\\schedules\\Pam:atravita.PamTries.therapy\"/1900 Trailer 9 7 0/2300 Trailer 25 17 2 pam_sleep"
+            "6": "630 Trailer 15 4 2 pam_sit_down/830 BusStop 21 10 2/a1600 Hospital 19 5 0 \"Strings\\schedules\\Pam:atravita.PamTries.therapy\"/1900 Trailer 9 7 0/2300 Trailer 25 17 2 pam_sleep",
+            "16": "630 Trailer 15 4 2 pam_sit_down/830 BusStop 21 10 2/a1430 Hospital 9 15 3 \"Strings\\schedules\\Pam:atravita.PamTries.medications\"/a1600 Hospital 19 5 0 \"Strings\\schedules\\Pam:atravita.PamTries.therapy\"/1900 Trailer 9 7 0/2300 Trailer 25 17 2 pam_sleep"
         }
     },
     {
@@ -28,7 +28,7 @@
         "Action": "EditData",
         "Target": "Characters/schedules/Pam",
         "Entries": {//Late night shopping at Pierre's
-            "bus": "630 Town 74 75 2 {{PamFishing}}/830 BusStop 11 10 2/1700 SeedShop 2 24 3 \"Strings\\schedules\\Pam:atravita.PamTries.seedshop_late\"/2100 Trailer 15 4 2 pam_sit_down/2400 Trailer 25 17 2 pam_sleep"
+            "bus": "630 Town 74 75 2 {{PamFishing}}/830 BusStop 21 10 2/1700 SeedShop 2 24 3 \"Strings\\schedules\\Pam:atravita.PamTries.seedshop_late\"/2100 Trailer 15 4 2 pam_sit_down/2400 Trailer 25 17 2 pam_sleep"
         },
         "When": {"DayOfWeek": "Monday"}
     },
@@ -37,7 +37,7 @@
         "Action": "EditData",
         "Target": "Characters/schedules/Pam",
         "Entries": {//Fishes with Willy.
-            "bus": "630 Trailer 15 4 2 pam_sit_down/830 BusStop 11 10 2/1700 Beach 26 36 2 {{PamFishing}}/2200 Trailer 25 17 2 pam_sleep"
+            "bus": "630 Trailer 15 4 2 pam_sit_down/830 BusStop 21 10 2/1700 Beach 26 36 2 {{PamFishing}}/2200 Trailer 25 17 2 pam_sleep"
         },
         "When": {"DayOfWeek": "Tuesday"}
     },
@@ -46,7 +46,7 @@
         "Action": "EditData",
         "Target": "Characters/schedules/Pam",
         "Entries": {//Goes to church.
-            "bus": "630 Town 74 75 2 {{PamFishing}}/830 BusStop 11 10 2/1700 SeedShop 37 18 0 \"Strings\\schedules\\Pam:atravita.PamTries.praying\"/2200 Trailer 25 17 2 pam_sleep"
+            "bus": "630 Town 74 75 2 {{PamFishing}}/830 BusStop 21 10 2/1700 SeedShop 37 18 0 \"Strings\\schedules\\Pam:atravita.PamTries.praying\"/2200 Trailer 25 17 2 pam_sleep"
         },
         "When": {"DayOfWeek": "Wednesday"}
     },
@@ -55,7 +55,7 @@
         "Action": "EditData",
         "Target": "Characters/schedules/Pam",
         "Entries": {//Goes fishing, location varies
-            "bus": "630 Trailer 15 4 2 pam_sit_down/830 BusStop 11 10 2/1700 {{PamFishingLocation}}/2300 Trailer 25 17 2 pam_sleep"
+            "bus": "630 Trailer 15 4 2 pam_sit_down/830 BusStop 21 10 2/1700 {{PamFishingLocation}}/2300 Trailer 25 17 2 pam_sleep"
         },
         "When": {"DayOfWeek": "Thursday"}
     },
@@ -64,7 +64,7 @@
         "Action": "EditData",
         "Target": "Characters/schedules/Pam",
         "Entries": {//Saloon with Willy and Clint
-            "bus": "630 Town 74 75 2 {{PamFishing}}/830 BusStop 11 10 2/1700 Saloon 16 22 1/2200 Trailer 25 17 2 pam_sleep"
+            "bus": "630 Town 74 75 2 {{PamFishing}}/830 BusStop 21 10 2/1700 Saloon 16 22 1/2200 Trailer 25 17 2 pam_sleep"
         },
         "When": {"DayOfWeek": "Friday"}
     },
@@ -73,7 +73,7 @@
         "Action": "EditData",
         "Target": "Characters/schedules/Pam",
         "Entries": {//attempts to cook....
-            "bus": "630 Trailer 15 4 2 pam_sit_down/830 BusStop 11 10 2/1700 Trailer 9 7 0/2300 Trailer 25 17 2 pam_sleep"
+            "bus": "630 Trailer 15 4 2 pam_sit_down/830 BusStop 21 10 2/1700 Trailer 9 7 0/2300 Trailer 25 17 2 pam_sleep"
         },
         "When": {"DayOfWeek": "Saturday"}
     },
@@ -82,7 +82,7 @@
         "Action": "EditData",
         "Target": "Characters/schedules/Pam",
         "Entries": {//Movies with Penny!
-            "bus": "630 Town 74 75 2 {{PamFishing}}/830 BusStop 11 10 2/1700 {{PamMovieLocation}}/2200 Trailer 25 17 2 pam_sleep"
+            "bus": "630 Town 74 75 2 {{PamFishing}}/830 BusStop 21 10 2/1700 {{PamMovieLocation}}/2200 Trailer 25 17 2 pam_sleep"
         },
         "When": {
             "DayOfWeek": "Sunday",

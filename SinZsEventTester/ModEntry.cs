@@ -39,6 +39,8 @@ public sealed class ModEntry : Mod
 
     private ModConfig config = null!;
 
+    private FastForwardHandler? fastForwardHandler;
+
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
     {
@@ -53,6 +55,7 @@ public sealed class ModEntry : Mod
         }
 
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
+        helper.Events.Input.ButtonPressed += this.OnButtonPressed;
 
         helper.ConsoleCommands.Add(
             "sinz.playevents",
@@ -104,6 +107,25 @@ public sealed class ModEntry : Mod
             "sinz.forget_triggers",
             "Forgets triggers",
             (_, args) => new SimpleConsoleCommand(this.Monitor).ForgetTriggers(args));
+    }
+
+    private void OnButtonPressed(object? sender, ButtonPressedEventArgs e)
+    {
+        if (!this.config.FastForwardKeybind.JustPressed())
+        {
+            return;
+        }
+        if (this.fastForwardHandler is not { } handler || handler.IsDisposed)
+        {
+            this.fastForwardHandler = new(this.Monitor, this.Helper.Events.GameLoop, this.Helper.Reflection, this.config);
+            Game1.addHUDMessage(new("FastFoward enabled!"));
+        }
+        else
+        {
+            this.fastForwardHandler.Dispose();
+            this.fastForwardHandler = null;
+            Game1.addHUDMessage(new("FastForward disabled!"));
+        }
     }
 
     /// <inheritdoc />

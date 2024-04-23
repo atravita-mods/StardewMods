@@ -282,6 +282,7 @@
     "demetrius-divorced-maru-oneweek": "We're so much better off without you in our family.",
     "demetrius-divorced-from-maru-a": "Well, I wish you hadn't broken my dear Maru's heart.",
     "demetrius-divorced-from-maru-b": "I have nothing to say to you.",
+    "demetrius-divorced-from-maru-c": "Go away. I have wrok to do.",
     "demetrius-divorced-from-sebastian-a": "I don't think Sebastian wants to see you.",
     "demetrius-divorced-from-sebastian-b": "You didn't have to break my stepson's heart like that.",
 
@@ -492,6 +493,23 @@
     // Willy chats about fish if you've been catching some.
     "willy-caught-fish-carp": "Ah, I see you've been fishing! Caught anything interesting yet?",
     "willy-caught-fish-catfish": "@, heard you caught your first catfish.#$b#She's a beauty, isn't she?$h",
+
+/***************
+* Gift dialogue
+****************/
+
+    "demetrius-tomato-gift": "What a lovely fruit specimen! I almost want to bite into it immediately.",
+    "demetrius-morel-gift": "Ah, this is a lovely specimen! You know, @, morels are quite valued for their flavor, but can be poisonous if not properly cooked.",
+    "demetrius-coffee-gift": "Ah, much thanks, @! I needed that.",
+    "demetrius-espresso-gift": "Do I look that tired, @?#$b#Just kidding, I definitely could have done with one of these.",
+    "demetrius-strawberry-gift-first": "Did you know, @, the small things on the sides of the strawberry are actually the fruit, and the red fleshy part is actually just an accessory fruit?",
+    "demetrius-strawberry-gift-later": "#$c .5#Ah, a fresh strawberry, my favorite fruit. Thank you.#You know, @, occasionally I consider planting some strawberries myself. But, as Robin constantly points out, I have a black thumb.",
+
+    "demetrius-strawberry-harvested": "@! Heard you've been growing strawberries lately.#$b#I've always wanted to, but every time I've gone to Pierre's for the seeds, he's not selling them.",
+
+    "demetrius-coral-gift-first": "A very interesting specimen indeed! Coral is made of many, many tiny polyps, each of which secretes a skeleton of carbon carbonate.#$b#But I'm not going to need more specimens, okay? I'm not a coral scientist.",
+
+    "demetrius-coral-later": "#$c .5#Ah, another bit of coral? This one seems to be exceptionally intricate.#Gosh, @, are we getting that much coral washing up on sea? I hope that doesn't mean our local corals are getting heat stressed and dying.",
 
 /***************
 * Anniversary!

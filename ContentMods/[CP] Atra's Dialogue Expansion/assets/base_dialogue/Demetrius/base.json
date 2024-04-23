@@ -30,7 +30,17 @@
                 "movieTheater": "{{i18n:demetrius-movie-start}}#$e#$c 0.5#{{i18n:demetrius-movie-a}}#{{i18n:demetrius-movie-b}}",
                 "divorced_Maru": "{{i18n:demetrius-divorced-maru}}$a",
                 "eventSeen_1053978_memory_oneweek": "{{i18n: demetrius-bed-event-one-week}}$s",
-                "mineArea_77377": "{{i18n: demetrius-quarry}}"
+                "mineArea_77377": "{{i18n: demetrius-quarry}}",
+                "cropMatured_400": "{{i18n: demetrius-strawberry-harvested}}$s",
+
+                // some gift dialogue
+                "AcceptGift_(O)256": "{{i18n:demetrius-tomato-gift}}$h",
+                "AcceptGift_(O)257": "{{i18n:demetrius-morel-gift}}",
+                "AcceptGift_(O)395": "{{i18n:demetrius-coffee-gift}}",
+                "AcceptGift_(O)253": "{{i18n:demetrius-espresso-gift}}",
+                "AcceptGift_(O)400": "$1 atravita.demetrius.strawberrygift.dialogue#{{i18n:demetrius-strawberry-gift-first}}#$e#{{i18n:demetrius-strawberry-gift-later}}",
+
+                "AcceptGift_(O)393": "$1 atravita.demetrius.coralgift.dialogue#{{i18n:demetrius-coral-gift-first}}#action AddFriendshipPoints Demetrius 20#$e#{{i18n:demetrius-coral-later}}"
             }
         },
         {
@@ -55,7 +65,8 @@
             "Entries": {
                 "ScienceHouse": "{{i18n: demetrius-divorced-from-maru-a}}$s",
                 "Mountain": "{{i18n: demetrius-divorced-from-maru-b}}$s",
-                "divorced_Maru_memory_oneweek": "{{i18n: demetrius-divorced-maru-oneweek}}$s"
+                "divorced_Maru_memory_oneweek": "{{i18n: demetrius-divorced-maru-oneweek}}$s",
+                "Town": "{{i18n: demetrius-divorced-from-maru-c}}$s"
             }
         },
         {

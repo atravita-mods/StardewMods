@@ -4,6 +4,7 @@
         "Target": "Characters/Dialogue/George",
         "Entries": {
             "summer_Mon10": "Doc's not gonna like how swollen my ankles are, nosiree.$s",
+            "AcceptGift_(O)260": "Oh, that's gonna feel real nice on my knee."
         },
         "When": {
             "HasSeenEvent": "18" // event where George tells you about his accident

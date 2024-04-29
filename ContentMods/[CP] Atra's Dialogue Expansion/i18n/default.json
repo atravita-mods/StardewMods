@@ -387,6 +387,8 @@
     "demetrius-bed-event-one-week": "@, Robin's still mad at me over that bed. I'm not sure what to do.",
     "demetrius-quarry": "You know, @, I've never been to that place beyond the bridge. It's been broken since we've moved here.#$b#I've heard stories, though.",
 
+    "harvey-skull-cavern": "Hey, @, take care in those caverns, won't you? I hear they're quite dangerous.",
+
     "marnie-barn.00": "You know, @, cows can have quite the personalities.",
     "marnie-barn.01": "Used to have one ole' gal who'd love to eat my hat.",
 
@@ -498,18 +500,27 @@
 * Gift dialogue
 ****************/
 
-    "demetrius-tomato-gift": "What a lovely fruit specimen! I almost want to bite into it immediately.",
-    "demetrius-morel-gift": "Ah, this is a lovely specimen! You know, @, morels are quite valued for their flavor, but can be poisonous if not properly cooked.",
     "demetrius-coffee-gift": "Ah, much thanks, @! I needed that.",
+    "demetrius-coral-gift-first": "A very interesting specimen indeed! Coral is made of many, many tiny polyps, each of which secretes a skeleton of carbon carbonate.#$b#But I'm not going to need more specimens, okay? I'm not a coral scientist.",
+    "demetrius-coral-later": "#$c .5#Ah, another bit of coral? This one seems to be exceptionally intricate.#Gosh, @, are we getting that much coral washing up on sea? I hope that doesn't mean our local corals are getting heat stressed and dying.",
+    "demetrius-dragonstooth-gift-first": "Oh, wow, @, where did you get that? That's a lovely specimen. I'll be careful to keep it safe and sound!#$b#But maybe don't bring me another, my wife says I hoard too many specimens as is.",
+    "demetrius-dragonstooth-gift-later": "Oh, thank you! But I probably shouldn't hold onto it, that looks like it may be dangerous.",
+    "demetrius-dragonstooth-reject": "Oh, a dragon's tooth! I'd love to keep that, but the last one leaked poison all over the kitchen, so maybe best if I don't.",
     "demetrius-espresso-gift": "Do I look that tired, @?#$b#Just kidding, I definitely could have done with one of these.",
+    "demetrius-morel-gift": "Ah, this is a lovely specimen! You know, @, morels are quite valued for their flavor, but can be poisonous if not properly cooked.",
     "demetrius-strawberry-gift-first": "Did you know, @, the small things on the sides of the strawberry are actually the fruit, and the red fleshy part is actually just an accessory fruit?",
     "demetrius-strawberry-gift-later": "#$c .5#Ah, a fresh strawberry, my favorite fruit. Thank you.#You know, @, occasionally I consider planting some strawberries myself. But, as Robin constantly points out, I have a black thumb.",
-
     "demetrius-strawberry-harvested": "@! Heard you've been growing strawberries lately.#$b#I've always wanted to, but every time I've gone to Pierre's for the seeds, he's not selling them.",
+    "demetrius-tomato-gift": "What a lovely fruit specimen! I almost want to bite into it immediately.",
 
-    "demetrius-coral-gift-first": "A very interesting specimen indeed! Coral is made of many, many tiny polyps, each of which secretes a skeleton of carbon carbonate.#$b#But I'm not going to need more specimens, okay? I'm not a coral scientist.",
+    // harvey
+    "harvey-birthday-gift-married": "Oh, is it my birthday today, my dear? I must have forgotten.#$b#Thank you so much!",
 
-    "demetrius-coral-later": "#$c .5#Ah, another bit of coral? This one seems to be exceptionally intricate.#Gosh, @, are we getting that much coral washing up on sea? I hope that doesn't mean our local corals are getting heat stressed and dying.",
+    "harvey-gift-coffee-morning.01": "Oh, a fresh coffee? Thanks, I needed that.",
+    "harvey-gift-coffee-morning.02": "You know, @, my roommate in college was very particular on his coffee. Had to be brewed a specific way, with water that was not too hot and not too cold...#$b#Myself, any coffee is good coffee.",
+    "harvey-gift-coffee-morning.03": "Sometimes, I wonder how people get through the day without coffee...or tea...#$b#Thanks!",
+    "harvey-gift-coffee-morning.04": "Ah, nothing like a freshly brewed coffee to start the day!$h",
+    "harvey-gift-coffee-evening": "Oh, a coffee! I'll be saving that for tomorrow.",
 
 /***************
 * Anniversary!
@@ -1570,6 +1581,7 @@
     "gus-y3-fair": "@, do you think I should add anything to the menu for next year?",
     "haley-y2-fair-spouse": "Our grange display is the best of them all!",
     "haley-y2-fair": "I'm not playing any of the fair games, I don't want to mess up my hair.",
+    "harvey-fair-judged-shorts": "Why would you...at the fair?",
     "harvey-y2-fair-spouse.0": "Gosh, I'm really not used to having so many people around.",
     "harvey-y2-fair-spouse.1": "I'll...just be waiting for you over here, okay, my dear?",
     "harvey-y2-fair": "Gus's secret sauce even makes eggplant burgers taste better!",

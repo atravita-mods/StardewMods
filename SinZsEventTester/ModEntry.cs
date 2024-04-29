@@ -357,7 +357,7 @@ Outer: ;
 
             if (Game1.activeClickableMenu is DialogueBox db)
             {
-                if (db.safetyTimer > 10)
+                if (db.safetyTimer > 0)
                 {
                     db.SpeedUp();
                     return;

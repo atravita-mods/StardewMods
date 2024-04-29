@@ -68,10 +68,9 @@ internal static class RedirectPhoneCall
             ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);
 
             helper.ForEachMatch(
-                new CodeInstructionWrapper[]
-                {
+                [
                     (OpCodes.Call, typeof(GameLocation).GetCachedMethod(nameof(GameLocation.AreStoresClosedForFestival), ReflectionCache.FlagTypes.StaticFlags)),
-                },
+                ],
                 (helper) =>
                 {
                     helper.ReplaceOperand(typeof(HSUtils).GetCachedMethod(nameof(HSUtils.StoresClosedForFestival), ReflectionCache.FlagTypes.StaticFlags));

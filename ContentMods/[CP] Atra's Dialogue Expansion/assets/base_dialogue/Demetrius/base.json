@@ -40,7 +40,20 @@
                 "AcceptGift_(O)253": "{{i18n:demetrius-espresso-gift}}",
                 "AcceptGift_(O)400": "$1 atravita.demetrius.strawberrygift.dialogue#{{i18n:demetrius-strawberry-gift-first}}#$e#{{i18n:demetrius-strawberry-gift-later}}",
 
-                "AcceptGift_(O)393": "$1 atravita.demetrius.coralgift.dialogue#{{i18n:demetrius-coral-gift-first}}#action AddFriendshipPoints Demetrius 20#$e#{{i18n:demetrius-coral-later}}"
+                "AcceptGift_(O)393": "$1 atravita.demetrius.coralgift.dialogue#{{i18n:demetrius-coral-gift-first}}#action AddFriendshipPoints Demetrius 20#$e#{{i18n:demetrius-coral-later}}",
+
+                "AcceptGift_(O)852": "$1 atravita.demetrius.dragonstoothgift.dialogue#{{i18n: demetrius-dragonstooth-gift-first}}#action AddFriendshipPoints Demetrius 40#$e#{{i18n:demetrius-dragonstooth-gift-later}}"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Demetrius - reject Dragons Tooth",
+            "Target": "Characters/Dialogue/Demetrius",
+            "When": {
+                "HasReadLetter": "atravita.demetrius.dragonstoothgift.dialogue"
+            },
+            "Entries":{
+                "reject_852": "{{i18n:demetrius-dragonstooth-reject}}"
             }
         },
         {
@@ -50,7 +63,8 @@
             "When": {
                 "Query: {{Hearts:Demetrius}} > 5": true,
                 "Relationship: Maru|contains=Divorced": false,
-                "Relationship: Sebastian|contains=Divorced": false
+                "Relationship: Sebastian|contains=Divorced": false,
+                "Random: a, b": "a"
             },
             "Entries": {
                 // base locational - in his lab.

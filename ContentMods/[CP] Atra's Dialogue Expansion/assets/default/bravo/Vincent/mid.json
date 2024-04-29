@@ -9,7 +9,9 @@
                 "spring_14": "Maybe Mom will buy some chocolate now that it's on sale?$h",
                 "summer_Wed10": "I asked Sam if he'd teach me how to skateboard some day.#$b#He said I was too little.$s",
                 "Thu8": "Sam let me play one of his video games!$h#$e#Mom yelled at him over that, though.",
-                "IslandSouth_Entry": "Do I need to put on sunscreen?"
+                "IslandSouth_Entry": "Do I need to put on sunscreen?",
+
+                "RejectMovieTicket_DontWantToSeeThatMovie": "Oh, mom says I shouldn't see that movie."
             },
         },
         {
@@ -60,9 +62,9 @@
                 "8_2": "Mom and Dad went to the city for a day. Said it was something for Dad.#$b#They said it might help bring Dad back? But he's back?",
                 "9_2": "I hope Mom's making {{i18n: dishes.child.{{Random:01,02,03,04,05,06,07,08}} }} for dinner tonight.",
                 "10_2": "Mom's making broccoli tonight.$s",
-                "12_2": "Mom won't let me have popcorn anymore.$s",
+                "12_2": "Mom won't let me have popcorn anymore. She says it's not 'healthy'.$s#$b#{{Title}} @, what's 'healthy'?",
                 "14_2": "My favorite color is purple. What's yours?",
-                "22_2": "I wanna go ice skating too!"
+                "22_2": "I wanna go ice skating too! But Sam wouldn't take me with him."
             }
         },
         {
@@ -73,7 +75,6 @@
             "Entries": {
                 "2_2": "Can I have some chocolate, {{Title}} @?",
                 "4_2": "I wish mom would make more cookies.$s",
-                "6_2": "My favorite color is purple. What's yours?",
                 "22_2": "I wanna go to the zoo, {{Title}} @, will you take me?"
             }
         },

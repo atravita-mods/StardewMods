@@ -183,6 +183,15 @@
         },
         {
             "Action": "EditData",
+            "LogName": "Harvey - normal dialogue file",
+            "Target": "Characters/Dialogue/Harvey",
+            "When": {"EnableFor":"Harvey"},
+            "Entries": {
+                "Fair_Judged_PlayerLost_PurpleShorts": "{{i18n:harvey-fair-judged-shorts}}"
+            }
+        },
+        {
+            "Action": "EditData",
             "LogName": "Harvey - normal",
             "Target": "Data/Festivals/fall16",
             "When": {

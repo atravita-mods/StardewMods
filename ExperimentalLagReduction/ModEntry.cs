@@ -36,6 +36,8 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunch;
         helper.Events.GameLoop.DayEnding += this.CrosscheckCache;
 
+        helper.Events.GameLoop.TimeChanged += this.OnTimeChanged;
+
         Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
 
         OverrideGiftTastes.Initialize(helper.GameContent);
@@ -45,6 +47,17 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         helper.Events.Content.AssetRequested += static (_, e) => AssetManager.Apply(e);
 
         this.Monitor.Log($"We seem to have been allowed {Environment.ProcessorCount} processors.", LogLevel.Debug);
+    }
+
+    private void OnTimeChanged(object? sender, TimeChangedEventArgs e)
+    {
+        foreach (var npc in Game1.currentLocation.characters)
+        {
+            if (npc.AllowDynamicAppearance && !npc.SimpleNonVillagerNPC)
+            {
+                npc.ChooseAppearance();
+            }
+        }
     }
 
     /// <inheritdoc />

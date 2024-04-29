@@ -2,6 +2,13 @@
     "Changes": [
         {
             "Action": "EditData",
+            "Target": "Characters/Dialogue/Harvey",
+            "Entries": {
+                "AcceptBirthdayGift_Positive": "{{i18n:harvey-birthday-gift-married}}$h"
+            }
+        },
+        {
+            "Action": "EditData",
             "Target": "Characters/Dialogue/MarriageDialogueHarvey",
             "Entries": {
                 "GILeave_Harvey": "{{i18n:gi_leave_harvey_0}}#$b#$s{{i18n:gi_leave_harvey_1}}",

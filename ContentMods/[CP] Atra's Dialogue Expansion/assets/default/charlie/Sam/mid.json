@@ -1,5 +1,13 @@
 {"Changes":[
     {
+        "LogName": "Sam - mid hearts",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Sam",
+        "Entries": {
+            "AcceptGift_(O)223": "Oh, Granny's cookies! Thanks, @, I'll go split them with Vincent.$h", // getting cookies.
+        }
+    },
+    {
         "LogName": "Sam, mid hearts - y1",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Sam",

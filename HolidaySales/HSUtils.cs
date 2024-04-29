@@ -17,6 +17,8 @@ namespace HolidaySales;
 /// </summary>
 internal static class HSUtils
 {
+    private static readonly ThreadLocal<HashSet<string>> _visited = new(static () => new());
+
     /// <summary>
     /// looks for calls to Utility.isFestivalDay and replaces it with calls to my custom method here.
     /// </summary>
@@ -102,23 +104,63 @@ internal static class HSUtils
         string? s = Utility.getSeasonKey(season) + day;
         if (Game1.temporaryContent.Load<Dictionary<string, string>>(@"Data\Festivals\FestivalDates").ContainsKey(s))
         {
-            int index = mapname.IndexOf('_');
-            ReadOnlySpan<char> mapRegion;
-            if (index == -1)
+            ReadOnlySpan<char> mapRegion = [];
+
+            if (Game1.getLocationFromName(mapname) is { } loc)
             {
-                mapRegion = "Town";
+                var contextId = loc.GetLocationContextId();
+
+                if (Game1.locationContextData.TryGetValue(contextId, out var context))
+                {
+                    var visited = _visited.Value!;
+                    visited.Clear();
+                    visited.Add(contextId);
+
+                    while (context.CopyWeatherFromLocation is { } next)
+                    {
+                        if (!Game1.locationContextData.TryGetValue(next, out var nextData))
+                        {
+                            ModEntry.ModMonitor.Log($"Could not find location data corresponding to {next}, skipping.");
+                            break;
+                        }
+                        else
+                        {
+                            contextId = next;
+                            context = nextData;
+                        }
+                    }
+
+                    if (contextId != "Default")
+                    {
+                        mapRegion = contextId;
+                    }
+                }
             }
-            else
+
+            if (mapRegion.IsEmpty)
             {
-                index = mapname.IndexOf('_', index + 1);
+                int index = mapname.IndexOf('_');
                 if (index == -1)
                 {
-                    mapRegion = "CustomMapRegion";
+                    mapRegion = "Town";
                 }
                 else
                 {
-                    mapRegion = mapname.AsSpan()[..index];
+                    index = mapname.IndexOf('_', index + 1);
+                    if (index == -1)
+                    {
+                        mapRegion = "CustomMapRegion";
+                    }
+                    else
+                    {
+                        mapRegion = mapname.AsSpan()[..index];
+                    }
                 }
+            }
+
+            if (mapRegion.IsEmpty)
+            {
+                mapRegion = "Town";
             }
 
             try

@@ -1,11 +1,15 @@
 ﻿namespace TrashDoesNotConsumeBait.HarmonyPatches;
 
-using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
 
 using HarmonyLib;
 
+using Microsoft.Xna.Framework;
+
+using StardewValley.Extensions;
+using StardewValley.ItemTypeDefinitions;
 using StardewValley.Menus;
+using StardewValley.Objects;
 using StardewValley.Tools;
 
 /// <summary>
@@ -22,6 +26,7 @@ internal static class TreasureMenuPatches
             return;
         }
 
+        Vector2 init_pos = Game1.player.Position + new Vector2(0, -196f);
         try
         {
             for (int i = itemGrab.ItemsToGrabMenu.actualInventory.Count - 1; i >= 0; i--)
@@ -35,6 +40,8 @@ internal static class TreasureMenuPatches
 
                 int original = item.Stack;
                 Item? remainder = item;
+
+                // try to equip if possible.
                 if (Game1.player.CurrentTool is FishingRod rod && item is SObject obj)
                 {
                     SObject? oldAttach = rod.attach(obj);
@@ -60,7 +67,43 @@ internal static class TreasureMenuPatches
 
                 if (remainder is null || remainder.Stack < original)
                 {
-                    Game1.addHUDMessage(HUDMessage.ForItemGained(item, original - (remainder?.Stack ?? 0)));
+                    int count = original - (remainder?.Stack ?? 0);
+                    Game1.addHUDMessage(HUDMessage.ForItemGained(item, count));
+                    if (Game1.currentLocation is { } loc)
+                    {
+                        ParsedItemData parsed = ItemRegistry.GetDataOrErrorItem(item.QualifiedItemId);
+                        if (parsed is not null)
+                        {
+                            string texture = parsed.TextureName;
+                            Rectangle sourceRect = parsed.GetSourceRect();
+
+                            for (int j = 0; j < count; j++)
+                            {
+                                TemporaryAnimatedSprite temporaryAnimatedSprite = new(
+                                    texture,
+                                    sourceRect,
+                                    600,
+                                    1,
+                                    0,
+                                    init_pos,
+                                    flicker: false,
+                                    flipped: false,
+                                    MathF.BitIncrement((float)init_pos.Y / 10000),
+                                    0.01f,
+                                    item is ColoredObject colored ? colored.color.Value : Color.White,
+                                    Game1.pixelZoom,
+                                    0.01f,
+                                    Random.Shared.NextBool() ? 0.02f : 0.02f,
+                                    Random.Shared.NextBool() ? 0.02f : 0.02f)
+                                {
+                                    motion = new Vector2(Game1.random.Next(-30, 31) / 10f, Game1.random.Next(-6, -3)),
+                                    acceleration = new Vector2(0f, 0.5f),
+                                };
+
+                                loc.temporarySprites.Add(temporaryAnimatedSprite);
+                            }
+                        }
+                    }
                 }
             }
 

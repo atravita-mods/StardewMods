@@ -15,7 +15,7 @@
                 // Ginger Island additional
                 "Resort_Pier": "{{i18n:vincent_pier}}$h",
                 "Resort_Wander_2": "{{i18n:vincent_wander}}$s",
-                "Resort_IslandNorth": "{{i18n: vincent_islandnorth}}$s"
+                "Resort_IslandNorth": "{{i18n: vincent_islandnorth}}$s",
             }
         },
         {

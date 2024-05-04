@@ -3,7 +3,10 @@
         {
             "Action": "EditData",
             "Target": "Data/Shops",
-            "TargetField": ["AnimalShop", "PriceModifiers"],
+            "TargetField": [
+                "AnimalShop",
+                "PriceModifiers"
+            ],
             "Entries": {
                 "atravita.DivorcedFromShane": {
                     "Id": "atravita.DivorcedFromShane",
@@ -22,7 +25,10 @@
         {
             "Action": "EditData",
             "Target": "Data/Shops",
-            "TargetField": ["Blacksmith", "PriceModifiers"],
+            "TargetField": [
+                "Blacksmith",
+                "PriceModifiers"
+            ],
             "Entries": {
                 "atravita.ClintFriendship": {
                     "Id": "atravita.ClintFriendship",
@@ -34,7 +40,10 @@
         {
             "Action": "EditData",
             "Target": "Data/Shops",
-            "TargetField": ["ClintUpgrade", "PriceModifiers"],
+            "TargetField": [
+                "ClintUpgrade",
+                "PriceModifiers"
+            ],
             "Entries": {
                 "atravita.ClintFriendship": {
                     "Id": "atravita.ClintFriendship",
@@ -46,7 +55,10 @@
         {
             "Action": "EditData",
             "Target": "Data/Shops",
-            "TargetField": ["Carpenter", "PriceModifiers"],
+            "TargetField": [
+                "Carpenter",
+                "PriceModifiers"
+            ],
             "Entries": {
                 "atravita.DivorcedFromMaruOrSebastian": {
                     "Id": "atravita.DivorcedFromMaruOrSebastian",
@@ -65,7 +77,10 @@
         {
             "Action": "EditData",
             "Target": "Data/Shops",
-            "TargetField": ["Dwarf", "PriceModifiers"],
+            "TargetField": [
+                "Dwarf",
+                "PriceModifiers"
+            ],
             "Entries": {
                 "atravita.DwarfFriendship": {
                     "Id": "atravita.DwarfFriendship",
@@ -77,7 +92,10 @@
         {
             "Action": "EditData",
             "Target": "Data/Shops",
-            "TargetField": ["FishShop", "PriceModifiers"],
+            "TargetField": [
+                "FishShop",
+                "PriceModifiers"
+            ],
             "Entries": {
                 "atravita.WillyFriendship": {
                     "Id": "atravita.WillyFriendship",
@@ -89,19 +107,40 @@
         {
             "Action": "EditData",
             "Target": "Data/Shops",
-            "TargetField": ["Saloon", "PriceModifiers"],
+            "TargetField": [
+                "Saloon",
+                "PriceModifiers"
+            ],
             "Entries": {
                 "atravita.GusFriendship": {
                     "Id": "atravita.GusFriendship",
                     "Modification": "Multiply",
-                    "Amount": "{{Query: 2 - {{Hearts:Willy}}/9 }}"
+                    "Amount": "{{Query: 2 - {{Hearts:Gus}}/9 }}"
                 }
             }
         },
         {
             "Action": "EditData",
             "Target": "Data/Shops",
-            "TargetField": ["SeedShop", "PriceModifiers"],
+            "TargetField": [
+                "ResortBar",
+                "PriceModifiers"
+            ],
+            "Entries": {
+                "atravita.GusFriendship": {
+                    "Id": "atravita.GusFriendship",
+                    "Modification": "Multiply",
+                    "Amount": "{{Query: 2 - {{Hearts:Gus}}/9 }}"
+                }
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Data/Shops",
+            "TargetField": [
+                "SeedShop",
+                "PriceModifiers"
+            ],
             "Entries": {
                 "atravita.DivorcedFromAbby": {
                     "Id": "atravita.DivorcedFromAbby",
@@ -120,7 +159,10 @@
         {
             "Action": "EditData",
             "Target": "Data/Shops",
-            "TargetField": ["ShadowShop", "PriceModifiers"],
+            "TargetField": [
+                "ShadowShop",
+                "PriceModifiers"
+            ],
             "Entries": {
                 "atravita.KrobusFriendship": {
                     "Id": "atravita.KrobusFriendship",
@@ -132,7 +174,10 @@
         {
             "Action": "EditData",
             "Target": "Data/Shops",
-            "TargetField": ["VolcanoShop", "PriceModifiers"],
+            "TargetField": [
+                "VolcanoShop",
+                "PriceModifiers"
+            ],
             "Entries": {
                 "atravita.DwarfFriendship": {
                     "Id": "atravita.DwarfFriendship",
@@ -144,9 +189,75 @@
         {
             "Action": "EditData",
             "Target": "Data/Shops",
-            "TargetField": ["Traveler", "PriceModifiers"],
+            "TargetField": [
+                "Hospital",
+                "PriceModifiers"
+            ],
             "Entries": {
-                "atravita.Traveler.Inflation" :{
+                "atravita.HarveyFriendship": {
+                    "Id": "atravita.HarveyFriendship",
+                    "Modification": "Multiply",
+                    "Amount": "{{Query: 2 - {{Hearts:Harvey}}/9 }}"
+                }
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Data/Shops",
+            "TargetField": [
+                "IceCreamStand",
+                "PriceModifiers"
+            ],
+            "Entries": {
+                "atravita.AlexFriendship": {
+                    "Id": "atravita.AlexFriendship",
+                    "Modification": "Multiply",
+                    "Amount": "{{Query: 2 - {{Hearts:Alex}}/9 }}"
+                }
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Data/Shops",
+            "TargetField": [
+                "Sandy",
+                "PriceModifiers"
+            ],
+            "Entries": {
+                "atravita.SandyFriendship": {
+                    "Id": "atravita.SandyFriendship",
+                    "Modification": "Multiply",
+                    "Amount": "{{Query: 2 - {{Hearts:Sandy}}/9 }}"
+                }
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Data/Shops",
+            "TargetField": [
+                "Bookseller",
+                "PriceModifiers"
+            ],
+            "Entries": {
+                "atravita.Bookseller.Inflation": {
+                    "Id": "atravita.Bookseller.Inflation",
+                    "Modification": "Multiply",
+                    "Amount": "1.5"
+                }
+            },
+            "When": {
+                "Year|contains=1": false
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Data/Shops",
+            "TargetField": [
+                "Traveler",
+                "PriceModifiers"
+            ],
+            "Entries": {
+                "atravita.Traveler.Inflation": {
                     "Id": "atravita.Traveler.Inflation",
                     "Modification": "Multiply",
                     "Amount": "1.5"
@@ -159,9 +270,12 @@
         {
             "Action": "EditData",
             "Target": "Data/Shops",
-            "TargetField": ["Traveler", "PriceModifiers"],
+            "TargetField": [
+                "Traveler",
+                "PriceModifiers"
+            ],
             "Entries": {
-                "atravita.Traveler.Economy" :{
+                "atravita.Traveler.Economy": {
                     "Id": "atravita.Traveler.Economy",
                     "Modification": "Multiply",
                     "Amount": "1.5"
@@ -174,7 +288,10 @@
         {
             "Action": "EditData",
             "Target": "Data/Shops",
-            "TargetField": ["Traveler", "Items"],
+            "TargetField": [
+                "Traveler",
+                "Items"
+            ],
             "Entries": {
                 "atravita.NextMonthsSeeds": {
                     "Id": "atravita.NextMonthsSeeds",
@@ -184,7 +301,11 @@
                         {
                             "Id": "DefaultMarkup",
                             "Modification": "Multiply",
-                            "RandomAmount": [2.0, 3.0, 4.0]
+                            "RandomAmount": [
+                                2.0,
+                                3.0,
+                                4.0
+                            ]
                         }
                     ],
                     "AvoidRepeat": true,

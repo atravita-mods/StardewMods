@@ -44,6 +44,7 @@ public sealed class ModEntry : Mod
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
     {
+        I18n.Init(helper.Translation);
         try
         {
             this.config = this.Helper.ReadConfig<ModConfig>();

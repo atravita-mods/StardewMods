@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using AtraShared.Utils;
+﻿using AtraShared.Utils;
 using AtraShared.Utils.Extensions;
 
 using HarmonyLib;
@@ -12,6 +6,7 @@ using HarmonyLib;
 using Microsoft.Xna.Framework;
 
 using StardewValley.Buildings;
+using StardewValley.GameData.Objects;
 
 namespace AtraCore.HarmonyPatches.FishPondPatches;
 
@@ -23,15 +18,26 @@ internal static class FishColorPatches
     {
         try
         {
-            if (!Game1.objectData.TryGetValue(__instance.fishType.Value, out var data)
-                || data.CustomFields?.TryGetValue("atravita.FishPondColor", out var scolor) is not true)
+            if (!Game1.objectData.TryGetValue(__instance.fishType.Value, out ObjectData? data))
             {
                 return;
             }
 
-            if (data.CustomFields.TryGetValue("atravita.FishPondColor.MinPopulation", out var pop))
+            if (data.CustomFields?.TryGetValue("atravita.FishPondColor", out string? scolor) is not true)
             {
-                if (!int.TryParse(pop, out var val))
+                if (ModEntry.Config.AutoColorFishPonds)
+                {
+                    scolor = "tailoring";
+                }
+                else
+                {
+                    return;
+                }
+            }
+
+            if (data.CustomFields?.TryGetValue("atravita.FishPondColor.MinPopulation", out string? pop) is true)
+            {
+                if (!int.TryParse(pop, out int val))
                 {
                     ModEntry.ModMonitor.Log($"Fish {__instance.fishType.Value} has invalid population gate for colorful fish ponds {pop}", LogLevel.Warn);
                     return;
@@ -50,7 +56,7 @@ internal static class FishColorPatches
 
             if (color is null)
             {
-                if (!ColorHandler.TryParseColor(scolor, out var potentialColor))
+                if (!ColorHandler.TryParseColor(scolor, out Color potentialColor))
                 {
                     ModEntry.ModMonitor.Log($"{scolor} could not be parsed as a valid color for {__instance.fishType.Value}'s custom fish coloring.");
                     return;

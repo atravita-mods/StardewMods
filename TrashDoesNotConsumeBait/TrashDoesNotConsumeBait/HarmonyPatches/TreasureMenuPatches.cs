@@ -18,6 +18,7 @@ using StardewValley.Tools;
 [HarmonyPatch(typeof(FishingRod))]
 internal static class TreasureMenuPatches
 {
+    [HarmonyPriority(Priority.Last)]
     [HarmonyPatch(nameof(FishingRod.openTreasureMenuEndFunction))]
     private static void Postfix()
     {
@@ -96,7 +97,7 @@ internal static class TreasureMenuPatches
                                     Random.Shared.NextBool() ? 0.02f : 0.02f,
                                     Random.Shared.NextBool() ? 0.02f : 0.02f)
                                 {
-                                    motion = new Vector2(Game1.random.Next(-30, 31) / 10f, Game1.random.Next(-6, -3)),
+                                    motion = new Vector2(Game1.random.Next(-30, 42) / 10f, Game1.random.Next(-9, -3)),
                                     acceleration = new Vector2(0f, 0.5f),
                                 };
 

@@ -69,7 +69,7 @@ internal struct SimpleConsoleCommand(IMonitor monitor)
                 string[] splits = evt.Split('/');
                 if (splits.Length < 2 || (splits.Length == 2 && string.IsNullOrWhiteSpace(splits[1])))
                 {
-                    monitor.Log($"{evt} is either fork or has no preconditions.");
+                    monitor.Log($"'{evt}' is either fork or has no preconditions.");
                     continue;
                 }
 

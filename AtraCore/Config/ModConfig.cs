@@ -9,4 +9,6 @@ internal sealed class ModConfig
     /// Gets or sets a value indicating whether or not to show regeneration numbers.
     /// </summary>
     public bool ShowRegenNumbers { get; set; } = true;
+
+    public bool AutoColorFishPonds { get; set; } = false;
 }

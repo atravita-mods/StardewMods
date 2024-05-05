@@ -139,23 +139,16 @@ internal static class HSUtils
 
             if (mapRegion.IsEmpty)
             {
-                int index = mapname.IndexOf('_');
-                if (index == -1)
+                ReadOnlySpan<char> mapNameSpan = mapname.AsSpan();
+                string default_area = "Town";
+
+                if (mapNameSpan.StartsWith("Custom_", StringComparison.Ordinal))
                 {
-                    mapRegion = "Town";
+                    mapNameSpan = mapNameSpan["Custom_".Length..];
+                    default_area = "CustomArea";
                 }
-                else
-                {
-                    index = mapname.IndexOf('_', index + 1);
-                    if (index == -1)
-                    {
-                        mapRegion = "CustomMapRegion";
-                    }
-                    else
-                    {
-                        mapRegion = mapname.AsSpan()[..index];
-                    }
-                }
+                int index = mapNameSpan.IndexOf('_');
+                mapRegion = index == -1 ? default_area : mapNameSpan[..index];
             }
 
             if (mapRegion.IsEmpty)

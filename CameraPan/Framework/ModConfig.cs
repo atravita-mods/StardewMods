@@ -60,6 +60,30 @@ public sealed class ModConfig
 
     private int yRange = 1000;
 
+    private float minZoom = 0.5f;
+
+    /// <summary>
+    /// Gets the minimum zoom level.
+    /// </summary>
+    [GMCMSection("Zoom", 0)]
+    public float MinZoom
+    {
+        get => this.minZoom;
+        set => this.minZoom = Math.Clamp(value, 0.1f, 0.75f);
+    }
+
+    private float maxZoom = 10f;
+
+    /// <summary>
+    /// Gets the maximum zoom level.
+    /// </summary>
+    [GMCMSection("Zoom", 0)]
+    public float MaxZoom
+    {
+        get => this.maxZoom;
+        set => this.maxZoom = Math.Clamp(value, 2f, 10f);
+    }
+
     /// <summary>
     /// Gets or sets the maximum distance the focal point can be from the player, on the x axis.
     /// </summary>

@@ -7,18 +7,18 @@ using AtraCore.Framework.ReflectionManager;
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
+
 using HarmonyLib;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using Netcode;
-
 using StardewModdingAPI.Utilities;
+
 using StardewValley.Inventories;
 using StardewValley.ItemTypeDefinitions;
 using StardewValley.Locations;
 using StardewValley.Menus;
-using StardewValley.Network;
 
 namespace AtraCore.HarmonyPatches.MuseumOverflow;
 

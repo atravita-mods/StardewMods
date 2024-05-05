@@ -1,0 +1,12 @@
+{
+    "$schema": "https://smapi.io/schemas/content-patcher.json",
+    "Changes": [
+        {
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/George",
+            "Entries": {
+                "atravita.SpamMail.TV": "{{i18n: george-tv}}",
+            }
+        },
+    ]
+}

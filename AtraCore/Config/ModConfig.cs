@@ -10,5 +10,8 @@ internal sealed class ModConfig
     /// </summary>
     public bool ShowRegenNumbers { get; set; } = true;
 
+    /// <summary>
+    /// Gets or sets a value indicating whether or not to auto color fish ponds.
+    /// </summary>
     public bool AutoColorFishPonds { get; set; } = false;
 }

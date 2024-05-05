@@ -32,6 +32,11 @@ internal static class PathfinderPatches
                 __result = -5;
                 return false;
             }
+            else if (terrainFeature is Grass)
+            {
+                __result = -5;
+                return false;
+            }
             else if (!terrainFeature.isPassable())
             {
                 __result = 15;

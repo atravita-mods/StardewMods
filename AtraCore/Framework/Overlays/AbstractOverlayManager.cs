@@ -9,9 +9,11 @@ namespace AtraCore.Framework.Overlays;
 /// </summary>
 internal abstract class AbstractOverlayManager : IDisposable
 {
+    protected IMonitor _monitor { get; private set; }
+
     private IGameLoopEvents _events;
     private IDisplayEvents _draw;
-    private IMonitor _monitor;
+
     private WeakReference<Farmer> player;
 
     private bool disposedValue = false;
@@ -35,7 +37,7 @@ internal abstract class AbstractOverlayManager : IDisposable
 
     private void RenderedWorld(object? sender, RenderedWorldEventArgs e)
     {
-        if (this.player?.TryGetTarget(out var target) == true
+        if (this.player?.TryGetTarget(out Farmer? target) == true
             && ReferenceEquals(target, Game1.player))
         {
             this.Draw(e.SpriteBatch);
@@ -44,7 +46,7 @@ internal abstract class AbstractOverlayManager : IDisposable
 
     private void OnTicked(object? sender, UpdateTickedEventArgs e)
     {
-        if (this.player?.TryGetTarget(out var target) == true
+        if (this.player?.TryGetTarget(out Farmer? target) == true
             && ReferenceEquals(target, Game1.player))
         {
             this.Tick();

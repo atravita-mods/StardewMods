@@ -24,7 +24,12 @@ internal static class PathfinderPatches
         {
             if (terrainFeature is Flooring)
             {
-                __result = -15;
+                __result = -7;
+                return false;
+            }
+            else if (terrainFeature is Grass)
+            {
+                __result = -5;
                 return false;
             }
             else if (!terrainFeature.isPassable())

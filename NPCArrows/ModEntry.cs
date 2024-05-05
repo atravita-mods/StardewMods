@@ -41,7 +41,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
 
     private void Display_RenderedHud(object? sender, RenderedHudEventArgs e)
     {
-        if (Game1.game1.takingMapScreenshot)
+        if (Game1.game1.takingMapScreenshot || Game1.farmEvent is not null || !Context.IsPlayerFree)
         {
             return;
         }
@@ -49,7 +49,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         IList<NPC>? characters = Game1.CurrentEvent?.actors;
         characters ??= Game1.currentLocation?.characters;
 
-        if (Context.IsPlayerFree && characters is not null)
+        if (characters is not null)
         {
             foreach (NPC? character in characters)
             {

@@ -39,7 +39,7 @@ internal static class TreasureMenuPatches
                     continue;
                 }
 
-                int original = item.Stack;
+                int original_stack = item.Stack;
                 Item? remainder = item;
 
                 // try to equip if possible.
@@ -66,9 +66,9 @@ internal static class TreasureMenuPatches
                     itemGrab.ItemsToGrabMenu.actualInventory[i] = remainder;
                 }
 
-                if (remainder is null || remainder.Stack < original)
+                if (remainder is null || remainder.Stack < original_stack)
                 {
-                    int count = original - (remainder?.Stack ?? 0);
+                    int count = original_stack - (remainder?.Stack ?? 0);
                     Game1.addHUDMessage(HUDMessage.ForItemGained(item, count));
                     if (Game1.currentLocation is { } loc)
                     {

@@ -165,6 +165,50 @@ internal sealed class ModEntry : BaseMod<ModEntry>
             this.SetUpDetailedConfig();
             CreateOrModifyButton();
         };
+
+        // zoom
+        this.Helper.Events.Display.MenuChanged += this.OnMenuChanged;
+    }
+
+    private void OnMenuChanged(object? sender, MenuChangedEventArgs e)
+    {
+        if (e.NewMenu is not GameMenu menu)
+        {
+            return;
+        }
+
+        foreach (var page in menu.pages)
+        {
+            if (page is OptionsPage options)
+            {
+                for (int i = 0; i < options.options.Count; i++)
+                {
+                    OptionsElement choice = options.options[i];
+                    if (choice is OptionsPlusMinus plusMinus && plusMinus.whichOption == Options.zoom)
+                    {
+                        int min = (int)(Config.MinZoom * 100);
+                        int max = (int)(Config.MaxZoom * 100);
+
+                        plusMinus.options.Clear();
+                        plusMinus.displayOptions.Clear();
+
+                        int count = ((max - min) / 5) + 1;
+                        plusMinus.options.EnsureCapacity(count);
+                        plusMinus.displayOptions.EnsureCapacity(count);
+
+                        for (int c = min; c <= max; c += 5)
+                        {
+                            string s = $"{c}%";
+                            plusMinus.options.Add(s);
+                            plusMinus.displayOptions.Add(s);
+                        }
+                        Game1.options.setPlusMinusToProperValue(plusMinus);
+                        break;
+                    }
+                }
+                break;
+            }
+        }
     }
 
     private void OnClicked(object? sender, ButtonPressedEventArgs e)
@@ -445,7 +489,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
             }
         }
 
-        if (Game1.game1.takingMapScreenshot)
+        if (Game1.game1.takingMapScreenshot || Game1.farmEvent is not null)
         {
             return;
         }

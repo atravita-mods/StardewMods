@@ -38,27 +38,44 @@
         {
             "Action": "Include",
             "FromFile": "assets/dialogue/demetrius.json",
-            "When": {"Hearts:Demetrius|contains={{Range:0,5}}": false}
+            "When": {
+                "Hearts:Demetrius|contains={{Range:0,5}}": false
+            }
         },
         {
             "Action": "Include",
             "FromFile": "assets/dialogue/haley.json",
-            "When": {"Hearts:Haley|contains={{Range:0,5}}": false}
+            "When": {
+                "Hearts:Haley|contains={{Range:0,5}}": false
+            }
         },
         {
             "Action": "Include",
             "FromFile": "assets/dialogue/harvey.json",
-            "When": {"Hearts: Harvey|contains={{Range:0,5}}": false}
+            "When": {
+                "Hearts: Harvey|contains={{Range:0,5}}": false
+            }
         },
         {
             "Action": "Include",
             "FromFile": "assets/dialogue/jodi.json",
-            "When": {"Hearts: Jodi|contains={{Range:0,5}}": false}
+            "When": {
+                "Hearts: Jodi|contains={{Range:0,5}}": false
+            }
         },
         {
             "Action": "Include",
             "FromFile": "assets/dialogue/vincent.json",
-            "When": {"Hearts:Vincent|contains={{Range:0,5}}": false}
+            "When": {
+                "Hearts:Vincent|contains={{Range:0,5}}": false
+            }
+        },
+        {
+            "Action": "Include",
+            "FromFile": "assets/dialogue/george.json",
+            "When": {
+                "Hearts:George|contains={{Range:0,5}}": false
+            }
         },
         {
             "Action": "EditData",

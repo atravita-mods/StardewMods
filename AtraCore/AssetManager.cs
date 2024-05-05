@@ -4,7 +4,6 @@ using AtraBase.Collections;
 using AtraBase.Toolkit.Extensions;
 
 using AtraCore.Framework.Models;
-using AtraCore.Framework.Triggers;
 using AtraCore.HarmonyPatches;
 
 using AtraShared.Utils.Extensions;
@@ -26,19 +25,21 @@ internal static class AssetManager
     private static IAssetName equipData = null!;
     private static IAssetName equipBuffIcons = null!;
 
-    private static IAssetName musicOverride = null!;
     private static IAssetName prismatic = null!;
 
     private static IAssetName dataObjects = null!;
     private static IAssetName categoryExtensions = null!;
 
-    private static IAssetName shopTrigger = null!;
+    private static IAssetName steamOverlay = null!;
 
     private static Lazy<Dictionary<string, EquipmentExtModel>> _ringData = new(
         static () => Game1.content.Load<Dictionary<string, EquipmentExtModel>>(AtraCoreConstants.EquipData));
 
     private static Lazy<Texture2D> _ringTextures = new(
         static () => Game1.content.Load<Texture2D>(equipBuffIcons.BaseName));
+
+    private static Lazy<Texture2D> _steamTexture = new(
+        static () => Game1.content.Load<Texture2D>(steamOverlay.BaseName));
 
     /// <summary>
     /// Gets the additional ring buff icons.
@@ -54,15 +55,14 @@ internal static class AssetManager
         equipData = parser.ParseAssetName(AtraCoreConstants.EquipData);
         equipBuffIcons = parser.ParseAssetName("Mods/atravita/EquipBuffIcons");
 
-        musicOverride = parser.ParseAssetName(AtraCoreConstants.MusicNameOverride);
         prismatic = parser.ParseAssetName(AtraCoreConstants.PrismaticMaskData);
 
         // category extensions.
         dataObjects = parser.ParseAssetName("Data/Objects");
         categoryExtensions = parser.ParseAssetName("Mods/atravita/CategoryExtensions");
 
-        // shop trigger
-        shopTrigger = parser.ParseAssetName("Mods/atravita/ShopTriggerData");
+        // overlays
+        steamOverlay = parser.ParseAssetName("Mods/atravita/AtraCore/steamAnimation");
 
         // check and populate the event locations.
         foreach (string? location in new[] { "AdventureGuild", "Blacksmith", "WitchHut", "WitchSwamp", "Summit" })
@@ -96,10 +96,6 @@ internal static class AssetManager
         {
             e.LoadFromModFile<Texture2D>("assets/BuffIcons.png", AssetLoadPriority.Exclusive);
         }
-        else if (e.NameWithoutLocale.IsEquivalentTo(musicOverride))
-        {
-            e.LoadFrom(static () => new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase), AssetLoadPriority.Exclusive);
-        }
         else if (e.NameWithoutLocale.IsEquivalentTo(prismatic))
         {
             e.LoadFrom(EmptyContainers.GetEmptyDictionary<string, DrawPrismaticModel>, AssetLoadPriority.Exclusive);
@@ -108,9 +104,9 @@ internal static class AssetManager
         {
             e.LoadFrom(EmptyContainers.GetEmptyDictionary<int, CategoryExtension>, AssetLoadPriority.Exclusive);
         }
-        else if (e.NameWithoutLocale.IsEquivalentTo(shopTrigger))
+        else if (e.NameWithoutLocale.IsEquivalentTo(steamOverlay))
         {
-            e.LoadFrom(EmptyContainers.GetEmptyDictionary<string, ShopItemTriggerModel>, AssetLoadPriority.Exclusive);
+            e.LoadFromModFile<Texture2D>("assets/steam.png", AssetLoadPriority.Low);
         }
         else if (e.NameWithoutLocale.StartsWith(dataEvents, false, false))
         {
@@ -181,10 +177,4 @@ internal static class AssetManager
     /// <returns>The data, or null if invalid.</returns>
     internal static CategoryExtension? GetCategoryExtension(int category)
         => Game1.content.Load<Dictionary<int, CategoryExtension>>(categoryExtensions.BaseName).GetValueOrDefault(category);
-
-    /// <summary>
-    /// Gets the data associated with shop item triggers.
-    /// </summary>
-    /// <returns>The underlying data.</returns>
-    internal static Dictionary<string, ShopItemTriggerModel> GetShopItemTriggers() => Game1.content.Load<Dictionary<string, ShopItemTriggerModel>>(shopTrigger.BaseName);
 }

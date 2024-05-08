@@ -32,6 +32,11 @@ internal static class ShopMenuPatcher
             {
                 __instance.categoriesToSellHere.Add(SObject.weaponCategory);
             }
+            if (ModEntry.Config.DressesAllowTrinkets)
+            {
+                __instance.categoriesToSellHere.Add(SObject.trinketCategory);
+                __instance.tagsToSellHere.Add(["category_trinket"]);
+            }
         }
     }
 

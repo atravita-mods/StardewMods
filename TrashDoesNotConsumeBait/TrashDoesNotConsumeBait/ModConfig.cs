@@ -11,11 +11,6 @@ internal sealed class ModConfig
     private float consumeChancePreserving = 0.5f;
 
     /// <summary>
-    /// Gets or sets a value indicating whether fishing chests should be automatically emptied into the inventory.
-    /// </summary>
-    public bool EmptyFishingChests { get; set; } = true;
-
-    /// <summary>
     /// Gets or sets a value indicating whether or not tackles/bait should be automatically refilled.
     /// </summary>
     public bool AutomaticRefill { get; set; } = true;
@@ -29,6 +24,16 @@ internal sealed class ModConfig
     /// Gets or sets a value indicating whether bait should only be replaced with the same type of bait.
     /// </summary>
     public bool SameBaitOnly { get; set; } = true;
+
+    /// <summary>
+    /// Gets or sets a value indicating whether fishing chests should be automatically emptied into the inventory.
+    /// </summary>
+    public bool EmptyFishingChests { get; set; } = true;
+
+    /// <summary>
+    /// Gets or sets a value indicating whether or not to try to automatically equip bait.
+    /// </summary>
+    public bool EquipBaitWhileReceiving { get; set; } = true;
 
     /// <summary>
     /// Gets or sets chance of consuming bait/tackle normally.

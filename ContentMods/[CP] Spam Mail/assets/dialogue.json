@@ -137,6 +137,16 @@
                 "atravita.SpamMail.ToolsShop": "{{i18n: robin-toolshop}}",
                 "atravita.SpamMail.Casino": "{{i18n: robin-casino}}"
             }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Penny",
+            "Entries": {
+                "atravita.SpamMail.PennyStocks": "{{i18n: penny-pennystocks}}",
+            },
+            "When": {
+                "Hearts:Penny|contains={{Range:0,5}}": false
+            }
         }
     ]
 }

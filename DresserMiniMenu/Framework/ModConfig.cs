@@ -18,6 +18,11 @@ public sealed class ModConfig
     public bool DressersAllowWeapons { get; set; } = true;
 
     /// <summary>
+    /// Gets or sets a value indicating whether dressers should allow bobbers.
+    /// </summary>
+    public bool DressesAllowTrinkets { get; set; } = true;
+
+    /// <summary>
     /// Gets or sets a value indicating whether dressers should allow tackle.
     /// </summary>
     public bool DressersAllowBobbers { get; set; } = false;
@@ -32,6 +37,7 @@ public sealed class ModConfig
     /// </summary>
     public bool HairArrows { get; set; } = true;
 
+    /*
     private int haleyStockLimit = 7;
 
     /// <summary>
@@ -57,4 +63,5 @@ public sealed class ModConfig
         get => this.haleyHeartsLimit;
         set => this.haleyHeartsLimit = Math.Clamp(value, 0, 14);
     }
+    */
 }

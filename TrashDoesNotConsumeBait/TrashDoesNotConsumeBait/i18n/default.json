@@ -25,5 +25,10 @@
   "ConsumeChancePreserving.title": "Consume Chance (Preserving)",
   "ConsumeChancePreserving.description": "The probability that bait and tackle will be consumed for a fishing rod with the enchantment Preserving.",
   "CrabPotTrashDoesNotEatBait.title": "Affect Crab Pot Trash",
-  "CrabPotTrashDoesNotEatBait.description":  "If enabled, crab pot trash will also not eat bait."
+  "CrabPotTrashDoesNotEatBait.description": "If enabled, crab pot trash will also not eat bait.",
+
+  "EmptyFishingChest.title": "Empty Fishing Chests",
+  "EmptyFishingChest.description": "If enabled, items from fishing chests will automatically be placed into your inventory if you have room.",
+  "EquipBaitWhileReceiving.title": "Equip Bait Automatically",
+  "EquipBaitWhileReceiving.description":  "Automatically equips bait when it is received."
 }

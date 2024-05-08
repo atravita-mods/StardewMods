@@ -9,7 +9,7 @@
                 "HarveyRoom_4_5": "{{i18n:harvey-radio.{{season}}.{{YearModulus}} }}",
 
                 // gifts
-                "AcceptGift_(O)395": "$query TIME 0600 1600#{{i18n: harvey-gift-coffee-morning.{{Random:01,02,03,04}} }}|{{harvey-gift-coffee-evening}}",
+                "AcceptGift_(O)395": "$query TIME 0600 1600#{{i18n: harvey-gift-coffee-morning.{{Random:01,02,03,04}} }}|{{i18n:harvey-gift-coffee-evening}}",
 
                 // CTs
                 "minelevel_121": "{{i18n: harvey-skull-cavern}}"

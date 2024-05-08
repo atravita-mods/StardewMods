@@ -1,4 +1,4 @@
-﻿#define TRACELOG
+﻿//#define TRACELOG
 
 using AtraShared.Utils.Extensions;
 
@@ -22,7 +22,7 @@ internal static class FishingDistanceCache
         {
             return;
         }
-        if (!_cache.TryGetValue(location.NameOrUniqueName, out var d))
+        if (!_cache.TryGetValue(location.NameOrUniqueName, out Dictionary<(int x, int y, bool land), int>? d))
         {
             _cache[location.NameOrUniqueName] = d = [];
         }

@@ -1,0 +1,41 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\csproj_common" />
+
+  <PropertyGroup>
+    <EnableHarmony>True</EnableHarmony>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Name>Shop Tabs</Name>
+    <Authors>atravita</Authors>
+    <Description>Adds additional tabs to shops.</Description>
+    <Version>0.1.0</Version>
+    <UpdateKeys>-1</UpdateKeys>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AtraCore\AtraCore.csproj" private="false" />
+    <ProjectReference Include="..\Pintail\Pintail\Pintail.csproj" private="false" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json" HintPath="$(GamePath)\smapi-internal\Newtonsoft.Json.dll" private="false" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="StardewValley" />
+    <Using Include="StardewModdingAPI" />
+    <Using Include="System.Diagnostics.CodeAnalysis" />
+    <Using Include="JetBrains.Annotations" />
+    <Using Alias="NotNullAttribute" Include="System.Diagnostics.CodeAnalysis.NotNullAttribute" />
+    <Using Alias="Object" Include="System.Object" />
+    <Using Alias="SObject" Include="StardewValley.Object" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="JetBrains.Annotations" Version="2023.3.0" />
+  </ItemGroup>
+
+
+</Project>

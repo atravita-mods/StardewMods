@@ -1,4 +1,5 @@
-﻿using AtraBase.Toolkit.Extensions;
+﻿using System.Diagnostics;
+
 using AtraBase.Toolkit.Reflection;
 using AtraBase.Toolkit.StringHandler;
 
@@ -38,9 +39,14 @@ internal static class ScheduleErrorFixer
     [HarmonyPatch(typeof(NPC), nameof(NPC.parseMasterSchedule))]
     private static void Prefix(string rawData, NPC __instance)
     {
-        if (__instance.currentLocation is not null || !__instance.isVillager())
+        if (__instance.currentLocation is not null || !__instance.IsVillager)
         {
             return;
+        }
+
+        if (SDate.Now().DaysSinceStart == 0)
+        {
+            ModEntry.ModMonitor.Log(new StackTrace().ToString());
         }
 
         ModEntry.ModMonitor.Log($"{__instance.Name} seems to have a null current location, attempting to fix.", LogLevel.Info);

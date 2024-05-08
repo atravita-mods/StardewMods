@@ -210,6 +210,8 @@
 
     "pam-pennystocks": "@, just invested most of my savings with that investment company that's been doing some advertising lately. Gonna earn so much with them!$h",
 
+    "penny-pennystocks": "Ma invested so much of our savings with this scummy broker.#$b#I...I hope it'll turn out okay, but...#$e#I wish people like this weren't allowed to take advantage of less educated folks like me and Ma...",
+
     "GoldShop.Title": "The World's Ending!",
     "GoldShop.Text": "You can't trust the financial system, so trust us instead! Buy gold from us, we promise we aren't overcharging you! Just 500$/bar.",
 
@@ -220,7 +222,7 @@
     "VideoGames.Text": "Look, it's basically the same game we released last year, and the year before that, but you're gonna buy it anyways, and you're gonna like it.",
 
     "shane-videogames": "The new game from Catalyst? Nah, not buying that, it's the same game they released last year.#$b#I miss when new games used to be unique.",
-    "sam-videogames": "I'm saving up as much of my salary as possible to buy the new game Catalyst just dropped!$h",
+    "sam-videogames": "I'm saving up as much of my salary as possible to buy the new game Catalyst just dropped!$h#$b#@, you planning on getting it? It looks so good!",
 
     // Affirm
     "TV.Title": "Just Four Easy Payments",
@@ -263,11 +265,11 @@
 
     "auto-insurance-call": "Have you re-priced your auto insurance lately? Maybe you should get to that.#We might be cheaper than your current plan. Or not. We'll tell you honestly. We promise.",
     "eyebrows-call": "Get the trendiest new eyebrows at Miss Mary's Salon! Just 600$ per eyebrow. Walk-ins welcome.",
-    "gambling-call": "Gambling addict? No problem, just call us!#Rehab services offered, no where near any casinos, we promise.",
+    "gambling-call": "Gambling addict? No problem, just call us!#Rehab services offered, nowhere near any casinos, we promise.",
     "goldbug-call": "Worried about inflation? Just buy gold!#Selling genuine gold bars, 500g each!",
     "house-sales": "Buying properties, any condition!#Ever wanted to sell your house? We make it easy. Just dial 1-800-SELL-HOME today!",
     "joja-call": "Buy anything online from Joja.#Now with free two day shipping!",
-    "joja-call2": "You have the whole world at your fingertips with Joja at your side!#Just pop online and order, it'll be there in two days.#Anything you want, on your doorstep, you don't even need to go outside.",
+    "joja-call2": "You have the whole world at your fingertips with Joja at your side!#Just pop online and order, it'll be there in two days.#Anything you want, on your doorstep, you don't even need to go outside.#You never need to go outside anymore.",
     "lawyer-call": "Workplace injury? We'll get you compensation.#No money up front, we'll just take a cut if we win.",
     "loan-call": "Offering paycheck advances, no credit check needed!#Call us any time, if you need any emergency funds.",
     "music-tickets": "Selling tickets for all your favorite artists!#All concerts sold out? No worries, we'll get you tickets. Somehow.",

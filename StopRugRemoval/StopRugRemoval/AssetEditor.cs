@@ -21,13 +21,12 @@ internal static class AssetEditor
     private static IAssetName betIconsPath = null!;
     private static IAssetName wildTrees = null!;
     private static Lazy<Texture2D> betIconLazy = new(static () => Game1.content.Load<Texture2D>(betIconsPath.BaseName));
-
     private static readonly PerScreen<TickCache<bool>> HasSeenSaloonEvent = new(
         () => new (static () => Game1.player?.eventsSeen?.Contains("40") == true));
 
     #region birdiequest
 
-    private static readonly Dictionary<IAssetName, int> BirdieQuest = new();
+    private static readonly Dictionary<IAssetName, int> BirdieQuest = [];
 
     private static LocalizedContentManager? contentManager;
 
@@ -47,6 +46,7 @@ internal static class AssetEditor
         saloonEvents = parser.ParseAssetName("Data/Events/Saloon");
         betIconsPath = parser.ParseAssetName("Mods/atravita_StopRugRemoval_BetIcons");
         wildTrees = parser.ParseAssetName("Data/WildTrees");
+
 
         const string dialogue = "Characters/Dialogue/";
         BirdieQuest.Add(parser.ParseAssetName($"{dialogue}Kent"), 864);

@@ -1,6 +1,11 @@
-﻿using AtraShared.Niceties;
+﻿using AtraShared.ConstantsAndEnums;
+using AtraShared.Niceties;
+using AtraShared.Utils.Extensions;
+
 using HarmonyLib;
+
 using Microsoft.Xna.Framework.Audio;
+
 using StardewValley.Menus;
 
 namespace StopRugRemoval.HarmonyPatches.Niceties.CrashHandling;
@@ -9,10 +14,10 @@ namespace StopRugRemoval.HarmonyPatches.Niceties.CrashHandling;
 /// Prevents a deleted cue from breaking the jukebox.
 /// </summary>
 [HarmonyPatch(typeof(ChooseFromListMenu))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class PreventJukeboxCrash
 {
     [HarmonyPatch(nameof(ChooseFromListMenu.IsValidJukeboxSong))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention")]
     private static bool Prefix(string name, ref bool __result)
     {
         if (Context.IsWorldReady && ModEntry.Config.FilterJukeboxSongs && !name.Equals("random", StringComparison.OrdinalIgnoreCase)
@@ -33,12 +38,12 @@ internal static class PreventJukeboxCrash
                 }
                 catch (Exception ex)
                 {
-                    ModEntry.ModMonitor.Log($"Failed in checking jukebox songs for invalid cues for cue {name}\n\n{ex}", LogLevel.Error);
+                    ModEntry.ModMonitor.LogError($"Failed in checking jukebox songs for invalid cues for cue {name}", ex);
                 }
             }
             else
             {
-                ModEntry.ModMonitor.Log($"Stardew's implementation of soundbank seems to have changed since I wrote this: {Game1.soundBank.GetType()}", LogLevel.Debug);
+                ModEntry.ModMonitor.LogOnce($"Stardew's implementation of soundbank seems to have changed since I wrote this: {Game1.soundBank.GetType()}", LogLevel.Debug);
             }
         }
         return true;

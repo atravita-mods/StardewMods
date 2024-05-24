@@ -8,6 +8,7 @@ using AtraBase.Toolkit.Extensions;
 using AtraCore.Framework.Caches;
 
 using AtraShared.Caching;
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Menuing;
 using AtraShared.Utils;
 using AtraShared.Utils.Extensions;
@@ -33,6 +34,7 @@ namespace GrowableGiantCrops.Framework;
 /// </summary>
 [HarmonyPatch(typeof(Utility))]
 [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1214:Readonly fields should appear before non-readonly fields", Justification = "Reviewed.")]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class ShopManager
 {
     private const string BUILDING = "Buildings";
@@ -181,7 +183,7 @@ internal static class ShopManager
                 interval = 50000f,
                 totalNumberOfLoops = 9999,
                 scale = 4f,
-                layerDepth = (((tile.Y - 0.5f) * Game1.tileSize) / 10000f) + 0.01f, // a little offset so it doesn't show up on the floor.
+                layerDepth = MathF.BitIncrement((((tile.Y - 0.5f) * Game1.tileSize) / 10000f) + 0.01f), // a little offset so it doesn't show up on the floor.
                 id = 777f,
             });
         }
@@ -218,8 +220,12 @@ internal static class ShopManager
             return;
         }
 
+        int x = (int)e.Cursor.GrabTile.X;
+        int y = (int)e.Cursor.GrabTile.Y;
+
         if (Game1.currentLocation.Name == "ScienceHouse"
-            && Game1.currentLocation.doesTileHaveProperty((int)e.Cursor.GrabTile.X, (int)e.Cursor.GrabTile.Y, "Action", BUILDING) == RESOURCE_SHOP_NAME
+            && (Game1.currentLocation.doesTileHaveProperty(x, y, "Action", BUILDING) == RESOURCE_SHOP_NAME
+                || Game1.currentLocation.doesTileHaveProperty(x, y + 1, "Action", BUILDING) == RESOURCE_SHOP_NAME)
             && Game1.player.hasOrWillReceiveMail(RESOURCE_SHOP_NAME))
         {
             input.SurpressClickInput();
@@ -237,7 +243,8 @@ internal static class ShopManager
             Game1.activeClickableMenu = shop;
         }
         else if (Game1.currentLocation.Name == "WitchHut"
-            && Game1.currentLocation.doesTileHaveProperty((int)e.Cursor.GrabTile.X, (int)e.Cursor.GrabTile.Y, "Action", BUILDING) == GIANT_CROP_SHOP_NAME)
+            && (Game1.currentLocation.doesTileHaveProperty(x, y, "Action", BUILDING) == GIANT_CROP_SHOP_NAME
+            || Game1.currentLocation.doesTileHaveProperty(x, y, "Action", BUILDING) == GIANT_CROP_SHOP_NAME))
         {
             input.SurpressClickInput();
 
@@ -251,10 +258,15 @@ internal static class ShopManager
     /// <summary>
     /// Clears the shop state.
     /// </summary>
-    internal static void Reset()
+    /// <param name="toTitle">Whether or not this is a return to the title screen.</param>
+    internal static void Reset(bool toTitle = false)
     {
         Stock.Value = null;
         NodeStock.Value = null;
+        if (toTitle)
+        {
+            HaveSentAllRobinMail.ResetAllScreens();
+        }
     }
 
     /// <inheritdoc cref="IGameLoopEvents.DayEnding"/>
@@ -330,7 +342,6 @@ internal static class ShopManager
     /// </summary>
     /// <param name="__result">shop inventory to add to.</param>
     [HarmonyPatch(nameof(Utility.getAllFurnituresForFree))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
     private static void Postfix(Dictionary<ISalable, int[]> __result)
     {
         try
@@ -339,7 +350,7 @@ internal static class ShopManager
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed while trying to add grass to the catalogue\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("adding grass to the catalogue", ex);
         }
     }
 

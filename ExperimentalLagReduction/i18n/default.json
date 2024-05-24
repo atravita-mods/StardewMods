@@ -1,3 +1,28 @@
 ﻿{
-  "hi": "hi"
+  "mod-description": "Some optimizations.",
+  "IllFormatedConfig": "Config file seems ill-formated, using default. Please use Generic Mod Config Menu to configure.",
+
+  "api-not-found": "{{APIID}} not found, integration disabled.",
+  "api-too-old": "Please update {{apiName}}({{APIID}}) to at least version {{minversion}}. Current version {{currentversion}}. Integration disabled.",
+
+  "Scheduler.title": "Scheduler",
+  "GiftTastes.title": "Gift Tastes",
+
+  "UseAlternativeScheduler.title": "Use Alternative Scheduler",
+  "UseAlternativeScheduler.description": "Replaces the game's macro scheduler completely.",
+
+  "AllowModAddedDoors.title": "Allow Mod-Added Doors",
+  "AllowModAddedDoors.description": "Lets mod-added doors be used for pathfinding.",
+
+  "AllowPartialPaths.title": "Allow Partial Paths",
+  "AllowPartialPaths.description": "When enabled, the marcro scheduler can piece together paths from partial paths. It is possible (but not very likely) that this might pick a slightly longer path.",
+
+  "PrePopulateCache.title": "Prepopulate Cache",
+  "PrePopulateCache.description": "If enabled, the cache will be pre-populated with routes from commonly used locations.",
+
+  "OverrideGiftTastes.title": "Override Gift Tastes",
+  "OverrideGiftTastes.description": "Enables this mod's gift taste parsing.",
+
+  "UseGiftTastesCache.title": "Use Gift Tastes Cache",
+  "UseGiftTastesCache.description": "If enabled, gift tastes will be cached."
 }

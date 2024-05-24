@@ -142,7 +142,7 @@ internal sealed class ModEntry : Mod
         this.Helper.Events.Content.AssetsInvalidated += static (_, e) => ShopManager.OnAssetInvalidated(e.NamesWithoutLocale);
         this.Helper.Events.Input.ButtonPressed += (_, e) => ShopManager.OnButtonPressed(e, this.Helper.Input);
         this.Helper.Events.GameLoop.DayEnding += static (_, _) => ShopManager.OnDayEnd();
-        this.Helper.Events.GameLoop.ReturnedToTitle += static (_, _) => ShopManager.Reset();
+        this.Helper.Events.GameLoop.ReturnedToTitle += static (_, _) => ShopManager.Reset(true);
         this.Helper.Events.Player.Warped += static (_, e) => ShopManager.AddBoxToShop(e);
 
         // trees - season switching in inventory.
@@ -270,7 +270,7 @@ internal sealed class ModEntry : Mod
 
 #if DEBUG
         sw.Stop();
-        this.Monitor.Log($"took {sw.ElapsedMilliseconds} ms to apply harmony patches", LogLevel.Info);
+        this.Monitor.LogTimespan("Applying harmony patches", sw);
 #endif
     }
 

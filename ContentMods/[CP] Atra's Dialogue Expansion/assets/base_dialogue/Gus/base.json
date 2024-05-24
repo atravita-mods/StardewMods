@@ -1,0 +1,12 @@
+{
+    "Changes":[
+        {
+            "LogName": "Gus - base",
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Gus",
+            "Entries": {
+                "Saloon_16_4": "{{i18n: gus-mornings.{{Season}}.{{Random:01,02,03,04,05,06,07,08,09,10}} }}"
+            }
+        }
+    ]
+}

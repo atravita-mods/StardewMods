@@ -12,9 +12,12 @@
     <Compile Include="$(MSBuildThisFileDirectory)Caching\TickCache.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConstantsAndEnums\BuffEnum.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)constantsandenums\Direction.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)constantsandenums\FriendshipEnum.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)constantsandenums\GenderEnum.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConstantsAndEnums\ItemTypeEnum.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConstantsAndEnums\Seasons.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)constantsandenums\Skills.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)constantsandenums\StyleCopConstants.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)constantsandenums\WalletItems.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConstantsAndEnums\Weathers.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Content\RawTexData\IRawTextureDataExtensions.cs" />
@@ -28,9 +31,13 @@
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\IMoreGiantCropsAPI.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\IMoreGrassStarters.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Niceties\AssetNameComparer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)niceties\GameLocationComparer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)niceties\ISalableComparer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)utils\extensions\BuffExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions\CropExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions\FarmerTeamExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions\IAssetDataForMapsExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions\ReflectionExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions\TreeExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\FarmerHelpers.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\GMCMAttributes\GMCMDefaultColorAttribute.cs" />

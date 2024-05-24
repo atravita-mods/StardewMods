@@ -1,4 +1,6 @@
-﻿using AtraShared.Utils;
+﻿// Ignore Spelling: Npcs
+
+using AtraShared.Utils;
 
 namespace GingerIslandMainlandAdjustments.Configuration;
 
@@ -14,25 +16,6 @@ public sealed class ModConfig
     public const DayOfWeek DEFAULT_GUS_VISIT_DAY = DayOfWeek.Tuesday;
 
     /// <summary>
-    /// Attempts to parse a string into a DayOfWeek.
-    /// Returns the default if not possible.
-    /// </summary>
-    /// <param name="rawstring">Raw string to parse.</param>
-    /// <returns>Day of week as enum.</returns>
-    [Pure]
-    public static DayOfWeek TryParseDayOfWeekOrGetDefault(string rawstring)
-        => Enum.TryParse(rawstring, true, out DayOfWeek dayOfWeek) ? dayOfWeek : DEFAULT_GUS_VISIT_DAY;
-
-    /// <summary>
-    /// Attempts to parse a raw string into a WearIslandClothing. Returns default if not parsable.
-    /// </summary>
-    /// <param name="rawstring">Raw string to parse.</param>
-    /// <returns>WearIslandClothing as enum.</returns>
-    [Pure]
-    public static WearIslandClothing TryParseWearIslandClothingOrGetDefault(string rawstring)
-        => Enum.TryParse(rawstring, true, out WearIslandClothing islandclothing) ? islandclothing : WearIslandClothing.Default;
-
-    /// <summary>
     /// Gets or sets a value indicating whether EnforceGITiming is enabled.
     /// When enabled, rejects time points too close together.
     /// And warns for them.
@@ -45,13 +28,19 @@ public sealed class ModConfig
     /// </summary>
     public bool RequireResortDialogue { get; set; } = true;
 
+    private WearIslandClothing wearIslandClothing = WearIslandClothing.Default;
+
     /// <summary>
     /// Gets or sets a value indicating whether or not Islanders should wear their beach outfits.
     /// </summary>
-    public WearIslandClothing WearIslandClothing { get; set; } = WearIslandClothing.Default;
+    public WearIslandClothing WearIslandClothing
+    {
+        get => this.wearIslandClothing;
+        set => this.wearIslandClothing = WearIslandClothingExtensions.IsDefined(value) ? value : WearIslandClothing.Default;
+    }
 
     /// <summary>
-    /// Gets or sets a value indicating whether whether to use the game's GI scheduler
+    /// Gets or sets a value indicating whether to use the game's GI scheduler
     /// or mine.
     /// </summary>
     public bool UseThisScheduler { get; set; } = true;
@@ -69,6 +58,11 @@ public sealed class ModConfig
         get => this.capacity;
         set => this.capacity = Math.Clamp(value, 0, 15);
     }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether or not NPCs too far from the resort should be staged at the saloon.
+    /// </summary>
+    public bool StageFarNpcsAtSaloon { get; set; } = true;
 
     /// <summary>
     /// Probability for a group to visit over just individuals.

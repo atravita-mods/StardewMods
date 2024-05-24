@@ -5,6 +5,8 @@ using AtraCore.Framework.Caches;
 using AtraShared.Caching;
 using AtraShared.Utils.Extensions;
 
+using Microsoft.Xna.Framework.Content;
+
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
 using StardewValley.Locations;
@@ -32,6 +34,8 @@ internal static class AssetEditor
 
     private static readonly PerScreen<TickCache<bool>> HasSeenPamEvent = new(
         static () => new(() => Game1.player?.eventsSeen?.Contains(PAMEVENT) == true));
+
+    private static readonly HashSet<string> Failed = new();
 
     /// <summary>
     /// The dialogue prefix.
@@ -63,6 +67,9 @@ internal static class AssetEditor
     // This currently isn't used for anything.
     private static IAssetName dataEventsTrailerBig = null!;
 
+    // We make that one chair sit-able.
+    private static IAssetName chairTiles = null!;
+
     // This stashes our LocalizedContentManager, should we need to restore a schedule
     private static LocalizedContentManager? contentManager;
 
@@ -72,6 +79,9 @@ internal static class AssetEditor
     /// <param name="parser">GameContentHelper.</param>
     internal static void Initialize(IGameContentHelper parser)
     {
+        // chair
+        chairTiles = parser.ParseAssetName("Data/ChairTiles");
+
         // phone
         phoneStringLocation = parser.ParseAssetName("Strings/Characters");
 
@@ -112,6 +122,10 @@ internal static class AssetEditor
         {
             e.Edit(EditTrailerBig, AssetEditPriority.Late);
         }
+        else if (e.NameWithoutLocale.IsEquivalentTo(chairTiles))
+        {
+            e.Edit(EditChairTiles, AssetEditPriority.Late);
+        }
         else if (e.NameWithoutLocale.StartsWith("Characters/schedules/", false, false))
         {
             e.Edit(CheckSpringSchedule, AssetEditPriority.Late + 100);
@@ -133,32 +147,45 @@ internal static class AssetEditor
         Globals.ModMonitor.DebugOnlyLog($"Checking schedule {e.NameWithoutLocale}", LogLevel.Info);
 
         IAssetDataForDictionary<string, string> editor = e.AsDictionary<string, string>();
+        if (editor.Data.Count == 0)
+        {
+            return;
+        }
         if (!editor.Data.ContainsKey("spring") && !editor.Data.ContainsKey("default"))
         {
             string character = e.NameWithoutLocale.BaseName.GetNthChunk('/', 2).ToString();
-            Globals.ModMonitor.Log($"Found NPC {character} without either a spring or default schedule. This may cause issues.", LogLevel.Info);
+            Globals.ModMonitor.LogOnce($"Found NPC {character} without either a spring or default schedule. This may cause issues.", LogLevel.Info);
             contentManager ??= new(Game1.content.ServiceProvider, Game1.content.RootDirectory);
-            try
+            if (!Failed.Contains(character))
             {
-                Dictionary<string, string> original = contentManager.LoadBase<Dictionary<string, string>>(e.NameWithoutLocale.BaseName);
-                if (original.TryGetValue("spring", out string? data))
+                try
                 {
-                    Globals.ModMonitor.Log($"Original spring schedule found: {data}. Adding back", LogLevel.Info);
-                    editor.Data["spring"] = data;
-                    return;
+                    Dictionary<string, string> original = contentManager.LoadBase<Dictionary<string, string>>(e.NameWithoutLocale.BaseName);
+                    if (original.TryGetValue("spring", out string? data))
+                    {
+                        Globals.ModMonitor.LogOnce($"Original spring schedule found for {character}: {data}. Adding back", LogLevel.Info);
+                        editor.Data["spring"] = data;
+                        return;
+                    }
+                    else if (original.TryGetValue("default", out string? @default))
+                    {
+                        Globals.ModMonitor.LogOnce($"Original default schedule found for {character}: {@default}. Adding back", LogLevel.Info);
+                        editor.Data["default"] = @default;
+                        return;
+                    }
                 }
-                else if (original.TryGetValue("default", out string? @default))
+                catch (ContentLoadException)
                 {
-                    Globals.ModMonitor.Log($"Original default schedule found: {@default}. Adding back", LogLevel.Info);
-                    editor.Data["default"] = @default;
-                    return;
+                    Globals.ModMonitor.Log($"Could not find original schedule for {character}.");
+                    Failed.Add(character);
+                }
+                catch (Exception ex)
+                {
+                    Globals.ModMonitor.LogError($"looking up backup schedule for {character}", ex);
+                    Failed.Add(character);
                 }
             }
-            catch (Exception ex)
-            {
-                Globals.ModMonitor.Log($"Could not find original schedule for {character}:\n\n{ex}");
-            }
-            Globals.ModMonitor.Log($"Could not restore spring schedule for {character}.", LogLevel.Info);
+            Globals.ModMonitor.LogOnce($"Could not restore spring schedule for {character}.", LogLevel.Info);
         }
     }
 
@@ -196,6 +223,16 @@ internal static class AssetEditor
     {
         IAssetDataForDictionary<string, string>? editor = e.AsDictionary<string, string>();
         editor.Data["Resort"] = I18n.WizardResort();
+    }
+
+    /// <summary>
+    /// Makes that one chair in IslandWest sit-able.
+    /// </summary>
+    /// <param name="e">Chair asset.</param>
+    private static void EditChairTiles(IAssetData e)
+    {
+        IAssetDataForDictionary<string, string>? editor = e.AsDictionary<string, string>();
+        editor.Data.TryAdd("island_tilesheet_1/6/41", "1/1/down/default/-1/-1/false");
     }
 
     private static void EditPhone(IAssetData e)

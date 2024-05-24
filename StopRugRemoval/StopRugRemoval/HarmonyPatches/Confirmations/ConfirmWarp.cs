@@ -1,18 +1,28 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
+
 using AtraCore.Framework.ReflectionManager;
+
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Menuing;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
+
 using HarmonyLib;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+
 using NetEscapades.EnumGenerators;
+
 using StardewModdingAPI.Utilities;
+
 using StardewValley.Buildings;
 using StardewValley.Locations;
 using StardewValley.Tools;
+
 using StopRugRemoval.Configuration;
+
 using xTile.Dimensions;
 
 using AtraUtils = AtraShared.Utils.Utils;
@@ -23,6 +33,7 @@ namespace StopRugRemoval.HarmonyPatches.Confirmations;
 /// Holds patches about confirming warps.
 /// </summary>
 [HarmonyPatch]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class ConfirmWarp
 {
     /// <summary>
@@ -71,7 +82,7 @@ internal static class ConfirmWarp
     /// Applies the patch to the wand.
     /// </summary>
     /// <param name="harmony">Harmony instance.</param>
-    /// <remarks>Seperate so these patches are not applied if player is using Better Return Scepter.</remarks>
+    /// <remarks>Separate so these patches are not applied if player is using Better Return Scepter.</remarks>
     internal static void ApplyWandPatches(Harmony harmony)
     {
         harmony.Patch(
@@ -126,8 +137,7 @@ internal static class ConfirmWarp
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Ran into error transpiling around the night market warp home service.\n\n{ex}", LogLevel.Error);
-            original?.Snitch(ModEntry.ModMonitor);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }
@@ -135,7 +145,6 @@ internal static class ConfirmWarp
 
     [HarmonyPrefix]
     [HarmonyPatch(typeof(SObject), nameof(SObject.performUseAction))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
     private static bool PrefixTotemWarp(SObject __instance, GameLocation location, ref bool __result)
     {
         if (Game1.eventUp || Game1.isFestival() || Game1.fadeToBlack || Game1.player.swimming.Value || Game1.player.onBridge.Value
@@ -208,19 +217,26 @@ internal static class ConfirmWarp
     [HarmonyPrefix]
     [HarmonyPriority(Priority.First)]
     [HarmonyPatch(typeof(Building), nameof(Building.doAction))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention")]
     private static bool PrefixBuildingAction(Building __instance, Vector2 tileLocation, Farmer who, ref bool __result)
     {
         if (Game1.eventUp || Game1.isFestival() || Game1.fadeToBlack || Game1.player.swimming.Value || Game1.player.onBridge.Value
-            || !ModEntry.Config.Enabled || Game1.activeClickableMenu is not null)
+            || !ModEntry.Config.Enabled || Game1.activeClickableMenu is DialogueAndAction)
         {
             return true;
         }
+
         if (!__instance.occupiesTile(tileLocation) || !__instance.buildingType.Value.EndsWith("Obelisk", StringComparison.OrdinalIgnoreCase)
             || !who.IsLocalPlayer || __instance.daysOfConstructionLeft.Value > 0)
         {
             return true;
         }
+
+        if (Game1.activeClickableMenu is not null)
+        {
+            // I have a menu open already, avoid warping.
+            return false;
+        }
+
         WarpLocation location = __instance.buildingType.Value switch
         {
             "Earth Obelisk" => WarpLocation.Mountain,
@@ -269,7 +285,6 @@ internal static class ConfirmWarp
         return true;
     }
 
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention")]
     private static bool PrefixWand(Wand __instance, GameLocation location, int x, int y, int power, Farmer who)
     {
         if (!who.IsLocalPlayer)
@@ -277,9 +292,13 @@ internal static class ConfirmWarp
             return true;
         }
         if (Game1.eventUp || Game1.isFestival() || Game1.fadeToBlack || Game1.player.swimming.Value || Game1.player.onBridge.Value || !ModEntry.Config.Enabled
-            || Game1.activeClickableMenu is not null)
+            || Game1.activeClickableMenu is DialogueAndAction)
         {
             return true;
+        }
+        if (Game1.activeClickableMenu is not null)
+        {
+            return false;
         }
 
         if (!HaveConfirmed.Value
@@ -310,13 +329,16 @@ internal static class ConfirmWarp
 
     [HarmonyPrefix]
     [HarmonyPatch(typeof(IslandWest), nameof(IslandWest.performAction))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention")]
     private static bool PrefixIslandWest(IslandWest __instance, string action, Farmer who, Location tileLocation)
     {
         if (Game1.eventUp || Game1.isFestival() || Game1.fadeToBlack || Game1.player.swimming.Value || Game1.player.onBridge.Value
-            || !ModEntry.Config.Enabled || Game1.activeClickableMenu is not null)
+            || !ModEntry.Config.Enabled || Game1.activeClickableMenu is DialogueAndAction)
         {
             return true;
+        }
+        if (Game1.activeClickableMenu is not null)
+        {
+            return false;
         }
         if (action == "FarmObelisk" && !HaveConfirmed.Value
             && (IsLocationConsideredDangerous(__instance) ? ModEntry.Config.WarpsInDangerousAreas : ModEntry.Config.WarpsInSafeAreas)

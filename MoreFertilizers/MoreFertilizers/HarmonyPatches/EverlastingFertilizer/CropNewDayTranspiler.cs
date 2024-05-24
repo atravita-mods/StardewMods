@@ -5,6 +5,7 @@ using AtraBase.Toolkit.Reflection;
 
 using AtraCore.Framework.ReflectionManager;
 
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 
@@ -12,6 +13,9 @@ using HarmonyLib;
 
 namespace MoreFertilizers.HarmonyPatches.EverlastingFertilizer;
 
+/// <summary>
+/// Holds patches against Crop.newDay for the Everlasting fertilizer.
+/// </summary>
 [HarmonyPatch(typeof(Crop))]
 internal static class CropNewDayTranspiler
 {
@@ -32,13 +36,13 @@ internal static class CropNewDayTranspiler
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod crashed while transpiling DGA. Integration may not work correctly.\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError($"transpiling DGA", ex);
         }
     }
 
     [HarmonyPatch(nameof(Crop.newDay))]
-    [SuppressMessage("SMAPI.CommonErrors", "AvoidNetField:Avoid Netcode types when possible", Justification = "Used for matching only.")]
-    [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:Split parameters should start on line after declaration", Justification = "Reviewed.")]
+    [SuppressMessage("SMAPI.CommonErrors", "AvoidNetField:Avoid Netcode types when possible", Justification = StyleCopConstants.UsedForMatchingOnly)]
+    [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:Split parameters should start on line after declaration", Justification = StyleCopConstants.SplitParametersIntentional)]
     private static IEnumerable<CodeInstruction>? Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
     {
         try
@@ -70,8 +74,7 @@ internal static class CropNewDayTranspiler
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod crashed while transpiling {original.FullDescription()}:\n\n{ex}", LogLevel.Error);
-            original.Snitch(ModEntry.ModMonitor);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }

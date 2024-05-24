@@ -1,3 +1,5 @@
+using AtraBase.Toolkit;
+
 using CommunityToolkit.Diagnostics;
 
 using NetEscapades.EnumGenerators;
@@ -11,7 +13,7 @@ namespace AtraShared.ConstantsAndEnums;
 /// </summary>
 [Flags]
 [EnumExtensions]
-[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1602:Enumeration items should be documented", Justification = "Should be obvious.")]
+[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1602:Enumeration items should be documented", Justification = StyleCopErrorConsts.SelfEvident)]
 public enum WalletItems
 {
     /// <summary>

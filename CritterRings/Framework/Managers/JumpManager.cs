@@ -444,7 +444,7 @@ internal sealed class JumpManager : IDisposable
             else if (this.needsBigJump == NeedsBigJump.IfPastBig)
             {
                 this.needsBigJump = NeedsBigJump.Medium;
-            };
+            }
         }
         else
         {
@@ -468,7 +468,7 @@ internal sealed class JumpManager : IDisposable
                 farmer.forceTimePass = this.forceTimePass;
                 if (disposing)
                 {
-                    Game1.moveViewportTo(farmer.Position, 5f, 60, null, ModEntry.cameraAPI is null ? null : ModEntry.cameraAPI.Reset);
+                    Game1.moveViewportTo(farmer.Position, 7.5f, 60, null, ModEntry.CameraAPI is null ? null : ModEntry.CameraAPI.Reset);
                 }
                 farmer.completelyStopAnimatingOrDoingAction();
             }

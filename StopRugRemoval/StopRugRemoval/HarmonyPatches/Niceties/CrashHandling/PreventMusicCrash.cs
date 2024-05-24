@@ -42,7 +42,7 @@ internal static class PreventMusicCrash
             }
             catch (Exception ex)
             {
-                ModEntry.ModMonitor.Log($"Failed in checking if the cue {cue} exists in the soundbank\n\n{ex}", LogLevel.Error);
+                ModEntry.ModMonitor.LogError("checking if the cue {cue} exists in the soundbank", ex);
             }
         }
         else
@@ -83,8 +83,7 @@ internal static class PreventMusicCrash
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Ran into error transpiling {original.FullDescription()}.\n\n{ex}", LogLevel.Error);
-            original?.Snitch(ModEntry.ModMonitor);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }

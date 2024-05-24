@@ -1,0 +1,36 @@
+{
+    "Changes": [
+        {
+            "Action": "Include",
+            "LogName": "Generic marriage items",
+            "FromFile": "assets/base_dialogue/marriage_generic.json",
+            "When": {
+                "Random: true, false, false": true,
+                "HasValue: {{Spouse}}": true,
+                "EnableGeneric": true,
+                "Spouse|contains = Wizard, Apples": false // avoid doing this for magical spouses.
+            }
+        },
+        {
+            "Action": "Include",
+            "LogName": "Spouse-related items",
+            "FromFile": "assets/base_dialogue/{{Spouse}}/spousal.json",
+            "When": {
+                "HasValue: {{Spouse}}": true,
+                "HasFile: {{FromFile}}": true,
+                "EnableFor": "{{Spouse}}",
+            }
+        },
+        {
+            "Action": "Include",
+            "LogName": "Misc items",
+            "FromFile": "assets/base_dialogue/anniversary.json",
+            "When": {
+                "EnableGeneric": true,
+                "HasValue: {{Spouse}}": true,
+                "EnableFor": "{{Spouse}}",
+                "Relationship: {{Spouse}}": "Married" // avoid doing this for roommates.
+            }
+        }
+    ]
+}

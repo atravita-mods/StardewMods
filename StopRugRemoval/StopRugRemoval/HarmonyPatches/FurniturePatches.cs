@@ -1,8 +1,13 @@
-﻿using AtraShared.Utils.Extensions;
+﻿using AtraCore;
+
+using AtraShared.ConstantsAndEnums;
+using AtraShared.Utils.Extensions;
 
 using HarmonyLib;
 
 using Microsoft.Xna.Framework;
+
+using StardewModdingAPI.Utilities;
 
 using StardewValley.BellsAndWhistles;
 using StardewValley.Objects;
@@ -15,11 +20,11 @@ namespace StopRugRemoval.HarmonyPatches;
 /// And to prevent me from removing rugs when I'm not supposed to....
 /// </summary>
 [HarmonyPatch(typeof(Furniture))]
+[SuppressMessage("StyleCop", "SA1313", Justification = StyleCopConstants.NamedForHarmony)]
 internal class FurniturePatches
 {
-    private static int ticks;
+    private static readonly PerScreen<int> ticks = new(createNewState: static () => 0);
 
-    [SuppressMessage("StyleCop", "SA1313", Justification = "Style prefered by Harmony")]
     [HarmonyPostfix]
     [HarmonyPatch(nameof(Furniture.canBeRemoved))]
     private static void PostfixCanBeRemoved(Furniture __instance, ref Farmer __0, ref bool __result)
@@ -35,13 +40,13 @@ internal class FurniturePatches
             }
 
             Rectangle bounds = __instance.boundingBox.Value;
-            int tileX = bounds.X / 64;
-            int tileY = bounds.Y / 64;
+            int tileX = bounds.X / Game1.tileSize;
+            int tileY = bounds.Y / Game1.tileSize;
             ModEntry.ModMonitor.DebugOnlyLog($"Checking rug: {bounds.X / 64f}, {bounds.Y / 64f}, W/H {bounds.Width / 64f}/{bounds.Height / 64f}", LogLevel.Debug);
 
-            for (int x = 0; x < bounds.Width / 64; x++)
+            for (int x = 0; x < bounds.Width / Game1.tileSize; x++)
             {
-                for (int y = 0; y < bounds.Height / 64; y++)
+                for (int y = 0; y < bounds.Height / Game1.tileSize; y++)
                 {
                     if (!currentLocation.isTileLocationTotallyClearAndPlaceable(x + tileX, y + tileY))
                     {
@@ -54,14 +59,13 @@ internal class FurniturePatches
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Ran into issues with postfix for Furniture::CanBeRemoved for {__instance.Name}\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("preventing rug removal", ex);
         }
     }
 
 #if DEBUG
     [HarmonyPrefix]
     [HarmonyPatch(nameof(Furniture.canBePlacedHere))]
-    [SuppressMessage("StyleCop", "SA1313", Justification = "Style prefered by Harmony")]
     private static bool PrefixCanBePlacedHere(Furniture __instance, GameLocation l, Vector2 tile, ref bool __result)
     {
         try
@@ -111,7 +115,6 @@ internal class FurniturePatches
     [HarmonyPrefix]
     [HarmonyPriority(Priority.First)]
     [HarmonyPatch(nameof(Furniture.clicked))]
-    [SuppressMessage("StyleCop", "SA1313", Justification = "Style prefered by Harmony")]
     private static bool PrefixClicked(Furniture __instance, Farmer who, ref bool __result)
     {
         try
@@ -126,10 +129,10 @@ internal class FurniturePatches
                 && ModEntry.Config.PreventRemovalFromTable
                 && !ModEntry.Config.FurniturePlacementKey.IsDown())
             {
-                if (Game1.ticks > ticks + 60)
+                if (Game1.ticks > ticks.Value + 60)
                 {
                     Game1.showRedMessage(I18n.TableRemovalMessage(keybind: ModEntry.Config.FurniturePlacementKey));
-                    ticks = Game1.ticks;
+                    ticks.Value = Game1.ticks;
                 }
                 __result = false;
                 return false;
@@ -137,7 +140,7 @@ internal class FurniturePatches
             else if (__instance.ParentSheetIndex == 1971 && who.currentLocation is GameLocation loc)
             {
                 // clicked on a butterfly hutch!
-                Vector2 v = new(Game1.random.Next(-2, 4), Game1.random.Next(-1, 1));
+                Vector2 v = new(Singletons.Random.Next(-2, 4), Singletons.Random.Next(-1, 1));
                 loc.instantiateCrittersList();
                 loc.addCritter(new Butterfly(__instance.TileLocation + v).setStayInbounds(stayInbounds: true));
             }
@@ -145,14 +148,13 @@ internal class FurniturePatches
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Ran into errors preventing removal of item from table for {who.Name}\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("preventing removal of item from table", ex);
             return true;
         }
     }
 
     [HarmonyPrefix]
     [HarmonyPatch(nameof(Furniture.DoesTileHaveProperty))]
-    [SuppressMessage("StyleCop", "SA1313", Justification = "Style prefered by Harmony")]
     private static bool PrefixDoesTileHaveProperty(Furniture __instance, int tile_x, int tile_y, string property_name, string layer_name, ref string property_value, ref bool __result)
     {
         try
@@ -168,7 +170,7 @@ internal class FurniturePatches
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed in preventing spawning on rugs at {tile_x} {tile_y}\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError($"preventing spawning on rugs at {tile_x} {tile_y}", ex);
         }
         return true;
     }

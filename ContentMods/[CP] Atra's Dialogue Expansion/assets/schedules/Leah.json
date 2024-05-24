@@ -1,0 +1,12 @@
+{
+    "Changes":[
+        {
+            "Action": "EditData",
+            "Target": "Characters/schedules/Leah",
+            "Entries": {
+                // restore her going to the night market.
+                "marriage_winter_15": "830 Forest 63 50 2 \"Strings\\schedules\\Leah:marriage_Mon.000\"/1400 Forest 106 34 2/1600 Beach 41 35 0 \"Strings\\schedules\\Leah:winter_15.000\"/2340 bed",
+            }
+        }
+    ]
+}

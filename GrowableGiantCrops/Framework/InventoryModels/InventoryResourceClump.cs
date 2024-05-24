@@ -72,6 +72,8 @@ public sealed class InventoryResourceClump : SObject
         this.Price = 0;
         this.Category = ResourceClump;
         this.bigCraftable.Value = true;
+
+        this.modData?.SetEnum(ResourceModdata, idx);
     }
 
     /// <summary>

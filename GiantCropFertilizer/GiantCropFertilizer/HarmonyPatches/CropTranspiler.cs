@@ -96,8 +96,7 @@ internal static class CropTranspiler
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod crashed while transpiling {original.FullDescription()}:\n\n{ex}", LogLevel.Error);
-            original.Snitch(ModEntry.ModMonitor);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }
@@ -147,8 +146,7 @@ internal static class CropTranspiler
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed while trying to transpile {original.FullDescription()}.\n\n{ex}", LogLevel.Error);
-            original.Snitch(ModEntry.ModMonitor);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }

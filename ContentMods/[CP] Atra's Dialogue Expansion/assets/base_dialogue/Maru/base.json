@@ -1,0 +1,14 @@
+{
+    "Changes": [
+        {
+            "Action": "EditData",
+            "LogName": "Divorced From Sebastian",
+            "Target": "Characters/Dialogue/Maru",
+            "When": {"Relationship: Sebastian": "Divorced"},
+            "Entries": {
+                "ScienceHouse": "{{i18n: maru-divorced-from-sebastian-a}}$s",
+                "Mountain": "{{i18n: maru-divorced-from-sebastian-b}}$s",
+            }
+        }
+    ]
+}

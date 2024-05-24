@@ -2,6 +2,8 @@
 
 using AtraBase.Toolkit;
 
+using AtraShared.ConstantsAndEnums;
+
 using GrowableGiantCrops.Framework;
 
 using HarmonyLib;
@@ -12,7 +14,7 @@ namespace GrowableGiantCrops.HarmonyPatches.ToolPatches;
 /// Patches for enchantments for the shovel.
 /// </summary>
 [HarmonyPatch]
-[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Named for Harmony.")]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class EnchantmentPatches
 {
     [HarmonyPostfix]

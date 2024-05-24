@@ -137,7 +137,7 @@ internal static class RadioactiveFertilizerHandler
         }
 
         random ??= RandomUtils.GetSeededRandom(9, "radioactive.fertilizer");
-        if (random.Next(4) == 0)
+        if (random.OfChance(0.25))
         {
             return;
         }

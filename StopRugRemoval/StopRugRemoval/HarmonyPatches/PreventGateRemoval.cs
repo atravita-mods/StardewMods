@@ -2,6 +2,8 @@
 using System.Reflection.Emit;
 using AtraBase.Toolkit.Reflection;
 using AtraCore.Framework.ReflectionManager;
+
+using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
@@ -18,8 +20,8 @@ namespace StopRugRemoval.HarmonyPatches;
 [HarmonyPatch(typeof(GameLocation))]
 internal static class PreventGateRemoval
 {
-    private static readonly PerScreen<int> PerscreenedAttempts = new(createNewState: () => 0);
-    private static readonly PerScreen<int> PerscreenedTicks = new(createNewState: () => 0);
+    private static readonly PerScreen<int> PerscreenedAttempts = new(createNewState: static () => 0);
+    private static readonly PerScreen<int> PerscreenedTicks = new(createNewState: static () => 0);
 
     private static int Attempts
     {
@@ -122,7 +124,7 @@ internal static class PreventGateRemoval
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Transpiler for GameLocation{nameof(GameLocation.checkAction)} failed with error {ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }

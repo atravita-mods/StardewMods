@@ -1,4 +1,5 @@
-﻿using AtraShared.Utils.Extensions;
+﻿using AtraShared.ConstantsAndEnums;
+using AtraShared.Utils.Extensions;
 
 using GingerIslandMainlandAdjustments.ScheduleManager;
 
@@ -14,6 +15,7 @@ namespace GingerIslandMainlandAdjustments.DialogueChanges;
 /// Class to handle patching of NPCs for dialogue.
 /// </summary>
 [HarmonyPatch(typeof(NPC))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class DialoguePatches
 {
     private const string ANTISOCIAL = "Resort_Antisocial";
@@ -39,7 +41,6 @@ internal static class DialoguePatches
     /// <param name="__result">Whether or not new dialogue has been found.</param>
     [HarmonyPostfix]
     [HarmonyPatch(nameof(NPC.checkForNewCurrentDialogue))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Convention used by Harmony")]
     private static void DoCheckIslandDialogue(NPC __instance, int __0, bool __1, ref bool __result)
     { // __0 = heartlevel, as int. __1 = whether or not to have a season prefix?
         try
@@ -121,7 +122,7 @@ internal static class DialoguePatches
         }
         catch (Exception ex)
         {
-            Globals.ModMonitor.Log($"Error in checking for island dialogue for NPC {__instance.Name}\n{ex}", LogLevel.Error);
+            Globals.ModMonitor.LogError($"checking for island dialogue for NPC {__instance.Name}", ex);
         }
     }
 
@@ -131,7 +132,6 @@ internal static class DialoguePatches
     /// <param name="__instance">NPC instance.</param>
     [HarmonyPostfix]
     [HarmonyPatch(nameof(NPC.arriveAtFarmHouse))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Convention used by Harmony")]
     private static void AppendArrival(NPC __instance)
     {
         try
@@ -154,17 +154,17 @@ internal static class DialoguePatches
                 __instance.currentMarriageDialogue.Clear();
                 if (Game1.player.getFriendshipHeartLevelForNPC(__instance.Name) > 9)
                 {
-                    __instance.CurrentDialogue.Push(new Dialogue(I18n.GILeaveDefaultHappy(__instance.getTermOfSpousalEndearment()), __instance));
+                    __instance.CurrentDialogue.Push(new Dialogue(I18n.GIReturnDefaultHappy(__instance.getTermOfSpousalEndearment()), __instance));
                 }
                 else
                 {
-                    __instance.CurrentDialogue.Push(new Dialogue(I18n.GILeaveDefaultUnhappy(), __instance));
+                    __instance.CurrentDialogue.Push(new Dialogue(I18n.GIReturnDefaultUnhappy(), __instance));
                 }
             }
         }
         catch (Exception ex)
         {
-            Globals.ModMonitor.Log($"Error in setting GIReturn dialogue for {__instance.Name}:\n{ex}", LogLevel.Error);
+            Globals.ModMonitor.LogError($"setting GIReturn dialogue for {__instance.Name}", ex);
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using System.Text.RegularExpressions;
+﻿// Ignore Spelling: Loc Qual prevtime Oschedule npc
+
+using System.Text.RegularExpressions;
 using AtraBase.Toolkit.Extensions;
 using AtraBase.Toolkit.Reflection;
 using AtraBase.Toolkit.StringHandler;
@@ -15,7 +17,7 @@ namespace AtraShared.Schedules;
 /// <summary>
 /// Holds a map + location.
 /// </summary>
-public class QualLoc
+internal sealed class QualLoc
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="QualLoc"/> class.
@@ -134,13 +136,13 @@ public class ScheduleUtilityFunctions
                 // GOTO newKey
                 if (npc.hasMasterScheduleEntry(newKey))
                 {
-                    string newscheduleKey = npc.getMasterScheduleEntry(newKey);
-                    if (newscheduleKey.Equals(rawData, StringComparison.Ordinal))
+                    string newScheduleKey = npc.getMasterScheduleEntry(newKey);
+                    if (newScheduleKey.Equals(rawData, StringComparison.Ordinal))
                     {
                         this.monitor.Log(this.translation.Get("GOTO_INFINITE_LOOP").Default("Infinite loop detected, skipping this schedule."), LogLevel.Warn);
                         return false;
                     }
-                    return this.TryFindGOTOschedule(npc, date, newscheduleKey, out scheduleString);
+                    return this.TryFindGOTOschedule(npc, date, newScheduleKey, out scheduleString);
                 }
                 else
                 {
@@ -482,7 +484,7 @@ public class ScheduleUtilityFunctions
             lastPoint = rawSchedule.AsSpan(slashloc + 1);
         }
 
-        if (lastPoint.TrySplitOnce(' ', out var first, out var second))
+        if (lastPoint.TrySplitOnce(' ', out _, out ReadOnlySpan<char> second))
         {
             return second;
         }

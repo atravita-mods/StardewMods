@@ -11,7 +11,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <Version>0.2.3</Version>
+    <Version>0.3.0</Version>
     <Name>AtraCore</Name>
     <Description>A core library mod some of my other mods depend on.</Description>
     <UpdateKeys>Nexus:12932</UpdateKeys>
@@ -20,7 +20,7 @@
   <PropertyGroup>
     <BundleExtraAssemblies>System,ThirdParty</BundleExtraAssemblies>
     <IgnoreModFilePatterns>
-         \.xcf$, <!-- GIMP files-->
+         $(IgnoreModFilePatterns),
          System.*.dll$, <!-- System would bundle these.-->
          ^Microsoft.(?!.*(Toolkit.Diagnostics.dll)), <!-- Everyone but MS.Toolkit.Diagnostics-->
          ^runtimes[/\\].*, 
@@ -32,7 +32,6 @@
 
   <PropertyGroup>
     <TranslationClassBuilder_AddGetByKey>true</TranslationClassBuilder_AddGetByKey>
-    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <ItemGroup>

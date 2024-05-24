@@ -1,5 +1,8 @@
 ﻿using System.Reflection;
 using AtraBase.Toolkit.Reflection;
+
+using AtraCore;
+using AtraCore.Framework.EventCommands;
 using AtraCore.Framework.ReflectionManager;
 using AtraCore.Utilities;
 
@@ -134,7 +137,7 @@ internal sealed class ModEntry : Mod
         }
         catch (Exception ex)
         {
-            ModMonitor.Log($"Failed to patch NPC::checkForNewCurrentDialogue for Special Orders Dialogue. Dialogue will be disabled\n\n{ex}", LogLevel.Error);
+            ModMonitor.LogError("patching NPC::checkForNewCurrentDialogue for Special Orders Dialogue", ex);
         }
 
         if (ModsThatHandleTheBoard.All(uniqueID => !this.Helper.ModRegistry.IsLoaded(uniqueID)))
@@ -177,17 +180,11 @@ internal sealed class ModEntry : Mod
 
         // Bind SpaceCore API
         IntegrationHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, LogLevel.Trace);
-        if (helper.TryGetAPI("spacechase0.SpaceCore", "1.5.10", out spaceCoreAPI))
+        _ = helper.TryGetAPI("spacechase0.SpaceCore", "1.5.10", out spaceCoreAPI);
+
+        if (!EventCommandManager.Add(new AddSpecialOrderCommand("atravita_addSpecialOrder", this.Monitor)))
         {
-            MethodInfo eventcommand = typeof(EventCommands).StaticMethodNamed(nameof(EventCommands.AddSpecialOrder));
-            spaceCoreAPI.AddEventCommand(EventCommands.ADD_SPECIAL_ORDER, eventcommand);
-        }
-        else
-        {
-            this.Monitor.Log("SpaceCore not detected, handling event commands myself", LogLevel.Info);
-            harmony.Patch(
-                original: typeof(Event).GetCachedMethod(nameof(Event.tryEventCommand), ReflectionCache.FlagTypes.InstanceFlags),
-                prefix: new HarmonyMethod(typeof(EventCommands), nameof(EventCommands.PrefixTryGetCommand)));
+            this.Monitor.Log($"Custom event command could not be added?", LogLevel.Warn);
         }
 
         if (helper.TryGetAPI("Pathoschild.ContentPatcher", "1.20.0", out IContentPatcherAPI? api))
@@ -233,7 +230,7 @@ internal sealed class ModEntry : Mod
         }
         catch (Exception ex)
         {
-            this.Monitor.Log($"Failed in loading temporary files:\n\n{ex}", LogLevel.Error);
+            this.Monitor.LogError("loading temporary files", ex);
         }
     }
 
@@ -246,7 +243,7 @@ internal sealed class ModEntry : Mod
         }
         catch (Exception ex)
         {
-            this.Monitor.Log($"Failed in saving temporary files:\n\n{ex}", LogLevel.Error);
+            this.Monitor.LogError("saving temporary files", ex);
         }
     }
 
@@ -422,7 +419,7 @@ internal sealed class ModEntry : Mod
         ModMonitor.Log($"{I18n.Analyzing()} {key}", LogLevel.Debug);
         try
         {
-            SpecialOrder? specialOrder = SpecialOrder.GetSpecialOrder(key, Game1.random.Next());
+            SpecialOrder? specialOrder = SpecialOrder.GetSpecialOrder(key, Singletons.Random.Next());
             if (specialOrder is not null)
             {
                 ModMonitor.Log($"\t{key} {I18n.Parsable()}", LogLevel.Debug);

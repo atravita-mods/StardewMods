@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿// Ignore Spelling: Ja
+
 using System.Text;
 
 using AtraBase.Toolkit;
@@ -14,7 +15,9 @@ using AtraShared.Utils.Extensions;
 using AtraShared.Utils.Shims.JAInternalTypesShims;
 
 using CommunityToolkit.Diagnostics;
+
 using FastExpressionCompiler.LightExpression;
+
 using HarmonyLib;
 
 using StardewValley.Locations;
@@ -24,7 +27,7 @@ namespace AtraShared.Utils.Shims;
 /// <summary>
 /// Holds shims against ja.
 /// </summary>
-[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "Fields kept near accessors.")]
+[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = StyleCopErrorConsts.AccessorsNearFields)]
 public static class JsonAssetsShims
 {
     private const int EventID = int.MinValue + 4993;
@@ -122,7 +125,7 @@ public static class JsonAssetsShims
         return ret;
     }
 
-    private static Lazy<Dictionary<string, string>?> jaCropCache = new(SetUpJAIntegration);
+    private static readonly Lazy<Dictionary<string, string>?> jaCropCache = new(SetUpJAIntegration);
 
     /// <summary>
     /// Gets a name->preconditions map of JA crops, or null if JA was not installed/reflection failed.
@@ -212,8 +215,7 @@ breakcontinue:
         }
         catch (Exception ex)
         {
-            modMonitor.Log($"Something appears to have gone wrong with JA integration:", LogLevel.Error);
-            modMonitor.Log(ex.ToString());
+            modMonitor.LogError("checking JA for crop data", ex);
             return null;
         }
     }

@@ -8,6 +8,8 @@ using AtraBase.Toolkit;
 using AtraBase.Toolkit.Extensions;
 using AtraBase.Toolkit.StringHandler;
 
+using AtraCore;
+using AtraCore.Framework.Internal;
 using AtraCore.Framework.ItemManagement;
 
 using AtraShared.ConstantsAndEnums;
@@ -29,7 +31,7 @@ using XLocation = xTile.Dimensions.Location;
 namespace FarmCaveSpawn;
 
 /// <inheritdoc />
-internal sealed class ModEntry : Mod
+internal sealed class ModEntry : BaseMod<ModEntry>
 {
     /// <summary>
     /// Sublocation-parsing regex.
@@ -84,9 +86,9 @@ internal sealed class ModEntry : Mod
     {
         I18n.Init(helper.Translation);
         AssetManager.Initialize(helper.GameContent);
+        base.Entry(helper);
 
         this.config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
-        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
 
         helper.Events.GameLoop.DayStarted += this.SpawnFruit;
         helper.Events.GameLoop.GameLaunched += this.SetUpConfig;
@@ -252,7 +254,7 @@ internal sealed class ModEntry : Mod
                         Match match = matches[0];
                         parseloc = location[..^match.Value.Length];
                         locLimits.Update(match, namedOnly: true);
-                        this.Monitor.DebugOnlyLog($"Found and parsed sublocation: {parseloc} + ({locLimits["x1"]};{locLimits["y1"]});({locLimits["x2"]};{locLimits["y2"]})");
+                        this.Monitor.DebugOnlyLog($"Found and parsed sub-location: {parseloc} + ({locLimits["x1"]};{locLimits["y1"]});({locLimits["x2"]};{locLimits["y2"]})");
                     }
                     else if (matches.Count >= 2)
                     {
@@ -331,7 +333,7 @@ END:
     private void PlaceFruit(GameLocation location, Vector2 tile)
     {
         int fruitToPlace = Utility.GetRandom(
-            this.TreeFruit.Count > 0 && this.Random.NextDouble() < (this.config.TreeFruitChance / 100f) ? this.TreeFruit : this.BASE_FRUIT,
+            this.TreeFruit.Count > 0 && this.Random.OfChance(this.config.TreeFruitChance / 100f) ? this.TreeFruit : this.BASE_FRUIT,
             this.Random);
 
         if (!DataToItemMap.IsActuallyRing(fruitToPlace))
@@ -343,7 +345,7 @@ END:
 
     [MethodImpl(TKConstants.Hot)]
     private bool CanSpawnFruitHere(GameLocation location, Vector2 tile)
-        => this.Random.NextDouble() < this.config.SpawnChance / 100f
+        => this.Random.OfChance(this.config.SpawnChance / 100f)
             && location.IsTileViewable(new XLocation((int)tile.X, (int)tile.Y), Game1.viewport)
             && location.isTileLocationTotallyClearAndPlaceableIgnoreFloors(tile);
 
@@ -414,7 +416,7 @@ END:
         List<string> denylist = this.GetData(AssetManager.DENYLIST_LOCATION);
         List<int> treeFruits = new();
 
-        Dictionary<int, string> fruittrees = this.Helper.GameContent.Load<Dictionary<int, string>>("Data/fruitTrees");
+        Dictionary<int, string> fruittrees = Game1.content.Load<Dictionary<int, string>>("Data/fruitTrees");
         ReadOnlySpan<char> currentseason = Game1.currentSeason.AsSpan().Trim();
         foreach ((int saplingIndex, string tree) in fruittrees)
         {
@@ -464,7 +466,7 @@ END:
             && this.SpawnedFruitToday
             && this.config.UseMineCave)
         { // The following code is copied out of the game and adds the bat sprites to the mines.
-            if (Game1.random.NextDouble() < 0.12)
+            if (Singletons.Random.OfChance(0.12))
             {
                 TemporaryAnimatedSprite redbat = new(
                     textureName: @"LooseSprites\Cursors",
@@ -472,7 +474,7 @@ END:
                     animationInterval: 80f,
                     animationLength: 4,
                     numberOfLoops: 9999,
-                    position: new Vector2(Game1.random.Next(mine.map.Layers[0].LayerWidth), Game1.random.Next(mine.map.Layers[0].LayerHeight)),
+                    position: new Vector2(Singletons.Random.Next(mine.map.Layers[0].LayerWidth), Singletons.Random.Next(mine.map.Layers[0].LayerHeight)),
                     flicker: false,
                     flipped: false,
                     layerDepth: 1f,
@@ -489,7 +491,7 @@ END:
                     motion = new Vector2(0f, -8f),
                 };
                 mine.TemporarySprites.Add(redbat);
-                if (Game1.random.NextDouble() < 0.15)
+                if (Singletons.Random.OfChance(0.15))
                 {
                     mine.localSound("batScreech");
                 }
@@ -498,11 +500,11 @@ END:
                     DelayedAction.playSoundAfterDelay("batFlap", (320 * i) + 240);
                 }
             }
-            else if (Game1.random.NextDouble() < 0.24)
+            else if (Singletons.Random.OfChance(0.24))
             {
                 BatTemporarySprite batsprite = new(
                     new Vector2(
-                        Game1.random.NextDouble() < 0.5 ? 0 : mine.map.DisplayWidth - 64,
+                        Singletons.Random.OfChance(0.5) ? 0 : mine.map.DisplayWidth - 64,
                         mine.map.DisplayHeight - 64));
                 mine.TemporarySprites.Add(batsprite);
             }

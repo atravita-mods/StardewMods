@@ -1,10 +1,17 @@
-﻿using AtraShared.Menuing;
+﻿using AtraCore;
+
+using AtraShared.ConstantsAndEnums;
+using AtraShared.Menuing;
 using AtraShared.Utils;
 using AtraShared.Utils.Extensions;
+
 using HarmonyLib;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+
 using StardewModdingAPI.Utilities;
+
 using StardewValley.Objects;
 using StardewValley.Tools;
 
@@ -16,6 +23,7 @@ namespace StopRugRemoval.HarmonyPatches;
 /// Patches against SObject.
 /// </summary>
 [HarmonyPatch(typeof(SObject))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class SObjectPatches
 {
     /// <summary>
@@ -32,7 +40,6 @@ internal static class SObjectPatches
     /// <returns>True to continue to vanilla function, false otherwise.</returns>
     [HarmonyPrefix]
     [HarmonyPatch("canPlaceWildTreeSeed")]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "HarmonyConvention")]
     private static bool PrefixWildTrees(GameLocation location, Vector2 tile, ref bool __result)
     {
         try
@@ -42,8 +49,8 @@ internal static class SObjectPatches
                 return true;
             }
 
-            int posX = ((int)tile.X * 64) + 32;
-            int posY = ((int)tile.Y * 64) + 32;
+            int posX = ((int)tile.X * Game1.tileSize) + 32;
+            int posY = ((int)tile.Y * Game1.tileSize) + 32;
             foreach (Furniture f in location.furniture)
             {
                 if (f.furniture_type.Value == Furniture.rug && f.getBoundingBox(f.TileLocation).Contains(posX, posY))
@@ -55,28 +62,28 @@ internal static class SObjectPatches
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Errored while trying to prevent tree growth\n\n{ex}.", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("preventing tree planting", ex);
         }
         return true;
     }
 
     [HarmonyPrefix]
     [HarmonyPatch(nameof(SObject.onExplosion))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "HarmonyConvention")]
     private static void PrefixOnExplosion(SObject __instance, Farmer who, GameLocation location)
     {
         try
         {
             if (__instance.IsSpawnedObject && ModEntry.Config.SaveBombedForage && ModEntry.Config.Enabled)
             {
+#warning - objects will have their positions set correctly in 1.6
                 // The SObject does not have its location anymore. Just spawn near the farmer, I guess?
-                location.debris.Add(new Debris(__instance, who.Position + new Vector2(Game1.random.Next(-128, 128), Game1.random.Next(-128, 128))));
-                ModEntry.ModMonitor.DebugOnlyLog(__instance.DisplayName + ' ' + __instance.TileLocation.ToString(), LogLevel.Warn);
+                location.debris.Add(new Debris(__instance, who.Position + new Vector2(Singletons.Random.Next(-128, 128), Singletons.Random.Next(-128, 128))));
+                ModEntry.ModMonitor.DebugOnlyLog(__instance.DisplayName + ' ' + __instance.TileLocation.ToString());
             }
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Error while creating debris.{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("creating debris", ex);
         }
     }
 
@@ -87,7 +94,6 @@ internal static class SObjectPatches
     /// <param name="t">tool used.</param>
     [HarmonyPrefix]
     [HarmonyPatch(nameof(SObject.performToolAction))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "HarmonyConvention")]
     private static bool PrefixPerformToolAction(SObject __instance, Tool t, ref bool __result)
     {
         __result = t is not Hoe || !__instance.IsScarecrow();
@@ -105,9 +111,12 @@ internal static class SObjectPatches
     /// <returns>True to continue to vanilla function, false otherwise.</returns>
     [HarmonyPrefix]
     [HarmonyPatch(nameof(SObject.placementAction))]
-    [SuppressMessage("StyleCop", "SA1313", Justification = "Style prefered by Harmony")]
     private static bool PrefixPlacementAction(SObject __instance, GameLocation location, int x, int y, ref bool __result)
     {
+        if (!ReferenceEquals(__instance, Game1.player.ActiveObject) || !ModEntry.Config.Enabled)
+        {
+            return true;
+        }
         try
         {
             if (ModEntry.Config.PreventPlantingOnRugs && __instance.isSapling())
@@ -122,13 +131,11 @@ internal static class SObjectPatches
                     }
                 }
             }
-            if (!HaveConfirmedBomb.Value && ModEntry.Config.Enabled
-                && !__instance.bigCraftable.Value && __instance is not Furniture
-                && __instance.ParentSheetIndex is 286 or 287 or 288
+            if (!HaveConfirmedBomb.Value && __instance.IsBomb()
                 && (IsLocationConsideredDangerous(location) ? ModEntry.Config.BombsInDangerousAreas : ModEntry.Config.BombsInSafeAreas)
                     .HasFlag(Context.IsMultiplayer ? ConfirmationEnum.InMultiplayerOnly : ConfirmationEnum.NotInMultiplayer))
             {
-                // handle the case where a bomb has already been placed?
+                // handle the case where a bomb has already been placed.
                 Vector2 loc = new(x, y);
                 foreach (TemporaryAnimatedSprite tas in location.temporarySprites)
                 {
@@ -150,13 +157,19 @@ internal static class SObjectPatches
                 {
                     () =>
                     {
-                        Game1.player.reduceActiveItemByOne();
+                        if (Game1.player.ActiveObject.IsBomb())
+                        {
+                            Game1.player.reduceActiveItemByOne();
+                        }
                         GameLocationUtils.ExplodeBomb(Game1.player.currentLocation, __instance.ParentSheetIndex, loc, ModEntry.Multiplayer());
                     },
                     () =>
                     {
                         HaveConfirmedBomb.Value = true;
-                        Game1.player.reduceActiveItemByOne();
+                        if (Game1.player.ActiveObject.IsBomb())
+                        {
+                            Game1.player.reduceActiveItemByOne();
+                        }
                         GameLocationUtils.ExplodeBomb(Game1.player.currentLocation, __instance.ParentSheetIndex, loc, ModEntry.Multiplayer());
                     },
                 };
@@ -169,7 +182,7 @@ internal static class SObjectPatches
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod failed while trying to prevent tree planting\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("prefixing SObject.placementAction", ex);
         }
         return true;
     }

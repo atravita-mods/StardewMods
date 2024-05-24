@@ -1,4 +1,8 @@
-﻿using AtraShared.ConstantsAndEnums;
+﻿using AtraBase.Toolkit.Extensions;
+
+using AtraCore;
+
+using AtraShared.ConstantsAndEnums;
 
 using Microsoft.Xna.Framework;
 
@@ -49,7 +53,7 @@ internal static class MiraculousFertilizerHandler
         keg.heldObject.Value = null;
         keg.performObjectDropInAction(item, false, Game1.player);
         SObject? heldobj = keg.heldObject.Value;
-        if (heldobj?.getOne() is SObject returnobj && Game1.random.NextDouble() < (25.0 + Game1.player.LuckLevel) / Math.Max(heldobj.Price, 150))
+        if (heldobj?.getOne() is SObject returnobj && Singletons.Random.OfChance((25.0 + Game1.player.LuckLevel) / Math.Max(heldobj.Price, 200)))
         {
             return returnobj;
         }

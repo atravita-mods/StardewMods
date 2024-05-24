@@ -1,4 +1,5 @@
-﻿using AtraCore.Utilities;
+﻿using AtraCore.Framework.Internal;
+using AtraCore.Utilities;
 
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
@@ -25,7 +26,7 @@ namespace CritterRings;
 /// <inheritdoc />
 [HarmonyPatch]
 [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "Reviewed.")]
-internal sealed class ModEntry : Mod
+internal sealed class ModEntry : BaseMod<ModEntry>
 {
     /// <summary>
     /// A buff corresponding to the bunny ring.
@@ -43,11 +44,9 @@ internal sealed class ModEntry : Mod
     internal static ModConfig Config { get; private set; } = null!;
 
     /// <summary>
-    /// Gets the logger for this mod.
+    /// Gets the API for CameraPan.
     /// </summary>
-    internal static IMonitor ModMonitor { get; private set; } = null!;
-
-    internal static ICameraAPI? cameraAPI { get; private set; } = null;
+    internal static ICameraAPI? CameraAPI { get; private set; } = null;
 
     #region managers
 
@@ -156,11 +155,10 @@ internal sealed class ModEntry : Mod
     public override void Entry(IModHelper helper)
     {
         I18n.Init(helper.Translation);
-        ModMonitor = this.Monitor;
+        base.Entry(helper);
         Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
 
-        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
         AssetManager.Initialize(helper.GameContent);
     }
@@ -203,7 +201,7 @@ internal sealed class ModEntry : Mod
             IntegrationHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, LogLevel.Trace);
             if (helper.TryGetAPI("atravita.CameraPan", "0.1.1", out ICameraAPI? api))
             {
-                cameraAPI = api;
+                CameraAPI = api;
             }
         }
     }
@@ -232,6 +230,8 @@ internal sealed class ModEntry : Mod
         {
             return;
         }
+
+        // Frog ring.
         if (!Game1.player.UsingTool && !Game1.player.isEating && Game1.player.yJumpOffset == 0
             && Config.MaxFrogJumpDistance > 0 && Config.FrogRingButton.Keybinds.FirstOrDefault(k => k.GetState() == SButtonState.Pressed) is Keybind keybind
             && FrogRing > 0 && Game1.player.isWearingRing(FrogRing))
@@ -255,6 +255,7 @@ internal sealed class ModEntry : Mod
             }
         }
 
+        // Bunny ring.
         if (Config.BunnyRingBoost > 0 && Config.BunnyRingButton.JustPressed() && BunnyRing > 0
             && Game1.player.isWearingRing(BunnyRing) && !Game1.player.hasBuff(BunnyBuffId))
         {

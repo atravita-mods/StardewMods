@@ -256,8 +256,7 @@ internal sealed class ModEntry : Mod
             this.Monitor.Log($"Could not get ID from JA.");
         }
 
-        int storedID;
-        if (this.Helper.Data.ReadSaveData<string>(SAVESTRING) is not string savedIdstring || !int.TryParse(savedIdstring, out storedID))
+        if (this.Helper.Data.ReadSaveData<string>(SAVESTRING) is not string savedIdstring || !int.TryParse(savedIdstring, out int storedID))
         {
             if (this.Helper.Data.ReadGlobalData<GiantCropFertilizerIDStorage>(SAVESTRING) is not GiantCropFertilizerIDStorage storedIDCls
                 || storedIDCls.ID == -1)
@@ -321,7 +320,7 @@ internal sealed class ModEntry : Mod
         }
         catch (Exception ex)
         {
-            this.Monitor.Log($"Failed in deshuffling IDs in SF buildings:\n\n{ex}", LogLevel.Error);
+            this.Monitor.LogError("deshuffling IDs in SF buildings", ex);
         }
         this.oldID = -1;
         this.newID = -1;

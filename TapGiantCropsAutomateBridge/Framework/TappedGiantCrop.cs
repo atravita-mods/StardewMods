@@ -14,8 +14,8 @@ namespace TapGiantCropsAutomateBridge.Framework;
 /// </summary>
 public class TappedGiantCrop : IMachine
 {
-    private GiantCrop crop;
-    private SObject tapper;
+    private readonly GiantCrop crop;
+    private readonly SObject tapper;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="TappedGiantCrop"/> class.

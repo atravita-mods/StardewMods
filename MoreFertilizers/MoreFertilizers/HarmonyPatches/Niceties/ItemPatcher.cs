@@ -1,5 +1,8 @@
-﻿using AtraShared.Utils.Extensions;
+﻿using AtraShared.ConstantsAndEnums;
+using AtraShared.Utils.Extensions;
+
 using HarmonyLib;
+
 using MoreFertilizers.Framework;
 
 namespace MoreFertilizers.HarmonyPatches.Niceties;
@@ -8,10 +11,10 @@ namespace MoreFertilizers.HarmonyPatches.Niceties;
 /// Adds a context tag for organic produce.
 /// </summary>
 [HarmonyPatch(typeof(Item))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class ItemPatcher
 {
     [HarmonyPatch("_PopulateContextTags")]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention")]
     private static void Postfix(Item __instance, HashSet<string> tags)
     {
         try
@@ -29,7 +32,7 @@ internal static class ItemPatcher
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed in adding context tags!\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("adding context tags", ex);
         }
     }
 }

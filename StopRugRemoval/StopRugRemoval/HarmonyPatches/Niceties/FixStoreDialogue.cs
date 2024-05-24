@@ -1,9 +1,14 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
+
 using AtraCore.Framework.ReflectionManager;
+
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
+
 using HarmonyLib;
+
 using StardewValley.Locations;
 
 namespace StopRugRemoval.HarmonyPatches.Niceties;
@@ -19,7 +24,7 @@ internal static class FixStoreDialogue
         => obj is not null && obj.Edibility > 0;
 
     [HarmonyPatch(nameof(SeedShop.getPurchasedItemDialogueForNPC))]
-    [SuppressMessage("SMAPI.CommonErrors", "AvoidNetField:Avoid Netcode types when possible", Justification = "Used for matching only.")]
+    [SuppressMessage("SMAPI.CommonErrors", "AvoidNetField:Avoid Netcode types when possible", Justification = StyleCopConstants.UsedForMatchingOnly)]
     private static IEnumerable<CodeInstruction>? Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
     {
         try
@@ -72,8 +77,7 @@ internal static class FixStoreDialogue
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Ran into error transpiling {original.FullDescription()}.\n\n{ex}", LogLevel.Error);
-            original?.Snitch(ModEntry.ModMonitor);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }

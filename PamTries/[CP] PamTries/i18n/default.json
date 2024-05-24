@@ -130,6 +130,11 @@
         "100-penny-09": "I've been talking to a therapist lately, too. Felt like the right thing to do.",
         "100-penny-10": "She's been telling me...telling me that my mother's sobriety isn't...something in my control.",
     "100-validate": "I get that you feel disappointed in her.",
-        "100-penny-20": "",
+        "100-penny-20": "I....I. Is this bad of me? That I don't believe in her anymore?",
+        "100-penny-21": "",
+
+        // "She's trying her best. I know she's trying her best."
     "100-confront": "She's trying her best, you should appreciate her progress more.",
+        "100-penny-50": "Ugh, @, you're not helpful, you know that right?",
+        "100-penny-51": "You know what, I don't want to talk to you anymore."
 }

@@ -2,9 +2,13 @@
 
 using AtraBase.Toolkit;
 
+using AtraShared.ConstantsAndEnums;
+using AtraShared.Utils.Extensions;
+
 using HarmonyLib;
 
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
 using SpecialOrdersExtended.Managers;
@@ -19,6 +23,7 @@ namespace SpecialOrdersExtended.HarmonyPatches;
 /// Handles loading custom emoji.
 /// </summary>
 [HarmonyPatch(typeof(SpecialOrdersBoard))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class CustomEmoji
 {
     private static readonly HashSet<string> Failed = new(); // hashset of failed loads.
@@ -26,6 +31,10 @@ internal static class CustomEmoji
 
     private static IGameContentHelper parser = null!;
 
+    /// <summary>
+    /// Initializes the asset cache.
+    /// </summary>
+    /// <param name="gameContentHelper">Game content helper.</param>
     internal static void Init(IGameContentHelper gameContentHelper) => parser = gameContentHelper;
 
     /// <summary>
@@ -60,15 +69,20 @@ internal static class CustomEmoji
     [MethodImpl(TKConstants.Hot)]
     [HarmonyPatch("GetPortraitForRequester")]
     [HarmonyPriority(Priority.LowerThanNormal)]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Named for harmony.")]
     private static void Postfix(ref KeyValuePair<Texture2D, Rectangle>? __result, string requester_name)
     {
         if (requester_name is null)
         {
             return;
         }
-
-        __result ??= GetEntry(requester_name);
+        try
+        {
+            __result ??= GetEntry(requester_name);
+        }
+        catch (Exception ex)
+        {
+            ModEntry.ModMonitor.LogError("overriding emoji", ex);
+        }
     }
 
     [MethodImpl(TKConstants.Hot)]
@@ -110,11 +124,15 @@ internal static class CustomEmoji
                     ModEntry.ModMonitor.Log($"{data} appears to be requesting an out of bounds rectangle.", LogLevel.Warn);
                 }
             }
+            catch (ContentLoadException)
+            {
+                Failed.Add(texLoc.BaseName);
+                ModEntry.ModMonitor.Log($"'{data.AssetName}' could not be found.", LogLevel.Warn);
+            }
             catch (Exception ex)
             {
                 Failed.Add(texLoc.BaseName);
-                ModEntry.ModMonitor.LogOnce($"Failed to load {data.AssetName}.", LogLevel.Error);
-                ModEntry.ModMonitor.Log(ex.ToString());
+                ModEntry.ModMonitor.LogError($"loading {data.AssetName}", ex);
             }
         }
 

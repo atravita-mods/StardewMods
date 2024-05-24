@@ -1,0 +1,46 @@
+{"Changes":[
+    {
+        "LogName": "Pam - inlaw",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Pam",
+        "When": {
+            "Query: {{Hearts:Penny}} >= 10": true,
+            "EnableFor": "Pam",
+        },
+        "Entries": {
+            "summer_Fri10_inlaw_Penny": "{{i18n: pam-penny-summer-fri10_0}}$h#$b#{{i18n:pam-penny-summer-fri10_1}}"
+        }
+    },
+    {
+        "LogName": "Vincent - inlaw",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Vincent",
+        "When": {
+            "EnableFor": "Vincent",
+        },
+        "Entries": {
+            "Tue_inlaw_Penny": "{{i18n:vincent-penny-tue-a}}#$e#{{i18n:vincent-penny-tue-b}}$h",
+        }
+    },
+    {
+        "LogName": "Evelyn - inlaw",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Evelyn",
+        "When": {
+            "Query: {{Hearts:Penny}} >= 10": true,
+            "EnableFor": "Evelyn"
+        },
+        "Entries": {
+            "winter_Mon4_inlaw_Penny": "{{i18n: evelyn-penny-winter-mon4}}$h"
+        }
+    },
+    {
+        "LogName": "Penny - Marriage - in normal dialogue file",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Penny",
+        "Entries": {
+            "Farmhouse_Entry": "{{i18n:penny-homecoming}}",
+            "Trailer_Entry": "{{i18n:penny-greet-Pam}}"
+        }
+    },
+]}

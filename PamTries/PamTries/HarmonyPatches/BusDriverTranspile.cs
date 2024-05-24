@@ -3,6 +3,8 @@
 using System.Reflection;
 using System.Reflection.Emit;
 using AtraBase.Toolkit.Reflection;
+
+using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
 
@@ -20,7 +22,7 @@ internal static class BusDriverTranspile
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed in transpiling GameLocation::UpdateWhenCurrentLocation to replace bus driver\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("transpiling GameLocation::UpdateWhenCurrentLocation to replace bus driver", ex);
         }
     }
 
@@ -42,7 +44,7 @@ internal static class BusDriverTranspile
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Ran into error transpiliing GameLocation.UpdateWhenCurrentLocation when substituting new driver:\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }

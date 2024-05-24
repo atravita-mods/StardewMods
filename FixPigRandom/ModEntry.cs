@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using AtraBase.Toolkit;
 using AtraBase.Toolkit.Reflection;
 
+using AtraCore;
 using AtraCore.Framework.ReflectionManager;
 
 using AtraShared.ConstantsAndEnums;
@@ -89,10 +90,10 @@ internal sealed class ModEntry : Mod
         }
         catch (Exception ex)
         {
-            modMonitor.Log($"Failed while trying to generate random for pig {id}:\n\n{ex}", LogLevel.Error);
+            modMonitor.LogError($"generating random for pig {id}", ex);
         }
 
-        return Game1.random;
+        return Singletons.Random;
     }
 
     private static IEnumerable<CodeInstruction>? Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
@@ -129,7 +130,7 @@ internal sealed class ModEntry : Mod
             {
                 new(OpCodes.Ldsfld, typeof(ModEntry).GetCachedField(nameof(modMonitor), ReflectionCache.FlagTypes.StaticFlags)),
                 new(OpCodes.Ldstr, "Truffles Over"),
-                new(OpCodes.Ldc_I4_1),
+                new(OpCodes.Ldc_I4_1), // LogLevel.Debug
                 new(OpCodes.Callvirt, typeof(IMonitor).GetCachedMethod(nameof(IMonitor.Log), ReflectionCache.FlagTypes.InstanceFlags)),
             });
 #endif
@@ -139,8 +140,7 @@ internal sealed class ModEntry : Mod
         }
         catch (Exception ex)
         {
-            modMonitor.Log($"Ran into error transpiling {original.FullDescription()}\n\n{ex}", LogLevel.Error);
-            original.Snitch(modMonitor);
+            modMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }
@@ -174,8 +174,7 @@ internal sealed class ModEntry : Mod
         }
         catch (Exception ex)
         {
-            modMonitor.Log($"Ran into error transpiling {original.FullDescription()}\n\n{ex}", LogLevel.Error);
-            original.Snitch(modMonitor);
+            modMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }

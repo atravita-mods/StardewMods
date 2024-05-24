@@ -10,6 +10,16 @@
     },
     {
         "Action": "Include",
+        "LogName": "Demetrius - mid hearts",
+        "FromFile": "assets/default/charlie/Demetrius/{{FarmCave}}.json",
+        "When": {
+            "EnableFor": "Demetrius",
+            "Query: {{Hearts:Demetrius}} >= 6": true,
+            "HasFile:{{FromFile}}": true,
+        }
+    },
+    {
+        "Action": "Include",
         "LogName": "Leah - mid hearts",
         "FromFile": "assets/default/charlie/Leah/mid.json",
         "When": {
@@ -28,11 +38,31 @@
     },
     {
         "Action": "Include",
+        "LogName": "Lewis - mid hearts",
+        "FromFile": "assets/default/charlie/Lewis/mid_realism.json",
+        "When": {
+            "EnableFor": "Lewis",
+            "Query: {{Hearts:Lewis}} >= 6": true,
+            "IncreasedRealism": true
+        }
+    },
+    {
+        "Action": "Include",
         "LogName": "Maru - mid hearts",
         "FromFile": "assets/default/charlie/Maru/mid.json",
         "When": {
             "EnableFor": "Maru",
             "Query: {{Hearts:Maru}} >= 6": true,
+        }
+    },
+    {
+        "Action": "Include",
+        "LogName": "Maru - mid hearts",
+        "FromFile": "assets/default/charlie/Maru/mid_realism.json",
+        "When": {
+            "EnableFor": "Maru",
+            "Query: {{Hearts:Maru}} >= 6": true,
+            "IncreasedRealism": true
         }
     },
     {

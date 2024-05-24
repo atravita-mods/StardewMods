@@ -1,4 +1,5 @@
 ﻿using AtraShared.ConstantsAndEnums;
+using AtraShared.Utils.Extensions;
 
 using HarmonyLib;
 
@@ -10,7 +11,7 @@ namespace PrismaticSlime.HarmonyPatches.SlimeToastPatches;
 /// Holds patches against Farmer.
 /// </summary>
 [HarmonyPatch(typeof(Farmer))]
-[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class FarmerPatches
 {
     /// <summary>
@@ -39,7 +40,7 @@ internal static class FarmerPatches
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed while trying to add prismatic toast buff\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("adding prismatic toast buff", ex);
         }
     }
 }

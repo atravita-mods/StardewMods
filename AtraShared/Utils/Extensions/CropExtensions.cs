@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace AtraShared.Utils.Extensions
+﻿namespace AtraShared.Utils.Extensions
 {
     public static class CropExtensions
     {

@@ -83,8 +83,7 @@ internal static class BusStopPatch
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed when trying to apply transpiler for {original.FullDescription()}\n\n{ex}", LogLevel.Error);
-            original.Snitch(ModEntry.ModMonitor);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
             return null;
         }
     }

@@ -1,6 +1,13 @@
-﻿using System.Buffers;
+﻿// Ignore Spelling: xstart yend xend ystart loc tileloc Utils
+
+using System.Buffers;
+
+using AtraBase.Toolkit.Extensions;
+
 using CommunityToolkit.Diagnostics;
+
 using Microsoft.Xna.Framework;
+
 using StardewValley.Buildings;
 using StardewValley.Locations;
 
@@ -14,6 +21,13 @@ namespace AtraShared.Utils;
 [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1124:Do not use regions", Justification = "Reviewed")]
 public static class GameLocationUtils
 {
+    #region random
+
+    private static readonly ThreadLocal<Random> _random = new(() => new());
+
+    private static Random Random => _random.Value!;
+    #endregion
+
     #region Animations
 
     /// <summary>
@@ -25,7 +39,10 @@ public static class GameLocationUtils
     /// <param name="mp">Multiplayer instance - used to broadcast sprites.</param>
     public static void ExplodeBomb(GameLocation loc, int whichBomb, Vector2 tileloc, Multiplayer mp)
     {
-        int bombID = Game1.random.Next();
+        Guard.IsNotNull(loc);
+        Guard.IsNotNull(mp);
+
+        int bombID = Random.Next();
         loc.playSound("thudStep");
         TemporaryAnimatedSprite tas_bomb = new(
             initialParentTileIndex: whichBomb,
@@ -119,6 +136,9 @@ public static class GameLocationUtils
     /// <remarks>Mostly copied from FishPond.showObjectThrownIntoPondAnimation.</remarks>
     public static void DrawWaterSplash(GameLocation loc, Vector2 nonTileLocation, Multiplayer mp, int delayTime)
     {
+        Guard.IsNotNull(loc);
+        Guard.IsNotNull(mp);
+
         mp.broadcastSprites(
             loc,
             new TemporaryAnimatedSprite(
@@ -144,7 +164,7 @@ public static class GameLocationUtils
                 numberOfLoops: 0,
                 position: nonTileLocation,
                 flicker: false,
-                flipped: Game1.random.NextDouble() < 0.5,
+                flipped: Random.OfChance(0.5),
                 layerDepth: (nonTileLocation.Y + 1f) / 10000f,
                 alphaFade: 0.01f,
                 color: Color.White,
@@ -164,9 +184,9 @@ public static class GameLocationUtils
                 animationInterval: 65f,
                 animationLength: 8,
                 numberOfLoops: 0,
-                position: nonTileLocation + new Vector2(Game1.random.Next(-32, 32), Game1.random.Next(-16, 32)),
+                position: nonTileLocation + new Vector2(Random.Next(-32, 32), Random.Next(-16, 32)),
                 flicker: false,
-                flipped: Game1.random.NextDouble() < 0.5,
+                flipped: Random.OfChance(0.5),
                 layerDepth: (nonTileLocation.Y + 1f) / 10000f,
                 alphaFade: 0.01f,
                 color: Color.White,
@@ -186,9 +206,9 @@ public static class GameLocationUtils
                 animationInterval: 75f,
                 animationLength: 8,
                 numberOfLoops: 0,
-                position: nonTileLocation + new Vector2(Game1.random.Next(-32, 32), Game1.random.Next(-16, 32)),
+                position: nonTileLocation + new Vector2(Random.Next(-32, 32), Random.Next(-16, 32)),
                 flicker: false,
-                flipped: Game1.random.NextDouble() < 0.5,
+                flipped: Random.OfChance(0.5),
                 layerDepth: (nonTileLocation.Y + 1f) / 10000f,
                 alphaFade: 0.01f,
                 color: Color.White,

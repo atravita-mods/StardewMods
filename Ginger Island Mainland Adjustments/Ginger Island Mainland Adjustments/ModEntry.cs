@@ -1,4 +1,6 @@
 ﻿using AtraCore.Utilities;
+
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Menuing;
 using AtraShared.MigrationManager;
 using AtraShared.Utils.Extensions;
@@ -38,7 +40,7 @@ internal sealed class ModEntry : Mod
         // Register events
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
         helper.Events.GameLoop.TimeChanged += this.OnTimeChanged;
-        helper.Events.GameLoop.DayStarted += MarriageDialogueHandler.OnDayStart;
+        helper.Events.GameLoop.DayStarted += static (_, _) => MarriageDialogueHandler.OnDayStart();
         helper.Events.GameLoop.DayEnding += this.OnDayEnding;
         helper.Events.GameLoop.ReturnedToTitle += this.ReturnedToTitle;
         helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
@@ -83,8 +85,8 @@ internal sealed class ModEntry : Mod
         if (Game1.getLocationFromName("IslandSouth") is IslandSouth islandSouth)
         {
             this.Monitor.DebugOnlyLog("Found IslandSouth.", LogLevel.Info);
-            ParrotUpgradePerch? perch = islandSouth.parrotUpgradePerches.FirstOrDefault(perch => perch.tilePosition.X == 17 && perch.tilePosition.Y == 22);
-            if (perch is not null && perch.currentState.Value != ParrotUpgradePerch.UpgradeState.Complete)
+            if (islandSouth.parrotUpgradePerches.FirstOrDefault(perch => perch.tilePosition.X == 17 && perch.tilePosition.Y == 22) is ParrotUpgradePerch perch
+                && perch.currentState.Value != ParrotUpgradePerch.UpgradeState.Complete)
             {
                 this.Monitor.DebugOnlyLog("Found perch, applying watching.", LogLevel.Info);
                 IslandSouthWatcher southWatcher = new(this.Helper.GameContent);
@@ -184,7 +186,7 @@ internal sealed class ModEntry : Mod
         }
         catch (Exception ex)
         {
-            Globals.ModMonitor.Log($"{I18n.HarmonyCrash()} {Globals.GithubLocation}{Environment.NewLine}{ex}", LogLevel.Error);
+            Globals.ModMonitor.Log(string.Format(ErrorMessageConsts.HARMONYCRASH, ex), LogLevel.Error);
         }
 
         harmony.Snitch(Globals.ModMonitor, this.ModManifest.UniqueID, transpilersOnly: true);

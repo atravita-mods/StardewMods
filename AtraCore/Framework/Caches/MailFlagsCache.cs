@@ -7,7 +7,7 @@ namespace AtraCore.Framework.Caches;
 /// </summary>
 internal static class MailFlagsCache
 {
-    private static List<WeakReference<NetList<string, NetString>>> listsToFree = new();
+    private static readonly List<WeakReference<NetList<string, NetString>>> listsToFree = new();
 
     /// <summary>
     /// Gets a hashset of the current player's mail flags.

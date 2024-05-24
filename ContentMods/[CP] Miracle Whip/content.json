@@ -1,0 +1,45 @@
+{
+    "$schema": "https://smapi.io/schemas/content-patcher.json",
+    "Format": "1.29.0",
+    "Changes": [
+        {
+            "Action": "EditImage",
+            "FromFile": "concession.png",
+            "Target": "LooseSprites/Concessions",
+            "ToArea": {
+                "X": 0,
+                "Y": 64,
+                "Height": 16,
+                "Width": 16
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Data/Concessions",
+            "Entries": {
+                32: {
+                    "ID": 32,
+                    "Name": "Miracle Whip",
+                    "DisplayName": "{{i18n: MiracleWhip.Name}}",
+                    "Description": "{{i18n: MiracleWhip.Description}}",
+                    "Price": 39,
+                    "ItemTags": [
+                        "Horrid"
+                    ]
+                }
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Data/ConcessionTastes",
+            "TargetField": ["*"],
+            "Entries": {
+                "DislikedTags": [
+                    "Black Licorice",
+                    "Joja",
+                    "Horrid",
+                  ],
+            }
+        }
+    ]
+}

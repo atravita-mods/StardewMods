@@ -54,8 +54,7 @@ internal static class FruitTreeGrowthPatch
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Transpiler for {nameof(FruitTree.IsGrowthBlocked)} failed with error {ex}", LogLevel.Error);
-            original?.Snitch(ModEntry.ModMonitor);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }

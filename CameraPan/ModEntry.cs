@@ -1,7 +1,11 @@
-﻿using System.Runtime.CompilerServices;
+﻿// Ignore Spelling: Api
+
+using System.Runtime.CompilerServices;
 
 using AtraBase.Toolkit;
 using AtraBase.Toolkit.Extensions;
+
+using AtraCore.Framework.Internal;
 
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
@@ -25,13 +29,12 @@ using AtraUtils = AtraShared.Utils.Utils;
 
 namespace CameraPan;
 
-// TODO: draw a big arrow pointing towards the player if the player is off screen?
-
 /// <inheritdoc />
 [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:Field names should not contain underscore", Justification = "Constants.")]
 [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1204:Static elements should appear before instance elements", Justification = "Reviewed.")]
-[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "Accessors kept near backing fields.")]
-internal sealed class ModEntry : Mod
+[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = StyleCopErrorConsts.AccessorsNearFields)]
+[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1202:Elements should be ordered by access", Justification = "Reviewed.")]
+internal sealed class ModEntry : BaseMod<ModEntry>
 {
     /// <summary>
     /// The integer ID of the camera item.
@@ -60,7 +63,7 @@ internal sealed class ModEntry : Mod
     {
         get => enabled.Value;
         set => enabled.Value = value;
-    } 
+    }
 
     private static readonly PerScreen<bool> snapOnNextTick = new(() => true);
 
@@ -92,11 +95,6 @@ internal sealed class ModEntry : Mod
     private static StringUtils stringUtils = null!;
 
     /// <summary>
-    /// Gets the logging instance for this mod.
-    /// </summary>
-    internal static IMonitor ModMonitor { get; private set; } = null!;
-
-    /// <summary>
     /// Gets a message to draw if the camera button is hovered over.
     /// </summary>
     internal static string CameraHoverMessage { get; private set; } = string.Empty;
@@ -120,7 +118,7 @@ internal sealed class ModEntry : Mod
     public override void Entry(IModHelper helper)
     {
         I18n.Init(helper.Translation);
-        ModMonitor = this.Monitor;
+        base.Entry(helper);
         Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
         stringUtils = new StringUtils(this.Monitor);
 
@@ -200,6 +198,9 @@ internal sealed class ModEntry : Mod
         harmony.Snitch(this.Monitor, harmony.Id, transpilersOnly: true);
     }
 
+    /// <summary>
+    /// Creates or moves my little camera button.
+    /// </summary>
     internal static void CreateOrModifyButton()
     {
         if (Game1.dayTimeMoneyBox?.position is Vector2 position)
@@ -414,7 +415,9 @@ internal sealed class ModEntry : Mod
         // Debug markers
         if (ConsoleCommands.DrawMarker)
         {
-            Vector2 target = Utility.ModifyCoordinatesForUIScale(Game1.GlobalToLocal(Game1.viewport, Target.ToVector2()));
+            Vector2 target = Utility.ModifyCoordinatesForUIScale(Game1.GlobalToLocal(
+                Game1.viewport,
+                Target.ToVector2()));
             e.SpriteBatch.Draw(
                 texture: AssetManager.DartsTexture,
                 position: target / Game1.options.zoomLevel,
@@ -449,7 +452,7 @@ internal sealed class ModEntry : Mod
         if (enabled.Value && ViewportAdjustmentPatches.ShouldOffset()
             && this.clickAndDragScrollPosition.Value is not null && Config.ClickAndDragBehavior == ClickAndDragBehavior.AutoScroll)
         {
-            var basePos = this.clickAndDragScrollPosition.Value.Value.ToVector2();
+            Vector2 basePos = this.clickAndDragScrollPosition.Value.Value.ToVector2();
             foreach (Direction direction in DirectionExtensions.Cardinal)
             {
                 e.SpriteBatch.Draw(
@@ -534,7 +537,7 @@ internal sealed class ModEntry : Mod
             return;
         }
 
-        arrowPos = Utility.snapToInt( Utility.ModifyCoordinatesForUIScale(arrowPos));
+        arrowPos = Utility.snapToInt(Utility.ModifyCoordinatesForUIScale(arrowPos));
 
         s.Draw(
             texture: AssetManager.ArrowTexture,

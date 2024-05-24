@@ -44,8 +44,7 @@ internal static class AssetManager
             }
             catch (Exception ex)
             {
-                ModEntry.ModMonitor.Log($"Unexpected error checking {location}'s event file!", LogLevel.Error);
-                ModEntry.ModMonitor.Log(ex.ToString());
+                ModEntry.ModMonitor.LogError($"checking {location}'s event file", ex);
             }
         }
 
@@ -60,11 +59,11 @@ internal static class AssetManager
     {
         try
         {
-            return Game1.content.Load<Dictionary<string, DrawPrismaticModel>>(AtraCoreConstants.PrismaticMaskData);
+            return Game1.temporaryContent.Load<Dictionary<string, DrawPrismaticModel>>(AtraCoreConstants.PrismaticMaskData);
         }
-        catch
+        catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log("Failed to load the prismatic mask data!", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("loading prismatic mask data", ex);
         }
         return null;
     }

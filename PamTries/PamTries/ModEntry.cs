@@ -1,6 +1,8 @@
 ﻿using AtraCore.Framework.Caches;
+using AtraCore.Framework.Internal;
 using AtraCore.Utilities;
 
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
 using AtraShared.Integrations.Interfaces.ContentPatcher;
 using AtraShared.MigrationManager;
@@ -22,33 +24,32 @@ using StardewModdingAPI.Events;
 namespace PamTries;
 
 /// <inheritdoc />
-internal sealed class ModEntry : Mod
+internal sealed class ModEntry : BaseMod<ModEntry>
 {
     private static readonly string[] SyncedConversationTopics = new string[2] { "PamTriesRehab", "PamTriesRehabHoneymoon" };
-    private Random? random;
-    private PamMood mood = PamMood.neutral;
-    private MigrationManager? migrator;
+    private static PamMood mood = PamMood.neutral;
 
-    /// <summary>
-    /// Gets the logger for this mod.
-    /// </summary>
-    internal static IMonitor ModMonitor { get; private set; } = null!;
+    private Random? random;
+    private MigrationManager? migrator;
 
     /// <summary>
     /// Gets the scheduling tools for this mod.
     /// </summary>
     internal static ScheduleUtilityFunctions ScheduleUtilityFunctions { get; private set; } = null!;
 
+    /// <summary>
+    /// Gets the value of Pam's mood.
+    /// </summary>
+    internal static PamMood PamMood => mood;
+
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
     {
+        base.Entry(helper);
+
         I18n.Init(helper.Translation);
         ScheduleUtilityFunctions = new(this.Monitor, this.Helper.Translation);
         AssetManager.Initialize(helper.GameContent);
-
-        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
-
-        ModMonitor = this.Monitor;
 
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunch;
         helper.Events.GameLoop.DayStarted += this.DayStarted;
@@ -72,7 +73,7 @@ internal sealed class ModEntry : Mod
         }
         catch (Exception ex)
         {
-            ModMonitor.Log($"Mod crashed while applying Harmony patches.\n\n{ex}", LogLevel.Error);
+            ModMonitor.Log(string.Format(ErrorMessageConsts.HARMONYCRASH, ex), LogLevel.Error);
         }
         harmony.Snitch(this.Monitor, uniqueID: harmony.Id, transpilersOnly: true);
     }
@@ -109,8 +110,8 @@ internal sealed class ModEntry : Mod
 
         if (Context.IsMainPlayer)
         {
-            if (Game1.getLocationFromName("Trailer_Big") is GameLocation bigtrailer && bigtrailer.Objects.TryGetValue(new Vector2(26, 9), out var sign)
-                && sign.bigCraftable.Value && sign.ParentSheetIndex == 34)
+            if (Game1.getLocationFromName("Trailer_Big") is GameLocation bigtrailer && bigtrailer.Objects.TryGetValue(new Vector2(26, 9), out SObject? sign)
+                && sign.bigCraftable.Value && sign.ParentSheetIndex == 34 && sign.Fragility != SObject.fragility_Indestructable)
             {
                 this.Monitor.Log($"Preventing player from stealing Pam's Yoba shrine.");
                 sign.Fragility = SObject.fragility_Indestructable;
@@ -173,7 +174,7 @@ internal sealed class ModEntry : Mod
             {
                 if (Context.IsWorldReady)
                 {
-                    return new[] { this.mood.ToStringFast() };
+                    return new[] { mood.ToStringFast() };
                 }
                 return null;
             });
@@ -216,15 +217,15 @@ internal sealed class ModEntry : Mod
         double chance = this.random.NextDouble();
         if (chance < moodchances[0])
         {
-            this.mood = PamMood.bad;
+            mood = PamMood.bad;
         }
         else if (chance < moodchances[1])
         {
-            this.mood = PamMood.neutral;
+            mood = PamMood.neutral;
         }
         else
         {
-            this.mood = PamMood.good;
+            mood = PamMood.good;
         }
     }
 

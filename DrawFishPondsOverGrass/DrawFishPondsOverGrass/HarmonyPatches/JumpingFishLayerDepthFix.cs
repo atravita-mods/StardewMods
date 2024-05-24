@@ -1,5 +1,8 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
+
+using AtraCore.Framework.ReflectionManager;
+
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
@@ -10,56 +13,17 @@ namespace DrawFishPondsOverGrass.HarmonyPatches;
 /// <summary>
 /// Patch that handles drawing jumping fish a little forward.
 /// </summary>
-[HarmonyPatch(typeof(JumpingFish))]
+[HarmonyPatch]
 internal static class JumpingFishLayerDepthFix
 {
     private const float Offset = 280f;
 
-    [HarmonyPatch(nameof(JumpingFish.Draw))]
-    private static IEnumerable<CodeInstruction>? Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
+    private static IEnumerable<MethodBase> TargetMethods()
     {
-        try
-        {
-            ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);
-            helper.ForEachMatch(
-                new CodeInstructionWrapper[]
-                {
-                    new(OpCodes.Ldarg_0),
-                    new(OpCodes.Ldflda),
-                    new(OpCodes.Ldfld),
-                    new(OpCodes.Ldc_R4, 10000f),
-                    new(OpCodes.Div),
-                },
-                transformer: (helper) =>
-                {
-                    helper.Advance(3)
-                        .Insert(new CodeInstruction[]
-                        {
-                            new (OpCodes.Ldc_R4, Offset),
-                            new (OpCodes.Add),
-                        });
-                    return true;
-                });
-            return helper.Render();
-        }
-        catch (Exception ex)
-        {
-            ModEntry.ModMonitor.Log($"Failed while trying to transpile jumping fish layer depth\n{ex}", LogLevel.Error);
-            original?.Snitch(ModEntry.ModMonitor);
-        }
-        return null;
+        yield return typeof(JumpingFish).GetCachedMethod(nameof(JumpingFish.Draw), ReflectionCache.FlagTypes.InstanceFlags);
+        yield return typeof(PondFishSilhouette).GetCachedMethod(nameof(PondFishSilhouette.Draw), ReflectionCache.FlagTypes.InstanceFlags);
     }
-}
 
-/// <summary>
-/// Patch that holds patches to get fish ponds fish silhouettes to draw at a good location.
-/// </summary>
-[HarmonyPatch(typeof(PondFishSilhouette))]
-internal static class PondFishLayerDepthFix
-{
-    private const float Offset = 280f;
-
-    [HarmonyPatch(nameof(PondFishSilhouette.Draw))]
     private static IEnumerable<CodeInstruction>? Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
     {
         try
@@ -74,7 +38,7 @@ internal static class PondFishLayerDepthFix
                     new(OpCodes.Ldc_R4, 10000f),
                     new(OpCodes.Div),
                 },
-                transformer: (helper) =>
+                transformer: static (helper) =>
                 {
                     helper.Advance(3)
                         .Insert(new CodeInstruction[]
@@ -88,10 +52,8 @@ internal static class PondFishLayerDepthFix
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed while trying to transpile shadow fish layer depth\n{ex}", LogLevel.Error);
-            original?.Snitch(ModEntry.ModMonitor);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
-
         return null;
     }
 }

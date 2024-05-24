@@ -2,6 +2,8 @@
 using System.Reflection.Emit;
 using AtraBase.Toolkit.Reflection;
 using AtraCore.Framework.ReflectionManager;
+
+using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
 using StardewValley.Locations;
@@ -66,7 +68,7 @@ internal static class JukeboxesEverywhere
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Ran into error transpiling jukeboxes to play everywhere!\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }

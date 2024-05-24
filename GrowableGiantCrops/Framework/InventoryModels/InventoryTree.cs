@@ -100,6 +100,8 @@ public sealed class InventoryTree : SObject
         this.isStump.Value = isStump;
         this.Stack = initialStack;
         this.Name = InventoryTreePrefix + idx.ToStringFast();
+
+        this.modData?.SetEnum(ModDataKey, idx);
     }
 
     #region reflection

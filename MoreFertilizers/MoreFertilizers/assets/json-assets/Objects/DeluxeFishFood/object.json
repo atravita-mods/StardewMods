@@ -3,5 +3,6 @@
   "Price": "100",
   "Category": -19,
   "Edibility": 10,
-  "TranslationKey": "deluxe-fish-food"
+  "TranslationKey": "deluxe-fish-food",
+  "ContextTags": [ "color_purple" ]
 }

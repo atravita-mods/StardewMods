@@ -1,28 +1,28 @@
 {
+    /******************************
+    * This file is mostly for specific static strings that really could do with a change.
+    ******************************/
+
     "Changes": [
         {
-            "LogName": "Generic spouse dialogue.",
+            "LogName": "Leah - base",
             "Action": "EditData",
-            "Target": "Characters/Dialogue/MarriageDialogue{{Spouse}}",
-            "Entries": {
-                "{{TheMightyAmondee.CustomTokens/AnniversarySeason}}_{{TheMightyAmondee.CustomTokens/AnniversaryDay}}": "Oh, honey, it's our anniversary today!#$b#Soooo....you've got anything planned?"
+            "Target": "Characters/Dialogue/Leah",
+            "Entries":{
+                "{{TaxDay}}": "Nothing sucks more than having to figure out what I did last year so I can file my taxes.$s"
             },
-            "When": {
-                "HasMod": "TheMightyAmondee.CustomTokens",
-                "HasValue: {{Spouse}}": true,
-                "EnableFor|contains={{Spouse}}": true,
-            }
+            "When": {"EnableFor": "Leah"}
         },
         {
-            "LogName": "Leah -- Married Dialogue",
+            "LogName": "Penny - marriage",
             "Action": "EditData",
-            "Target": "Characters/Dialogue/MarriageDialogueLeah",
+            "Target": "Characters/Dialogue/MarriageDialoguePenny",
             "Entries": {
-                "{{TheMightyAmondee.CustomTokens/AnniversarySeason}}_{{TheMightyAmondee.CustomTokens/AnniversaryDay}}": "It's our anniversary, dear! Don't you think we should do something fun today?"
+                "winter_3": "Oh, it's winter again, isn't it? What are you planning on doing this winter?#$b#I trust you to handle the finances, %endearment."
             },
             "When": {
-                "HasMod": "TheMightyAmondee.CustomTokens",
-                "EnableFor|contains=Leah": true
+                "EnableFor": "Penny",
+                "Year|contains = 1,2": false
             }
         },
         {
@@ -34,7 +34,27 @@
                 "{{TaxDay}}": "You'd think that, since the government is the one who pays me, I wouldn't have to do all this work to pay my taxes.$s"
             },
             "When": {
-                "EnableFor|contains=Demetrius": true
+                "EnableFor": "Demetrius",
+            }
+        },
+        {
+            "LogName": "Emily base",
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Emily",
+            "Entries": {
+                "{{TaxDay}}": "Ugh, I hate having to file my taxes.#$b#Mine and Haley's, honestly maybe I should get her to do her own...."
+            },
+            "When": {
+                "EnableFor": "Emily",
+            }
+        },
+        {
+            "LogName": "Robin - after upgrades",
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Robin",
+            "When": {"Query: {{FarmhouseUpgrade}} > 3": true},
+            "Entries": {
+                "winter_Mon": "I've always loved this time of year. The snow in the mountains is beautiful. Even when I have to walk through it."
             }
         },
         {
@@ -43,7 +63,7 @@
             "Target": "Characters/Dialogue/rainy",
             "When": {
                 "Season": "winter",
-                "EnableFor|contains=Elliott": true
+                "EnableFor": "Elliott"
             },
             "Entries": {
                 "Elliott": "A day like this is good for my productivity.#$e#It's not like I'd be going out in this weather.#$e#Maybe to the saloon. Later."
@@ -54,20 +74,20 @@
             "Action": "EditData",
             "Target": "Characters/Dialogue/Lewis",
             "Entries": {
-                "{{TaxDay}}": "We've all gotta do our duty, @, and that duty includes paying our taxes."
+                "{{TaxDay}}": "We've all gotta do our duty, @, and that duty includes paying our taxes.#$e#Now, did I collect the taxes of that guy who lives out west?"
             },
             "When": {
-                "EnableFor|contains=Lewis": true
+                "EnableFor": "Lewis",
             }
         },
         {
             "LogName": "Marnie - winter Y1",
             "Action": "EditData",
             "Target": "Characters/Dialogue/Marnie",
-            "When": {"Year": "1"},
+            "When": {"Year": "1", "EnableFor": "Marnie"},
             "Entries": {
                 "fall_27": "Make sure to have plenty of hay for winter! It's too cold for animals to go out for most of our winters, so they won't have a chance to eat grass outside."
-            }
+            },
         },
         {
             // This block is to remove vanilla Marnie lines that no longer make sense past Y1.
@@ -78,10 +98,10 @@
                 "{{TaxDay}}": "%Marnie looks exhausted.#$b#Sorry, @, I was up all night trying to file my taxes...#$e#Why do I always leave things like this to the last minute...",
                 // block off her vanilla line about Shane **just** moving in after Y1
                 "Tue": "Between you and I, I think this good country air does Shane well.$h",
-                "Tue_inlaw_Shane": "I'm glad Shane found you, @. I think he's been doing better, recently.$h",
+                "Tue_inlaw_Shane": "I'm glad Shane found you, @. I think he's been doing better, recently.$h"
             },
             "When": {
-                "EnableFor|contains=Marnie": true,
+                "EnableFor": "Marnie",
                 "Year|contains=1": false
             }
         },
@@ -93,7 +113,7 @@
                 "{{TaxDay}}": "Why I've gotta pay taxes to fund this stupid war, I'll never know."
             },
             "When": {
-                "EnableFor|contains=Pam": true
+                "EnableFor": "Pam"
             }
         },
         {
@@ -101,11 +121,37 @@
             "Action": "EditData",
             "Target": "Characters/Dialogue/Pierre",
             "Entries": {
-                "{{TaxDay}}": "Dunno what the state is doing with all my tax dollars.$s#$b#Such a process, every year, to file them. Takes Caroline a week!",
+                "{{TaxDay}}": "Dunno what the state is doing with all my taxes.$s#$b#Such a process, every year, to file them. Takes Caroline a week!",
                 "spring_27": "Gotta make sure to stock tulip bulbs for Ms. Mullner!",
+                "spring_27_2": "Gotta make sure to stock tulip bulbs for Ms. Mullner!"
             },
             "When": {
-                "EnableFor|contains=Pierre": true
+                "EnableFor": "Pierre"
+            }
+        },
+        {
+            "LogName": "Pierre - post CC",
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Pierre",
+            "Entries": {
+                "Fri": "$c .5#Without Joja here, it almost feels like I can breathe a little again.#How's the farm doing? Any seeds you'd like to buy?$h",
+            },
+            "When": {
+                "EnableFor": "Pierre",
+                "IsCommunityCenterComplete": true
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Pierre post-stocklist",
+            "Target": "Characters/Dialogue/Pierre",
+            "Entries": {
+                "winter_Mon": "Man, @, I'm glad you've found my old stocklist, I've got so much more to sell!$h",
+                "winter_Mon4": "@, interested in any seeds today? Gotta be prepared for spring!$h"
+            },
+            "When": {
+                "HasFlag" :"PierreStocklist",
+                "EnableFor": "Pierre"
             }
         },
         {
@@ -113,10 +159,11 @@
             "Action": "EditData",
             "Target": "Characters/Dialogue/Caroline",
             "Entries": {
-                "{{TaxDay}}": "I wish it didn't take so long to do our taxes.#$b#Neither Pierre nor I are organized enough to get them done early."
+                "{{TaxDay}}": "I wish it didn't take so long to do our taxes.#$b#Neither Pierre nor I are organized enough to get them done early.",
+                "Tue": "Tuesdays are our aerobics club days. Say, @, you wanna join us?$h"
             },
             "When": {
-                "EnableFor|contains=Caroline": true
+                "EnableFor": "Caroline"
             }
         },
         {
@@ -127,7 +174,7 @@
                 "summer_Mon": "Between you and I, @, being open seven days a week is quite tiring.#$b#I wish I could take more time to garden, but sadly we have to run the store."
             },
             "When": {
-                "EnableFor|contains=Caroline": true,
+                "EnableFor": "Caroline",
                 "IsCommunityCenterComplete": true
             }
         },
@@ -138,7 +185,7 @@
             "When": {
                 "Season": "winter",
                 "Day": 28,
-                "EnableFor|contains=Gus": true
+                "EnableFor": "Gus"
             },
             "Entries": {
                 "IslandSouth_14_21": "$1 atravitaGusNewYear#Happy New Year, @! Have one on me today. May the next year be even better![873]#$e#Are you enjoying the party, @?"
@@ -150,7 +197,7 @@
             "Target": "Characters/Dialogue/Sandy",
             "When": {
                 "HasFlag": "ccMovieTheater",
-                "EnableFor|contains=Sandy": true
+                "EnableFor": "Sandy"
             },
             "Entries": {
                 "movieTheater": "I heard you guys have a theater now!$h#$b#I'm so excited! I love movies.",
@@ -163,7 +210,7 @@
             "Target": "Characters/Dialogue/rainy",
             "When": {
                 "Season": "winter",
-                "EnableFor|contains=Evelyn": true
+                "EnableFor": "Evelyn"
             },
             "Entries": {
                 "Evelyn": "Weather like this...we didn't use to get rain during winter.$s#$e#The snow'll become slush and that's difficult for George."
@@ -175,10 +222,22 @@
             "Target": "Characters/Dialogue/rainy",
             "When": {
                 "HasFlag": "beenToWoods",
-                "EnableFor|contains=Abigail": true
+                "EnableFor": "Abigail"
             },
             "Entries": {
                 "Abigail": "I love the woods in the rain.#$b#So peaceful, away from the rest of the town.#$e#I don't think anyone else goes out there."
+            }
+        },
+        {
+            "LogName": "Sebastian - strings",
+            "Action": "EditData",
+            "Target": "Strings/schedules/Sebastian",
+            "Entries":{
+                "rain.000": "It's so peaceful out here, isn't it?",
+            },
+            "When": {
+                "EnableFor": "Sebastian",
+                "Query: {{Hearts:Sebastian}} >= 6": true,
             }
         },
         {
@@ -187,7 +246,7 @@
             "Target": "Characters/Dialogue/Alex",
             "When": {
                 "Year|contains = 1,2": false,
-                "EnableFor|contains=Alex": true
+                "EnableFor": "Alex"
             },
             "Entries": {
                 // Slowly remove references to "going pro"
@@ -196,7 +255,8 @@
                 "fall_Mon": "Argh, why are there so many muscle names to remember?$s",
                 "fall_Mon2": "Studying, studying, studying, is there any way I can get out of studying?$s",
 
-                "winter_Wed8": "I've been looking for good exercises I can do indoors.#$b#Usually the cold doesn't bother me that much, but the snow is hard to run in.$s"
+                "winter_Wed8": "I've been looking for good exercises I can do indoors.#$b#Usually the cold doesn't bother me that much, but the snow is hard to run in.$s",
+                "Resort_Towel_3": "Gotta work on my tan, @.$h"
             }
         },
         {
@@ -204,7 +264,8 @@
             "Action": "EditData",
             "Target": "Characters/Dialogue/MarriageDialogueAlex",
             "When": {
-                "Season|contains=winter": false
+                "Season|contains=winter": false,
+                "EnableFor": "Alex"
             },
             "Entries": {
                 // vanilla line claims you can't run in rain, which is flat wrong.

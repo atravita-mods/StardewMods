@@ -1,0 +1,26 @@
+{
+    "Changes": [
+        {
+            "LogName": "Vincent - base",
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Vincent",
+            "Entries": {
+                // birthday
+                "spring_10": "{{i18n:vincent-birthday.self|title={{Title}} }}$h",
+                "spring_10_2": "{{i18n:vincent-birthday.self|title={{Title}} }}$h",
+
+                // Ginger Island additional
+                "Resort_Pier": "{{i18n:vincent_pier}}$h"
+            }
+        },
+        {
+            "LogName": "Vincent - divorced from Sam",
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Vincent",
+            "When": {"Relationship: Sam": "Divorced"},
+            "Entries": {
+                "Town": "{{i18n:vincent-divorced-from-sam}}$s"
+            }
+        }
+    ]
+}

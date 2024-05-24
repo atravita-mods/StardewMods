@@ -74,11 +74,20 @@
     },
     {
         "Action": "Include",
+        "LogName": "Linus - mid hearts",
+        "FromFile": "assets/default/bravo/Linus/mid.json",
+        "When": {
+            "EnableFor": "Linus",
+            "Query: {{Hearts:Linus}} >= 6": true
+        }
+    },
+    {
+        "Action": "Include",
         "LogName": "Vincent - mid hearts",
         "FromFile": "assets/default/bravo/Vincent/mid.json",
         "When": {
             "EnableFor": "Vincent",
-            "Query: {{Hearts:Kent}} >= 6": true
+            "Query: {{Hearts:Vincent}} >= 6": true
         }
     }
 ]}

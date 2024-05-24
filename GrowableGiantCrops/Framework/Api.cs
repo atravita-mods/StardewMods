@@ -1,4 +1,6 @@
-﻿using AtraShared.Utils.Extensions;
+﻿// Ignore Spelling: loc Api
+
+using AtraShared.Utils.Extensions;
 
 using GrowableGiantCrops.Framework.Assets;
 using GrowableGiantCrops.Framework.InventoryModels;

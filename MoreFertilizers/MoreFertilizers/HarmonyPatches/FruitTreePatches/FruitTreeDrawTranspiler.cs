@@ -35,7 +35,7 @@ internal static class FruitTreeDrawTranspiler
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod crashed while transpiling DGA. Integration may not work correctly.\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("transpiling DGA", ex);
         }
     }
 
@@ -55,7 +55,7 @@ internal static class FruitTreeDrawTranspiler
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod crashed while transpiling AT. Integration may not work correctly.\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("transpiling AT", ex);
         }
     }
 
@@ -75,7 +75,8 @@ internal static class FruitTreeDrawTranspiler
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.LogOnce($"Crash while drawing fruit trees!\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("recoloring fruit trees", ex);
+            ModEntry.Config.RecolorFruitTrees = false;
         }
         return prevcolor;
     }
@@ -109,8 +110,7 @@ internal static class FruitTreeDrawTranspiler
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod crashed while transpiling {original.FullDescription()}:\n\n{ex}", LogLevel.Error);
-            original?.Snitch(ModEntry.ModMonitor);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }

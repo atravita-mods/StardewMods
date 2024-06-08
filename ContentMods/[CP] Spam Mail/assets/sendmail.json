@@ -270,6 +270,20 @@
                     "Action": "AddMail Current atravita.SpamMail.WinterStarCraft"
                 }
             }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Data/TriggerActions",
+            "Entries": {
+                "atravita.SpamMail.Children": {
+                    "Id": "atravita.SpamMail.Children",
+                    "Trigger": "DayEnding",
+                    "Action": "AddMail Current atravita.SpamMail.Children"
+                }
+            },
+            "When": {
+                "HavingChild": "@{{playerName}}"
+            }
         }
     ]
 }

@@ -37,5 +37,9 @@
     <PackageReference Update="JetBrains.Annotations" Version="2023.3.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\" />
+  </ItemGroup>
+
 
 </Project>

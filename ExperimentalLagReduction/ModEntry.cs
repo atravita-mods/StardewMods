@@ -49,19 +49,34 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         this.Monitor.Log($"We seem to have been allowed {Environment.ProcessorCount} processors.", LogLevel.Debug);
     }
 
+    /// <inheritdoc />
+    public override object? GetApi() => new API();
+
     private void OnTimeChanged(object? sender, TimeChangedEventArgs e)
     {
-        foreach (var npc in Game1.currentLocation.characters)
+        foreach (NPC? npc in Game1.currentLocation.characters.Concat((Game1.CurrentEvent?.actors as IEnumerable<NPC>) ?? Array.Empty<NPC>()))
         {
-            if (npc.AllowDynamicAppearance && !npc.SimpleNonVillagerNPC)
+            if (npc.IsVillager && npc.AllowDynamicAppearance && !npc.SimpleNonVillagerNPC)
             {
+                int? prevX = npc.Sprite?.SpriteWidth;
+                int? prevY = npc.Sprite?.SpriteHeight;
                 npc.ChooseAppearance();
+
+                if (npc.Sprite is not null)
+                {
+                    if (prevX is not null)
+                    {
+                        npc.Sprite.SpriteWidth = prevX.Value;
+                    }
+
+                    if (prevY is not null)
+                    {
+                        npc.Sprite.SpriteHeight = prevY.Value;
+                    }
+                }
             }
         }
     }
-
-    /// <inheritdoc />
-    public override object? GetApi() => new API();
 
     /// <inheritdoc cref="IGameLoopEvents.GameLaunched"/>
     private void OnGameLaunch(object? sender, GameLaunchedEventArgs e)

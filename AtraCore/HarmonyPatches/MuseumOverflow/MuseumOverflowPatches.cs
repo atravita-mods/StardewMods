@@ -38,7 +38,12 @@ internal static class MuseumOverflowPatches
 
     private static int GetDonatedLength => Game1.player.team.GetOrCreateGlobalInventory(INVENTORY_NAME).Count;
 
-    private static bool TryGetInventory([NotNullWhen(true)] out Inventory? inventory)
+    /// <summary>
+    /// Attempts to get the inventory that museum overflow items are storied in.
+    /// </summary>
+    /// <param name="inventory">The inventory.</param>
+    /// <returns>true if found, false otherwise.</returns>
+    internal static bool TryGetInventory([NotNullWhen(true)] out Inventory? inventory)
     {
         if (Game1.player.team.globalInventories.TryGetValue(INVENTORY_NAME, out inventory))
         {

@@ -251,6 +251,11 @@
 
     "demetrius-ring": "Actually, @, diamonds aren't rare at all, their price is just elevated due to marketing.",
 
+    // Children
+    "Children.Title": "Cribs: Now With Free Installation",
+    "Children.Text.1": "Dear @, you may possibly be interested in a crib? Or maybe some baby clothing? Buy from BigRedDot and we'll throw in the installation for free!",
+    "Children.Text.2": "Why are we sending this to you now? Uh, no particular reason, we don't have analytics or anything. We promise.",
+
     /**************
     * Friendship Block
     ***************/

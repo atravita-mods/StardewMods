@@ -408,7 +408,8 @@
             "Target": "Data/Festivals/spring24",
             "When": {
                 "EnableFor": "Lewis",
-                "HasValue: {{Spouse}}": true
+                "HasValue: {{Spouse}}": true,
+                "Relationship: {{Spouse}}": "Married"
             },
             "Entries": {
                 "Lewis": "{{i18n:lewis-y1-dance-married}}",
@@ -461,7 +462,8 @@
             "Target": "Data/Festivals/spring24",
             "When": {
                 "EnableFor": "Linus",
-                "HasValue: {{Spouse}}": true
+                "HasValue: {{Spouse}}": true,
+                "Relationship: {{Spouse}}": "Married"
             },
             "Entries": {
                 "Linus_y4": "{{i18n:linus-y3-dance-married}}$h"

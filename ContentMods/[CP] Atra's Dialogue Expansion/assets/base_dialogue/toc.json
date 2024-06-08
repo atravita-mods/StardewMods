@@ -221,7 +221,8 @@
             "LogName": "Spouse lines",
             "FromFile": "assets/base_dialogue/spouse_toc.json",
             "When": {
-                "HasValue: {{Spouse}}": true
+                "HasValue: {{Spouse}}": true,
+                "Relationship: {{Spouse}}": "Married"
             }
         },
         {

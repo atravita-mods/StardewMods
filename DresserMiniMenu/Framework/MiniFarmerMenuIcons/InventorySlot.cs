@@ -1,5 +1,6 @@
 ﻿// Ignore Spelling: Clickable
 
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
 
 using Microsoft.Xna.Framework;
@@ -34,7 +35,7 @@ internal class InventorySlot<TObject> : IInventorySlot<TObject>
     /// <param name="getItem">A function that gets the relevant item.</param>
     /// <param name="setItem">A function that sets an item into this slot.</param>
     /// <param name="isActive">Whether or not this slot should be active.</param>
-    internal InventorySlot(InventorySlotType type, int x, int y, string name, Func<TObject?> getItem, Action<TObject?> setItem, bool isActive = true)
+    internal InventorySlot(EquipmentType type, int x, int y, string name, Func<TObject?> getItem, Action<TObject?> setItem, bool isActive = true)
     {
         this.Type = type;
         this.Clickable = new ClickableComponent(new Rectangle(x, y, INVENTORY_SLOT_SIZE, INVENTORY_SLOT_SIZE), name);
@@ -52,7 +53,7 @@ internal class InventorySlot<TObject> : IInventorySlot<TObject>
     /// <summary>
     /// Gets the type of wearable this inventory slot refers to.
     /// </summary>
-    protected InventorySlotType Type { get; init; }
+    protected EquipmentType Type { get; init; }
 
     /// <summary>
     /// Gets a function that gets the wearable instance.

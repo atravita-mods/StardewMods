@@ -40,9 +40,13 @@
                 "AcceptGift_(O)253": "{{i18n:demetrius-espresso-gift}}",
                 "AcceptGift_(O)400": "$1 atravita.demetrius.strawberrygift.dialogue#{{i18n:demetrius-strawberry-gift-first}}#$e#{{i18n:demetrius-strawberry-gift-later}}",
 
-                "AcceptGift_(O)393": "$1 atravita.demetrius.coralgift.dialogue#{{i18n:demetrius-coral-gift-first}}#action AddFriendshipPoints Demetrius 20#$e#{{i18n:demetrius-coral-later}}",
+                "AcceptGift_(O)393": "$1 atravita.demetrius.coralgift.dialogue#$action AddFriendshipPoints Demetrius 20#{{i18n:demetrius-coral-gift-first}}#$e#{{i18n:demetrius-coral-later}}",
 
-                "AcceptGift_(O)852": "$1 atravita.demetrius.dragonstoothgift.dialogue#{{i18n: demetrius-dragonstooth-gift-first}}#action AddFriendshipPoints Demetrius 40#$e#{{i18n:demetrius-dragonstooth-gift-later}}"
+                "AcceptGift_(O)852": "$1 atravita.demetrius.dragonstoothgift.dialogue#$action AddFriendshipPoints Demetrius 40#{{i18n: demetrius-dragonstooth-gift-first}}#$e#{{i18n:demetrius-dragonstooth-gift-later}}",
+
+                // some fish dialogue
+                "fishCaught_161": "{{i18n:demetrius-ice-pip}}$h",
+                "fishCaught_165": "{{i18n:demetrius-desert-fish}}$h"
             }
         },
         {

@@ -63,7 +63,7 @@ internal static class TokenPurchasePatch
         {
             try
             {
-                int length = (int)Math.Log10(Game1.player.Money) - 1;
+                int length = (int)Math.Log10(Game1.player.Money) - 2;
                 if (length <= 0)
                 {
                     // player really doesn't have enough money to buy anything, defer to vanilla method.
@@ -79,6 +79,7 @@ internal static class TokenPurchasePatch
                 int coins = 10;
                 for (int i = 0; i < length; i++)
                 {
+                    coins *= 10;
                     int copy = coins; // prevent accidental capture. There's no explicit notation for that in C#
 
                     Response response = new(

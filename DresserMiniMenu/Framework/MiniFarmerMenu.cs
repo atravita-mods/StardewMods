@@ -1,4 +1,5 @@
-﻿using AtraShared.Niceties;
+﻿using AtraShared.ConstantsAndEnums;
+using AtraShared.Niceties;
 using AtraShared.Utils.Extensions;
 
 using DresserMiniMenu.Framework.MiniFarmerMenuIcons;
@@ -576,7 +577,7 @@ internal sealed class MiniFarmerMenu : IClickableMenu
         // equipment icons.
         this.equipmentIcons.Clear();
         this.equipmentIcons.Add(new InventorySlot<Ring>(
-            type: InventorySlotType.Ring,
+            type: EquipmentType.Ring,
             x: this.xPositionOnScreen + 32,
             y: this.yPositionOnScreen + 32,
             name: "Left Ring",
@@ -584,7 +585,7 @@ internal sealed class MiniFarmerMenu : IClickableMenu
             setItem: static (value) => Game1.player.leftRing.Value = value,
             isActive: !blockRingSlots));
         this.equipmentIcons.Add(new InventorySlot<Ring>(
-            type: InventorySlotType.Ring,
+            type: EquipmentType.Ring,
             x: this.xPositionOnScreen + 32,
             y: this.yPositionOnScreen + 32 + 64,
             name: "Right Ring",
@@ -592,28 +593,28 @@ internal sealed class MiniFarmerMenu : IClickableMenu
             setItem: static (value) => Game1.player.rightRing.Value = value,
             isActive: !blockRingSlots));
         this.equipmentIcons.Add(new InventorySlot<Boots>(
-            type: InventorySlotType.Boots,
+            type: EquipmentType.Boots,
             x: this.xPositionOnScreen + 32,
             y: this.yPositionOnScreen + 32 + 128,
             name: "Boots",
             getItem: static () => Game1.player.boots.Value,
             setItem: static value => Game1.player.boots.Value = value));
         this.equipmentIcons.Add(new InventorySlot<Hat>(
-            type: InventorySlotType.Hat,
+            type: EquipmentType.Hat,
             x: this.xPositionOnScreen + this.width - 64 - 32,
             y: this.yPositionOnScreen + 32,
             name: "Hat",
             getItem: static () => Game1.player.hat.Value,
             setItem: static value => Game1.player.hat.Value = value));
         this.equipmentIcons.Add(new ClothingSlot(
-            type: InventorySlotType.Shirt,
+            type: EquipmentType.Shirt,
             x: this.xPositionOnScreen + this.width - 64 - 32,
             y: this.yPositionOnScreen + 32 + 64,
             name: "Shirt",
             getItem: static () => Game1.player.shirtItem.Value,
             setItem: static value => Game1.player.shirtItem.Value = value));
         this.equipmentIcons.Add(new ClothingSlot(
-            type: InventorySlotType.Pants,
+            type: EquipmentType.Pants,
             x: this.xPositionOnScreen + this.width - 64 - 32,
             y: this.yPositionOnScreen + 32 + 128,
             name: "Pants",

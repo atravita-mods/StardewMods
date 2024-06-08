@@ -496,6 +496,10 @@
     "willy-caught-fish-carp": "Ah, I see you've been fishing! Caught anything interesting yet?",
     "willy-caught-fish-catfish": "@, heard you caught your first catfish.#$b#She's a beauty, isn't she?$h",
 
+    // Demetrius too, with fish.
+    "demetrius-ice-pip": "Hey, @, did you know that the ice pip is one of few vertebrates that don't have hemoglobin?",
+    "demetrius-desert-fish": "Isn't it amazing, how many fish can survive in such a harsh place like the desert?",
+
 /***************
 * Gift dialogue
 ****************/

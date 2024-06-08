@@ -593,21 +593,27 @@ internal sealed class CompleteScreenshotter : AbstractScreenshotter
         GL.GetTexImageInternal(TextureTarget.Texture2D, 0, texture.glFormat, texture.glType, bitmap.GetPixels());
     }
 
+    private static readonly Lazy<Regex> _fileSanitationRegex = new(
+        static () => new Regex(@"^[A-Z]:|^\\\\[.?]\\|^\\\\[a-zA-Z0-9]+\\", RegexOptions.CultureInvariant | RegexOptions.Compiled)
+        );
+
     private static string SanitizeFilename(string originalFilename)
     {
         // sanitize output, hopefully
         Span<char> buffer = stackalloc char[Math.Min(256, originalFilename.Length)];
         ValueStringBuilder builder = new(buffer);
 
-        Regex regex = new(@"^[A - Z]:|^\\\\[.?]\\");
+        ReadOnlySpan<char> original = originalFilename;
 
-        if (regex.Match(originalFilename) is Match match)
+        Regex regex = _fileSanitationRegex.Value;
+
+        if (regex.Match(originalFilename) is Match match && match.Success)
         {
-            originalFilename = match.Value;
+            builder.Append(match.ValueSpan);
+            original = original[match.ValueSpan.Length..];
         }
 
-        // TODO: handle the start of paths correctly
-        foreach (SpanSplitEntry item in originalFilename.StreamSplit(Path.GetInvalidFileNameChars()))
+        foreach (SpanSplitEntry item in original.StreamSplit(Path.GetInvalidFileNameChars()))
         {
             builder.Append(item.Word);
             builder.Append(item.Separator switch

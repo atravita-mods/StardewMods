@@ -69,6 +69,8 @@
                 "atravita.SpamMail.WinterStarCraft": "{{i18n:Craft.WinterStar.Title}}^^{{i18n:Craft.WinterStar.Text}} %item conversationTopic atravita.SpamMail.WinterStarCraft {{Spacer}} %% [#]{{i18n:Craft.WinterStar.Title}}",
 
                 "atravita.SpamMail.Ring": "{{i18n:Ring.Title}}^^{{i18n:Ring.Text.1}}^^{{i18n:Ring.Text.2}} %item conversationTopic atravita.SpamMail.Ring {{Spacer}} %% [#]{{i18n:Ring.Title}}",
+
+                "atravita.SpamMail.Children": "{{i18n:Children.Title}}^^{{i18n:Children.Text.1}}^^{{i18n:Children.Text.2}} %item conversationTopic atravita.SpamMail.Children {{Spacer}} %% [#]{{i18n:Children.Title}}"
             }
         }
     ]

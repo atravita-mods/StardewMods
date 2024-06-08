@@ -8,7 +8,8 @@
                 "Random: true, false, false": true,
                 "HasValue: {{Spouse}}": true,
                 "EnableGeneric": true,
-                "Spouse|contains = Wizard, Apples, Krobus": false // avoid doing this for magical spouses.
+                "Spouse|contains = Wizard, Apples, Krobus": false, // avoid doing this for magical spouses.
+                "Relationship: {{Spouse}}": "Married"
             }
         },
         {
@@ -17,7 +18,8 @@
             "Target": "Characters/Dialogue/{{Spouse}}",
             "When": {
                 "HasValue: {{Spouse}}": true,
-                "EnableFor": "{{Spouse}}"
+                "EnableFor": "{{Spouse}}",
+                "Relationship: {{Spouse}}": "Married"
             },
             "Entries": {
                 "Farmhouse_Entry": "{{i18n:homecoming-love}}"
@@ -31,6 +33,7 @@
                 "HasValue: {{Spouse}}": true,
                 "HasFile: {{FromFile}}": true,
                 "EnableFor": "{{Spouse}}",
+                "Relationship: {{Spouse}}": "Married"
             }
         },
         {

@@ -61,6 +61,7 @@
             "When": {
                 "HasMod": "aedenthorn.FreeLove",
                 "HasValue: {{Spouse}}": true,
+                "Relationship: {{Spouse}}": "Married"
             }
         },
 
@@ -75,7 +76,8 @@
             "Value": "{{i18n:mrs}}",
             "When": {
                 "PlayerGender": "Female",
-                "HasValue: {{Spouse}}": true
+                "HasValue: {{Spouse}}": true,
+                "Relationship: {{Spouse}}": "Married"
             }
         },
         {

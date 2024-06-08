@@ -1,14 +1,12 @@
-﻿using AtraShared.Utils.Extensions;
+﻿using NetEscapades.EnumGenerators;
 
-using NetEscapades.EnumGenerators;
-
-namespace DresserMiniMenu.Framework.MiniFarmerMenuIcons;
+namespace AtraShared.ConstantsAndEnums;
 
 /// <summary>
 /// The type of item this is. Used for drawing the menu background.
 /// </summary>
 [EnumExtensions]
-internal enum InventorySlotType
+public enum EquipmentType
 {
     /// <summary>
     /// A <see cref="StardewValley.Objects.Hat"/>
@@ -34,37 +32,43 @@ internal enum InventorySlotType
     /// A shirt, <seealso cref="StardewValley.Objects.Clothing"/>
     /// </summary>
     Shirt = 69,
+
+    /// <summary>
+    /// A trinket, <seealso cref="StardewValley.Objects.Trinket"/>
+    /// </summary>
+    Trinket = 70,
 }
 
 /// <summary>
-/// Extension methods for <see cref="InventorySlotType"/>.
+/// Extension methods for <see cref="EquipmentType"/>.
 /// </summary>
-internal static partial class InventorySlotTypeExtensions
+public static partial class EquipmentTypeExtensions
 {
     /// <summary>
     /// Plays the sound cue associated with this inventory type.
     /// </summary>
     /// <param name="type">Inventory slot type.</param>
-    internal static void PlayEquipSound(this InventorySlotType type)
+    public static void PlayEquipSound(this EquipmentType type)
     {
         string cue = type switch
         {
-            InventorySlotType.Hat => "grassyStep",
-            InventorySlotType.Ring => "crit",
+            EquipmentType.Hat => "grassyStep",
+            EquipmentType.Ring => "crit",
+            EquipmentType.Trinket => "clank",
             _ => "sandyStep",
         };
 
         try
         {
             Game1.playSound(cue);
-            if (type == InventorySlotType.Boots)
+            if (type == EquipmentType.Boots)
             {
                 DelayedAction.playSoundAfterDelay("sandyStep", 150);
             }
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.LogError("playing equip sound", ex);
+            AtraBase.Internal.Logger.Instance.Error("playing equip sound", ex);
         }
     }
 }

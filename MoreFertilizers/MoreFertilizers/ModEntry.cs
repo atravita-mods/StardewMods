@@ -57,11 +57,6 @@ internal sealed class ModEntry : Mod
 
 #pragma warning disable SA1201 // Elements should appear in the correct order
 
-    /// <summary>
-    /// Gets a reference to the JA API.
-    /// </summary>
-    internal static IJsonAssetsAPI? JsonAssetsAPI => jsonAssets;
-
     private static int prismaticFertilizerID = -1;
 
     /// <summary>
@@ -644,11 +639,6 @@ internal sealed class ModEntry : Mod
         this.Helper.Events.Content.AssetRequested += static (_, e) => AssetEditor.Edit(e);
         this.Helper.Events.Content.AssetsInvalidated += this.OnAssetInvalidated;
 
-        if (this.Helper.ModRegistry.IsLoaded("atravita.SpecialOrdersExtended"))
-        {
-            this.Helper.Events.Content.AssetRequested += static (_, e) => AssetEditor.EditSpecialOrderDialogue(e);
-        }
-
         // Apply harmony patches.
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
 
@@ -842,7 +832,7 @@ internal sealed class ModEntry : Mod
         }
         storedIDs = storedIDCls;
 
-        Dictionary<int, int> idMapping = new();
+        Dictionary<int, int> idMapping = [];
 
         // special case! Update the museum reward tracking too...
         if (PrismaticFertilizerID != -1)

@@ -1,5 +1,4 @@
-﻿namespace AtraCore;
-
+﻿
 #if DEBUG
 using System.Diagnostics;
 #endif
@@ -21,6 +20,7 @@ using AtraCore.Framework.Internal;
 using AtraCore.Framework.ItemManagement;
 using AtraCore.Framework.ItemResolvers;
 using AtraCore.Framework.QueuePlayerAlert;
+using AtraCore.Framework.TriggerActions;
 using AtraCore.HarmonyPatches;
 using AtraCore.HarmonyPatches.CustomEquipPatches;
 using AtraCore.HarmonyPatches.DrawPrismaticPatches;
@@ -38,8 +38,11 @@ using StardewModdingAPI.Events;
 
 using StardewValley.Delegates;
 using StardewValley.Internal;
+using StardewValley.Triggers;
 
 using AtraUtils = AtraShared.Utils.Utils;
+
+namespace AtraCore;
 
 /// <inheritdoc />
 internal sealed class ModEntry : BaseMod<ModEntry>
@@ -122,11 +125,13 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         MultiplayerDispatch.Register(SetRelationship.RequestNPCMove, SetRelationship.ProcessMoveRequest);
 
         // actions
-        GameLocation.RegisterTileAction("atravita.Teleport", TeleportPlayer.ApplyCommand);
+        GameLocation.RegisterTileAction("atravita.AtraCore_Teleport", TeleportPlayer.ApplyCommand);
 
-        ItemQueryResolver.Register("atravita_choose_k", ChooseKQuery.ChooseK);
-        ItemQueryResolver.Register("atravita_generic_flavored_item", GenericFlavoredItemQuery.Generate);
+        ItemQueryResolver.Register("atravita.AtraCore_CHOOSE_K", ChooseKQuery.ChooseK);
+        ItemQueryResolver.Register("atravita.AtraCore_GENERIC_FLAVORED_ITEM", GenericFlavoredItemQuery.Generate);
         ItemQueryResolver.Register("atravita_raccoon_seed", RaccoonSeedQuery.Query);
+        ItemQueryResolver.Register("atravita_missing_artifact_or", MissingArtifact.Query);
+        ItemQueryResolver.Register("atravita_shop_forward", ShopForwardQuery.Query);
 
         AddGSQ("atravita.AtraCore_HAS_EARNED_MONEY", MoneyEarned.CheckMoneyEarned);
         AddGSQ("atravita.AtraCore_HAS_DAILY_LUCK", CurrentDailyLuck.DailyLuck);
@@ -143,6 +148,10 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         AddGSQ("atravita.AtraCore_IS_SEED_GROWING_IN", IsSeedGrowingIn.SeedQuery);
         AddGSQ("atravita.AtraCore_IS_SAPLING_GROWING_IN", IsSeedGrowingIn.SaplingQuery);
 
+        AddGSQ("atravita.AtraCore_FARMER_IS_WEARING", FarmerQueries.IsWearing);
+
+        AddGSQ("atravita.AtraCore_IS_ERROR_ITEM", ItemQueries.ErrorItem);
+
         void AddGSQ(string query, GameStateQueryDelegate del)
         {
             if (GameStateQuery.Exists(query))
@@ -154,6 +163,14 @@ internal sealed class ModEntry : BaseMod<ModEntry>
                 GameStateQuery.Register(query, del);
             }
         }
+
+        // add trigger actions
+        TriggerActionManager.RegisterAction("atravita.AtraCore_EMOTE", NPCActions.Emote);
+        TriggerActionManager.RegisterAction("atravita.AtraCore_NPC_TEXT_OVER_HEAD", NPCActions.TextOverHead);
+        TriggerActionManager.RegisterAction("atravita.AtraCore_JUMP", NPCActions.Jump);
+        TriggerActionManager.RegisterAction("atravita.AtraCore_FACE_DIRECTION", NPCActions.FaceDirection);
+        TriggerActionManager.RegisterAction("atravita.AtraCore_OPEN_SHOP", NPCActions.OpenShop);
+        TriggerActionManager.RegisterAction("atravita.AtraCore_CHANGE_APPEARANCE", NPCActions.ChangeAppearance);
 
         // integrations
         {
@@ -168,6 +185,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
     /// <inheritdoc cref="IGameLoopEvents.SaveLoaded"/>
     private void OnSaveLoaded(object? sender, SaveLoadedEventArgs e)
     {
+        MissingArtifact.Reset();
         try
         {
             AllowRepeatAfterHandler.Load(this.Helper.Data);

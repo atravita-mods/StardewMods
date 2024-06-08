@@ -54,6 +54,13 @@ internal static class TreasureMenuPatches
                     {
                         remainder = null;
                     }
+
+                    int addedNumber = original_stack - (remainder?.Stack ?? 0);
+                    if (addedNumber > 0)
+                    {
+                        Game1.player.OnItemReceived(item, addedNumber, oldAttach, true);
+
+                    }
                 }
 
                 remainder = Game1.player.addItemToInventory(remainder);

@@ -278,35 +278,7 @@ internal sealed class ModEntry : Mod
         Game1.player.displayName = Game1.player.Name;
 
         // Crosscheck the player's spouse is still valid.
-        const string modData = "atravita.RememberedSpouse";
-        if (Game1.player.spouse is not null && NPCCache.GetByVillagerName(Game1.player.spouse, searchTheater: true) is null)
-        {
-            string spouseName = Game1.player.spouse;
-            ModMonitor.Log($"Player married to {spouseName} but spouse instance not found.", LogLevel.Warn);
-            if (Game1.characterData.ContainsKey(spouseName))
-            {
-                ModMonitor.Log($"{spouseName} accounted for NPCDispos. We expect them to be respawned later.", LogLevel.Info);
-            }
-            else
-            {
-                ModMonitor.Log($"Cannot account for NPC spouse {spouseName}. Did you remove an NPC mod? Setting spouse to null.", LogLevel.Warn);
-                Game1.player.modData[modData] = Game1.player.spouse;
-                Game1.player.spouse = null;
-                PlayerAlertHandler.AddMessage(new(I18n.EmergencyDivorce_Message(spouseName), HUDMessage.error_type));
-            }
-        }
-        else if (!Game1.player.team.IsMarried(Game1.player.UniqueMultiplayerID) // player marriage.
-            && Game1.player.spouse is null && Game1.player.modData.TryGetValue(modData, out string? pastSpouse)
-            && Game1.player.friendshipData.TryGetValue(pastSpouse, out Friendship? friendship) && friendship.IsMarried())
-        {
-            ModMonitor.Log($"Checking past spouse {pastSpouse}.");
-            if (NPCCache.GetByVillagerName(pastSpouse, searchTheater: true) is not null)
-            {
-                ModMonitor.Log($"Past spouse found! Re-initiating marriage.", LogLevel.Info);
-                Game1.player.spouse = pastSpouse;
-                Game1.player.modData.Remove(modData);
-            }
-        }
+        ValidateSpouse();
 
         if (Context.IsSplitScreen && Context.ScreenId != 0)
         {
@@ -340,6 +312,19 @@ internal sealed class ModEntry : Mod
                     name: () => name,
                     getValue: () => Config.SafeLocationMap.TryGetValue(name, out IsSafeLocationEnum val) ? val : IsSafeLocationEnum.Dynamic,
                     setValue: (value) => Config.SafeLocationMap[name] = value);
+            }
+        }
+
+        // fix the railroad being silly
+        if (Game1.getLocationFromName("Railroad") is Railroad railroad)
+        {
+            try
+            {
+                railroad.DayUpdate(Game1.dayOfMonth);
+            }
+            catch (Exception ex)
+            {
+                this.Monitor.Log($"Could not force railroad to update at save load:\n{ex}");
             }
         }
 
@@ -395,6 +380,42 @@ internal sealed class ModEntry : Mod
 #if DEBUG
             this.Monitor.LogTimespan("Sanity checking locations", sw, LogLevel.Trace);
 #endif
+        }
+    }
+
+    /// <summary>
+    /// Check to see if a player's spouse data is still valid.
+    /// </summary>
+    private static void ValidateSpouse()
+    {
+        const string modData = "atravita.RememberedSpouse";
+        if (Game1.player.spouse is not null && NPCCache.GetByVillagerName(Game1.player.spouse, searchTheater: true) is null)
+        {
+            string spouseName = Game1.player.spouse;
+            ModMonitor.Log($"Player married to {spouseName} but spouse instance not found.", LogLevel.Warn);
+            if (Game1.characterData.ContainsKey(spouseName))
+            {
+                ModMonitor.Log($"{spouseName} accounted for NPCDispos. We expect them to be respawned later.", LogLevel.Info);
+            }
+            else
+            {
+                ModMonitor.Log($"Cannot account for NPC spouse {spouseName}. Did you remove an NPC mod? Setting spouse to null.", LogLevel.Warn);
+                Game1.player.modData[modData] = Game1.player.spouse;
+                Game1.player.spouse = null;
+                PlayerAlertHandler.AddMessage(new(I18n.EmergencyDivorce_Message(spouseName), HUDMessage.error_type));
+            }
+        }
+        else if (!Game1.player.team.IsMarried(Game1.player.UniqueMultiplayerID) // player marriage.
+            && Game1.player.spouse is null && Game1.player.modData.TryGetValue(modData, out string? pastSpouse)
+            && Game1.player.friendshipData.TryGetValue(pastSpouse, out Friendship? friendship) && friendship.IsMarried())
+        {
+            ModMonitor.Log($"Checking past spouse {pastSpouse}.");
+            if (NPCCache.GetByVillagerName(pastSpouse, searchTheater: true) is not null)
+            {
+                ModMonitor.Log($"Past spouse found! Re-initiating marriage.", LogLevel.Info);
+                Game1.player.spouse = pastSpouse;
+                Game1.player.modData.Remove(modData);
+            }
         }
     }
 

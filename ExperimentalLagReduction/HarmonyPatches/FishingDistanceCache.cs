@@ -35,8 +35,8 @@ internal static class FishingDistanceCache
     [HarmonyPatch(typeof(FishingRod), nameof(FishingRod.distanceToLand))]
     private static bool PrefixDistanceToLand(int tileX, int tileY, GameLocation location, bool landMustBeAdjacentToWalkableTile, ref int __result)
     {
-        if (_cache.TryGetValue(location.NameOrUniqueName, out var d)
-            && d.TryGetValue((tileX, tileY, landMustBeAdjacentToWalkableTile), out var distance))
+        if (_cache.TryGetValue(location.NameOrUniqueName, out Dictionary<(int x, int y, bool land), int>? d)
+            && d.TryGetValue((tileX, tileY, landMustBeAdjacentToWalkableTile), out int distance))
         {
             ModEntry.ModMonitor.TraceOnlyLog($"Cache hit {location.NameOrUniqueName} - tile {tileX}, {tileY}");
             __result = distance;

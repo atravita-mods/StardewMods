@@ -5,6 +5,7 @@ using AtraBase.Toolkit.Extensions;
 
 using AtraCore.Framework.Models;
 using AtraCore.HarmonyPatches;
+using AtraCore.HarmonyPatches.MinorOptimizationPatches;
 
 using AtraShared.Utils.Extensions;
 
@@ -139,6 +140,11 @@ internal static class AssetManager
         if (assets is null || assets.Contains(dataObjects) || assets.Contains(categoryExtensions))
         {
             CategoryPatches.Reset();
+        }
+
+        if (assets is null || assets.Contains(dataObjects))
+        {
+            DyeColor.Reset();
         }
     }
 

@@ -97,7 +97,7 @@ internal static class FixSecretNotes
         Dictionary<int, string> secretNoteData = DataLoader.SecretNotes(Game1.content);
 
         // Get list of seen notes and add notes in inventory.
-        Seen.Value ??= new();
+        Seen.Value ??= [];
         Seen.Value.Clear();
 
         foreach (int id in who.secretNotesSeen)
@@ -127,7 +127,7 @@ internal static class FixSecretNotes
             }
         }
 
-        ModEntry.ModMonitor.DebugOnlyLog($"{Unseen.Value.Count} notes unseen: {string.Join(", ", Unseen.Values.Select(x => x.ToString()))}", LogLevel.Info);
+        ModEntry.ModMonitor.DebugOnlyLog($"{Unseen.Value.Count} notes unseen: {string.Join(", ", Unseen.Value.Select(x => x.ToString()))}", LogLevel.Info);
         if (Unseen.Value.Count == 0)
         {
             HasSeenAllSecretNotes.Value = true;

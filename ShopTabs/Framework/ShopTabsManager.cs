@@ -19,7 +19,7 @@ internal static class ShopTabsManager
     private readonly record struct TabEntry(string textureName, Rectangle location, Func<ISalable, bool> filter, bool useBackground, string[]? excludedShops = null);
 
     private static readonly List<TabEntry> _tabs = [];
-    private static WeakReference<ShopMenu>? _lastEditedMenu;
+    private static readonly WeakReference<ShopMenu?> _lastEditedMenu = new(null);
 
     internal static void Init()
     {
@@ -65,7 +65,7 @@ internal static class ShopTabsManager
         _tabs.Add(
             new(
                 Game1.objectSpriteSheetName,
-                Game1.getSourceRectForStandardTileSheet(Game1.objectSpriteSheet, 451, 16, 16),
+                new Rectangle(144, 592, 16, 16),
                 static item => item is SObject obj && obj.IsRecipe,
                 true
                 ));
@@ -84,12 +84,27 @@ internal static class ShopTabsManager
     {
         if (Game1.activeClickableMenu is not ShopMenu menu
             || menu.ShopId == Game1.shop_adventurersGuildItemRecovery
-            || (_lastEditedMenu?.TryGetTarget(out ShopMenu? last) == true && ReferenceEquals(last, menu)))
+            || (_lastEditedMenu.TryGetTarget(out ShopMenu? last) && ReferenceEquals(last, menu)))
         {
             return;
         }
 
+        _lastEditedMenu.SetTarget(menu);
+
         bool hasSetUpFilters = true;
+        if (menu.ShopId == Game1.shop_carpenter)
+        {
+            menu.UseFurnitureCatalogueTabs();
+            for (int i = menu.tabButtons.Count - 1; i >= 1; i--)
+            {
+                var proposed_tab = menu.tabButtons[i];
+                if (!menu.itemPriceAndStock.Keys.Any(item => proposed_tab.Filter(item)))
+                {
+                    menu.tabButtons.RemoveAt(i);
+                }
+            }
+        }
+
         if (menu.tabButtons?.Count is null or 0)
         {
             hasSetUpFilters = false;
@@ -180,6 +195,10 @@ internal static class ShopTabsManager
             }
         }
 
+        if (menu.tabButtons.Count == 1)
+        {
+            menu.tabButtons.Clear();
+        }
         menu.repositionTabs();
         if (menu.tabButtons.Count > 0)
         {

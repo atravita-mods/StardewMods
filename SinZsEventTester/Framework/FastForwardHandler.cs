@@ -1,21 +1,29 @@
 ﻿using StardewModdingAPI.Events;
 
 namespace SinZsEventTester.Framework;
+
+/// <summary>
+/// Handles fast forward mode.
+/// </summary>
 internal sealed class FastForwardHandler : IDisposable
 {
     private IMonitor _monitor;
     private IGameLoopEvents _loopEvents;
     private IReflectionHelper _reflector;
-    private ModConfig _modConfig;
     private bool disposedValue;
     private bool _modCalledTick;
 
-    internal FastForwardHandler(IMonitor monitor, IGameLoopEvents loopEvents, IReflectionHelper reflector, ModConfig config)
+    /// <summary>
+    /// Initializes a new instance of the <see cref="FastForwardHandler"/> class.
+    /// </summary>
+    /// <param name="monitor">SMAPI monitor instance.</param>
+    /// <param name="loopEvents">The gameloop event handler.</param>
+    /// <param name="reflector">The reflection helper.</param>
+    internal FastForwardHandler(IMonitor monitor, IGameLoopEvents loopEvents, IReflectionHelper reflector)
     {
         this._monitor = monitor;
         this._loopEvents = loopEvents;
         this._reflector = reflector;
-        this._modConfig = config;
 
         loopEvents.UpdateTicking += this.OnUpdateTicked;
     }
@@ -29,11 +37,19 @@ internal sealed class FastForwardHandler : IDisposable
             return;
         }
         this._modCalledTick = true;
-        for (int i = 0; i < this._modConfig.FastForwardRatio; i++)
+        try
         {
-            this._reflector.GetMethod(Game1.game1, "Update").Invoke([Game1.currentGameTime]);
+            for (int i = 0; i < ModEntry.Config.FastForwardRatio; i++)
+            {
+                var cachedPosition = Game1.player.Position;
+                this._reflector.GetMethod(Game1.game1, "Update").Invoke([Game1.currentGameTime]);
+                Game1.player.Position = cachedPosition;
+            }
         }
-        this._modCalledTick = false;
+        finally
+        {
+            this._modCalledTick = false;
+        }
     }
 
     private void Dispose(bool disposing)
@@ -48,7 +64,6 @@ internal sealed class FastForwardHandler : IDisposable
             this._monitor = null!;
             this._loopEvents = null!;
             this._reflector = null!;
-            this._modConfig = null!;
             this.disposedValue = true;
         }
     }

@@ -20,6 +20,8 @@ public sealed class ModEntry : Mod
 {
     private bool hooked = false;
 
+    internal static ModConfig Config { get; private set; } = null!;
+
     // keep track of the current events.
     private readonly Stack<EventRecord> evts = new();
     private EventRecord? current;
@@ -37,8 +39,6 @@ public sealed class ModEntry : Mod
 
     private int iterationstoSkip = 0;
 
-    private ModConfig config = null!;
-
     private FastForwardHandler? fastForwardHandler;
 
     /// <inheritdoc />
@@ -47,12 +47,12 @@ public sealed class ModEntry : Mod
         I18n.Init(helper.Translation);
         try
         {
-            this.config = this.Helper.ReadConfig<ModConfig>();
+            Config = this.Helper.ReadConfig<ModConfig>();
         }
         catch (Exception ex)
         {
             this.Monitor.Log($"Failed to deserialize config, see errors: {ex}.", LogLevel.Error);
-            this.config = new();
+            Config = new();
         }
 
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
@@ -112,13 +112,13 @@ public sealed class ModEntry : Mod
 
     private void OnButtonPressed(object? sender, ButtonPressedEventArgs e)
     {
-        if (!this.config.FastForwardKeybind.JustPressed())
+        if (!Config.FastForwardKeybind.JustPressed())
         {
             return;
         }
         if (this.fastForwardHandler is not { } handler || handler.IsDisposed)
         {
-            this.fastForwardHandler = new(this.Monitor, this.Helper.Events.GameLoop, this.Helper.Reflection, this.config);
+            this.fastForwardHandler = new(this.Monitor, this.Helper.Events.GameLoop, this.Helper.Reflection);
             Game1.addHUDMessage(new("FastFoward enabled!"));
         }
         else
@@ -138,12 +138,12 @@ public sealed class ModEntry : Mod
         {
             api.Register(
                 mod: this.ModManifest,
-                reset: () => this.config = new(),
-                save: () => this.Helper.WriteConfig(this.config));
+                reset: static () => Config = new(),
+                save: () => this.Helper.WriteConfig(Config));
             api.AddNumberOption(
                 mod: this.ModManifest,
-                getValue: () => this.config.EventSpeedRatio,
-                setValue: value => this.config.EventSpeedRatio = value,
+                getValue: static () => Config.EventSpeedRatio,
+                setValue: static value => Config.EventSpeedRatio = value,
                 I18n.EventSpeedRatio);
         }
     }
@@ -309,7 +309,7 @@ Outer: ;
         // try to run events faster.
         try
         {
-            int count = this.config.EventSpeedRatio - 1;
+            int count = Config.EventSpeedRatio - 1;
             for (int i = 0; i < count; i++)
             {
                 Game1.CurrentEvent?.Update(Game1.currentLocation, Game1.currentGameTime);

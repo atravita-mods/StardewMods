@@ -43,6 +43,8 @@ internal static class Rescheduler
 
     private static bool preCached = false;
 
+    private static LightWeightCancellationToken? token;
+
 #if TIMING
     private static readonly ThreadLocal<Stopwatch> _stopwatch = new(() => new(), trackAllValues: true);
 
@@ -108,6 +110,10 @@ internal static class Rescheduler
     internal static bool ClearCache()
     {
         preCached = false;
+
+        token?.Cancel();
+        token = null;
+
         if (PathCache.IsEmpty)
         {
             return false;
@@ -175,11 +181,13 @@ internal static class Rescheduler
 
         if (parallel)
         {
-            new Thread(PrefetchWorker).Start(centers);
+            token?.Cancel();
+            token = new();
+            new Thread(PrefetchWorker).Start(new TaskAndTokenHolder(centers, token));
         }
         else
         {
-            PrefetchWorker(centers);
+            PrefetchWorker(new TaskAndTokenHolder(centers, null));
         }
 
 #if TIMING
@@ -203,11 +211,11 @@ internal static class Rescheduler
 
         try
         {
-            List<(GameLocation center, int radius)> work = (List<(GameLocation center, int radius)>)obj!;
-            foreach ((GameLocation center, int radius) in work)
+            TaskAndTokenHolder holder = (TaskAndTokenHolder)obj!;
+            foreach ((GameLocation center, int radius) in holder.Centers)
             {
                 handled.Add(center.Name);
-                _ = GetPathFor(center, null, UnPathfindingGendered, false, radius);
+                _ = GetPathFor(center, null, UnPathfindingGendered, false, radius, holder.Token);
 
 #if TIMING && TRACELOG
                 ModEntry.ModMonitor.Log($"Prefetch done for {center.NameOrUniqueName}. Total time: {_stopwatch.Value.Elapsed.TotalMilliseconds:F2} ms, {PathCache.Count} total routes cached.", LogLevel.Info);
@@ -237,8 +245,10 @@ internal static class Rescheduler
                 }
 
                 ModEntry.ModMonitor.TraceOnlyLog($"Prefetching for {name} at {home} - time {timer.ElapsedMilliseconds:F2} with {PathCache.Count}.", LogLevel.Trace);
-                _ = GetPathFor(homeLocation, null, UnPathfindingGendered, false, 2);
+                _ = GetPathFor(homeLocation, null, UnPathfindingGendered, false, 2, holder.Token);
             }
+
+            token = null;
 
 #if TIMING
             _stopwatch.Value.Stop();
@@ -262,20 +272,6 @@ internal static class Rescheduler
     /// <remarks>Returning true with path as null represents an INVALID path.</remarks>
     internal static bool TryGetPathFromCache(string start, string end, Gender PathfindingGender, out string[]? path)
     {
-        static string[]? ShorterNonNull(string[]? left, string[]? right)
-        {
-            if (left is null || left.Length == 0)
-            {
-                return right;
-            }
-            if (right is null || right.Length == 0)
-            {
-                return left;
-            }
-
-            return left.Length <= right.Length ? left : right;
-        }
-
         path = null;
         if (!PathCache.TryGetValue((start, end), out PathSet? set))
         {
@@ -346,7 +342,8 @@ internal static class Rescheduler
     /// <param name="allowPartialPaths">Whether or not to allow piecing together paths to make a full path. This can make the algo pick a less-optimal path, but it's unlikely and is much faster.</param>
     /// <param name="limit">Search limit.</param>
     /// <returns>Path, or null if not found.</returns>
-    internal static string[]? GetPathFor(GameLocation start, GameLocation? end, PathfindingGender PathfindingGender, bool allowPartialPaths, int limit = int.MaxValue)
+    /// <param name="token">A token to check if we should bail.</param>
+    internal static string[]? GetPathFor(GameLocation start, GameLocation? end, PathfindingGender PathfindingGender, bool allowPartialPaths, int limit = int.MaxValue, LightWeightCancellationToken? token = null)
     {
         if (limit <= 0)
         {
@@ -381,6 +378,11 @@ internal static class Rescheduler
 
             while (_queue.Value.TryDequeue(out MacroNode? node))
             {
+                if (token?.IsCanceled == true)
+                {
+                    return null;
+                }
+
                 _visited.Value.Add(node.Name);
                 if (Game1.getLocationFromName(node.Name) is not GameLocation current)
                 {
@@ -396,16 +398,16 @@ internal static class Rescheduler
 
                 // insert into cache
                 string[] route = Unravel(node);
-                InsertRoute(start.Name, node.Name, node.PathfindingGenderConstraint, route);
+                InsertRoute(start.Name, node.Name, node.PathfindingGenderConstraint, route, token);
 
                 if (ret is not null)
                 {
                     continue;
                 }
 
-                PathfindingGender pathfindingGenderConstrainedToCurrentSearch = GetTightestPathfindingGenderConstraint(PathfindingGender, node.PathfindingGenderConstraint);
+                PathfindingGender genderConstrainedToCurrentSearch = GetTightestPathfindingGenderConstraint(PathfindingGender, node.PathfindingGenderConstraint);
 
-                if (pathfindingGenderConstrainedToCurrentSearch != PathfindingGender.Invalid && end is not null)
+                if (genderConstrainedToCurrentSearch != PathfindingGender.Invalid && end is not null)
                 {
                     // found destination, return it.
                     if (end.Name == node.Name)
@@ -423,7 +425,7 @@ internal static class Rescheduler
 
                                 string[] segment = route[index..];
                                 ModEntry.ModMonitor.TraceOnlyLog($"Backtrack inserting path from {segment[0]} to {segment[^1]}", LogLevel.Trace);
-                                InsertRoute(segment[0], segment[^1], UnPathfindingGendered, segment);
+                                InsertRoute(segment[0], segment[^1], UnPathfindingGendered, segment, token);
                                 index--;
                             }
                             while (index > 0);
@@ -446,27 +448,27 @@ internal static class Rescheduler
                                 Array.Copy(route, routeStart, route.Length - 1);
                                 Array.Copy(prev, 0, routeStart, route.Length - 1, prev.Length);
 
-                                InsertRoute(start.Name, end.Name, node.PathfindingGenderConstraint, routeStart);
+                                InsertRoute(start.Name, end.Name, node.PathfindingGenderConstraint, routeStart, token);
                                 ret = routeStart;
                             }
                         }
                         else
                         {
-                            string[]? PathfindingGenderedPrev = pathfindingGenderConstrainedToCurrentSearch switch
+                            string[]? genderedPrev = genderConstrainedToCurrentSearch switch
                             {
                                 PathfindingGender.Male => set.MalePath,
                                 PathfindingGender.Female => set.FemalePath,
                                 _ => null
                             };
 
-                            if (PathfindingGenderedPrev is not null && PathfindingGenderedPrev.Length > 2 && CompletelyDistinct(route, PathfindingGenderedPrev))
+                            if (genderedPrev is not null && genderedPrev.Length > 2 && CompletelyDistinct(route, genderedPrev))
                             {
                                 ModEntry.ModMonitor.TraceOnlyLog($"Partial route found: {start.Name} -> {node.Name} + {node.Name} -> {end.Name}", LogLevel.Info);
-                                string[] routeStart = new string[route.Length + PathfindingGenderedPrev.Length - 1];
+                                string[] routeStart = new string[route.Length + genderedPrev.Length - 1];
                                 Array.Copy(route, routeStart, route.Length - 1);
-                                Array.Copy(PathfindingGenderedPrev, 0, routeStart, route.Length - 1, PathfindingGenderedPrev.Length);
+                                Array.Copy(genderedPrev, 0, routeStart, route.Length - 1, genderedPrev.Length);
 
-                                InsertRoute(start.Name, end.Name, pathfindingGenderConstrainedToCurrentSearch, routeStart);
+                                InsertRoute(start.Name, end.Name, genderConstrainedToCurrentSearch, routeStart, token);
                                 ret = routeStart;
                             }
                         }
@@ -499,7 +501,7 @@ internal static class Rescheduler
                 };
 
                 ModEntry.ModMonitor.Log($"Scheduler could not find route from {start.Name} to {end.Name} while honoring PathfindingGender {PathfindingGenderstring}", LogLevel.Warn);
-                InsertRoute(start.Name, end.Name, PathfindingGender, []);
+                InsertRoute(start.Name, end.Name, PathfindingGender, [], token);
             }
             return null;
         }
@@ -513,8 +515,12 @@ internal static class Rescheduler
     }
 
     [MethodImpl(TKConstants.Hot)]
-    private static void InsertRoute(string start, string end, PathfindingGender constraint, string[] route)
+    private static void InsertRoute(string start, string end, PathfindingGender constraint, string[] route, LightWeightCancellationToken? token = null)
     {
+        if (token?.IsCanceled == true)
+        {
+            return;
+        }
         PathCache.AddOrUpdate(
             (start, end),
             _ => GetNewPathSet(constraint, route),
@@ -537,13 +543,13 @@ internal static class Rescheduler
         switch (PathfindingGenderConstraint)
         {
             case PathfindingGender.Male:
-                prev.MalePath = route;
+                prev.MalePath = ShorterNonNull(prev.MalePath, route);
                 break;
             case PathfindingGender.Female:
-                prev.FemalePath = route;
+                prev.FemalePath = ShorterNonNull(prev.FemalePath, route);
                 break;
             case PathfindingGender.Undefined:
-                prev.UndefinedPath = route;
+                prev.UndefinedPath = ShorterNonNull(prev.UndefinedPath, route);
                 break;
         }
 
@@ -834,6 +840,20 @@ internal static class Rescheduler
 
     #endregion
 
+    private static string[]? ShorterNonNull(string[]? left, string[]? right)
+    {
+        if (left is null || left.Length == 0)
+        {
+            return right;
+        }
+        if (right is null || right.Length == 0)
+        {
+            return left;
+        }
+
+        return left.Length <= right.Length ? left : right;
+    }
+
     [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:Fields should be private", Justification = "The entire class is private?")]
     private class MacroNode
     {
@@ -850,6 +870,21 @@ internal static class Rescheduler
             this.Depth = prev?.Depth is int previousDepth ? previousDepth + 1 : 0;
         }
     }
+
+    [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:Fields should be private", Justification = "The entire class is private?")]
+    private record TaskAndTokenHolder(List<(GameLocation center, int radius)> Centers, LightWeightCancellationToken? Token);
+}
+
+internal sealed class LightWeightCancellationToken
+{
+    private volatile bool _isCancelled = false;
+
+    internal void Cancel()
+    {
+        this._isCancelled = true;
+    }
+
+    internal bool IsCanceled => this._isCancelled;
 }
 
 /// <summary>

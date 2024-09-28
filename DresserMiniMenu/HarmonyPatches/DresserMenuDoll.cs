@@ -5,7 +5,6 @@ using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 
 using AtraBase.Toolkit;
-using AtraBase.Toolkit.Reflection;
 
 using AtraCore.Framework.ReflectionManager;
 
@@ -89,6 +88,23 @@ internal static class DresserMenuDoll
                     Filter = ApplyFilter,
                 });
                 __instance.repositionTabs();
+
+                __instance.exitFunction += () =>
+                {
+                    if (MiniMenu.Value?.ShopMenu is not null && ReferenceEquals(__instance, MiniMenu.Value.ShopMenu))
+                    {
+                        try
+                        {
+                            MiniMenu.Value.BeforeExit();
+                            MiniMenu.Value.exitThisMenu();
+                            MiniMenu.Value = null;
+                        }
+                        catch (Exception ex)
+                        {
+                            ModEntry.ModMonitor.LogError("cleaning up smol menu", ex);
+                        }
+                    }
+                };
             }
         }
         catch (Exception ex)
@@ -199,25 +215,6 @@ internal static class DresserMenuDoll
             catch (Exception ex)
             {
                 ModEntry.ModMonitor.LogError("hovering for mini menu", ex);
-            }
-        }
-    }
-
-    [HarmonyPrefix]
-    [HarmonyPatch("cleanupBeforeExit")]
-    private static void PrefixShutdown(ShopMenu __instance)
-    {
-        if (MiniMenu.Value?.ShopMenu is not null && ReferenceEquals(__instance, MiniMenu.Value.ShopMenu))
-        {
-            try
-            {
-                MiniMenu.Value.BeforeExit();
-                MiniMenu.Value.exitThisMenu();
-                MiniMenu.Value = null;
-            }
-            catch (Exception ex)
-            {
-                ModEntry.ModMonitor.LogError("cleaning up smol menu", ex);
             }
         }
     }

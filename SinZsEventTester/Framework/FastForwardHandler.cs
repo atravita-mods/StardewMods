@@ -10,7 +10,6 @@ internal sealed class FastForwardHandler : IDisposable
     private IMonitor _monitor;
     private IGameLoopEvents _loopEvents;
     private IReflectionHelper _reflector;
-    private bool disposedValue;
     private bool _modCalledTick;
 
     /// <summary>
@@ -28,11 +27,14 @@ internal sealed class FastForwardHandler : IDisposable
         loopEvents.UpdateTicking += this.OnUpdateTicked;
     }
 
-    internal bool IsDisposed => this.disposedValue;
+    /// <summary>
+    /// Gets or sets a value indicating whether or not this instance is disposed.
+    /// </summary>
+    internal bool IsDisposed { get; private set; }
 
     private void OnUpdateTicked(object? sender, UpdateTickingEventArgs e)
     {
-        if (this._modCalledTick)
+        if (this._modCalledTick || Context.ScreenId != 0)
         {
             return;
         }
@@ -41,9 +43,18 @@ internal sealed class FastForwardHandler : IDisposable
         {
             for (int i = 0; i < ModEntry.Config.FastForwardRatio; i++)
             {
+                if (this.IsDisposed)
+                {
+                    return;
+                }
+
                 var cachedPosition = Game1.player.Position;
+                var cachedMap = Game1.player.currentLocation;
                 this._reflector.GetMethod(Game1.game1, "Update").Invoke([Game1.currentGameTime]);
-                Game1.player.Position = cachedPosition;
+                if (cachedMap == Game1.player.currentLocation)
+                {
+                    Game1.player.Position = cachedPosition;
+                }
             }
         }
         finally
@@ -54,7 +65,7 @@ internal sealed class FastForwardHandler : IDisposable
 
     private void Dispose(bool disposing)
     {
-        if (!this.disposedValue)
+        if (!this.IsDisposed)
         {
             if (disposing)
             {
@@ -64,7 +75,7 @@ internal sealed class FastForwardHandler : IDisposable
             this._monitor = null!;
             this._loopEvents = null!;
             this._reflector = null!;
-            this.disposedValue = true;
+            this.IsDisposed = true;
         }
     }
 

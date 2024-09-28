@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using StardewValley.Extensions;
 using StardewValley.Menus;
 using StardewValley.Objects;
+using StardewValley.Objects.Trinkets;
 
 namespace ExperimentalLagReduction.HarmonyPatches.MiniChanges;
 
@@ -58,7 +59,7 @@ internal static class ItemSortRewrite
             TrinketEffect myData = me.GetEffect();
             TrinketEffect otherData = otherTrinket.GetEffect();
 
-            __result = myData.general_stat_1 - otherData.general_stat_1;
+            __result = myData.GeneralStat.CompareTo(otherData.GeneralStat);
             if (__result != 0)
             {
                 return false;

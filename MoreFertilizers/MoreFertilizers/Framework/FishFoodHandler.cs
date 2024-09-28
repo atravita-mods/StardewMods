@@ -132,7 +132,7 @@ internal static class FishFoodHandler
             }
         }
 
-        Task broadcast = Task.Run(() => BroadcastHandler(multiplayer));
+        BroadcastHandler(multiplayer);
 
         if (UnsavedLocHandler.FishFoodLocationMap.Count > 0)
         {
@@ -156,8 +156,6 @@ internal static class FishFoodHandler
             },
             true,
             true);
-
-        broadcast.Wait();
     }
 
     /// <summary>

@@ -119,13 +119,13 @@ public sealed class ModEntry : Mod
         if (this.fastForwardHandler is not { } handler || handler.IsDisposed)
         {
             this.fastForwardHandler = new(this.Monitor, this.Helper.Events.GameLoop, this.Helper.Reflection);
-            Game1.addHUDMessage(new("FastFoward enabled!"));
+            Game1.addHUDMessage(new("FastFoward enabled!", HUDMessage.achievement_type));
         }
         else
         {
             this.fastForwardHandler.Dispose();
             this.fastForwardHandler = null;
-            Game1.addHUDMessage(new("FastForward disabled!"));
+            Game1.addHUDMessage(new("FastForward disabled!", HUDMessage.achievement_type));
         }
     }
 

@@ -1,4 +1,5 @@
 ﻿using StardewModdingAPI.Events;
+using Microsoft.Xna.Framework;
 
 namespace SinZsEventTester.Framework;
 
@@ -48,10 +49,12 @@ internal sealed class FastForwardHandler : IDisposable
                     return;
                 }
 
-                var cachedPosition = Game1.player.Position;
-                var cachedMap = Game1.player.currentLocation;
+                Vector2 cachedPosition = Game1.player.Position;
+                GameLocation? cachedMap = i > 2 ? Game1.player.currentLocation : null;
+
                 this._reflector.GetMethod(Game1.game1, "Update").Invoke([Game1.currentGameTime]);
-                if (cachedMap == Game1.player.currentLocation)
+
+                if (cachedMap is not null && cachedMap == Game1.player.currentLocation)
                 {
                     Game1.player.Position = cachedPosition;
                 }

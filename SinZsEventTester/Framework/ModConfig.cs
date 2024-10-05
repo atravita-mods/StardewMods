@@ -8,4 +8,6 @@ public sealed class ModConfig
     public int FastForwardRatio { get; set; } = 7;
 
     public KeybindList FastForwardKeybind { get; set; } = new(SButton.K);
+
+    public bool AllowCheats { get; internal set; } = true;
 }

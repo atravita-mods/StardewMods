@@ -1,6 +1,7 @@
 ﻿namespace SinZsEventTester;
 
 using System.Runtime.CompilerServices;
+using System.Text;
 
 using Microsoft.Xna.Framework.Input;
 
@@ -11,6 +12,7 @@ using SinZsEventTester.Framework;
 using StardewModdingAPI.Events;
 
 using StardewValley.BellsAndWhistles;
+using StardewValley.Delegates;
 using StardewValley.Menus;
 using StardewValley.Minigames;
 
@@ -48,6 +50,10 @@ public sealed class ModEntry : Mod
         try
         {
             Config = this.Helper.ReadConfig<ModConfig>();
+            if (Config.AllowCheats)
+            {
+                Program.enableCheats = true;
+            }
         }
         catch (Exception ex)
         {
@@ -146,6 +152,34 @@ public sealed class ModEntry : Mod
                 setValue: static value => Config.EventSpeedRatio = value,
                 I18n.EventSpeedRatio);
         }
+
+        var handlers = this.Helper.Reflection.GetField<Dictionary<string, DebugCommandHandlerDelegate>>(typeof(DebugCommands), "Handlers").GetValue();
+        handlers.TryAdd("smapicommand", (args, logger) =>
+        {
+            StringBuilder builder = new();
+            foreach(string? arg in args.AsSpan(1))
+            {
+                if (arg.Contains(' '))
+                {
+                    builder.Append('"').Append(arg).Append('"');
+                }
+                else
+                {
+                    builder.Append(arg);
+                }
+                builder.Append(' ');
+            }
+            if (builder.Length > 0)
+            {
+                builder.Remove(builder.Length - 1, 1);
+            }
+
+
+            string command = builder.ToString();
+            logger.Debug($"Queuing {command}");
+
+            SMAPICommandQueuer.QueueConsoleCommand(command);
+        });
     }
 
     private void Hook()

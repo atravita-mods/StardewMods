@@ -1,10 +1,12 @@
 ﻿Changelog
 ===============
 
-### Versuib 0.1.6
+### Version 0.1.6
 * Added ability to fast forward.
 * Added ability to use the chatbox commands.
+* Added an optional performance dashboard, accessed via console command `sinz.monitor_performance`.
 * Fixed GMCM integration.
+* Fixed repeatedly playing grandpa events.
 
 ### Version 0.1.5
 * GSQ checker now allows checking a single asset

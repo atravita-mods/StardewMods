@@ -1,0 +1,10 @@
+{
+   "Name": "Bella",
+   "Author": "atravita",
+   "Description": "Adds my dog to the game.",
+   "Version": "0.1.0",
+   "UniqueID": "atravita.CP.Bella",
+   "ContentPackFor": {
+       "UniqueID": "Pathoschild.ContentPatcher"
+    }
+}

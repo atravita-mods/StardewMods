@@ -1,3 +1,6 @@
 ﻿{
-  "event_speed_ratio": "Event Speed Ratio"
+  "event_speed_ratio": "Event Speed Ratio",
+  "fast_forward_ratio": "Fast Forward Ratio",
+  "fast_forward_keybind": "Fast Forward Keybind",
+  "allow_cheats": "Allow Cheats"
 }

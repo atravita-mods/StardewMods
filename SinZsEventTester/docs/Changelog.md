@@ -1,6 +1,11 @@
 ﻿Changelog
 ===============
 
+### Versuib 0.1.6
+* Added ability to fast forward.
+* Added ability to use the chatbox commands.
+* Fixed GMCM integration.
+
 ### Version 0.1.5
 * GSQ checker now allows checking a single asset
 * Event keys ending in a slash are now properly treated as correct.

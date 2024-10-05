@@ -10,7 +10,7 @@
   "UniqueID": "sinZandAtravita.SinZsEventTester",
   "Name": "SinZ's Event Tester",
   "Author": "SinZ and atravita",
-  "Version": "0.1.5-Debug",
+  "Version": "0.1.6",
   "Description": "Automated way to run events.",
   "MinimumApiVersion": "4.0.7",
   "EntryDll": "SinZsEventTester.dll",

@@ -12,6 +12,7 @@ internal sealed class FastForwardHandler : IDisposable
     private IGameLoopEvents _loopEvents;
     private IReflectionHelper _reflector;
     private bool _modCalledTick;
+    private readonly int ratio;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="FastForwardHandler"/> class.
@@ -19,17 +20,19 @@ internal sealed class FastForwardHandler : IDisposable
     /// <param name="monitor">SMAPI monitor instance.</param>
     /// <param name="loopEvents">The gameloop event handler.</param>
     /// <param name="reflector">The reflection helper.</param>
-    internal FastForwardHandler(IMonitor monitor, IGameLoopEvents loopEvents, IReflectionHelper reflector)
+    /// <param name="ratio">The ratio to fast forward.</param>
+    internal FastForwardHandler(IMonitor monitor, IGameLoopEvents loopEvents, IReflectionHelper reflector, int ratio)
     {
         this._monitor = monitor;
         this._loopEvents = loopEvents;
         this._reflector = reflector;
+        this.ratio = ratio;
 
         loopEvents.UpdateTicking += this.OnUpdateTicked;
     }
 
     /// <summary>
-    /// Gets or sets a value indicating whether or not this instance is disposed.
+    /// Gets a value indicating whether or not this instance is disposed.
     /// </summary>
     internal bool IsDisposed { get; private set; }
 
@@ -42,7 +45,7 @@ internal sealed class FastForwardHandler : IDisposable
         this._modCalledTick = true;
         try
         {
-            for (int i = 0; i < ModEntry.Config.FastForwardRatio; i++)
+            for (int i = 0; i < this.ratio; i++)
             {
                 if (this.IsDisposed)
                 {

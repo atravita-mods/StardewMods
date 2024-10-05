@@ -13,6 +13,8 @@ using StardewModdingAPI.Events;
 
 using StardewValley.BellsAndWhistles;
 using StardewValley.Delegates;
+using StardewValley.Locations;
+using StardewValley.Logging;
 using StardewValley.Menus;
 using StardewValley.Minigames;
 
@@ -42,6 +44,7 @@ public sealed class ModEntry : Mod
     private int iterationstoSkip = 0;
 
     private FastForwardHandler? fastForwardHandler;
+    private MonitorPerformance? performanceMonitor;
 
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
@@ -114,26 +117,94 @@ public sealed class ModEntry : Mod
             "sinz.forget_triggers",
             "Forgets triggers",
             (_, args) => new SimpleConsoleCommand(this.Monitor).ForgetTriggers(args));
+
+        helper.ConsoleCommands.Add(
+            "sinz.fast_forward",
+            "Fasts forward the game",
+            (command, args) => this.FastForward(command, args.AsSpan())
+            );
+
+        helper.ConsoleCommands.Add(
+            "sinz.gc",
+            "Checks the amount of memory used.",
+            callback: (command, args) => this.GarbageCollect(command, args.AsSpan()));
+
+        helper.ConsoleCommands.Add(
+            "sinz.monitor_performance",
+            "Adds performance monitoring",
+            (command, args) => this.MonitorPerformance(command, args.AsSpan()));
+    }
+
+    private void Log(IGameLogger? logger, string message)
+    {
+        if (logger is not null)
+        {
+            logger.Info(message);
+        }
+        else
+        {
+            this.Monitor.Log(message, LogLevel.Debug);
+        }
     }
 
     private void OnButtonPressed(object? sender, ButtonPressedEventArgs e)
     {
-        if (!Config.FastForwardKeybind.JustPressed())
+        if (Config.FastForwardKeybind.JustPressed())
         {
+            this.ToggleFastForward();
+        }
+    }
+
+    #region fast forward handlers
+
+    private void FastForward(string command, Span<string> args, IGameLogger? logger = null)
+    {
+        if (args.Length == 0)
+        {
+            this.ToggleFastForward();
+        }
+        if (!int.TryParse(args[0], out var multi))
+        {
+            this.Log(logger, $"Could not parse {args[0]} as valid int");
             return;
         }
-        if (this.fastForwardHandler is not { } handler || handler.IsDisposed)
+
+        if (multi < 2)
         {
-            this.fastForwardHandler = new(this.Monitor, this.Helper.Events.GameLoop, this.Helper.Reflection);
-            Game1.addHUDMessage(new("FastFoward enabled!", HUDMessage.achievement_type));
+            this.DisableFastForward();
         }
         else
         {
-            this.fastForwardHandler.Dispose();
-            this.fastForwardHandler = null;
-            Game1.addHUDMessage(new("FastForward disabled!", HUDMessage.achievement_type));
+            this.EnableFastForward(multi);
         }
     }
+
+    private void ToggleFastForward()
+    {
+        if (this.fastForwardHandler is not { } handler || handler.IsDisposed)
+        {
+            this.EnableFastForward(Config.FastForwardRatio);
+        }
+        else
+        {
+            this.DisableFastForward();
+        }
+    }
+
+    private void EnableFastForward(int ratio)
+    {
+        this.fastForwardHandler = new(this.Monitor, this.Helper.Events.GameLoop, this.Helper.Reflection, ratio);
+        Game1.addHUDMessage(new("FastFoward enabled!", HUDMessage.achievement_type));
+    }
+
+    private void DisableFastForward()
+    {
+        this.fastForwardHandler?.Dispose();
+        this.fastForwardHandler = null;
+        Game1.addHUDMessage(new("FastForward disabled!", HUDMessage.achievement_type));
+    }
+
+    #endregion
 
     /// <inheritdoc />
     public override object? GetApi(IModInfo mod) => new Api(mod, this.Monitor);
@@ -145,12 +216,44 @@ public sealed class ModEntry : Mod
             api.Register(
                 mod: this.ModManifest,
                 reset: static () => Config = new(),
-                save: () => this.Helper.WriteConfig(Config));
+                save: () =>
+                {
+                    Task.Run(() => this.Helper.WriteConfig(Config)).ContinueWith((task) => {
+                        if (task.IsCompletedSuccessfully)
+                        {
+                            this.Monitor.Log("Config saved!");
+                        }
+                        else
+                        {
+                            this.Monitor.Log("Config failed to save.", LogLevel.Error);
+                            if (task.Exception is { } ex)
+                            {
+                                this.Monitor.Log(ex.ToString());
+                            }
+                        }
+                    });
+                    Program.enableCheats = Config.AllowCheats;
+                });
             api.AddNumberOption(
                 mod: this.ModManifest,
                 getValue: static () => Config.EventSpeedRatio,
                 setValue: static value => Config.EventSpeedRatio = value,
                 I18n.EventSpeedRatio);
+            api.AddNumberOption(
+                mod: this.ModManifest,
+                getValue: static () => Config.FastForwardRatio,
+                setValue: static value => Config.FastForwardRatio = value,
+                I18n.FastForwardRatio);
+            api.AddKeybindList(
+                mod: this.ModManifest,
+                getValue: static () => Config.FastForwardKeybind,
+                setValue: static value => Config.FastForwardKeybind = value,
+                I18n.FastForwardKeybind);
+            api.AddBoolOption(
+                mod: this.ModManifest,
+                getValue: static () => Config.AllowCheats,
+                setValue: static value => Config.AllowCheats = value,
+                I18n.AllowCheats);
         }
 
         var handlers = this.Helper.Reflection.GetField<Dictionary<string, DebugCommandHandlerDelegate>>(typeof(DebugCommands), "Handlers").GetValue();
@@ -174,12 +277,44 @@ public sealed class ModEntry : Mod
                 builder.Remove(builder.Length - 1, 1);
             }
 
-
             string command = builder.ToString();
             logger.Debug($"Queuing {command}");
 
             SMAPICommandQueuer.QueueConsoleCommand(command);
         });
+
+        handlers.TryAdd("fastforward", (args, logger) =>
+        {
+            this.FastForward(args[0], args.AsSpan(1), logger);
+        });
+
+        handlers.TryAdd("gc", (args, logger) =>
+        {
+            this.GarbageCollect(args[0], args.AsSpan(1), logger);
+        });
+    }
+
+    private void GarbageCollect(string command, Span<string> args, IGameLogger? logger = null)
+    {
+        this.Log(logger, $"Current memory usage {GC.GetTotalMemory(false):N0} bytes.");
+        if (args.Length > 0 && bool.TryParse(args[0], out var v) && v)
+        {
+            GC.Collect();
+            this.Log(logger, $"Post-collection memory usage is {GC.GetTotalMemory(true):N0} bytes.");
+        }
+    }
+
+    private void MonitorPerformance(string command, Span<string> args, IGameLogger? logger = null)
+    {
+        if (this.performanceMonitor is null || this.performanceMonitor.IsDisposed)
+        {
+            this.performanceMonitor = new(this.Helper.Events.GameLoop, this.Helper.Events.Display, this.Monitor);
+        }
+        else
+        {
+            this.performanceMonitor.Dispose();
+            this.performanceMonitor = null;
+        }
     }
 
     private void Hook()
@@ -313,7 +448,12 @@ public sealed class ModEntry : Mod
 
         foreach (string key in events.Keys)
         {
-            if (!int.TryParse(key, out int _) && key.IndexOf('/') < 0)
+            if (location is not FarmHouse && (key.StartsWith("558291/") || key.StartsWith("558292/")))
+            {
+                this.Monitor.Log($"Skipping gramps event {key}");
+                continue;
+            }
+            else if (!int.TryParse(key, out int _) && key.IndexOf('/') < 0)
             {
                 this.Monitor.Log($"{key} is likely a fork, skipping...");
                 continue;

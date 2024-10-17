@@ -1,5 +1,5 @@
-﻿using StardewModdingAPI.Events;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
+using StardewModdingAPI.Events;
 
 namespace SinZsEventTester.Framework;
 
@@ -34,7 +34,7 @@ internal sealed class FastForwardHandler : IDisposable
     /// <summary>
     /// Gets a value indicating whether or not this instance is disposed.
     /// </summary>
-    internal bool IsDisposed { get; private set; }
+    internal bool IsDisposed { get; private set; } = false;
 
     private void OnUpdateTicked(object? sender, UpdateTickingEventArgs e)
     {
@@ -75,6 +75,7 @@ internal sealed class FastForwardHandler : IDisposable
         {
             if (disposing)
             {
+                this._monitor?.Log("Disposing fast forward");
                 this._loopEvents.UpdateTicking -= this.OnUpdateTicked;
             }
 

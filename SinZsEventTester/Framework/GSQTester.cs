@@ -247,15 +247,15 @@ internal sealed class GSQTester(IMonitor monitor, IReflectionHelper reflector)
             string[] newBreadcrumbs = [.. breadcrumbs, "RandomItemId"];
             foreach (string? candidate in ids)
             {
-                this.CheckItemQuery(monitor, candidate, spawnable.PerItemCondition, [..newBreadcrumbs, candidate]);
+                this.CheckItemQuery(candidate, spawnable.PerItemCondition, [..newBreadcrumbs, candidate]);
             }
             return;
         }
 
-        this.CheckItemQuery(monitor, spawnable.ItemId, spawnable.PerItemCondition, breadcrumbs);
+        this.CheckItemQuery(spawnable.ItemId, spawnable.PerItemCondition, breadcrumbs);
     }
 
-    private void CheckItemQuery(IMonitor monitor, string query, string? perItemCondition, string[] breadcrumbs)
+    private void CheckItemQuery(string query, string? perItemCondition, string[] breadcrumbs)
     {
         ItemQueryContext context = new(Game1.currentLocation, Game1.player, Random.Shared);
         string tokenized_query = query.Replace("BOBBER_X", "4").Replace("BOBBER_Y", "6").Replace("WATER_DEPTH", "5").Replace("DROP_IN_ID", "(O)69").Replace("DROP_IN_PRESERVE", "(O)69").Replace("NEARBY_FLOWER_ID", "597").Replace("DROP_IN_QUALITY", "4");
@@ -317,15 +317,25 @@ internal sealed class GSQTester(IMonitor monitor, IReflectionHelper reflector)
 
         Farmer? player = Game1.player;
         GameLocation location = player?.currentLocation ?? Game1.currentLocation;
-        GameStateQuery.ParsedGameStateQuery[] parsed = GameStateQuery.Parse(gsq);
-        if (parsed.Length == 0)
-        {
-            return;
-        }
 
-        if (parsed[0].Error is { } error)
+        GameStateQuery.ParsedGameStateQuery[] parsed;
+        try
         {
-            GameStateQuery.Helpers.ErrorResult(parsed[0].Query, error);
+            parsed = GameStateQuery.Parse(gsq);
+            if (parsed.Length == 0)
+            {
+                return;
+            }
+
+            if (parsed[0].Error is { } error)
+            {
+                GameStateQuery.Helpers.ErrorResult(parsed[0].Query, error);
+                return;
+            }
+        }
+        catch (Exception ex)
+        {
+            GameStateQuery.Helpers.ErrorResult([gsq], "an error occurred", ex);
             return;
         }
 

@@ -45,6 +45,7 @@ public sealed class ModEntry : Mod
 
     private FastForwardHandler? fastForwardHandler;
     private MonitorPerformance? performanceMonitor;
+    private DialogueChecker? dialogueChecker;
 
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
@@ -63,6 +64,8 @@ public sealed class ModEntry : Mod
             this.Monitor.Log($"Failed to deserialize config, see errors: {ex}.", LogLevel.Error);
             Config = new();
         }
+
+        DialogueChecker.Init(this.Helper.Reflection);
 
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
         helper.Events.Input.ButtonPressed += this.OnButtonPressed;
@@ -133,6 +136,23 @@ public sealed class ModEntry : Mod
             "sinz.monitor_performance",
             "Adds performance monitoring",
             (command, args) => this.MonitorPerformance(command, args.AsSpan()));
+
+        helper.ConsoleCommands.Add(
+            "sinz.check_dialogue",
+            "Checks dialogue",
+            (command, args) => this.CheckDialogue(command, args.AsSpan()));
+    }
+
+    private void CheckDialogue(string command, Span<string> args, IGameLogger? logger = null)
+    {
+        if (!Context.IsWorldReady)
+        {
+            this.Warn(logger, "Please load a world first!");
+            return;
+        }
+
+        this.dialogueChecker?.Dispose();
+        this.dialogueChecker = new(this.Monitor, this.Helper.Events.GameLoop, args);
     }
 
     private void Log(IGameLogger? logger, string message)
@@ -144,6 +164,18 @@ public sealed class ModEntry : Mod
         else
         {
             this.Monitor.Log(message, LogLevel.Debug);
+        }
+    }
+
+    private void Warn(IGameLogger? logger, string message)
+    {
+        if (logger is not null)
+        {
+            logger.Warn(message);
+        }
+        else
+        {
+            this.Monitor.Log(message, LogLevel.Warn);
         }
     }
 
@@ -162,6 +194,7 @@ public sealed class ModEntry : Mod
         if (args.Length == 0)
         {
             this.ToggleFastForward();
+            return;
         }
         if (!int.TryParse(args[0], out var multi))
         {
@@ -199,9 +232,12 @@ public sealed class ModEntry : Mod
 
     private void DisableFastForward()
     {
-        this.fastForwardHandler?.Dispose();
-        this.fastForwardHandler = null;
-        Game1.addHUDMessage(new("FastForward disabled!", HUDMessage.achievement_type));
+        if (this.fastForwardHandler is { } handler)
+        {
+            handler.Dispose();
+            this.fastForwardHandler = null;
+            Game1.addHUDMessage(new("FastForward disabled!", HUDMessage.achievement_type));
+        }
     }
 
     #endregion
@@ -259,25 +295,34 @@ public sealed class ModEntry : Mod
         var handlers = this.Helper.Reflection.GetField<Dictionary<string, DebugCommandHandlerDelegate>>(typeof(DebugCommands), "Handlers").GetValue();
         handlers.TryAdd("smapicommand", (args, logger) =>
         {
-            StringBuilder builder = new();
-            foreach(string? arg in args.AsSpan(1))
+            string command;
+            if (args.Length == 2)
             {
-                if (arg.Contains(' '))
-                {
-                    builder.Append('"').Append(arg).Append('"');
-                }
-                else
-                {
-                    builder.Append(arg);
-                }
-                builder.Append(' ');
+                command = args[1];
             }
-            if (builder.Length > 0)
+            else
             {
-                builder.Remove(builder.Length - 1, 1);
+                StringBuilder builder = new();
+                foreach (string? arg in args.AsSpan(1))
+                {
+                    if (arg.Contains(' '))
+                    {
+                        builder.Append('"').Append(arg).Append('"');
+                    }
+                    else
+                    {
+                        builder.Append(arg);
+                    }
+                    builder.Append(' ');
+                }
+                if (builder.Length > 0)
+                {
+                    builder.Remove(builder.Length - 1, 1);
+                }
+
+                command = builder.ToString();
             }
 
-            string command = builder.ToString();
             logger.Debug($"Queuing {command}");
 
             SMAPICommandQueuer.QueueConsoleCommand(command);
@@ -828,7 +873,7 @@ Outer: ;
     private void TrivialResponse(DialogueBox db)
     {
         this.Monitor.Log($"Meaningless choice, skipping.");
-        db.selectedResponse = Game1.random.Next(db.responses.Length);
+        db.selectedResponse = Random.Shared.Next(db.responses.Length);
 
         db.safetyTimer = 0;
         this.Monitor.VerboseLog("Clicking on the dialogue box.");

@@ -60,6 +60,7 @@ public record struct TimeRange : IComparable<TimeRange>
     /// <returns>True if successful, false otherwise.</returns>
     internal static bool TryParse(string? value, out TimeRange result)
     {
+        ModEntry.ModMonitor.Log(value ?? "", LogLevel.Alert);
         if (value is not null
             && value.AsSpan().TrySplitOnce('-', out ReadOnlySpan<char> first, out ReadOnlySpan<char> second)
             && int.TryParse(first, out int start)

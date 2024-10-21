@@ -402,31 +402,6 @@ public sealed class BuffModel : BuffAttributesData
 
     #endregion
 
-    /// <inheritdoc cref="BuffEffects.CombatLevel"/>
-    public float CombatLevel { get; set; } = 0;
-
-    /// <inheritdoc cref="BuffEffects.Immunity"/>
-    public float Immunity { get; set; } = 0;
-
-    /// <inheritdoc cref="BuffEffects.AttackMultiplier" />
-    public float AttackMultiplier { get; set; } = 0f;
-
-    /// <inheritdoc cref="BuffEffects.KnockbackMultiplier"/>
-    public float KnockbackMultiplier { get; set; } = 0f;
-
-    /// <inheritdoc cref="BuffEffects.WeaponSpeedMultiplier"/>
-    public float WeaponSpeedMultiplier { get; set; } = 0f;
-
-    /// <inheritdoc cref="BuffEffects.CriticalChanceMultiplier"/>
-    public float CriticalChanceMultiplier { get; set; } = 0f;
-
-    /// <inheritdoc cref="BuffEffects.CriticalPowerMultiplier"/>
-    public float CriticalPowerMultiplier { get; set; } = 0f;
-
-    /// <inheritdoc cref="BuffEffects.WeaponPrecisionMultiplier"/>
-    /// <remarks>This is unused in vanilla.</remarks>
-    public float WeaponPrecisionMultiplier { get; set; } = 0f;
-
     /// <summary>
     /// Performs a leftfold combine on two buff models.
     /// </summary>

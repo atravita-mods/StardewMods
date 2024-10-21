@@ -1,9 +1,15 @@
-﻿using StardewModdingAPI.Events;
+﻿using Microsoft.Xna.Framework;
+
+using StardewModdingAPI.Events;
 
 using StardewValley.BellsAndWhistles;
 using StardewValley.Menus;
 
 namespace SinZsEventTester.Framework;
+
+/// <summary>
+/// Warps farmer around, talking to each npc and taking note of their dialogue.
+/// </summary>
 internal sealed class DialogueChecker : IDisposable
 {
     private IMonitor monitor;
@@ -34,7 +40,6 @@ internal sealed class DialogueChecker : IDisposable
         {
             Utility.ForEachVillager((npc) =>
             {
-
                 // check for new current dialogue.
                 int friendship = Game1.player.friendshipData.GetValueOrDefault(npc.Name)?.Points ?? 0;
                 _ = npc.checkForNewCurrentDialogue(friendship / 250) || npc.checkForNewCurrentDialogue(friendship / 250, true) || npc.setTemporaryMessages(Game1.player);
@@ -48,7 +53,7 @@ internal sealed class DialogueChecker : IDisposable
         }
         else
         {
-            foreach (var name in args)
+            foreach (string name in args)
             {
                 if (Utility.fuzzyCharacterSearch(name) is not NPC npc)
                 {
@@ -56,12 +61,12 @@ internal sealed class DialogueChecker : IDisposable
                     continue;
                 }
 
-                if (npc.CurrentDialogue?.TryPeek(out var current) == true && !current.isOnFinalDialogue())
+                if (npc.CurrentDialogue?.TryPeek(out Dialogue? current) == true && !current.isOnFinalDialogue())
                 {
                     this.stack.Push((npc, null));
                 }
 
-                foreach (var key in npc.Dialogue.Keys)
+                foreach (string key in npc.Dialogue.Keys)
                 {
                     this.stack.Push((npc, key));
                 }
@@ -142,7 +147,7 @@ internal sealed class DialogueChecker : IDisposable
         if (this.currentNPC?.CurrentDialogue?.TryPeek(out Dialogue? d) == true
             && ReferenceEquals(d, this.currentDialogue) && d.currentDialogueIndex > 0 && !d.isOnFinalDialogue())
         {
-            monitor.Log($"Continuation of {d.TranslationKey ?? "no translation key"} - {d.currentDialogueIndex}");
+            monitor.VerboseLog($"Continuation of {d.TranslationKey ?? "no translation key"} - {d.currentDialogueIndex}.");
             Game1.drawDialogue(this.currentNPC);
             if (Game1.activeClickableMenu is DialogueBox)
             {
@@ -167,7 +172,7 @@ internal sealed class DialogueChecker : IDisposable
             this.iterationsToSkip = 10;
             if (nextLocation is not null)
             {
-                var pos = npc.TilePoint;
+                Point pos = npc.TilePoint;
                 switch (npc.FacingDirection)
                 {
                     case Game1.up:

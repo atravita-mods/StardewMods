@@ -120,6 +120,10 @@ public sealed class ModEntry : Mod
             "sinz.forget_triggers",
             "Forgets triggers",
             (_, args) => new SimpleConsoleCommand(this.Monitor).ForgetTriggers(args));
+        helper.ConsoleCommands.Add(
+            "sinz.get_music",
+            "Gets the track currently playing, if any.",
+            (_, _) => new SimpleConsoleCommand(this.Monitor).GetTrack());
 
         helper.ConsoleCommands.Add(
             "sinz.fast_forward",
@@ -196,7 +200,7 @@ public sealed class ModEntry : Mod
             this.ToggleFastForward();
             return;
         }
-        if (!int.TryParse(args[0], out var multi))
+        if (!int.TryParse(args[0], out int multi))
         {
             this.Log(logger, $"Could not parse {args[0]} as valid int");
             return;
@@ -292,7 +296,7 @@ public sealed class ModEntry : Mod
                 I18n.AllowCheats);
         }
 
-        var handlers = this.Helper.Reflection.GetField<Dictionary<string, DebugCommandHandlerDelegate>>(typeof(DebugCommands), "Handlers").GetValue();
+        Dictionary<string, DebugCommandHandlerDelegate> handlers = this.Helper.Reflection.GetField<Dictionary<string, DebugCommandHandlerDelegate>>(typeof(DebugCommands), "Handlers").GetValue();
         handlers.TryAdd("smapicommand", (args, logger) =>
         {
             string command;
@@ -342,7 +346,7 @@ public sealed class ModEntry : Mod
     private void GarbageCollect(string command, Span<string> args, IGameLogger? logger = null)
     {
         this.Log(logger, $"Current memory usage {GC.GetTotalMemory(false):N0} bytes.");
-        if (args.Length > 0 && bool.TryParse(args[0], out var v) && v)
+        if (args.Length > 0 && bool.TryParse(args[0], out bool v) && v)
         {
             GC.Collect();
             this.Log(logger, $"Post-collection memory usage is {GC.GetTotalMemory(true):N0} bytes.");

@@ -142,7 +142,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ItemSpawnExtended", "ItemSp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MarriageDialogueAdjuster", "MarriageDialogueAdjuster\MarriageDialogueAdjuster.csproj", "{798B1C35-0847-4832-90CF-BED2DFAF5476}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShopTabs", "ShopTabs\ShopTabs.csproj", "{6E013D89-58B5-4BF9-A1A2-4D807EE2E0D5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShopTabs", "ShopTabs\ShopTabs.csproj", "{6E013D89-58B5-4BF9-A1A2-4D807EE2E0D5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SaveCompression", "SaveCompression\SaveCompression.csproj", "{1B73A40B-7F96-43B9-90F1-D0884C4DCD6C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -386,6 +388,10 @@ Global
 		{6E013D89-58B5-4BF9-A1A2-4D807EE2E0D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6E013D89-58B5-4BF9-A1A2-4D807EE2E0D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6E013D89-58B5-4BF9-A1A2-4D807EE2E0D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B73A40B-7F96-43B9-90F1-D0884C4DCD6C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B73A40B-7F96-43B9-90F1-D0884C4DCD6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B73A40B-7F96-43B9-90F1-D0884C4DCD6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B73A40B-7F96-43B9-90F1-D0884C4DCD6C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -10,7 +10,7 @@
   "UniqueID": "atravita.EastScarp",
   "Name": "East Scarp C#",
   "Author": "atravita",
-  "Version": "0.1.1",
+  "Version": "0.1.1-Debug",
   "Description": "ES C# component",
   "MinimumApiVersion": "4.0.7",
   "EntryDll": "EastScarp.dll",

@@ -6,6 +6,20 @@
 /// <param name="monitor">the monitor instance to use.</param>
 internal struct SimpleConsoleCommand(IMonitor monitor)
 {
+    internal readonly void GetTrack()
+    {
+        if (Game1.currentSong is { } song)
+        {
+            if (song is DummyCue)
+            {
+                monitor.Log($"Track is a dummy song, audio not enabled.", LogLevel.Warn);
+                return;
+            }
+
+            monitor.Log($"Track is {song.Name}. Playing: {song.IsPlaying}.");
+        }
+    }
+
     /// <summary>
     /// Forgets that the following events were seen.
     /// </summary>

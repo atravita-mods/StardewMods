@@ -75,7 +75,7 @@ internal sealed class MonitorPerformance : IDisposable
     {
         e.SpriteBatch.Draw(Game1.staminaRect, new Rectangle(0, 0, Game1.viewport.Width, 64), Color.Black * 0.5f);
 
-        var drawloc = Vector2.One * 12;
+        Vector2 drawloc = Vector2.One * 12;
         e.SpriteBatch.DrawString(Game1.dialogueFont, this.RenderTime, drawloc, Color.White);
 
         drawloc.X += this.renderWidth;
@@ -95,7 +95,7 @@ internal sealed class MonitorPerformance : IDisposable
     private void Rendered(object? sender, RenderedEventArgs e)
     {
         this.renderWatch.Stop();
-        var ms = this.renderWatch.Elapsed.TotalMilliseconds;
+        double ms = this.renderWatch.Elapsed.TotalMilliseconds;
         if (Game1.ticks % 5 == 0 || ms > 5)
         {
             this.RenderTime = $"Render time: {ms:00.00} ms.";
@@ -120,7 +120,7 @@ internal sealed class MonitorPerformance : IDisposable
         }
 
         this.updateWatch.Stop();
-        var ms = this.updateWatch.Elapsed.TotalMilliseconds;
+        double ms = this.updateWatch.Elapsed.TotalMilliseconds;
         if (Game1.ticks % 5 == 0 || ms > 5)
         {
             this.UpdateTime = $"Update time: {ms:00.00} ms.";

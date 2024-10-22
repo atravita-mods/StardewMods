@@ -41,7 +41,7 @@ internal sealed class DialogueChecker : IDisposable
             Utility.ForEachVillager((npc) =>
             {
                 // check for new current dialogue.
-                int friendship = Game1.player.friendshipData.GetValueOrDefault(npc.Name)?.Points ?? 0;
+                int friendship = Game1.player.friendshipData.TryGetValue(npc.Name, out var data) ? data.Points : 0;
                 _ = npc.checkForNewCurrentDialogue(friendship / 250) || npc.checkForNewCurrentDialogue(friendship / 250, true) || npc.setTemporaryMessages(Game1.player);
 
                 if (npc.CurrentDialogue?.Count > 0)

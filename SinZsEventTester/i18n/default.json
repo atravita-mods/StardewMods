@@ -1,6 +1,27 @@
 ﻿{
+  // gmcm
   "event_speed_ratio": "Event Speed Ratio",
   "fast_forward_ratio": "Fast Forward Ratio",
   "fast_forward_keybind": "Fast Forward Keybind",
-  "allow_cheats": "Allow Cheats"
+  "allow_cheats": "Allow Cheats",
+
+  //Text used in console commands
+  "load-save-first": "Load save first.",
+  "true": "True",
+  "false": "False",
+
+  "number-found": "{{count}} individual special orders found.",
+  "valid-keys": "{{count}} valid keys",
+  "unseen-keys": "{{count}} unseen keys",
+  "analyzing": "Analyzing",
+  "parsable": "seems parsable",
+  "unparsable": "has errors in parsing",
+  "nonrepeatable": "Non-repeatable",
+  "repeatable-seen": "Repeatable, seen before",
+  "month-long-late": "Month long quest, not available after the {{cutoff}}th",
+  "has-invalid-tags": "Has invalid tags",
+  "tag-failed": "Tag failed",
+  "active": "Currently active",
+  "failed-GSQ": "Failed game state query check",
+  "unknown": "Unknown reason",
 }

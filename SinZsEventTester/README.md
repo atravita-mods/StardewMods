@@ -29,6 +29,7 @@ Command | Usage | Example
 |`sinz.empty_event_queue` | Empties the event queue to stop autoplay.
 `sinz.check_preconditions` | Checks over all the event preconditions in the game to make sure they're formatted correctly
 `sinz.check_gsq` | Checks over all the GSQ in the game to make sure they're formatted correctly
+`sinz.check_special_orders` | Checks over special orders to see if they're formatted correctly and can be triggered.
 `sinz.forget_mail <mail>` | Removes the mail key from the player's `mailRecieved`.
 `sinz.forget_event <eventID>` | Removes the event key from the player's `eventsSeen`
 `sinz.forget_triggers <triggerID>` | Removes the trigger ID from the player's `triggerActionsRun`

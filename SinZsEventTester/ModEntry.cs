@@ -111,6 +111,11 @@ public sealed class ModEntry : Mod
                 }
             });
         helper.ConsoleCommands.Add(
+            "sinz.check_special_orders",
+            "Checks special orders",
+            (_, args) => new CheckSpecialOrdersCommand(this.Monitor).GetAvailableOrders()
+            );
+        helper.ConsoleCommands.Add(
             "sinz.forget_event",
             "Forgets events",
             (_, args) => new SimpleConsoleCommand(this.Monitor).ForgetEvents(args));

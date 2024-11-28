@@ -2,7 +2,7 @@
 ===============
 
 ### Version 0.1.7
-* Added dialogue checker.
+* Added dialogue checker and special order checker
 * Item Spawn Query checker now checks for error items. Tighted rules on item spawn query replacements.
 
 ### Version 0.1.6

@@ -36,9 +36,12 @@ public sealed class ModData
 
     internal void PopulateIfBlank(Farmer player)
     {
-        if (this.LastMilliseconds < 0)
+        unchecked
         {
-            this.LastMilliseconds = (int)(player.millisecondsPlayed ^ (player.millisecondsPlayed << 32));
+            if (this.LastMilliseconds < 0)
+            {
+                this.LastMilliseconds = (int)(player.millisecondsPlayed ^ (player.millisecondsPlayed << 32));
+            }
         }
 
         if (this.LastSteps < 0)

@@ -18,12 +18,12 @@
 
   <PropertyGroup>
     <Authors>atravita</Authors>
-    <MinimumApiVersion>4.0.7</MinimumApiVersion>
+    <MinimumApiVersion>4.1.6</MinimumApiVersion>
     <UniqueId>$(Authors).$(AssemblyName)</UniqueId>
     <EntryDll>$(AssemblyName).dll</EntryDll>
     <GamePath>C:\Program Files (x86)\Steam\steamapps\common\Stardew Valley</GamePath>
     <GameModsPath>$(GamePath)/Mods</GameModsPath>
-    <MinimumGameVersion>1.6.4</MinimumGameVersion>
+    <MinimumGameVersion>1.6.14</MinimumGameVersion>
   </PropertyGroup>
 
   <PropertyGroup>

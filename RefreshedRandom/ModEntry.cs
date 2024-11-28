@@ -54,7 +54,7 @@ internal sealed class ModEntry : Mod
         helper.Events.Specialized.LoadStageChanged += this.OnLoadSaveChanged;
         helper.Events.GameLoop.SaveCreated += this.OnSaveCreate;
         helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
-        helper.Events.GameLoop.Saving += this.OnSaving;
+        helper.Events.GameLoop.Saving += this.Saving;
 
         // multiplayer
         helper.Events.Multiplayer.PeerConnected += this.PeerConnected;
@@ -99,7 +99,7 @@ internal sealed class ModEntry : Mod
     }
 
     /// <inheritdoc cref="IGameLoopEvents.Saving"/>
-    private void OnSaving(object? sender, SavingEventArgs e)
+    private void Saving(object? sender, SavingEventArgs e)
     {
         if (Context.IsMainPlayer)
         {

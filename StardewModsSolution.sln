@@ -150,6 +150,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MapLayerTester", "MapLayerT
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RefreshedRandom", "RefreshedRandom\RefreshedRandom.csproj", "{9B3B14C0-D57C-4CD4-8288-3BB3DFF01766}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WhyAreYouDisposed", "WhyAreYouDisposed\WhyAreYouDisposed.csproj", "{D4D7DC14-8742-427A-8C2E-9F8B8A9226C8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -404,6 +406,10 @@ Global
 		{9B3B14C0-D57C-4CD4-8288-3BB3DFF01766}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9B3B14C0-D57C-4CD4-8288-3BB3DFF01766}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9B3B14C0-D57C-4CD4-8288-3BB3DFF01766}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4D7DC14-8742-427A-8C2E-9F8B8A9226C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4D7DC14-8742-427A-8C2E-9F8B8A9226C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4D7DC14-8742-427A-8C2E-9F8B8A9226C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4D7DC14-8742-427A-8C2E-9F8B8A9226C8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

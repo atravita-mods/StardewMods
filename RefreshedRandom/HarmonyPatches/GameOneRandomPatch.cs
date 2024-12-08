@@ -4,6 +4,10 @@ using System.Reflection.Emit;
 using HarmonyLib;
 
 namespace RefreshedRandom.HarmonyPatches;
+
+/// <summary>
+/// Patches Game1.newDayAfterFade to hijack the random.
+/// </summary>
 internal static class GameOneRandomPatch
 {
     internal static void ApplyPatch(Harmony harmony, IReflectionHelper reflector)

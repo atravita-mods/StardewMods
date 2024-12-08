@@ -1,8 +1,5 @@
 ﻿using StardewValley.GameData.SpecialOrders;
 using StardewValley.SpecialOrders;
-
-using static StardewValley.Menus.CoopMenu;
-
 namespace SinZsEventTester.Framework;
 
 /// <summary>

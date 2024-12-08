@@ -26,6 +26,11 @@ internal sealed class MonitorPerformance : IDisposable
     private readonly float renderWidth;
     private readonly float updateWidth;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="MonitorPerformance"/> class.
+    /// </summary>
+    /// <param name="gameLoopEvents">Game loop event manager.</param>
+    /// <param name="displayEvents">Display event manager.</param>
     public MonitorPerformance(IGameLoopEvents gameLoopEvents, IDisplayEvents displayEvents)
     {
         this.gameLoopEvents = gameLoopEvents;
@@ -43,6 +48,9 @@ internal sealed class MonitorPerformance : IDisposable
         this.updateWidth = Game1.dialogueFont.MeasureString($"Update time: {0:00.00} ms.").X + 4;
     }
 
+    /// <summary>
+    /// Gets a value indicating whether or not this instance is disposed.
+    /// </summary>
     internal bool IsDisposed { get; private set; }
 
     private void Dispose(bool disposing)

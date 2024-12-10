@@ -15,15 +15,17 @@ using StardewValley.Tools;
 /// <summary>
 /// Patches against fruit trees.
 /// </summary>
-[HarmonyPatch(typeof(FruitTree))]
+
 [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Named For Harmony")]
 internal static class FruitTreePatches
 {
+    private static MeleeWeapon? scythe;
+
     private static readonly PerScreen<int> Ticks = new(static () => -1);
     private static readonly PerScreen<int> Attempts = new(static () => 0);
 
     [HarmonyPrefix]
-    [HarmonyPatch(nameof(FruitTree.shake))]
+    [HarmonyPatch(typeof(FruitTree), nameof(FruitTree.shake))]
     private static bool PrefixShake(FruitTree __instance)
     {
         int x = (int)__instance.Tile.X;
@@ -54,7 +56,7 @@ internal static class FruitTreePatches
     }
 
     [HarmonyPrefix]
-    [HarmonyPatch(nameof(FruitTree.performToolAction))]
+    [HarmonyPatch(typeof(FruitTree), nameof(FruitTree.performToolAction))]
     private static bool PrefixCut(FruitTree __instance, Tool t)
     {
         if (t is MeleeWeapon || __instance.health.Value <= -99f)
@@ -74,9 +76,49 @@ internal static class FruitTreePatches
         return true;
     }
 
+    [HarmonyPrefix]
+    [HarmonyPatch(typeof(Tree), nameof(Tree.performToolAction))]
+    private static bool PrefixCut(Tree __instance, Tool t, int explosion, Vector2 tileLocation)
+    {
+        try
+        {
+            if ((t is not Axe && explosion > 0) || __instance.health.Value <= -99f)
+            {
+                return true;
+            }
+
+            int x = (int)__instance.Tile.X;
+            int y = (int)__instance.Tile.Y;
+            if (__instance.Location?.doesTileHaveProperty(x, y, "EastScarpe.TreeCut", "Back") is string message)
+            {
+                // if moss, harvest it.
+                if (__instance.hasMoss.Value)
+                {
+                    scythe ??= new MeleeWeapon("44");
+                    scythe.lastUser = t?.getLastFarmerToUse() ?? Game1.player;
+                    __instance.performToolAction(scythe, 0, tileLocation);
+                    return false;
+                }
+                ShowMessage(message);
+                __instance.shake(tileLocation, false);
+                return false;
+            }
+        }
+        catch (Exception ex)
+        {
+            ModEntry.ModMonitor.Log($"Exception while attempting to prevent woodchopping, {ex}.", LogLevel.Error);
+        }
+        return true;
+    }
+
     private static void ShowMessage(string message)
     {
-        if (string.IsNullOrWhiteSpace(message))
+        if (message.EqualsIgnoreCase("NO_MESSAGE"))
+        {
+            // do nothing
+            return;
+        }
+        else if (string.IsNullOrWhiteSpace(message))
         {
             Game1.showRedMessage(I18n.FruitTree_Forbidden());
         }
@@ -104,7 +146,7 @@ internal static class FruitTreePatches
                 }
             }
 
-            Game1.DrawDialogue(new(npc, null, TokenParser.ParseText(second.Trim().ToString())));
+            Game1.DrawDialogue(new (npc, null, TokenParser.ParseText(second.Trim().ToString())));
         }
         else
         {
@@ -116,7 +158,8 @@ internal static class FruitTreePatches
     {
         Farmer player = Game1.player;
 
-        tree.shakeLeft.Value = player.StandingPixel.X > (tree.Tile.X + 0.5f) * 64f || (player.Tile.X == tree.Tile.X && Game1.random.NextBool());
+        tree.shakeLeft.Value = player.StandingPixel.X > (tree.Tile.X + 0.5f) * 64f || (player.Tile.X == tree.Tile.X && Random.Shared.NextBool());
         tree.maxShake = tree.growthStage.Value >= 4 ? MathF.PI / 128.0f : MathF.PI / 64f;
     }
+
 }

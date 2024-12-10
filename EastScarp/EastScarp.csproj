@@ -9,7 +9,7 @@
   <PropertyGroup>
     <Name>East Scarp C#</Name>
     <Description>ES C# component</Description>
-    <Version>0.1.2</Version>
+    <Version>0.1.3</Version>
     <UpdateKeys>-1</UpdateKeys>
   </PropertyGroup>
 

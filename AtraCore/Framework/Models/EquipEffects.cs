@@ -318,7 +318,7 @@ public sealed class BuffModel : BuffAttributesData
 
         BlockExpression block = Expression.Block(expressions);
         Expression<Action<BuffEffects, BuffModel>> lambda = Expression.Lambda<Action<BuffEffects, BuffModel>>(block, new ParameterExpression[] { effects, model });
-        ModEntry.ModMonitor.LogIfVerbose($"Ring merge function generated:\n{lambda.ToCSharpString()}");
+        ModEntry.ModMonitor.VerboseLog($"Ring merge function generated:\n{lambda.ToCSharpString()}");
         return lambda.CompileFast();
     });
 
@@ -349,9 +349,9 @@ public sealed class BuffModel : BuffAttributesData
         }
 
         expressions.Add(rows);
-        BlockExpression block = Expression.Block(new ParameterExpression[] { rows }, expressions);
-        Expression<Func<BuffModel, int>> lambda = Expression.Lambda<Func<BuffModel, int>>(block, new ParameterExpression[] { model });
-        ModEntry.ModMonitor.LogIfVerbose($"Height function generated:\n{lambda.ToCSharpString()}");
+        BlockExpression block = Expression.Block([rows], expressions);
+        Expression<Func<BuffModel, int>> lambda = Expression.Lambda<Func<BuffModel, int>>(block, [model]);
+        ModEntry.ModMonitor.VerboseLog($"Height function generated:\n{lambda.ToCSharpString()}");
         return lambda.CompileFast();
     });
 
@@ -380,8 +380,8 @@ public sealed class BuffModel : BuffAttributesData
         }
 
         BlockExpression block = Expression.Block(expressions);
-        Expression<Action<BuffModel, BuffModel>> lambda = Expression.Lambda<Action<BuffModel, BuffModel>>(block, new ParameterExpression[] { left, right });
-        ModEntry.ModMonitor.LogIfVerbose($"Sum function generated:\n{lambda.ToCSharpString()}");
+        Expression<Action<BuffModel, BuffModel>> lambda = Expression.Lambda<Action<BuffModel, BuffModel>>(block, [left, right]);
+        ModEntry.ModMonitor.VerboseLog($"Sum function generated:\n{lambda.ToCSharpString()}");
         return lambda.CompileFast();
     });
 

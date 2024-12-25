@@ -24,6 +24,7 @@ using StardewModdingAPI.Utilities;
 
 using StardewValley;
 using StardewValley.Buffs;
+using StardewValley.Extensions;
 using StardewValley.Locations;
 using StardewValley.Objects;
 
@@ -38,10 +39,10 @@ internal static class ItemPatcher
     private const string LightKey = "atravita.EquipLight";
 
     // maps the ring ID to the current effect of the ring for tooltips
-    private static readonly PerScreen<Dictionary<string, EquipEffects>> _tooltipMap = new(static () => new());
+    private static readonly PerScreen<Dictionary<string, EquipEffects>> _tooltipMap = new(static () => []);
 
     // maps the items to their active effects
-    private static readonly PerScreen<ConditionalWeakTable<Item, EquipEffects>> _activeEffects = new(static () => new());
+    private static readonly PerScreen<ConditionalWeakTable<Item, EquipEffects>> _activeEffects = new(static () => []);
 
     // holds tooltip cache for combined rings
     private static readonly ConditionalWeakTable<CombinedRing, EquipEffects?> _combinedTooltips = [];
@@ -50,7 +51,7 @@ internal static class ItemPatcher
     private static readonly ConditionalWeakTable<Boots, EquipEffects?> _bootsTooltips = [];
 
     // holds references to active lights
-    private static readonly PerScreen<Dictionary<Item, int>> _lightSources = new(static () => new());
+    private static readonly PerScreen<Dictionary<Item, string>> _lightSources = new(static () => []);
 
     // holds the remainder of health from the last round of health updates.
     private static readonly PerScreen<float> _healthRemainder = new(static () => 0f);
@@ -65,13 +66,6 @@ internal static class ItemPatcher
     }
 
     #region delegates
-    private static readonly Lazy<Func<Ring, int?>> lightIDSourceGetter = new(() =>
-        typeof(Ring).GetCachedField("_lightSourceID", ReflectionCache.FlagTypes.InstanceFlags)
-                    .GetInstanceFieldGetter<Ring, int?>());
-
-    private static readonly Lazy<Action<Ring, int?>> lightIDSourceSetter = new(() =>
-        typeof(Ring).GetCachedField("_lightSourceID", ReflectionCache.FlagTypes.InstanceFlags)
-                    .GetInstanceFieldSetter<Ring, int?>());
 
     private static readonly Lazy<Func<Item, int>> _getDescriptionWidth = new(() => 
         typeof(Item).GetCachedMethod("getDescriptionWidth", ReflectionCache.FlagTypes.InstanceFlags)
@@ -655,7 +649,7 @@ internal static class ItemPatcher
             offset.Y += 21f;
             offset += currentPlayer.Position;
 
-            foreach (int light in _lightSources.Value.Values)
+            foreach (string light in _lightSources.Value.Values)
             {
                 currentPlayer.currentLocation.repositionLightSource(light, offset);
             }
@@ -681,7 +675,7 @@ internal static class ItemPatcher
 
     private static void AdjustLight(this Item item, GameLocation location, Vector2 position, bool capRadius)
     {
-        if (item.modData.GetInt(LightKey) is int lightId)
+        if (item.modData.TryGetValue(LightKey, out string? lightId))
         {
             location.repositionLightSource(lightId, position);
             if (capRadius && location.getLightSource(lightId) is { } light)
@@ -952,64 +946,51 @@ internal static class ItemPatcher
         }
     }
 
-    private static int AddItemLight(int radius, Color color, Item item, Farmer player, GameLocation location)
+    private static string AddItemLight(float radius, Color color, Item item, Farmer player, GameLocation location)
     {
-        // rings have their own unique item ID, but other items don't. We're gonna cheat a little and use the hash code, which in C# is the sync block index unless defined otherwise.
-        // should be unique enough.
-        int lightID = GenerateLightSource(radius, color, player, location, item.GetHashCode());
-        item.modData.SetInt(LightKey, lightID);
+        string lightID = GenerateLightSource(radius, color, player, location, item);
+        item.modData[LightKey] = lightID;
         _lightSources.Value[item] = lightID;
         ModEntry.ModMonitor.TraceOnlyLog($"[DataEquips] Adding light id {lightID:X}");
         return lightID;
     }
 
-    private static void AddRingLight(int radius, Color color, Ring ring, Farmer player, GameLocation location)
+    private static void AddRingLight(float radius, Color color, Ring ring, Farmer player, GameLocation location)
     {
-        int lightID = GenerateLightSource(radius, color, player, location, ring.uniqueID.Value);
-        lightIDSourceSetter.Value(ring, lightID);
+        string lightID = GenerateLightSource(radius, color, player, location, ring);
+        ring.lightSourceId = lightID;
         ModEntry.ModMonitor.TraceOnlyLog($"[DataEquips] Adding light id {lightID:X}");
     }
 
-    private static int GenerateLightSource(int radius, Color color, Farmer player, GameLocation location, int uniqueItemID)
+    private static string GenerateLightSource(float radius, Color color, Farmer player, GameLocation location, Item equippedItem)
     {
-        int startingID;
-        int lightID;
-
-        unchecked
-        {
-            lightID = startingID = uniqueItemID + (int)player.UniqueMultiplayerID;
-            while (location.sharedLights.ContainsKey(lightID))
-            {
-                ++lightID;
-            }
-        }
-
+        var lightID = equippedItem.GenerateLightSourceId(player);
         LightSource lightSource = new(
+                    id: lightID,
                     textureIndex: 1,
-                    new Vector2(player.Position.X + 21f, player.Position.Y + 64f),
-                    radius,
-                    color,
-                    identifier: startingID,
-                    light_context: LightSource.LightContext.None,
+                    position: new Vector2(player.Position.X + 21f, player.Position.Y + 64f),
+                    radius: radius,
+                    color: color,
+                    lightContext: LightSource.LightContext.None,
                     playerID: player.UniqueMultiplayerID);
-        location.sharedLights[lightID] = lightSource;
+        location.sharedLights.AddLight(lightSource);
         return lightID;
     }
 
     private static void RemoveRingLight(Ring __instance, GameLocation location)
     {
-        int? lightID = lightIDSourceGetter.Value(__instance);
-        if (lightID.HasValue)
+        var lightID = __instance.lightSourceId;
+        if (lightID is not null)
         {
-            ModEntry.ModMonitor.TraceOnlyLog($"[DataEquips] Removing light id {lightID.Value:X}");
-            location.removeLightSource(lightID.Value);
-            lightIDSourceSetter.Value(__instance, null);
+            ModEntry.ModMonitor.TraceOnlyLog($"[DataEquips] Removing light id {lightID}");
+            location.removeLightSource(lightID);
+            __instance.lightSourceId = null;
         }
     }
 
     private static void RemoveItemLight(Item item, GameLocation location)
     {
-        if (_lightSources.Value.TryGetValue(item, out int lightID))
+        if (_lightSources.Value.TryGetValue(item, out var lightID))
         {
             ModEntry.ModMonitor.TraceOnlyLog($"[DataEquips] Removing light id {lightID:X}");
             location.removeLightSource(lightID);

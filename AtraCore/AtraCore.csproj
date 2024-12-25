@@ -2,6 +2,7 @@
   <Import Project="..\csproj_common" />
   <Import Project="..\AtraBase\AtraBase\AtraBase.projitems" Label="Shared" />
   <Import Project="..\AtraShared\AtraShared.projitems" Label="Shared" />
+  <Import Project="..\MiniAtraShared\MiniAtraShared.projitems" Label="Shared" />
 
   <PropertyGroup>
     <EnableHarmony>True</EnableHarmony>

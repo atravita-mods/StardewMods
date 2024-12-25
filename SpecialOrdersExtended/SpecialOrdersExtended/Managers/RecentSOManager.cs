@@ -82,7 +82,7 @@ internal class RecentSOManager
         }
         List<string> keysRemoved = recentCompletedSO.dayUpdate(daysplayed);
         DialogueManager.ClearRepeated(keysRemoved);
-        ModEntry.ModMonitor.LogIfVerbose($"Keys removed from Recent Completed SOs: {string.Join(", ", keysRemoved)}");
+        ModEntry.ModMonitor.VerboseLog($"Keys removed from Recent Completed SOs: {string.Join(", ", keysRemoved)}");
     }
 
     /// <summary>

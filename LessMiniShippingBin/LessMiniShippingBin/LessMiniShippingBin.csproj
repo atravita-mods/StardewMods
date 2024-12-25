@@ -1,4 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\..\MiniAtraShared\MiniAtraShared.projitems" Label="Shared" />
   <Import Project="..\..\csproj_common" />
 
   <PropertyGroup>
@@ -7,21 +8,15 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <Version>0.3.2</Version>
+    <Version>0.4.2</Version>
     <Name>Less Mini Shipping Bin</Name>
     <Description>Lets you make the mini shipping bin bigger.</Description>
     <UpdateKeys>Nexus:10959</UpdateKeys>
-    <BaseManifest>..\..\base_dependencies.json</BaseManifest>
   </PropertyGroup>
 
   <PropertyGroup>
     <TranslationClassBuilder_AddGetByKey>true</TranslationClassBuilder_AddGetByKey>
   </PropertyGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\AtraCore\AtraCore.csproj" Private="false" />
-    <ProjectReference Include="..\..\Pintail\Pintail\Pintail.csproj" Private="false" />
-  </ItemGroup>
 
   <ItemGroup>
     <Using Include="StardewValley" />

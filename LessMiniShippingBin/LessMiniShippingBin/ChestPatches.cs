@@ -1,9 +1,4 @@
-﻿using AtraBase.Toolkit.Reflection;
-
-using AtraCore.Framework.ReflectionManager;
-
-using AtraShared.ConstantsAndEnums;
-using AtraShared.Utils.Extensions;
+﻿using AtraShared.Utils.Extensions;
 
 using HarmonyLib;
 
@@ -18,14 +13,15 @@ namespace LessMiniShippingBin;
 /// Patches against StardewValley.Objects.Chest.
 /// </summary>
 [HarmonyPatch(typeof(Chest))]
-[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Named for Harmony")]
 internal static class ChestPatches
 {
     #region delegates
 
-    private static readonly Lazy<Func<Chest, int>> GetCurrentLidFrame = new(() =>
-        typeof(Chest).GetCachedField("currentLidFrame", ReflectionCache.FlagTypes.InstanceFlags)
-                     .GetInstanceFieldGetter<Chest, int>());
+    private static readonly Lazy<AccessTools.FieldRef<Chest, int>> _currentLidFrameGetter = new(() =>
+    {
+        return AccessTools.FieldRefAccess<Chest, int>("currentLidFrame");
+    });
 
     #endregion
 
@@ -60,7 +56,7 @@ internal static class ChestPatches
     }
 
     [HarmonyPostfix]
-    [HarmonyPatch(nameof(Chest.draw), new[] {typeof(SpriteBatch), typeof(int), typeof(int), typeof(float) })]
+    [HarmonyPatch(nameof(Chest.draw), [typeof(SpriteBatch), typeof(int), typeof(int), typeof(float)])]
     private static void PostfixDraw(Chest __instance, SpriteBatch spriteBatch, int x, int y, float alpha)
     {
         if ((__instance.fridge.Value ? ModEntry.Config.DrawFirstItemFridge : ModEntry.Config.DrawFirstItem)
@@ -68,7 +64,7 @@ internal static class ChestPatches
             && __instance.Items.Count > 0 && __instance.Items[0] is Item itemToDraw)
         {
             int startframe = __instance.startingLidFrame.Value;
-            int currentFrame = GetCurrentLidFrame.Value(__instance);
+            int currentFrame = _currentLidFrameGetter.Value(__instance);
             float alphaAdjustment = __instance.lidFrameCount.Value > 1
                 ? 1 - ((currentFrame - startframe) / (float)(__instance.lidFrameCount.Value - 1))
                 : 1;

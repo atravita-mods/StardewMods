@@ -1,8 +1,7 @@
-﻿using AtraShared.Integrations;
-using AtraShared.Utils.Extensions;
+﻿
 using HarmonyLib;
 using StardewModdingAPI.Events;
-using AtraUtils = AtraShared.Utils.Utils;
+
 
 namespace LessMiniShippingBin;
 

@@ -61,10 +61,10 @@ internal static class TeleportPlayer
             if (ArgUtility.TryGetOptionalRemainder(parameters, conditionsStart, out string? condition)
                 && !string.IsNullOrWhiteSpace(condition))
             {
-                ModEntry.ModMonitor.LogIfVerbose($"[Teleport] - checking {condition}");
+                ModEntry.ModMonitor.VerboseLog($"[Teleport] - checking {condition}");
                 if (!GameStateQuery.CheckConditions(condition))
                 {
-                    ModEntry.ModMonitor.LogIfVerbose($"[Teleport] action failed condition.");
+                    ModEntry.ModMonitor.VerboseLog($"[Teleport] action failed condition.");
                     return false;
                 }
             }

@@ -1,4 +1,8 @@
-﻿namespace SinZsEventTester.Framework;
+﻿using Microsoft.Xna.Framework;
+
+using StardewValley.Objects;
+
+namespace SinZsEventTester.Framework;
 
 /// <summary>
 /// A struct that wraps a simple command.
@@ -6,6 +10,43 @@
 /// <param name="monitor">the monitor instance to use.</param>
 internal struct SimpleConsoleCommand(IMonitor monitor)
 {
+    /// <summary>
+    /// Causes the phone to show a specific call, or the first matching unseen call if not specified.
+    /// </summary>
+    /// <param name="call">Call to check.</param>
+    internal readonly void RingPhone(string? call = null)
+    {
+        if (Game1.currentLocation is not GameLocation loc)
+        {
+            monitor.Log($"Please load a save.", LogLevel.Error);
+            return;
+        }
+
+        if (!loc.Objects.Values.Any(static item => item is Phone))
+        {
+            List<Vector2> open = Utility.recursiveFindOpenTiles(loc, Game1.player.Tile, 2, 100);
+            if (open.Count < 2 || !loc.Objects.TryAdd(open[1], new Phone(Vector2.Zero)))
+            {
+                monitor.Log($"Could not find empty spot to place phone.");
+            }
+        }
+        if (call is null)
+        {
+            DeterministicRandom notActuallyRandom = new();
+            call = Phone.PhoneHandlers.Select(handler => handler.CheckForIncomingCall(notActuallyRandom)).FirstOrDefault();
+        }
+        if (call is not null)
+        {
+            monitor.Log($"Ringing phone for {call}.", LogLevel.Info);
+            Phone.intervalsToRing = 3;
+            Game1.player.team.ringPhoneEvent.Fire(call);
+        }
+        else
+        {
+            monitor.Log($"Could not find valid phone call?", LogLevel.Error);
+        }
+    }
+
     internal readonly void GetTrack()
     {
         if (Game1.currentSong is { } song)
@@ -102,4 +143,16 @@ internal struct SimpleConsoleCommand(IMonitor monitor)
         }
     }
 
+}
+
+/// <summary>
+/// A RNG that always returns 0.
+/// </summary>
+file sealed class DeterministicRandom : Random
+{
+    /// <summary>
+    /// Always returns 0.
+    /// </summary>
+    /// <returns>Returns 0.</returns>
+    public override double NextDouble() => 0;
 }

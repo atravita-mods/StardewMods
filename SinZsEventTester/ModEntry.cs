@@ -89,6 +89,11 @@ public sealed class ModEntry : Mod
                 this.evts.Clear();
             });
         helper.ConsoleCommands.Add(
+            "sinz.phone_call",
+            "calls the phone",
+            (_, args) => new SimpleConsoleCommand(this.Monitor).RingPhone(args.FirstOrDefault())
+            );
+        helper.ConsoleCommands.Add(
             "sinz.check_preconditions",
             "checks over all preconditions",
             (_, _) => new SimpleConsoleCommand(this.Monitor).CheckPreconditions());

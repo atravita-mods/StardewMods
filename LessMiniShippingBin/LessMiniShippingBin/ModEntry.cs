@@ -2,6 +2,7 @@
 using HarmonyLib;
 using StardewModdingAPI.Events;
 
+using AtraUtils = MiniAtraShared.Utils;
 
 namespace LessMiniShippingBin;
 

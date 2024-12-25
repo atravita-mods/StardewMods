@@ -9,12 +9,14 @@
     <Import_RootNamespace>MiniAtraShared</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)BaseMod.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)LogExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\BaseMod.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\LogExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\PredicateInterpolatedStringHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\SMAPIHelperExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Models\" />
+    <Folder Include="$(MSBuildThisFileDirectory)Extensions\" />
   </ItemGroup>
 </Project>

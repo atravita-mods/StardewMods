@@ -369,9 +369,9 @@ internal sealed class ModEntry : Mod
     private static int miraculousBeverages = -1;
 
     /// <summary>
-    /// Gets the integer ID of the miraculous beverages fertilizer. -1 if not found/not loaded...
+    /// Gets the id of the Miraculous Beverages Fertilizer.
     /// </summary>
-    internal static int MiraculousBeveragesID
+    internal static string MiraculousBeveragesID
     {
         get
         {

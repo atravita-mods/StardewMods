@@ -8,6 +8,8 @@ using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils;
 using AtraShared.Utils.Extensions;
 
+using MiniAtraShared.Extensions;
+
 using StardewModdingAPI.Events;
 
 namespace MoreFertilizers.Framework;

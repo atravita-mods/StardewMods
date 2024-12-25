@@ -1,27 +1,22 @@
 ﻿// Ignore Spelling: Api
 
 using System.Diagnostics;
-
-using AtraCore.Framework.Internal;
 using AtraCore.Utilities;
-
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
 using AtraShared.Integrations.Interfaces;
 using AtraShared.MigrationManager;
 using AtraShared.Utils.Extensions;
-
 using GrowableGiantCrops.Framework;
 using GrowableGiantCrops.Framework.Assets;
 using GrowableGiantCrops.Framework.InventoryModels;
 using GrowableGiantCrops.HarmonyPatches.Compat;
 using GrowableGiantCrops.HarmonyPatches.ItemPatches;
-
 using HarmonyLib;
-
+using MiniAtraShared.Extensions;
+using MiniAtraShared.Models;
 using StardewModdingAPI.Events;
-
-using AtraUtils = AtraShared.Utils.Utils;
+using AtraUtils = MiniAtraShared.Utils;
 
 namespace GrowableGiantCrops;
 

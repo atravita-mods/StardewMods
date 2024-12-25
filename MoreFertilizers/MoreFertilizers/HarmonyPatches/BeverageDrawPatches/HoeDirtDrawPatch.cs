@@ -1,12 +1,8 @@
 ﻿using AtraBase.Toolkit.Extensions;
-
 using AtraShared.ConstantsAndEnums;
-using AtraShared.Utils.Extensions;
-
 using HarmonyLib;
-
 using Microsoft.Xna.Framework;
-
+using MiniAtraShared.Extensions;
 using StardewValley.TerrainFeatures;
 
 namespace MoreFertilizers.HarmonyPatches.BeverageDrawPatches;
@@ -28,7 +24,7 @@ internal class HoeDirtDrawPatch
 
         try
         {
-            if (__instance.fertilizer.Value != -1 && __instance.fertilizer.Value == ModEntry.MiraculousBeveragesID && Random.Shared.RollDice(512))
+            if (__instance.fertilizer.Value == ModEntry.MiraculousBeveragesID && Random.Shared.RollDice(512))
             {
                 __instance.Location.TemporarySprites.Add(new TemporaryAnimatedSprite(
                     Game1.mouseCursorsName,

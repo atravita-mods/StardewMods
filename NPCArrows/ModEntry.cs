@@ -1,7 +1,9 @@
 ﻿namespace NPCArrows;
 
 using AtraCore.Framework.Caches;
-using AtraCore.Framework.Internal;
+
+using MiniAtraShared.Extensions;
+using MiniAtraShared.Models;
 
 using NPCArrows.Framework;
 using NPCArrows.Framework.Monitors;

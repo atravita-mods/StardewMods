@@ -1,6 +1,7 @@
 ﻿namespace MuseumRewardsIn;
 
-using AtraCore.Framework.Internal;
+using MiniAtraShared.Models;
+using MiniAtraShared.Extensions;
 
 using AtraShared.Integrations;
 using AtraShared.Utils.Extensions;
@@ -14,7 +15,7 @@ using StardewModdingAPI.Events;
 using StardewValley.Internal;
 using StardewValley.Locations;
 
-using AtraUtils = AtraShared.Utils.Utils;
+using AtraUtils = MiniAtraShared.Utils;
 
 /// <inheritdoc />
 internal sealed class ModEntry : BaseMod<ModEntry>

@@ -15,6 +15,8 @@ using StardewValley.GameData.Crops;
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 
+using MiniAtraShared.Extensions;
+
 namespace MoreFertilizers.Framework;
 
 /// <summary>

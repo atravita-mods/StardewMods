@@ -1,5 +1,4 @@
-﻿using AtraCore.Framework.Caches;
-using AtraCore.Framework.Internal;
+﻿using AtraCore.Framework.Caches
 using AtraCore.Utilities;
 
 using AtraShared.ConstantsAndEnums;
@@ -12,6 +11,9 @@ using AtraShared.Utils.Extensions;
 using HarmonyLib;
 
 using Microsoft.Xna.Framework;
+
+using MiniAtraShared.Models;
+
 
 using PamTries.Framework;
 
@@ -26,7 +28,7 @@ namespace PamTries;
 internal sealed class ModEntry : BaseMod<ModEntry>
 {
     private const string PAM_REHAB_EVENT = "99210002";
-    private static readonly string[] SyncedConversationTopics = new string[2] { "PamTriesRehab", "PamTriesRehabHoneymoon" };
+    private static readonly string[] SyncedConversationTopics = ["PamTriesRehab", "PamTriesRehabHoneymoon"];
     private static PamMood mood = PamMood.neutral;
 
     private Random? random;

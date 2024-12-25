@@ -1,6 +1,6 @@
 ﻿namespace StopRugRemoval.Framework.Niceties;
 
-using AtraShared.Utils.Extensions;
+using MiniAtraShared.Extensions;
 
 using StardewValley.Buildings;
 

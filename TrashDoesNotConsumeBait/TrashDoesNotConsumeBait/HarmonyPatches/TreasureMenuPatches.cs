@@ -1,10 +1,10 @@
 ﻿namespace TrashDoesNotConsumeBait.HarmonyPatches;
 
-using AtraShared.Utils.Extensions;
-
 using HarmonyLib;
 
 using Microsoft.Xna.Framework;
+
+using MiniAtraShared.Extensions;
 
 using StardewValley.Extensions;
 using StardewValley.ItemTypeDefinitions;

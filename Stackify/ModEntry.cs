@@ -1,30 +1,20 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
-
 using AtraCore.Framework.ReflectionManager;
-
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
-
 using HarmonyLib;
-
+using MiniAtraShared.Models;
 using Stackify.Framework;
-
 using StardewValley.Objects;
-
-using AtraUtils = AtraShared.Utils.Utils;
+using AtraUtils = MiniAtraShared.Utils;
 
 namespace Stackify;
 
 /// <inheritdoc />
-internal sealed class ModEntry : Mod
+internal sealed class ModEntry : BaseMod<ModEntry>
 {
-    /// <summary>
-    /// Gets the logger for this mod.
-    /// </summary>
-    internal static IMonitor ModMonitor { get; private set; } = null!;
-
     /// <summary>
     /// Gets the config instance for this mod.
     /// </summary>
@@ -34,10 +24,7 @@ internal sealed class ModEntry : Mod
     public override void Entry(IModHelper helper)
     {
         I18n.Init(helper.Translation);
-        ModMonitor = this.Monitor;
         Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
-
-        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
     }
 
     private static bool ShouldStackForQuality(SObject self, SObject other)
@@ -74,17 +61,17 @@ internal sealed class ModEntry : Mod
         try
         {
             ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);
-            helper.FindNext(new CodeInstructionWrapper[]
-            {
+            helper.FindNext(
+            [
                 OpCodes.Ldarg_0,
                 (OpCodes.Isinst, typeof(ColoredObject)),
                 (OpCodes.Ldfld, typeof(ColoredObject).GetCachedField(nameof(ColoredObject.color), ReflectionCache.FlagTypes.InstanceFlags)),
-            })
-            .FindPrev(new CodeInstructionWrapper[]
-            {
+            ])
+            .FindPrev(
+            [
                 OpCodes.Ldarg_0,
                 (OpCodes.Isinst, typeof(ColoredObject)),
-            });
+            ]);
             helper.Print();
             return helper.Render();
         }

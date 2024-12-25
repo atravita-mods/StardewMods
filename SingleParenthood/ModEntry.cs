@@ -3,13 +3,15 @@ using AtraShared.Integrations;
 using AtraShared.Integrations.Interfaces;
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
+using MiniAtraShared.Extensions;
+using MiniAtraShared.Models;
 using StardewModdingAPI.Events;
-using AtraUtils = AtraShared.Utils.Utils;
+using AtraUtils = MiniAtraShared.Utils;
 
 namespace SingleParenthood;
 
 /// <inheritdoc />
-internal sealed class ModEntry : Mod
+internal sealed class ModEntry : BaseMod<ModEntry>
 {
     internal const string CountUp = "atravita.SingleParenthood.CountUp";
     internal const string Type = "atravita.SingleParenthood.Type";
@@ -22,10 +24,6 @@ internal sealed class ModEntry : Mod
     /// </summary>
     internal static IPregnancyRoleApi? PregnancyRoleApi => pregancyRoleApi;
 
-    /// <summary>
-    /// Gets the logger for this mod.
-    /// </summary>
-    internal static IMonitor ModMonitor { get; private set; } = null!;
 
     /// <summary>
     /// Gets the input helper for this mod.
@@ -40,12 +38,10 @@ internal sealed class ModEntry : Mod
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
     {
+        base.Entry(helper);
         I18n.Init(helper.Translation);
-        ModMonitor = this.Monitor;
         InputHelper = this.Helper.Input;
         Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
-
-        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
 
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunch;
     }

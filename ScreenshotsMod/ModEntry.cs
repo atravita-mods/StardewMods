@@ -4,7 +4,8 @@ namespace ScreenshotsMod;
 
 using System;
 
-using AtraCore.Framework.Internal;
+using MiniAtraShared.Models;
+using MiniAtraShared.Extensions;
 
 using AtraShared.Integrations;
 using AtraShared.Utils.Extensions;
@@ -21,7 +22,7 @@ using StardewModdingAPI.Utilities;
 
 using StardewValley.Locations;
 
-using AtraUtils = AtraShared.Utils.Utils;
+using AtraUtils = MiniAtraShared.Utils;
 
 /// <inheritdoc />
 internal sealed class ModEntry : BaseMod<ModEntry>

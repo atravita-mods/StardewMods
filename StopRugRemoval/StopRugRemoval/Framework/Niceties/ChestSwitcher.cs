@@ -1,6 +1,6 @@
-﻿using AtraShared.Utils.Extensions;
+﻿using Microsoft.Xna.Framework;
 
-using Microsoft.Xna.Framework;
+using MiniAtraShared.Extensions;
 
 using StardewModdingAPI.Events;
 

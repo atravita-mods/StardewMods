@@ -3,18 +3,12 @@
 #define TRACELOG
 
 using System.Reflection;
-
 using AtraBase.Toolkit.Reflection;
-
 using AtraCore.Framework.ReflectionManager;
-
-using AtraShared.Utils.Extensions;
-
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-
+using MiniAtraShared.Extensions;
 using StardewModdingAPI.Events;
-
 using StardewValley.BellsAndWhistles;
 
 namespace ScreenshotsMod.Framework.Screenshotter;

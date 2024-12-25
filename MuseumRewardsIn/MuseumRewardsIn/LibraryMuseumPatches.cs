@@ -1,12 +1,10 @@
-﻿namespace MuseumRewardsIn;
-
-using AtraShared.Utils.Extensions;
-
+﻿using AtraShared.Utils.Extensions;
 using HarmonyLib;
-
+using MiniAtraShared.Extensions;
 using StardewModdingAPI.Events;
-
 using StardewValley.Locations;
+
+namespace MuseumRewardsIn;
 
 /// <summary>
 /// Holds patches against LibraryMuseum.

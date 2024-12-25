@@ -3,13 +3,14 @@
 using AtraBase.Toolkit;
 
 using AtraShared.ConstantsAndEnums;
-using AtraShared.Utils.Extensions;
 
 using HarmonyLib;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+
+using MiniAtraShared.Extensions;
 
 using SpecialOrdersExtended.Managers;
 

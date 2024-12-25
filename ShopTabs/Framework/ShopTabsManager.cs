@@ -4,6 +4,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
+using MiniAtraShared.Extensions;
+
 using StardewModdingAPI.Events;
 
 using StardewValley.Extensions;

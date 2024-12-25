@@ -12,6 +12,8 @@ using StardewModdingAPI.Events;
 using StardewValley.GameData.BigCraftables;
 using StardewValley.GameData.Machines;
 
+using MiniAtraShared.Extensions;
+
 #region models
 
 /// <summary>

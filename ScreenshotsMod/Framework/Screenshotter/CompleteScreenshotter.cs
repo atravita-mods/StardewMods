@@ -16,6 +16,8 @@ using CommunityToolkit.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using MiniAtraShared.Extensions;
+
 using MonoGame.OpenGL;
 
 using SkiaSharp;

@@ -22,6 +22,8 @@ using StardewValley.SpecialOrders;
 using AtraUtils = MiniAtraShared.Utils;
 using SharedUtils = AtraShared.Utils.Utils;
 
+using MiniAtraShared.Extensions;
+
 namespace SpecialOrdersExtended;
 
 /// <inheritdoc />

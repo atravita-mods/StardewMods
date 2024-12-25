@@ -7,12 +7,13 @@ using AtraBase.Toolkit.Reflection;
 
 using AtraCore.Framework.ReflectionManager;
 
-using AtraShared.Utils.Extensions;
 using AtraShared.Utils.Shims;
 
 using CommunityToolkit.Diagnostics;
 
 using Microsoft.Xna.Framework;
+
+using MiniAtraShared.Extensions;
 
 using StardewValley.GameData.GiantCrops;
 using StardewValley.Internal;
@@ -110,7 +111,7 @@ public sealed class TapGiantCrop : ITapGiantCropsAPI
         OverrideObject? @override = null;
         if (data?.HarvestItems is { } items)
         {
-            ItemQueryContext context = new(giantCrop.Location, Game1.player, Random.Shared);
+            ItemQueryContext context = new(giantCrop.Location, Game1.player, Random.Shared, $"{tapper.Name}-TapGiantCrop");
             foreach (GiantCropHarvestItemData? drop in items)
             {
                 // derived from GiantCrop.TryGetDrop

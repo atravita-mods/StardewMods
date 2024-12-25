@@ -7,6 +7,8 @@ using HarmonyLib;
 
 using Microsoft.Xna.Framework;
 
+using MiniAtraShared.Extensions;
+
 using MoreFertilizers.Framework;
 
 using StardewValley.TerrainFeatures;

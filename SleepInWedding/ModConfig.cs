@@ -25,10 +25,11 @@ internal sealed class ModConfig
     }
 
     /// <summary>
-    /// Gets or sets a value indicating whether or not we should try to
+    /// Gets a value indicating whether or not we should try to
     /// set the wedding on save load.
     /// </summary>
-    public bool TryRecoverWedding { get; set; } = true;
+    [Obsolete]
+    public bool TryRecoverWedding { get; private set; } = true;
 
     /// <summary>
     /// Gets or sets a value indicating whether or not the wedding should play when the player

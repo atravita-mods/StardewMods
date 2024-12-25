@@ -31,12 +31,15 @@ using StopRugRemoval.HarmonyPatches.Niceties;
 using StopRugRemoval.HarmonyPatches.Niceties.PhoneTiming;
 using StopRugRemoval.HarmonyPatches.Volcano;
 
-using AtraUtils = AtraShared.Utils.Utils;
+using AtraUtils = MiniAtraShared.Utils;
+
+using MiniAtraShared.Models;
+using MiniAtraShared.Extensions;
 
 /// <summary>
 /// Entry class to the mod.
 /// </summary>
-internal sealed class ModEntry : Mod
+internal sealed class ModEntry : BaseMod<ModEntry>
 {
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:Field names should begin with lower-case letter", Justification = "Reviewed.")]
     private static GMCMHelper? GMCM = null;
@@ -44,11 +47,6 @@ internal sealed class ModEntry : Mod
     private MigrationManager? migrator;
 
     #region accessors
-
-    /// <summary>
-    /// Gets the logger for this file.
-    /// </summary>
-    internal static IMonitor ModMonitor { get; private set; } = null!;
 
     /// <summary>
     /// Gets instance that holds the configuration for this mod.
@@ -80,9 +78,9 @@ internal sealed class ModEntry : Mod
     /// <inheritdoc/>
     public override void Entry(IModHelper helper)
     {
+        base.Entry(helper);
         I18n.Init(helper.Translation);
         AssetEditor.Initialize(helper.GameContent);
-        ModMonitor = this.Monitor;
         MultiplayerHelper = this.Helper.Multiplayer;
         InputHelper = this.Helper.Input;
         UNIQUEID = this.ModManifest.UniqueID;

@@ -6,6 +6,8 @@ using HarmonyLib;
 
 using SingleParenthood.Framework;
 
+using MiniAtraShared.Extensions;
+
 using StardewValley.Locations;
 
 namespace SingleParenthood.HarmonyPatches;

@@ -1,10 +1,7 @@
 ﻿using AtraShared.ConstantsAndEnums;
-using AtraShared.Utils.Extensions;
-
 using HarmonyLib;
-
+using MiniAtraShared.Extensions;
 using StardewValley.Objects;
-
 using StopRugRemoval.Configuration;
 
 namespace StopRugRemoval.HarmonyPatches.Niceties;
@@ -27,7 +24,7 @@ internal static class NapalmInSafeAreas
 
         try
         {
-            if (__instance.ParentSheetIndex == 811 && location.IsLocationConsideredSafe())
+            if (__instance.QualifiedItemId == "(O)811" && location.IsLocationConsideredSafe())
             {
                 return false;
             }

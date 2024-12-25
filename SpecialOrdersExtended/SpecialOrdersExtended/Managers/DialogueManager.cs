@@ -6,7 +6,8 @@ using AtraCore.Framework.DialogueManagement;
 
 using AtraShared;
 using AtraShared.ConstantsAndEnums;
-using AtraShared.Utils.Extensions;
+
+using MiniAtraShared.Extensions;
 
 using SpecialOrdersExtended.DataModels;
 

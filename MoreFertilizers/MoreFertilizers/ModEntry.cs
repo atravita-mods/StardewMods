@@ -20,6 +20,9 @@ using CommunityToolkit.Diagnostics;
 
 using HarmonyLib;
 
+using MiniAtraShared.Models;
+using MiniAtraShared.Extensions;
+
 using MoreFertilizers.DataModels.Legacy;
 using MoreFertilizers.Framework;
 using MoreFertilizers.HarmonyPatches;
@@ -35,12 +38,12 @@ using StardewModdingAPI.Events;
 
 using StardewValley.TerrainFeatures;
 
-using AtraUtils = AtraShared.Utils.Utils;
+using AtraUtils = MiniAtraShared.Utils;
 
 namespace MoreFertilizers;
 
 /// <inheritdoc />
-internal sealed class ModEntry : Mod
+internal sealed class ModEntry : BaseMod<ModEntry>
 {
     private const string SavedIDKey = "MFSavedObjectID";
 
@@ -437,11 +440,6 @@ internal sealed class ModEntry : Mod
      **************/
 
     /// <summary>
-    /// Gets the logger for this mod.
-    /// </summary>
-    internal static IMonitor ModMonitor { get; private set; } = null!;
-
-    /// <summary>
     /// Gets the multi-player gmcmHelper for this mod.
     /// </summary>
     internal static IMultiplayerHelper MultiplayerHelper { get; private set; } = null!;
@@ -469,18 +467,17 @@ internal sealed class ModEntry : Mod
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
     {
+        base.Entry(helper);
         I18n.Init(helper.Translation);
         AssetEditor.Initialize(helper.GameContent);
 
         MultiplayerHelper = helper.Multiplayer;
         ModContentHelper = helper.ModContent;
-        ModMonitor = this.Monitor;
         DIRPATH = helper.DirectoryPath;
         UNIQUEID = string.Intern(this.ModManifest.UniqueID);
         Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
 
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
-        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
 
 #if DEBUG
         helper.Events.Input.ButtonPressed += this.DebugOutput;

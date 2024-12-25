@@ -1,21 +1,17 @@
-﻿namespace TrashDoesNotConsumeBait;
-
-using System.Reflection;
-
-using AtraCore.Framework.Internal;
+﻿using System.Reflection;
 
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
 using AtraShared.MigrationManager;
 using AtraShared.Utils.Extensions;
-
 using HarmonyLib;
-
+using MiniAtraShared.Extensions;
+using MiniAtraShared.Models;
 using StardewModdingAPI.Events;
-
 using StardewValley.Tools;
+using AtraUtils = MiniAtraShared.Utils;
 
-using AtraUtils = AtraShared.Utils.Utils;
+namespace TrashDoesNotConsumeBait;
 
 /// <inheritdoc/>
 internal sealed class ModEntry : BaseMod<ModEntry>

@@ -15,6 +15,8 @@ using CommunityToolkit.Diagnostics;
 
 using HarmonyLib;
 
+using MiniAtraShared.Extensions;
+
 using Netcode;
 
 using StardewValley.Tools;

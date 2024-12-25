@@ -1,19 +1,14 @@
 ﻿// Ignore Spelling: Api
 
-using AtraCore.Framework.Internal;
-
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Menuing;
 using AtraShared.Utils.Extensions;
-
 using HarmonyLib;
-
 using Microsoft.Xna.Framework;
-
+using MiniAtraShared.Extensions;
+using MiniAtraShared.Models;
 using StardewModdingAPI.Events;
-
 using StardewValley.TerrainFeatures;
-
 using TapGiantCrops.Framework;
 
 namespace TapGiantCrops;

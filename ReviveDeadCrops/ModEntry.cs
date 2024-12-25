@@ -1,6 +1,7 @@
 ﻿// Ignore Spelling: Api
 
-using AtraCore.Framework.Internal;
+using MiniAtraShared.Models;
+using MiniAtraShared.Extensions;
 
 using AtraShared.Menuing;
 using AtraShared.Utils.Extensions;

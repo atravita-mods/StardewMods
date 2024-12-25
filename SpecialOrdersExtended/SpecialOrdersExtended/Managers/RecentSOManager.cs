@@ -1,7 +1,8 @@
 ﻿using AtraBase.Toolkit.Extensions;
 
 using AtraShared;
-using AtraShared.Utils.Extensions;
+
+using MiniAtraShared.Extensions;
 
 using SpecialOrdersExtended.DataModels;
 

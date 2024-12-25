@@ -5,19 +5,18 @@ using AtraShared.Utils.Extensions;
 
 using HarmonyLib;
 
+using MiniAtraShared.Extensions;
+using MiniAtraShared.Models;
+
 using StardewModdingAPI.Events;
 
-using AtraUtils = AtraShared.Utils.Utils;
+using AtraUtils = MiniAtraShared.Utils;
 
 namespace RelationshipsMatter;
 
 /// <inheritdoc/>
-internal sealed class ModEntry : Mod
+internal sealed class ModEntry : BaseMod<ModEntry>
 {
-    /// <summary>
-    /// Gets the logger for this mod.
-    /// </summary>
-    internal static IMonitor ModMonitor { get; private set; } = null!;
 
     /// <summary>
     /// Gets the config instance for this mod.
@@ -32,13 +31,11 @@ internal sealed class ModEntry : Mod
     /// <inheritdoc/>
     public override void Entry(IModHelper helper)
     {
-        ModMonitor = this.Monitor;
+        base.Entry(helper);
         I18n.Init(helper.Translation);
         RMUtils.Init(helper.GameContent);
         Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
         Scheduler = new(this.Monitor, this.Helper.Translation);
-
-        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
 
         helper.Events.GameLoop.GameLaunched += this.SetUpConfig;
         helper.Events.Content.AssetsInvalidated += (_, e) => RMUtils.Reset(e.NamesWithoutLocale);

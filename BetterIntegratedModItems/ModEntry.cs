@@ -1,6 +1,5 @@
 ﻿using AtraBase.Toolkit;
 
-using AtraCore.Framework.Internal;
 using AtraCore.Utilities;
 
 using AtraShared.ConstantsAndEnums;
@@ -14,11 +13,14 @@ using BetterIntegratedModItems.Framework.DataModels;
 
 using HarmonyLib;
 
+using MiniAtraShared.Extensions;
+using MiniAtraShared.Models;
+
 using StardewModdingAPI.Events;
 
 using StardewValley.Characters;
 
-using AtraUtils = AtraShared.Utils.Utils;
+using AtraUtils = MiniAtraShared.Utils;
 
 namespace BetterIntegratedModItems;
 
@@ -75,7 +77,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         GMCMHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
         if (helper.TryGetAPI())
         {
-            helper.Register(
+            _ = helper.Register(
                 reset: static () => Config = new(),
                 save: () => this.Helper.AsyncWriteConfig(this.Monitor, Config))
             .AddParagraph(I18n.ModDescription)

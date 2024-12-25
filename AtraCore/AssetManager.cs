@@ -7,10 +7,10 @@ using AtraCore.Framework.Models;
 using AtraCore.HarmonyPatches;
 using AtraCore.HarmonyPatches.MinorOptimizationPatches;
 
-using AtraShared.Utils.Extensions;
-
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+
+using MiniAtraShared.Extensions;
 
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;

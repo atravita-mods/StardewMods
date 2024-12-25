@@ -11,6 +11,8 @@ using AtraShared.Wrappers;
 
 using CommunityToolkit.Diagnostics;
 
+using MiniAtraShared.Extensions;
+
 using StardewValley.GameData.BigCraftables;
 using StardewValley.GameData.Objects;
 using StardewValley.GameData.Pants;

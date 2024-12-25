@@ -13,6 +13,8 @@ using HarmonyLib;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using MiniAtraShared.Extensions;
+
 using StardewModdingAPI.Utilities;
 
 using StardewValley.Inventories;

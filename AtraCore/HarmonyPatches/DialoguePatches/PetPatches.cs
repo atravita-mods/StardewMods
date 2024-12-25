@@ -1,8 +1,8 @@
 ﻿using AtraBase.Toolkit.Extensions;
 
-using AtraShared.Utils.Extensions;
-
 using HarmonyLib;
+
+using MiniAtraShared.Extensions;
 
 using StardewValley.Characters;
 using StardewValley.Objects;

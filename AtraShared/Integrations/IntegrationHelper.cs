@@ -8,6 +8,8 @@ using AtraShared.Utils.Extensions;
 
 using CommunityToolkit.Diagnostics;
 
+using MiniAtraShared.Extensions;
+
 namespace AtraShared.Integrations;
 
 /// <summary>

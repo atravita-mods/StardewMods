@@ -20,6 +20,8 @@ using FastExpressionCompiler.LightExpression;
 
 using HarmonyLib;
 
+using MiniAtraShared.Extensions;
+
 using StardewValley.Locations;
 
 namespace AtraShared.Utils.Shims;

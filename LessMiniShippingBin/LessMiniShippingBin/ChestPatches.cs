@@ -1,9 +1,9 @@
-﻿using AtraShared.Utils.Extensions;
-
-using HarmonyLib;
+﻿using HarmonyLib;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+
+using MiniAtraShared.Extensions;
 
 using StardewValley.Objects;
 
@@ -31,23 +31,21 @@ internal static class ChestPatches
     /// <param name="__instance">The chest to look at.</param>
     /// <param name="__result">The requested size of the chest.</param>
     [HarmonyPostfix]
+    [HarmonyPriority(Priority.HigherThanNormal)]
     [HarmonyPatch(nameof(Chest.GetActualCapacity))]
     private static void PostfixActualCapacity(Chest __instance, ref int __result)
     {
         try
         {
-            switch (__instance.SpecialChestType)
+            __result = __instance.SpecialChestType switch
             {
-                case Chest.SpecialChestTypes.MiniShippingBin:
-                    __result = ModEntry.Config.MiniShippingCapacity;
-                    break;
-                case Chest.SpecialChestTypes.JunimoChest:
-                    __result = ModEntry.Config.JuminoCapacity;
-                    break;
-                default:
-                    // do nothing.
-                    break;
-            }
+                Chest.SpecialChestTypes.MiniShippingBin => ModEntry.Config.MiniShippingCapacity,
+                // Chest.SpecialChestTypes.Enricher => 9,
+                Chest.SpecialChestTypes.JunimoChest => ModEntry.Config.JuminoCapacity,
+                Chest.SpecialChestTypes.BigChest => ModEntry.Config.BigChestCapacity,
+                Chest.SpecialChestTypes.None => ModEntry.Config.SmallChestCapacity,
+                _ => __result
+            };
         }
         catch (Exception ex)
         {

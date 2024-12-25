@@ -1,6 +1,6 @@
 ﻿//#define TRACELOG
 
-using AtraShared.Utils.Extensions;
+using MiniAtraShared.Extensions;
 
 using HarmonyLib;
 

@@ -5,7 +5,8 @@ using System.Runtime.CompilerServices;
 using AtraBase.Toolkit;
 using AtraBase.Toolkit.Extensions;
 
-using AtraCore.Framework.Internal;
+using MiniAtraShared.Models;
+using MiniAtraShared.Extensions;
 
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
@@ -25,7 +26,7 @@ using StardewModdingAPI.Utilities;
 
 using StardewValley.Menus;
 
-using AtraUtils = AtraShared.Utils.Utils;
+using AtraUtils =MiniAtraShared.Utils;
 
 namespace CameraPan;
 

@@ -5,6 +5,9 @@ using AtraShared.Utils.Extensions;
 using HarmonyLib;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+
+using MiniAtraShared.Extensions;
+
 using StardewModdingAPI.Events;
 
 namespace AtraCore.Framework.Caches.AssetCache;

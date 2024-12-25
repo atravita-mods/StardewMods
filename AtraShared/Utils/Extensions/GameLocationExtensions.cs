@@ -7,6 +7,8 @@ using CommunityToolkit.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 
+using MiniAtraShared.Extensions;
+
 using StardewValley.Locations;
 using StardewValley.Monsters;
 using StardewValley.Objects;

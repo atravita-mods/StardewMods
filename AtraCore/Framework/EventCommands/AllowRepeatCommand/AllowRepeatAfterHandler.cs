@@ -6,6 +6,8 @@ using AtraShared.Utils.Extensions;
 
 using CommunityToolkit.Diagnostics;
 
+using MiniAtraShared.Extensions;
+
 using StardewModdingAPI.Utilities;
 
 /// <summary>

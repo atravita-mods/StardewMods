@@ -19,6 +19,8 @@ using HarmonyLib;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using MiniAtraShared.Extensions;
+
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
 
@@ -67,7 +69,7 @@ internal static class ItemPatcher
 
     #region delegates
 
-    private static readonly Lazy<Func<Item, int>> _getDescriptionWidth = new(() => 
+    private static readonly Lazy<Func<Item, int>> _getDescriptionWidth = new(() =>
         typeof(Item).GetCachedMethod("getDescriptionWidth", ReflectionCache.FlagTypes.InstanceFlags)
                     .CreateDelegate<Func<Item, int>>());
     #endregion

@@ -5,6 +5,9 @@ using AtraShared.Integrations.Interfaces;
 using AtraShared.Niceties;
 using AtraShared.Utils.Extensions;
 using Microsoft.Xna.Framework;
+
+using MiniAtraShared.Extensions;
+
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 

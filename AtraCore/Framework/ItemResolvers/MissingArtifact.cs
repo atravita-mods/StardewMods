@@ -4,6 +4,8 @@ using AtraCore.HarmonyPatches.MuseumOverflow;
 
 using AtraShared.Utils.Extensions;
 
+using MiniAtraShared.Extensions;
+
 using StardewModdingAPI;
 
 using StardewValley;

@@ -1,4 +1,4 @@
-﻿namespace AtraShared.Utils.Extensions;
+﻿namespace MiniAtraShared.Extensions;
 
 /// <summary>
 /// Extension methods on SMAPI's helper class.

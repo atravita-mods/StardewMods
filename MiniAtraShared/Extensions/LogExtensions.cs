@@ -1,6 +1,6 @@
 ﻿// Ignore Spelling: pred
 
-namespace AtraShared.Utils.Extensions;
+namespace MiniAtraShared.Extensions;
 
 using System.Diagnostics;
 using System.Runtime.CompilerServices;

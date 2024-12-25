@@ -1,11 +1,12 @@
 ﻿using System.Collections.Concurrent;
 
 using AtraShared.Utils;
-using AtraShared.Utils.Extensions;
 
 using HarmonyLib;
 
 using Microsoft.Xna.Framework;
+
+using MiniAtraShared.Extensions;
 
 using StardewValley.GameData.BigCraftables;
 using StardewValley.GameData.Objects;

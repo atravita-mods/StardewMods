@@ -12,6 +12,8 @@ using AtraShared.Utils.Extensions;
 
 using Microsoft.Xna.Framework;
 
+using MiniAtraShared.Extensions;
+
 using StardewModdingAPI.Utilities;
 
 using StardewValley.Network;

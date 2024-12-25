@@ -2,28 +2,23 @@
 
 using AtraBase.Models.WeightedRandom;
 using AtraBase.Toolkit.Extensions;
-
 using AtraCore.Framework.Internal;
 using AtraCore.Framework.ItemManagement;
-
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
 using AtraShared.ItemManagement;
 using AtraShared.Utils;
 using AtraShared.Utils.Extensions;
-
 using CatGiftsRedux.Framework;
 using CatGiftsRedux.Framework.Pickers;
-
 using Microsoft.Xna.Framework;
-
+using MiniAtraShared.Extensions;
+using MiniAtraShared.Models;
 using StardewModdingAPI.Events;
-
 using StardewValley.Characters;
 using StardewValley.Extensions;
 using StardewValley.GameData.Objects;
-
-using AtraUtils = AtraShared.Utils.Utils;
+using AtraUtils = MiniAtraShared.Utils;
 using Utils = CatGiftsRedux.Framework.Utils;
 
 namespace CatGiftsRedux;

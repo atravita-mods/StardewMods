@@ -34,13 +34,16 @@ using AtraShared.Utils.Extensions;
 
 using HarmonyLib;
 
+using MiniAtraShared.Extensions;
+using MiniAtraShared.Models;
+
 using StardewModdingAPI.Events;
 
 using StardewValley.Delegates;
 using StardewValley.Internal;
 using StardewValley.Triggers;
 
-using AtraUtils = AtraShared.Utils.Utils;
+using AtraUtils = MiniAtraShared.Utils;
 
 namespace AtraCore;
 

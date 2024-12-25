@@ -1,20 +1,16 @@
 ﻿// Ignore Spelling: Api
 
-using AtraCore.Framework.Internal;
-
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
 using AtraShared.Utils.Extensions;
-
 using ExperimentalLagReduction.Framework;
 using ExperimentalLagReduction.HarmonyPatches;
-
 using HarmonyLib;
+using MiniAtraShared.Extensions;
+using MiniAtraShared.Models;
 using StardewModdingAPI.Events;
-
 using StardewValley.Pathfinding;
-
-using AtraUtils = AtraShared.Utils.Utils;
+using AtraUtils = MiniAtraShared.Utils;
 
 namespace ExperimentalLagReduction;
 

@@ -1,6 +1,6 @@
 ﻿namespace EasierDartPuzzle;
 
-using AtraCore.Framework.Internal;
+using MiniAtraShared.Models;
 
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
@@ -9,8 +9,8 @@ using AtraShared.Utils.Extensions;
 using HarmonyLib;
 
 using StardewModdingAPI.Events;
-
-using AtraUtils = AtraShared.Utils.Utils;
+using MiniAtraShared.Extensions;
+using AtraUtils = MiniAtraShared.Utils;
 
 /// <inheritdoc/>
 internal sealed class ModEntry : BaseMod<ModEntry>

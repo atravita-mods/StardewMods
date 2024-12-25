@@ -4,17 +4,12 @@
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
-
 using AtraBase.Collections;
 using AtraBase.Toolkit;
-
 using AtraShared.ConstantsAndEnums;
-using AtraShared.Utils.Extensions;
-
 using ExperimentalLagReduction.Framework;
-
 using HarmonyLib;
-
+using MiniAtraShared.Extensions;
 using StardewValley.GameData.Characters;
 using StardewValley.Locations;
 using StardewValley.Pathfinding;

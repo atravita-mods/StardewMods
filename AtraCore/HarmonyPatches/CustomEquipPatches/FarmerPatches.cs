@@ -7,6 +7,8 @@ using AtraShared.Utils.Extensions;
 
 using HarmonyLib;
 
+using MiniAtraShared.Extensions;
+
 using StardewValley.Monsters;
 using StardewValley.Objects;
 using StardewValley.Tools;

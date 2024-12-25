@@ -14,6 +14,8 @@ using CommunityToolkit.Diagnostics;
 
 using HarmonyLib;
 
+using MiniAtraShared.Extensions;
+
 namespace AtraCore.Framework.Harmonizer;
 public sealed class Harmonizer
 {

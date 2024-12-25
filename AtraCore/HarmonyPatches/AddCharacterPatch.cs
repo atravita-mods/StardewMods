@@ -6,6 +6,8 @@ using AtraShared.Utils.Extensions;
 
 using HarmonyLib;
 
+using MiniAtraShared.Extensions;
+
 using StardewValley.SaveMigrations;
 
 // [HarmonyPatch]

@@ -1,4 +1,4 @@
-﻿namespace AtraCore.Framework.Internal;
+﻿namespace MiniAtraShared.Models;
 
 // this little generic trickery means that each mod gets separate statics.
 

@@ -10,6 +10,8 @@ using AtraShared.Utils.Extensions;
 
 using HarmonyLib;
 
+using MiniAtraShared.Extensions;
+
 using StardewModdingAPI.Events;
 
 using StardewValley.Delegates;

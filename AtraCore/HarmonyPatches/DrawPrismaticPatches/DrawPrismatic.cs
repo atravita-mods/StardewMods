@@ -17,6 +17,8 @@ using HarmonyLib;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using MiniAtraShared.Extensions;
+
 using Netcode;
 
 using StardewValley.Objects;

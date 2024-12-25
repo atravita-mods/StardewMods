@@ -16,6 +16,8 @@ using CommunityToolkit.Diagnostics;
 
 using Microsoft.Xna.Framework;
 
+using MiniAtraShared.Extensions;
+
 using StardewModdingAPI.Utilities;
 
 namespace AtraShared.Integrations;

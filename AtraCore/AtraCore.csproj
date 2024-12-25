@@ -56,10 +56,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Pintail\Pintail\Pintail.csproj" private="true" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Update="JetBrains.Annotations" Version="2023.3.0" />
     <PackageReference Update="Leclair.Stardew.ModManifestBuilder" Version="2.1.0" />
   </ItemGroup>

@@ -169,7 +169,6 @@ internal static class IslandCaveWestDifficultyTranspiler
         return IslandWestCave1.PHASE_PLAY_SEQUENCE;
     }
 
-#pragma warning disable SA1116 // Split parameters should start on line after declaration. Reviewed.
     [HarmonyPatch(nameof(IslandWestCave1.UpdateWhenCurrentLocation))]
     private static IEnumerable<CodeInstruction>? Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
     {
@@ -196,7 +195,7 @@ internal static class IslandCaveWestDifficultyTranspiler
                 new (SpecialCodeInstructionCases.LdLoc),
                 new (OpCodes.Ldarg_0),
                 new (OpCodes.Ldfld, typeof(IslandWestCave1).GetCachedField(nameof(IslandWestCave1.currentDifficulty), ReflectionCache.FlagTypes.InstanceFlags)),
-                new (OpCodes.Call),
+                new (OpCodes.Callvirt),
                 new (OpCodes.Blt_S),
             ])
             .Advance(4)
@@ -242,7 +241,6 @@ internal static class IslandCaveWestDifficultyTranspiler
         }
         return null;
     }
-#pragma warning restore SA1116 // Split parameters should start on line after declaration
 
     [HarmonyPostfix]
     [HarmonyPatch(nameof(IslandWestCave1.performAction))]

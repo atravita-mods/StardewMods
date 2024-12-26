@@ -1,5 +1,7 @@
 ﻿using System.Diagnostics;
 
+using AtraShared.ConstantsAndEnums;
+
 using HarmonyLib;
 
 namespace StopRugRemoval.HarmonyPatches.Niceties.CrashHandling;
@@ -8,11 +10,12 @@ namespace StopRugRemoval.HarmonyPatches.Niceties.CrashHandling;
 /// Holds patches against dialogue for debugging only.
 /// </summary>
 [HarmonyPatch(typeof(Dialogue))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class DialoguePatcher
 {
     private static bool Prepare => ModEntry.ModMonitor.IsVerbose;
 
-    [HarmonyPatch(MethodType.Constructor, new[] { typeof(NPC), typeof(string), typeof(string) })]
+    [HarmonyPatch(MethodType.Constructor, [typeof(NPC), typeof(string), typeof(string)])]
     private static void Postfix(Dialogue __instance, string translationKey, string dialogueText)
     {
         if (string.IsNullOrWhiteSpace(translationKey) && string.IsNullOrWhiteSpace(dialogueText))

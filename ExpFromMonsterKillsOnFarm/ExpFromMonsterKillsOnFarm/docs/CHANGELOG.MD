@@ -1,6 +1,9 @@
 ﻿Changelog
 ===========
 
+### Version 0.4.0
+* Removed atracore dependency. Updated to 1.6. Please note that this mod was partially eaten by 1.6.
+
 ### Version 0.3.1
 * No new changes, just recompiled for a new version of atracore.
 

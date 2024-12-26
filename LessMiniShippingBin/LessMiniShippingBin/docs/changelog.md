@@ -1,6 +1,9 @@
 ﻿Changelog
 ===============
 
+### Version 0.4.0
+* Removed atracore dependency. Updated to 1.6. Added ability to change size of small or big chests as well.
+
 ### Version 0.3.3
 * Now option for drawing the first item in a fridge or chest over it.
 

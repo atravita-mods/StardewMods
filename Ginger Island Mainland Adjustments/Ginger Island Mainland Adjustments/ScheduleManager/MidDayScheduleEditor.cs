@@ -4,6 +4,9 @@ using AtraCore.Framework.Caches;
 
 using AtraShared.Utils.Extensions;
 using Microsoft.Xna.Framework;
+
+using MiniAtraShared.Extensions;
+
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
 

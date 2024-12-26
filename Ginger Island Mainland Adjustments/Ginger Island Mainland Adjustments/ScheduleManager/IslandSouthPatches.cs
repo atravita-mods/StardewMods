@@ -1,7 +1,7 @@
 ﻿using AtraBase.Toolkit;
 
 using AtraShared.ConstantsAndEnums;
-using AtraShared.Utils.Extensions;
+using MiniAtraShared.Extensions;
 
 using GingerIslandMainlandAdjustments.AssetManagers;
 using GingerIslandMainlandAdjustments.Configuration;

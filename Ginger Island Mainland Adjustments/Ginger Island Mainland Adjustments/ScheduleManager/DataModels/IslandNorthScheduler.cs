@@ -3,9 +3,10 @@
 using AtraBase.Toolkit.Extensions;
 
 using AtraShared.Schedules.DataModels;
-using AtraShared.Utils.Extensions;
 
 using GingerIslandMainlandAdjustments.CustomConsoleCommands;
+
+using MiniAtraShared.Extensions;
 
 using Microsoft.Xna.Framework;
 

@@ -25,6 +25,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ContentPacks Include="content-packs/[CP] More Fertilizers" Version="$(Version)" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Using Include="StardewValley" />
     <Using Include="StardewModdingAPI" />
     <Using Include="System.Diagnostics.CodeAnalysis" />
@@ -37,7 +41,6 @@
   <ItemGroup>
     <Folder Include="assets\" />
     <Folder Include="DataModels\ModModels\" />
-    <Folder Include="Legacy\" />
   </ItemGroup>
 
   <ItemGroup>

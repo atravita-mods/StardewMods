@@ -3,7 +3,7 @@
 /// <summary>
 /// Data model used to save the ID number, to protect against shuffling...
 /// </summary>
-public class MoreFertilizerIDs
+public sealed class MoreFertilizerIDs
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="MoreFertilizerIDs"/> class.

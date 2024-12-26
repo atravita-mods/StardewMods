@@ -181,7 +181,7 @@ internal sealed class GSQTester(IMonitor monitor, IReflectionHelper reflector, I
         {
             foreach (FieldInfo field in t.GetFields())
             {
-                if (field.Name == "ItemId" && field.FieldType == typeof(string))
+                if (field.Name is "ItemId" or "TradeItemId" && field.FieldType == typeof(string))
                 {
                     if (field.GetValue(data) is string itemID)
                     {
@@ -203,7 +203,7 @@ internal sealed class GSQTester(IMonitor monitor, IReflectionHelper reflector, I
 
             foreach (PropertyInfo prop in t.GetProperties())
             {
-                if (prop.Name == "ItemId" && prop.PropertyType == typeof(string))
+                if (prop.Name is "ItemId" or "TradeItemId" && prop.PropertyType == typeof(string))
                 {
                     if (prop.GetValue(data) is string itemID)
                     {

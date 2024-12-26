@@ -3,7 +3,7 @@
 using AtraCore.Framework.Caches;
 
 using AtraShared.Caching;
-using AtraShared.Utils.Extensions;
+using MiniAtraShared.Extensions;
 
 using Microsoft.Xna.Framework.Content;
 
@@ -35,7 +35,7 @@ internal static class AssetEditor
     private static readonly PerScreen<TickCache<bool>> HasSeenPamEvent = new(
         static () => new(() => Game1.player?.eventsSeen?.Contains(PAMEVENT) == true));
 
-    private static readonly HashSet<string> Failed = new();
+    private static readonly HashSet<string> Failed = [];
 
     /// <summary>
     /// The dialogue prefix.

@@ -592,7 +592,6 @@ internal sealed class ModEntry : BaseMod<ModEntry>
             {
                 this.Monitor.Log("Found either prismatic tools or radioactive tools. Applying compat patches", LogLevel.Info);
                 ExtendedToolsMods.ApplyPatches(harmony);
-                AddCrowsForExtendedToolsTranspiler.ApplyPatches(harmony);
             }
 
             if (this.Helper.ModRegistry.Get("spacechase0.TheftOfTheWinterStar") is IModInfo winterStar

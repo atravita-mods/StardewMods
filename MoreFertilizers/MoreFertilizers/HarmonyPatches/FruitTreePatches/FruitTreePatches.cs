@@ -1,9 +1,7 @@
 ﻿using AtraShared.Utils.Extensions;
-
 using HarmonyLib;
-
+using MiniAtraShared.Extensions;
 using MoreFertilizers.Framework;
-
 using StardewValley.TerrainFeatures;
 
 namespace MoreFertilizers.HarmonyPatches.FruitTreePatches;
@@ -16,7 +14,7 @@ internal static class FruitTreePatches
     private static void PostfixDayUpdate(FruitTree __instance)
     {
         if (!__instance.stump.Value && __instance.fruit.Count <= 0 && __instance.growthStage.Value == FruitTree.treeStage
-            && !__instance.GreenHouseTree
+            && !__instance.IgnoresSeasonsHere()
             && __instance.modData?.GetBool(CanPlaceHandler.EverlastingFruitTreeFertilizer) == true)
         {
             try

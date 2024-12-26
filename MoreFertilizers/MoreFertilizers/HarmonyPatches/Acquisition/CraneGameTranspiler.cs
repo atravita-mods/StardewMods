@@ -23,31 +23,17 @@ internal static class CraneGameTranspiler
     {
         if (Utility.hasFinishedJojaRoute())
         {
-            if (ModEntry.JojaFertilizerID != -1)
-            {
-                items.Add(new SObject(ModEntry.JojaFertilizerID, 5));
-            }
-            if (ModEntry.DeluxeJojaFertilizerID != -1)
-            {
-                items.Add(new SObject(ModEntry.DeluxeJojaFertilizerID, 5));
-            }
-            if (ModEntry.FruitTreeFertilizerID != -1)
-            {
-                items.Add(new SObject(ModEntry.FruitTreeFertilizerID, 5));
-            }
-            items.Add(new SObject(71, 1)); // Lewis's shorts.
+            items.Add(new SObject(ModEntry.JojaFertilizerID, 5));
+            items.Add(new SObject(ModEntry.DeluxeJojaFertilizerID, 5));
+            items.Add(new SObject(ModEntry.FruitTreeFertilizerID, 5));
+            items.Add(new SObject("71", 1)); // Lewis's shorts.
         }
         else
         {
-            if (ModEntry.SecretJojaFertilizerID != -1)
-            {
-                items.Add(new SObject(ModEntry.SecretJojaFertilizerID, 1));
-            }
+            items.Add(new SObject(ModEntry.SecretJojaFertilizerID, 1));
         }
-        if (ModEntry.MiraculousBeveragesID != -1)
-        {
-            items.Add(new SObject(ModEntry.MiraculousBeveragesID, 5));
-        }
+
+        items.Add(new SObject(ModEntry.MiraculousBeveragesID, 5));
     }
 
     private static void AddFertilizerToRewardsListThree(List<Item> items)
@@ -70,7 +56,7 @@ internal static class CraneGameTranspiler
         }
     }
 
-    [HarmonyPatch(MethodType.Constructor, new[] { typeof(CraneGame) })]
+    [HarmonyPatch(MethodType.Constructor, [typeof(CraneGame)])]
     private static IEnumerable<CodeInstruction>? Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
     {
         try

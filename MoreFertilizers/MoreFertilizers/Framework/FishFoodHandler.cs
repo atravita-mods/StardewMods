@@ -1,5 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
 using AtraShared.Utils.Extensions;
+using MiniAtraShared.Extensions;
 using StardewModdingAPI.Events;
 using StardewValley.Locations;
 

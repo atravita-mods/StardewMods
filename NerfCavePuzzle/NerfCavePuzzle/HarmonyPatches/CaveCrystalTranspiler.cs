@@ -8,6 +8,8 @@ using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
 using StardewValley.Locations;
+using MiniAtraShared.Extensions;
+
 
 namespace NerfCavePuzzle.HarmonyPatches;
 
@@ -48,18 +50,18 @@ internal static class CaveCrystalTranspiler
         try
         {
             ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);
-            helper.FindFirst(new CodeInstructionWrapper[]
-            {
+            helper.FindFirst(
+            [
                 new(OpCodes.Ldarg_0),
                 new(OpCodes.Ldc_R4, 1000f),
                 new(OpCodes.Stfld, typeof(IslandWestCave1).GetNestedType("CaveCrystal")?.GetCachedField("glowTimer", ReflectionCache.FlagTypes.InstanceFlags) ?? ReflectionThrowHelper.ThrowMethodNotFoundException<FieldInfo>("IslandWestCave1+CaveCrystal")),
-            })
+            ])
             .Advance(2)
-            .Insert(new CodeInstruction[]
-            {
+            .Insert(
+            [
                 new(OpCodes.Call, typeof(CaveCrystalTranspiler).GetCachedMethod(nameof(GetFlashScale), ReflectionCache.FlagTypes.StaticFlags)),
                 new(OpCodes.Mul),
-            });
+            ]);
             return helper.Render();
         }
         catch (Exception ex)
@@ -75,20 +77,19 @@ internal static class CaveCrystalTranspiler
         {
             ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);
             helper.ForEachMatch(
-                new CodeInstructionWrapper[]
-                {
+                [
                     new(OpCodes.Ldc_R4, 1000f),
                     new(OpCodes.Div),
                     new(OpCodes.Call, typeof(Utility).GetCachedMethod(nameof(Utility.Lerp), ReflectionCache.FlagTypes.StaticFlags)),
-                },
+                ],
                 transformer: static (helper) =>
                 {
                     helper.Advance(1)
-                        .Insert(new CodeInstruction[]
-                        {
+                        .Insert(
+                        [
                             new(OpCodes.Call, typeof(CaveCrystalTranspiler).GetCachedMethod(nameof(GetFlashScale), ReflectionCache.FlagTypes.StaticFlags)),
                             new(OpCodes.Mul),
-                        });
+                        ]);
                     return true;
                 });
             return helper.Render();

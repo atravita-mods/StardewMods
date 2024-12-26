@@ -3,6 +3,8 @@ using AtraShared.Utils.Extensions;
 
 using HarmonyLib;
 
+using MiniAtraShared.Extensions;
+
 using StardewValley.Objects;
 
 namespace MoreFertilizers.HarmonyPatches.Niceties;
@@ -24,7 +26,7 @@ internal static class ChestPatcher
             if (__instance.giftbox.Value && ModEntry.LuckyFertilizerID != -1 && Game1.player.modData?.GetBool(HasGottenLucky) != true)
             {
                 Game1.createMultipleObjectDebris(
-                    index: ModEntry.LuckyFertilizerID,
+                    id: ModEntry.LuckyFertilizerID,
                     xTile: (int)__instance.TileLocation.X,
                     yTile: (int)__instance.TileLocation.Y,
                     number: 5,

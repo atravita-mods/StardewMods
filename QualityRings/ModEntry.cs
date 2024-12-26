@@ -1,6 +1,6 @@
-﻿using AtraCore.Framework.Internal;
+﻿using AtraShared.Integrations;
 
-using AtraShared.Integrations;
+using MiniAtraShared.Models;
 
 using StardewModdingAPI.Events;
 

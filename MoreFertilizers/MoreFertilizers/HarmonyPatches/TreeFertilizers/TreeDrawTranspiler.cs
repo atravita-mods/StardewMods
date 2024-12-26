@@ -13,6 +13,8 @@ using HarmonyLib;
 
 using Microsoft.Xna.Framework;
 
+using MiniAtraShared.Extensions;
+
 using MoreFertilizers.Framework;
 
 using StardewValley.TerrainFeatures;
@@ -57,14 +59,14 @@ internal static class TreeDrawTranspiler
         try
         {
             ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);
-            helper.FindNext(new CodeInstructionWrapper[]
-            {
+            helper.FindNext(
+            [
                 OpCodes.Ldarg_0,
                 (OpCodes.Ldfld, typeof(Tree).GetCachedField(nameof(Tree.growthStage), ReflectionCache.FlagTypes.InstanceFlags)),
                 OpCodes.Call, // op_implicit
                 OpCodes.Ldc_I4_5,
                 OpCodes.Bge,
-            })
+            ])
             .Advance(4)
             .StoreBranchDest()
             .AdvanceToStoredLabel()
@@ -75,16 +77,16 @@ internal static class TreeDrawTranspiler
 
             for (int i = 0; i < 2; i++)
             {
-                helper.FindNext(new CodeInstructionWrapper[]
-                {
+                helper.FindNext(
+                [
                 (OpCodes.Call, typeof(Color).GetCachedProperty(nameof(Color.White), ReflectionCache.FlagTypes.StaticFlags).GetGetMethod()),
-                })
+                ])
                 .Advance(1)
-                .Insert(new CodeInstruction[]
-                {
+                .Insert(
+                [
                 new(OpCodes.Ldarg_0),
                 new(OpCodes.Call, typeof(TreeDrawTranspiler).GetCachedMethod(nameof(TreeDrawTranspiler.ReplaceColorIfNeeded), ReflectionCache.FlagTypes.StaticFlags)),
-                });
+                ]);
             }
 
             // helper.Print();

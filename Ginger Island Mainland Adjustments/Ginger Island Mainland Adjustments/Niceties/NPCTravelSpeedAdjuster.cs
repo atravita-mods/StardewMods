@@ -1,7 +1,7 @@
 ﻿namespace GingerIslandMainlandAdjustments.Niceties;
 
 using AtraShared.ConstantsAndEnums;
-using AtraShared.Utils.Extensions;
+using MiniAtraShared.Extensions;
 
 using HarmonyLib;
 

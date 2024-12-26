@@ -2,17 +2,13 @@
 using AtraShared.Menuing;
 using AtraShared.Utils;
 using AtraShared.Utils.Extensions;
-
 using HarmonyLib;
-
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-
+using MiniAtraShared.Extensions;
 using StardewModdingAPI.Utilities;
-
 using StardewValley.Objects;
 using StardewValley.Tools;
-
 using StopRugRemoval.Configuration;
 
 namespace StopRugRemoval.HarmonyPatches;
@@ -74,7 +70,7 @@ internal static class SObjectPatches
             if (__instance.IsSpawnedObject && ModEntry.Config.SaveBombedForage && ModEntry.Config.Enabled)
             {
                 __instance.Location.debris.Add(new Debris(__instance, __instance.TileLocation * 64));
-                ModEntry.ModMonitor.DebugOnlyLog(__instance.DisplayName + ' ' + __instance.TileLocation.ToString());
+                ModEntry.ModMonitor.DebugOnlyLog($"{__instance.DisplayName} {__instance.TileLocation}");
             }
         }
         catch (Exception ex)
@@ -143,15 +139,15 @@ internal static class SObjectPatches
                     }
                 }
 
-                Response[] responses = new[]
-                {
+                Response[] responses =
+                [
                     new Response("BombsYes", I18n.YesOne()).SetHotKey(Keys.Y),
                     new Response("BombsArea", I18n.YesArea()),
                     new Response("BombsNo", I18n.No()).SetHotKey(Keys.Escape),
-                };
+                ];
 
-                Action?[] actions = new[]
-                {
+                Action?[] actions =
+                [
                     () =>
                     {
                         if (Game1.player.ActiveObject.IsBomb())
@@ -169,7 +165,7 @@ internal static class SObjectPatches
                         }
                         GameLocationUtils.ExplodeBomb(Game1.player.currentLocation, __instance.ParentSheetIndex, loc, Game1.Multiplayer);
                     },
-                };
+                ];
 
                 __result = false;
 

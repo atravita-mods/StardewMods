@@ -5,6 +5,9 @@ using HarmonyLib;
 
 using StardewModdingAPI.Utilities;
 
+using MiniAtraShared.Extensions;
+
+
 namespace PamTries.HarmonyPatches;
 
 /// <summary>

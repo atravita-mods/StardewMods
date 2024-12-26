@@ -8,6 +8,9 @@ using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
+
+using MiniAtraShared.Extensions;
+
 using MoreFertilizers.Framework;
 using StardewValley.TerrainFeatures;
 
@@ -67,23 +70,23 @@ internal static class FruitTreeDrawTranspiler
         try
         {
             ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);
-            helper.FindNext(new CodeInstructionWrapper[]
-            {
+            helper.FindNext(
+            [
                 new(OpCodes.Ldarg_0),
                 new(OpCodes.Ldfld, typeof(FruitTree).GetCachedField(nameof(FruitTree.growthStage), ReflectionCache.FlagTypes.InstanceFlags)),
                 new(OpCodes.Call),
                 new(OpCodes.Ldc_I4_4),
-            })
-            .FindNext(new CodeInstructionWrapper[]
-            {
+            ])
+            .FindNext(
+            [
                 new(OpCodes.Call, typeof(Color).GetCachedProperty(nameof(Color.White), ReflectionCache.FlagTypes.StaticFlags).GetGetMethod()),
-            })
+            ])
             .Advance(1)
-            .Insert(new CodeInstruction[]
-            {
+            .Insert(
+            [
                 new(OpCodes.Ldarg_0),
-                new(OpCodes.Call, typeof(FruitTreeDrawTranspiler).GetCachedMethod(nameof(FruitTreeDrawTranspiler.ReplaceColorIfNeeded), ReflectionCache.FlagTypes.StaticFlags)),
-            });
+                new(OpCodes.Call, typeof(FruitTreeDrawTranspiler).GetCachedMethod(nameof(ReplaceColorIfNeeded), ReflectionCache.FlagTypes.StaticFlags)),
+            ]);
 
             // helper.Print();
             return helper.Render();

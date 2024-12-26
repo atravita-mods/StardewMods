@@ -146,7 +146,8 @@ public class ReviveDeadCropsApi : IReviveDeadCropsApi
             rotation: 0f,
             rotationChange: 0f)
         {
-            light = true,
+            lightId = $"{loc.NameOrUniqueName}_{tile.X}_{tile.Y}_{Random.Shared.Next()}",
+            lightRadius = 2,
         };
         Game1.Multiplayer.broadcastSprites(loc, tas);
     }

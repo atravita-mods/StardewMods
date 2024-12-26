@@ -8,6 +8,8 @@ using HarmonyLib;
 
 using Microsoft.Xna.Framework;
 
+using MiniAtraShared.Extensions;
+
 using StardewModdingAPI.Events;
 
 using StardewValley.Buildings;

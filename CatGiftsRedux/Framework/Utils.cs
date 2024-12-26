@@ -2,7 +2,8 @@
 
 using AtraShared.Caching;
 using AtraShared.Utils;
-using AtraShared.Utils.Extensions;
+using MiniAtraShared.Extensions;
+
 using AtraShared.Wrappers;
 
 using Microsoft.Xna.Framework;

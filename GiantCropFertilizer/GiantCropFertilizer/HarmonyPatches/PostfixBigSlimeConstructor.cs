@@ -3,7 +3,8 @@
 using AtraBase.Toolkit.Extensions;
 
 using AtraShared.ConstantsAndEnums;
-using AtraShared.Utils.Extensions;
+
+using MiniAtraShared.Extensions;
 
 using HarmonyLib;
 

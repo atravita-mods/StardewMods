@@ -10,6 +10,8 @@ using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
 
+using MiniAtraShared.Extensions;
+
 using StardewValley.Enchantments;
 using StardewValley.Tools;
 

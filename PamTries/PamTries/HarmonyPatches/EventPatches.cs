@@ -11,6 +11,8 @@ using AtraShared.Utils.HarmonyHelper;
 
 using HarmonyLib;
 
+using MiniAtraShared.Extensions;
+
 namespace PamTries.HarmonyPatches;
 
 /// <summary>

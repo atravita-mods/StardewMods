@@ -1,15 +1,11 @@
 ﻿using AtraShared.ConstantsAndEnums;
 using AtraShared.Niceties;
-using AtraShared.Utils.Extensions;
-
 using DresserMiniMenu.Framework.MiniFarmerMenuIcons;
-
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-
+using MiniAtraShared.Extensions;
 using StardewValley.Menus;
 using StardewValley.Objects;
-
 using AtraUtils = AtraShared.Utils.Utils;
 
 namespace DresserMiniMenu.Framework;

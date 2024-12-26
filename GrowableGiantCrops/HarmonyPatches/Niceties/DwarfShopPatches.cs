@@ -1,9 +1,11 @@
 ﻿using AtraShared.ConstantsAndEnums;
-using AtraShared.Utils.Extensions;
 
 using HarmonyLib;
 
 using Microsoft.Xna.Framework;
+
+using MiniAtraShared.Extensions;
+
 
 using StardewValley.Menus;
 
@@ -24,7 +26,7 @@ internal static class DwarfShopPatches
         {
             if (Game1.player.hasMagicInk)
             {
-                SObject boulder = new(Vector2.Zero, 78) { Fragility = SObject.fragility_Removable };
+                SObject boulder = new(Vector2.Zero, "78") { Fragility = SObject.fragility_Removable };
                 __result.TryAdd(boulder, new[] { 1000, ShopMenu.infiniteStock });
             }
         }

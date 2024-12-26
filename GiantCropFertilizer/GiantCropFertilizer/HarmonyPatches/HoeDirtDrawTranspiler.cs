@@ -44,21 +44,21 @@ internal static class HoeDirtDrawTranspiler
         try
         {
             ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);
-            helper.FindNext(new CodeInstructionWrapper[]
-            {
+            helper.FindNext(
+            [
                 OpCodes.Ldarg_0,
                 (OpCodes.Callvirt, typeof(HoeDirt).GetCachedMethod(nameof(HoeDirt.GetFertilizerSourceRect), ReflectionCache.FlagTypes.InstanceFlags)),
-            })
-            .FindNext(new CodeInstructionWrapper[]
-            {
+            ])
+            .FindNext(
+            [
                  new(OpCodes.Call, typeof(Color).GetCachedProperty(nameof(Color.White), ReflectionCache.FlagTypes.StaticFlags).GetGetMethod()),
-            })
+            ])
             .Advance(1)
-            .Insert(new CodeInstruction[]
-            {
+            .Insert(
+            [
                 new(OpCodes.Ldarg_0),
                 new(OpCodes.Call, typeof(HoeDirtDrawTranspiler).GetCachedMethod(nameof(ReplaceColor), ReflectionCache.FlagTypes.StaticFlags)),
-            });
+            ]);
 
             // helper.Print();
             return helper.Render();

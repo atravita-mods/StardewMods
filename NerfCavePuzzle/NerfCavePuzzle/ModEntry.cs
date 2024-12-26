@@ -1,18 +1,14 @@
-﻿using AtraCore.Framework.Internal;
-using AtraCore.Utilities;
-
+﻿using AtraCore.Utilities;
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
 using AtraShared.MigrationManager;
 using AtraShared.Utils.Extensions;
-
 using HarmonyLib;
-
+using MiniAtraShared.Extensions;
+using MiniAtraShared.Models;
 using NerfCavePuzzle.HarmonyPatches;
-
 using StardewModdingAPI.Events;
-
-using AtraUtils = AtraShared.Utils.Utils;
+using AtraUtils = MiniAtraShared.Utils;
 
 namespace NerfCavePuzzle;
 

@@ -1,22 +1,17 @@
 ﻿using AtraBase.Models.WeightedRandom;
 using AtraBase.Toolkit.Extensions;
-using AtraBase.Toolkit.StringHandler;
-
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
 using AtraShared.Integrations.Interfaces;
 using AtraShared.Utils;
 using AtraShared.Utils.Extensions;
 using AtraShared.Wrappers;
-
+using MiniAtraShared.Extensions;
 using StardewModdingAPI.Events;
-
 using StardewValley.GameData.Crops;
+using StardewValley.GameData.Objects;
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
-
-using MiniAtraShared.Extensions;
-using StardewValley.GameData.Objects;
 
 namespace MoreFertilizers.Framework;
 
@@ -104,10 +99,9 @@ internal static class RadioactiveFertilizerHandler
                 return true;
             }
 
-            string seasonstring = location.GetSeasonKey();
-            int season = Utility.getSeasonNumber(seasonstring);
+            var season = location.GetSeason();
 
-            if (season < 0 || season > 3)
+            if ((int)season < 0 || (int)season > 3)
             {
                 ModEntry.ModMonitor.Log("Season unrecognized, skipping");
                 return true;
@@ -117,7 +111,7 @@ internal static class RadioactiveFertilizerHandler
             {
                 if (terrain is HoeDirt dirt && dirt.fertilizer.Value == ModEntry.RadioactiveFertilizerID)
                 {
-                    ProcessRadioactiveFertilizer(dirt, bestfarmer, bestProfession, location, season, cropData, seasonstring);
+                    ProcessRadioactiveFertilizer(dirt, bestfarmer, bestProfession, location, cropData, season);
                 }
             }
 
@@ -125,7 +119,7 @@ internal static class RadioactiveFertilizerHandler
             {
                 if (obj is IndoorPot pot && pot.hoeDirt.Value is HoeDirt dirt && dirt.fertilizer.Value == ModEntry.RadioactiveFertilizerID)
                 {
-                    ProcessRadioactiveFertilizer(dirt, bestfarmer, bestProfession, location, season, cropData, seasonstring);
+                    ProcessRadioactiveFertilizer(dirt, bestfarmer, bestProfession, location, cropData, season);
                 }
             }
 
@@ -157,17 +151,17 @@ internal static class RadioactiveFertilizerHandler
         CropManagers[(int)season] ??= GeneratedWeightedList(season, cropData);
 
         WeightedManager<string>? manager = CropManagers[(int)season];
-        if (manager?.Count is null or 0 || !manager.GetValue(random).TryGetValue(out string? crop))
+        if (manager?.Count is null or 0 || !manager.GetValue(random).TryGetValue(out string? crop) || crop is null)
         {
             return;
         }
 
-        if (cropData.TryGetValue(crop, out var data)
+        if (cropData.TryGetValue(crop, out CropData? data)
             && (location.SeedsIgnoreSeasonsHere() || HasSufficientTimeToGrow(profession, crop, data, seasonEnum)))
         {
             ModEntry.ModMonitor.Log($"Replacing plant at {dirt.Tile} with {crop}.");
             dirt.destroyCrop(false);
-            dirt.plant(crop, farmer, false, location);
+            dirt.plant(crop, farmer, false);
             dirt.fertilizer.Value = null;
         }
     }
@@ -204,7 +198,7 @@ internal static class RadioactiveFertilizerHandler
                 continue;
             }
 
-            if (data.Seasons.Contains(season) && data.HarvestItemId is { } obj && Game1Wrappers.ObjectData.TryGetValue(obj, out ObjectData objData))
+            if (data.Seasons.Contains(season) && data.HarvestItemId is { } obj && Game1Wrappers.ObjectData.TryGetValue(obj, out ObjectData? objData))
             {
                 if (objData.Name.Contains("Qi", StringComparison.OrdinalIgnoreCase))
                 {
@@ -223,19 +217,10 @@ internal static class RadioactiveFertilizerHandler
     {
         if (api is null)
         {
-            int daysLeft = 28 - Game1.dayOfMonth;
-            foreach (SpanSplitEntry days in cropData.GetNthChunk('/', 0).StreamSplit(null, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
-            {
-                if (!int.TryParse(days, out int num) || num > daysLeft)
-                {
-                    return false;
-                }
-                daysLeft -= num;
-            }
-
-            return true;
+            int daysLeft = 28 - Game1.dayOfMonth - cropData.DaysInPhase.Sum();
+            return daysLeft > 0;
         }
-        else if (api.GetDays(profession, 0, cropId, season) > 28 - Game1.dayOfMonth)
+        else if (api.GetDays(profession, null, cropId, season) > 28 - Game1.dayOfMonth)
         {
             return false;
         }

@@ -5,6 +5,7 @@ using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
 using MoreFertilizers.Framework;
+using MiniAtraShared.Extensions;
 using Netcode;
 using StardewValley.Buildings;
 
@@ -41,11 +42,11 @@ internal static class FishPondDayUpdateTranspiler
         try
         {
             ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);
-            helper.FindNext(new CodeInstructionWrapper[]
-            {
+            helper.FindNext(
+            [
                 new(OpCodes.Newobj, typeof(Random).GetCachedConstructor(ReflectionCache.FlagTypes.InstanceFlags, new[] { typeof(int) })),
                 new(SpecialCodeInstructionCases.StLoc),
-            }).Advance(1);
+            ]).Advance(1);
 
             CodeInstruction? local = helper.CurrentInstruction.ToLdLoc();
 

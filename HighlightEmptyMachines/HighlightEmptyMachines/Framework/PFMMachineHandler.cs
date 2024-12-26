@@ -6,7 +6,9 @@ using AtraBase.Toolkit;
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
 using AtraShared.Integrations.Interfaces;
-using AtraShared.Utils.Extensions;
+
+using MiniAtraShared.Extensions;
+
 using StardewModdingAPI.Utilities;
 
 namespace HighlightEmptyMachines.Framework;

@@ -1,6 +1,6 @@
 ﻿namespace CritterRings.Framework.Managers;
 
-using AtraShared.Utils.Extensions;
+using MiniAtraShared.Extensions;
 
 using StardewModdingAPI.Events;
 

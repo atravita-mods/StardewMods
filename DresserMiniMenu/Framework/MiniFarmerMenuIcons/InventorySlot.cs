@@ -1,14 +1,11 @@
 ﻿// Ignore Spelling: Clickable
 
 using AtraShared.ConstantsAndEnums;
-using AtraShared.Utils.Extensions;
-
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-
+using MiniAtraShared.Extensions;
 using StardewValley.Menus;
-
-using AtraUtils = AtraShared.Utils.Utils;
+using AtraUtils = MiniAtraShared.Utils;
 
 namespace DresserMiniMenu.Framework.MiniFarmerMenuIcons;
 

@@ -1,9 +1,10 @@
 ﻿using AtraBase.Toolkit.Extensions;
 
 using AtraShared.Caching;
-using AtraShared.Utils.Extensions;
 
 using HarmonyLib;
+
+using MiniAtraShared.Extensions;
 
 using MoreFertilizers.Framework;
 
@@ -30,11 +31,11 @@ internal static class TravelingMerchantPatcher
 
             if (ModEntry.BountifulBushID != -1 && Game1.currentSeason is "spring" or "fall" && HasPlayerUnlockedBountiful.GetValue())
             {
-                __result.Add(new SObject(ModEntry.BountifulBushID, 1), new[] { 200, random.Next(1, 3) });
+                __result.Add(new SObject(ModEntry.BountifulBushID, 1), [200, random.Next(1, 3)]);
             }
             else if (ModEntry.WisdomFertilizerID != -1 && Game1.currentSeason is "summer" or "winter")
             {
-                __result.Add(new SObject(ModEntry.WisdomFertilizerID, 1), new[] { 100, random.Next(1, 3) });
+                __result.Add(new SObject(ModEntry.WisdomFertilizerID, 1), [100, random.Next(1, 3)]);
             }
         }
         catch (Exception ex)

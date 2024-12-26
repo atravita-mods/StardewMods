@@ -1,9 +1,9 @@
 ﻿using System.Runtime.CompilerServices;
 
-using AtraShared.Utils.Extensions;
-
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+
+using MiniAtraShared.Extensions;
 
 using StardewValley.Enchantments;
 using StardewValley.Menus;
@@ -25,7 +25,7 @@ internal sealed class ForgeSelectionMenu : IClickableMenu
     private readonly int inherentWidth;
 
     private readonly bool shouldShowTooltip;
-    private readonly List<BaseEnchantment> options = new();
+    private readonly List<BaseEnchantment> options;
 
     private ClickableTextureComponent backButton;
     private ClickableTextureComponent forwardButton;
@@ -66,7 +66,7 @@ internal sealed class ForgeSelectionMenu : IClickableMenu
     internal Tool Tool { get; init; }
 
     /// <summary>
-    /// Gets a value indicating whether whether or not this is an innate enchantment.
+    /// Gets a value indicating whether or not this is an innate enchantment.
     /// </summary>
     internal bool IsInnate { get; init; }
 

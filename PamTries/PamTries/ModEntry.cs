@@ -1,4 +1,4 @@
-﻿using AtraCore.Framework.Caches
+﻿using AtraCore.Framework.Caches;
 using AtraCore.Utilities;
 
 using AtraShared.ConstantsAndEnums;
@@ -13,7 +13,6 @@ using HarmonyLib;
 using Microsoft.Xna.Framework;
 
 using MiniAtraShared.Models;
-
 
 using PamTries.Framework;
 

@@ -1,9 +1,10 @@
 ﻿using AtraShared.ConstantsAndEnums;
-using AtraShared.Utils.Extensions;
 
 using HarmonyLib;
 
 using Microsoft.Xna.Framework;
+
+using MiniAtraShared.Extensions;
 
 using StardewValley.Locations;
 using StardewValley.Objects;

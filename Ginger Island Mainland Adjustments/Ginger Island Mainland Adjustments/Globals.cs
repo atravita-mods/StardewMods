@@ -2,7 +2,7 @@
 using AtraShared.Schedules;
 using GingerIslandMainlandAdjustments.Configuration;
 using GingerIslandMainlandAdjustments.CustomConsoleCommands;
-using AtraUtils = AtraShared.Utils.Utils;
+using AtraUtils = MiniAtraShared.Utils;
 
 namespace GingerIslandMainlandAdjustments;
 

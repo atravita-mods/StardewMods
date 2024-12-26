@@ -1,11 +1,12 @@
 ﻿using AtraBase.Toolkit.Extensions;
 
 using AtraShared.ConstantsAndEnums;
-using AtraShared.Utils.Extensions;
 
 using HarmonyLib;
 
 using Microsoft.Xna.Framework;
+
+using MiniAtraShared.Extensions;
 
 using StardewModdingAPI.Utilities;
 

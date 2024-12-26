@@ -1,7 +1,7 @@
 ﻿namespace GingerIslandMainlandAdjustments.Niceties;
 
 using AtraShared.ConstantsAndEnums;
-using AtraShared.Utils.Extensions;
+using MiniAtraShared.Extensions;
 
 using HarmonyLib;
 
@@ -14,7 +14,7 @@ using HarmonyLib;
 internal static class NPCSchedulePatches
 {
     [HarmonyPriority(Priority.Last)]
-    [HarmonyPatch(nameof(NPC.TryLoadSchedule), new Type[] { })]
+    [HarmonyPatch(nameof(NPC.TryLoadSchedule), [])]
     private static bool Prefix(NPC __instance, ref bool __result)
     {
         try

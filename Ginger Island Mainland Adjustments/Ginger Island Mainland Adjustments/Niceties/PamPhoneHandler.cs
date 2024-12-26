@@ -3,12 +3,14 @@
 using AtraCore.Framework.Caches;
 
 using AtraShared.Caching;
-using AtraShared.Utils.Extensions;
 
 using GingerIslandMainlandAdjustments.AssetManagers;
 using GingerIslandMainlandAdjustments.MultiplayerHandler;
 
 using Microsoft.Xna.Framework.Graphics;
+
+using MiniAtraShared.Extensions;
+
 
 using StardewValley.Objects;
 

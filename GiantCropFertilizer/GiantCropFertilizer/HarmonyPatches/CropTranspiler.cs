@@ -1,15 +1,11 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
-
 using AtraCore.Framework.ReflectionManager;
-
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
-
 using HarmonyLib;
-
 using Microsoft.Xna.Framework;
-
+using MiniAtraShared.Extensions;
 using StardewValley.Extensions;
 using StardewValley.GameData.GiantCrops;
 using StardewValley.TerrainFeatures;
@@ -58,39 +54,39 @@ internal static class CropTranspiler
         try
         {
             ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);
-            helper.FindNext(new CodeInstructionWrapper[]
-            { // random.NextBool(giantCrop.Chance);
+            helper.FindNext(
+            [ // random.NextBool(giantCrop.Chance);
                 SpecialCodeInstructionCases.LdLoc,
                 (OpCodes.Ldfld, typeof(GiantCropData).GetCachedField(nameof(GiantCropData.Chance), ReflectionCache.FlagTypes.InstanceFlags)),
                 new(OpCodes.Call, typeof(RandomExtensions).GetCachedMethod<Random, float>(nameof(RandomExtensions.NextBool), ReflectionCache.FlagTypes.StaticFlags)),
                 OpCodes.Brfalse,
-            })
+            ])
             .Advance(2)
-            .Insert(new CodeInstruction[]
-            { // And replace the hard-coded number if necessary.
+            .Insert(
+            [ // And replace the hard-coded number if necessary.
                 new(OpCodes.Ldarg_0),
                 new(OpCodes.Ldarg_0),
                 new(OpCodes.Ldfld, typeof(Crop).GetCachedField("tilePosition", ReflectionCache.FlagTypes.InstanceFlags)), // sigh, gotta get the tile position now.
                 new(OpCodes.Call, typeof(CropTranspiler).GetCachedMethod(nameof(GetChanceForFertilizer), ReflectionCache.FlagTypes.StaticFlags)),
-            })
-            .FindNext(new CodeInstructionWrapper[]
-            { // Locate the code that deletes the crop after a giant crop is created.
+            ])
+            .FindNext(
+            [ // Locate the code that deletes the crop after a giant crop is created.
                 SpecialCodeInstructionCases.LdLoc,
                 new(OpCodes.Ldfld, typeof(GameLocation).GetCachedField(nameof(GameLocation.terrainFeatures), ReflectionCache.FlagTypes.InstanceFlags)),
                 new(SpecialCodeInstructionCases.Wildcard),
                 new(OpCodes.Callvirt),
                 new(OpCodes.Castclass, typeof(HoeDirt)),
                 new(OpCodes.Ldnull),
-            })
-            .FindNext(new CodeInstructionWrapper[]
-            {
+            ])
+            .FindNext(
+            [
                 new(OpCodes.Ldnull),
-            })
-            .Insert(new CodeInstruction[]
-            { // Insert a call that removes the fertilizer as well.
+            ])
+            .Insert(
+            [ // Insert a call that removes the fertilizer as well.
                 new(OpCodes.Dup),
                 new(OpCodes.Call, typeof(CropTranspiler).GetCachedMethod(nameof(RemoveFertilizer), ReflectionCache.FlagTypes.StaticFlags)),
-            });
+            ]);
 
             // helper.Print();
             return helper.Render();

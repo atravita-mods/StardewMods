@@ -1,6 +1,5 @@
 ﻿namespace GingerIslandMainlandAdjustments;
 
-using AtraCore.Framework.Internal;
 using AtraCore.Utilities;
 
 using AtraShared.ConstantsAndEnums;
@@ -17,6 +16,9 @@ using GingerIslandMainlandAdjustments.Niceties;
 using GingerIslandMainlandAdjustments.ScheduleManager;
 
 using HarmonyLib;
+
+using MiniAtraShared.Extensions;
+using MiniAtraShared.Models;
 
 using StardewModdingAPI.Events;
 

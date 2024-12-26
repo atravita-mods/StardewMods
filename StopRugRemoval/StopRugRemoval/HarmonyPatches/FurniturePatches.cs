@@ -1,5 +1,4 @@
 ﻿using AtraShared.ConstantsAndEnums;
-using AtraShared.Utils.Extensions;
 
 using HarmonyLib;
 
@@ -11,11 +10,12 @@ using StardewValley.BellsAndWhistles;
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 
+using MiniAtraShared.Extensions;
+
 namespace StopRugRemoval.HarmonyPatches;
 
 /// <summary>
 /// Class to hold patches for the Furniture class, to allow me to place rugs under other furniture
-/// And to prevent me from removing rugs when I'm not supposed to....
 /// </summary>
 [HarmonyPatch(typeof(Furniture))]
 [SuppressMessage("StyleCop", "SA1313", Justification = StyleCopConstants.NamedForHarmony)]

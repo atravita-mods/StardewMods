@@ -13,6 +13,8 @@ using HarmonyLib;
 
 using Microsoft.Xna.Framework;
 
+using MiniAtraShared.Extensions;
+
 using StardewValley.Locations;
 
 namespace PamTries.HarmonyPatches;

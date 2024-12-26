@@ -11,6 +11,8 @@ using AtraShared.Utils.HarmonyHelper;
 
 using HarmonyLib;
 
+using MiniAtraShared.Extensions;
+
 namespace MoreFertilizers.HarmonyPatches.EverlastingFertilizer;
 
 /// <summary>
@@ -48,13 +50,13 @@ internal static class CropNewDayTranspiler
         try
         {
             ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);
-            helper.FindNext(new CodeInstructionWrapper[]
-            {
+            helper.FindNext(
+            [
                 new(SpecialCodeInstructionCases.LdArg, 5),
                 new(OpCodes.Ldfld, typeof(GameLocation).GetCachedField(nameof(GameLocation.isOutdoors), ReflectionCache.FlagTypes.InstanceFlags)),
                 new(OpCodes.Call), // this is an op_implicit
                 new(OpCodes.Brfalse_S),
-            })
+            ])
             .Push()
             .Advance(3)
             .StoreBranchDest()
@@ -62,12 +64,12 @@ internal static class CropNewDayTranspiler
             .DefineAndAttachLabel(out Label jumppoint)
             .Pop()
             .GetLabels(out IList<Label>? labels)
-            .Insert(new CodeInstruction[]
-            {
+            .Insert(
+            [
                 new(OpCodes.Ldarg_2), // fertilizer
                 new(OpCodes.Call, typeof(ModEntry).GetCachedProperty(nameof(ModEntry.EverlastingFertilizerID), ReflectionCache.FlagTypes.StaticFlags).GetGetMethod(true)),
                 new(OpCodes.Beq, jumppoint),
-            }, withLabels: labels);
+            ], withLabels: labels);
 
             // helper.Print();
             return helper.Render();

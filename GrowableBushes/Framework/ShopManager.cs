@@ -12,6 +12,8 @@ using HarmonyLib;
 
 using Microsoft.Xna.Framework;
 
+using MiniAtraShared.Extensions;
+
 using StardewModdingAPI.Events;
 
 using StardewValley.Menus;
@@ -178,7 +180,7 @@ internal static class ShopManager
             {
                 if (IslandUnlocked.GetValue())
                 {
-                    sellData = new[] { free ? 0 : 1_500 * ModEntry.Config.ShopCostScale, ShopMenu.infiniteStock };
+                    sellData = [free ? 0 : 1_500 * ModEntry.Config.ShopCostScale, ShopMenu.infiniteStock];
                 }
                 else
                 {
@@ -187,7 +189,7 @@ internal static class ShopManager
             }
             else if (bushIndex is BushSizes.Medium)
             {
-                sellData = new[] { free ? 0 : 1_000 * ModEntry.Config.ShopCostScale, ShopMenu.infiniteStock };
+                sellData = [free ? 0 : 1_000 * ModEntry.Config.ShopCostScale, ShopMenu.infiniteStock];
             }
             else
             {

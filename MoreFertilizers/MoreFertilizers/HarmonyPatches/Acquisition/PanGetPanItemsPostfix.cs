@@ -1,9 +1,11 @@
 ﻿using AtraBase.Toolkit.Extensions;
 
 using AtraShared.ConstantsAndEnums;
-using AtraShared.Utils.Extensions;
 
 using HarmonyLib;
+
+using MiniAtraShared.Extensions;
+
 using StardewValley.Locations;
 using StardewValley.Tools;
 

@@ -7,8 +7,8 @@ using AtraCore.Framework.ReflectionManager;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
+using MiniAtraShared.Extensions;
 using StardewModdingAPI.Events;
-
 using StardewValley.Extensions;
 using StardewValley.Locations;
 

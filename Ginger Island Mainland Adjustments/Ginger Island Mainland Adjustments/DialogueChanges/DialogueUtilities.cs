@@ -1,6 +1,9 @@
 ﻿using AtraShared.Utils.Extensions;
 using StardewModdingAPI.Utilities;
 
+using MiniAtraShared.Extensions;
+
+
 namespace GingerIslandMainlandAdjustments.DialogueChanges;
 
 /// <summary>

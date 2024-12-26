@@ -1,15 +1,10 @@
 ﻿using AtraBase.Toolkit.Extensions;
-
 using AtraShared.ConstantsAndEnums;
-using AtraShared.Utils.Extensions;
-
 using HarmonyLib;
-
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-
+using MiniAtraShared.Extensions;
 using MoreFertilizers.Framework;
-
 using StardewValley.TerrainFeatures;
 
 namespace MoreFertilizers.HarmonyPatches.BeverageDrawPatches;
@@ -21,7 +16,7 @@ namespace MoreFertilizers.HarmonyPatches.BeverageDrawPatches;
 [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class BushDrawPatch
 {
-    [HarmonyPatch(nameof(Bush.draw), new[] { typeof(SpriteBatch), typeof(Vector2) } )]
+    [HarmonyPatch(nameof(Bush.draw), [typeof(SpriteBatch), typeof(Vector2)] )]
     private static void Postfix(Bush __instance)
     {
         try

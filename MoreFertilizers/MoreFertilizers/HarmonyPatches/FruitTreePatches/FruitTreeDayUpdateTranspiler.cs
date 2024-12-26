@@ -10,6 +10,8 @@ using AtraShared.Utils.HarmonyHelper;
 
 using HarmonyLib;
 
+using MiniAtraShared.Extensions;
+
 using MoreFertilizers.Framework;
 
 using Netcode;
@@ -55,8 +57,8 @@ internal static class FruitTreeDayUpdateTranspiler
                 new (OpCodes.Call, typeof(FruitTree).GetCachedMethod(nameof(FruitTree.IsGrowthBlocked), ReflectionCache.FlagTypes.StaticFlags)),
                 new (SpecialCodeInstructionCases.StLoc),
             })
-            .FindNext(new CodeInstructionWrapper[]
-            {
+            .FindNext(
+            [
                 new (OpCodes.Ldarg_0),
                 new (OpCodes.Ldfld, typeof(FruitTree).GetCachedField(nameof(FruitTree.daysUntilMature), ReflectionCache.FlagTypes.InstanceFlags)),
                 new (OpCodes.Dup),
@@ -64,18 +66,18 @@ internal static class FruitTreeDayUpdateTranspiler
                 new (SpecialCodeInstructionCases.StLoc),
                 new (SpecialCodeInstructionCases.LdLoc),
                 new (OpCodes.Ldc_I4_1),
-            })
+            ])
             .FindNext(new CodeInstructionWrapper[]
             {
                 new (OpCodes.Ldc_I4_1),
             })
             .Advance(1)
-            .Insert(new CodeInstruction[]
-            {
+            .Insert(
+            [
                 new (OpCodes.Ldarg_0),
                 new (OpCodes.Call, typeof(FruitTreeDayUpdateTranspiler).GetCachedMethod(nameof(CalculateExtraGrowth), ReflectionCache.FlagTypes.StaticFlags)),
                 new (OpCodes.Add),
-            });
+            ]);
             return helper.Render();
         }
         catch (Exception ex)

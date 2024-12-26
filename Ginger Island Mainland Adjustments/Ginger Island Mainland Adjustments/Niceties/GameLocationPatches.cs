@@ -1,9 +1,10 @@
 ﻿namespace GingerIslandMainlandAdjustments.Niceties;
 
 using AtraShared.ConstantsAndEnums;
-using AtraShared.Utils.Extensions;
 
 using HarmonyLib;
+
+using MiniAtraShared.Extensions;
 
 using Microsoft.Xna.Framework;
 
@@ -22,7 +23,7 @@ internal class GameLocationPatches
     /// <param name="__instance">Gamelocation.</param>
     /// <returns>True to continue to original function, false to skip original function.</returns>
     [HarmonyPrefix]
-    [HarmonyPatch(nameof(GameLocation.characterTrampleTile), new Type[] { typeof(Vector2) })]
+    [HarmonyPatch(nameof(GameLocation.characterTrampleTile), [typeof(Vector2)])]
     private static bool PrefixCharacterTrample(GameLocation __instance)
     {
         try

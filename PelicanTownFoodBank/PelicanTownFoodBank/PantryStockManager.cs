@@ -14,13 +14,13 @@ namespace PelicanTownFoodBank;
 /// </summary>
 internal static class PantryStockManager
 {
-    private static readonly PerScreen<Lazy<List<int>>> PerScreenedSellables = new(() => new Lazy<List<string>>(SetUpInventory));
-    private static readonly PerScreen<HashSet<ISalable>> PerScreenedBuyBacks = new(() => new HashSet<ISalable>());
+    private static readonly PerScreen<Lazy<List<string>>> PerScreenedSellables = new(() => new Lazy<List<string>>(SetUpInventory));
+    private static readonly PerScreen<HashSet<ISalable>> PerScreenedBuyBacks = new(() => []);
 
     /// <summary>
-    /// Gets a list of integers that corresponds to the shop's stock.
+    /// Gets a list of ids that corresponds to the shop's stock.
     /// </summary>
-    internal static List<int> Sellables => PerScreenedSellables.Value.Value;
+    internal static List<string> Sellables => PerScreenedSellables.Value.Value;
 
     /// <summary>
     /// Gets a Dictionary consisting of the sold back objects and their quantities.

@@ -1,8 +1,8 @@
-﻿using AtraCore.Framework.Internal;
-
-using AtraShared.ConstantsAndEnums;
+﻿using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
+
+using MiniAtraShared.Models;
 
 namespace PrismaticClothing;
 

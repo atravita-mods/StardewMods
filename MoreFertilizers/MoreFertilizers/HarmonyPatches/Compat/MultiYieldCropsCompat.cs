@@ -11,6 +11,8 @@ using AtraShared.Utils.HarmonyHelper;
 
 using HarmonyLib;
 
+using MiniAtraShared.Extensions;
+
 using MoreFertilizers.Framework;
 
 using StardewValley.Characters;

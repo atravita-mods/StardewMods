@@ -4,7 +4,8 @@ using AtraBase.Toolkit.Extensions;
 
 using AtraShared.Integrations;
 using AtraShared.Integrations.Interfaces;
-using AtraShared.Utils.Extensions;
+
+using MiniAtraShared.Extensions;
 
 using StardewModdingAPI.Utilities;
 

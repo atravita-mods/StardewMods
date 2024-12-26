@@ -1,14 +1,10 @@
 ﻿using AtraBase.Toolkit.StringHandler;
-
 using AtraShared.Utils.Extensions;
-
 using Microsoft.Xna.Framework.Graphics;
-
+using MiniAtraShared.Extensions;
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
-
 using StardewValley.Enchantments;
-
 using AtraUtils = AtraShared.Utils.Utils;
 
 namespace ForgeMenuChoice;

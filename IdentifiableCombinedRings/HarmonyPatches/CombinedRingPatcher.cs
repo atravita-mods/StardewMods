@@ -1,19 +1,12 @@
 ﻿using System.Runtime.CompilerServices;
-
 using AtraBase.Toolkit;
-
 using AtraShared.ConstantsAndEnums;
-using AtraShared.Utils.Extensions;
-
 using HarmonyLib;
-
 using IdentifiableCombinedRings.Framework;
-
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-
+using MiniAtraShared.Extensions;
 using Netcode;
-
 using StardewValley.Objects;
 
 namespace IdentifiableCombinedRings.HarmonyPatches;
@@ -27,6 +20,7 @@ internal class CombinedRingPatcher
 {
     /// <inheritdoc cref="CombinedRing.drawInMenu(SpriteBatch, Vector2, float, float, float, StackDrawType, Color, bool)"/>
     /// <param name="__instance">Combined ring to check.</param>
+    /// <param name="spriteBatch">spritebatch to draw to.</param>
     [HarmonyPrefix]
     [HarmonyPriority(Priority.Low)]
     [MethodImpl(TKConstants.Hot)]

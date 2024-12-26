@@ -4,7 +4,9 @@ using AtraBase.Toolkit;
 using AtraCore.Framework.Caches;
 
 using AtraShared.Utils;
-using AtraShared.Utils.Extensions;
+
+using MiniAtraShared.Extensions;
+
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
 using StardewValley.Locations;
@@ -145,7 +147,7 @@ internal static class AssetLoader
     /// <exception cref="UnexpectedEnumValueException{SpecialGroupType}">Received an unexpected enum value.</exception>
     internal static Dictionary<string, HashSet<NPC>> GetCharacterGroup(SpecialGroupType specialGroupType)
     {
-        Dictionary<string, HashSet<NPC>> characterGroups = new();
+        Dictionary<string, HashSet<NPC>> characterGroups = [];
         string assetLocation = specialGroupType switch
         {
             SpecialGroupType.Explorers => ExplorerLocation,
@@ -159,7 +161,7 @@ internal static class AssetLoader
             {
                 continue;
             }
-            HashSet<NPC> group = new();
+            HashSet<NPC> group = [];
             foreach (string charname in data[groupname].Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
             {
                 if (NPCCache.GetByVillagerName(charname) is NPC npc)

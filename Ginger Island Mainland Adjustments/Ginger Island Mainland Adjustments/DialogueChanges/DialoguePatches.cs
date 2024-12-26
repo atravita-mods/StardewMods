@@ -7,6 +7,8 @@ using GingerIslandMainlandAdjustments.ScheduleManager;
 
 using HarmonyLib;
 
+using MiniAtraShared.Extensions;
+
 using StardewModdingAPI.Utilities;
 
 using StardewValley.Locations;
@@ -23,7 +25,7 @@ internal static class DialoguePatches
     private const string TOADVENTURE = "Resort_Adventure";
     private const string FROMADVENTURE = "Resort_AdventureReturn";
 
-    private static readonly PerScreen<HashSet<string>> TalkedToTodayPerScreen = new(createNewState: () => new HashSet<string>());
+    private static readonly PerScreen<HashSet<string>> TalkedToTodayPerScreen = new(createNewState: () => []);
 
     private static HashSet<string> TalkedToToday => TalkedToTodayPerScreen.Value;
 

@@ -1,10 +1,11 @@
 ﻿using AtraShared.ConstantsAndEnums;
-using AtraShared.Utils.Extensions;
 
 using HarmonyLib;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+
+using MiniAtraShared.Extensions;
 
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
@@ -23,7 +24,7 @@ namespace ForgeMenuChoice.HarmonyPatches;
 [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class ForgeMenuPatches
 {
-    private static readonly PerScreen<List<BaseEnchantment>> PossibleEnchantmentPerscreen = new(() => new());
+    private static readonly PerScreen<List<BaseEnchantment>> PossibleEnchantmentPerscreen = new(() => []);
     private static readonly PerScreen<ForgeSelectionMenu?> MenuPerscreen = new();
     private static readonly PerScreen<int> LastButtonPressTicks = new(() => 0);
 

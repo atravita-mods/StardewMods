@@ -12,13 +12,14 @@ using AtraCore.Framework.Caches;
 
 using AtraShared.Schedules.DataModels;
 using AtraShared.Utils;
-using AtraShared.Utils.Extensions;
 
 using GingerIslandMainlandAdjustments.AssetManagers;
 using GingerIslandMainlandAdjustments.CustomConsoleCommands;
 using GingerIslandMainlandAdjustments.ScheduleManager.DataModels;
 
 using Microsoft.Xna.Framework;
+
+using MiniAtraShared.Extensions;
 
 using StardewValley.Extensions;
 using StardewValley.Locations;
@@ -475,7 +476,7 @@ internal static class GIScheduler
         {
             sb.Clear();
 
-            if (Globals.Config.StageFarNpcsAtSaloon && visitor.getSpouse() is null)
+            if (Globals.Config.StageFarNpcsAtSaloon && visitor.getSpouse() is null && Game1.getLocationFromName(visitor.DefaultMap) is not FarmHouse)
             {
                 try
                 {

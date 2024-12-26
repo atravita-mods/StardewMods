@@ -1,6 +1,4 @@
-﻿
-
-using StardewModdingAPI.Events;
+﻿using StardewModdingAPI.Events;
 
 using StardewValley.GameData.SpecialOrders;
 

@@ -1,5 +1,6 @@
 ﻿using AtraShared.Schedules.DataModels;
-using AtraShared.Utils.Extensions;
+using MiniAtraShared.Extensions;
+
 using Microsoft.Xna.Framework;
 
 namespace GingerIslandMainlandAdjustments.ScheduleManager.DataModels;

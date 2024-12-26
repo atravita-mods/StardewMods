@@ -1,13 +1,9 @@
 ﻿using System.Reflection;
-
 using AtraBase.Toolkit.Reflection;
-
 using AtraCore.Framework.ReflectionManager;
-
 using AtraShared.ConstantsAndEnums;
-using AtraShared.Utils.Extensions;
-
 using HarmonyLib;
+using MiniAtraShared.Extensions;
 using StardewValley.Objects;
 
 namespace StopRugRemoval.HarmonyPatches.OutdoorRugsMostly;
@@ -28,7 +24,7 @@ internal static class CanPlantTreesHerePatches
     {
         foreach (Type type in typeof(GameLocation).GetAssignableTypes(publiconly: true, includeAbstract: false))
         {
-            if (type.GetCachedMethod(nameof(GameLocation.CanPlantTreesHere), ReflectionCache.FlagTypes.UnflattenedInstanceFlags, new Type[] { typeof(string), typeof(int), typeof(int), typeof(string).MakeByRefType() }) is MethodBase method
+            if (type.GetCachedMethod(nameof(GameLocation.CanPlantTreesHere), ReflectionCache.FlagTypes.UnflattenedInstanceFlags, [typeof(string), typeof(int), typeof(int), typeof(string).MakeByRefType()]) is MethodBase method
                 && method.DeclaringType == type)
             {
                 yield return method;

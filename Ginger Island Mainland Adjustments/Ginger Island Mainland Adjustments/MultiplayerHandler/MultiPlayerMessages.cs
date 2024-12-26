@@ -8,6 +8,8 @@ using GingerIslandMainlandAdjustments.AssetManagers;
 
 using HarmonyLib;
 
+using MiniAtraShared.Extensions;
+
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
 

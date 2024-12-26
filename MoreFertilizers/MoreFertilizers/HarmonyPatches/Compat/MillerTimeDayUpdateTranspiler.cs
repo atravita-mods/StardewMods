@@ -5,6 +5,9 @@ using AtraCore.Framework.ReflectionManager;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
+
+using MiniAtraShared.Extensions;
+
 using MoreFertilizers.HarmonyPatches.OrganicFertilizer;
 using Netcode;
 using StardewValley.Objects;
@@ -37,45 +40,43 @@ internal static class MillerTimeDayUpdateTranspiler
         }
     }
 
-#pragma warning disable SA1116 // Split parameters should start on line after declaration
     private static IEnumerable<CodeInstruction>? Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
     {
         try
         {
             ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);
             helper.DeclareLocal(typeof(Item), out LocalBuilder? inputlocal)
-            .FindNext(new CodeInstructionWrapper[]
-            { // Find the call to get_Item.
+            .FindNext(
+            [ // Find the call to get_Item.
                 new(OpCodes.Callvirt, typeof(NetFieldBase<Chest, NetRef<Chest>>).GetCachedProperty("Value", ReflectionCache.FlagTypes.InstanceFlags).GetGetMethod()),
                 new(OpCodes.Ldfld, typeof(Chest).GetCachedField(nameof(Chest.items), ReflectionCache.FlagTypes.InstanceFlags)),
                 new(SpecialCodeInstructionCases.LdLoc),
                 new(OpCodes.Callvirt, typeof(NetList<Item, NetRef<Item>>).GetCachedProperty("Item", ReflectionCache.FlagTypes.InstanceFlags).GetGetMethod()),
-            })
+            ])
             .Advance(4)
-            .Insert(new CodeInstruction[]
-            { // This is sufficiently annoying we're just going to create a local to store it.
-              // Bloody hoisted fields.
+            .Insert(
+            [ // This is sufficiently annoying we're just going to create a local to store it. Bloody hoisted fields.
                 new(OpCodes.Stloc, inputlocal),
                 new(OpCodes.Ldloc, inputlocal),
-            })
-            .FindNext(new CodeInstructionWrapper[]
-            { // find and store the output's local.
-                new(OpCodes.Newobj, typeof(SObject).GetCachedConstructor(ReflectionCache.FlagTypes.InstanceFlags, new[] { typeof(int), typeof(int), typeof(bool), typeof(int), typeof(int) })),
+            ])
+            .FindNext(
+            [ // find and store the output's local.
+                new(OpCodes.Newobj, typeof(SObject).GetCachedConstructor(ReflectionCache.FlagTypes.InstanceFlags, [typeof(int), typeof(int), typeof(bool), typeof(int), typeof(int)])),
                 new(SpecialCodeInstructionCases.StLoc),
-            }).Advance(1);
+            ]).Advance(1);
 
             CodeInstruction? stoutput = helper.CurrentInstruction.Clone();
             CodeInstruction? ldoutput = helper.CurrentInstruction.ToLdLoc();
 
             helper.Advance(1)
             .GetLabels(out IList<Label> labelsToMove, clear: true)
-            .Insert(new CodeInstruction[]
-            { // Place our function call here.
+            .Insert(
+            [ // Place our function call here.
                 new(OpCodes.Ldloc, inputlocal),
                 ldoutput,
                 new(OpCodes.Call, typeof(MillDayUpdateTranspiler).GetCachedMethod(nameof(MillDayUpdateTranspiler.MakeMillOutputOrganic), ReflectionCache.FlagTypes.StaticFlags)),
                 stoutput,
-            }, withLabels: labelsToMove);
+            ], withLabels: labelsToMove);
 
             // helper.Print();
             return helper.Render();
@@ -86,5 +87,4 @@ internal static class MillerTimeDayUpdateTranspiler
         }
         return null;
     }
-#pragma warning restore SA1116 // Split parameters should start on line after declaration
 }

@@ -12,6 +12,8 @@ using HarmonyLib;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using MiniAtraShared.Extensions;
+
 using StardewValley.TerrainFeatures;
 
 namespace MoreFertilizers.HarmonyPatches.Compat;
@@ -70,7 +72,7 @@ internal static class MultiFertilizerDrawTranspiler
                 spriteBatch.Draw(
                     texture: Game1.mouseCursors,
                     position: pos,
-                    sourceRectangle: dirt.GetFertilizerSourceRect(dirt.fertilizer.Value),
+                    sourceRectangle: dirt.GetFertilizerSourceRect(),
                     color: HoeDirtDrawTranspiler.GetColor(Color.White, dirt.fertilizer.Value),
                     rotation: 0f,
                     origin: Vector2.Zero,

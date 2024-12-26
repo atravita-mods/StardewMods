@@ -3,7 +3,7 @@ using AtraBase.Toolkit.Reflection;
 
 using AtraCore.Framework.ReflectionManager;
 
-using AtraShared.Utils.Extensions;
+using MiniAtraShared.Extensions;
 
 using Microsoft.Xna.Framework;
 
@@ -383,7 +383,8 @@ Continue: ;
                 rotation: 0f,
                 rotationChange: 0f)
             {
-                light = true,
+                lightId = $"Rabbit_{tile.X}_{tile.Y}_{Random.Shared.Next()}",
+                lightRadius = 2,
             };
             loc.temporarySprites.Add(tas);
         }

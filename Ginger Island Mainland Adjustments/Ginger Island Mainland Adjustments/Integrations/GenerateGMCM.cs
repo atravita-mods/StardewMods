@@ -3,8 +3,9 @@
 using AtraCore.Framework.Caches;
 
 using AtraShared.Integrations;
-using AtraShared.Utils.Extensions;
 using GingerIslandMainlandAdjustments.Configuration;
+
+using MiniAtraShared.Extensions;
 
 namespace GingerIslandMainlandAdjustments.Integrations;
 

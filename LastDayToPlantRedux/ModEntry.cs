@@ -1,20 +1,16 @@
 ﻿// Ignore Spelling: Api
 
-using AtraCore.Framework.Internal;
-
 using AtraShared.Integrations;
 using AtraShared.MigrationManager;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.Shims;
-
 using LastDayToPlantRedux.Framework;
-
+using MiniAtraShared.Extensions;
+using MiniAtraShared.Models;
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
-
 using StardewValley.Menus;
-
-using AtraUtils = AtraShared.Utils.Utils;
+using AtraUtils = MiniAtraShared.Utils;
 
 namespace LastDayToPlantRedux;
 

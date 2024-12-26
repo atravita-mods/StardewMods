@@ -21,7 +21,10 @@ using StardewValley.BellsAndWhistles;
 using StardewValley.Buffs;
 using StardewValley.Locations;
 
-using AtraUtils = AtraShared.Utils.Utils;
+using MiniAtraShared.Extensions;
+using MiniAtraShared.Models;
+
+using AtraUtils = MiniAtraShared.Utils;
 
 /// <inheritdoc />
 [HarmonyPatch]
@@ -57,7 +60,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
     internal static JumpManager? CurrentJumper => JumpManagers.Value;
     #endregion
 
-    #region ItemConsts
+    #region item constants
 
     /// <summary>
     /// The unique ID of this mod.

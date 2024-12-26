@@ -2,19 +2,15 @@
 using System.Diagnostics;
 #endif
 
-using AtraCore.Framework.Internal;
-
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
 using AtraShared.Utils.Extensions;
-
 using DresserMiniMenu.Framework;
-
 using HarmonyLib;
-
+using MiniAtraShared.Extensions;
+using MiniAtraShared.Models;
 using StardewModdingAPI.Events;
-
-using AtraUtils = AtraShared.Utils.Utils;
+using AtraUtils = MiniAtraShared.Utils;
 
 namespace DresserMiniMenu;
 

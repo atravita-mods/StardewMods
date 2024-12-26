@@ -4,7 +4,7 @@ using AtraBase.Toolkit.Extensions;
 
 using AtraCore.Framework.ReflectionManager;
 
-using AtraShared.Utils.Extensions;
+using MiniAtraShared.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
 

@@ -432,5 +432,6 @@ Global
 		AtraShared\AtraShared.projitems*{3b016280-a267-4c67-affe-999c2b25e527}*SharedItemsImports = 5
 		MiniAtraShared\MiniAtraShared.projitems*{3b016280-a267-4c67-affe-999c2b25e527}*SharedItemsImports = 5
 		AtraShared\AtraShared.projitems*{7119b285-0356-4ce5-adca-cc008e9315da}*SharedItemsImports = 13
+		MiniAtraShared\MiniAtraShared.projitems*{b4a3bb5f-f849-46cd-b673-461249466f78}*SharedItemsImports = 5
 	EndGlobalSection
 EndGlobal

@@ -1,7 +1,9 @@
 Farm Combat Grants XP Too
 ==========================
 
-In vanilla, when you kill a monster on the farm, you get no XP from it; nor does it count towards quests. This mod makes it so you do.
+This mod is mostly deprecated. In 1.6, monsters now award 1/3 of xp if killed on farm, and quests can allow monsters on farm to count.
+
+~~In vanilla, when you kill a monster on the farm, you get no XP from it; nor does it count towards quests. This mod makes it so you do.~~
 
 ![Shows XP gain from a kill of a dino on the farm.](docs/dinokill.gif)
 

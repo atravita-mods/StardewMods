@@ -18,6 +18,9 @@ using AtraShared.Wrappers;
 
 using Microsoft.Xna.Framework;
 
+using MiniAtraShared.Extensions;
+using MiniAtraShared.Models;
+
 using StardewModdingAPI.Events;
 
 using StardewValley.Extensions;
@@ -26,7 +29,8 @@ using StardewValley.Internal;
 using StardewValley.Locations;
 using StardewValley.TokenizableStrings;
 
-using AtraUtils = AtraShared.Utils.Utils;
+using AtraUtils = MiniAtraShared.Utils;
+using SharedUtils = AtraShared.Utils.Utils;
 using XLocation = xTile.Dimensions.Location;
 
 namespace FarmCaveSpawn;
@@ -367,7 +371,7 @@ END:
         }
         StringBuilder sb = StringBuilderCache.Acquire(fruitNames.Count * 6);
         sb.Append("Possible fruits: ");
-        sb.AppendJoin(", ", AtraUtils.ContextSort(fruitNames));
+        sb.AppendJoin(", ", SharedUtils.ContextSort(fruitNames));
         this.Monitor.Log(StringBuilderCache.GetStringAndRelease(sb), LogLevel.Info);
     }
 
@@ -495,7 +499,7 @@ END:
             return null;
         }
 
-        SObject? item = ItemQueryResolver.TryResolveRandomItem(data, new ItemQueryContext(Game1.getFarm(), null, null), avoidRepeat: false, null, null, null, delegate (string query, string error)
+        SObject? item = ItemQueryResolver.TryResolveRandomItem(data, new ItemQueryContext(Game1.getFarm(), null, null, "FarmCaveSpawn"), avoidRepeat: false, null, null, null, delegate (string query, string error)
         {
             this.Monitor.Log($"Failed parsing item query '{query}' for drop ID {data.Id}, skipping. Error '{error}'");
         }) as SObject;

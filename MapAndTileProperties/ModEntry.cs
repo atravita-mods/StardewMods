@@ -1,4 +1,5 @@
-﻿using AtraCore.Framework.Internal;
+﻿using MiniAtraShared.Extensions;
+using MiniAtraShared.Models;
 
 namespace MapAndTileProperties;
 

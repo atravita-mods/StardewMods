@@ -20,11 +20,11 @@ namespace MoreFertilizers.HarmonyPatches.BushFertilizers;
 [HarmonyPatch(typeof(Bush))]
 internal static class BushShakeTranspiler
 {
-    private static void GenerateBeverage(Bush bush, int index)
+    private static void GenerateBeverage(Bush bush, string index)
     {
         if (bush?.modData?.GetBool(CanPlaceHandler.MiraculousBeverages) == true && MiraculousFertilizerHandler.GetBeverage(index) is SObject output)
         {
-            Game1.createItemDebris(output, bush.tilePosition.Value * 64f, -1);
+            Game1.createItemDebris(output, bush.Tile * 64f, -1);
         }
     }
 
@@ -34,25 +34,28 @@ internal static class BushShakeTranspiler
         try
         {
             ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);
-            helper.FindNext(new CodeInstructionWrapper[]
-            {
+            helper.FindNext(
+            [
                 new(OpCodes.Ldstr, "spring"),
-            })
-            .FindNext(new CodeInstructionWrapper[]
-            { // if (shakeOff == -1)
+            ])
+            .FindNext(
+            [ // if (shakeOff == -1)
                 new(SpecialCodeInstructionCases.LdLoc),
                 new(OpCodes.Ldfld),
                 new(OpCodes.Ldc_I4_M1),
                 new(OpCodes.Beq),
-            })
+            ])
             .Copy(2, out IEnumerable<CodeInstruction>? copy)
             .GetLabels(out IList<Label> labels);
 
-            List<CodeInstruction> codes = new() { new(OpCodes.Ldarg_0) };
-            codes.AddRange(copy);
-            codes.Add(new(OpCodes.Call, typeof(BushShakeTranspiler).GetCachedMethod(nameof(GenerateBeverage), ReflectionCache.FlagTypes.StaticFlags)));
+            CodeInstruction[] codes =
+            [
+                new(OpCodes.Ldarg_0),
+                .. copy,
+                new(OpCodes.Call, typeof(BushShakeTranspiler).GetCachedMethod(nameof(GenerateBeverage), ReflectionCache.FlagTypes.StaticFlags)),
+            ];
 
-            helper.Insert(codes.ToArray(), labels);
+            helper.Insert(codes, labels);
 
             // helper.Print();
             return helper.Render();

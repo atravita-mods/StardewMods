@@ -16,6 +16,7 @@ using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 
 using MiniAtraShared.Extensions;
+using StardewValley.GameData.Objects;
 
 namespace MoreFertilizers.Framework;
 
@@ -24,7 +25,7 @@ namespace MoreFertilizers.Framework;
 /// </summary>
 internal static class RadioactiveFertilizerHandler
 {
-    private static readonly WeightedManager<int>?[] CropManagers = new WeightedManager<int>?[4];
+    private static readonly WeightedManager<string>?[] CropManagers = new WeightedManager<string>?[4];
 
     private static IAssetName crops = null!;
     private static IAssetName objects = null!;
@@ -134,7 +135,7 @@ internal static class RadioactiveFertilizerHandler
         random = null;
     }
 
-    private static void ProcessRadioactiveFertilizer(HoeDirt dirt, Farmer farmer, Profession profession, GameLocation location, int season, Dictionary<int, string> cropData, string seasonstring)
+    private static void ProcessRadioactiveFertilizer(HoeDirt dirt, Farmer farmer, Profession profession, GameLocation location, Dictionary<string, CropData> cropData, Season season)
     {
         if (dirt.crop is null || dirt.crop.dead.Value || dirt.crop.IsActuallyFullyGrown())
         {
@@ -149,24 +150,24 @@ internal static class RadioactiveFertilizerHandler
 
         if (location.SeedsIgnoreSeasonsHere())
         {
-            season = random.Next(4);
+            season = (Season)random.Next(4);
         }
 
-        StardewSeasons seasonEnum = SeasonExtensions.GetSeasonFromIndex(season);
-        CropManagers[season] ??= GeneratedWeightedList(seasonstring, cropData);
+        StardewSeasons seasonEnum = SeasonExtensions.ConvertFromGameSeason(season);
+        CropManagers[(int)season] ??= GeneratedWeightedList(season, cropData);
 
-        WeightedManager<int>? manager = CropManagers[season];
-        if (manager?.Count is null or 0 || !manager.GetValue(random).TryGetValue(out int crop))
+        WeightedManager<string>? manager = CropManagers[(int)season];
+        if (manager?.Count is null or 0 || !manager.GetValue(random).TryGetValue(out string? crop))
         {
             return;
         }
 
-        if (cropData.TryGetValue(crop, out string? data)
+        if (cropData.TryGetValue(crop, out var data)
             && (location.SeedsIgnoreSeasonsHere() || HasSufficientTimeToGrow(profession, crop, data, seasonEnum)))
         {
             ModEntry.ModMonitor.Log($"Replacing plant at {dirt.Tile} with {crop}.");
             dirt.destroyCrop(false);
-            dirt.plant(crop, (int)dirt.Tile.X, (int)dirt.Tile.Y, farmer, false, location);
+            dirt.plant(crop, farmer, false, location);
             dirt.fertilizer.Value = null;
         }
     }
@@ -184,13 +185,13 @@ internal static class RadioactiveFertilizerHandler
         return Profession.None;
     }
 
-    private static WeightedManager<int> GeneratedWeightedList(string season, Dictionary<string, string> cropData)
+    private static WeightedManager<string> GeneratedWeightedList(Season season, Dictionary<string, CropData> cropData)
     {
-        WeightedManager<int>? manager = new();
+        WeightedManager<string>? manager = new();
 
         HashSet<string> denylist = AssetEditor.GetRadioactiveExclusions();
 
-        foreach ((string id, string data) in cropData)
+        foreach ((string id, CropData data) in cropData)
         {
             if (id == "885" || denylist.Contains(id))
             {
@@ -198,22 +199,19 @@ internal static class RadioactiveFertilizerHandler
                 continue;
             }
 
-            if (ModEntry.Config.BanRaisedSeeds && bool.TryParse(data.GetNthChunk('/', 7), out bool raised) && raised)
+            if (ModEntry.Config.BanRaisedSeeds && data.IsRaised)
             {
                 continue;
             }
 
-            if (data.GetNthChunk('/', 1).Contains(season, StringComparison.OrdinalIgnoreCase)
-                && int.TryParse(data.GetNthChunk('/', 3), out int obj)
-                && Game1Wrappers.ObjectData.TryGetValue(obj, out StardewValley.GameData.Objects.ObjectData objData))
+            if (data.Seasons.Contains(season) && data.HarvestItemId is { } obj && Game1Wrappers.ObjectData.TryGetValue(obj, out ObjectData objData))
             {
-                ReadOnlySpan<char> name = objData.GetNthChunk('/', SObject.objectInfoNameIndex);
-                if (name.Contains("Qi", StringComparison.OrdinalIgnoreCase))
+                if (objData.Name.Contains("Qi", StringComparison.OrdinalIgnoreCase))
                 {
                     continue;
                 }
 
-                double weight = Math.Clamp(2500.0 / price, 1.0f, 1000f);
+                double weight = Math.Clamp(2500.0 / Math.Min(objData.Price, 1), 1.0f, 1000f);
                 manager.Add(weight, id);
             }
         }
@@ -221,7 +219,7 @@ internal static class RadioactiveFertilizerHandler
         return manager;
     }
 
-    private static bool HasSufficientTimeToGrow(Profession profession, int cropId, string cropData, StardewSeasons season)
+    private static bool HasSufficientTimeToGrow(Profession profession, string cropId, CropData cropData, StardewSeasons season)
     {
         if (api is null)
         {

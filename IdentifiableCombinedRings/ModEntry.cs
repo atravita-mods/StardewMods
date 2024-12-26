@@ -1,15 +1,12 @@
-﻿using AtraCore.Framework.Internal;
-
-using AtraShared.ConstantsAndEnums;
+﻿using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
 using AtraShared.Utils.Extensions;
-
 using HarmonyLib;
 using IdentifiableCombinedRings.Framework;
-
+using MiniAtraShared.Extensions;
+using MiniAtraShared.Models;
 using StardewModdingAPI.Events;
-
-using AtraUtils = AtraShared.Utils.Utils;
+using AtraUtils = MiniAtraShared.Utils;
 
 namespace IdentifiableCombinedRings;
 

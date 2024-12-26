@@ -1,13 +1,15 @@
 ﻿using AtraShared.Integrations;
-using AtraShared.Utils.Extensions;
 
 using FarmBuildingHelper.Framework;
+
+using MiniAtraShared.Extensions;
+using MiniAtraShared.Models;
 
 using StardewModdingAPI.Events;
 
 using StardewValley.Menus;
 
-using AtraUtils = AtraShared.Utils.Utils;
+using AtraUtils = MiniAtraShared.Utils;
 
 namespace FarmBuildingHelper;
 

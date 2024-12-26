@@ -1,4 +1,4 @@
-﻿using AtraShared.Utils.Extensions;
+﻿using MiniAtraShared.Extensions;
 
 using StardewValley.GameData.Shops;
 using StardewValley.Internal;

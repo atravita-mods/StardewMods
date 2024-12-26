@@ -49,7 +49,7 @@ internal static class BreakableContainerPostfix
             _ => ModEntry.FishFoodID, // should never happen.
         };
         Game1.createMultipleObjectDebris(
-            index: objectID,
+            id: objectID,
             xTile: (int)__instance.TileLocation.X,
             yTile: (int)__instance.TileLocation.Y,
             number: Random.Shared.Next(1, Math.Clamp(Game1.player.MiningLevel / 2, 2, 6)),

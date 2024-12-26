@@ -4,8 +4,6 @@
 using System.Diagnostics;
 #endif
 
-using AtraCore.Framework.Internal;
-
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
 using AtraShared.MigrationManager;
@@ -17,7 +15,10 @@ using HighlightEmptyMachines.Framework;
 
 using StardewModdingAPI.Events;
 
-using AtraUtils = AtraShared.Utils.Utils;
+using AtraUtils = MiniAtraShared.Utils;
+
+using MiniAtraShared.Models;
+using MiniAtraShared.Extensions;
 
 /// <inheritdoc />
 internal sealed class ModEntry : BaseMod<ModEntry>

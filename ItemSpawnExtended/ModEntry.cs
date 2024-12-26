@@ -1,6 +1,6 @@
 ﻿namespace ItemSpawnExtended;
 
-using AtraCore.Framework.Internal;
+using MiniAtraShared.Models;
 
 using StardewModdingAPI;
 

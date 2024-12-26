@@ -15,6 +15,8 @@ using HarmonyLib;
 
 using Microsoft.Xna.Framework;
 
+using MiniAtraShared.Extensions;
+
 namespace FixPigRandom;
 
 /// <inheritdoc />

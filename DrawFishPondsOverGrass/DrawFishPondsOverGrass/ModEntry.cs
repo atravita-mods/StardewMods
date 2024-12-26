@@ -1,8 +1,8 @@
-﻿using AtraCore.Framework.Internal;
-
-using AtraShared.ConstantsAndEnums;
+﻿using AtraShared.ConstantsAndEnums;
 
 using HarmonyLib;
+
+using MiniAtraShared.Models;
 
 namespace DrawFishPondsOverGrass;
 

@@ -39,7 +39,6 @@
         "haley",
         "HaleyHouse",
         "harvey",
-        "harvey",
         "Hmmm",
         "i18n",
         "IncomingPhoneCalls",
@@ -91,7 +90,6 @@
         "ToolsShop",
         "toolsShop2",
         "ToolsShop2",
-        "ToolsShop2",
         "TriggerActions",
         "TriggerCondition",
         "TwoMonthsya",
@@ -106,5 +104,9 @@
         "zoo2",
         "Zoo2",
         "Zuzu",
+        "AddConverstionTopic",
+        "SpamMailSpacer",
+        "JojaPlantBased",
+        "qiChallengeComplete"
     ]
 }

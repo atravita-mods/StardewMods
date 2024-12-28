@@ -1,7 +1,6 @@
-﻿using System.Text.RegularExpressions;
-using System.Reflection;
+﻿using System.Reflection;
+using System.Text.RegularExpressions;
 using Netcode;
-using System.Linq;
 
 namespace SinZsEventTester.Framework.BulkRemoveCommand;
 internal struct BulkAddRemoveCommand(IMonitor monitor)
@@ -24,7 +23,7 @@ internal struct BulkAddRemoveCommand(IMonitor monitor)
     {
         [GameDataType.Crafting] = (re, farmer) =>
         {
-            foreach (var k in DataLoader.CraftingRecipes(Game1.content).Keys.Where(k => re.IsMatch(k)))
+            foreach (string? k in DataLoader.CraftingRecipes(Game1.content).Keys.Where(k => re.IsMatch(k)))
             {
                 farmer.craftingRecipes.TryAdd(k, 0);
             }
@@ -32,7 +31,7 @@ internal struct BulkAddRemoveCommand(IMonitor monitor)
 
         [GameDataType.Cooking] = (re, farmer) =>
         {
-            foreach (var k in DataLoader.CookingRecipes(Game1.content).Keys.Where(k => re.IsMatch(k)))
+            foreach (string? k in DataLoader.CookingRecipes(Game1.content).Keys.Where(k => re.IsMatch(k)))
             {
                 farmer.cookingRecipes.TryAdd(k, 0);
             }
@@ -68,7 +67,7 @@ internal struct BulkAddRemoveCommand(IMonitor monitor)
 
     internal void Add(string[] args)
     {
-        if (!ArgUtility.TryGetEnum<GameDataType>(args, 0, out GameDataType value, out string? error))
+        if (!ArgUtility.TryGetEnum(args, 0, out GameDataType value, out string? error))
         {
             monitor.Log(error, LogLevel.Warn);
             return;
@@ -89,7 +88,7 @@ internal struct BulkAddRemoveCommand(IMonitor monitor)
 
     internal void Remove(string[] args)
     {
-        if (!ArgUtility.TryGetEnum<GameDataType>(args, 0, out GameDataType value, out string? error))
+        if (!ArgUtility.TryGetEnum(args, 0, out GameDataType value, out string? error))
         {
             monitor.Log(error, LogLevel.Warn);
             return;

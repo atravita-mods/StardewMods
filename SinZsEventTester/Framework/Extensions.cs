@@ -2,7 +2,7 @@
 using StardewValley.Menus;
 
 /// <summary>
-/// The extension methods for this mod
+/// The extension methods for this mod.
 /// </summary>
 internal static class Extensions
 {
@@ -31,7 +31,7 @@ internal static class Extensions
 
                 // else, we've run out of entries
                 // and return an empty span to mark as failure.
-                return ReadOnlySpan<char>.Empty;
+                return [];
             }
 
             if (index > -1)

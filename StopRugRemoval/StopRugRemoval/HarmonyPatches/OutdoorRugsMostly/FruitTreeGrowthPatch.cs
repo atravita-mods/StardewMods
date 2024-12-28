@@ -5,6 +5,9 @@ using AtraCore.Framework.ReflectionManager;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
+
+using Microsoft.Xna.Framework;
+
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 
@@ -17,9 +20,9 @@ namespace StopRugRemoval.HarmonyPatches.OutdoorRugsMostly;
 internal static class FruitTreeGrowthPatch
 {
     /***************************************************
-    * Removing rugs from the possible check list.
-    * Original method: if (o == null) { return true;}
-    * New methods: if (o == null || (o is Furniture f && f.furniture_type.Value == Furniture.rug)) { return true;}
+    * Removing rugs from the possible check list by
+    * adding CollisionMask.Furniture to the IgnorePassables
+    * of environment.IsTileOccupiedBy
     ****************************************************/
 
     [HarmonyPatch(nameof(FruitTree.IsGrowthBlocked))]
@@ -30,20 +33,13 @@ internal static class FruitTreeGrowthPatch
             ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);
             helper.FindLast(
                     [
-                    new (OpCodes.Ldc_I4_0),
-                    new (OpCodes.Callvirt, typeof(GameLocation).GetCachedMethod<int, int, bool>(nameof(GameLocation.getObjectAtTile), ReflectionCache.FlagTypes.InstanceFlags)),
+                    (OpCodes.Ldc_I4, 153),
+                    OpCodes.Ldc_I4_0,
+                    OpCodes.Ldc_I4_0,
+                    (OpCodes.Callvirt, typeof(GameLocation).GetCachedMethod<Vector2, CollisionMask, CollisionMask, bool>(nameof(GameLocation.IsTileOccupiedBy), ReflectionCache.FlagTypes.InstanceFlags)),
                     ])
-                .FindNext(
-                    [
-                    new (SpecialCodeInstructionCases.StLoc, typeof(SObject)),
-                    new (SpecialCodeInstructionCases.LdLoc, typeof(SObject)),
-                    new (OpCodes.Brfalse_S),
-                    ])
-                .Advance(2)
-                .Insert(
-                    [
-                    new (OpCodes.Call, typeof(FruitTreeGrowthPatch).StaticMethodNamed(nameof(IsNotRugOrNull))),
-                    ]);
+            .Advance(1)
+            .ReplaceInstruction(new(OpCodes.Ldc_I4, (int)CollisionMask.Furniture));
             return helper.Render();
         }
         catch (Exception ex)
@@ -52,7 +48,4 @@ internal static class FruitTreeGrowthPatch
         }
         return null;
     }
-
-    private static bool IsNotRugOrNull(SObject? obj)
-        => obj is not null && (obj is not Furniture f || f.furniture_type.Value != Furniture.rug);
 }

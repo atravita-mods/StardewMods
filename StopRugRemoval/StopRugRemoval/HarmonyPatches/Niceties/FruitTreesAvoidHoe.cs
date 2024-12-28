@@ -35,7 +35,7 @@ internal static class FruitTreesAvoidHoe
             [
                 new(OpCodes.Brtrue_S),
                 new(OpCodes.Ldarg_1),
-                new(OpCodes.Callvirt, typeof(Tool).GetCachedProperty(nameof(Tool.BaseName), ReflectionCache.FlagTypes.InstanceFlags).GetGetMethod()),
+                new(OpCodes.Callvirt, typeof(Item).GetCachedProperty(nameof(Item.Name), ReflectionCache.FlagTypes.InstanceFlags).GetGetMethod()),
                 new(OpCodes.Ldstr, "Hoe"),
                 new(OpCodes.Callvirt, typeof(string).GetCachedMethod<string>(nameof(string.Contains), ReflectionCache.FlagTypes.InstanceFlags)),
                 new(OpCodes.Brfalse),

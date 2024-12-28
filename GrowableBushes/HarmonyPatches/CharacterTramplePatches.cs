@@ -3,11 +3,12 @@
 using AtraBase.Toolkit;
 
 using AtraShared.ConstantsAndEnums;
-using AtraShared.Utils.Extensions;
 using GrowableBushes.Framework.Items;
 using HarmonyLib;
 
 using Microsoft.Xna.Framework;
+
+using MiniAtraShared.Extensions;
 
 using StardewValley.TerrainFeatures;
 using StardewValley.Tools;
@@ -26,7 +27,7 @@ internal static class CharacterTramplePatches
     [HarmonyPatch(nameof(Character.MovePosition))]
     private static void Prefix(Character __instance, GameLocation currentLocation)
     {
-        if (!ModEntry.Config.ShouldNPCsTrampleBushes || __instance is not NPC npc || !npc.isVillager()
+        if (!ModEntry.Config.ShouldNPCsTrampleBushes || __instance is not NPC npc || !npc.IsVillager
             || currentLocation?.largeTerrainFeatures?.Count is 0 or null)
         {
             return;

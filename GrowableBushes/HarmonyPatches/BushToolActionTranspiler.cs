@@ -29,14 +29,14 @@ internal static class BushToolActionTranspiler
         try
         {
             ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);
-            helper.FindNext(new CodeInstructionWrapper[]
-            {
+            helper.FindNext(
+            [
                 OpCodes.Ldarg_0,
                 (OpCodes.Ldfld, typeof(Bush).GetCachedField(nameof(Bush.size), ReflectionCache.FlagTypes.InstanceFlags)),
                 OpCodes.Call, // op_implicit
                 OpCodes.Ldc_I4_4,
                 OpCodes.Bne_Un_S,
-            })
+            ])
             .Push()
             .Advance(4)
             .StoreBranchDest()
@@ -44,12 +44,12 @@ internal static class BushToolActionTranspiler
             .DefineAndAttachLabel(out Label jumpPoint)
             .Pop()
             .GetLabels(out IList<Label>? labelsToMove)
-            .Insert(new CodeInstruction[]
-            {
+            .Insert(
+            [
                 new(OpCodes.Ldarg_0),
                 new(OpCodes.Call, typeof(BushToolActionTranspiler).GetCachedMethod(nameof(IsPlacedBush), ReflectionCache.FlagTypes.StaticFlags)),
                 new(OpCodes.Brtrue, jumpPoint),
-            }, withLabels: labelsToMove);
+            ], withLabels: labelsToMove);
 
             // helper.Print();
             return helper.Render();

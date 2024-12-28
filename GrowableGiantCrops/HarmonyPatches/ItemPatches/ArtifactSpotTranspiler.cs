@@ -28,20 +28,20 @@ internal static class ArtifactSpotTranspiler
         try
         {
             ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);
-            helper.FindNext(new CodeInstructionWrapper[]
-            { // this.parentSheetIndex.Value == 590
+            helper.FindNext(
+            [ // this.parentSheetIndex.Value == 590
                 OpCodes.Ldarg_0,
                 (OpCodes.Ldfld, typeof(Item).GetCachedField(nameof(Item.parentSheetIndex), ReflectionCache.FlagTypes.InstanceFlags)),
                 OpCodes.Call,
                 (OpCodes.Ldc_I4, 590),
-            })
-            .FindNext(new CodeInstructionWrapper[]
-            { // t is Hoe
+            ])
+            .FindNext(
+            [ // t is Hoe
                 SpecialCodeInstructionCases.LdLoc,
                 OpCodes.Ldfld,
                 (OpCodes.Isinst, typeof(Hoe)),
                 OpCodes.Brfalse,
-            })
+            ])
             .Push()
             .Advance(4)
             .DefineAndAttachLabel(out Label jumpPoint)

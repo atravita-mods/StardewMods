@@ -206,7 +206,7 @@ internal static class SObjectPatches
     }
 
     [HarmonyPrefix]
-    [HarmonyPatch(nameof(SObject.draw), new[] { typeof(SpriteBatch), typeof(int), typeof(int), typeof(float) } )]
+    [HarmonyPatch(nameof(SObject.draw), [typeof(SpriteBatch), typeof(int), typeof(int), typeof(float)] )]
     private static bool PrefixDraw(SObject __instance, SpriteBatch spriteBatch, int x, int y, float alpha)
     {
         if (!GetDrawParts(__instance, out Texture2D? tex, out int offset))
@@ -304,19 +304,19 @@ internal static class SObjectPatches
         try
         {
             ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);
-            helper.FindNext(new CodeInstructionWrapper[]
-            {
+            helper.FindNext(
+            [
                 OpCodes.Ldc_I4_1,
                 OpCodes.Ldc_I4_4,
                 (OpCodes.Newobj, typeof(Grass).GetCachedConstructor<int, int>(ReflectionCache.FlagTypes.InstanceFlags)),
-            })
+            ])
             .GetLabels(out IList<Label>? labels)
             .Remove(3)
-            .Insert(new CodeInstruction[]
-            {
+            .Insert(
+            [
                 new(OpCodes.Ldarg_0),
                 new(OpCodes.Call, typeof(SObjectPatches).GetCachedMethod(nameof(GetMatchingGrass), ReflectionCache.FlagTypes.StaticFlags)),
-            }, withLabels: labels);
+            ], withLabels: labels);
 
             // helper.Print();
             return helper.Render();

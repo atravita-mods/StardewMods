@@ -50,13 +50,13 @@ internal static class FruitTreeDayUpdateTranspiler
         try
         {
             ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);
-            helper.FindNext(new CodeInstructionWrapper[]
-            {
+            helper.FindNext(
+            [
                 new (SpecialCodeInstructionCases.LdArg),
                 new (SpecialCodeInstructionCases.LdArg),
                 new (OpCodes.Call, typeof(FruitTree).GetCachedMethod(nameof(FruitTree.IsGrowthBlocked), ReflectionCache.FlagTypes.StaticFlags)),
                 new (SpecialCodeInstructionCases.StLoc),
-            })
+            ])
             .FindNext(
             [
                 new (OpCodes.Ldarg_0),

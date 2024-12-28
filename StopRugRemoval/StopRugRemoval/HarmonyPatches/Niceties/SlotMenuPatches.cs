@@ -49,7 +49,7 @@ internal static class TokenPurchasePatch
         }
     }
 
-    [HarmonyPatch(nameof(GameLocation.performAction), new[] { typeof(string[]), typeof(Farmer), typeof(XLocation) })]
+    [HarmonyPatch(nameof(GameLocation.performAction), [typeof(string[]), typeof(Farmer), typeof(XLocation)])]
     private static bool Prefix(string[] action, Farmer who, ref bool __result)
     {
         if (who.IsLocalPlayer && ModEntry.Config.Enabled && action.Length != 0 && action[0] == "BuyQiCoins")
@@ -76,8 +76,8 @@ internal static class TokenPurchasePatch
                     int copy = coins; // prevent accidental capture. There's no explicit notation for that in C#
 
                     Response response = new(
-                                            responseKey: copy.ToString("X", CultureInfo.InvariantCulture),
-                                            responseText: copy.ToString("N", culture));
+                        responseKey: copy.ToString("X", CultureInfo.InvariantCulture),
+                        responseText: copy.ToString("N", culture));
 
                     if ((i + 1).MapNumberToKey() is Keys hotkey)
                     {
@@ -185,12 +185,9 @@ internal static class SlotMenuPatches
         ShowResultSetterLazy.Value(slots, false);
     }
 
-    private static int ButtonOffset()
-        => ModEntry.Config.BetIcons && ModEntry.Config.Enabled ? 288 : 160;
-
     [HarmonyPostfix]
-    [HarmonyPatch(typeof(Slots), MethodType.Constructor, new[] { typeof(int), typeof(bool) })]
-    private static void PostfixConstructor()
+    [HarmonyPatch(typeof(Slots), MethodType.Constructor, [typeof(int), typeof(bool)])]
+    private static void PostfixConstructor(ClickableComponent ___doneButton)
     {
         if (ModEntry.Config.BetIcons && ModEntry.Config.Enabled)
         {
@@ -199,35 +196,13 @@ internal static class SlotMenuPatches
 
             position = Utility.getTopLeftPositionForCenteringOnScreen(Game1.viewport, 124, HEIGHT, -16, 224);
             Bet10000.Value = new ClickableComponent(new Rectangle((int)position.X, (int)position.Y, 124, HEIGHT), I18n.Bet10k());
+
+            // Move the DONE button down to make room for the bet 1k and bet 10k buttons.
+            ___doneButton.bounds.Y += 128;
         }
     }
 
-    // Move the DONE button down to make room for the bet 1k and bet 10k buttons.
 #pragma warning disable SA1116 // Split parameters should start on line after declaration
-    [HarmonyTranspiler]
-    [HarmonyPatch(typeof(Slots), MethodType.Constructor, new[] { typeof(int), typeof(bool) })]
-    private static IEnumerable<CodeInstruction>? TranspileConstructor(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
-    {
-        try
-        {
-            ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);
-            helper.FindNext(new CodeInstructionWrapper[]
-            {
-                new(OpCodes.Ldc_I4, 160),
-                new(OpCodes.Call, typeof(Utility).GetCachedMethod(nameof(Utility.getTopLeftPositionForCenteringOnScreen), ReflectionCache.FlagTypes.StaticFlags, new[] { typeof(xTile.Dimensions.Rectangle), typeof(int), typeof(int), typeof(int), typeof(int) })),
-            })
-            .ReplaceInstruction(OpCodes.Call, typeof(SlotMenuPatches).GetCachedMethod(nameof(ButtonOffset), ReflectionCache.FlagTypes.StaticFlags), keepLabels: true);
-
-            // helper.Print();
-            return helper.Render();
-        }
-        catch (Exception ex)
-        {
-            ModEntry.ModMonitor.LogTranspilerError(original, ex);
-        }
-        return null;
-    }
-
     // Stick my draw at the right location in the middle of this function. Gotta do this since the spritebatch is opened and closed in this function.
     [HarmonyTranspiler]
     [HarmonyPatch(nameof(Slots.draw))]
@@ -236,22 +211,22 @@ internal static class SlotMenuPatches
         try
         {
             ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);
-            helper.FindNext(new CodeInstructionWrapper[]
-            {
+            helper.FindNext(
+            [
                 new(OpCodes.Ldarg_0),
                 new(OpCodes.Ldfld, typeof(Slots).GetCachedField("showResult", ReflectionCache.FlagTypes.InstanceFlags)),
                 new(OpCodes.Brfalse),
-            })
+            ])
             .Advance(2)
             .StoreBranchDest()
             .AdvanceToStoredLabel()
             .GetLabels(out IList<Label>? labels, clear: true)
-            .Insert(new CodeInstruction[]
-            {
+            .Insert(
+            [
                 new(OpCodes.Ldarg_0),
                 new(OpCodes.Ldarg_1),
                 new(OpCodes.Call, typeof(SlotMenuPatches).StaticMethodNamed(nameof(DrawImpl))),
-            }, withLabels: labels);
+            ], withLabels: labels);
 
             // helper.Print();
             return helper.Render();

@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Input;
 using Newtonsoft.Json;
 
 using SinZsEventTester.Framework;
+using SinZsEventTester.Framework.BulkRemoveCommand;
 
 using StardewModdingAPI.Events;
 
@@ -161,6 +162,16 @@ public sealed class ModEntry : Mod
             "sinz.hibernate",
             "Sleeps for X days",
             (command, args) => new HiberationManager(this.Helper.Events.GameLoop, this.Helper.Reflection, int.Parse(args[0])));
+
+        helper.ConsoleCommands.Add(
+            "sinz.bulkadd",
+            "bulk adds recipes",
+            (command, args) => new BulkAddRemoveCommand(this.Monitor).Add(args));
+
+        helper.ConsoleCommands.Add(
+            "sinz.bulkremove",
+            "bulk remove data",
+            (command, args) => new BulkAddRemoveCommand(this.Monitor).Remove(args));
     }
 
     private void CheckDialogue(string command, Span<string> args, IGameLogger? logger = null)

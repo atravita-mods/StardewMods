@@ -157,6 +157,10 @@ public sealed class ModEntry : Mod
             "sinz.check_dialogue",
             "Checks dialogue",
             (command, args) => this.CheckDialogue(command, args.AsSpan()));
+        helper.ConsoleCommands.Add(
+            "sinz.hibernate",
+            "Sleeps for X days",
+            (command, args) => new HiberationManager(this.Helper.Events.GameLoop, this.Helper.Reflection, int.Parse(args[0])));
     }
 
     private void CheckDialogue(string command, Span<string> args, IGameLogger? logger = null)

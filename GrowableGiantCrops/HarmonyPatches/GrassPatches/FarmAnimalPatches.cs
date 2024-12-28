@@ -37,12 +37,12 @@ internal static class FarmAnimalPatches
         try
         {
             ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);
-            helper.FindNext(new CodeInstructionWrapper[]
-            { // find and replace t is Grass with our own check.
+            helper.FindNext(
+            [ // find and replace t is Grass with our own check.
                 SpecialCodeInstructionCases.LdLoc,
                 (OpCodes.Isinst, typeof(Grass)),
                 OpCodes.Brfalse_S,
-            })
+            ])
             .Advance(1)
             .ReplaceInstruction(
                 opcode: OpCodes.Call,

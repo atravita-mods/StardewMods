@@ -10,7 +10,7 @@ internal sealed class FastForwardHandler : IDisposable
 {
     private IMonitor _monitor;
     private IGameLoopEvents _loopEvents;
-    private IReflectionHelper _reflector;
+    private Action<Game1, GameTime> updateFunc;
     private bool _modCalledTick;
     private readonly int ratio;
 
@@ -25,8 +25,8 @@ internal sealed class FastForwardHandler : IDisposable
     {
         this._monitor = monitor;
         this._loopEvents = loopEvents;
-        this._reflector = reflector;
         this.ratio = ratio;
+        this.updateFunc = reflector.GetMethod(Game1.game1, "Update").MethodInfo.CreateDelegate<Action<Game1, GameTime>>();
 
         loopEvents.UpdateTicking += this.OnUpdateTicked;
     }
@@ -55,7 +55,7 @@ internal sealed class FastForwardHandler : IDisposable
                 Vector2 cachedPosition = Game1.player.Position;
                 GameLocation? cachedMap = i > 2 ? Game1.player.currentLocation : null;
 
-                this._reflector.GetMethod(Game1.game1, "Update").Invoke([Game1.currentGameTime]);
+                this.updateFunc(Game1.game1, Game1.currentGameTime);
 
                 if (cachedMap is not null && cachedMap == Game1.player.currentLocation)
                 {
@@ -81,7 +81,7 @@ internal sealed class FastForwardHandler : IDisposable
 
             this._monitor = null!;
             this._loopEvents = null!;
-            this._reflector = null!;
+            this.updateFunc = null!;
             this.IsDisposed = true;
         }
     }

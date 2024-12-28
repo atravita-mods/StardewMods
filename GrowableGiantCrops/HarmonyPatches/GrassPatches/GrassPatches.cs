@@ -65,16 +65,19 @@ internal static class GrassPatches
         try
         {
             ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);
-            helper.FindNext(new CodeInstructionWrapper[]
-            { // find and remove this.grassType == 1. We want all grass to grow!
+            helper.FindNext(
+            [ // find and remove this.grassType == 1 || this.grassType == 7. We want all grass to grow!
                 OpCodes.Ldarg_0,
                 (OpCodes.Ldfld, typeof(Grass).GetCachedField(nameof(Grass.grassType), ReflectionCache.FlagTypes.InstanceFlags)),
                 OpCodes.Call,
                 OpCodes.Ldc_I4_1,
-                OpCodes.Bne_Un_S,
-            })
+                OpCodes.Beq_S
+            ])
             .GetLabels(out IList<Label>? labelsToMove)
-            .Remove(5)
+            .RemoveIncluding([
+                OpCodes.Ldc_I4_7,
+                OpCodes.Bne_Un_S,
+            ])
             .AttachLabels(labelsToMove);
 
             // helper.Print();

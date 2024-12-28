@@ -1,9 +1,6 @@
 ﻿using AtraCore.Utilities;
-
-using AtraShared.Utils.Extensions;
-
 using Microsoft.Xna.Framework;
-
+using MiniAtraShared.Extensions;
 using StardewValley.Locations;
 
 namespace GrowableGiantCrops.Framework;
@@ -15,9 +12,9 @@ internal static class LocationTileHandler
 {
     private static readonly Dictionary<string, List<LocationTileDelegate>> Handlers = new(StringComparer.OrdinalIgnoreCase)
     {
-        ["IslandNorth"] = new() { IslandNorthHandler },
-        ["Railroad"] = new() { RailRoadHandler },
-        ["Sewer"] = new() { SewerHandler },
+        ["IslandNorth"] = [IslandNorthHandler],
+        ["Railroad"] = [RailRoadHandler],
+        ["Sewer"] = [SewerHandler],
     };
 
     private delegate bool LocationTileDelegate(
@@ -121,7 +118,7 @@ internal static class LocationTileHandler
             });
             multi.broadcastSprites(railroad, new TemporaryAnimatedSprite(Game1.mouseCursorsName, new Rectangle(0, 499, 10, 11), 35.715f, 7, 8, (new Vector2(54f, 34f) * 64f) + (new Vector2(3f, 10f) * 4f), flicker: false, flipped: false, 0.2305f, 0f, Color.White, 4f, 0f, 0f, 0f)
             {
-                id = 9999f,
+                id = 9999,
             });
 
             DelayedAction.playSoundAfterDelay("secret1", 2000);
@@ -149,7 +146,7 @@ internal static class LocationTileHandler
         // taken from NPC.checkAction.
         if (property == "MagicalSeal")
         {
-            who.removeQuest(28);
+            who.removeQuest("28");
             who.mailReceived.Add("krobusUnseal");
 
             Game1.player.jitterStrength = 2f;

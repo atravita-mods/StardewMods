@@ -38,7 +38,9 @@ internal sealed class ModEntry : BaseMod<ModEntry>
 
         Friendship lewisFriendship = Game1.player.friendshipData["Lewis"];
 
-        BasicFriendshipMonitor monitor = new BasicFriendshipMonitor(lewisFriendship, lewis!);
+        BasicFriendshipMonitor monitor = new(lewisFriendship, lewis!);
+
+        PlayerExpMonitor playerExpMonitor = new(Game1.player);
     }
 
     private void Display_RenderedHud(object? sender, RenderedHudEventArgs e)

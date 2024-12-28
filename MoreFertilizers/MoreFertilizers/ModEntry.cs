@@ -433,7 +433,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
     /// Gets a list of fertilizer IDs for fertilizers that are placed in other means (not into HoeDirt).
     /// </summary>
     /// <remarks>Handled by <see cref="SpecialFertilizerApplication" /> and typically stored in <see cref="ModDataDictionary"/>.</remarks>
-    internal static HashSet<int> SpecialFertilizerIDs { get; } = new();
+    internal static HashSet<int> SpecialFertilizerIDs { get; } = [];
 
     /**************
      * Generally useful things that need to be attached to something static.

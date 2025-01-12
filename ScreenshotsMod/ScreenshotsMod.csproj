@@ -18,7 +18,6 @@
     <Publicize Include="MonoGame.Framework" />
   </ItemGroup>
 
-
   <ItemGroup>
     <PackageReference Include="Krafs.Publicizer" Version="2.2.1">
       <PrivateAssets>all</PrivateAssets>

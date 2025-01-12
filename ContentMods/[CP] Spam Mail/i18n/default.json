@@ -3,6 +3,7 @@
     * Configuration
     * **********************/
     "config.ExpectedPlayTime.name": "Expected Play Time",
+    "config.ExpectedPlayTime.description": "In years, roughly how long you expect your save to last. This is used to space out the spam mail.",
 
     /***********************
     * Circus

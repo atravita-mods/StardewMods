@@ -107,6 +107,9 @@
         "AddConverstionTopic",
         "SpamMailSpacer",
         "JojaPlantBased",
-        "qiChallengeComplete"
+        "qiChallengeComplete",
+        "spam",
+        "orca",
+        "jojachocolate"
     ]
 }

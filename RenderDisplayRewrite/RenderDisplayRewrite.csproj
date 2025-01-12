@@ -1,35 +1,23 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <Import Project="..\csproj_common" />
+  <Import Project="..\MiniAtraShared\MiniAtraShared.projitems" Label="Shared" />
 
   <PropertyGroup>
-    <EnableHarmony>True</EnableHarmony>
     <ImplicitUsings>enable</ImplicitUsings>
+    <EnableHarmony>True</EnableHarmony>
   </PropertyGroup>
 
   <PropertyGroup>
-    <BaseManifest>..\base_dependencies.json</BaseManifest>
-    <Name>Experimental Lag Reduction</Name>
-    <Description>This is an experiment.</Description>
+    <Name>RenderDisplayRewrite</Name>
+    <Authors>atravita</Authors>
+    <Description>Rewrites the map display manager.</Description>
     <Version>0.1.0</Version>
     <UpdateKeys>-1</UpdateKeys>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AtraCore\AtraCore.csproj" private="false" />
-    <ProjectReference Include="..\Pintail\Pintail\Pintail.csproj" private="false" />
+    <None Remove="i18n\default.json" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Publicize Include="MonoGame.Framework" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Krafs.Publicizer" Version="2.2.1">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
-
 
   <ItemGroup>
     <Using Include="StardewValley" />

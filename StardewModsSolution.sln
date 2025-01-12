@@ -154,6 +154,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WhyAreYouDisposed", "WhyAre
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "MiniAtraShared", "MiniAtraShared\MiniAtraShared.shproj", "{0DC81935-2304-4358-926C-A031863024B1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RecipeSortFix", "RecipeSortFix\RecipeSortFix.csproj", "{128F7E17-B673-499D-BD55-0C02F8A2A0B3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RenderDisplayRewrite", "RenderDisplayRewrite\RenderDisplayRewrite.csproj", "{A1602FAA-71E9-438B-81CD-D3BE62D4DEC3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -412,6 +416,14 @@ Global
 		{D4D7DC14-8742-427A-8C2E-9F8B8A9226C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D4D7DC14-8742-427A-8C2E-9F8B8A9226C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D4D7DC14-8742-427A-8C2E-9F8B8A9226C8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{128F7E17-B673-499D-BD55-0C02F8A2A0B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{128F7E17-B673-499D-BD55-0C02F8A2A0B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{128F7E17-B673-499D-BD55-0C02F8A2A0B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{128F7E17-B673-499D-BD55-0C02F8A2A0B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1602FAA-71E9-438B-81CD-D3BE62D4DEC3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1602FAA-71E9-438B-81CD-D3BE62D4DEC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1602FAA-71E9-438B-81CD-D3BE62D4DEC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1602FAA-71E9-438B-81CD-D3BE62D4DEC3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -425,6 +437,7 @@ Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		AtraBase\AtraBase\AtraBase.projitems*{0cf9b517-0f07-46a1-92fc-659454d17889}*SharedItemsImports = 5
 		MiniAtraShared\MiniAtraShared.projitems*{0dc81935-2304-4358-926c-a031863024b1}*SharedItemsImports = 13
+		MiniAtraShared\MiniAtraShared.projitems*{128f7e17-b673-499d-bd55-0c02f8a2a0b3}*SharedItemsImports = 5
 		AtraBase\AtraBase\AtraBase.projitems*{222da76b-dc35-4382-a427-98992dbdc6f7}*SharedItemsImports = 5
 		MiniAtraShared\MiniAtraShared.projitems*{2cc4a5d6-d722-48c7-9e89-6a5b9d773a16}*SharedItemsImports = 5
 		AtraBase\AtraBase\AtraBase.projitems*{2db924cc-3230-4c0a-8e9b-967cdeda2e23}*SharedItemsImports = 13

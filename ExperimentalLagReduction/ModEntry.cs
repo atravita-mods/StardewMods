@@ -50,9 +50,9 @@ internal sealed class ModEntry : BaseMod<ModEntry>
 
     private void OnTimeChanged(object? sender, TimeChangedEventArgs e)
     {
-        foreach (NPC? npc in Game1.currentLocation.characters.Concat((Game1.CurrentEvent?.actors as IEnumerable<NPC>) ?? Array.Empty<NPC>()))
+        foreach (NPC? npc in Game1.currentLocation.characters.Concat((Game1.CurrentEvent?.actors as IEnumerable<NPC>) ?? []))
         {
-            if (npc.IsVillager && npc.AllowDynamicAppearance && !npc.SimpleNonVillagerNPC)
+            if (npc.IsVillager && npc.AllowDynamicAppearance && !npc.SimpleNonVillagerNPC && !npc.IsInvisible)
             {
                 int? prevX = npc.Sprite?.SpriteWidth;
                 int? prevY = npc.Sprite?.SpriteHeight;

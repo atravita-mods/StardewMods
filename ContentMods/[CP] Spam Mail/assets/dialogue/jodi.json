@@ -6,7 +6,7 @@
             "Target": "Characters/Dialogue/Jodi",
             "Entries": {
                 "atravita.SpamMail.Composter": "{{i18n: jodi-composter}}",
-                "atravita.SpamMail.WaterPark": "{{i18n: jodi-waterpark}}",
+                "atravita.SpamMail.WaterPark": "{{i18n: jodi-waterpark}}$s",
                 "atravita.SpamMail.JojaChocolate": "{{i18n: jodi-jojachocolate}}$s"
             }
         },

@@ -15,10 +15,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json" HintPath="$(GamePath)\smapi-internal\Newtonsoft.Json.dll" private="false" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Using Include="StardewValley" />
     <Using Include="StardewModdingAPI" />
     <Using Include="System.Diagnostics.CodeAnalysis" />

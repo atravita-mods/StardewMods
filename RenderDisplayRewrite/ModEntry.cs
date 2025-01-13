@@ -27,8 +27,9 @@ internal class ModEntry : BaseMod<ModEntry>
 
         Harmony harmony = new (this.ModManifest.UniqueID);
 
-        ReplaceDisplayDevice.ApplyPatches(harmony);
+        ReplaceDisplayDevice.Apply(harmony);
         ReplaceStaticTile.Apply(harmony);
+        NOPMapTilesheetLoad.Apply(harmony);
     }
 
     /// <inheritdoc cref="IPlayerEvents.Warped"/>

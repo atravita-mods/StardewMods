@@ -13,7 +13,7 @@ using xTile.Display;
 namespace RenderDisplayRewrite.HarmonyPatches;
 internal static class ReplaceDisplayDevice
 {
-    internal static void ApplyPatches(Harmony harmony)
+    internal static void Apply(Harmony harmony)
     {
         harmony.Patch(
             original: AccessTools.Method(AccessTools.TypeByName("StardewModdingAPI.Framework.SGame"), "CreateDisplayDevice"),

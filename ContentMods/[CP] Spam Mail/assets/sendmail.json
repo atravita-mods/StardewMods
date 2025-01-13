@@ -11,7 +11,7 @@
                     "Trigger": "DayEnding",
                     "Condition": "SEASON spring, DAY_OF_MONTH 10 11 12",
                     "Actions": [
-                        "AddConverstionTopic atravita.SpamMailSpacer {{ExpectedPlayTime}}",
+                        "AddConversationTopic atravita.SpamMailSpacer {{ExpectedPlayTime}}",
                         "AddMail Current atravita.SpamMail.JojaChocolate"
                     ],
                 },
@@ -21,7 +21,7 @@
                     "Trigger": "DayEnding",
                     "Condition": "SEASON fall winter, PLAYER_FRIENDSHIP_POINTS Current Vincent 1000, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMail.Aquarium, RANDOM 0.1, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMailSpacer",
                     "Actions": [
-                        "AddConverstionTopic atravita.SpamMailSpacer {{ExpectedPlayTime}}",
+                        "AddConversationTopic atravita.SpamMailSpacer {{ExpectedPlayTime}}",
                         "AddMail Current atravita.SpamMail.CircusMail"
                     ]
                 },
@@ -30,7 +30,7 @@
                     "Trigger": "DayEnding",
                     "Condition": "!SEASON spring, PLAYER_FRIENDSHIP_POINTS Current Vincent 500, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMail.CircusMail, RANDOM 0.1, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMailSpacer",
                     "Actions": [
-                        "AddConverstionTopic atravita.SpamMailSpacer {{ExpectedPlayTime}}",
+                        "AddConversationTopic atravita.SpamMailSpacer {{ExpectedPlayTime}}",
                         "AddMail Current atravita.SpamMail.Aquarium"
                     ]
                 },
@@ -46,7 +46,7 @@
                     "Trigger": "DayEnding",
                     "Condition": "!SEASON winter, {{MidYearConstraint}}, PLAYER_HAS_MAIL Current atravita.SpamMail.Zoo received, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMail.Zoo, RANDOM 0.1, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMailSpacer",
                     "Actions": [
-                        "AddConverstionTopic atravita.SpamMailSpacer {{ExpectedPlayTime}}",
+                        "AddConversationTopic atravita.SpamMailSpacer {{ExpectedPlayTime}}",
                         "AddMail Current atravita.SpamMail.Zoo2"
                     ]
                 },
@@ -56,7 +56,7 @@
                     "Trigger": "DayEnding",
                     "Condition": "PLAYER_HAS_MAIL Current atravita.SpamMail.Aquarium received, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMail.Aquarium, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMail.Zoo, RANDOM 0.1, {{LateYearConstraint}}, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMailSpacer",
                     "Actions": [
-                        "AddConverstionTopic atravita.SpamMailSpacer {{ExpectedPlayTime}}",
+                        "AddConversationTopic atravita.SpamMailSpacer {{ExpectedPlayTime}}",
                         "AddMail Current atravita.SpamMail.Castle"
                     ]
                 },
@@ -65,7 +65,7 @@
                     "Trigger": "DayEnding",
                     "Condition": "PLAYER_HAS_MAIL Current atravita.SpamMail.CircusMail received, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMail.CircusMail, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMail.Zoo2, RANDOM 0.1, {{LateYearConstraint}}, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMailSpacer",
                     "Actions": [
-                        "AddConverstionTopic atravita.SpamMailSpacer {{ExpectedPlayTime}}",
+                        "AddConversationTopic atravita.SpamMailSpacer {{ExpectedPlayTime}}",
                         "AddMail Current atravita.SpamMail.WaterPark"
                     ]
                 },
@@ -75,7 +75,7 @@
                     "Trigger": "DayEnding",
                     "Condition": "SEASON summer, PLAYER_HAS_MAIL Current beachBridgeFixed, RANDOM 0.1, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMailSpacer",
                     "Actions": [
-                        "AddConverstionTopic atravita.SpamMailSpacer {{ExpectedPlayTime}}",
+                        "AddConversationTopic atravita.SpamMailSpacer {{ExpectedPlayTime}}",
                         "AddMail Current atravita.SpamMail.JojaSummer"
                     ]
                 },
@@ -84,7 +84,7 @@
                     "Trigger": "DayEnding",
                     "Condition": "SEASON fall, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMail.JojaSummer, PLAYER_HAS_MAIL Current atravita.SpamMail.JojaSummer received, RANDOM 0.1, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMailSpacer",
                     "Actions": [
-                        "AddConverstionTopic atravita.SpamMailSpacer {{ExpectedPlayTime}}",
+                        "AddConversationTopic atravita.SpamMailSpacer {{ExpectedPlayTime}}",
                         "AddMail Current atravita.SpamMail.JojaFall"
                     ]
                 },
@@ -93,7 +93,7 @@
                     "Trigger": "DayEnding",
                     "Condition": "SEASON winter, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMail.JojaFall, PLAYER_HAS_MAIL Current atravita.SpamMail.JojaFall received, RANDOM 0.1, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMailSpacer",
                     "Actions": [
-                        "AddConverstionTopic atravita.SpamMailSpacer {{ExpectedPlayTime}}",
+                        "AddConversationTopic atravita.SpamMailSpacer {{ExpectedPlayTime}}",
                         "AddMail Current atravita.SpamMail.JojaWinter"
                     ]
                 },
@@ -102,7 +102,7 @@
                     "Trigger": "DayEnding",
                     "Condition": "PLAYER_HAS_MAIL Current atravita.SpamMail.Summer received, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMail.Summer, RANDOM 0.1, {{MidYearConstraint}}, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMailSpacer",
                     "Actions": [
-                        "AddConverstionTopic atravita.SpamMailSpacer {{ExpectedPlayTime}}",
+                        "AddConversationTopic atravita.SpamMailSpacer {{ExpectedPlayTime}}",
                         "AddMail Current atravita.SpamMail.JojaVirtualPet"
                     ]
                 },
@@ -111,7 +111,7 @@
                     "Trigger": "DayEnding",
                     "Condition": "PLAYER_HAS_MAIL Current atravita.SpamMail.JojaFall received, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMail.JojaFall, SEASON summer fall, RANDOM 0.1, {{MidYearConstraint}}, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMailSpacer",
                     "Actions": [
-                        "AddConverstionTopic atravita.SpamMailSpacer {{ExpectedPlayTime}}",
+                        "AddConversationTopic atravita.SpamMailSpacer {{ExpectedPlayTime}}",
                         "AddMail Current atravita.SpamMail.JojaSneakers"
                     ],
                 },
@@ -120,7 +120,7 @@
                     "Trigger": "DayEnding",
                     "Condition": "PLAYER_HAS_MAIL Current atravita.SpamMail.JojaWinter received, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMail.JojaWinter, SEASON summer fall, RANDOM 0.1, {{MidYearConstraint}}, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMailSpacer",
                     "Actions": [
-                        "AddConverstionTopic atravita.SpamMailSpacer {{ExpectedPlayTime}}",
+                        "AddConversationTopic atravita.SpamMailSpacer {{ExpectedPlayTime}}",
                         "AddMail Current atravita.SpamMail.JojaSelfStirring",
                     ]
                 },
@@ -129,7 +129,7 @@
                     "Trigger": "DayEnding",
                     "Condition": "SEASON summer fall, RANDOM 0.2, {{LateYearConstraint}}, PLAYER_HAS_MAIL Current atravita.SpamMail.JojaSelfStirring, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMail.JojaSelfStirring, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMailSpacer",
                     "Actions": [
-                        "AddConverstionTopic atravita.SpamMailSpacer {{ExpectedPlayTime}}",
+                        "AddConversationTopic atravita.SpamMailSpacer {{ExpectedPlayTime}}",
                         "AddMail Current, atravita.SpamMail.JojaSelfStirring"
                     ]
                 },
@@ -139,7 +139,7 @@
                     "Trigger": "DayEnding",
                     "Condition": "{{MidYearConstraint}}, PLAYER_HAS_MAIL Current qiChallengeComplete, PLAYER_VISITED_LOCATION Current JojaMart, Random 0.1, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMailSpacer",
                     "Actions": [
-                        "AddConverstionTopic atravita.SpamMailSpacer {{ExpectedPlayTime}}",
+                        "AddConversationTopic atravita.SpamMailSpacer {{ExpectedPlayTime}}",
                         "AddMail Current atravita.SpamMail.JojaPlantBased"
                     ]
                 },
@@ -155,7 +155,7 @@
                     "Trigger": "DayEnding",
                     "Condition": "PLAYER_HAS_MAIL Current ccVault, RANDOM 0.1, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMailSpacer",
                     "Actions": [
-                        "AddConverstionTopic atravita.SpamMailSpacer {{ExpectedPlayTime}}",
+                        "AddConversationTopic atravita.SpamMailSpacer {{ExpectedPlayTime}}",
                         "AddMail Current atravita.SpamMail.PennyStocks"
                     ]
                 },
@@ -164,7 +164,7 @@
                     "Trigger": "DayEnding",
                     "Condition": "PLAYER_HAS_MAIL Current willyBackRoomInvitation, RANDOM 0.1, {{MidYearConstraint}}, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMailSpacer",
                     "Actions": [
-                        "AddConverstionTopic atravita.SpamMailSpacer {{ExpectedPlayTime}}",
+                        "AddConversationTopic atravita.SpamMailSpacer {{ExpectedPlayTime}}",
                         "AddMail Current atravita.SpamMail.VideoGames"
                     ]
                 },
@@ -173,7 +173,7 @@
                     "Trigger": "DayEnding",
                     "Condition": "PLAYER_FARMHOUSE_UPGRADE Current 2, RANDOM 0.1, {{MidYearConstraint}}, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMailSpacer",
                     "Actions": [
-                        "AddConverstionTopic atravita.SpamMailSpacer {{ExpectedPlayTime}}",
+                        "AddConversationTopic atravita.SpamMailSpacer {{ExpectedPlayTime}}",
                         "AddMail Current atravita.SpamMail.Ring"
                     ]
                 },
@@ -183,7 +183,7 @@
                     "Trigger": "DayEnding",
                     "Condition": "PLAYER_VISITED_LOCATION Current Hospital, PLAYER_HAS_MAIL Current guildMember, RANDOM 0.1, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMailSpacer",
                     "Actions": [
-                        "AddConverstionTopic atravita.SpamMailSpacer {{ExpectedPlayTime}}",
+                        "AddConversationTopic atravita.SpamMailSpacer {{ExpectedPlayTime}}",
                         "AddMail Current atravita.SpamMail.SkinImplants"
                     ]
                 },
@@ -192,7 +192,7 @@
                     "Trigger": "DayEnding",
                     "Condition": "PLAYER_VISITED_LOCATION Current Hospital, PLAYER_HAS_MAIL Current atravita.SpamMail.SkinImplants received, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMail.SkinImplants, RANDOM 0.25, {{MidYearConstraint}}, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMailSpacer",
                     "Actions": [
-                        "AddConverstionTopic atravita.SpamMailSpacer {{ExpectedPlayTime}}",
+                        "AddConversationTopic atravita.SpamMailSpacer {{ExpectedPlayTime}}",
                         "AddMail Current atravita.SpamMail.HairInjection"
                     ]
                 },
@@ -201,7 +201,7 @@
                     "Trigger": "DayEnding",
                     "Condition": "PLAYER_VISITED_LOCATION Current Hospital, RANDOM 0.25, {{LateYearConstraint}}, PLAYER_HAS_MAIL Current atravita.SpamMail.EnergyDrink2 received, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMail.EnergyDrink2, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMailSpacer",
                     "Actions": [
-                        "AddConverstionTopic atravita.SpamMailSpacer {{ExpectedPlayTime}}",
+                        "AddConversationTopic atravita.SpamMailSpacer {{ExpectedPlayTime}}",
                         "AddMail Current atravita.SpamMail.EnergyDrink3"
                     ]
                 },
@@ -211,7 +211,7 @@
                     "Trigger": "DayEnding",
                     "Condition": "PLAYER_VISITED_LOCATION Current IslandSouth, RANDOM 0.08, PLAYER_HAS_MAIL Current Island_Resort, SEASON fall winter, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMailSpacer",
                     "Actions": [
-                        "AddConverstionTopic atravita.SpamMailSpacer {{ExpectedPlayTime}}",
+                        "AddConversationTopic atravita.SpamMailSpacer {{ExpectedPlayTime}}",
                         "AddMail Current atravita.SpamMail.IslandVacation"
                     ]
                 },
@@ -220,7 +220,7 @@
                     "Trigger": "DayEnding",
                     "Condition": "PLAYER_VISITED_LOCATION Current IslandSouth, RANDOM 0.1, PLAYER_HAS_MAIL Current atravita.SpamMail.IslandVacation received, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMail.IslandVacation, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMailSpacer",
                     "Actions": [
-                        "AddConverstionTopic atravita.SpamMailSpacer {{ExpectedPlayTime}}",
+                        "AddConversationTopic atravita.SpamMailSpacer {{ExpectedPlayTime}}",
                         "AddMail Current atravita.SpamMail.Cruise"
                     ]
                 },
@@ -231,7 +231,7 @@
                     "Location": "SandyHouse",
                     "Condition": "PLAYER_VISITED_LOCATION Current SandyHouse, RANDOM 0.05, SEASON spring summer, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMailSpacer",
                     "Actions": [
-                        "AddConverstionTopic atravita.SpamMailSpacer {{ExpectedPlayTime}}",
+                        "AddConversationTopic atravita.SpamMailSpacer {{ExpectedPlayTime}}",
                         "AddMail Current atravita.SpamMail.Casino"
                     ]
                 },
@@ -240,7 +240,7 @@
                     "Trigger": "LocationChanged",
                     "Condition": "LOCATION_NAME Here SandyHouse, RANDOM 0.05, SEASON fall winter, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMailSpacer",
                     "Actions": [
-                        "AddConverstionTopic atravita.SpamMailSpacer {{ExpectedPlayTime}}",
+                        "AddConversationTopic atravita.SpamMailSpacer {{ExpectedPlayTime}}",
                         "AddMail Current atravita.SpamMail.Spices"
                     ]
                 },
@@ -251,7 +251,7 @@
                     "Condition": "LOCATION_NAME Here SeedShop, SEASON fall winter, RANDOM 0.05, {{MidYearConstraint}}, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMailSpacer",
                     "Actions": [
                         "AddMail Current atravita.SpamMail.Composter",
-                        "AddConverstionTopic atravita.SpamMailSpacer {{ExpectedPlayTime}}",
+                        "AddConversationTopic atravita.SpamMailSpacer {{ExpectedPlayTime}}",
                     ]
                 },
                 "atravita.SpamMail.VPN": {
@@ -259,7 +259,7 @@
                     "Trigger": "LocationChanged",
                     "Condition": "LOCATION_NAME Here SeedShop, SEASON spring summer, RANDOM 0.1, {{LateYearConstraint}}, PLAYER_HAS_MAIL Current atravita.SpamMail.Composter received, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMail.Composter, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMailSpacer",
                     "Actions": [
-                        "AddConverstionTopic atravita.SpamMailSpacer {{ExpectedPlayTime}}",
+                        "AddConversationTopic atravita.SpamMailSpacer {{ExpectedPlayTime}}",
                         "AddMail Current atravita.SpamMail.VPN"
                     ]
                 },
@@ -268,7 +268,7 @@
                     "Trigger": "LocationChanged",
                     "Condition": "LOCATION_NAME Here SeedShop, SEASON summer fall, RANDOM 0.05, {{MidYearConstraint}}, PLAYER_HAS_MAIL Current atravita.SpamMail.PennyStocks received, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMail.PennyStocks, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMailSpacer",
                     "Actions": [
-                        "AddConverstionTopic atravita.SpamMailSpacer {{ExpectedPlayTime}}",
+                        "AddConversationTopic atravita.SpamMailSpacer {{ExpectedPlayTime}}",
                         "AddMail Current atravita.SpamMail.GoldShop",
                     ]
                 },
@@ -277,7 +277,7 @@
                     "Trigger": "LocationChanged",
                     "Condition": "LOCATION_NAME Here SeedShop, SEASON fall winter, RANDOM 0.1, {{LateYearConstraint}}, PLAYER_HAS_MAIL Current atravita.SpamMail.GoldShop received, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMail.GoldShop, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMailSpacer",
                     "Actions": [
-                        "AddConverstionTopic atravita.SpamMailSpacer {{ExpectedPlayTime}}",
+                        "AddConversationTopic atravita.SpamMailSpacer {{ExpectedPlayTime}}",
                         "AddMail Current atravita.SpamMail.Book"
                     ]
                 },
@@ -287,7 +287,7 @@
                     "Trigger": "LocationChanged",
                     "Condition": "LOCATION_NAME Here Saloon,PLAYER_HAS_MAIL Current CarolineTea received, {{MidYearConstraint}}, RANDOM 0.05, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMailSpacer",
                     "Actions": [
-                        "AddConverstionTopic atravita.SpamMailSpacer {{ExpectedPlayTime}}",
+                        "AddConversationTopic atravita.SpamMailSpacer {{ExpectedPlayTime}}",
                         "AddMail Current atravita.SpamMail.EnergyDrink",
                     ]
                 },
@@ -296,7 +296,7 @@
                     "Trigger": "LocationChanged",
                     "Condition": "LOCATION_NAME Here Saloon, PLAYER_HAS_MAIL Current atravita.SpamMail.EnergyDrink received, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMail.EnergyDrink, RANDOM 0.05, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMailSpacer",
                     "Actions": [
-                        "AddConverstionTopic atravita.SpamMailSpacer {{ExpectedPlayTime}}",
+                        "AddConversationTopic atravita.SpamMailSpacer {{ExpectedPlayTime}}",
                         "AddMail Current atravita.SpamMail.EnergyDrink2"
                     ]
                 },
@@ -305,7 +305,7 @@
                     "Trigger": "DayEnding",
                     "Condition": "PLAYER_VISITED_LOCATION Current Saloon, PLAYER_HAS_MAIL Current galaxySword, RANDOM 0.05, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMailSpacer",
                     "Actions": [
-                        "AddConverstionTopic atravita.SpamMailSpacer {{ExpectedPlayTime}}",
+                        "AddConversationTopic atravita.SpamMailSpacer {{ExpectedPlayTime}}",
                         "AddMail Current atravita.SpamMail.Pizza"
                     ]
                 },
@@ -314,7 +314,7 @@
                     "Trigger": "LocationChanged",
                     "Condition": "LOCATION_NAME Here Saloon, PLAYER_HAS_MAIL Current atravita.SpamMail.Pizza received, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMail.Pizza, {{MidYearConstraint}}, RANDOM 0.05, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMailSpacer",
                     "Actions": [
-                        "AddConverstionTopic atravita.SpamMailSpacer {{ExpectedPlayTime}}",
+                        "AddConversationTopic atravita.SpamMailSpacer {{ExpectedPlayTime}}",
                         "AddMail Current atravita.SpamMail.Therapy"
                     ]
                 },
@@ -324,7 +324,7 @@
                     "Trigger": "LocationChanged",
                     "Condition": "LOCATION_NAME Here ScienceHouse, SEASON spring summer, RANDOM 0.1, {{MidYearConstraint}}, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMailSpacer",
                     "Actions": [
-                        "AddConverstionTopic atravita.SpamMailSpacer {{ExpectedPlayTime}}",
+                        "AddConversationTopic atravita.SpamMailSpacer {{ExpectedPlayTime}}",
                         "AddMail Current atravita.SpamMail.Quantum"
                     ]
                 },
@@ -333,7 +333,7 @@
                     "Trigger": "DayEnding",
                     "Condition": "PLAYER_VISITED_LOCATION Current ScienceHouse, SEASON fall winter, RANDOM 0.1, {{MidYearConstraint}}, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMailSpacer",
                     "Actions": [
-                        "AddConverstionTopic atravita.SpamMailSpacer {{ExpectedPlayTime}}",
+                        "AddConversationTopic atravita.SpamMailSpacer {{ExpectedPlayTime}}",
                         "AddMail Current atravita.SpamMail.ToolsShop"
                     ]
                 },
@@ -342,7 +342,7 @@
                     "Trigger": "DayEnding",
                     "Condition": "PLAYER_VISITED_LOCATION Current ScienceHouse, PLAYER_FRIENDSHIP_POINTS Current Demetrius 1000, SEASON winter, PLAYER_HAS_MAIL Current atravita.SpamMail.ToolsShop received, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMail.ToolsShop, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMailSpacer",
                     "Actions": [
-                        "AddConverstionTopic atravita.SpamMailSpacer {{ExpectedPlayTime}}",
+                        "AddConversationTopic atravita.SpamMailSpacer {{ExpectedPlayTime}}",
                         "AddMail Current atravita.SpamMail.ToolsShop2"
                     ]
                 },
@@ -352,7 +352,7 @@
                     "Trigger": "DayEnding",
                     "Condition": "PLAYER_VISITED_LOCATION Current JoshHouse, PLAYER_FRIENDSHIP_POINTS Current George 500, !SEASON summer, {{LateYearConstraint}}, RANDOM 0.1, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMailSpacer",
                     "Actions": [
-                        "AddConverstionTopic atravita.SpamMailSpacer {{ExpectedPlayTime}}",
+                        "AddConversationTopic atravita.SpamMailSpacer {{ExpectedPlayTime}}",
                         "AddMail Current atravita.SpamMail.TV"
                     ]
                 },
@@ -362,7 +362,7 @@
                     "Trigger": "DayEnding",
                     "Condition": "PLAYER_VISITED_LOCATION Current HaleyHouse, PLAYER_FRIENDSHIP_POINTS Current Emily 500, PLAYER_HAS_MAIL atravita.SpamMail.Clothing received, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMail.Clothing, RANDOM 0.1, {{MidYearConstraint}}, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMailSpacer",
                     "Actions": [
-                        "AddConverstionTopic atravita.SpamMailSpacer {{ExpectedPlayTime}}",
+                        "AddConversationTopic atravita.SpamMailSpacer {{ExpectedPlayTime}}",
                         "AddMail Current atravita.SpamMail.Craft"
                     ]
                 },
@@ -371,7 +371,7 @@
                     "Trigger": "LocationChanged",
                     "Condition": "LOCATION_NAME Here HaleyHouse, PLAYER_HAS_MAIL Current atravita.SpamMail.Craft received, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMail.Craft, RANDOM 0.5, {{LateYearConstraint}}, SEASON winter, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMailSpacer",
                     "Actions": [
-                        "AddConverstionTopic atravita.SpamMailSpacer {{ExpectedPlayTime}}",
+                        "AddConversationTopic atravita.SpamMailSpacer {{ExpectedPlayTime}}",
                         "AddMail Current atravita.SpamMail.WinterStarCraft"
                     ]
                 }

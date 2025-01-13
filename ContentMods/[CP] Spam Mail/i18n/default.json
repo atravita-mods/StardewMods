@@ -22,9 +22,9 @@
 
     "Aquarium.Text.2": "Brought to you by Fahrenheit! No one's more extremmeeee than Fahrenheit Energy Drinks!",
 
-    "vincent-aquarium": "Miss Penny's gonna bring Jas and me to the Aquarium next Friday!$h#$b#I'm so excited.$h",
     "demetrius-aquarium": "I wonder, @, if it's ethical to keep such intelligent creatures such as orca in an aquarium?",
     "maru-aquarium": "Dad used to bring us out to the aquarium all the time when we were kids.#$b#I wish he had the time to do things like that now....",
+    "vincent-aquarium": "Miss Penny's gonna bring Jas and me to the Aquarium next Friday!$h#$b#I'm so excited.$h",
 
     /*************************
     * Zoo
@@ -83,8 +83,8 @@
     "JojaMail.Sneakers.Text.1": "Stride into the new school year with our fashionable light up sneakers! Now 30 percent off!",
     "JojaMail.Sneakers.Text.2": "One per person. Returns not accepted. These products do not carry a warranty. Void where illegal.",
 
-    "vincent-sneakers": "Hey, @! Look at these cool new sneakers mom got me! They light up!$h#$b#Oh, one broke already.$s",
     "jodi-sneakers": "Vincent begged and begged for me to buy him those light-up sneakers.#$b#But they're so cheaply made, one broke already. They weren't cheap either.$s",
+    "vincent-sneakers": "Hey, @! Look at these cool new sneakers mom got me! They light up!$h#$b#Oh, one broke already.$s",
 
     "JojaMail.SelfStirring.Title": "Introducing...The Self-Stirring Mug!",
     "JojaMail.SelfStirring.Text.1": "Ever been too lazy to stir your coffee in the morning? Well, Joja has your back! Introducing our new self-stirring coffee mug! It'll do the work for you!",
@@ -103,7 +103,6 @@
     "JojaMail.PlantBased.Text": "Seaweed chips, tofu burgers, and bean-based fake fish, feel better about yourself AND the environment when you buy these plant-based snacks!",
 
     "demetrius-plant-based": "You know, @, I've gotta take issue with this ad for plant-based foods.#$b#Algae is not a plant and Joja should know that already.",
-
     "emily-plant-based": "I'm glad that the big corporations are taking the environment more seriously, but sodium-packed processed foods aren't the answer.",
 
     // Medications, because WTF America
@@ -123,6 +122,8 @@
     "Therapy.Text.1": "Feeling bad about yourself? No fear, we're here! Providing long-distance therapy via phone or letter to rural areas.",
     "Therapy.Text.2": "We promise to never sell your data.",
 
+    "kent-therapy": "Jodi says I should be doing more therapy.#$e#I don't like it though. I don't like talking about myself.",
+
     // vacation
     "IslandVacation.Title": "Take off to a Tropical Paradise",
     "IslandVacation.Text.1": "Enjoy a nice pina colada on the white sandy beaches of Ginger Island! Just 1000$ for a ticket!",
@@ -138,7 +139,6 @@
     "Casino.Text.2": "Adults only, open all hours.",
 
     "pam-casino": "Ma used to really love gambling. She'd go up to the casino whenever she could.#$b#I miss her.$s",
-
     "robin-casino": "Demetrius and I went to a casino once. He spent the entire night trying to calculate the optimal way to win at the slot machines.",
 
     /*************
@@ -147,9 +147,9 @@
     "Composter.Title": "Kitchen Countertop Composter - Cheap and Easy!",
     "Composter.Text.1": "Tired of food scraps stinking up your kitchen? Just buy our patented Electric Kitchen Countertop Composter. With just nine payments of 1000$, you can create compost in hours!",
 
-    "jodi-composter": "Look, @, I bought that composter that's been all over the news lately.$h#$b#Works wonders, takes care of all my food scraps!",
-    "emily-composter": "Gosh, I don't know why people keep falling for greenwashing.#$b#That composter they keep advertising, it uses electricity, so it really doesn't help the environment any.$s",
     "demetrius-composter": "Composting is so much better for our environment than leaving our food scraps to rot in a landfill.",
+    "emily-composter": "Gosh, I don't know why people keep falling for greenwashing.#$b#That composter they keep advertising, it uses electricity, so it really doesn't help the environment any.$s",
+    "jodi-composter": "Look, @, I bought that composter that's been all over the news lately.$h#$b#Works wonders, takes care of all my food scraps!",
 
     /**************
     * Clothing
@@ -163,6 +163,7 @@
     "haley-clothing-unmarried": "Oh, @, did you see this advertisement for wedding gowns that came in the other day? Aren't these beautiful? I'd love to be able to wear any of these for my wedding.",
     "haley-clothing-married-other": "Oh, @, take a look at these wedding dresses in this ad! Aren't they so pretty? Maybe I'll grab one for my recommitment ceremony...",
     "haley-clothing-married-player":"Oh, hey, @! Take a look at these dresses in this ad here, aren't they so fashionable? If we were to get married again, which one would you like to see me in?",
+    "penny-clothing-unmarried": "All I ever dreamed of, @, was to have a white picket fence and 2.5 children...",
 
     // VPN
     "VPN.Title": "Protect Your Privacy!",

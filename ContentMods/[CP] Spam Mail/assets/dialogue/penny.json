@@ -1,0 +1,21 @@
+{
+    "Changes":[
+        {
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Penny",
+            "Entries": {
+                "atravita.SpamMail.PennyStocks": "{{i18n: penny-pennystocks}}",
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Penny",
+            "Entries":{
+                "atravita.SpamMail.Clothing": "{{i18n: penny-clothing-unmarried}}$s"
+            },
+            "When": {
+                "Spouse:anyPlayer|contains=Penny": false
+            }
+        }
+    ]
+}

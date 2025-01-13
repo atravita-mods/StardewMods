@@ -19,17 +19,18 @@
             "Action": "EditData",
             "Target": "Characters/Dialogue/Emily",
             "Entries": {
-                "atravita.SpamMail.Composter": "{{i18n: emily-composter}}",
                 "atravita.SpamMail.Clothing": "{{i18n: emily-clothing}}",
+                "atravita.SpamMail.Composter": "{{i18n: emily-composter}}",
+                "atravita.SpamMail.JojaPlantBased": "{{i18n: emily-plant-based}}$s",
                 "atravita.SpamMail.WinterStarCraft": "{{i18n: emily-winter-star-crafts}}",
-                "atravita.SpamMail.JojaPlantBased": "{{i18n: emily-plant-based}}$s"
             }
         },
         {
             "Action": "EditData",
             "Target": "Characters/Dialogue/Kent",
             "Entries": {
-                "atravita.SpamMail.HairInjection": "{{i18n: kent-hair-injection}}$s"
+                "atravita.SpamMail.HairInjection": "{{i18n: kent-hair-injection}}$s",
+                "atravita.SpamMail.Therapy": "{{i18n: kent-therapy}}$s"
             },
             "When": {
                 "Hearts:Kent|contains={{Range:0,5}}": false
@@ -75,6 +76,13 @@
             "FromFile": "assets/dialogue/george.json",
             "When": {
                 "Hearts:George|contains={{Range:0,5}}": false
+            }
+        },
+        {
+            "Action": "Include",
+            "FromFile": "assets/dialogue/penny.json",
+            "When": {
+                "Hearts:Penny|contains={{Range:0,5}}": false
             }
         },
         {
@@ -152,15 +160,5 @@
                 "atravita.SpamMail.Ring": "{{i18n:robin-ring}}"
             }
         },
-        {
-            "Action": "EditData",
-            "Target": "Characters/Dialogue/Penny",
-            "Entries": {
-                "atravita.SpamMail.PennyStocks": "{{i18n: penny-pennystocks}}",
-            },
-            "When": {
-                "Hearts:Penny|contains={{Range:0,5}}": false
-            }
-        }
     ]
 }

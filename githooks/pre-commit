@@ -8,5 +8,5 @@ MODSPATH = Path(r"C:\Program Files (x86)\Steam\steamapps\common\Stardew Valley\M
 CONTENTPATH = Path.cwd() / 'ContentMods'
 
 for folder in CONTENTPATH.iterdir():
-    if folder.is_dir():
+    if folder.is_dir() and (folder / "manifest.json").exists():
         shutil.copytree(folder, MODSPATH / folder.name, dirs_exist_ok=True)

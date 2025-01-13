@@ -1,0 +1,12 @@
+#!/usr/bin/env python
+
+from pathlib import Path
+import shutil
+
+MODSPATH = Path(r"C:\Program Files (x86)\Steam\steamapps\common\Stardew Valley\Mods")
+
+CONTENTPATH = Path.cwd() / 'ContentMods'
+
+for folder in CONTENTPATH.iterdir():
+    if folder.is_dir():
+        shutil.copytree(folder, MODSPATH / folder.name, dirs_exist_ok=True)

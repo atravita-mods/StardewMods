@@ -6,5 +6,8 @@
    "UniqueID": "atravita.CP.SpamMail",
    "ContentPackFor": {
        "UniqueID": "Pathoschild.ContentPatcher"
-    }
+    },
+    "UpdateKeys": [
+        "Nexus:17786"
+      ]
 }

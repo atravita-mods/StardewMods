@@ -1,9 +1,13 @@
 Spam Mail
 ====================
 
-*this is one of the last things I worked on, last year. I figured it was better to just release it.*
+*this is one of the last things I worked on, last year. I figured it was better to just release it. Is it finished? Nah. Is there plenty of content? Sure. Am I going to update this in any reasonable time? No.*
 
 Adds random spam mail. Makes NPCs react to the spam mail.
+
+One thing that's always bothered me about the game is how static the dialogue is. Nothing...really changes, about ever. This was an attempt to inject additional conversation topics into the game.
+
+That's about it.
 
 ## Install
 
@@ -14,7 +18,7 @@ Adds random spam mail. Makes NPCs react to the spam mail.
 
 ## Configuration
 
-1. `Expected Play Time`: A multiplier that controls the gap between notes in the puzzle. Set higher to increase the gap between notes. **This can be set locally** (1 = same as vanilla.)
+1. `ExpectedPlayTime`: In years, roughly how long you expect your save to last. This is used to space out the spam mail.
 
 ## Compatibility
 
@@ -24,3 +28,6 @@ Adds random spam mail. Makes NPCs react to the spam mail.
 
 ## See also
 [Repository](https://github.com/atravita-mods/StardewMods/tree/alpha/ContentMods/%5BCP%5D%20Spam%20Mail)
+
+## License
+The MIT license over my entire repository covers this, but this is also dual license'd [CC-4.0](https://creativecommons.org/licenses/by/4.0/). You may pick either license.

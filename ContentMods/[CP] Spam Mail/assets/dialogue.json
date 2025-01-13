@@ -148,7 +148,8 @@
             "Target": "Characters/Dialogue/Robin",
             "Entries": {
                 "atravita.SpamMail.ToolsShop": "{{i18n: robin-toolshop}}",
-                "atravita.SpamMail.Casino": "{{i18n: robin-casino}}"
+                "atravita.SpamMail.Casino": "{{i18n: robin-casino}}",
+                "atravita.SpamMail.Ring": "{{i18n:robin-ring}}"
             }
         },
         {

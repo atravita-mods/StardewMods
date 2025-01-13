@@ -12,6 +12,7 @@
     "CircusMail.Text": "Two weeks only, the Cirque de La Lune's in town! Featuring death-defying acrobatics, ferocious tamed lions, mind-bending magic shows, and, of course, clowns!^^Visit us in Zuzu City while we're here!",
 
     "vincent-circus-before": "Mom won't bring me to the circus.$s",
+    "sam-circus": "Man, @, do you think I'd be a good clown?#$b#I mean, I guess I'm pretty good with kids, don't you think?#$e#Maybe it'll be a backup career plan, if this music thing doesn't work out.",
 
     /*************************
     * Aquarium
@@ -22,14 +23,16 @@
     "Aquarium.Text.2": "Brought to you by Fahrenheit! No one's more extremmeeee than Fahrenheit Energy Drinks!",
 
     "vincent-aquarium": "Miss Penny's gonna bring Jas and me to the Aquarium next Friday!$h#$b#I'm so excited.$h",
-
     "demetrius-aquarium": "I wonder, @, if it's ethical to keep such intelligent creatures such as orca in an aquarium?",
+    "maru-aquarium": "Dad used to bring us out to the aquarium all the time when we were kids.#$b#I wish he had the time to do things like that now....",
 
     /*************************
     * Zoo
     *************************/
     "Zoo.Title": "New Exhibits at the Zuzu City Zoo!",
     "Zoo.Text": "Just for this summer, we've got some panda visitors! Bring your kids to meet these lovely fluffy critters before they go extinct.",
+
+    "lewis-zoo": "@, after the mines closed down, it's be real hard getting any industry around this place.#$b#Wish we could get some nice attractions, like a zoo or aquarium or something.",
 
     "Zoo2.Title": "Meet our new Eagle Ambassador!",
     "Zoo2.Text": "We'd like to introduce you to Sparrow, our new eagle ambassador! Come and watch us feed her fish and learn about conservation efforts.",
@@ -43,6 +46,8 @@
     // anyone else remember Medieval Times?
     "Castle.Title": "Jousting, Knights, and Festivities!",
     "Castle.Text": "Come see an unique attraction in Castle Times! Featuring dynamic jousts, expert horsemanship, and a feast fit for kings! Only 1000$ per person!",
+
+    "sebastian-castle": "Who wants to watch grown men pretend to be knights?#$b#Between you and I, @, that type of thing is more fun when you get to participate.",
 
     /*********************
     * Water Park
@@ -79,6 +84,7 @@
     "JojaMail.Sneakers.Text.2": "One per person. Returns not accepted. These products do not carry a warranty. Void where illegal.",
 
     "vincent-sneakers": "Hey, @! Look at these cool new sneakers mom got me! They light up!$h#$b#Oh, one broke already.$s",
+    "jodi-sneakers": "Vincent begged and begged for me to buy him those light-up sneakers.#$b#But they're so cheaply made, one broke already. They weren't cheap either.$s",
 
     "JojaMail.SelfStirring.Title": "Introducing...The Self-Stirring Mug!",
     "JojaMail.SelfStirring.Text.1": "Ever been too lazy to stir your coffee in the morning? Well, Joja has your back! Introducing our new self-stirring coffee mug! It'll do the work for you!",
@@ -160,9 +166,17 @@
 
     // VPN
     "VPN.Title": "Protect Your Privacy!",
-    "VPN.Text": "Did you know that when you're browsing online, every website tracks you! Well, they do! Let us help you hide from them. Only 99g for the first month!",
+    "VPN.Text.1": "Did you know that when you're browsing online, every website tracks you? Well, they do! Let us help you hide from them. Only 99g for the first month!",
+    "VPN.Text.2": "Please review our privacy policy carefully. We must follow all laws of the land, including responding appropriately to subpoenas.",
 
     "lewis-vpn": "Hey, @, can you explain this VPN thing to me? Is it something we should be doing?",
+
+    // Quantum TV
+    "Quantum.Title": "Introducing Our Quantum TV!!",
+    "Quantum.Text": "Our latest technology, with the brightest colors you'll ever see, surround-sound, and automatically dimming backlight, will be the best TV you've ever had. Plus, it's quantum! No, the engineers didn't tell me HOW it was quantum, just that it WAS.",
+
+    "demetrius-quantum": "I wonder what's so quantum about that new quantum TV...",
+    "sebastian-quantum": "Man, I wish I could afford that new quantum TV.#$b#@, it's got qdots!#$e#What are qdots? Well...they're little tiny crystals, only a few nanometers in width, and because of that they've got really precise emission spectra, so they emit really clean colors.#$e#Sadly, I'm never gonna be able to afford one.",
 
     // pizza
     "Pizza.Title": "Enjoy our new fully-stuffed-crust pizza!",
@@ -171,10 +185,14 @@
 
     "shane-pizza": "Hey, @, you've seen that new fully-stuffed-crust pizza? I can't wait to try it out?",
     "gus-pizza": "@, you think I should start carrying lava cakes or something?#$b#Something to attract a younger crowd?",
+    "sam-pizza": "I bet Sebastian that he couldn't finish an entire fully-stuffed-crust pizza, but by Yoba, my man did it.$h",
 
+    // Spices!
     "Spices.Title": "Crazy Jake's Crazy Spices",
     "Spices.Text.1": "The hottest spices on this side of the Gem Sea! Guaranteed no one fresher or spicier!",
     "Spices.Text.2": "Order now and get a free mug!",
+
+    "gus-spices": "Rosemary is one of the easiest things to grow. I've got some in a pot out back.#$b#You can basically ignore it and it'll still blossom.$h",
 
     // energy drinks?
     "EnergyDrink.Title": "You've Got It, Athlete.",
@@ -192,12 +210,14 @@
     "EnergyDrink3.Text.1": "We don't know, but we certainly put a lot in this lemonade! Now available in every store in the country, for the low low price of 1000g. It's good for your health, we promise!",
     "EnergyDrink3.Text.2": "Health claims have not been evaluated by any government agency.",
 
+    "harvey-energy-drink-3": "@, this is really getting excessive! That caffeinated lemonade, that's going to kill someone some day!",
+
     // Tools Shop
     "ToolsShop.Title": "Air Compressors For Less",
     "ToolsShop.Text.1": "Introducing our new Black and Yellow Air Compressor, perfect for small tasks! Buy yours, thirty percent off, today!",
     "ToolsShop.Text.2": "Home Improvement has never been easier!",
 
-    "robin-toolshop": "I wonder if I could convince Demetrius we need a new air compressor?",
+    "robin-toolshop": "I wonder if I could convince Demetrius we need a new air compressor?#$b#Or maybe a new drill press...",
 
     "ToolsShop2.Title": "Get The Guy In Your Life Something",
     "ToolsShop2.Text.1": "It's almost the Winter Star! You should probably get the guy in your life something. Got no ideas? What about getting him a tool?",
@@ -232,10 +252,10 @@
     "george-tv": "Gosh, @, Alex's been hankering for a new TV lately, but to be frank, I can't bear parting with the one I have.#$b#Wouldn't know how to operate all the buttons on the new ones.",
 
     // Craft store
-    "Craft.Title": "70% off yarn!",
+    "Craft.Title": "70% Off Yarn!",
     "Craft.Text": "Come in this weekend for 70% off most of our stock! Yarn, glitter, cake decorations, anything to unlock your creativity!",
 
-    "haley-crafts": "Hey, @, do you think Emily would appreciate this kit to make a Winter Star snow globe?",
+    "haley-crafts": "Hey, @, do you think Emily would appreciate this kit to make a Winter Star snow globe?#4b#It's full of super-fine glitter!",
 
     "Craft.WinterStar.Title": "Get Ready For Winter Star!",
     "Craft.WinterStar.Text": "Nearly 70% off foam snowmen, fake snow, tinsel, and plastic trees! Because if you don't start now, you definitely won't get your Winter Star decorations done in time!",

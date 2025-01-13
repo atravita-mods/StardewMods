@@ -81,7 +81,8 @@
             "Action": "EditData",
             "Target": "Characters/Dialogue/Lewis",
             "Entries": {
-                "atravita.SpamMail.VPN": "{{i18n: lewis-vpn}}"
+                "atravita.SpamMail.VPN": "{{i18n: lewis-vpn}}",
+                "atravita.SpamMail.Zoo": "{{i18n: lewis-zoo}}"
             },
             "When": {
                 "Hearts:Lewis|contains={{Range:0,5}}": false
@@ -91,7 +92,16 @@
             "Action": "EditData",
             "Target": "Characters/Dialogue/Maru",
             "Entries": {
-                "atravita.SpamMail.Ring": "{{i18n:maru-ring}}"
+                "atravita.SpamMail.Ring": "{{i18n:maru-ring}}",
+                "atravita.SpamMail.Aquarium": "{{i18n:maru-aquarium}}"
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Sebastian",
+            "Entries": {
+                "atravita.SpamMail.Quantum": "{{i18n: sebastian-quantum}}",
+                "atravita.SpamMail.Castle": "{{i18n: sebastian-castle}}"
             }
         },
         {
@@ -120,14 +130,17 @@
             "Action": "EditData",
             "Target": "Characters/Dialogue/Gus",
             "Entries": {
-                "atravita.SpamMail.Pizza": "{{i18n: gus-pizza}}"
+                "atravita.SpamMail.Pizza": "{{i18n: gus-pizza}}",
+                "atravita.SpamMail.Spices": "{{i18n: gus-spices}}"
             }
         },
         {
             "Action": "EditData",
             "Target": "Characters/Dialogue/Sam",
             "Entries": {
-                "atravita.SpamMail.VideoGames": "{{i18n:sam-videogames}}"
+                "atravita.SpamMail.VideoGames": "{{i18n:sam-videogames}}",
+                "atravita.SpamMail.Pizza": "{{i18n:sam-pizza}}",
+                "atravita.SpamMail.CircusMail": "{{i18n:sam-circus}}"
             }
         },
         {

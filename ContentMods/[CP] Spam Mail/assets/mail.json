@@ -42,7 +42,9 @@
                 // Shopping Block.
                 "atravita.SpamMail.Composter": "{{i18n:Composter.Title}}^^{{i18n:Composter.Text.1}}%item conversationTopic atravita.SpamMail.Composter {{Spacer}} %% [#]{{i18n:Composter.Title}}",
                 "atravita.SpamMail.Clothing": "{{i18n:Clothing.Title}}^^{{i18n:Clothing.Text.1}}^^{{i18n:Clothing.Text.2}} %item conversationTopic atravita.SpamMail.Clothing {{Spacer}} %% [#]{{i18n:Clothing.Title}}",
-                "atravita.SpamMail.VPN": "{{i18n:VPN.Title}}^^{{i18n:VPN.Text}} %item conversationTopic atravita.SpamMail.VPN {{Spacer}} %% [#]{{i18n:VPN.Title}}",
+                "atravita.SpamMail.VPN": "{{i18n:VPN.Title}}^^{{i18n:VPN.Text.1}}^^{{i18n:VPN.Text.2}} %item conversationTopic atravita.SpamMail.VPN {{Spacer}} %% [#]{{i18n:VPN.Title}}",
+                "atravita.SpamMail.Quantum": "{{i18n:Quantum.Title}}^^{{i18n:Quantum.Text}} %item conversationTopic atravita.SpamMail.Quantum {{Spacer}} %% [#]{{i18n:Quantum.Title}}",
+
 
                 "atravita.SpamMail.Pizza": "{{i18n:Pizza.Title}}^^{{i18n:Pizza.Text.1}}^^{{i18n:Pizza.Text.2}} %item conversationTopic atravita.SpamMail.Pizza {{Spacer}} %% [#]{{i18n:Pizza.Title}}",
 

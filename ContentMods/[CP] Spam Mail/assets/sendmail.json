@@ -319,6 +319,15 @@
                     ]
                 },
                 // ScienceHouse block.
+                "atravita.SpamMail.Quantum": {
+                    "Id": "atravita.SpamMail.VPN",
+                    "Trigger": "LocationChanged",
+                    "Condition": "LOCATION_NAME Here ScienceHouse, SEASON spring summer, RANDOM 0.1, {{MidYearConstraint}}, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMailSpacer",
+                    "Actions": [
+                        "AddConverstionTopic atravita.SpamMailSpacer {{ExpectedPlayTime}}",
+                        "AddMail Current atravita.SpamMail.Quantum"
+                    ]
+                },
                 "atravita.SpamMail.ToolsShop": {
                     "Id": "atravita.SpamMail.ToolsShop",
                     "Trigger": "DayEnding",

@@ -7,6 +7,7 @@
             "Entries": {
                 "atravita.SpamMail.EnergyDrink": "{{i18n:harvey-energy-drink}}$s",
                 "atravita.SpamMail.EnergyDrink2": "{{i18n:harvey-energy-drink-2}}$s",
+                "atravita.SpamMail.EnergyDrink3": "{{i18n:harvey-energy-drink-3}}$s",
                 "atravita.SpamMail.SkinImplants": "{{i18n:harvey-skin-implants}}",
             }
         },

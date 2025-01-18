@@ -1,6 +1,8 @@
 {
     "spellchecker.ignoreWordsList": [
+        "EnableDialogue",
+        "OnlyIfRainingOrWinter",
+        "OverrideMovement",
         "Uninstall",
-        "EnableDialogue"
     ]
 }

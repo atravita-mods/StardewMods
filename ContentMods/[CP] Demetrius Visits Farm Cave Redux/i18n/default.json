@@ -9,6 +9,9 @@
     "config.OverrideUnlock.name": "Override Unlock",
     "config.OverrideUnlock.description": "If enabled, Demetrius will show up regardless of whether or not he's set up the farm cave.",
 
+    "config.OverrideMovement.name": "Override Movement",
+    "config.OverrideMovement.description": "Typically, Demetrius is only allowed to walk around if one of two nondestructive npc mods are found. Set this to true to allow him to wander regardless.",
+
     "config.EnableDialogue.name": "Enable Dialogue",
     "config.EnableDialogue.description": "Whether or not the dialogue from this mod should be enabled",
 

@@ -45,7 +45,7 @@
             "Action": "Include",
             "FromFile": "movement.json",
             "When": {
-                "Query: {{HasMod|contains=MadaraUchiha.NonDestructiveNPCs, IamSaulC.NonDestructiveNPCs}} OR {{FarmCave|contains=Bats}}": true,
+                "Query: {{HasMod|contains=MadaraUchiha.NonDestructiveNPCs, IamSaulC.NonDestructiveNPCs}} OR {{OverrideMovement}}": true,
             }
         }
     ]

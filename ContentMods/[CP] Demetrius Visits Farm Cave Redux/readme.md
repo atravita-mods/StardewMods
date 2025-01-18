@@ -17,11 +17,12 @@ Inspired by [Demetrius Visits Cave](https://www.nexusmods.com/stardewvalley/mods
 ## Uninstall
 Simply remove this mod from your mods folder.
 
-## Configuration 
+## Configuration
 
 * **DemetriusVisitDay**: Select which day Demetrius comes to the farm cave. If you select a day of week, he comes once per week. If you select a specific day, he comes once per month. Specific schedules (like his night market schedule or his hospital visit) will still take priority though. (Custom NPC Exclusions is used to prevent him from trying to go to Ginger Island.)
 * **OnlyIfRainingOrWinter**: Will limit Demetrius to only visiting during the winter or during days where it's raining, when he'd stay inside otherwise. (Most of his other schedules have him wandering around town or studying the river in the mountains.)
 * **OverrideUnlock**: Demetrius should start visiting after the farm cave is unlocked, but if that doesn't work for some reason, set this to true.
+* **OverrideMovement**: Typically, Demetrius is only allowed to walk around if one of two nondestructive npc mods are found. Set this to true to allow him to wander regardless.
 * **EnableDialogue**: Enables the dialogue this mod adds.
 * **XPosition/YPosition**: Sets the location Demetrius should stand in.
 * **XWarp/YWarp**: Sets the location Demetrius should leave the farm cave from. This should be set one square away from the actual exit. You probably don't need to change this.

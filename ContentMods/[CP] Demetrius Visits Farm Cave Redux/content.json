@@ -10,6 +10,10 @@
             "AllowValues": "true, false",
             "Default": "false",
         },
+        "OverrideMovement": {
+            "AllowValues": "true, false",
+            "Default": false
+        },
         "OverrideUnlock": {
             "AllowValues": "true, false",
             "Default": "false"

@@ -126,6 +126,7 @@
     "demetrius.Mushrooms.Winter.10": "Gotta write my end-of-year report soon.#$b#I keep complaining that grants are the worst part of my job, but no, this end-of-year report is the worst part of my job.$s",
 
     // Misc CT dialogue, for 1.6
+    "dating-maru": "I guess, @, I'm getting used to the idea of you dating my daughter...",
     "dialogue.firstvisit.islandSouth": "You went to Ginger Island? Come, tell me about all the flora and fauna you saw!$h",
 
     "dialogue.fishcaught.sturgeon": "You caught a sturgeon, you say? Those fish are gigantic! How did you manage?",
@@ -143,5 +144,6 @@
 
     "demetrius.farmcave.oneyear": "You know, @, I've never properly thanked you for letting me set up my little experiment in your cave.#$b#I've gotten a lot of data from it, it's been really useful.#$e#So thank you. Very much. From the bottom of my heart.#$e#I'm serious. Thank you.#$e#I can thank you some more if you really want more but I need to get back to work.",
 
-    "demetrius.robin.axe": "Hey, thanks for bringing my wife her axe back. I haven't seen her so happy in weeks!$h"
+    "demetrius.robin.axe": "Hey, thanks for bringing my wife her axe back. I haven't seen her so happy in weeks!$h",
+    "demetrius.museum.start": "When I was growing up, we used to find sharks teeth all the time.#$e#Grew up hundreds of miles from the sea, too, crazy to imagine everything underwater.#$e#But it would have had to be that way, sharks don't swim on land."
 }

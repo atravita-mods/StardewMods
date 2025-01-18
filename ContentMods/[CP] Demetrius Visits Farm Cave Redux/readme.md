@@ -22,7 +22,7 @@ Simply remove this mod from your mods folder.
 * **DemetriusVisitDay**: Select which day Demetrius comes to the farm cave. If you select a day of week, he comes once per week. If you select a specific day, he comes once per month. Specific schedules (like his night market schedule or his hospital visit) will still take priority though. (Custom NPC Exclusions is used to prevent him from trying to go to Ginger Island.)
 * **OnlyIfRainingOrWinter**: Will limit Demetrius to only visiting during the winter or during days where it's raining, when he'd stay inside otherwise. (Most of his other schedules have him wandering around town or studying the river in the mountains.)
 * **OverrideUnlock**: Demetrius should start visiting after the farm cave is unlocked, but if that doesn't work for some reason, set this to true.
-* **EnableDialogue**: Enables the dialogue this mod adds. 
+* **EnableDialogue**: Enables the dialogue this mod adds.
 * **XPosition/YPosition**: Sets the location Demetrius should stand in.
 * **XWarp/YWarp**: Sets the location Demetrius should leave the farm cave from. This should be set one square away from the actual exit. You probably don't need to change this.
 
@@ -30,4 +30,4 @@ Simply remove this mod from your mods folder.
 * Yveltal0892 for the Chinese translation!
 
 ## License
-The MIT license over my entire repository covers this, but this is also dual license'd [CC-4.0](https://creativecommons.org/licenses/by/4.0/). You may pick either license.
+The MIT license over my entire repository covers this, but this is also dual licensed [CC-4.0](https://creativecommons.org/licenses/by/4.0/). You may pick either license.

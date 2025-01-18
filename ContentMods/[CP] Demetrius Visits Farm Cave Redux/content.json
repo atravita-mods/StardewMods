@@ -1,6 +1,6 @@
 {
     "$schema": "https://smapi.io/schemas/content-patcher.json",
-    "Format": "2.0.0",
+    "Format": "2.5.0",
     "ConfigSchema": {
         "DemetriusVisitDay": {
             "AllowValues": "Mon, Tue, Wed, Thu, Fri, Sat, Sun, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28",
@@ -72,6 +72,42 @@
             "When": {
                 "Query: {{OverrideUnlock}} OR NOT({{FarmCave|contains=None}}) OR ({{HasMod|contains=aedenthorn.FarmCaveFramework}} AND {{HasSeenEvent|contains=65}})": true,
             }
-        }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Demetrius",
+            "Entries": {
+                "FarmCave": "{{i18n:demetrius.{{DialogueVariant}}.{{Season}}.{{Random:00,01,02,03,04,05,06,07,08,09,10}} }}",
+
+                // dating Maru
+                "dating_Maru_oneweek": "{{i18n: dating-maru}}",
+
+                // visiting maps.
+                "firstVisit_IslandSouth": "{{i18n: dialogue.firstvisit.islandSouth}}",
+
+                // catching fish
+                "fishCaught_142": "{{i18n: dialogue.fishcaught.carp}}",
+                "fishCaught_698": "{{i18n: dialogue.fishcaught.sturgeon}}",
+                "fishCaught_Goby": "{{i18n: dialogue.fishcaught.goby}}",
+                "fishCaught_148": "{{i18n: dialogue.fishcaught.eel}}",
+                "fishCaught_149": "{{i18n: dialogue.fishcaught.octopus}}",
+                "fishCaught_151": "{{i18n: dialogue.fishcaught.squid}}",
+
+                // the farmcave event
+                "eventSeen_65_memory_fourweeks": "{{i18n: demetrius.farmcave.fourweeks.{{DialogueVariant}} }}",
+                "eventSeen_65_memory_eightweeks": "{{i18n: demetrius.farmcave.eightweeks.{{DialogueVariant}} }}",
+                "eventSeen_65_memory_oneyear": "{{i18n: demetrius.farmcave.oneyear}}",
+
+                // animals
+                "purchasedAnimal_White Cow_fourweeks": "{{i18n:demetrius.purchased.cow}}",
+
+                // quests
+                "questComplete_100": "{{i18n: demetrius.robin.axe}}",
+                "questComplete_24": "{{i18n: demetrius.museum.start}}"
+            },
+            "When": {
+                "EnableDialogue": true
+            }
+        },
     ]
 }

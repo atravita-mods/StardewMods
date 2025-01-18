@@ -1,8 +1,19 @@
 {
     "spellchecker.ignoreWordsList": [
+        "AllowValues",
+        "ConfigSchema",
+        "DemetriusRemainderSchedule",
+        "DemetriusVisitDay",
+        "EditData",
         "EnableDialogue",
+        "FarmCave",
+        "json",
         "OnlyIfRainingOrWinter",
         "OverrideMovement",
+        "OverrideUnlock",
+        "TextOperations",
         "Uninstall",
+        "UniqueID",
+        "UpdateKeys",
     ]
 }

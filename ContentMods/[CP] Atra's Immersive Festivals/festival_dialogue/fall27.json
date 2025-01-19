@@ -1,0 +1,412 @@
+// Halloween festival
+{
+    "Changes":[
+        {
+            "Action": "EditData",
+            "LogName": "Abby - normal",
+            "Target": "Data/Festivals/fall27",
+            "When": {
+                "EnableFor": "Abigail"
+            },
+            "Entries": {
+                "Abigail_y3": "%{{i18n:abby-y2-halloween.00}}#$b${{i18n:abby-y2-halloween.01}}",
+                "Abigail_spouse_y3": "{{i18n:abby-y2-halloween-spouse}}"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Alex - normal",
+            "Target": "Data/Festivals/fall27",
+            "When": {
+                "EnableFor": "Alex"
+            },
+            "Entries": {
+                "Alex_y3": "{{i18n:alex-y2-halloween.00}}#$e${{i18n:alex-y2-halloween.01}}",
+                "Alex_spouse": "{{i18n:alex-y1-halloween-spouse}}"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Caroline - normal",
+            "Target": "Data/Festivals/fall27",
+            "When": {
+                "EnableFor": "Caroline"
+            },
+            "Entries": {
+                "Caroline_y3": "{{i18n:caroline-y2-halloween}}",
+                "Caroline_y4": "{{i18n:caroline-y3-halloween}}"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Clint - normal",
+            "Target": "Data/Festivals/fall27",
+            "When": {
+                "EnableFor": "Clint"
+            },
+            "Entries": {
+                "Clint_y3": "{{i18n:clint-y2-halloween}}$h"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Demetrius - normal",
+            "Target": "Data/Festivals/fall27",
+            "When": {
+                "EnableFor": "Demetrius"
+            },
+            "Entries": {
+                "Demetrius_y3": "{{i18n:demetrius-y2-halloween}}",
+                "Demetrius_y4": "{{i18n:demetrius-y3-halloween}}",
+                "Demetrius_y5": "{{i18n:demetrius-y4-halloween}}$s"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Elliott - normal",
+            "Target": "Data/Festivals/fall27",
+            "When": {
+                "EnableFor": "Elliott"
+            },
+            "Entries": {
+                "Elliott_y3": "{{i18n:elliott-y2-halloween.00}}#$b${{i18n:elliott-y2-halloween.01}}$s",
+                "Elliott_spouse_y3": "{{i18n:elliott-y2-halloween-spouse}}"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Emily - normal",
+            "Target": "Data/Festivals/fall27",
+            "When": {
+                "EnableFor": "Emily"
+            },
+            "Entries": {
+                "Emily_y3": "{{i18n:emily-y2-halloween.00}}#$b${{i18n:emily-y2-halloween.01}}$s",
+                "Emily_spouse": "{{i18n:emily-y2-halloween-spouse}}"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Evelyn - normal",
+            "Target": "Data/Festivals/fall27",
+            "When": {
+                "EnableFor": "Evelyn"
+            },
+            "Entries": {
+                "Evelyn_y3": "{{i18n:evelyn-y2-halloween}}",
+                "Evelyn_y4": "{{i18n:evelyn-y3-halloween}}"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "George - normal",
+            "Target": "Data/Festivals/fall27",
+            "When": {
+                "EnableFor": "George"
+            },
+            "Entries": {
+                "George_y3": "{{i18n:george-y2-halloween}}",
+                "George_y4": "{{i18n:george-y3-halloween}}$h"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Gus - normal",
+            "Target": "Data/Festivals/fall27",
+            "When": {
+                "EnableFor": "Gus"
+            },
+            "Entries": {
+                "Gus_y3": "{{i18n:gus-y2-halloween}}",
+                "Gus_y4": "{{i18n:gus-y3-halloween}}$h"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Haley - normal",
+            "Target": "Data/Festivals/fall27",
+            "When": {
+                "EnableFor": "Haley"
+            },
+            "Entries": {
+                "Haley_y3": "{{i18n:haley-y2-halloween}}",
+                "Haley_spouse_y3": "{{i18n:haley-y2-halloween-spouse}}"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Haley - child singular",
+            "Target": "Data/Festivals/fall27",
+            "When": {
+                "EnableFor": "Haley",
+                "ChildStatus": "One",
+                "Spouse": "Haley"
+            },
+            "Entries": {
+                "Haley_spouse_y3": "{{i18n:haley-y2-halloween-spouse-has-kid}}"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Haley - multiple kids",
+            "Target": "Data/Festivals/fall27",
+            "When": {
+                "EnableFor": "Haley",
+                "ChildStatus": "Multiple",
+                "Spouse": "Haley"
+            },
+            "Entries": {
+                "Haley_spouse_y3": "{{i18n:haley-y2-halloween-spouse-has-kids}}"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Harvey - normal",
+            "Target": "Data/Festivals/fall27",
+            "When": {
+                "EnableFor": "Harvey"
+            },
+            "Entries": {
+                "Harvey_y3": "{{i18n:harvey-y2-halloween}}",
+                "Harvey_spouse_y3": "{{i18n:harvey-y2-halloween-spouse}}"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Jas - normal",
+            "Target": "Data/Festivals/fall27",
+            "When": {
+                "EnableFor": "Jas"
+            },
+            "Entries": {
+                "Jas_y3": "{{i18n:jas-y2-halloween.00}}$s#$e#{{i18n:jas-y2-halloween.01|title={{Title}} }}",
+                "Jas_y4": "{{i18n:jas-y3-halloween}}$s"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Jodi - normal",
+            "Target": "Data/Festivals/fall27",
+            "When": {
+                "EnableFor": "Jodi"
+            },
+            "Entries": {
+                "Jodi_y3": "{{i18n:jodi-y2-halloween}}",
+                "Jodi_y4": "{{i18n:jodi-y3-halloween}}",
+                "Jodi_y5": "{{i18n:jodi-y4-halloween}}$s",
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Kent - normal",
+            "Target": "Data/Festivals/fall27",
+            "When": {
+                "EnableFor": "Kent"
+            },
+            "Entries": {
+                "Kent_y3": "{{i18n:kent-y2-halloween}}",
+                "Kent_y4": "{{i18n:kent-y3-halloween}}"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Leah - normal",
+            "Target": "Data/Festivals/fall27",
+            "When": {
+                "EnableFor": "Leah"
+            },
+            "Entries": {
+                "Leah_y3": "{{i18n:leah-y2-halloween}}$h",
+                "Leah_spouse_y3": "{{i18n:leah-y2-halloween-spouse}}"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Leo - normal",
+            "Target": "Data/Festivals/fall27",
+            "When": {
+                "EnableFor": "Leo"
+            },
+            "Entries": {
+                "Leo_y3": "{{i18n:leo-y2-halloween|title={{Title}} }}$s",
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Lewis - normal",
+            "Target": "Data/Festivals/fall27",
+            "When": {
+                "EnableFor": "Lewis"
+            },
+            "Entries": {
+                "Lewis_y3": "{{i18n:lewis-y2-halloween.00}}$h#$e#{{i18n:lewis-y2-halloween.01}}",
+                "Lewis_y4": "{{i18n:lewis-y3-halloween.00}}$h#$e#{{i18n:lewis-y3-halloween.01}}",
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Linus - normal",
+            "Target": "Data/Festivals/fall27",
+            "When": {
+                "EnableFor": "Linus"
+            },
+            "Entries": {
+                "Linus_y3": "{{i18n:linus-y2-halloween}}$h",
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Marlon - normal",
+            "Target": "Data/Festivals/fall27",
+            "When": {
+                "EnableFor": "Marlon"
+            },
+            "Entries": {
+                "Marlon_y3": "{{i18n:marlon-y2-halloween}}",
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Marnie - normal",
+            "Target": "Data/Festivals/fall27",
+            "When": {
+                "EnableFor": "Marnie"
+            },
+            "Entries": {
+                "Marnie_y3": "{{i18n:marnie-y2-halloween}}$h",
+                "Marnie_y4": "{{i18n:marnie-y3-halloween}}$h"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Marnie - realism",
+            "Target": "Data/Festivals/fall27",
+            "When": {
+                "EnableFor": "Marnie",
+                "IncreasedRealism": true
+            },
+            "Entries": {
+                "Marnie_y4": "{{i18n:marnie-y3-halloween-realism}}"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Maru - normal",
+            "Target": "Data/Festivals/fall27",
+            "When": {
+                "EnableFor": "Maru"
+            },
+            "Entries": {
+                "Maru_y3": "{{i18n:maru-y2-halloween}}$h",
+                "Maru_spouse_y3": "{{i18n:maru-y2-halloween-spouse}}"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Pam - normal",
+            "Target": "Data/Festivals/fall27",
+            "When": {
+                "EnableFor": "Pam"
+            },
+            "Entries": {
+                "Pam_y3": "{{i18n:pam-y2-halloween}}$h",
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Penny - normal",
+            "Target": "Data/Festivals/fall27",
+            "When": {
+                "EnableFor": "Penny"
+            },
+            "Entries": {
+                "Penny_y3": "{{i18n:penny-y2-halloween}}",
+                "Penny_spouse_y3": "{{i18n:penny-y2-halloween-spouse}}$s"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Pierre - normal",
+            "Target": "Data/Festivals/fall27",
+            "When": {
+                "EnableFor": "Pierre"
+            },
+            "Entries": {
+                "Pierre": "{{i18n:pierre-y1-halloween}}$h",
+                "Pierre_y3": "{{i18n:pierre-y2-halloween}}",
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Pierre - normal",
+            "Target": "Data/Festivals/fall27",
+            "When": {
+                "EnableFor": "Pierre",
+                "Relationship: Abigail": "Married",
+            },
+            "Entries": {
+                "Pierre_y3": "{{i18n:pierre-y2-halloween-married-to-abby}}$h",
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Robin - normal",
+            "Target": "Data/Festivals/fall27",
+            "When": {
+                "EnableFor": "Robin"
+            },
+            "Entries": {
+                "Robin_y3": "{{i18n:robin-y2-halloween}}$h",
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Sam - normal",
+            "Target": "Data/Festivals/fall27",
+            "When": {
+                "EnableFor": "Sam"
+            },
+            "Entries": {
+                "Sam_y3": "{{i18n:sam-y2-halloween}}",
+                "Sam_spouse_y3": "{{i18n:sam-y2-halloween-spouse}}$h"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Sebastian - normal",
+            "Target": "Data/Festivals/fall27",
+            "When": {
+                "EnableFor": "Sebastian"
+            },
+            "Entries": {
+                "Sebastian_y3": "{{i18n:sebastian-y2-halloween}}",
+                "Sebastian_spouse_y3": "{{i18n:sebastian-y2-halloween-spouse}}$h"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Shane - normal",
+            "Target": "Data/Festivals/fall27",
+            "When": {
+                "EnableFor": "Shane"
+            },
+            "Entries": {
+                "Shane_y3": "{{i18n:shane-y2-halloween}}$h",
+                "Shane_y4": "{{i18n:shane-y3-halloween}}",
+                "Shane_spouse_y3": "{{i18n:shane-y2-halloween-spouse}}$h"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Vincent - normal",
+            "Target": "Data/Festivals/fall27",
+            "When": {
+                "EnableFor": "Vincent"
+            },
+            "Entries": {
+                "Vincent_y3": "{{i18n:vincent-y2-halloween|title={{Title}} }}",
+                "Vincent_y4": "{{i18n:vincent-y3-halloween}}",
+            }
+        },
+    ]
+}

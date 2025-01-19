@@ -1,0 +1,431 @@
+// fun and politics in the sun.
+{"Changes":[
+    {
+        "Action": "EditData",
+        "LogName": "Abby - normal",
+        "Target": "Data/Festivals/summer11",
+        "When": {
+            "EnableFor": "Abigail"
+        },
+        "Entries": {
+            "Abigail_y3": "{{i18n:abby-y2-luau.00}}",
+            "Abigail_y4": "{{i18n:abby-y3-luau.00}}$s",
+            "Abigail_spouse_y3": "{{i18n:abby-y2-luau-spouse}}#$b#{{i18n:abby-y2-luau-spouse.00}}$s"
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Alex - normal",
+        "Target": "Data/Festivals/summer11",
+        "When": {
+            "EnableFor": "Alex"
+        },
+        "Entries": {
+            "Alex_y3": "{{i18n:alex-y2-luau.00}}$h",
+            "Alex_spouse_y3": "{{i18n:alex-y2-luau-spouse}}$h",
+            "Alex_spouse_y4": "{{i18n:alex-y3-luau-spouse}}$h"
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Alex - higher hearts",
+        "Target": "Data/Festivals/summer11",
+        "When": {
+            "EnableFor": "Alex",
+            "Query: {{Hearts:Alex}} > 5": true
+        },
+        "Entries": {
+            "Alex_y4": "{{i18n:alex-y3-luau.00}}$h"
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Caroline - normal",
+        "Target": "Data/Festivals/summer11",
+        "When": {
+            "EnableFor": "Caroline"
+        },
+        "Entries": {
+            "Caroline_y3": "{{i18n:caroline-y2-luau}}$h",
+            "Caroline_y4": "{{i18n:caroline-y3-luau}}$s",
+            "Caroline_y5": "{{i18n:caroline-y4-luau}}$h#$e#{{i18n:caroline-y4-luau.00}}"
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Clint - normal",
+        "Target": "Data/Festivals/summer11",
+        "When": {
+            "EnableFor": "Clint"
+        },
+        "Entries": {
+            "Clint_y3": "{{i18n:clint-y2-luau}}",
+            "Clint_y4": "{{i18n:clint-y3-luau.00}}$s#$e{{i18n:clint-y3-luau.01}}",
+            "Clint_y5": "{{i18n:clint-y4-luau}}$h"
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Demetrius - normal",
+        "Target": "Data/Festivals/summer11",
+        "When": {
+            "EnableFor": "Demetrius"
+        },
+        "Entries": {
+            "Demetrius_y3": "{{i18n:demetrius-y2-luau}}$s",
+            "Demetrius_y4": "{{i18n:demetrius-y3-luau}}$s",
+            "Demetrius_y5": "{{i18n:demetrius-y4-luau.00}}$s#$e#{{i18n:demetrius-y4-luau.01}}"
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Elliott - normal",
+        "Target": "Data/Festivals/summer11",
+        "When": {
+            "EnableFor": "Elliott"
+        },
+        "Entries": {
+            "Elliott_y3": "{{i18n:elliott-y2-luau.00}}#$b${{i18n:elliott-y2-luau.01}}$s",
+            "Elliott_y4": "{{i18n:elliott-y3-luau}}$h",
+            "Elliott_spouse_y3": "{{i18n:elliott-y2-luau-spouse}}#$b#{{i18n:elliott-y2-luau-spouse.01}}$s"
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Emily - normal",
+        "Target": "Data/Festivals/summer11",
+        "When": {
+            "EnableFor": "Emily"
+        },
+        "Entries": {
+            "Emily_y3": "{{i18n:emily-y2-luau.00}}#$b${{i18n:emily-y2-luau.01}}$h",
+            "Emily_spouse": "{{i18n:emily-y1-luau-spouse}}$h",
+            "Emily_spouse_y3": "{{i18n:emily-y2-luau-spouse}}$h"
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Evelyn - normal",
+        "Target": "Data/Festivals/summer11",
+        "When": {
+            "EnableFor": "Evelyn"
+        },
+        "Entries": {
+            "Evelyn_y3": "{{i18n:evelyn-y2-luau}}",
+            "Evelyn_y4": "{{i18n:evelyn-y3-luau}}$s",
+            "Evelyn_y5": "{{i18n:evelyn-y4-luau}}$h"
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "George - normal",
+        "Target": "Data/Festivals/summer11",
+        "When": {
+            "EnableFor": "George"
+        },
+        "Entries": {
+            "George_y3": "{{i18n:george-y2-luau}}$h",
+            "George_y4": "{{i18n:george-y3-luau}}$s",
+            "George_y5": "{{i18n:george-y4-luau}}$h"
+        }
+    },
+    {
+        // NOTE: Governor does not use Y2 tokens apparently.
+        "Action": "EditData",
+        "LogName": "Governor",
+        "Target": "Data/Festivals/summer11",
+        "When": {
+            "EnableFor": "Governor",
+            "Query: {{IsJojaMartComplete}} OR NOT ({{YearModulus|contains=1}})": true
+        },
+        "Entries": {
+            "Governor": "{{i18n:governor-y{{YearModulus}}-luau-joja-{{IsJojaMartComplete}} }}"
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Gus - normal",
+        "Target": "Data/Festivals/summer11",
+        "When": {
+            "EnableFor": "Gus"
+        },
+        "Entries": {
+            "Gus_y3": "{{i18n:gus-y2-luau}}$h",
+            "Gus_y4": "{{i18n:gus-y3-luau}}$h",
+            "Gus_y5": "{{i18n:gus-y4-luau}}$s"
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Haley - normal",
+        "Target": "Data/Festivals/summer11",
+        "When": {
+            "EnableFor": "Haley"
+        },
+        "Entries": {
+            "Haley_y3": "{{i18n:haley-y2-luau.00}}#$b${{i18n:haley-y2-luau.01}}",
+            "Haley_spouse_y3": "{{i18n:haley-y2-luau-spouse}}$h",
+            "Haley_spouse_y4": "{{i18n:haley-y3-luau-spouse}}$h"
+        }
+    },
+    {
+        // deliberately leaving the vanilla line about Maru. Maybe Harvey is just socially awkward and doesn't mean much by it.
+        "Action": "EditData",
+        "LogName": "Harvey - normal",
+        "Target": "Data/Festivals/summer11",
+        "When": {
+            "EnableFor": "Harvey"
+        },
+        "Entries": {
+            "Harvey_y3": "{{i18n:harvey-y2-luau}}",
+            "Harvey_spouse_y3": "{{i18n:harvey-y2-luau-spouse}}"
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Jas - normal",
+        "Target": "Data/Festivals/summer11",
+        "When": {
+            "EnableFor": "Jas"
+        },
+        "Entries": {
+            "Jas_y3": "{{i18n:jas-y2-luau.00}}$s#$e#{{i18n:jas-y2-luau.01|title={{Title}} }}",
+            "Jas_y4": "{{i18n:jas-y3-luau}}$s"
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Jodi - normal",
+        "Target": "Data/Festivals/summer11",
+        "When": {
+            "EnableFor": "Jodi"
+        },
+        "Entries": {
+            "Jodi_y3": "{{i18n:jodi-y2-luau}}",
+            "Jodi_y4": "{{i18n:jodi-y3-luau}}",
+            "Jodi_y5": "{{i18n:jodi-y4-luau}}$s"
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Kent - normal",
+        "Target": "Data/Festivals/summer11",
+        "When": {
+            "EnableFor": "Kent"
+        },
+        "Entries": {
+            "Kent_y3": "{{i18n:kent-y2-luau}}",
+            "Kent_y4": "{{i18n:kent-y3-luau}}$s"
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Leah - normal",
+        "Target": "Data/Festivals/summer11",
+        "When": {
+            "EnableFor": "Leah"
+        },
+        "Entries": {
+            "Leah_y3": "{{i18n:leah-y2-luau}}$h",
+            "Leah_spouse_y3": "{{i18n:leah-y2-luau-spouse}}$s#$b#{{i18n:leah-y2-luau-spouse.00}}"
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Leo - normal",
+        "Target": "Data/Festivals/summer11",
+        "When": {
+            "EnableFor": "Leo"
+        },
+        "Entries": {
+            "Leo_y3": "{{i18n:leo-y2-luau}}",
+            "Leo_y4": "{{i18n:leo-y3-luau}}$h"
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Lewis - normal",
+        "Target": "Data/Festivals/summer11",
+        "When": {
+            "EnableFor": "Lewis"
+        },
+        "Entries": {
+            "Lewis_y3": "{{i18n:lewis-y2-luau}}",
+            "Lewis_y4": "{{i18n:lewis-y3-luau}}$h#$e#{{i18n:lewis-y3-luau.00}}"
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Linus - normal",
+        "Target": "Data/Festivals/summer11",
+        "When": {
+            "EnableFor": "Linus"
+        },
+        "Entries": {
+            "Linus_y3": "{{i18n:linus-y2-luau}}$h",
+            "Linus_y4": "{{i18n:linus-y3-luau}}$h"
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Marlon - normal",
+        "Target": "Data/Festivals/summer11",
+        "When": {
+            "EnableFor": "Marlon"
+        },
+        "Entries": {
+            "Marlon_y3": "{{i18n:marlon-y2-luau}}"
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Marnie - normal",
+        "Target": "Data/Festivals/summer11",
+        "When": {
+            "EnableFor": "Marnie"
+        },
+        "Entries": {
+            "Marnie_y3": "{{i18n:marnie-y2-luau}}$h",
+            "Marnie_y4": "{{i18n:marnie-y3-luau}}$h"
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Maru - normal",
+        "Target": "Data/Festivals/summer11",
+        "When": {
+            "EnableFor": "Maru"
+        },
+        "Entries": {
+            "Maru_y3": "{{i18n:maru-y2-luau}}$h",
+            "Maru_spouse_y3": "{{i18n:maru-y2-luau-spouse}}$s"
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Pam - normal",
+        "Target": "Data/Festivals/summer11",
+        "When": {
+            "EnableFor": "Pam"
+        },
+        "Entries": {
+            "Pam_y3": "{{i18n:pam-y2-luau}}$h"
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Penny - normal",
+        "Target": "Data/Festivals/summer11",
+        "When": {
+            "EnableFor": "Penny"
+        },
+        "Entries": {
+            "Penny_y3": "{{i18n:penny-y2-luau}}#$e#{{i18n:penny-y2-luau.00}}$s",
+            "Penny_spouse_y3": "{{i18n:penny-y2-luau-spouse}}"
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Pierre - no Joja",
+        "Target": "Data/Festivals/summer11",
+        "When": {
+            "EnableFor": "Pierre",
+            "IsJojaMartComplete": false
+        },
+        "Entries": {
+            "Pierre_y3": "{{i18n:pierre-y2-luau}}",
+            "Pierre_y4": "{{i18n:pierre-y3-luau}}$h"
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Pierre - Joja",
+        "Target": "Data/Festivals/summer11",
+        "When": {
+            "EnableFor": "Pierre",
+            "IsJojaMartComplete": true
+        },
+        "Entries": {
+            "Pierre_y3": "{{i18n:pierre-y2-luau-joja}}$s#$e#{{i18n:pierre-y2-luau-joja.00}}",
+            "Pierre_y4": "{{i18n:pierre-y3-luau-joja}}$s"
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Robin - normal",
+        "Target": "Data/Festivals/summer11",
+        "When": {
+            "EnableFor": "Robin"
+        },
+        "Entries": {
+            "Robin_y3": "{{i18n:robin-y2-luau}}$h",
+            "Robin_y4": "{{i18n:robin-y3-luau}}$h#$e#{{i18n:robin-y3-luau.01}}",
+            "Robin_y5": "{{i18n:robin-y4-luau.00}}$s"
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Sam - normal",
+        "Target": "Data/Festivals/summer11",
+        "When": {
+            "EnableFor": "Sam"
+        },
+        "Entries": {
+            "Sam_y3": "{{i18n:sam-y2-luau}}$s#$e#{{i18n:sam-y2-luau.00}}$s",
+            "Sam_spouse_y3": "{{i18n:sam-y2-luau-spouse}}$l",
+            "Sam_spouse_y4": "{{i18n:sam-y3-luau-spouse}}$h"
+        }
+    },
+    // intentionally skip Sandy.
+    {
+        "Action": "EditData",
+        "LogName": "Sebastian - normal",
+        "Target": "Data/Festivals/summer11",
+        "When": {
+            "EnableFor": "Sebastian"
+        },
+        "Entries": {
+            "Sebastian_y3": "{{i18n:sebastian-y2-luau}}$s#$e#{{i18n:sebastian-y2-luau.000}}",
+            "Sebastian_spouse_y3": "{{i18n:sebastian-y2-luau-spouse}}$s"
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Shane - normal",
+        "Target": "Data/Festivals/summer11",
+        "When": {
+            "EnableFor": "Shane"
+        },
+        "Entries": {
+            "Shane_y3": "{{i18n:shane-y2-luau}}$h",
+            "Shane_y4": "{{i18n:shane-y3-luau}}",
+            "Shane_spouse": "{{i18n:shane-y1-luau-spouse}}$h"
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Vincent - normal",
+        "Target": "Data/Festivals/summer11",
+        "When": {
+            "EnableFor": "Vincent"
+        },
+        "Entries": {
+            "Vincent_y3": "{{i18n:vincent-y2-luau|title={{Title}} }}",
+            "Vincent_y4": "{{i18n:vincent-y3-luau}}"
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Willy - normal",
+        "Target": "Data/Festivals/summer11",
+        "When": {
+            "EnableFor": "Willy"
+        },
+        "Entries": {
+            "Willy_y3": "{{i18n:willy-y2-luau}}$h",
+            "Willy_y4": "{{i18n:willy-y3-luau}}$s",
+            "Willy_y5": "{{i18n:willy-y4-luau}}$h"
+        }
+    }
+    // Wizard deliberately excluded, he has enough content.
+]}

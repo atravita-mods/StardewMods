@@ -1,0 +1,448 @@
+// Stardew Fair, fall16
+{
+    "Changes": [
+        {
+            "Action": "EditData",
+            "LogName": "Abby - normal",
+            "Target": "Data/Festivals/fall16",
+            "When": {
+                "EnableFor": "Abigail"
+            },
+            "Entries": {
+                "Abigail_y3": "{{i18n:abby-y2-fair}}",
+                "Abigail_y4": "{{i18n:abby-y3-fair.01}}$h#$e#{{i18n:abby-y3-fair.02}}",
+                "Abigail_spouse_y3": "{{i18n:abby-y2-fair-spouse}}$h",
+                "Abigail_spouse_y4": "{{i18n:abby-y3-fair-spouse}}$h"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Abby - normal dialogue file",
+            "Target": "Characters/Dialogue/Abigail",
+            "When": {
+                "EnableFor" : "Abigail",
+                "Relationship: Abigail | contains=Divorced": false
+            },
+            "Entries": {
+                "Fair_Judged_PlayerWon": "{{i18n:abby-fair-judged-won}}",
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Alex - normal",
+            "Target": "Data/Festivals/fall16",
+            "When": {
+                "EnableFor": "Alex"
+            },
+            "Entries": {
+                "Alex_y3": "{{i18n:alex-y2-fair}}$h",
+                "Alex_y4": "{{i18n:alex-y3-fair}}",
+                "Alex_spouse_y3": "{{i18n:alex-y2-fair-spouse}}$h",
+                "Alex_spouse_y4": "{{i18n:alex-y3-fair-spouse}}$h"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Caroline - normal",
+            "Target": "Data/Festivals/fall16",
+            "When": {
+                "EnableFor": "Caroline",
+                "Relationship: Abigail | contains=Divorced": false
+            },
+            "Entries": {
+                "Caroline_y3": "{{i18n:caroline-y2-fair}}$h",
+                "Caroline_y4": "{{i18n:caroline-y3-fair}}$h",
+                "Caroline_y5": "{{i18n:caroline-y4-fair}}"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Caroline - divorced from Abby",
+            "Target": "Data/Festivals/fall16",
+            "When": {
+                "EnableFor": "Caroline",
+                "Relationship: Abigail": "Divorced"
+            },
+            "Entries": {
+                "Caroline": "{{i18n:caroline-fair-divorced-from-abby}}$a",
+                "Caroline_y2": null,
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Caroline - normal - regular dialogue file",
+            "Target": "Characters/Dialogue/Caroline",
+            "When": {
+                "EnableFor": "Caroline",
+                "Relationship: Abigail | contains=Divorced": false
+            },
+            "Entries": {
+                "Fair_Judging": "{{i18n:caroline-fair-judging}}",
+                "Fair_Judged_PlayerLost_Skipped": "{{i18n:caroline-fair-judged-skipped}}$h",
+                "Fair_Judged_PlayerLost": "{{i18n:caroline-fair-judged-lost}}$h",
+                "Fair_Judged_PlayerWon": "{{i18n:caroline-fair-judged-won}}$h",
+                "Fair_Judged_PlayerLost_PurpleShorts": "{{i18n:caroline-fair-judged-shorts}}$a"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Clint - normal",
+            "Target": "Data/Festivals/fall16",
+            "When": {
+                "EnableFor": "Clint"
+            },
+            "Entries": {
+                "Clint_y3": "{{i18n:clint-y2-fair.0}}$h#$b#{{i18n:clint-y2-fair.1}}$s",
+                "Clint_y4": "{{i18n:clint-y3-fair}}$s"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Demetrius - normal",
+            "Target": "Data/Festivals/fall16",
+            "When": {
+                "EnableFor": "Demetrius"
+            },
+            "Entries": {
+                "Demetrius_y3": "{{i18n:demetrius-y2-fair.0}}#$b#{{i18n:demetrius-y2-fair.1}}",
+                "Demetrius_y4": "{{i18n:demetrius-y3-fair.0}}$h#$b#{{i18n:demetrius-y3-fair.1}}$h"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Elliott - normal",
+            "Target": "Data/Festivals/fall16",
+            "When": {
+                "EnableFor": "Elliott"
+            },
+            "Entries": {
+                "Elliott_y3": "{{i18n:elliott-y2-fair}}",
+                "Elliott_y4": "{{i18n:elliott-y3-fair}}$h",
+                "Elliott_spouse_y3": "{{i18n:elliott-y2-fair-spouse}}$h",
+                "Elliott_spouse_y4": "{{i18n:elliott-y3-fair-spouse}}$h"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Emily - normal",
+            "Target": "Data/Festivals/fall16",
+            "When": {
+                "EnableFor": "Emily"
+            },
+            "Entries": {
+                "Emily_y3": "{{i18n:emily-y2-fair}}$h",
+                "Emily_spouse": "{{i18n:emily-y1-fair-spouse}}$h",
+                "Emily_spouse_y3": "{{i18n:emily-y2-fair-spouse}}"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Evelyn - normal",
+            "Target": "Data/Festivals/fall16",
+            "When": {
+                "EnableFor": "Evelyn"
+            },
+            "Entries": {
+                "Evelyn_y3": "{{i18n:evelyn-y2-fair}}$h"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "George - normal",
+            "Target": "Data/Festivals/fall16",
+            "When": {
+                "EnableFor": "George"
+            },
+            "Entries": {
+                "George_y3": "{{i18n:george-y2-fair}}"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Gus - normal",
+            "Target": "Data/Festivals/fall16",
+            "When": {
+                "EnableFor": "Gus"
+            },
+            "Entries": {
+                "Gus_y3": "{{i18n:gus-y2-fair}}$h",
+                "Gus_y4": "{{i18n:gus-y3-fair}}"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Haley - normal",
+            "Target": "Data/Festivals/fall16",
+            "When": {
+                "EnableFor": "Haley"
+            },
+            "Entries": {
+                "Haley_spouse_y3": "{{i18n:haley-y2-fair-spouse}}$h",
+                "Haley_y3": "{{i18n:haley-y2-fair}}"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Harvey - normal dialogue file",
+            "Target": "Characters/Dialogue/Harvey",
+            "When": {"EnableFor":"Harvey"},
+            "Entries": {
+                "Fair_Judged_PlayerLost_PurpleShorts": "{{i18n:harvey-fair-judged-shorts}}"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Harvey - normal",
+            "Target": "Data/Festivals/fall16",
+            "When": {
+                "EnableFor": "Harvey"
+            },
+            "Entries": {
+                "Harvey_spouse_y3": "{{i18n:harvey-y2-fair-spouse.0}}#$b#{{i18n:harvey-y2-fair-spouse.1}}",
+                "Harvey_y3": "{{i18n: harvey-y2-fair}}$h"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Jas - normal",
+            "Target": "Data/Festivals/fall16",
+            "When": {
+                "EnableFor": "Jas"
+            },
+            "Entries": {
+                "Jas_y3": "{{i18n:jas-y2-fair}}$h",
+                "Jas_y4": "{{i18n:jas-y3-fair}}$h"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Jodi - normal",
+            "Target": "Data/Festivals/fall16",
+            "When": {
+                "EnableFor": "Jodi"
+            },
+            "Entries": {
+                "Jodi_y3": "{{i18n:jodi-y2-fair.0}}#$b#{{i18n:jodi-y2-fair.1}}",
+                "Jodi_y4": "{{i18n:jodi-y3-fair.0}}#$b#{{i18n:jodi-y3-fair.1}}"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Kent - normal",
+            "Target": "Data/Festivals/fall16",
+            "When": {
+                "EnableFor": "Kent"
+            },
+            "Entries": {
+                "Kent_y3": "{{i18n:kent-y2-fair.0}}#$e#{{i18n:kent-y2-fair.1}}"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Leah - normal",
+            "Target": "Data/Festivals/fall16",
+            "When": {
+                "EnableFor": "Leah"
+            },
+            "Entries": {
+                "Leah_y3": "{{i18n:leah-y2-fair}}",
+                "Leah_spouse_y3": "{{i18n:leah-y2-fair-spouse}}"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Leo - normal",
+            "Target": "Data/Festivals/fall16",
+            "When": {
+                "EnableFor": "Leo"
+            },
+            "Entries": {
+                "Leo_y3": "{{i18n:leo-y2-fair}}$h"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Lewis - normal",
+            "Target": "Data/Festivals/fall16",
+            "When": {
+                "EnableFor": "Lewis"
+            },
+            "Entries": {
+                "Lewis_y3": "{{i18n:lewis-y2-fair.0}}$h#$b#{{i18n:lewis-y2-fair.1}}#$e#{{i18n:lewis-y2-fair.2}}$h"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Linus - normal",
+            "Target": "Data/Festivals/fall16",
+            "When": {
+                "EnableFor": "Linus"
+            },
+            "Entries": {
+                "Linus_y3": "{{i18n:linus-y2-fair}}$h"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Linus - higher hearts",
+            "Target": "Data/Festivals/fall16",
+            "When": {
+                "EnableFor": "Linus",
+                "Query: {{Hearts: Linus}} >= 8": true
+            },
+            "Entries": {
+                "Linus": "{{i18n:linus-y1-fair-high-hearts}}$h"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Marlon - normal",
+            "Target": "Data/Festivals/fall16",
+            "When": {
+                "EnableFor": "Marlon"
+            },
+            "Entries": {
+                "Marlon_y3": "{{i18n:marlon-y2-fair}}$h",
+                "Marlon_y4": "{{i18n:marlon-y3-fair}}$h"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Marnie - normal",
+            "Target": "Data/Festivals/fall16",
+            "When": {
+                "EnableFor": "Marnie"
+            },
+            "Entries": {
+                "Marnie_y3": "{{i18n:marnie-y2-fair}}$h",
+                "Marnie_y4": "{{i18n:marnie-y3-fair}}$s"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Maru - normal",
+            "Target": "Data/Festivals/fall16",
+            "When": {
+                "EnableFor": "Maru"
+            },
+            "Entries": {
+                "Maru_y3": "{{i18n:maru-y2-fair.0}}#$e#{{i18n:maru-y2-fair.1}}",
+                "Maru_spouse_y3": "{{i18n:maru-y2-fair-spouse}}"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Pam - normal",
+            "Target": "Data/Festivals/fall16",
+            "When": {
+                "EnableFor": "Pam"
+            },
+            "Entries": {
+                "Pam_y3": "{{i18n:pam-y2-fair}}$h",
+                "Pam_y4": "{{i18n:pam-y3-fair}}$s"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Penny - normal",
+            "Target": "Data/Festivals/fall16",
+            "When": {
+                "EnableFor": "Penny"
+            },
+            "Entries": {
+                "Penny_y3": "{{i18n:penny-y2-fair.0}}#$e#{{i18n:penny-y2-fair.1}}",
+                "Penny_spouse_y3": "{{i18n:penny-y2-fair-spouse}}$h"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Pierre - normal",
+            "Target": "Data/Festivals/fall16",
+            "When": {
+                "EnableFor": "Pierre"
+            },
+            "Entries": {
+                "Pierre_y3": "{{i18n:pierre-y2-fair}}$h",
+                "Pierre_y4": "{{i18n:pierre-y3-fair}}$h"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Robin - normal",
+            "Target": "Data/Festivals/fall16",
+            "When": {
+                "EnableFor": "Robin"
+            },
+            "Entries": {
+                "Robin_y3": "{{i18n:robin-y2-fair}}$h",
+                "Robin_y4": "{{i18n:robin-y3-fair}}$h"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Sam - normal",
+            "Target": "Data/Festivals/fall16",
+            "When": {
+                "EnableFor": "Sam"
+            },
+            "Entries": {
+                "Sam_y3": "{{i18n:sam-y2-fair.0}}#$e#{{i18n:sam-y2-fair.1}}$h",
+                "Sam_spouse_y3": "{{i18n:sam-y2-fair-spouse}}$h",
+                "Sam_spouse_y4": "{{i18n:sam-y3-fair-spouse}}"
+            }
+        },
+        // Sandy intentionally skipped.
+        {
+            "Action": "EditData",
+            "LogName": "Sebastian - normal",
+            "Target": "Data/Festivals/fall16",
+            "When": {
+                "EnableFor": "Sebastian"
+            },
+            "Entries": {
+                "Sebastian_y3": "{{i18n:sebastian-y2-fair.0}}$s#$e#{{i18n:sebastian-y2-fair.1}}",
+                "Sebastian_y4": "{{i18n:sebastian-y3-fair|videogame={{i18n:video.game.{{Random:01, 02, 03, 04, 05, 06, 07, 08, 09}} }} }}",
+                "Sebastian_spouse_y3": "{{i18n:sebastian-y2-fair-spouse}}$h",
+                "Sebastian_spouse_y4": "{{i18n:sebastian-y3-fair-spouse}}"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Shane - normal",
+            "Target": "Data/Festivals/fall16",
+            "When": {
+                "EnableFor": "Shane"
+            },
+            "Entries": {
+                "Shane_y3": "{{i18n:shane-y2-fair}}$h",
+                "Shane_spouse": "{{i18n:shane-y1-fair-spouse}}$h",
+                "Shane_spouse_y3": "{{i18n:shane-y2-fair-spouse}}"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Vincent - normal",
+            "Target": "Data/Festivals/fall16",
+            "When": {
+                "EnableFor": "Vincent"
+            },
+            "Entries": {
+                "Vincent_y3": "{{i18n:vincent-y2-fair}}$h",
+                "Vincent_y4": "{{i18n:vincent-y3-fair}}$h",
+                "Vincent_y5": "{{i18n:vincent-y3-fair}}"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Willy - normal",
+            "Target": "Data/Festivals/fall16",
+            "When": {
+                "EnableFor": "Willy"
+            },
+            "Entries": {
+                "Willy_y3": "{{i18n:willy-y2-fair}}$h",
+                "Willy_y4": "{{i18n:willy-y3-fair}}$h"
+            }
+        }
+    ]
+}

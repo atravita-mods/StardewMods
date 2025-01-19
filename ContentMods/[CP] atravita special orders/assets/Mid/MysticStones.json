@@ -2,27 +2,32 @@
     {
         "LogName": "Mystic Stones -- Edit Context Tags",
         "Action": "EditData",
-        "Target": "Data/ObjectContextTags",
-        "TextOperations": [
-            {
-                "Operation": "Append",
-                "Target": ["Entries", "Earth Crystal"],
-                "Value": "elemental_stone",
-                "Delimiter": ", "
-            },
-            {
-                "Operation": "Append",
-                "Target": ["Entries", "Frozen Tear"],
-                "Value": "elemental_stone",
-                "Delimiter": ", "
-            },
-            {
-                "Operation": "Append",
-                "Target": ["Entries", "Fire Quartz"],
-                "Value": "elemental_stone",
-                "Delimiter": ", "
-            }
-        ]
+        "Target": "Data/Objects",
+        // earth crystal
+        "TargetField": ["86", "ContextTags"],
+        "Entries": {
+            "elemental_stone": "elemental_stone"
+        }
+    },
+    {
+        "LogName": "Mystic Stones -- Edit Context Tags",
+        "Action": "EditData",
+        "Target": "Data/Objects",
+        // fire quartz
+        "TargetField": ["82", "ContextTags"],
+        "Entries": {
+            "elemental_stone": "elemental_stone"
+        }
+    },
+    {
+        "LogName": "Mystic Stones -- Edit Context Tags",
+        "Action": "EditData",
+        "Target": "Data/Objects",
+        // frozen tear
+        "TargetField": ["84", "ContextTags"],
+        "Entries": {
+            "elemental_stone": "elemental_stone"
+        }
     },
     {
         "LogName": "Mystic Stones - Special Order",

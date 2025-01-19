@@ -49,24 +49,16 @@
         "Name": "BaseGiftCount",
         "Value": "25"
     },
-    {
-        "Name": "MonsterEssenceCount",
-        "Value": "150"
-    }
     ],
     "Changes": [
     {//apparently I don't actually need to do this?
         "LogName": "Add wine_item to wine, to match other artisan goods.",
         "Action": "EditData",
-        "Target": "Data/ObjectContextTags",
-        "TextOperations": [
-            {
-                "Operation": "Append",
-                "Target": ["Entries", "id_o_348"],
-                "Value": "wine_item",
-                "Delimiter": ", "
-            }
-        ]
+        "Target": "Data/Objects",
+        "TargetField": ["348", "ContextTags"],
+        "Entries": {
+            "wine_item": "wine_item"
+        }
     },
     {
         "Action": "Include", //custom dropboxes

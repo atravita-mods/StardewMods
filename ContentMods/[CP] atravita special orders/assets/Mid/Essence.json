@@ -1,36 +1,23 @@
 {"Changes": [
     {
-        "LogName": "Essence -- Edit Context Tags",
+        "LogName": "Mystic Stones -- Edit Context Tags",
         "Action": "EditData",
-        "Target": "Data/ObjectContextTags",
-        "TextOperations": [
-            {
-                "Operation": "Append",
-                "Target": ["Entries", "Void Essence"],
-                "Value": "monster_essence",
-                "Delimiter": ", "
-            },
-            {
-                "Operation": "Append",
-                "Target": ["Entries", "Solar Essence"],
-                "Value": "monster_essence",
-                "Delimiter": ", "
-            }
-        ]
+        "Target": "Data/Objects",
+        // void essence
+        "TargetField": ["769", "ContextTags"],
+        "Entries": {
+            "elemental_stone": "monster_essence"
+        }
     },
     {
-        "LogName": "Essence -- Edit Context Tags - Ridgeside's Spiritual Essence",
+        "LogName": "Mystic Stones -- Edit Context Tags",
         "Action": "EditData",
-        "Target": "Data/ObjectContextTags",
-        "TextOperations": [
-            {
-                "Operation": "Append",
-                "Target": ["Entries", "Spiritual Essence"],
-                "Value": "monster_essence",
-                "Delimiter": ", "
-            }
-        ],
-        "When": {"HasMod": "Rafseazz.RSVCP"}
+        "Target": "Data/Objects",
+        // solar essence
+        "TargetField": ["768", "ContextTags"],
+        "Entries": {
+            "elemental_stone": "monster_essence"
+        }
     },
     {
         "LogName": "Essence - Special Order",
@@ -54,16 +41,16 @@
                 "Objectives": [
                 {
                     "Type": "Collect",
-                    "Text": "{{i18n:atravita.essence.gather|count={{MonsterEssenceCount}} }}",
-                    "RequiredCount": "{{MonsterEssenceCount}}",
+                    "Text": "{{i18n:atravita.essence.gather|count=150 }}",
+                    "RequiredCount": "150",
                     "Data": {
                         "AcceptedContextTags": "monster_essence"
                     }
                 },
                 {
                     "Type": "Ship",
-                    "Text": "{{i18n:atravita.essence.ship|count={{MonsterEssenceCount}} }}",
-                    "RequiredCount": "{{MonsterEssenceCount}}",
+                    "Text": "{{i18n:atravita.essence.ship|count=150 }}",
+                    "RequiredCount": "150",
                     "Data": {
                         "AcceptedContextTags": "monster_essence"
                     }
@@ -72,7 +59,7 @@
                 "Rewards": [
                     {
                         "Type": "Money",
-                        "Data": {"Amount": "{{Query: {{MonsterEssenceCount}}*5+1000}}"}
+                        "Data": {"Amount": "1750"}
                     },
                     {
                         "Type": "Mail",

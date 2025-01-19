@@ -11,7 +11,8 @@
                 "Repeatable": "{{Repeatability}}",
                 //because of the way Special Orders are coded, using CP's "When" field is fragile.
                 //using mail flags to delay these quests
-                "RequiredTags": "mail_pierreQualityCrops, mail_winter_13_2, !season_spring, !houselevel_under_3",
+                "RequiredTags": "mail_pierreQualityCrops, mail_winter_13_2, !season_spring",
+                "Condition": "PLAYER_FARMHOUSE_UPGRADE Any 3",
                 "OrderType": "",
                 "SpecialRule": "",
                 "ItemToRemoveOnEnd": null,

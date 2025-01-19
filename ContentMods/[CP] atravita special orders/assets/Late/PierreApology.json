@@ -11,7 +11,8 @@
                 "Repeatable": "False",
                 //because of the way Special Orders are coded, using CP's "When" field is fragile.
                 //using mail flags to delay these quests
-                "RequiredTags": "!season_winter, !dropbox_PierreBox, event_963113, !craftingrecipe_Deluxe-Fertilizer_not",
+                "RequiredTags": "!season_winter, !dropbox_PierreBox, event_963113",
+                "Condition": "PLAYER_HAS_CRAFTING_RECIPE Any Deluxe Fertilizer",
                 "OrderType": "",
                 "SpecialRule": "",
                 "ItemToRemoveOnEnd": null,

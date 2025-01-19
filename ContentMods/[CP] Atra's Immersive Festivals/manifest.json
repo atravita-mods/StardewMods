@@ -1,0 +1,29 @@
+{
+    "$schema": "https://smapi.io/schemas/manifest.json",
+    "Name": "[CP] Atra's Immersive Festivals",
+    "Author": "atravita",
+    "Version": "0.1.0",
+    "Description": "Makes festivals more immersive.",
+    "UniqueID": "atravita.CP.ImmersiveFestivals",
+    "MinimumApiVersion": "3.15",
+    "UpdateKeys": [
+        "Nexus:-1"
+    ],
+    "ContentPackFor": {
+        "UniqueID": "Pathoschild.ContentPatcher",
+    },
+    "Dependencies": [
+        {
+            "UniqueID": "gizzymo.canonfriendlyexpansion",
+            "IsRequired": false
+        },
+        {
+            "UniqueID": "iss.immersivespouses",
+            "IsRequired": false,
+        },
+        {
+            "UniqueID": "atravita.CP.GingerIslandMainlandAdjustments",
+            "IsRequired": false
+        }
+    ]
+}

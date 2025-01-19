@@ -37,7 +37,7 @@ internal static class ReplaceStaticTile
                 continue;
             }
 
-            foreach (var method in inner.GetMethods(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public))
+            foreach (MethodInfo method in inner.GetMethods(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public))
             {
                 if (method.ReturnType == typeof(StaticTile) && method.Name.Contains("<LoadTile>"))
                 {

@@ -274,19 +274,8 @@
             },
             "Entries": {
                 "Marnie_y3": "{{i18n:marnie-y2-halloween}}$h",
-                "Marnie_y4": "{{i18n:marnie-y3-halloween}}$h"
-            }
-        },
-        {
-            "Action": "EditData",
-            "LogName": "Marnie - realism",
-            "Target": "Data/Festivals/fall27",
-            "When": {
-                "EnableFor": "Marnie",
-                "IncreasedRealism": true
-            },
-            "Entries": {
-                "Marnie_y4": "{{i18n:marnie-y3-halloween-realism}}"
+                "Marnie_y4": "{{i18n:marnie-y3-halloween}}$h",
+                "Marnie_y5": "{{i18n:marnie-y3-halloween-realism}}"
             }
         },
         {

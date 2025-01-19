@@ -1,5 +1,65 @@
 {
-    "Changes":[
-        
+    "Changes": [
+        {
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Alex",
+            "LogName": "Alex",
+            "Entries": {
+                // pre-luau
+                "summer_10{{YearRemainder}}": "{{i18n:alex-pre-luau.{{YearModulus}} }}$h",
+                // pre x-mas
+                "winter_20{{YearRemainder}}": "{{i18n:alex-pre-xmas.{{YearModulus}} }}$h",
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Demetrius",
+            "Entries": {
+                // headed into the moonlight jellies festival.
+                "summer_25{{YearRemainder}}": "{{i18n:demetrius-summer-end.{{YearModulus}} }}",
+                "summer_27{{YearRemainder}}": "{{i18n: demetrius-jellies-pre.01}}#$b#{{i18n: demetrius-jellies-pre.02}}",
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Gus",
+            "Entries": {
+                // before major festivals
+                "winter_24{{YearRemainder}}": "{{i18n:gus-pre-winter-star.{{YearModulus}} }}$h"
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Jodi",
+            "Entries": {
+                "winter_15{{YearRemainder}}": "{{i18n: jodi-xmas-pre.{{Random: 00,01,02,03}} }}",
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Lewis",
+            "Entries": {
+                // pre-festival
+                "summer_10{{YearRemainder}}": "{{i18n: luau-prelude-lewis.{{IsJojaMartComplete}}.{{Random:00,01,02}} }}",
+                "fall_15{{YearRemainder}}": "{{i18n:fair-prelude-lewis.{{Random:00,01,02}} }}$h"
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Maru",
+            "Entries": {
+                // pre-festival
+                "summer_24{{YearRemainder}}": "{{i18n: maru-pre-jellies.{{Random:00,01,02}} }}"
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Vincent",
+            "Entries": {
+                // Winter star
+                "winter_24{{YearRemainder}}": "{{i18n:vincent-xmas-pre|title={{Title}} }}$h",
+                "winter_26{{YearRemainder}}": "{{i18n:vincent-xmas-post.{{Random:00, 01, 02}}|title={{Title}} }}$h",
+            }
+        }
     ]
 }

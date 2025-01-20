@@ -14,5 +14,7 @@ public sealed class ModConfig
 
     public KeybindList FastForwardKeybind { get; set; } = new(SButton.K);
 
-    public bool AllowCheats { get; internal set; } = true;
+    public bool AllowCheats { get; set; } = true;
+
+    public bool SkipDialogue { get; set; } = true;
 }

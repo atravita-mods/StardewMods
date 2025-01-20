@@ -1,9 +1,16 @@
 ﻿Changelog
 ===============
 
+### Version 0.1.9
+* Made skipping dialogue optional.
+* Added method to automatically run commands when saves are created or loaded.
+
+### Version 0.1.8
+* Added phone call command
+
 ### Version 0.1.7
 * Added dialogue checker and special order checker
-* Item Spawn Query checker now checks for error items. Tighted rules on item spawn query replacements.
+* Item Spawn Query checker now checks for error items. Tightened rules on item spawn query replacements.
 
 ### Version 0.1.6
 * Added ability to fast forward.

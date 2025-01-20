@@ -29,8 +29,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Update="JetBrains.Annotations" Version="2023.3.0" />
+    <None Update="startup_commands.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Update="JetBrains.Annotations" Version="2023.3.0" />
+  </ItemGroup>
 
 </Project>

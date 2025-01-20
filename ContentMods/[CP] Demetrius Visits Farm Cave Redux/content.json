@@ -84,6 +84,7 @@
 
                 // visiting maps.
                 "firstVisit_IslandSouth": "{{i18n: dialogue.firstvisit.islandSouth}}",
+                "firstVisit_ScienceHouse_oneweek": "{{i18n: dialogue.firstvisit.scienceHouse}}",
 
                 // catching fish
                 "fishCaught_142": "{{i18n: dialogue.fishcaught.carp}}",

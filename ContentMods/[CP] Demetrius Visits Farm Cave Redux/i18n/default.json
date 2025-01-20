@@ -131,6 +131,7 @@
     // Misc CT dialogue, for 1.6
     "dating-maru": "I guess, @, I'm getting used to the idea of you dating my daughter...",
     "dialogue.firstvisit.islandSouth": "You went to Ginger Island? Come, tell me about all the flora and fauna you saw!$h",
+    "dialogue.firstvisit.scienceHouse": "Robin built our house when we first moved here, all those years ago.#$b#Maru wasn't even born yet at that point!#$e#She custom-built my lab so I could have one in this tiny town...",
 
     "dialogue.fishcaught.sturgeon": "You caught a sturgeon, you say? Those fish are gigantic! How did you manage?",
     "dialogue.fishcaught.goby": "You caught a goby? That fish is quite rare.#$b#Say, where did you catch it?",

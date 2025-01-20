@@ -118,6 +118,11 @@ internal sealed class DialogueChecker : IDisposable
                 this.lastShownDialogue = s;
             }
 
+            if (!ModEntry.Config.SkipDialogue)
+            {
+                return;
+            }
+
             // click dialogue
             if (db.responses?.Length > 0)
             {

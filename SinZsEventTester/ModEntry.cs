@@ -14,6 +14,7 @@ using StardewModdingAPI.Events;
 
 using StardewValley.BellsAndWhistles;
 using StardewValley.Delegates;
+using StardewValley.Extensions;
 using StardewValley.Locations;
 using StardewValley.Logging;
 using StardewValley.Menus;
@@ -23,6 +24,8 @@ using StardewValley.Minigames;
 [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1309:Field names should not begin with underscore", Justification = "Preference.")]
 public sealed class ModEntry : Mod
 {
+    private sealed record class IntHolder(int Value);
+
     private bool hooked = false;
 
     internal static ModConfig Config { get; private set; } = null!;
@@ -38,7 +41,7 @@ public sealed class ModEntry : Mod
     private readonly HashSet<string> seenResponses = [];
 
     // I keep on clicking the stupid dialogues twice. Agh. Don't allow that.
-    private readonly ConditionalWeakTable<DialogueBox, object> _seen = [];
+    private readonly ConditionalWeakTable<DialogueBox, IntHolder> _seen = [];
 
     private HashSet<EventRecord> completed = [];
 
@@ -72,6 +75,8 @@ public sealed class ModEntry : Mod
 
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
         helper.Events.Input.ButtonPressed += this.OnButtonPressed;
+        helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
+        helper.Events.GameLoop.SaveCreated += this.OnSaveCreated;
 
         helper.ConsoleCommands.Add(
             "sinz.playevents",
@@ -172,6 +177,23 @@ public sealed class ModEntry : Mod
             "sinz.bulkremove",
             "bulk remove data",
             (command, args) => new BulkAddRemoveCommand(this.Monitor).Remove(args));
+    }
+
+    private void OnSaveCreated(object? sender, SaveCreatedEventArgs e) => this.RunMacros("save_created_commands.txt");
+    private void OnSaveLoaded(object? sender, SaveLoadedEventArgs e) => this.RunMacros("startup_commands.txt");
+
+    private void RunMacros(string file)
+    {
+        var dir = new DirectoryInfo(this.Helper.DirectoryPath);
+        var fileinfo = dir.GetFiles().Where(a => a.Name.EqualsIgnoreCase(file)).FirstOrDefault();
+        if (fileinfo is null)
+        {
+            this.Monitor.Log($"Could not find file by name {file}");
+            return;
+        }
+
+        this.Monitor.Log($"Running {fileinfo.FullName}", LogLevel.Debug);
+        new RunStartupFile(this.Monitor, this.Helper.Events.GameLoop, fileinfo);
     }
 
     private void CheckDialogue(string command, Span<string> args, IGameLogger? logger = null)
@@ -321,6 +343,11 @@ public sealed class ModEntry : Mod
                 getValue: static () => Config.AllowCheats,
                 setValue: static value => Config.AllowCheats = value,
                 I18n.AllowCheats);
+            api.AddBoolOption(
+                mod: this.ModManifest,
+                getValue: static () => Config.SkipDialogue,
+                setValue: static value => Config.SkipDialogue = value,
+                I18n.SkipDialogue);
         }
 
         Dictionary<string, DebugCommandHandlerDelegate> handlers = this.Helper.Reflection.GetField<Dictionary<string, DebugCommandHandlerDelegate>>(typeof(DebugCommands), "Handlers").GetValue();
@@ -629,12 +656,23 @@ Outer: ;
                     return;
                 }
 
-                if (db.isQuestion && db.selectedResponse == -1 && !this._seen.TryGetValue(db, out _))
+                if (db.isQuestion && db.selectedResponse == -1)
                 {
-                    this._seen.AddOrUpdate(db, new());
+                    // processed you before, continue clicking the same thing.
+                    if (this._seen.TryGetValue(db, out IntHolder? value))
+                    {
+                        db.selectedResponse = value.Value;
+                        if (ModEntry.Config.SkipDialogue)
+                        {
+                            db.receiveLeftClick(0, 0, false);
+                        }
+
+                        return;
+                    }
+
                     string currentCommand = Game1.CurrentEvent.GetCurrentCommand() ?? string.Empty;
                     this.Monitor.Log($"Asked a question with {db.responses.Length} options: {db.characterDialoguesBrokenUp.FirstOrDefault() ?? db.dialogues.FirstOrDefault() ?? string.Empty}", LogLevel.Info);
-                    this.Monitor.Log($"{currentCommand}");
+                    this.Monitor.Log(currentCommand);
                     if (this.Monitor.IsVerbose)
                     {
                         this.Monitor.Log(JsonConvert.SerializeObject(db.responses), LogLevel.Trace);
@@ -780,6 +818,7 @@ Outer: ;
                             }
 
                             db.selectedResponse = 0;
+                            this._seen.AddOrUpdate(db, new(0));
                             this.workingNode.Color = Color.Grey;
                             this.workingNode = this.workingNode.Children.First();
                             break;
@@ -794,6 +833,7 @@ Outer: ;
                             this.workingNode.Children.Add(blue);
 
                             db.selectedResponse = 0;
+                            this._seen.AddOrUpdate(db, new(0));
                             this.workingNode.Color = Color.Grey;
                             this.workingNode = blue;
                             break;
@@ -819,6 +859,7 @@ Outer: ;
 
                                 this.Monitor.Log($"Now selecting response {child.ResponsePosition}. {db.responses[child.ResponsePosition].responseText}", LogLevel.Debug);
                                 db.selectedResponse = child.ResponsePosition;
+                                this._seen.AddOrUpdate(db, new(child.ResponsePosition));
                                 this.workingNode = child;
                                 break;
                             }
@@ -836,14 +877,17 @@ Outer: ;
                     }
                 }
 
-                this.Monitor.VerboseLog("Clicking on the dialogue box");
-                db.safetyTimer = 0;
-                db.receiveLeftClick(0, 0);
+                if (ModEntry.Config.SkipDialogue)
+                {
+                    this.Monitor.VerboseLog("Clicking on the dialogue box");
+                    db.safetyTimer = 0;
+                    db.receiveLeftClick(0, 0, false);
+                }
             }
             else if (Game1.activeClickableMenu is NamingMenu nm)
             {
                 // Hope doing this at 4tps isn't a problem
-                nm.receiveLeftClick(nm.doneNamingButton.bounds.Center.X, nm.doneNamingButton.bounds.Center.Y);
+                nm.receiveLeftClick(nm.doneNamingButton.bounds.Center.X, nm.doneNamingButton.bounds.Center.Y, false);
             }
             return;
         }
@@ -851,7 +895,10 @@ Outer: ;
         // do I need to kill end of night menus?
 
         // can't queue new events if the game is trying to save/doing night stuff.
-        if (!Game1.game1.IsActive || Game1.newDay || Game1.gameMode != Game1.playingGameMode) return;
+        if (!Game1.game1.IsActive || Game1.newDay || Game1.gameMode != Game1.playingGameMode)
+        {
+            return;
+        }
 
         if (Game1.activeClickableMenu is { } menu)
         {
@@ -919,7 +966,9 @@ Outer: ;
     private void TrivialResponse(DialogueBox db)
     {
         this.Monitor.Log($"Meaningless choice, skipping.");
-        db.selectedResponse = Random.Shared.Next(db.responses.Length);
+        var response = Random.Shared.Next(db.responses.Length);
+        db.selectedResponse = response;
+        this._seen.AddOrUpdate(db, new(response));
 
         db.safetyTimer = 0;
         this.Monitor.VerboseLog("Clicking on the dialogue box.");

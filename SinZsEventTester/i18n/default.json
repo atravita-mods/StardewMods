@@ -4,6 +4,7 @@
   "fast_forward_ratio": "Fast Forward Ratio",
   "fast_forward_keybind": "Fast Forward Keybind",
   "allow_cheats": "Allow Cheats",
+  "skip_dialogue": "Skip Dialogue",
 
   //Text used in console commands
   "load-save-first": "Load save first.",

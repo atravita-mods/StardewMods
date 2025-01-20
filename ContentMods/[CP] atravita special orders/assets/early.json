@@ -38,7 +38,7 @@
     },
     {
         "Action": "Include",
-        "FromFile": "assets/Early/WarEffort.json",
+        "FromFile": "assets/Early/WarEffort.json, assets/Early/StoneCold.json",
         "When": {
             "AllowedSkills|contains=Mining": "true",
         }

@@ -28,6 +28,7 @@
 // ******************
 
    "George": "George",
+   "Gunther": "Gunther",
    "Pierre": "Pierre",
    "Gus": "Gus",
    "Willy": "Willy",
@@ -45,6 +46,16 @@
 
     "Dad": "Dad",
     "Son": "Son",
+
+// ***************
+// Stone Cold
+// ***************
+    "atravita.stone_cold.name": "Stone Cold",
+    "atravita.stone_cold.text": "Our local university is conducting a study on local minerals. Please collect 100 fresh minerals and deposit them into the museum. Your help will be greatly appreciated.",
+    "atravita.stone_cold.gather_minerals": "Gather 100 fresh minerals.",
+    "atravita.stone_cold.donate_minerals": "Donate 100 minerals to the museum.",
+    "atravita.stone_cold.mail.title": "Stone Cold thank-you note.",
+    "atravita.stone_cold.mail.text": "Thanks again for the minerals, they will be very educational for the students at our local universities. Certainly, they'll get plenty of experimental data with our minerals, assuming they don't derp up the protocol like they always do. Still, I've attached this stone chest I found in the basement. Hopefully it is of use to you.",
 
 // ******************
 // Alcohol Order.

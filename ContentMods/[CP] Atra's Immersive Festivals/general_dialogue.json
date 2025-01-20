@@ -6,9 +6,9 @@
             "LogName": "Alex",
             "Entries": {
                 // pre-luau
-                "summer_10{{YearRemainder}}": "$query PLAYER_FRIENDSHIP_POINTS Any Alex 1000#{{i18n:alex-pre-luau.{{YearModulus}} }}$h|{{i18n: alex-pre-luau-unfriendly}}",
+                "summer_10{{YearRemainder}}": "$query PLAYER_FRIENDSHIP_POINTS Current Alex 1000#{{i18n:alex-pre-luau.{{YearModulus}} }}$h|{{i18n: alex-pre-luau-unfriendly}}",
                 // pre x-mas
-                "winter_20{{YearRemainder}}": "{{i18n:alex-pre-xmas.{{YearModulus}} }}$h",
+                "winter_20{{YearRemainder}}": "$query PLAYER_FRIENDSHIP_POINTS Current Alex 100#{{i18n:alex-pre-xmas.{{YearModulus}} }}$h| {{i18n:alex-pre-xmas-unfriendly}}",
             }
         },
         {

@@ -7,6 +7,7 @@
       "Target": "Data/Mail",
       "Entries": {
         "atravita_AlcoholOrder_Reward": "@! ^{{i18n:atravita.alcohol_order.mail.text}}^^    -{{i18n:Gus}}%item object 599 5 %%[#]{{i18n:atravita.alcohol_order.mail.title}}",
+        "atravita_stoneCold_reward": "@, ^{{i18n:atravita.stone_cold.mail.text}}^^    -{{i18n:Gunther}}%item bigobject BigStoneChest %%[#]{{i18n:atravita.stone_cold.mail.title}}",
         "atravita_BlackberrySeason_Reward": "@, ^{{i18n:atravita.blackberry_season.mail.text}}^^   -{{i18n:Lewis}}^^{{i18n:atravita.blackberry_season.mail.postscript}}%item object 770 20 %%[#]{{i18n:atravita.blackberry_season.mail.title}}",
         "atravita_CatfishChallenge_Reward": "@! ^{{i18n:atravita.catfish_challenge.mail.text}}^^    -{{i18n:Willy}}%item object 166 1 %%[#]{{i18n:atravita.catfish_challenge.mail.title}}",
         "atravita_CaviarTastes_Reward": "@!^{{i18n:atravita.caviar_tastes.mail.text}}^^    --{{i18n:Lewis}}%item bigobject 209 %%[#]{{i18n:atravita.caviar_tastes.mail.title}}",

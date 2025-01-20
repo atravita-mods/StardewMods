@@ -418,4 +418,13 @@
     "atravita.the_quickest_way.text": "The quickest way to a man's heart is through his stomach. Cook and gift {{BaseGiftCount}} loved dishes in a week.",
     "atravita.the_quickest_way.gather": "Cook {{BaseGiftCount}} dishes.",
     "atravita.the_quickest_way.gift": "Gift {{BaseGiftCount}} loved dishes.",
+
+    // *******************
+    // Sparkling Stones
+    // *******************
+
+    "atravita.sparkling_stones.name": "Sparkling Stones",
+    "atravita.sparkling_stones.text": "Citizens in Zuzu want sparkling stones to propose with in an odd tradition. Descend into the Skull Caverns to find some.",
+    "atravita.sparkling_stones.prismatic": "Prismatic Shards",
+    "atravita.sparkling_stones.diamond": "Diamonds"
 }

@@ -1,0 +1,65 @@
+{
+    "Changes":[
+        {
+            "Action": "EditData",
+            "Target": "Strings/SpecialOrderStrings",
+            "Entries": {
+                "atravita.DF.SparklingStones.Prismatic": "{{i18n: atravita.sparkling_stones.prismatic}}",
+                "atravita.DF.SparklingStones.Diamond": "{{i18n:atravita.sparkling_stones.diamond}}"
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Data/SpecialOrders",
+            "Entries": {
+                "atravita.DF.SparklingStones": {
+                    "Name": "{{i18n:atravita.sparkling_stones.name}}",
+                    "Requester": "Marlon",
+                    "Duration": "OneDay",
+                    "Repeatable": true,
+                    "RequiredTags": "",
+                    "Condition": "",
+                    "OrderType": "DesertFestivalMarlon",
+                    "SpecialRule": "",
+                    "Text": "{{i18n:atravita.sparkling_stones.text}}",
+                    "ItemToRemoveOnEnd": null,
+                    "MailToRemoveOnEnd": null,
+                    "RandomizedElements": [
+                      {
+                        "Name": "Treasure",
+                        "Values": [
+                          {
+                            "RequiredTags": "",
+                            "Value": "Target|item_prismatic_shard|LocalizedName|[atravita.DF.SparklingStones.Prismatic]|Count|4"
+                          },
+                          {
+                            "RequiredTags": "",
+                            "Value": "Target|item_diamond|LocalizedName|[atravita.DF.SparklingStones.Diamond]|Count|10"
+                          }
+                        ]
+                      }
+                    ],
+                    "Objectives": [
+                      {
+                        "Type": "Collect",
+                        "Text": "[Marlon_DF_2_Objective]",
+                        "RequiredCount": "{Treasure:Count}",
+                        "Data": {
+                          "AcceptedContextTags": "{Treasure:Target}"
+                        }
+                      }
+                    ],
+                    "Rewards": [
+                      {
+                        "Type": "Object",
+                        "Data": {
+                          "Item": "CalicoEgg",
+                          "Amount": "50"
+                        }
+                      }
+                    ],
+                }
+            }
+        }
+    ]
+}

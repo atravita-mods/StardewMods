@@ -16,6 +16,14 @@
     },
     {
         "Action": "Include",
+        "FromFile": "assets/Late/SparklingStones.json",
+        "When": {
+            "AllowedSkills|contains=Combat": "true",
+            "AllowedSkills|contains=Mining": "true"
+        }
+    },
+    {
+        "Action": "Include",
         "FromFile": "assets/Late/ValleyVintage.json",
         "When": {
             "AllowedSkills|contains=ArtisanGoods": "true"

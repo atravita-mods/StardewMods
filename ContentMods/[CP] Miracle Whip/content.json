@@ -1,6 +1,6 @@
 {
     "$schema": "https://smapi.io/schemas/content-patcher.json",
-    "Format": "1.29.0",
+    "Format": "2.5.0",
     "Changes": [
         {
             "Action": "EditData",
@@ -25,7 +25,7 @@
             "Target": "Data/ConcessionTastes",
             "TargetField": ["*", "DislikedTags"],
             "Entries": {
-                999: "Horrid"
+                "Horrid": "Horrid"
             }
         }
     ]

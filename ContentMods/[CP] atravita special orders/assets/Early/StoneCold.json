@@ -29,7 +29,7 @@
                     },
                     {
                         "Type": "Donate",
-                        "Text": "{{i18n:atravita.stone_cold.donate}}",
+                        "Text": "{{i18n:atravita.stone_cold.donate_minerals}}",
                         "RequiredCount": "100",
                         "Data": {
                           "DropBox": "GuntherBox",

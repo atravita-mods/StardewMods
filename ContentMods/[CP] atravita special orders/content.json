@@ -18,6 +18,10 @@
             "AllowValues": "True,False",
             "Default": "True"
         },
+        "DesertFestival" :{
+            "AllowValues": "True,False",
+            "Default": "True"
+        },
         "Events" : { //puts in the extra events.
             "AllowValues": "True,False",
             "Default": "True"

@@ -19,7 +19,8 @@
         "FromFile": "assets/Late/SparklingStones.json",
         "When": {
             "AllowedSkills|contains=Combat": "true",
-            "AllowedSkills|contains=Mining": "true"
+            "AllowedSkills|contains=Mining": "true",
+            "DesertFestival": true
         }
     },
     {

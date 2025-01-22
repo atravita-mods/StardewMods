@@ -18,6 +18,8 @@
     "config.Repeatability.description": "Certain quests repeat can repeat. Should they?",
     "config.Delay.name": "Delay Quests",
     "config.Delay.description": "Whether or not to delay the quests from this mod.",
+    "config.DesertFestival.name": "Desert Festival Quests",
+    "config.DesertFestival.description": "Whether or not to allow quests that affect the desert festival.",
     "config.Events.name": "Include Events",
     "config.Events.description": "Whether or not to include the events from this mod.",
     // ******************

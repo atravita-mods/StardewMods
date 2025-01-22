@@ -1,6 +1,10 @@
 ﻿Changelog
 ===============
 
+### Version 0.1.10
+* Added a Chinese translation, much thanks to [BlackRosePetals](https://github.com/BlackRosePetals)!
+* Fixed issue with the fast forward feature.
+
 ### Version 0.1.9
 * Made skipping dialogue optional.
 * Added method to automatically run commands when saves are created or loaded.

@@ -36,7 +36,8 @@
         "atravita_ValleyVintage_Reward": "@! ^{{i18n:atravita.valley_vintage.mail.text}}^^   -{{i18n:Lewis}}^^{{i18n:atravita.valley_vintage.mail.postscript}}%item bigobject 248 %%[#]{{i18n:atravita.valley_vintage.mail.title}}",
         "atravita_warEffort_reward": "@,^{{i18n:atravita.war_effort.mail.text}}^^     -{{i18n:Lewis}}%item bigobject 248 %%[#]{{i18n:atravita.war_effort.mail.title}}",
         "atravita_warEffort2_reward": "@,^{{i18n:atravita.war_effort_2.mail.text}}^^     -{{i18n:Lewis}}%item object 204 6 %%[#]{{i18n:atravita.war_effort_2.mail.title}}",
-        "atravita_warEffort3_reward": "@,^{{i18n:atravita.war_effort3.mail.text}}^^     -{{i18n:Lewis}}%item object 439 3 %%[#]{{i18n:atravita.war_effort3.mail.title}}"
+        "atravita_warEffort3_reward": "@,^{{i18n:atravita.war_effort3.mail.text}}^^     -{{i18n:Lewis}}%item object 439 3 %%[#]{{i18n:atravita.war_effort3.mail.title}}",
+        "atravita_DrillBabyDrill_Reward": "@,^{{i18n:atravita.drill_baby_drill.mail.text}}^^     -{{i18n:Marlon}}%item bigobject HeavyFurnace %%[#]{{i18n:atravita.drill_baby_drill.mail.title}}"
       }
     },
     {

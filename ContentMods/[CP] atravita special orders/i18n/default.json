@@ -428,5 +428,22 @@
     "atravita.sparkling_stones.name": "Sparkling Stones",
     "atravita.sparkling_stones.text": "Citizens in Zuzu want sparkling stones to propose with in an odd tradition. Descend into the Skull Caverns to find some.",
     "atravita.sparkling_stones.prismatic": "Prismatic Shards",
-    "atravita.sparkling_stones.diamond": "Diamonds"
+    "atravita.sparkling_stones.diamond": "Diamonds",
+
+    // ********************
+    // Even Deeper
+    // ********************
+
+    "atravita.even_deeper.name": "Even Deeper",
+    "atravita.even_deeper.text": "Congratulations, kiddo, for reaching deep in the skull cavern...Now, can you make level 70...again?",
+    "atravita.even_deeper.objective": "Reach level 70 in the skull caverns.",
+
+    // ********************
+    // Drill Baby Drill
+    // ******************
+    "atravita.drill_baby_drill.name": "Drill, Baby, Drill",
+    "atravita.drill_baby_drill.text": "Now that you've made it deep in the skull cavern...can you do better? Make it to level 200",
+    "atravita.drill_baby_drill.objective": "Reach level 200 in the skull caverns.",
+    "atravita.drill_baby_drill.mail.title": "Drill, Baby, Drill Reward Note",
+    "atravita.drill_baby_drill.mail.text": "Hey, kiddo. You did well. That skull cavern can be an unfriendly place. Here, have a furnace for your troubles."
 }

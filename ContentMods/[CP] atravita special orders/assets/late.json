@@ -16,7 +16,7 @@
     },
     {
         "Action": "Include",
-        "FromFile": "assets/Late/SparklingStones.json",
+        "FromFile": "assets/Late/SparklingStones.json, assets/Late/EvenDeeper.json",
         "When": {
             "AllowedSkills|contains=Combat": "true",
             "AllowedSkills|contains=Mining": "true",
@@ -35,6 +35,14 @@
         "FromFile": "assets/Late/SlimeEggs.json",
         "When": {
             "AllowedSkills|contains=Combat": "true"
+        }
+    },
+    {
+        "Action": "Include",
+        "FromFile": "assets/Late/DrillBabyDrill.json",
+        "When": {
+            "AllowedSkills|contains=Combat": "true",
+            "AllowedSkills|contains=Mining": "true"
         }
     },
     {

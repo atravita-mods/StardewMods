@@ -1,0 +1,56 @@
+{
+    "Changes": [
+        {
+            // alter vanilla special order to block it from happening if you've reached a certain part of the mines
+            "Action": "EditData",
+            "Target": "Data/SpecialOrders",
+            "TextOperations": [
+                {
+                    "Operation": "Append",
+                    "Target": [
+                        "Fields",
+                        "DesertFestivalMarlon2",
+                        "Condition"
+                    ],
+                    "Value": "MINE_LOWEST_LEVEL_REACHED 0 220",
+                    "Delimiter": "," // if the field isn't empty, add a space between the old & new text
+                }
+            ]
+        },
+        {
+            "Action": "EditData",
+            "Target": "Data/SpecialOrders",
+            "Entries": {
+                "atravita.DF.EvenDeeper": {
+                    "Name": "{{i18n:atravita.even_deeper.name}}",
+                    "Requester": "Marlon",
+                    "Duration": "OneDay",
+                    "Repeatable": true,
+                    "RequiredTags": "",
+                    "Condition": "MINE_LOWEST_LEVEL_REACHED 180",
+                    "OrderType": "DesertFestivalMarlon",
+                    "Text": "{{i18n:atravita.even_deeper.text}}",
+                    "Objectives": [
+                        {
+                            "Type": "ReachMineFloor",
+                            "Text": "{{i18n:atravita.even_deeper.objective}}",
+                            "RequiredCount": "70",
+                            "Data": {
+                                "SkullCave": "true"
+                            }
+                        }
+                    ],
+                    "Rewards": [
+                        {
+                            "Type": "Object",
+                            "Data": {
+                                "Item": "CalicoEgg",
+                                "Amount": "60"
+                            }
+                        }
+                    ],
+                }
+            }
+        }
+    ]
+}

@@ -1,0 +1,28 @@
+{
+  // 通用模组管理菜单
+  "event_speed_ratio": "事件速度比例",
+  "fast_forward_ratio": "快进比例",
+  "fast_forward_keybind": "快进键绑定",
+  "allow_cheats": "允许作弊",
+  "skip_dialogue": "跳过对话",
+
+  //控制台命令中使用的文本
+  "load-save-first": "先加载保存内容.",
+  "true": "真",
+  "false": "假",
+
+  "number-found": "{{count}} 找到的个别特殊订单.",
+  "valid-keys": "{{count}} 有效按键",
+  "unseen-keys": "{{count}} 未查看的按键",
+  "analyzing": "解析",
+  "parsable": "看起来可以解析",
+  "unparsable": "在解析时出现错误",
+  "nonrepeatable": "不可重复",
+  "repeatable-seen": "可重复, 以前看过",
+  "month-long-late": "长达一个月的任务, {{cutoff}} 次之后不可用",
+  "has-invalid-tags": "标签无效",
+  "tag-failed": "标签失效",
+  "active": "当前活动",
+  "failed-GSQ": "游戏状态查询检查失败",
+  "unknown": "未知原因",
+}

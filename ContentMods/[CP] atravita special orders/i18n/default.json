@@ -442,8 +442,19 @@
     // Drill Baby Drill
     // ******************
     "atravita.drill_baby_drill.name": "Drill, Baby, Drill",
-    "atravita.drill_baby_drill.text": "Now that you've made it deep in the skull cavern...can you do better? Make it to level 200",
-    "atravita.drill_baby_drill.objective": "Reach level 200 in the skull caverns.",
+    "atravita.drill_baby_drill.text": "Now that you've made it deep in the skull cavern...can you do better? Make it to level 150.",
+    "atravita.drill_baby_drill.objective": "Reach level 150 in the skull caverns.",
     "atravita.drill_baby_drill.mail.title": "Drill, Baby, Drill Reward Note",
-    "atravita.drill_baby_drill.mail.text": "Hey, kiddo. You did well. That skull cavern can be an unfriendly place. Here, have a furnace for your troubles."
+    "atravita.drill_baby_drill.mail.text": "Hey, kiddo. You did well. That skull cavern can be an unfriendly place. Here, have a furnace for your troubles.",
+
+    // *******************
+    // Little Free Library
+    // *******************
+
+    "atravita.little_free_library.name": "Little Free Library",
+    "atravita.little_free_library.text": "The library could do with a few more books, and the town could do with a bit more reading. Bring twenty books to the counter, and donate 10 liked books?",
+    "atravita.little_free_library.donate": "Donate 20 books to the library.",
+    "atravita.little_free_library.gift": "Gift 10 liked books",
+    "atravita.little_free_library.mail.title": "Little Free Library - Thank You!",
+    "atravita.little_free_library.mail.text": "Well, that should get literacy rates in this little town going in the right direction. I've also attached a little something special for you..."
 }

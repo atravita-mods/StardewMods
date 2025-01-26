@@ -34,6 +34,7 @@
         "goatcheese",
         "Gotoro",
         "HasSeenEvent",
+        "HeavyFurnace",
         "hookin",
         "hotfoods",
         "HotFoods",
@@ -45,6 +46,7 @@
         "internet",
         "isavailable",
         "ItemToRemoveOnEnd",
+        "LittleFreeLibrary",
         "LogName",
         "MailReceived",
         "MailToRemoveOnEnd",
@@ -62,6 +64,7 @@
         "pierre",
         "PierreApology",
         "piña",
+        "PurpleBook",
         "QiEnabled",
         "RandomizedElements",
         "Rasmodius",
@@ -94,6 +97,5 @@
         "whatcha",
         "woodskip",
         "Zuzu",
-        "HeavyFurnace"
     ]
 }

@@ -58,5 +58,12 @@
         "When": {
             "AllowedSkills|contains=Farming": "true"
         }
+    },
+    {
+        "Action": "Include",
+        "FromFile": "assets/Mid/LittleFreeLibrary.json",
+        "When": {
+            "AllowedSkills|contains=Gifting": "true"
+        }
     }
 ]}

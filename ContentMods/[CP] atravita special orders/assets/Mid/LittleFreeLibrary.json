@@ -1,0 +1,58 @@
+{
+    "Changes":[
+        {
+            "Action": "EditData",
+            "Target": "Data/SpecialOrders",
+            "Entries": {
+                "atravita.LittleFreeLibrary": {
+                    "Name": "{{i18n:atravita.little_free_library.name}}",
+                    "Requester": "Gunther",
+                    "Duration": "Month",
+                    "Repeatable": "{{Repeatability}}",
+                    "RequiredTags": "mail_atravita_ValleyFlowers_reward",
+                    "Condition": "YEAR 2",
+                    "Text": "{{i18n:atravita.little_free_library.text}}",
+                    "Objectives": [
+                      {
+                        "Type": "Collect",
+                        "Text": "{{i18n: atravita.little_free_library.donate}}",
+                        "RequiredCount": "20",
+                        "Data": {
+                          "AcceptedContextTags": "book_item"
+                        }
+                      },
+                      {
+                        "Type": "Gift",
+                        "Text": "{{i18n: atravita.little_free_library.gift}}",
+                        "RequiredCount": "10",
+                        "Data": {
+                            "AcceptedContextTags": "book_item",
+                            "MinimumLikeLevel": "Liked"
+                        }
+                      }
+                    ],
+                    "Rewards": [
+                        {
+                            "Type": "Money",
+                            "Data": {"Amount": "2000"}
+                        },
+                        {
+                            "Type": "Mail",
+                            "Data": {
+                                "MailReceived": "atravita_LittleFreeLibrary_Reward",
+                                "NoLetter": "false"
+                            }
+                        },
+                        {
+                            "Type": "Friendship",
+                            "Data": {
+                                "TargetName": "Penny",
+                                "Amount": "500"
+                            }
+                        }
+                    ],
+                }
+            }
+        }
+    ]
+}

@@ -6,7 +6,7 @@
             "Name": "{{i18n:atravita.drill_baby_drill.name}}",
             "Requester": "Marlon",
             "Duration": "TwoWeeks",
-            "Repeatable": true,
+            "Repeatable": "{{Repeatability}}",
             "RequiredTags": "mail_atravita_warEffort3_reward",
             "Condition": "MINE_LOWEST_LEVEL_REACHED 220",
             "OrderType": "",
@@ -15,7 +15,7 @@
                 {
                     "Type": "ReachMineFloor",
                     "Text": "{{i18n:atravita.drill_baby_drill.objective}}",
-                    "RequiredCount": "200",
+                    "RequiredCount": "150",
                     "Data": {
                         "SkullCave": "true"
                     }

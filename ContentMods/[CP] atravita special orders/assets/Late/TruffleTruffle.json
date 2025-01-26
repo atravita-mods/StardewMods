@@ -9,15 +9,9 @@
                 "Requester": "Lewis",
                 "Duration": "Week",
                 "Repeatable": "{{Repeatability}}",
-                //because of the way Special Orders are coded, using CP's "When" field is fragile.
-                //using mail flags to delay these quests
                 "RequiredTags": "mail_pierreQualityCrops, mail_summer_21_2, !season_winter",
                 "OrderType": "",
-                "SpecialRule": "",
-                "ItemToRemoveOnEnd": null,
-                "MailToRemoveOnEnd": null,
                 "Text": "{{i18n:atravita.truffle.text}}",
-                "RandomizedElements": null,
                 "Objectives": [
                     {
                         "Type": "Collect",

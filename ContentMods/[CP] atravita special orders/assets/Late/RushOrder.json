@@ -23,9 +23,6 @@
                 //using mail flags to delay these quests
                 "RequiredTags": "mail_gotMissingStocklist",
                 "OrderType": "",
-                "SpecialRule": "",
-                "ItemToRemoveOnEnd": null,
-                "MailToRemoveOnEnd": null,
                 "Text": "[atravita.RushOrder.Text]",
                 "RandomizedElements": [
                     {

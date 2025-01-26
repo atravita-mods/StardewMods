@@ -9,16 +9,10 @@
                 "Requester": "Lewis",
                 "Duration": "TwoWeeks",
                 "Repeatable": "{{Repeatability}}",
-                //because of the way Special Orders are coded, using CP's "When" field is fragile.
-                //using mail flags to delay these quests
                 "RequiredTags": "mail_pierreQualityCrops, mail_winter_13_2, !season_spring",
                 "Condition": "PLAYER_FARMHOUSE_UPGRADE Any 3",
                 "OrderType": "",
-                "SpecialRule": "",
-                "ItemToRemoveOnEnd": null,
-                "MailToRemoveOnEnd": null,
                 "Text": "{{i18n:atravita.valley_vintage.text}}",
-                "RandomizedElements": null,
                 "Objectives": [
                     { // note: collect objectives don't work with casks.
                         "Type": "Ship",

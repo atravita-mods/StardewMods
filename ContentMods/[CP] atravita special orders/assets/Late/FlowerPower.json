@@ -13,11 +13,7 @@
                 //using mail flags to delay these quests
                 "RequiredTags": "mail_pierreQualityCrops, mail_atravita_EvelynTulips_Reward, mail_winter_13_2, !season_winter",
                 "OrderType": "",
-                "SpecialRule": "",
-                "ItemToRemoveOnEnd": null,
-                "MailToRemoveOnEnd": null,
                 "Text": "{{i18n:atravita.flower_power.text}}",
-                "RandomizedElements": null,
                 "Objectives": [
                     {
                         "Type": "Collect",

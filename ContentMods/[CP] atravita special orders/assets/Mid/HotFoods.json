@@ -13,11 +13,7 @@
                 //using mail flags to delay these quests
                 "RequiredTags": "season_summer, mail_gusGiantOmelet, mail_fall_6_2",
                 "OrderType": "",
-                "SpecialRule": "",
-                "ItemToRemoveOnEnd": null,
-                "MailToRemoveOnEnd": null,
                 "Text": "{{i18n: atravita.hotfoods.text}}",
-                "RandomizedElements": null,
                 "Objectives": [
                     {
                         "Type": "Fish",

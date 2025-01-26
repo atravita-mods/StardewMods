@@ -11,11 +11,7 @@
                 "Repeatable": "False",
                 "RequiredTags": "season_winter, mail_robinResource, !dropbox_PierreBox",
                 "OrderType": "",
-                "SpecialRule": "",
-                "ItemToRemoveOnEnd": null,
-                "MailToRemoveOnEnd": null,
                 "Text": "{{i18n:atravita.deck_the_halls.text}}",
-                "RandomizedElements": null,
                 "Objectives": [
                     {
                         "Type": "Collect",

@@ -9,15 +9,9 @@
                 "Requester": "Gus",
                 "Duration": "TwoWeeks",
                 "Repeatable": "{{Repeatability}}",
-                //because of the way Special Orders are coded, using CP's "When" field is fragile.
-                //using mail flags to delay these quests
                 "RequiredTags": "mail_gusGiantOmelet, !dropbox_GusFridge",
                 "OrderType": "",
-                "SpecialRule": "",
-                "ItemToRemoveOnEnd": null,
-                "MailToRemoveOnEnd": null,
                 "Text": "{{i18n:atravita.alcohol_order.text}}",
-                "RandomizedElements": null,
                 "Objectives": [
                     {
                         "Type": "Collect",

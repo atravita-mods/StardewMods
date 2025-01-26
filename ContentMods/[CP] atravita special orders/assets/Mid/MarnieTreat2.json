@@ -20,11 +20,7 @@
                 "Repeatable": "{{Repeatability}}",
                 "RequiredTags": "mail_atravita_MarnieTreat_Reward, season_fall",
                 "OrderType": "",
-                "SpecialRule": "",
-                "ItemToRemoveOnEnd": null,
-                "MailToRemoveOnEnd": null,
                 "Text": "{{i18n:atravita.marnie_treat_2.text}}",
-                "RandomizedElements": null,
                 "Objectives": [
                     {
                         "Type": "Collect",

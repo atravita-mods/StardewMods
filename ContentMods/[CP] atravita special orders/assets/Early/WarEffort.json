@@ -14,11 +14,7 @@
                     //using mail flags to delay these quests
                     "RequiredTags": "mail_QiChallengeComplete, mail_ClintReward, mail_MSB_Lewis, mail_winter_19_2",
                     "OrderType": "",
-                    "SpecialRule": "",
-                    "ItemToRemoveOnEnd": null,
-                    "MailToRemoveOnEnd": null,
                     "Text": "{{i18n:atravita.war_effort.text}}",
-                    "RandomizedElements": null,
                     "Objectives": [
                         {
                             "Type": "Collect",

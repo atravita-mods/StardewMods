@@ -12,11 +12,7 @@
                 "RequiredTags": "season_fall, mail_linusTrashCleanup, mail_atravita_SalmonberrySeason_Reward",
                 "Condition": "DAY_OF_MONTH 6 7 8 9 10 11 12 13 14 15",
                 "OrderType": "",
-                "SpecialRule": "",
-                "ItemToRemoveOnEnd": null,
-                "MailToRemoveOnEnd": null,
                 "Text": "{{i18n:atravita.blackberry_season.text}}",
-                "RandomizedElements": null,
                 "Objectives": [
                     {
                         "Type": "Collect",

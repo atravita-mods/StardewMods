@@ -33,9 +33,6 @@
                     "RequiredTags": "mail_MSB_Lewis, !season_fall, !dropbox_SandyBox, !dropboxRoom_SandyHouse",
                     "Condition": "PLAYER_FRIENDSHIP_POINTS Any Sandy 2000",
                     "OrderType": "",
-                    "SpecialRule": "",
-                    "ItemToRemoveOnEnd": null,
-                    "MailToRemoveOnEnd": null,
                     "Text": "[atravita.ValleyFlowers.Text]",
                     "RandomizedElements": [
                         {

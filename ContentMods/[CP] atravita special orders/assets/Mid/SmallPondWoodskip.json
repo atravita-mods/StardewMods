@@ -13,11 +13,7 @@
                 //using mail flags to delay these quests
                 "RequiredTags": "mail_willyBugWadCutscene",
                 "OrderType": "",
-                "SpecialRule": "",
-                "ItemToRemoveOnEnd": null,
-                "MailToRemoveOnEnd": null,
                 "Text": "{{i18n:atravita.small_pond.woodskip.text}}",
-                "RandomizedElements": null,
                 "Objectives": [
                     {
                         "Type": "Fish",

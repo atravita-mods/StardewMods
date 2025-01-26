@@ -14,11 +14,7 @@
                 "RequiredTags": "!season_winter, !dropbox_PierreBox, event_963113",
                 "Condition": "PLAYER_HAS_CRAFTING_RECIPE Any Deluxe Fertilizer",
                 "OrderType": "",
-                "SpecialRule": "",
-                "ItemToRemoveOnEnd": null,
-                "MailToRemoveOnEnd": null,
                 "Text": "{{i18n:atravita.pierre_apology.text}}",
-                "RandomizedElements": null,
                 "Objectives": [
                     {
                         "Type": "Collect",

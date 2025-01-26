@@ -14,11 +14,7 @@
                     //using mail flags to delay these quests
                     "RequiredTags": "mail_ClintReward, mail_winter_19_2",
                     "OrderType": "Qi",
-                    "SpecialRule": "",
-                    "ItemToRemoveOnEnd": null,
-                    "MailToRemoveOnEnd": null,
                     "Text": "{{i18n:atravita.monster_eradication.text}}",
-                    "RandomizedElements": null,
                     "Objectives": [
                         {
                             "Type": "Slay",

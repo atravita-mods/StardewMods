@@ -13,11 +13,7 @@
                 //using mail flags to delay these quests
                 "RequiredTags": "!season_summer, !season_winter, mail_willyBugWadCutscene",
                 "OrderType": "",
-                "SpecialRule": "",
-                "ItemToRemoveOnEnd": null,
-                "MailToRemoveOnEnd": null,
                 "Text": "{{i18n:atravita.catfish_challenge.text}}",
-                "RandomizedElements": null,
                 "Objectives": [
                     {
                         "Type": "Fish",

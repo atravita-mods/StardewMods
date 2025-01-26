@@ -17,13 +17,8 @@
                     "Requester": "Marlon",
                     "Duration": "OneDay",
                     "Repeatable": true,
-                    "RequiredTags": "",
-                    "Condition": "",
                     "OrderType": "DesertFestivalMarlon",
-                    "SpecialRule": "",
                     "Text": "{{i18n:atravita.sparkling_stones.text}}",
-                    "ItemToRemoveOnEnd": null,
-                    "MailToRemoveOnEnd": null,
                     "RandomizedElements": [
                       {
                         "Name": "Treasure",

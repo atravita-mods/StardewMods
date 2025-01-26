@@ -27,7 +27,6 @@
             "Default": "True"
         }
     },
-    
     "DynamicTokens": [
     {
         "Name": "SeasonalSeeds",

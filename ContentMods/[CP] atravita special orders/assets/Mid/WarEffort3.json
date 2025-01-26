@@ -12,11 +12,7 @@
                     "Repeatable": "{{Repeatability}}",
                     "RequiredTags": "!season_spring, !season_fall, mail_atravita_warEffort2_reward",
                     "OrderType": "",
-                    "SpecialRule": "",
-                    "ItemToRemoveOnEnd": null,
-                    "MailToRemoveOnEnd": null,
                     "Text": "{{i18n:atravita.war_effort3.text}}",
-                    "RandomizedElements": null,
                     "Objectives": [
                         {
                             "Type": "Collect",

@@ -24,11 +24,7 @@
                 //using mail flags to delay these quests
                 "RequiredTags": "season_spring, mail_georgeGifts, mail_summer_6_2, !dropbox_EvelynKitchen",
                 "OrderType": "",
-                "SpecialRule": "",
-                "ItemToRemoveOnEnd": null,
-                "MailToRemoveOnEnd": null,
                 "Text": "{{i18n:atravita.evelyn_tulips.text}}",
-                "RandomizedElements": null,
                 "Objectives": [
                     {
                         "Type": "Collect",

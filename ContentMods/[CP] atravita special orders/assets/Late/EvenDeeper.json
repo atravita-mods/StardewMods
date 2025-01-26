@@ -26,7 +26,6 @@
                     "Requester": "Marlon",
                     "Duration": "OneDay",
                     "Repeatable": true,
-                    "RequiredTags": "",
                     "Condition": "MINE_LOWEST_LEVEL_REACHED 180",
                     "OrderType": "DesertFestivalMarlon",
                     "Text": "{{i18n:atravita.even_deeper.text}}",

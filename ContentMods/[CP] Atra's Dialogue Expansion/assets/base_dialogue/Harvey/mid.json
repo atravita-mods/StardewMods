@@ -12,7 +12,8 @@
                 "AcceptGift_(O)395": "$query TIME 0600 1600#{{i18n: harvey-gift-coffee-morning.{{Random:01,02,03,04}} }}|{{i18n:harvey-gift-coffee-evening}}",
 
                 // CTs
-                "minelevel_121": "{{i18n: harvey-skull-cavern}}"
+                "minelevel_121": "{{i18n: harvey-skull-cavern}}",
+                "firstVisit_Mine": "{{i18n: harvey-mines}}"
             },
             "When": {
                 "Random: a, b": "a"

@@ -3,7 +3,7 @@ Less Mini Shipping Bin
 
 ![Example of enlarged Mini-Shipping Bin](docs/box.gif)
 
-Lets you set the capacity of the mini shipping bin higher.
+Lets you set the capacity of the mini shipping bin higher. Also jumino chests, big chests, small chests, and fridges.
 
 ### Install
 

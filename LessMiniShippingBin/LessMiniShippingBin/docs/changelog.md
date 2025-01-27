@@ -1,6 +1,9 @@
 ﻿Changelog
 ===============
 
+### Version 0.4.1
+* Now adds the ability to affect fridges as well.
+
 ### Version 0.4.0
 * Removed atracore dependency. Updated to 1.6. Added ability to change size of small or big chests as well.
 

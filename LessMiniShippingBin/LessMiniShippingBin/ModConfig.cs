@@ -14,6 +14,7 @@ internal sealed class ModConfig
     private int juminocapcity = 9;
     private int smallChestCapacity = 36;
     private int bigChestCapacity = 70;
+    private int fridgeCapacity = 36;
 
     /// <summary>
     /// Gets or sets capacity of the mini shipping bin.
@@ -50,7 +51,15 @@ internal sealed class ModConfig
     {
         get => this.bigChestCapacity;
         set => this.bigChestCapacity = ClampValue(value);
+    }
 
+    /// <summary>
+    /// Gets or sets the capacity of fridges.
+    /// </summary>
+    public int FridgeCapacity
+    {
+        get => this.fridgeCapacity;
+        set => this.fridgeCapacity = ClampValue(value);
     }
 
     /// <summary>

@@ -82,6 +82,16 @@ internal sealed class ModEntry : BaseMod<ModEntry>
             max: ModConfig.MAX_CHEST_SIZE,
             interval: 1);
 
+        api.AddNumberOption(
+            this.ModManifest,
+            static () => Config.FridgeCapacity,
+            static value => Config.FridgeCapacity = value,
+            I18n.FridgeCapacity_Title,
+            I18n.FridgeCapacity_Description,
+            min: ModConfig.MIN_CHEST_SIZE,
+            max: ModConfig.MAX_CHEST_SIZE,
+            interval: 1);
+
         api.AddBoolOption(
             this.ModManifest,
             static () => Config.DrawFirstItem,

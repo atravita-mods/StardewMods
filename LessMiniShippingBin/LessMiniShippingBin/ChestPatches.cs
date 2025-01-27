@@ -37,7 +37,13 @@ internal static class ChestPatches
     {
         try
         {
-            __result = __instance.SpecialChestType switch
+            if (__instance.fridge.Value)
+            {
+                __result = Math.Max(ModEntry.Config.FridgeCapacity, __result);
+                return;
+            }
+            __result = Math.Max(
+                __instance.SpecialChestType switch
             {
                 Chest.SpecialChestTypes.MiniShippingBin => ModEntry.Config.MiniShippingCapacity,
                 // Chest.SpecialChestTypes.Enricher => 9,
@@ -45,7 +51,7 @@ internal static class ChestPatches
                 Chest.SpecialChestTypes.BigChest => ModEntry.Config.BigChestCapacity,
                 Chest.SpecialChestTypes.None => ModEntry.Config.SmallChestCapacity,
                 _ => __result
-            };
+            }, __result);
         }
         catch (Exception ex)
         {

@@ -13,6 +13,9 @@
   "BigChestCapacity.title": "Big Chest Capacity",
   "BigChestCapacity.description": "Sets the capacity of the big chests",
 
+  "FridgeCapacity.title": "Fridge Capacity",
+  "FridgeCapacity.description": "Sets the capacity of the fridges.",
+
   "DrawFirstItem.title": "Draw First Item",
   "DrawFirstItem.description": "When enabled, the first item in a chest will be drawn in over it.",
   "DrawFirstItemFridge.title": "Draw First Item (Fridge)",

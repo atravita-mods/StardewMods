@@ -10,6 +10,9 @@
                 // birthday
                 "winter_23{{YearRemainder}}": "{{i18n:leah-birthday-self.{{Random: 00,01,02}} }}$h",
                 
+
+                // misc
+                "firstVisit_ElliottHouse": "{{i18n: leah-visit-elliott}}$h"
             }
         }
     ]

@@ -2,6 +2,17 @@
     "Changes": [
         {
             "Action": "EditData",
+            "Target": "Characters/Dialogue/Abigail",
+            "LogName": "Abigail",
+            "Entries": {
+                "spring_5{{YearRemainder}}": "$query PLAYER_FRIENDSHIP_POINTS Current Abigail 1000#{{i18n: abby-pre-egg-hunt.{{YearModulus}} }} | {{i18n: abby-pre-egg-hunt.unfriendly}}"
+            },
+            "When": {
+                "EnableFor": "Abigail"
+            }
+        },
+        {
+            "Action": "EditData",
             "Target": "Characters/Dialogue/Alex",
             "LogName": "Alex",
             "Entries": {
@@ -9,6 +20,9 @@
                 "summer_10{{YearRemainder}}": "$query PLAYER_FRIENDSHIP_POINTS Current Alex 1000#{{i18n:alex-pre-luau.{{YearModulus}} }}$h|{{i18n: alex-pre-luau-unfriendly}}",
                 // pre x-mas
                 "winter_20{{YearRemainder}}": "$query PLAYER_FRIENDSHIP_POINTS Current Alex 100#{{i18n:alex-pre-xmas.{{YearModulus}} }}$h| {{i18n:alex-pre-xmas-unfriendly}}",
+            },
+            "When": {
+                "EnableFor": "Alex"
             }
         },
         {
@@ -18,6 +32,9 @@
                 // headed into the moonlight jellies festival.
                 "summer_25{{YearRemainder}}": "{{i18n:demetrius-summer-end.{{YearModulus}} }}",
                 "summer_27{{YearRemainder}}": "{{i18n: demetrius-jellies-pre.01}}#$b#{{i18n: demetrius-jellies-pre.02}}",
+            },
+            "When": {
+                "EnableFor": "Demetrius"
             }
         },
         {
@@ -26,6 +43,9 @@
             "Entries": {
                 // before major festivals
                 "winter_24{{YearRemainder}}": "{{i18n:gus-pre-winter-star.{{YearModulus}} }}$h"
+            },
+            "When": {
+                "EnableFor": "Gus"
             }
         },
         {
@@ -33,6 +53,9 @@
             "Target": "Characters/Dialogue/Jodi",
             "Entries": {
                 "winter_15{{YearRemainder}}": "{{i18n: jodi-xmas-pre.{{Random: 00,01,02,03}} }}",
+            },
+            "When": {
+                "EnableFor": "Jodi"
             }
         },
         {
@@ -42,6 +65,19 @@
                 // pre-festival
                 "summer_10{{YearRemainder}}": "{{i18n: luau-prelude-lewis.{{IsJojaMartComplete}}.{{Random:00,01,02}} }}",
                 "fall_15{{YearRemainder}}": "{{i18n:fair-prelude-lewis.{{Random:00,01,02}} }}$h"
+            },
+            "When": {
+                "EnableFor": "Lewis"
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Leah",
+            "Entries": {
+                "winter_24{{YearRemainder}}": "{{i18n:leah-xmas.pre.{{Random: 00,01,02,03}} }}"
+            },
+            "When": {
+                "EnableFor": "Leah"
             }
         },
         {
@@ -50,6 +86,9 @@
             "Entries": {
                 // pre-festival
                 "summer_24{{YearRemainder}}": "{{i18n: maru-pre-jellies.{{Random:00,01,02}} }}"
+            },
+            "When": {
+                "EnableFor": "Maru"
             }
         },
         {
@@ -59,6 +98,9 @@
                 // Winter star
                 "winter_24{{YearRemainder}}": "{{i18n:vincent-xmas-pre|title={{Title}} }}$h",
                 "winter_26{{YearRemainder}}": "{{i18n:vincent-xmas-post.{{Random:00, 01, 02}}|title={{Title}} }}$h",
+            },
+            "When": {
+                "EnableFor": "Vincent"
             }
         }
     ]

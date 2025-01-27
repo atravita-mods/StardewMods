@@ -20,6 +20,12 @@
     * Festival Dialogue
     * **************************/
     // Egg festival
+    "abby-pre-egg-hunt.unfriendly": "You ready for the egg hunt? I always win, and this year won't be any different.",
+    "abby-pre-egg-hunt.0": "@, you think I'm getting too old to participate in the egg hunt?",
+    "abby-pre-egg-hunt.1": "Mum says I shouldn't be so competitive against Vince and Jas fur the egg hunt. She says I should let them win at least some of the time.#$b#@, what do you think?",
+    "abby-pre-egg-hunt.2": "I'm training hard for the egg hunt this year! Getting all sorts of training tips from Alex",
+    "abby-pre-egg-hunt.3": "Gosh, @, it must be so easy for you to stay so fit, running around all day like that.#$b#You're not stuck in front of a screen taking online classes all day.",
+    "abby-pre-egg-hunt.4": "I wish dad would let me train up as an adventurer, but he wants me to go get my degree.#$b#I wonder if he wants me to get a Mrs. Degree.",
     "abby-y2-egg-spouse": "We might be married but I'm still better at egg hunt than you are.",
     "abby-y3-egg.00": "Abigail looks like she's concentrating very deeply.",
     "abby-y3-egg.01": "Go away, I'm focusing for the egg hunt.",
@@ -768,9 +774,10 @@
     "kent-y3-xmas.01": "Growing up, Winter Star was always my favorite.",
     "kent-y3-xmas.02": "Always was so excited to see what I got under the tree.",
     "kent-y4-xmas": "Jodi got me some new tools for Winter Star. Things I'm definitely looking forward to using.",
-    "leah-xmas.pre.00": "Oh, is it the Winter Star tomorrow? I wonder what I'll get...",
-    "leah-xmas.pre.01": "Winter Star...oh, that is tomorrow! Did I remember to buy a gift?",
-    "leah-xmas.pre.02": "Heya, @, it's the Winter Star tomorrow. You looking forward to that feast?",
+    "leah-xmas.pre.00": "Oh, is it the Winter Star tomorrow? I wonder what I'll get...$h",
+    "leah-xmas.pre.01": "Winter Star...oh, that is tomorrow! Did I remember to buy a gift?$h",
+    "leah-xmas.pre.02": "Heya, @, it's the Winter Star tomorrow. You looking forward to that feast?$h",
+    "leah-xmas.pre.03": "Oh, gosh, I still have Winter Star gifts I need to pick up.$s",
     "leah-y2-xmas.00": "Sometimes, I wonder just how I managed to get this life.",
     "leah-y2-xmas.01": "It's a simple life, but it's the one I want.",
     "leah-y3-xmas": "I wonder...would there be a way to carve those candy canes into interesting shapes? Might give it a try next year.",

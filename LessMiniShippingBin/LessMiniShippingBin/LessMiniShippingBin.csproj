@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <Version>0.4.0</Version>
+    <Version>0.4.1</Version>
     <Name>Less Mini Shipping Bin</Name>
     <Description>Lets you make the mini shipping bin bigger.</Description>
     <UpdateKeys>Nexus:10959</UpdateKeys>

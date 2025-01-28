@@ -11,7 +11,6 @@ using Microsoft.Xna.Framework.Graphics;
 
 using MiniAtraShared.Extensions;
 
-
 using StardewValley.Objects;
 
 /// <summary>

@@ -1,5 +1,6 @@
 using AtraBase.Collections;
 using AtraBase.Toolkit;
+using AtraBase.Toolkit.StringHandler;
 
 using AtraCore.Framework.Caches;
 
@@ -9,7 +10,6 @@ using MiniAtraShared.Extensions;
 
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
-using StardewValley.Locations;
 
 namespace GingerIslandMainlandAdjustments.AssetManagers;
 
@@ -114,7 +114,7 @@ internal static class AssetLoader
     /// <exception cref="UnexpectedEnumValueException{SpecialCharacterType}">Recieved an unexpected enum value.</exception>
     internal static HashSet<NPC> GetSpecialCharacter(SpecialCharacterType specialCharacterType)
     {
-        HashSet<NPC> specialCharacters = new();
+        HashSet<NPC> specialCharacters = [];
         string assetLocation = specialCharacterType switch
         {
             SpecialCharacterType.Musician => MusicianLocation,
@@ -162,8 +162,9 @@ internal static class AssetLoader
                 continue;
             }
             HashSet<NPC> group = [];
-            foreach (string charname in data[groupname].Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
+            foreach (SpanSplitEntry character in data[groupname].StreamSplit(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
             {
+                string charname = character.ToString();
                 if (NPCCache.GetByVillagerName(charname) is NPC npc)
                 {
                     group.Add(npc);
@@ -180,14 +181,7 @@ internal static class AssetLoader
         // (This is mostly for Free Love. Your poly commune can all go to Ginger Island together!)
         if (specialGroupType == SpecialGroupType.Groups)
         {
-            HashSet<NPC> allSpouses = new();
-            foreach (NPC npc in NPCHelpers.GetNPCs())
-            {
-                if (npc?.isMarried() == true && IslandSouth.CanVisitIslandToday(npc))
-                {
-                    allSpouses.Add(npc);
-                }
-            }
+            HashSet<NPC> allSpouses = NPCHelpers.GetNPCs().Where(npc => npc?.isMarried() == true).ToHashSet();
             if (allSpouses.Count > 1)
             {
                 characterGroups["allSpouses"] = allSpouses;
@@ -204,7 +198,7 @@ internal static class AssetLoader
     /// <remarks>Will invalidate the cache every time, so cache it if you need it stored.</remarks>
     internal static Dictionary<NPC, string[]> GetExclusions()
     {
-        Dictionary<NPC, string[]> exclusions = new();
+        Dictionary<NPC, string[]> exclusions = [];
         Dictionary<string, string> data = Globals.GameContentHelper.Load<Dictionary<string, string>>(ExclusionLocations);
         foreach (string npcname in data.Keys)
         {

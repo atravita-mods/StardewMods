@@ -1,12 +1,8 @@
 ﻿using AtraBase.Toolkit.Extensions;
-
 using AtraCore.Framework.Caches;
-
 using AtraShared.Caching;
-using MiniAtraShared.Extensions;
-
 using Microsoft.Xna.Framework.Content;
-
+using MiniAtraShared.Extensions;
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
 using StardewValley.Locations;
@@ -67,9 +63,6 @@ internal static class AssetEditor
     // This currently isn't used for anything.
     private static IAssetName dataEventsTrailerBig = null!;
 
-    // We make that one chair sit-able.
-    private static IAssetName chairTiles = null!;
-
     // This stashes our LocalizedContentManager, should we need to restore a schedule
     private static LocalizedContentManager? contentManager;
 
@@ -79,9 +72,6 @@ internal static class AssetEditor
     /// <param name="parser">GameContentHelper.</param>
     internal static void Initialize(IGameContentHelper parser)
     {
-        // chair
-        chairTiles = parser.ParseAssetName("Data/ChairTiles");
-
         // phone
         phoneStringLocation = parser.ParseAssetName("Strings/Characters");
 

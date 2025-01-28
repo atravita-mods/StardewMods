@@ -26,8 +26,6 @@ namespace MoreFertilizers.HarmonyPatches;
 [HarmonyPatch(typeof(Crop))]
 internal static class CropHarvestTranspiler
 {
-    private const string DGAModDataKey = "atravita.MoreFertilizers/DGASeedID";
-
     private static bool hasQualityMod = false;
 
     internal static void Initialize(IModRegistry registry)

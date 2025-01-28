@@ -35,7 +35,7 @@ internal sealed class PamPhoneHandler : IPhoneHandler
     {
         if (HasGottenPamMail.GetValue() && NPCCache.GetByVillagerName("Pam") is NPC pam)
         {
-            yield return new KeyValuePair<string, string>("PamBus", pam.displayName);
+            yield return new ("PamBus", pam.displayName);
         }
     }
 

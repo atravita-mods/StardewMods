@@ -42,6 +42,7 @@ internal class ModEntry : BaseMod<ModEntry>
 
         ReplaceDisplayDevice.Apply(harmony);
         NOPMapTilesheetLoad.Apply(harmony);
+        NopSeasonLoadTranspiler.Apply(harmony);
         if (Config.CacheTileRotations)
         {
             ReplaceStaticTile.Apply(harmony);

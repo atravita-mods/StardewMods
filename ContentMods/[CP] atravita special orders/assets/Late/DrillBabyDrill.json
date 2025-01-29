@@ -1,41 +1,45 @@
 {
-    "Action": "EditData",
-    "Target": "Data/SpecialOrders",
-    "Entries": {
-        "atravita.DrillBabyDrill": {
-            "Name": "{{i18n:atravita.drill_baby_drill.name}}",
-            "Requester": "Marlon",
-            "Duration": "TwoWeeks",
-            "Repeatable": "{{Repeatability}}",
-            "RequiredTags": "mail_atravita_warEffort3_reward",
-            "Condition": "MINE_LOWEST_LEVEL_REACHED 220",
-            "OrderType": "",
-            "Text": "{{i18n:atravita.drill_baby_drill.text}}",
-            "Objectives": [
-                {
-                    "Type": "ReachMineFloor",
-                    "Text": "{{i18n:atravita.drill_baby_drill.objective}}",
-                    "RequiredCount": "150",
-                    "Data": {
-                        "SkullCave": "true"
-                    }
+    "Changes": [
+        {
+            "Action": "EditData",
+            "Target": "Data/SpecialOrders",
+            "Entries": {
+                "atravita.DrillBabyDrill": {
+                    "Name": "{{i18n:atravita.drill_baby_drill.name}}",
+                    "Requester": "Marlon",
+                    "Duration": "TwoWeeks",
+                    "Repeatable": "{{Repeatability}}",
+                    "RequiredTags": "mail_atravita_warEffort3_reward",
+                    "Condition": "MINE_LOWEST_LEVEL_REACHED 220",
+                    "OrderType": "",
+                    "Text": "{{i18n:atravita.drill_baby_drill.text}}",
+                    "Objectives": [
+                        {
+                            "Type": "ReachMineFloor",
+                            "Text": "{{i18n:atravita.drill_baby_drill.objective}}",
+                            "RequiredCount": "150",
+                            "Data": {
+                                "SkullCave": "true"
+                            }
+                        }
+                    ],
+                    "Rewards": [
+                        {
+                            "Type": "Money",
+                            "Data": {
+                                "Amount": "10000"
+                            }
+                        },
+                        {
+                            "Type": "Mail",
+                            "Data": {
+                                "MailReceived": "atravita_DrillBabyDrill_Reward",
+                                "NoLetter": "false"
+                            }
+                        }
+                    ],
                 }
-            ],
-            "Rewards": [
-                {
-                    "Type": "Money",
-                    "Data": {
-                        "Amount": "10000"
-                    }
-                },
-                {
-                    "Type": "Mail",
-                    "Data": {
-                        "MailReceived": "atravita_DrillBabyDrill_Reward",
-                        "NoLetter": "false"
-                    }
-                }
-            ],
+            }
         }
-    }
+    ]
 }

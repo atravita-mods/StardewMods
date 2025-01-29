@@ -111,7 +111,7 @@ internal static class AssetLoader
     /// </summary>
     /// <param name="specialCharacterType">Which type of special position am I looking for.</param>
     /// <returns>HashSet of possible special characters.</returns>
-    /// <exception cref="UnexpectedEnumValueException{SpecialCharacterType}">Recieved an unexpected enum value.</exception>
+    /// <exception cref="UnexpectedEnumValueException{SpecialCharacterType}">Received an unexpected enum value.</exception>
     internal static HashSet<NPC> GetSpecialCharacter(SpecialCharacterType specialCharacterType)
     {
         HashSet<NPC> specialCharacters = [];

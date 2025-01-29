@@ -19,6 +19,7 @@
                     "Repeatable": true,
                     "OrderType": "DesertFestivalMarlon",
                     "Text": "{{i18n:atravita.sparkling_stones.text}}",
+                    "Condition": "PLAYER_STAT Any Book_Diamonds 1",
                     "RandomizedElements": [
                       {
                         "Name": "Treasure",

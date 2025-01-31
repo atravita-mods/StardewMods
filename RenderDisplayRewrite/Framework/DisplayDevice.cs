@@ -17,7 +17,7 @@ namespace RenderDisplayRewrite.Framework;
 /// <param name="content">The content manager.</param>
 /// <param name="graphics">The graphics device.</param>
 /// <param name="monitor">The logger for this class.</param>
-internal sealed class DisplayDevice(ContentManager content, GraphicsDevice graphics, IMonitor monitor)
+internal sealed class DisplayDevice(ContentManager content, GraphicsDevice graphics, IMonitor monitor, IGameContentHelper gameContentHelper)
     : IDisplayDevice
 {
     private readonly Dictionary<TileSheet, Texture2D> cache = [];
@@ -106,9 +106,11 @@ internal sealed class DisplayDevice(ContentManager content, GraphicsDevice graph
     /// </summary>
     internal void ClearCache() => this.cache.Clear();
 
-    private static float GetRotation(Tile tile) => tile is RotTile rot ? rot.Rotation : RotTile.ParseRotation(tile);
-    private static SpriteEffects GetEffects(Tile tile) => tile is RotTile rot ? rot.Effects : RotTile.ParseEffects(tile);
-
+    /// <summary>
+    /// Tries to load the texture for a tilesheet.
+    /// </summary>
+    /// <param name="tileSheet">The tilesheet in question.</param>
+    /// <returns>Texture if successfull, null otherwise.</returns>
     internal Texture2D? TryLoadTilesheetTexture(TileSheet tileSheet)
     {
         string source = tileSheet.ImageSource;
@@ -120,6 +122,12 @@ internal sealed class DisplayDevice(ContentManager content, GraphicsDevice graph
             }
 
             Texture2D texture = content.Load<Texture2D>(source);
+            if (texture.IsDisposed)
+            {
+                monitor.Log($"{source} was disposed, invalidating.");
+                gameContentHelper.InvalidateCache(source);
+                return null;
+            }
             this.cache[tileSheet] = texture;
             return texture;
         }
@@ -131,6 +139,10 @@ internal sealed class DisplayDevice(ContentManager content, GraphicsDevice graph
             return null;
         }
     }
+
+    private static float GetRotation(Tile tile) => tile is RotTile rot ? rot.Rotation : RotTile.ParseRotation(tile);
+
+    private static SpriteEffects GetEffects(Tile tile) => tile is RotTile rot ? rot.Effects : RotTile.ParseEffects(tile);
 }
 
 file static class Extensions

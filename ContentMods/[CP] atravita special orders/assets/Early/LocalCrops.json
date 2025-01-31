@@ -1,0 +1,107 @@
+{
+    "Changes": [
+        {
+            "Action": "EditData",
+            "Target": "Data/SpecialOrderStrings",
+            "Entries": {
+                "atravita.LocalCrops.Text": "{{i18n: atravita.local_crops.text}} {Tag}",
+                "atravita.LocalCrops.Spring": "{{i18n: atravita.local_crops.spring}}",
+                "atravita.LocalCrops.Summer": "{{i18n: atravita.local_crops.summer}}",
+                "atravita.LocalCrops.Fall": "{{i18n: atravita.local_crops.fall}}",
+                "atravita.LocalCrops.Winter": "{{i18n: atravita.local_crops.winter}}"
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Data/SpecialOrders",
+            "Entries": {
+                "atravita.LocalCrops": {
+                    "Name": "{{i18n:atravita.local_crops.name}}",
+                    "Requester": "Lewis",
+                    "Duration": "Month",
+                    "Repeatable": "{{Repeatability}}",
+                    "OrderType": "",
+                    "Text": "[atravita.LocalCrops.Text]",
+                    "RandomizedElements": [
+                        {
+                            "Name": "Crop",
+                            "Values": [
+                                {
+                                    "RequiredTags": "season_spring",
+                                    "Value": "Carrot"
+                                },
+                                {
+                                    "RequiredTags": "season_summer",
+                                    "Value": "Summer Squash"
+                                },
+                                {
+                                    "RequiredTags": "season_fall",
+                                    "Value": "Broccoli"
+                                },
+                                {
+                                    "RequiredTags": "season_winter",
+                                    "Value": "Powdermelon"
+                                }
+                            ]
+                        },
+                        {
+                            "Name": "Tag",
+                            "Values": [
+                                {
+                                    "RequiredTags": "season_spring",
+                                    "Value": "[atravita.LocalCrops.Spring]"
+                                },
+                                {
+                                    "RequiredTags": "season_summer",
+                                    "Value": "[atravita.LocalCrops.Summer]"
+                                },
+                                {
+                                    "RequiredTags": "season_fall",
+                                    "Value": "[atravita.LocalCrops.Fall]"
+                                },
+                                {
+                                    "RequiredTags": "season_winter",
+                                    "Value": "[atravita.LocalCrops.Winter]"
+                                }
+                            ]
+                        }
+                    ],
+                    "Objectives": [
+                        {
+                            "Type": "Collect",
+                            "Text": "[Lewis_Objective_1_Text]",
+                            "RequiredCount": "{{Query: {{Year}} * 50 + 20}}",
+                            "Data": {
+                                "AcceptedContextTags": "{Crop:Tags}"
+                            }
+                        },
+                        {
+                            "Type": "Ship",
+                            "Text": "[Lewis_Objective_0_Text]",
+                            "RequiredCount": "{{Query: {{Year}} * 50 + 20}}",
+                            "Data": {
+                                "AcceptedContextTags": "{Crop:Tags}"
+                            }
+                        }
+                    ],
+                    "Rewards": [
+                        {
+                            "Type": "Money",
+                            "Data": {
+                                "Amount": "{Crop:Price}",
+                                "Multiplier": "{{Query: {{Year}} * 60 + 50}}"
+                            }
+                        },
+                        {
+                            "Type": "Mail",
+                            "Data": {
+                                "MailReceived": "atravita_LocalCrops_Reward",
+                                "NoLetter": "false"
+                            }
+                        }
+                    ],
+                },
+            }
+        }
+    ]
+}

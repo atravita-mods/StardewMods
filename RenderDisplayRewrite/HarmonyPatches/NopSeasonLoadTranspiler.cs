@@ -6,6 +6,11 @@ using Microsoft.Xna.Framework.Graphics;
 
 using RenderDisplayRewrite.Framework;
 
+using StardewModdingAPI.Utilities;
+
+using StardewValley.Locations;
+
+using xTile;
 using xTile.Display;
 using xTile.Tiles;
 

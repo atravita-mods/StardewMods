@@ -42,7 +42,8 @@
                             "DropBox": "EvelynKitchen",
                             "DropBoxGameLocation": "JoshHouse",
                             "DropBoxIndicatorLocation": "3 15",
-                            "AcceptedContextTags": "item_tulip, quality_gold/quality_iridium"
+                            "AcceptedContextTags": "item_tulip, quality_gold/quality_iridium",
+                            "MinimumCapacity": "12",
                         }
                     }
                 ],

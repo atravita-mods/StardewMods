@@ -456,5 +456,18 @@
     "atravita.little_free_library.donate": "Donate 20 books to the library.",
     "atravita.little_free_library.gift": "Gift 10 liked books",
     "atravita.little_free_library.mail.title": "Little Free Library - Thank You!",
-    "atravita.little_free_library.mail.text": "Well, that should get literacy rates in this little town going in the right direction. I've also attached a little something special for you..."
+    "atravita.little_free_library.mail.text": "Well, that should get literacy rates in this little town going in the right direction. I've also attached a little something special for you...",
+
+    // **********************
+    // Local Crops
+    // **********************
+
+    "atravita.local_crops.name": "Local Crops",
+    "atravita.local_crops.text": "I hear there is great demand for our local crop, the {Crop}. Looking for someone to grow some. At haste!",
+    "atravita.local_crops.spring": "I'm told our carrots have an especially nice crunch.",
+    "atravita.local_crops.summer": "Squash is in right now as a low-carb alternative to pasta!",
+    "atravita.local_crops.fall": "I hear that children will voluntarily eat our broccoli!",
+    "atravita.local_crops.winter": "Our powdermelons are especially crisp!",
+    "atravita.local_crops.mail.text": "Well done shipping all those crops. You'll certainly help put our little town on the map. I've included some things you might like...hopefully...well I hope you'll at least consider planting them...",
+    "atravita.local_crops.mail.title": "Local Crops - Thank You!"
 }

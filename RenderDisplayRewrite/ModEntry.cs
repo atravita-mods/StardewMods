@@ -16,12 +16,15 @@ internal class ModEntry : BaseMod<ModEntry>
 {
     internal static ModConfig Config { get; private set; } = null!;
 
+    internal static IGameContentHelper ContentHelper { get; private set; } = null!;
+
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
     {
         I18n.Init(helper.Translation);
         base.Entry(helper);
 
+        ContentHelper = helper.GameContent;
         try
         {
             Config = this.Helper.ReadConfig<ModConfig>();
@@ -33,8 +36,8 @@ internal class ModEntry : BaseMod<ModEntry>
             Config = new();
         }
 
-        helper.Events.Content.AssetReady += (_, e) => DisplayDeviceManager.Ready(e);
-        helper.Events.Content.AssetsInvalidated += (_, e) => DisplayDeviceManager.Invalidate(e.Names);
+        helper.Events.Content.AssetReady += static (_, e) => DisplayDeviceManager.Ready(e);
+        helper.Events.Content.AssetsInvalidated += static (_, e) => DisplayDeviceManager.Invalidate(e.Names);
 
         helper.Events.Player.Warped += this.OnWarp;
 

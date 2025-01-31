@@ -31,7 +31,7 @@
     },
     {
         "Action": "Include",
-        "FromFile": "assets/Early/EvelynTulips.json, assets/Early/DemetriusApology.json",
+        "FromFile": "assets/Early/EvelynTulips.json, assets/Early/DemetriusApology.json, assets/Early/LocalCrops.json",
         "When": {
             "AllowedSkills|contains=Farming": "true"
         }

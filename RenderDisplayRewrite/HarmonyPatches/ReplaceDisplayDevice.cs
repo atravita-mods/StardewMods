@@ -24,7 +24,7 @@ internal static class ReplaceDisplayDevice
     {
         try
         {
-            __result = new DisplayDevice(content, graphicsDevice, ModEntry.ModMonitor);
+            __result = new DisplayDevice(content, graphicsDevice, ModEntry.ModMonitor, ModEntry.ContentHelper);
             ModEntry.ModMonitor.Log("Overriding display device....");
             return false;
         }

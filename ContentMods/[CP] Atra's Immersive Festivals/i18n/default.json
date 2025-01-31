@@ -109,6 +109,12 @@
     "willy-y4-egg.01": "Spend the day out on them waters, see what I can catch...",
 
     // Flower Dance
+    "abby-pre-dance.unfriendly": "Dad's all panicked about getting his booth ready for the dance. He's probably going to ask me to help him, if he spots me.",
+    "abby-pre-dance.1": "Mom's making me get a new dress for this dance. Such a waste of money, I'd rather have a new video game.",
+    "abby-pre-dance.2": "Mom wants me to get my hair cut and curled before the dance...$s",
+    "abby-pre-dance.3": "You know, @, maybe I should conveniently get the flu. That'll get me out of the dance, right?",
+    "abby-pre-dance.4": "Maybe mom should go dance in that dance instead of making me do it...",
+    "abby-pre-dance.0": "Mom got me new shoes for the dance. They hurt my feet.",
     "abby-y2-dance.00": "@, you think we could get rid of this festival? I don't think anyone likes the dance.",
     "abby-y3-dance.00": "I really wouldn't dance if my dad didn't make me, but he thinks we should try harder to be part of the community.",
     "abby-y1-dance-spouse": "Ugh, @, dance with me? That way I won't feel so awkward.",

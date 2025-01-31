@@ -5,7 +5,8 @@
             "Target": "Characters/Dialogue/Abigail",
             "LogName": "Abigail",
             "Entries": {
-                "spring_5{{YearRemainder}}": "$query PLAYER_FRIENDSHIP_POINTS Current Abigail 1000#{{i18n: abby-pre-egg-hunt.{{YearModulus}} }} | {{i18n: abby-pre-egg-hunt.unfriendly}}"
+                "spring_5{{YearRemainder}}": "$query PLAYER_FRIENDSHIP_POINTS Current Abigail 1000#{{i18n: abby-pre-egg-hunt.{{YearModulus}} }} | {{i18n: abby-pre-egg-hunt.unfriendly}}",
+                "spring_22{{YearRemainder}}": "$query PLAYER_FRIENDSHIP_POINTS Current Abigail 1000#{{i18n: abby-pre-dance.{{YearModulus}} }} | {{i18n: abby-pre-dance.unfriendly}}"
             },
             "When": {
                 "EnableFor": "Abigail"

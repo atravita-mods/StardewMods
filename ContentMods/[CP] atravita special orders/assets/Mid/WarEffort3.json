@@ -64,6 +64,19 @@
                     ]
                 }
             }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Data/SpecialOrders",
+            "Fields": {
+                "atravita.warEffort3": {
+                    "Condition": "PLAYER_HAS_CRAFTING_RECIPE Any Cornucopia_DeluxeSmoker"
+                }
+            },
+            "When": {
+                "HasMod": "Cornucopia.ArtisanMachines",
+                "Delay": true
+            }
         }
     ]
 }

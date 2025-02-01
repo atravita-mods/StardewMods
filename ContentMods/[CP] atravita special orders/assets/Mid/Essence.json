@@ -67,6 +67,19 @@
                 ]
             }
         }
+    },
+    {
+        "Action": "EditData",
+        "Target": "Data/SpecialOrders",
+        "Fields": {
+            "atravita.Essence": {
+                "Condition": "PLAYER_HAS_CRAFTING_RECIPE Any Cornucopia_Alembic"
+            }
+        },
+        "When": {
+            "HasMod": "Cornucopia.ArtisanMachines",
+            "Delay": true
+        }
     }
     ]
 }

@@ -38,6 +38,19 @@
                 ]
             }
         }
+    },
+    {
+        "Action": "EditData",
+        "Target": "Data/SpecialOrders",
+        "Fields": {
+            "atravita.ValleyVintage": {
+                "Condition": "PLAYER_HAS_CRAFTING_RECIPE Any Cornucopia_WaxBarrel"
+            }
+        },
+        "When": {
+            "HasMod": "Cornucopia.ArtisanMachines",
+            "Delay": true
+        }
     }
     ]
 }

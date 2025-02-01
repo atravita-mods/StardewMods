@@ -1,58 +1,74 @@
-{"Changes": [
-    {
-        "LogName": "Alcohol Order - Special Order",
-        "Action": "EditData",
-        "Target": "Data/SpecialOrders",
-        "Entries": {
-            "atravita.AlcoholOrder": {
-                "Name": "{{i18n:atravita.alcohol_order.name}}",
-                "Requester": "Gus",
-                "Duration": "TwoWeeks",
-                "Repeatable": "{{Repeatability}}",
-                "RequiredTags": "mail_gusGiantOmelet, !dropbox_GusFridge",
-                "OrderType": "",
-                "Text": "{{i18n:atravita.alcohol_order.text}}",
-                "Objectives": [
-                    {
-                        "Type": "Collect",
-                        "Text": "{{i18n:atravita.alcohol_order.collect}}",
-                        "RequiredCount": "50",
-                        "Data": {
-                            "AcceptedContextTags": "alcohol_item, !wine_item"
+{
+    "Changes": [
+        {
+            "LogName": "Alcohol Order - Special Order",
+            "Action": "EditData",
+            "Target": "Data/SpecialOrders",
+            "Entries": {
+                "atravita.AlcoholOrder": {
+                    "Name": "{{i18n:atravita.alcohol_order.name}}",
+                    "Requester": "Gus",
+                    "Duration": "TwoWeeks",
+                    "Repeatable": "{{Repeatability}}",
+                    "RequiredTags": "mail_gusGiantOmelet, !dropbox_GusFridge",
+                    "OrderType": "",
+                    "Text": "{{i18n:atravita.alcohol_order.text}}",
+                    "Objectives": [
+                        {
+                            "Type": "Collect",
+                            "Text": "{{i18n:atravita.alcohol_order.collect}}",
+                            "RequiredCount": "50",
+                            "Data": {
+                                "AcceptedContextTags": "alcohol_item, !wine_item"
+                            }
+                        },
+                        {
+                            "Type": "Donate",
+                            "Text": "{{i18n:atravita.alcohol_order.donate}}",
+                            "RequiredCount": "50",
+                            "Data": {
+                                "DropBox": "GusFridge",
+                                "DropBoxGameLocation": "Saloon",
+                                "DropBoxIndicatorLocation": "18 15",
+                                "AcceptedContextTags": "alcohol_item, !wine_item",
+                                "MinimumCapacity": "30"
+                            }
                         }
-                    },
-                    {
-                        "Type": "Donate",
-                        "Text": "{{i18n:atravita.alcohol_order.donate}}",
-                        "RequiredCount": "50",
-                        "Data": {
-                            "DropBox": "GusFridge",
-                            "DropBoxGameLocation": "Saloon",
-                            "DropBoxIndicatorLocation": "18 15",
-                            "AcceptedContextTags": "alcohol_item, !wine_item",
-                            "MinimumCapacity": "30"
+                    ],
+                    "Rewards": [
+                        {
+                            "Type": "Money",
+                            "Data": {
+                                "Amount": "10000"
+                            }
+                        },
+                        {
+                            "Type": "Mail",
+                            "Data": {
+                                "MailReceived": "atravita_AlcoholOrder_Reward",
+                                "NoLetter": "false"
+                            }
+                        },
+                        {
+                            "Type": "Friendship",
+                            "Data": {}
                         }
-                    }
-                ],
-                "Rewards": [
-                    {
-                        "Type": "Money",
-                        "Data": {"Amount": "10000"}
-                    },
-                    {
-                        "Type": "Mail",
-                        "Data": {
-                            "MailReceived": "atravita_AlcoholOrder_Reward",
-                            "NoLetter": "false"
-                        }
-                    },
-                    {
-                        "Type": "Friendship",
-                        "Data": {}
-                    }
-                ]
+                    ]
+                }
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Data/SpecialOrders",
+            "Fields": {
+                "atravita.AlcoholOrder": {
+                    "Condition": "PLAYER_HAS_CRAFTING_RECIPE Any Cornucopia_YogurtJar"
+                }
+            },
+            "When": {
+                "HasMod": "Cornucopia.ArtisanMachines",
+                "Delay": true
             }
         }
-    }
     ]
 }

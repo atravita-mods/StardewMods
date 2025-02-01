@@ -54,6 +54,19 @@
                 ]
             }
         }
+    },
+    {
+        "Action": "EditData",
+        "Target": "Data/SpecialOrders",
+        "Fields": {
+            "atravita.MarnieTreat2": {
+                "Condition": "PLAYER_HAS_CRAFTING_RECIPE Any Cornucopia_Alembic"
+            }
+        },
+        "When": {
+            "HasMod": "Cornucopia.ArtisanMachines",
+            "Delay": true
+        }
     }
     ]
 }

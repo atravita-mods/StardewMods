@@ -43,8 +43,8 @@
             "AllowedSkills|contains=Farming": "true"
         },
         "LocalTokens": {
-            "CropCount": "{{Query: {{Year}} * 50 + 20}}",
-            "MoneyReward": "{{Query: {{Year}} * 60 + 50}}"
+            "CropCount": "{{Query: {{Year}} * 50 - 30}}",
+            "MoneyReward": "{{Query: {{Year}} * 60}}"
         }
     },
     {

@@ -53,7 +53,7 @@
         "Target": "Data/SpecialOrders",
         "Fields": {
             "atravita.FlowerPower": {
-                "Condition": "PLAYER_HAS_CRAFTING_RECIPE Any Cornucopia_WaxBarrel"
+                "Condition": "Any \"PLAYER_HAS_CRAFTING_RECIPE Any Cornucopia_WaxBarrel\" \"Year 3\""
             }
         },
         "When": {

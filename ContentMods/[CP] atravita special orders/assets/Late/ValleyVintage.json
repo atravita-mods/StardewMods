@@ -44,7 +44,7 @@
         "Target": "Data/SpecialOrders",
         "Fields": {
             "atravita.ValleyVintage": {
-                "Condition": "PLAYER_HAS_CRAFTING_RECIPE Any Cornucopia_WaxBarrel"
+                "Condition": "Any \"PLAYER_HAS_CRAFTING_RECIPE Any Cornucopia_WaxBarrel\" \"Year 4\""
             }
         },
         "When": {

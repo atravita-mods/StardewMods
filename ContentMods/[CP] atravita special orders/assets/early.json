@@ -38,6 +38,17 @@
     },
     {
         "Action": "Include",
+        "FromFile": "assets/Early/LocalCrops.json",
+        "When": {
+            "AllowedSkills|contains=Farming": "true"
+        },
+        "LocalTokens": {
+            "CropCount": "{{Query: {{Year}} * 50 + 20}}",
+            "MoneyReward": "{{Query: {{Year}} * 60 + 50}}"
+        }
+    },
+    {
+        "Action": "Include",
         "FromFile": "assets/Early/WarEffort.json, assets/Early/StoneCold.json",
         "When": {
             "AllowedSkills|contains=Mining": "true",

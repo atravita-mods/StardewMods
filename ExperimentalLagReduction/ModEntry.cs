@@ -48,7 +48,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
     /// <inheritdoc />
     public override object? GetApi() => new API();
 
-    private void OnTimeChanged(object? sender, TimeChangedEventArgs e)
+    private void OnTimeChanged(object? sender, EventArgs e)
     {
         foreach (NPC? npc in Game1.currentLocation.characters.Concat((Game1.CurrentEvent?.actors as IEnumerable<NPC>) ?? []))
         {

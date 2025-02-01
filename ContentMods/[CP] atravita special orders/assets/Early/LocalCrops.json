@@ -8,7 +8,9 @@
                 "atravita.LocalCrops.Spring": "{{i18n: atravita.local_crops.spring}}",
                 "atravita.LocalCrops.Summer": "{{i18n: atravita.local_crops.summer}}",
                 "atravita.LocalCrops.Fall": "{{i18n: atravita.local_crops.fall}}",
-                "atravita.LocalCrops.Winter": "{{i18n: atravita.local_crops.winter}}"
+                "atravita.LocalCrops.Winter": "{{i18n: atravita.local_crops.winter}}",
+                "atravita.LocalCrops.Collect": "{{i18n: atravita.local_crops.collect | count = {{CropCount}} }}",
+                "atravita.LocalCrops.Ship": "{{i18n: atravita.local_crops.ship | count= {{CropCount}} }}"
             }
         },
         {
@@ -32,7 +34,7 @@
                                 },
                                 {
                                     "RequiredTags": "season_summer",
-                                    "Value": "Summer Squash"
+                                    "Value": "SummerSquash"
                                 },
                                 {
                                     "RequiredTags": "season_fall",
@@ -69,16 +71,16 @@
                     "Objectives": [
                         {
                             "Type": "Collect",
-                            "Text": "[Lewis_Objective_1_Text]",
-                            "RequiredCount": "{{Query: {{Year}} * 50 + 20}}",
+                            "Text": "[atravita.LocalCrops.Collect]",
+                            "RequiredCount": "{{CropCount}}",
                             "Data": {
                                 "AcceptedContextTags": "{Crop:Tags}"
                             }
                         },
                         {
                             "Type": "Ship",
-                            "Text": "[Lewis_Objective_0_Text]",
-                            "RequiredCount": "{{Query: {{Year}} * 50 + 20}}",
+                            "Text": "[atravita.LocalCrops.Ship]",
+                            "RequiredCount": "{{CropCount}}",
                             "Data": {
                                 "AcceptedContextTags": "{Crop:Tags}"
                             }
@@ -89,7 +91,7 @@
                             "Type": "Money",
                             "Data": {
                                 "Amount": "{Crop:Price}",
-                                "Multiplier": "{{Query: {{Year}} * 60 + 50}}"
+                                "Multiplier": "{{MoneyReward}}"
                             }
                         },
                         {

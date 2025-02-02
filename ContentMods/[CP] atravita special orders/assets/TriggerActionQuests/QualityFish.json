@@ -25,7 +25,7 @@
                     "Requester": "Willy",
                     "Duration": "TwoWeeks",
                     "Repeatable": "{{Repeatability}}",
-                    "Condition": "YEAR 2, PLAYER_SPECIAL_ORDER_COMPLETE any atravita.QualityFish",
+                    "Condition": "YEAR 2, PLAYER_HAS_MAIL any atravita_QualityFish_Invite received",
                     "OrderType": "",
                     "Text": "{{i18n:atravita.quality_fish.text}}",
                     "Objectives": [
@@ -60,6 +60,26 @@
                         }
                     ]
                 }
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Data/SpecialOrders",
+            "TextOperations": [
+                {
+                    "Operation": "Append",
+                    "Target": [
+                        "Fields",
+                        "atravita.QualityFish",
+                        "Conditions"
+                    ],
+                    "Value": "PLAYER_SPECIAL_ORDER_COMPLETE Any Cornucopia.ArtisanMachines_YogurtJar",
+                    "Delimiter": ","
+                }
+            ],
+            "When": {
+                "HasMod": "Cornucopia.ArtisanMachines",
+                "Delay": true
             }
         }
     ]

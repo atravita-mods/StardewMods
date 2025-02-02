@@ -44,7 +44,7 @@
         "Target": "Data/SpecialOrders",
         "Fields": {
             "atravita.ValleyVintage": {
-                "Condition": "PLAYER_FARMHOUSE_UPGRADE Any 3, Any \" PLAYER_SPECIAL_ORDER_COMPLETE Any Cornucopia.ArtisanMachines_WaxBarrel\" \"Year 4\""
+                "Condition": "PLAYER_FARMHOUSE_UPGRADE Any 3, Any \"PLAYER_SPECIAL_ORDER_COMPLETE Any Cornucopia.ArtisanMachines_WaxBarrel\" \"Year 4\""
             }
         },
         "When": {

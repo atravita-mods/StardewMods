@@ -53,6 +53,19 @@
                     ],
                 }
             }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Data/SpecialOrders",
+            "Fields": {
+                "atravita.LittleFreeLibrary": {
+                    "Condition": "YEAR 2, PLAYER_SPECIAL_ORDER_COMPLETE Any Cornucopia.ArtisanMachines_YogurtJar"
+                }
+            },
+            "When": {
+                "HasMod": "Cornucopia.ArtisanMachines",
+                "Delay": true
+            }
         }
     ]
 }

@@ -9,8 +9,7 @@
                 "Requester": "Willy",
                 "Duration": "Week",
                 "Repeatable": "{{Repeatability}}",
-                //because of the way Special Orders are coded, using CP's "When" field is fragile.
-                //using mail flags to delay these quests
+
                 "RequiredTags": "!season_summer, !season_winter, mail_willyBugWadCutscene",
                 "OrderType": "",
                 "Text": "{{i18n:atravita.catfish_challenge.text}}",

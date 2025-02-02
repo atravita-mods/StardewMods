@@ -44,9 +44,28 @@
                             "MailReceived": "atravita_DemetriusMagmaCap_Reward",
                             "NoLetter": "false"
                         }
+                    },
+                    {
+                        "Type": "Friendship",
+                        "Data": {
+                            "Amount": "100"
+                        }
                     }
                 ]
             }
+        }
+    },
+    {
+        "Action": "EditData",
+        "Target": "Data/SpecialOrders",
+        "Fields": {
+            "atravita.DemetriusMagmaCap": {
+                "Condition": "PLAYER_SPECIAL_ORDER_COMPLETE Any Cornucopia.ArtisanMachines_YogurtJar"
+            }
+        },
+        "When": {
+            "HasMod": "Cornucopia.ArtisanMachines",
+            "Delay": true
         }
     }
     ]

@@ -46,19 +46,19 @@
                             "Values": [
                                 {
                                     "RequiredTags": "season_spring",
-                                    "Value": "Carrot"
+                                    "Value": "PICK_ITEM Carrot"
                                 },
                                 {
                                     "RequiredTags": "season_summer",
-                                    "Value": "SummerSquash"
+                                    "Value": "PICK_ITEM SummerSquash"
                                 },
                                 {
                                     "RequiredTags": "season_fall",
-                                    "Value": "Broccoli"
+                                    "Value": "PICK_ITEM Broccoli"
                                 },
                                 {
                                     "RequiredTags": "season_winter",
-                                    "Value": "Powdermelon"
+                                    "Value": "PICK_ITEM Powdermelon"
                                 }
                             ]
                         },

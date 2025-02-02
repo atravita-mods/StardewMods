@@ -94,6 +94,13 @@
         },
         {
             "Action": "EditData",
+            "Target": "Characters/Dialogue/Pam",
+            "Entries": {
+                "summer_19": "$d bus#{{i18n:pam-pre-trout.y1.employed}}|{{i18n:pam-pre-trout.y1.unemployed}}"
+            }
+        },
+        {
+            "Action": "EditData",
             "Target": "Characters/Dialogue/Vincent",
             "Entries": {
                 // Winter star

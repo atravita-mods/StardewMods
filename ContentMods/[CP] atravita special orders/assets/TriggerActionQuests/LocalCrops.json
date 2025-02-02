@@ -7,7 +7,7 @@
                 "atravita.SpecialOrders.LocalCrops": {
                     "Id": "atravita.SpecialOrders.LocalCrops",
                     "Trigger": "DayEnding",
-                    "Condition": "PLAYER_VISITED_LOCATION Current Backwoods, PLAYER_FARMING_LEVEL 8, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMailSpacer, Random 0.5, DAY_OF_WEEK mon",
+                    "Condition": "PLAYER_VISITED_LOCATION Current Backwoods, PLAYER_FARMING_LEVEL 8, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMailSpacer, Random 0.5, DAY_OF_MONTH 1 7 8 14 15",
                     "Actions": [
                         "AddConversationTopic atravita.SpamMailSpacer",
                         "AddMail Current atravita_LocalCrops_Invite"
@@ -117,8 +117,8 @@
                                 "NoLetter": "false"
                             }
                         }
-                    ],
-                },
+                    ]
+                }
             }
         },
         {

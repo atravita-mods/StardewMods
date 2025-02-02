@@ -9,8 +9,6 @@
                 "Requester": "Willy",
                 "Duration": "Week",
                 "Repeatable": "{{Repeatability}}",
-                //because of the way Special Orders are coded, using CP's "When" field is fragile.
-                //using mail flags to delay these quests
                 "RequiredTags": "!season_spring, !season_fall, mail_willyBugWadCutscene, mail_spring_21_2",
                 "OrderType": "",
                 "Text": "{{i18n:atravita.sturgeon_challenge.text}}",

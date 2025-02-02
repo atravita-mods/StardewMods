@@ -62,7 +62,7 @@
             "Target": "Data/SpecialOrders",
             "Fields": {
                 "atravita.AlcoholOrder": {
-                    "Condition": "PLAYER_HAS_CRAFTING_RECIPE Any Cornucopia_YogurtJar"
+                    "Condition": " PLAYER_SPECIAL_ORDER_COMPLETE Any Cornucopia.ArtisanMachines_YogurtJar"
                 }
             },
             "When": {

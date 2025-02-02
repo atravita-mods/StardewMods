@@ -81,6 +81,13 @@
                     {
                         "Type": "Friendship",
                         "Data": {}
+                    },
+                    {
+                        "Type": "Friendship",
+                        "Data": {
+                            "TargetName": "Robin",
+                            "Amount": "100"
+                        }
                     }
                 ]
             }

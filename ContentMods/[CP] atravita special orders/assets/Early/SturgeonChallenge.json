@@ -43,6 +43,19 @@
                 ]
             }
         }
+    },
+    {
+        "Action": "EditData",
+        "Target": "Data/SpecialOrders",
+        "Fields": {
+            "atravita.SturgeonChallenge": {
+                "Condition": " PLAYER_SPECIAL_ORDER_COMPLETE Any Cornucopia.ArtisanMachines_YogurtJar"
+            }
+        },
+        "When": {
+            "HasMod": "Cornucopia.ArtisanMachines",
+            "Delay": true
+        }
     }
     ]
 }

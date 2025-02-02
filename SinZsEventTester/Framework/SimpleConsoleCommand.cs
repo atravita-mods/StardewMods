@@ -143,6 +143,23 @@ internal struct SimpleConsoleCommand(IMonitor monitor)
         }
     }
 
+    internal readonly void RandomizeFriendships()
+    {
+        Utility.ForEachVillager(static villager =>
+        {
+            if (!villager.CanSocialize)
+            {
+                return true;
+            }
+            if (!Game1.player.friendshipData.TryGetValue(villager.Name, out var friendship))
+            {
+                Game1.player.friendshipData[villager.Name] = friendship = new Friendship();
+            }
+
+            friendship.Points = Random.Shared.Next(Utility.GetMaximumHeartsForCharacter(villager) * 250);
+            return true;
+        });
+    }
 }
 
 /// <summary>

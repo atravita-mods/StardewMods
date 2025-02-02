@@ -30,10 +30,7 @@
     "DynamicTokens": [
         {
             "Name": "SeasonalSeeds",
-            "Value": "495",
-            "When": {
-                "Season": "Spring"
-            }
+            "Value": "495"
         },
         {
             "Name": "SeasonalSeeds",

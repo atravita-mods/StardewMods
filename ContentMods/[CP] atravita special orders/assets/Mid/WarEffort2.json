@@ -88,7 +88,7 @@
             "Target": "Data/SpecialOrders",
             "Fields": {
                 "atravita.warEffort2": {
-                    "Condition": "PLAYER_HAS_CRAFTING_RECIPE Any Cornucopia_Alembic"
+                    "Condition": " PLAYER_SPECIAL_ORDER_COMPLETE Any Cornucopia.ArtisanMachines_Alembic"
                 }
             },
             "When": {

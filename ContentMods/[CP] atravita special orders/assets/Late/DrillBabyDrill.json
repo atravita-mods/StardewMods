@@ -46,7 +46,7 @@
             "Target": "Data/SpecialOrders",
             "Fields": {
                 "atravita.DrillBabyDrill": {
-                    "Condition": "PLAYER_HAS_CRAFTING_RECIPE Any Cornucopia_Alembic, MINE_LOWEST_LEVEL_REACHED 220"
+                    "Condition": "MINE_LOWEST_LEVEL_REACHED 220, Any \" PLAYER_SPECIAL_ORDER_COMPLETE Any Cornucopia.ArtisanMachines_Alembic\" \"Year 2\""
                 }
             },
             "When": {

@@ -47,6 +47,19 @@
                 ]
             }
         }
+    },
+    {
+        "Action": "EditData",
+        "Target": "Data/SpecialOrders",
+        "Fields": {
+            "atravita.TruffleTruffle": {
+                "Condition": "Any \" PLAYER_SPECIAL_ORDER_COMPLETE Any Cornucopia.ArtisanMachines_Alembic\" \"Year 2\""
+            }
+        },
+        "When": {
+            "HasMod": "Cornucopia.ArtisanMachines",
+            "Delay": true
+        }
     }
     ]
 }

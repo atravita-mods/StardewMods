@@ -70,7 +70,7 @@
             "Target": "Data/SpecialOrders",
             "Fields": {
                 "atravita.warEffort3": {
-                    "Condition": "PLAYER_HAS_CRAFTING_RECIPE Any Cornucopia_DeluxeSmoker"
+                    "Condition": " PLAYER_SPECIAL_ORDER_COMPLETE Any Cornucopia.ArtisanMachines_DeluxeSmoker"
                 }
             },
             "When": {

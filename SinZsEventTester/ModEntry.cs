@@ -144,6 +144,10 @@ public sealed class ModEntry : Mod
             (_, _) => new SimpleConsoleCommand(this.Monitor).GetTrack());
 
         helper.ConsoleCommands.Add(
+            "sinz.randomize_friendships",
+            "Randomizes the friendship points for everyone in the game.",
+            (_, _) => new SimpleConsoleCommand(this.Monitor).RandomizeFriendships());
+        helper.ConsoleCommands.Add(
             "sinz.fast_forward",
             "Fasts forward the game",
             (command, args) => this.FastForward(command, args.AsSpan())

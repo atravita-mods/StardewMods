@@ -1,0 +1,66 @@
+{
+    "Changes": [
+        {
+            "Actions": "EditData",
+            "Target": "Data/TriggerActions",
+            "Entries": {
+                "atravita.SpecialOrders.QualityFish": {
+                    "Id": "atravita.SpecialOrders.QualityFish",
+                    "Trigger": "DayEnding",
+                    "Condition": "PLAYER_VISITED_LOCATION Current FishShop, PLAYER_FISHING_LEVEL 8, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMailSpacer, Random 0.1",
+                    "Actions": [
+                        "AddConversationTopic atravita.SpamMailSpacer",
+                        "AddMail Current atravita_QualityFish_Invite"
+                    ]
+                },
+            }
+        },
+        {
+            "LogName": "Quality Fish - Special Order",
+            "Action": "EditData",
+            "Target": "Data/SpecialOrders",
+            "Entries": {
+                "atravita.QualityFish": {
+                    "Name": "{{i18n:atravita.quality_fish.name}}",
+                    "Requester": "Willy",
+                    "Duration": "TwoWeeks",
+                    "Repeatable": "{{Repeatability}}",
+                    "Condition": "YEAR 2, PLAYER_SPECIAL_ORDER_COMPLETE any atravita.QualityFish",
+                    "OrderType": "",
+                    "Text": "{{i18n:atravita.quality_fish.text}}",
+                    "Objectives": [
+                        {
+                            "Type": "Fish",
+                            "Text": "{{i18n:atravita.quality_fish.fish}}",
+                            "RequiredCount": "100",
+                            "Data": {
+                                "AcceptedContextTags": "quality_gold/quality_iridium"
+                            }
+                        }
+                    ],
+                    "Rewards": [
+                        {
+                            "Type": "Money",
+                            "Data": {
+                                "Amount": "1500"
+                            }
+                        },
+                        {
+                            "Type": "Mail",
+                            "Data": {
+                                "MailReceived": "atravita_QualityFish_Reward",
+                                "NoLetter": "false"
+                            }
+                        },
+                        {
+                            "Type": "Friendship",
+                            "Data": {
+                                "Amount": 100
+                            }
+                        }
+                    ]
+                }
+            }
+        }
+    ]
+}

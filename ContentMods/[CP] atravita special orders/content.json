@@ -73,11 +73,7 @@
         },
         {
             "Action": "Include", //custom dropboxes
-            "FromFile": "assets/dropboxes.json"
-        },
-        { //Include mail data
-            "Action": "Include",
-            "FromFile": "assets/mail.json"
+            "FromFile": "assets/dropboxes.json, assets/mail.json, assets/trigeractions.json"
         },
         {
             "Action": "Include",

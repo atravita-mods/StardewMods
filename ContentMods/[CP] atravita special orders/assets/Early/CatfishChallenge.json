@@ -37,7 +37,9 @@
                     },
                     {
                         "Type": "Friendship",
-                        "Data": {}
+                        "Data": {
+                            "Amount": 100
+                        }
                     }
                 ]
             }

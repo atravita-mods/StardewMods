@@ -1,0 +1,12 @@
+{
+    "Changes": [
+        {
+            "Actions": "Include",
+            "FromFile": "assets/TriggerActionQuests/QualityFish.json",
+            "When": {
+                "AllowedSkills": "fishing"
+            }
+        },
+
+    ]
+}

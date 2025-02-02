@@ -9,6 +9,8 @@
         "atravita_AlcoholOrder_Reward": "@! ^{{i18n:atravita.alcohol_order.mail.text}}^^    -{{i18n:Gus}}%item object 599 5 %%[#]{{i18n:atravita.alcohol_order.mail.title}}",
         "atravita_BlackberrySeason_Reward": "@, ^{{i18n:atravita.blackberry_season.mail.text}}^^   -{{i18n:Lewis}}^^{{i18n:atravita.blackberry_season.mail.postscript}}%item object 770 20 %%[#]{{i18n:atravita.blackberry_season.mail.title}}",
         "atravita_CatfishChallenge_Reward": "@! ^{{i18n:atravita.catfish_challenge.mail.text}}^^    -{{i18n:Willy}}%item object 166 1 %%[#]{{i18n:atravita.catfish_challenge.mail.title}}",
+        "atravita_QualityFish_Invite": "{{i18n:atravita.quality_fish.mail.greeting}},^{{atravita.quality_fish.invite.text}}^^    --{{i18n: Willy}}%item specialorder atravita.QualityFish %% [#]{{i18n:atravita.quality_fish.invite.title}}",
+        "atravita_QualityFish_Reward": "{{i18n:atravita.quality_fish.mail.greeting}},^{{i18n:atravita.quality_fish.mail.text}}^^    -{{i18n:Willy}}%item bigobject FishSmoker %%[#]{{i18n:atravita.quality_fish.mail.title}}",
         "atravita_CaviarTastes_Reward": "@!^{{i18n:atravita.caviar_tastes.mail.text}}^^    --{{i18n:Lewis}}%item bigobject 209 %%[#]{{i18n:atravita.caviar_tastes.mail.title}}",
         "atravita_deckTheHalls_After": "@! ^{{i18n:atravita.deck_the_halls_after.mail.text}}^^     -Caroline%item object 239 5%%[#]{{i18n:atravita.deck_the_halls_invite.mail.title}}",
         "atravita_deckTheHalls_Invite": "@! ^{{i18n:atravita.deck_the_halls_invite.mail.text}}^^   -Caroline.%item object 236 5 %%[#]{{i18n:atravita.deck_the_halls_invite.mail.title}}",

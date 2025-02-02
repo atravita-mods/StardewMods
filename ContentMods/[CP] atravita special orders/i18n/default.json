@@ -78,6 +78,19 @@
     "atravita.catfish_challenge.fish": "Fish up twenty gold-quality catfish.",
     "atravita.catfish_challenge.mail.text": "I'm impressed! Your angling skills are coming along quite nicely. Practice makes perfect, doesn't it? I've attached a little reward for you.",
     "atravita.catfish_challenge.mail.title": "Catfish Challenge thank-you note",
+
+    // *******************
+    // Quality fish
+    // *******************
+    "atravita.quality_fish.name": "Quality Fish",
+    "atravita.quality_fish.text": "Looking for an angler to land a hundred quality fish in the next two weeks.",
+    "atravita.quality_fish.fish": "Fish up 100 gold or iridium quality fish",
+    "atravita.quality_fish.mail.greeting": "Kiddo",
+    "atravita.quality_fish.mail.text": "You did good with the fish this time around. Here, I've got something for you that you might like.",
+    "atravita.quality_fish.mail.title": "Quality Fish - thank you note",
+    "atravita.quality_fish.invite.title": "Quality Fish",
+    "atravita.quality_fish.invite.text": "People don't know how good fresh fish taste these days. Lots of the fish hitting the market is dredged-up, frozen product. Let's show them how good fish should taste.",
+
     // *******************
     // Deck The Halls
     // *******************

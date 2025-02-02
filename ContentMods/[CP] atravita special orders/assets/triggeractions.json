@@ -1,14 +1,14 @@
 {
     "Changes": [
         {
-            "Actions": "Include",
+            "Action": "Include",
             "FromFile": "assets/TriggerActionQuests/QualityFish.json",
             "When": {
                 "AllowedSkills": "fishing"
             }
         },
         {
-            "Actions": "Include",
+            "Action": "Include",
             "FromFile": "assets/TriggerActionQuests/LocalCrops.json",
             "When":{
                 "AllowedSkills": "farming"

@@ -486,5 +486,21 @@
     "atravita.local_crops.mail.text": "Well done shipping all those crops. You'll certainly help put our little town on the map. I've included some things you might like...hopefully...well I hope you'll at least consider planting them...",
     "atravita.local_crops.mail.title": "Local Crops - Thank You!",
     "atravita.local_crops.invite.text": "We've got increasing demand for our local crops. Would you be a dear and grow some? You'll find the seeds scattered around...",
-    "atravita.local_crops.invite.title": "Local Crops - Invite"
+    "atravita.local_crops.invite.title": "Local Crops - Invite",
+
+    // **********************
+    // Local Fruits
+    // **********************
+
+    "atravita.local_fruits.name": "Local Fruits",
+    "atravita.local_fruits.text": "Market demand for our local fruit, the {Crop}, is surging. Let's grow some. And quickly!",
+    "atravita.local_fruits.spring": "All the new-years-resolutions folks are looking for healthy foods to add to their diet!",
+    "atravita.local_fruits.summer": "There's nothing like a juicy fruit to cut the summer heat!",
+    "atravita.local_fruits.fall": "It's pie season, and you know what all pies need - some tasty fruit!",
+    "atravita.local_fruits.collect": "Grow {{count}} {Crop:TextPlural}",
+    "atravita.local_fruits.ship": "Ship {{count}} {Crop:TextPlural}",
+    "atravita.local_fruits.mail.text": "Amazing job producing fruit for out little town! You did good. Please please consider this gift as payment. Err. At least, I hope you'll receive this gift as adequate payment....",
+    "atravita.local_fruits.mail.title": "Local Crops - Thank You!",
+    "atravita.local_fruits.invite.text": "Our little town used to be famous for its fruits. I'd like to put us back on the map. Could you grow some fruit for shipment?",
+    "atravita.local_fruits.invite.title": "Local Fruits - Invite",
 }

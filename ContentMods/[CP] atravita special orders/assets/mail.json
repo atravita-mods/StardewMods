@@ -22,9 +22,11 @@
         "atravita_FlowerPower_Reward": "@! ^{{i18n:atravita.flower_power.mail.text}}^^   -{{i18n:Lewis}}%item bigobject 248 %%[#]{{i18n:atravita.flower_power.mail.title}}",
         "atravita_HotFoods_Reward": "@! ^{{i18n:atravita.hotfoods.mail.text}}^^    -{{i18n: Gus}}%item object 710 15%%[#]{{i18n:atravita.hotfoods.mail.title}}",
         "atravita_InAJam_Reward": "@!^{{i18n:atravita.in_a_jam.mail.text}}^^    --{{i18n:Gus}}%item bigobject 19 %%[#]{{i18n:atravita.in_a_jam.mail.title}}",
-        "atravita_LittleFreeLibrary_Reward": "@,^{{i18n:atravita.little_free_library.mail.text}}^^     -{{i18n:Gunther}}%item object PurpleBook 1 %% [#]{{i18n:atravita.little_free_library.mail.title}}",
+        "atravita_LittleFreeLibrary_Reward": "@,^{{i18n:atravita.little_free_library.mail.text}}^^     -{{i18n:Gunther}}%item object PurpleBook 1 %% %item object SkillBook_0 1 SkillBook_1 1 SkillBook_2 1 SkillBook_3 1 SkillBook_4 1 %%[#]{{i18n:atravita.little_free_library.mail.title}}",
         "atravita_LocalCrops_Invite": "@!^ {{i18n:atravita.local_crops.invite.text}}^^    -{{i18n: Lewis}}%item specialorder atravita.LocalCrops %%[#]{{i18n:atravita.local_crops.invite.title}}",
         "atravita_LocalCrops_Reward": "@!^ {{i18n:atravita.local_crops.mail.text}}^^    -{{i18n: Lewis}}%item object CarrotSeeds 20 %% %item object SummerSquashSeeds 20 %% %item object BroccoliSeeds 20 %% %item object PowdermelonSeeds 20 %%[#]{{i18n:atravita.local_crops.mail.title}}",
+        "atravita_LocalFruits_Invite": "@!^ {{i18n:atravita.local_fruits.invite.text}}^^    -{{i18n: Lewis}}%item specialorder atravita.LocalFruits %%[#]{{i18n:atravita.local_fruits.invite.title}}",
+        "atravita_LocalFruits_Reward": "@!^ {{i18n:atravita.local_fruits.mail.text}}^^    -{{i18n: Lewis}}%item object 628 1 629 1 630 1 631 1 632 1 633 1%%[#]{{i18n:atravita.local_fruits.mail.title}}", // some random sapling as reward.
         "atravita_MarnieTreat_Reward": "@! ^{{i18n:atravita.marnie_treat.mail.text}}^^   -{{i18n:Marnie}}^^{{i18n:atravita.marnie_treat.mail.postscript}}%item bigobject 272 %%[#]{{i18n:atravita.marnie_treat.mail.title}}",
         "atravita_MarnieTreat2_Reward": "@! ^{{i18n:atravita.marnie_treat_2.mail.text}}^^   -{{i18n:Marnie}}^^{{i18n:atravita.marnie_treat_2.mail.postscript}}%item bigobject 272 %%[#]{{i18n:atravita.marnie_treat_2.mail.title}}",
         "atravita_MysticStones_Reward": "@! ^{{i18n:atravita.mystic_stones.mail.text}}^^   -{{i18n:Wizard}}%item object 261 5 689 5 690 5 %%[#]{{i18n:atravita.mystic_stones.mail.title}}",

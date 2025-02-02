@@ -1,0 +1,146 @@
+{
+    "Changes": [
+        {
+            "Action": "EditData",
+            "Target": "Data/TriggerActions",
+            "Entries": {
+                "atravita.SpecialOrders.LocalFruits": {
+                    "Id": "atravita.SpecialOrders.LocalFruits",
+                    "Trigger": "DayEnding",
+                    "Condition": "PLAYER_VISITED_LOCATION Current Backwoods, PLAYER_FARMING_LEVEL Any 8, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMailSpacer, Random 0.5, DAY_OF_MONTH 1 7 8 14 15",
+                    "Actions": [
+                        "AddConversationTopic atravita.SpamMailSpacer",
+                        "AddMail Current atravita_LocalFruits_Invite"
+                    ]
+                },
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Strings/SpecialOrderStrings",
+            "Entries": {
+                "atravita.LocalFruits.Text": "{{i18n: atravita.local_fruits.text}} {Tag}",
+                "atravita.LocalFruits.Spring": "{{i18n: atravita.local_fruits.spring}}",
+                "atravita.LocalFruits.Summer": "{{i18n: atravita.local_fruits.summer}}",
+                "atravita.LocalFruits.Fall": "{{i18n: atravita.local_fruits.fall}}",
+                "atravita.LocalFruits.Collect": "{{i18n: atravita.local_fruits.collect | count = {{CropCount}} }}",
+                "atravita.LocalFruits.Ship": "{{i18n: atravita.local_fruits.ship | count= {{CropCount}} }}"
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Data/SpecialOrders",
+            "Entries": {
+                "atravita.LocalFruits": {
+                    "Name": "{{i18n:atravita.local_fruits.name}}",
+                    "Requester": "Lewis",
+                    "Duration": "Month",
+                    "Repeatable": "{{Repeatability}}",
+                    "RequiredTags": "mail_atravita_LocalFruits_Invite, !season_winter",
+                    "OrderType": "",
+                    "Text": "[atravita.LocalFruits.Text]",
+                    "RandomizedElements": [
+                        {
+                            "Name": "Crop",
+                            "Values": [
+                                {
+                                    "RequiredTags": "season_spring",
+                                    "Value": "PICK_ITEM Cherry, Apricot"
+                                },
+                                {
+                                    "RequiredTags": "season_summer",
+                                    "Value": "PICK_ITEM Orange, Peach"
+                                },
+                                {
+                                    "RequiredTags": "season_fall",
+                                    "Value": "PICK_ITEM Apple, Pomegranate"
+                                },
+                                {
+                                    "RequiredTags": "island",
+                                    "Value": "PICK_ITEM Banana, Mango"
+                                }
+                            ]
+                        },
+                        {
+                            "Name": "Tag",
+                            "Values": [
+                                {
+                                    "RequiredTags": "season_spring",
+                                    "Value": "[atravita.LocalFruits.Spring]"
+                                },
+                                {
+                                    "RequiredTags": "season_summer",
+                                    "Value": "[atravita.LocalFruits.Summer]"
+                                },
+                                {
+                                    "RequiredTags": "season_fall",
+                                    "Value": "[atravita.LocalFruits.Fall]"
+                                },
+                            ]
+                        }
+                    ],
+                    "Objectives": [
+                        {
+                            "Type": "Collect",
+                            "Text": "[atravita.LocalFruits.Collect]",
+                            "RequiredCount": "{{CropCount}}",
+                            "Data": {
+                                "AcceptedContextTags": "{Crop:Tags}"
+                            }
+                        },
+                        {
+                            "Type": "Ship",
+                            "Text": "[atravita.LocalFruits.Ship]",
+                            "RequiredCount": "{{CropCount}}",
+                            "Data": {
+                                "AcceptedContextTags": "{Crop:Tags}"
+                            }
+                        }
+                    ],
+                    "Rewards": [
+                        {
+                            "Type": "Money",
+                            "Data": {
+                                "Amount": "{Crop:Price}",
+                                "Multiplier": "{{MoneyReward}}"
+                            }
+                        },
+                        {
+                            "Type": "Mail",
+                            "Data": {
+                                "MailReceived": "atravita_LocalFruits_Reward",
+                                "NoLetter": "false"
+                            }
+                        },
+                        {
+                            "Type": "Friendship",
+                            "Data": {
+                                "Amount": 100
+                            }
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Data/SpecialOrders",
+            "TextOperations": [
+                {
+                    "Operation": "Append",
+                    "Target": [
+                        "Fields",
+                        "atravita.LocalFruits",
+                        "Conditions"
+                    ],
+                    "Value": "PLAYER_SPECIAL_ORDER_COMPLETE Any Cornucopia.ArtisanMachines_YogurtJar",
+                    "Delimiter": ","
+                }
+            ],
+            "When": {
+                "HasMod": "Cornucopia.ArtisanMachines",
+                "Delay": true
+            }
+        }
+    ]
+}

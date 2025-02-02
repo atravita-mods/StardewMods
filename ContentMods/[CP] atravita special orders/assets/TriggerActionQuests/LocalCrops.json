@@ -1,7 +1,7 @@
 {
     "Changes": [
         {
-            "Actions": "EditData",
+            "Action": "EditData",
             "Target": "Data/TriggerActions",
             "Entries": {
                 "atravita.SpecialOrders.LocalCrops": {
@@ -17,7 +17,7 @@
         },
         {
             "Action": "EditData",
-            "Target": "Data/SpecialOrderStrings",
+            "Target": "Strings/SpecialOrderStrings",
             "Entries": {
                 "atravita.LocalCrops.Text": "{{i18n: atravita.local_crops.text}} {Tag}",
                 "atravita.LocalCrops.Spring": "{{i18n: atravita.local_crops.spring}}",

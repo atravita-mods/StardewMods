@@ -10,7 +10,7 @@ namespace SinZsEventTester.Framework;
 /// <summary>
 /// Warps farmer around, talking to each npc and taking note of their dialogue.
 /// </summary>
-internal sealed class DialogueChecker : IDisposable
+internal sealed class DialogueChecker : IChecker
 {
     private IMonitor monitor;
     private IGameLoopEvents gameLoopEvents;
@@ -41,7 +41,7 @@ internal sealed class DialogueChecker : IDisposable
             Utility.ForEachVillager((npc) =>
             {
                 // check for new current dialogue.
-                int friendship = Game1.player.friendshipData.TryGetValue(npc.Name, out var data) ? data.Points : 0;
+                int friendship = Game1.player.friendshipData.TryGetValue(npc.Name, out Friendship? data) ? data.Points : 0;
                 _ = npc.checkForNewCurrentDialogue(friendship / 250) || npc.checkForNewCurrentDialogue(friendship / 250, true) || npc.setTemporaryMessages(Game1.player);
 
                 if (npc.CurrentDialogue?.Count > 0)
@@ -75,6 +75,11 @@ internal sealed class DialogueChecker : IDisposable
 
         this.monitor.Log($"Okay, {this.stack.Count} dialogues queued.");
     }
+
+    /// <summary>
+    /// Gets a value indicating whether or not this instance is disposed.
+    /// </summary>
+    public bool IsDisposed { get; private set; }
 
     private void OnTick(object? sender, UpdateTickedEventArgs e)
     {
@@ -241,11 +246,6 @@ internal sealed class DialogueChecker : IDisposable
             this.Dispose();
         }
     }
-
-    /// <summary>
-    /// Gets a value indicating whether or not this instance is disposed.
-    /// </summary>
-    internal bool IsDisposed {get; private set; }
 
     private void Dispose(bool disposing)
     {

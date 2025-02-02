@@ -20,9 +20,12 @@ using StardewValley.Logging;
 using StardewValley.Menus;
 using StardewValley.Minigames;
 
+using MiniAtraShared.Models;
+using SinZsEventTester.Framework.EventTester;
+
 /// <inheritdoc />
 [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1309:Field names should not begin with underscore", Justification = "Preference.")]
-public sealed class ModEntry : Mod
+public sealed class ModEntry : BaseMod<ModEntry>
 {
     private sealed record class IntHolder(int Value);
 
@@ -49,7 +52,7 @@ public sealed class ModEntry : Mod
 
     private FastForwardHandler? fastForwardHandler;
     private MonitorPerformance? performanceMonitor;
-    private DialogueChecker? dialogueChecker;
+    private IChecker? currentChecker;
     private bool _prevPauseWhenUnfocused = true;
     private bool _prevDialogueTyping = true;
 
@@ -57,6 +60,7 @@ public sealed class ModEntry : Mod
     public override void Entry(IModHelper helper)
     {
         I18n.Init(helper.Translation);
+        base.Entry(helper);
         try
         {
             Config = this.Helper.ReadConfig<ModConfig>();
@@ -168,6 +172,10 @@ public sealed class ModEntry : Mod
             "Checks dialogue",
             (command, args) => this.CheckDialogue(command, args.AsSpan()));
         helper.ConsoleCommands.Add(
+            "sinz.check_mail",
+            "Checks mail",
+            (command, args) => this.CheckMail(command, args.AsSpan()));
+        helper.ConsoleCommands.Add(
             "sinz.hibernate",
             "Sleeps for X days",
             (command, args) => new HiberationManager(this.Helper.Events.GameLoop, this.Helper.Reflection, int.Parse(args[0])));
@@ -204,36 +212,24 @@ public sealed class ModEntry : Mod
     {
         if (!Context.IsWorldReady)
         {
-            this.Warn(logger, "Please load a world first!");
+            LogHelpers.Warn(logger, "Please load a world first!");
             return;
         }
 
-        this.dialogueChecker?.Dispose();
-        this.dialogueChecker = new(this.Monitor, this.Helper.Events.GameLoop, args);
+        this.currentChecker?.Dispose();
+        this.currentChecker = new DialogueChecker(this.Monitor, this.Helper.Events.GameLoop, args);
     }
 
-    private void Log(IGameLogger? logger, string message)
+    private void CheckMail(string command, Span<string> args, IGameLogger? logger = null)
     {
-        if (logger is not null)
+        if (!Context.IsWorldReady)
         {
-            logger.Info(message);
+            LogHelpers.Warn(logger, "Please load a world first!");
+            return;
         }
-        else
-        {
-            this.Monitor.Log(message, LogLevel.Debug);
-        }
-    }
 
-    private void Warn(IGameLogger? logger, string message)
-    {
-        if (logger is not null)
-        {
-            logger.Warn(message);
-        }
-        else
-        {
-            this.Monitor.Log(message, LogLevel.Warn);
-        }
+        this.currentChecker?.Dispose();
+        this.currentChecker = new MailChecker(this.Monitor, this.Helper.Events.GameLoop);
     }
 
     private void OnButtonPressed(object? sender, ButtonPressedEventArgs e)
@@ -255,7 +251,7 @@ public sealed class ModEntry : Mod
         }
         if (!int.TryParse(args[0], out int multi))
         {
-            this.Log(logger, $"Could not parse {args[0]} as valid int");
+            LogHelpers.Log(logger, $"Could not parse {args[0]} as valid int");
             return;
         }
 
@@ -403,11 +399,11 @@ public sealed class ModEntry : Mod
 
     private void GarbageCollect(string command, Span<string> args, IGameLogger? logger = null)
     {
-        this.Log(logger, $"Current memory usage {GC.GetTotalMemory(false):N0} bytes.");
+        LogHelpers.Log(logger, $"Current memory usage {GC.GetTotalMemory(false):N0} bytes.");
         if (args.Length > 0 && bool.TryParse(args[0], out bool v) && v)
         {
             GC.Collect();
-            this.Log(logger, $"Post-collection memory usage is {GC.GetTotalMemory(true):N0} bytes.");
+            LogHelpers.Log(logger, $"Post-collection memory usage is {GC.GetTotalMemory(true):N0} bytes.");
         }
     }
 
@@ -1038,71 +1034,4 @@ Outer: ;
             fadeSpeed: 0.05f);
         }
     }
-
-    #region tree types
-
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "This is a record.")]
-    private record Node(string ResponseKey, int ResponsePosition, List<Node> Children)
-    {
-        [JsonProperty]
-        internal Color Color { get; set; } = Color.White;
-
-        internal bool ChildrenFinished()
-        {
-            switch (this.Color)
-            {
-                case Color.Black:
-                    return true;
-                case Color.Blue:
-                case Color.White:
-                    return false;
-            }
-
-            foreach (Node child in this.Children)
-            {
-                switch (child.Color)
-                {
-                    case Color.White:
-                    case Color.Blue:
-                        return false;
-                    case Color.Black:
-                        continue;
-                    case Color.Grey:
-                        if (child.ChildrenFinished())
-                        {
-                            child.Color = Color.Black;
-                            continue;
-                        }
-                        return false;
-                }
-            }
-
-            return true;
-        }
-    }
-
-    private enum Color
-    {
-        /// <summary>
-        /// This node has not been visited before and has not queued its children.
-        /// </summary>
-        White,
-
-        /// <summary>
-        /// This node has queued its children, but has not been fully visited.
-        /// </summary>
-        Grey,
-
-        /// <summary>
-        /// This node is fully visited.
-        /// </summary>
-        Black,
-
-        /// <summary>
-        /// This node has not been visited before, but should only queue a single (also blue) child.
-        /// </summary>
-        Blue,
-    }
-
-    #endregion
 }

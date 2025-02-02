@@ -1,4 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\MiniAtraShared\MiniAtraShared.projitems" Label="Shared" />
   <Import Project="..\csproj_common" />
 
   <PropertyGroup>

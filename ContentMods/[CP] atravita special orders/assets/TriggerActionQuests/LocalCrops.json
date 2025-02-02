@@ -1,6 +1,21 @@
 {
     "Changes": [
         {
+            "Actions": "EditData",
+            "Target": "Data/TriggerActions",
+            "Entries": {
+                "atravita.SpecialOrders.LocalCrops": {
+                    "Id": "atravita.SpecialOrders.LocalCrops",
+                    "Trigger": "DayEnding",
+                    "Condition": "PLAYER_VISITED_LOCATION Current Backwoods, PLAYER_FARMING_LEVEL 8, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMailSpacer, Random 0.5, DAY_OF_WEEK mon",
+                    "Actions": [
+                        "AddConversationTopic atravita.SpamMailSpacer",
+                        "AddMail Current atravita_LocalCrops_Invite"
+                    ]
+                },
+            }
+        },
+        {
             "Action": "EditData",
             "Target": "Data/SpecialOrderStrings",
             "Entries": {
@@ -22,6 +37,7 @@
                     "Requester": "Lewis",
                     "Duration": "Month",
                     "Repeatable": "{{Repeatability}}",
+                    "RequiredTags": "mail_atravita_LocalCrops_Invite",
                     "OrderType": "",
                     "Text": "[atravita.LocalCrops.Text]",
                     "RandomizedElements": [
@@ -108,11 +124,18 @@
         {
             "Action": "EditData",
             "Target": "Data/SpecialOrders",
-            "Fields": {
-                "atravita.LocalCrops": {
-                    "Condition": "PLAYER_SPECIAL_ORDER_COMPLETE Any Cornucopia.ArtisanMachines_YogurtJar"
+            "TextOperations": [
+                {
+                    "Operation": "Append",
+                    "Target": [
+                        "Fields",
+                        "atravita.LocalCrops",
+                        "Conditions"
+                    ],
+                    "Value": "PLAYER_SPECIAL_ORDER_COMPLETE Any Cornucopia.ArtisanMachines_YogurtJar",
+                    "Delimiter": ","
                 }
-            },
+            ],
             "When": {
                 "HasMod": "Cornucopia.ArtisanMachines",
                 "Delay": true

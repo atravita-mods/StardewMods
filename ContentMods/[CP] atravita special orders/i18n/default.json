@@ -484,5 +484,7 @@
     "atravita.local_crops.collect": "Grow {{count}} {Crop:TextPlural}",
     "atravita.local_crops.ship": "Ship {{count}} {Crop:TextPlural}",
     "atravita.local_crops.mail.text": "Well done shipping all those crops. You'll certainly help put our little town on the map. I've included some things you might like...hopefully...well I hope you'll at least consider planting them...",
-    "atravita.local_crops.mail.title": "Local Crops - Thank You!"
+    "atravita.local_crops.mail.title": "Local Crops - Thank You!",
+    "atravita.local_crops.invite.text": "We've got increasing demand for our local crops. Would you be a dear and grow some? You'll find the seeds scattered around...",
+    "atravita.local_crops.invite.title": "Local Crops - Invite"
 }

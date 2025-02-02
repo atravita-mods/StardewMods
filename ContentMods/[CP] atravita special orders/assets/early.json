@@ -31,20 +31,9 @@
     },
     {
         "Action": "Include",
-        "FromFile": "assets/Early/EvelynTulips.json, assets/Early/DemetriusApology.json, assets/Early/LocalCrops.json",
+        "FromFile": "assets/Early/EvelynTulips.json, assets/Early/DemetriusApology.json",
         "When": {
             "AllowedSkills|contains=Farming": "true"
-        }
-    },
-    {
-        "Action": "Include",
-        "FromFile": "assets/Early/LocalCrops.json",
-        "When": {
-            "AllowedSkills|contains=Farming": "true"
-        },
-        "LocalTokens": {
-            "CropCount": "{{Query: {{Year}} * 50 - 30}}",
-            "MoneyReward": "{{Query: {{Year}} * 60}}"
         }
     },
     {

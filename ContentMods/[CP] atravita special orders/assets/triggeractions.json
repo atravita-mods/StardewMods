@@ -7,6 +7,16 @@
                 "AllowedSkills": "fishing"
             }
         },
-
+        {
+            "Actions": "Include",
+            "FromFile": "assets/TriggerActionQuests/LocalCrops.json",
+            "When":{
+                "AllowedSkills": "farming"
+            },
+            "LocalTokens": {
+                "CropCount": "{{Query: {{Year}} * 50 - 30}}",
+                "MoneyReward": "{{Query: {{Year}} * 60}}"
+            }
+        }
     ]
 }

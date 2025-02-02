@@ -73,7 +73,14 @@
         },
         {
             "Action": "Include", //custom dropboxes
-            "FromFile": "assets/dropboxes.json, assets/mail.json, assets/triggeractions.json"
+            "FromFile": "assets/dropboxes.json, assets/mail.json"
+        },
+        {
+            "Action": "Include",
+            "FromFile": "assets/triggeractions.json",
+            "When": {
+                "HasValue: {{Year}}": true
+            }
         },
         {
             "Action": "Include",

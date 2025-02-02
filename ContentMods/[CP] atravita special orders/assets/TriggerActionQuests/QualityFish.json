@@ -1,7 +1,7 @@
 {
     "Changes": [
         {
-            "Actions": "EditData",
+            "Action": "EditData",
             "Target": "Data/TriggerActions",
             "Entries": {
                 "atravita.SpecialOrders.QualityFish": {

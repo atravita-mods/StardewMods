@@ -30,6 +30,7 @@ Command | Usage | Example
 `sinz.check_preconditions` | Checks over all the event preconditions in the game to make sure they're formatted correctly
 `sinz.check_gsq` | Checks over all the GSQ in the game to make sure they're formatted correctly
 `sinz.check_special_orders` | Checks over special orders to see if they're formatted correctly and can be triggered.
+`sinz.check_mail <optional filter>`| Checks over mail entries. Filter is a regex. If omitted, all mail is checked.
 `sinz.forget_mail <mail>` | Removes the mail key from the player's `mailRecieved`.
 `sinz.forget_event <eventID>` | Removes the event key from the player's `eventsSeen`
 `sinz.forget_triggers <triggerID>` | Removes the trigger ID from the player's `triggerActionsRun`
@@ -47,7 +48,7 @@ Additionally the mod adds the following commands to the game's own debug command
 
 Command | Usage | Example
 --------|-------|--------
-`smapicommand` | Runs any other console command. Mostly useful for chat box debugging, also allows for console commands in general to be used in the game's `\runmacro`.
+`smapicommand` | Runs any other console command. Mostly useful for chat box debugging, also allows for console commands in general to be used in the game's `\runmacro` and this mod's `startup_commands.txt`.
 `fastforward` | Toggles fast forward mode.
 `fastforward <int>` | Sets the fast forward to a specific rate. If 1 or less, disables fast forward.
 `gc` | Prints memory usage

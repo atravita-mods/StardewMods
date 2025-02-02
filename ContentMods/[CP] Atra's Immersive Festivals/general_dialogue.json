@@ -17,6 +17,8 @@
             "Target": "Characters/Dialogue/Alex",
             "LogName": "Alex",
             "Entries": {
+                // trout-derby
+                "spring_19": "{{i18n:alex-pre-trout.y1}}",
                 // pre-luau
                 "summer_10{{YearRemainder}}": "$query PLAYER_FRIENDSHIP_POINTS Current Alex 1000#{{i18n:alex-pre-luau.{{YearModulus}} }}$h|{{i18n: alex-pre-luau-unfriendly}}",
                 // pre x-mas

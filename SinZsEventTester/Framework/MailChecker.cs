@@ -64,29 +64,32 @@ internal sealed class MailChecker : IChecker
 
         if (Game1.activeClickableMenu is LetterViewerMenu letter && ModEntry.Config.SkipDialogue)
         {
-            var x = 0;
-            var y = 0;
-            if (letter.itemsToGrab.Where(static item => item.item is not null).FirstOrDefault() is { } item)
+            if (letter.scale < 0.98f)
             {
-                x = item.bounds.Center.X;
-                y = item.bounds.Center.Y;
+                letter.scale = 0.98f;
+                return;
             }
-            else if (letter.ShouldShowInteractable() && letter.acceptQuestButton is { } quest)
+
+            ClickableComponent? clickable = null;
+            if (letter.page < letter.mailMessage.Count - 1 && letter.forwardButton is { } forward)
             {
-                x = quest.bounds.Center.X;
-                y = quest.bounds.Center.Y;
+                clickable = forward;
             }
-            else if (letter.page < letter.mailMessage.Count - 1 && letter.forwardButton is { } forward)
+            else if (letter.itemsToGrab.Where(static item => item.item is not null).FirstOrDefault() is { } item)
             {
-                x = forward.bounds.Center.X;
-                y = forward.bounds.Center.y;
+                clickable = item;
+            }
+            else if ((letter.questID is not null || letter.specialOrderId is not null) && letter.acceptQuestButton is { } quest)
+            {
+                clickable = quest;
             }
             else if (letter.readyToClose() && letter.upperRightCloseButton is { } close)
             {
-                x = close.bounds.Center.X;
-                y = close.bounds.Center.Y;
+                clickable = close;
             }
 
+            var x = clickable?.bounds.Center.X ?? 0;
+            var y = clickable?.bounds.Center.Y ?? 0;
 
             letter.receiveLeftClick(x, y, false);
             return;

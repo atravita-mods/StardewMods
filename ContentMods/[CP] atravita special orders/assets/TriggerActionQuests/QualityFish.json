@@ -7,7 +7,7 @@
                 "atravita.SpecialOrders.QualityFish": {
                     "Id": "atravita.SpecialOrders.QualityFish",
                     "Trigger": "DayEnding",
-                    "Condition": "PLAYER_VISITED_LOCATION Current FishShop, PLAYER_FISHING_LEVEL 8, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMailSpacer, Random 0.5, DAY_OF_WEEK mon",
+                    "Condition": "PLAYER_VISITED_LOCATION Current FishShop, PLAYER_FISHING_LEVEL Any 8, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMailSpacer, Random 0.5, DAY_OF_WEEK mon",
                     "Actions": [
                         "AddConversationTopic atravita.SpamMailSpacer",
                         "AddMail Current atravita_QualityFish_Invite"

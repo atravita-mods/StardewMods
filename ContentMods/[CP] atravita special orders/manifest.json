@@ -1,17 +1,20 @@
 {
-   "Name": "Additional Special Orders",
-   "Author": "atravita",
-   "Version": "1.0.2",
-   "Description": "More special orders.",
-   "UniqueID": "atravita.SpecialOrders",
-   "ContentPackFor": {
-      "UniqueID": "Pathoschild.ContentPatcher",
+    "Name": "Additional Special Orders",
+    "Author": "atravita",
+    "Version": "1.0.2",
+    "Description": "More special orders.",
+    "UniqueID": "atravita.SpecialOrders",
+    "ContentPackFor": {
+        "UniqueID": "Pathoschild.ContentPatcher",
+        "MinimumVersion": "2.5.1"
     },
-    "UpdateKeys": ["Nexus:9828"],
+    "UpdateKeys": [
+        "Nexus:9828"
+    ],
     "Dependencies": [
-    {
-        "UniqueID": "atravita.SpecialOrdersExtended",
-        "IsRequired": false,
-    }
+        {
+            "UniqueID": "atravita.SpecialOrdersExtended",
+            "IsRequired": false,
+        }
     ],
 }

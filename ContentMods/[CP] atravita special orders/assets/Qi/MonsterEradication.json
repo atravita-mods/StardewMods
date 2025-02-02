@@ -10,10 +10,9 @@
                     "Requester": "Qi",
                     "Duration": "Week",
                     "Repeatable": "{{Repeatability}}",
-                    //because of the way Special Orders are coded, using CP's "When" field is fragile.
-                    //using mail flags to delay these quests
                     "RequiredTags": "mail_ClintReward, mail_winter_19_2",
                     "OrderType": "Qi",
+                    "Condition": "ANY \"PLAYER_SPECIAL_ORDER_COMPLETE Any QiChallenge10, PLAYER_SPECIAL_ORDER_COMPLETE Any QiChallenge9\" {{Delay|contains=false}}",
                     "Text": "{{i18n:atravita.monster_eradication.text}}",
                     "Objectives": [
                         {

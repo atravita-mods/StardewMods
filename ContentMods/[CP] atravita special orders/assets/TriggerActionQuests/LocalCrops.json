@@ -116,6 +116,12 @@
                                 "MailReceived": "atravita_LocalCrops_Reward",
                                 "NoLetter": "false"
                             }
+                        },
+                        {
+                            "Type": "Friendship",
+                            "Data": {
+                                "Amount": 100
+                            }
                         }
                     ]
                 }

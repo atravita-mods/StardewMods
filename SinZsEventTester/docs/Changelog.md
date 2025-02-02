@@ -1,6 +1,9 @@
 ﻿Changelog
 ===============
 
+### Version 0.1.11
+* Adds automated mail checking.
+
 ### Version 0.1.10
 * Added a Chinese translation, much thanks to [BlackRosePetals](https://github.com/BlackRosePetals)!
 * Fixed issue with the fast forward feature.

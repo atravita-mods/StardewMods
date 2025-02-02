@@ -229,7 +229,7 @@ public sealed class ModEntry : BaseMod<ModEntry>
         }
 
         this.currentChecker?.Dispose();
-        this.currentChecker = new MailChecker(this.Monitor, this.Helper.Events.GameLoop);
+        this.currentChecker = new MailChecker(this.Monitor, this.Helper.Events.GameLoop, args);
     }
 
     private void OnButtonPressed(object? sender, ButtonPressedEventArgs e)

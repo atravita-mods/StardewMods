@@ -1,5 +1,5 @@
-﻿using StardewModdingAPI.Events;
-
+﻿using System.Text.RegularExpressions;
+using StardewModdingAPI.Events;
 using StardewValley.Menus;
 
 namespace SinZsEventTester.Framework;
@@ -13,21 +13,33 @@ internal sealed class MailChecker : IChecker
 
     private int iterationsToSkip;
 
-    internal MailChecker(IMonitor monitor, IGameLoopEvents gameLoopEvents)
+    internal MailChecker(IMonitor monitor, IGameLoopEvents gameLoopEvents, Span<string> args)
     {
         this.monitor = monitor;
         this.gameLoopEvents = gameLoopEvents;
 
         var mail = DataLoader.Mail(Game1.content);
-        foreach (var (key, value) in mail)
+        Func<string, bool> filter;
+        if (args.Length > 0)
         {
-            if (value.Contains('{'))
+            List<Regex> regexes = [];
+            foreach (var arg in args)
             {
-                this.monitor.Log($"{key}-{value} is likely special, skipping.");
-                continue;
+                regexes.Add(new Regex(arg));
             }
 
-            this.mails.Push((key, value));
+            filter = (mail) => regexes.Any(re => re.IsMatch(mail));
+        }
+        else
+        {
+            filter = (mail) => true;
+        }
+        foreach (var (key, value) in mail)
+        {
+            if (filter(key))
+            {
+                this.mails.Push((key, value));
+            }
         }
 
         if (this.mails.Count > 0)
@@ -102,7 +114,7 @@ internal sealed class MailChecker : IChecker
             var (key, value) = result;
 
             this.monitor?.Log($"Launching {key}");
-            var letterMenu = new LetterViewerMenu(value, value.Split("[#]").ElementAtOrDefault(1) ?? "no-title", false);
+            var letterMenu = new LetterViewerMenu(value, key, false);
             Game1.activeClickableMenu = letterMenu;
 
             this.monitor?.Log($"Message: {string.Join("\n\t", letterMenu.mailMessage)}");

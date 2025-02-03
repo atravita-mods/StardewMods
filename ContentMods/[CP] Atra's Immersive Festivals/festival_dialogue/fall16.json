@@ -25,6 +25,7 @@
             },
             "Entries": {
                 "Fair_Judged_PlayerWon": "{{i18n:abby-fair-judged-won}}",
+                "Fair_Judged_PlayerLost": "$query PLAYER_FRIENDSHIP_POINTS Current Abigail 1000#{{i18n: abby-fair-judged-lost-friendly}}$h ! {{i18n: abby-fair-judged-lost-unfriendly}}"
             }
         },
         {

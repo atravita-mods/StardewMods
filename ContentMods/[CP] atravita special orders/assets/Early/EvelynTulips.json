@@ -20,8 +20,6 @@
                 "Requester": "George",
                 "Duration": "Week",
                 "Repeatable": "{{Repeatability}}",
-                //because of the way Special Orders are coded, using CP's "When" field is fragile.
-                //using mail flags to delay these quests
                 "RequiredTags": "season_spring, mail_georgeGifts, mail_summer_6_2, !dropbox_EvelynKitchen",
                 "OrderType": "",
                 "Text": "{{i18n:atravita.evelyn_tulips.text}}",
@@ -61,7 +59,16 @@
                     },
                     {
                         "Type": "Friendship",
-                        "Data": {}
+                        "Data": {
+                            "Amount": 100
+                        }
+                    },
+                    {
+                        "Type": "Friendship",
+                        "Data": {
+                            "TargetName": "Evelyn",
+                            "Amount": 100
+                        }
                     }
                 ]
             }

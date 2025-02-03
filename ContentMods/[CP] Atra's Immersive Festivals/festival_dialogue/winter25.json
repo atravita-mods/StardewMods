@@ -1,5 +1,5 @@
 {
-    "Changes":[
+    "Changes": [
         {
             "Action": "EditData",
             "LogName": "Abby - normal",
@@ -57,7 +57,9 @@
             "LogName": "Clint - normal",
             "Action": "EditData",
             "Target": "Data/Festivals/winter25",
-            "When": {"EnableFor":"Clint"},
+            "When": {
+                "EnableFor": "Clint"
+            },
             "Entries": {
                 "Clint_y3": "{{i18n:clint-y2-xmas}}$s"
             }
@@ -66,7 +68,9 @@
             "LogName": "Demetrius - normal",
             "Action": "EditData",
             "Target": "Data/Festivals/winter25",
-            "When": {"EnableFor":"Demetrius"},
+            "When": {
+                "EnableFor": "Demetrius"
+            },
             "Entries": {
                 "Demetrius_y3": "{{i18n:demetrius-y2-xmas.01}}$h#$e#{{i18n:demetrius-y2-xmas.02}}",
                 "Demetrius_y4": "{{i18n:demetrius-y3-xmas}}"
@@ -76,7 +80,9 @@
             "LogName": "Elliott - normal",
             "Action": "EditData",
             "Target": "Data/Festivals/winter25",
-            "When": {"EnableFor": "Elliott"},
+            "When": {
+                "EnableFor": "Elliott"
+            },
             "Entries": {
                 "Elliott_y3": "{{i18n:elliott-y2-xmas}}$h",
                 "Elliott_y4": "{{i18n:elliott-y3-xmas}}$h",
@@ -87,7 +93,9 @@
             "LogName": "Emily - normal",
             "Action": "EditData",
             "Target": "Data/Festivals/winter25",
-            "When": {"EnableFor": "Emily"},
+            "When": {
+                "EnableFor": "Emily"
+            },
             "Entries": {
                 "Emily_y3": "{{i18n:emily-y2-xmas.01}}$h#$e#{{i18n:emily-y2-xmas.02}}",
                 "Emily_spouse": "{{i18n:emily-y1-xmas-spouse}}$l",
@@ -98,7 +106,9 @@
             "LogName": "Evelyn - normal",
             "Action": "EditData",
             "Target": "Data/Festivals/winter25",
-            "When": {"EnableFor": "Evelyn"},
+            "When": {
+                "EnableFor": "Evelyn"
+            },
             "Entries": {
                 "Evelyn_y3": "{{i18n:evelyn-y2-xmas.01}}$h#$e#{{i18n:evelyn-y2-xmas.02}}"
             }
@@ -295,7 +305,9 @@
             "Action": "EditData",
             "LogName": "Lewis - normal",
             "Target": "Data/Festivals/winter25",
-            "When": { "EnableFor": "Lewis"},
+            "When": {
+                "EnableFor": "Lewis"
+            },
             "Entries": {
                 "Lewis_y3": "{{i18n:lewis-y2-xmas}}#$e#{{i18n:lewis-y2-xmas.00}}"
             }
@@ -316,7 +328,9 @@
             "Action": "EditData",
             "LogName": "Linus - normal",
             "Target": "Data/Festivals/winter25",
-            "When": {"EnableFor": "Linus"},
+            "When": {
+                "EnableFor": "Linus"
+            },
             "Entries": {
                 "Linus_y3": "{{i18n:linus-y2-xmas}}$h",
                 "Linus_y4": "{{i18n:linus-y3-xmas}}$h"
@@ -337,7 +351,9 @@
             "LogName": "Marnie",
             "Action": "EditData",
             "Target": "Data/Festivals/winter25",
-            "When": {"EnableFor": "Marnie"},
+            "When": {
+                "EnableFor": "Marnie"
+            },
             "Entries": {
                 "Marnie_y3": "{{i18n:marnie-y2-xmas}}",
                 "Marnie_y4": "{{i18n:marnie-y3-xmas-better}}$h#$e#{{i18n:marnie-y3-xmas-better.00}}"
@@ -347,7 +363,9 @@
             "LogName": "Maru - normal",
             "Action": "EditData",
             "Target": "Data/Festivals/winter25",
-            "When": {"EnableFor": "Maru"},
+            "When": {
+                "EnableFor": "Maru"
+            },
             "Entries": {
                 "Maru_y3": "{{i18n:maru-y2-xmas.00}}#$b#{{i18n:maru-y2-xmas.01}}",
                 "Maru_spouse_y3": "{{i18n:maru-y2-xmas-spouse}}$h"
@@ -357,7 +375,9 @@
             "LogName": "Pam",
             "Action": "EditData",
             "Target": "Data/Festivals/winter25",
-            "When": {"EnableFor": "Pam"},
+            "When": {
+                "EnableFor": "Pam"
+            },
             "Entries": {
                 "Pam_y3": "{{i18n:pam-y2-xmas}}$h"
             }
@@ -366,7 +386,9 @@
             "LogName": "Penny - normal",
             "Action": "EditData",
             "Target": "Data/Festivals/winter25",
-            "When": {"EnableFor": "Penny"},
+            "When": {
+                "EnableFor": "Penny"
+            },
             "Entries": {
                 "Penny_y3": "{{i18n:penny-y2-xmas.00}}$s",
                 "Penny_y4": "{{i18n:penny-y3-xmas.00}}#$b#{{i18n:penny-y3-xmas.01}}",
@@ -402,7 +424,11 @@
             "LogName": "Pierre",
             "Action": "EditData",
             "Target": "Data/Festivals/winter25",
-            "When": {"EnableFor": "Pierre"},
+            "When": {
+                "EnableFor": "Pierre",
+                "Relationship: Abigail|contains=Divorced": false,
+                "IsJojaMartComplete": false
+            },
             "Entries": {
                 "Pierre_y3": "{{i18n:pierre-y2-xmas}}$h",
                 "Pierre_y4": "{{i18n:pierre-y3-xmas}}$h",
@@ -410,10 +436,24 @@
             }
         },
         {
+            "LogName": "Pierre - divorced from abby",
+            "Action": "EditData",
+            "Target": "Data/Festivals/winter25",
+            "When": {
+                "EnableFor": "Pierre",
+                "Relationship: Abigail": "Divorced",
+            },
+            "Entries": {
+                "Pierre_y2": "{{i18n:pierre-divorced-from-abby}}$s"
+            }
+        },
+        {
             "LogName": "Robin",
             "Action": "EditData",
             "Target": "Data/Festivals/winter25",
-            "When": {"EnableFor": "Robin"},
+            "When": {
+                "EnableFor": "Robin"
+            },
             "Entries": {
                 "Robin_y3": "{{i18n:robin-y2-xmas}}$h",
                 "Robin_y4": "{{i18n:robin-y3-xmas}}$h"
@@ -473,7 +513,9 @@
             "LogName": "Sebastian - normal",
             "Action": "EditData",
             "Target": "Data/Festivals/winter25",
-            "When": {"EnableFor": "Sebastian"},
+            "When": {
+                "EnableFor": "Sebastian"
+            },
             "Entries": {
                 "Sebastian_y3": "{{i18n:sebastian-y2-xmas.00}}$s",
                 "Sebastian_spouse_y3": "{{i18n:sebastian-y2-xmas-spouse}}"
@@ -495,7 +537,9 @@
             "LogName": "Shane - normal",
             "Action": "EditData",
             "Target": "Data/Festivals/winter25",
-            "When": {"EnableFor": "Shane"},
+            "When": {
+                "EnableFor": "Shane"
+            },
             "Entries": {
                 "Shane_y3": "{{i18n:shane-y2-xmas.00}}$h",
                 "Shane_spouse": "{{i18n:shane-y1-xmas-spouse.00}}#$b#{{i18n:shane-y1-xmas-spouse.01}}$h"
@@ -530,7 +574,9 @@
             "LogName": "Willy",
             "Action": "EditData",
             "Target": "Data/Festivals/winter25",
-            "When": {"EnableFor": "Willy"},
+            "When": {
+                "EnableFor": "Willy"
+            },
             "Entries": {
                 "Willy_y3": "{{i18n:willy-y2-xmas}}$h",
                 "Willy_y4": "{{i18n:willy-y3-xmas}}$h"

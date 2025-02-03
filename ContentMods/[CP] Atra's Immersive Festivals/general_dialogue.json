@@ -23,6 +23,9 @@
                 "summer_10{{YearRemainder}}": "$query PLAYER_FRIENDSHIP_POINTS Current Alex 1000#{{i18n:alex-pre-luau.{{YearModulus}} }}$h|{{i18n: alex-pre-luau-unfriendly}}",
                 // pre x-mas
                 "winter_20{{YearRemainder}}": "$query PLAYER_FRIENDSHIP_POINTS Current Alex 100#{{i18n:alex-pre-xmas.{{YearModulus}} }}$h| {{i18n:alex-pre-xmas-unfriendly}}",
+
+                // additional ct
+                "wonEggHunt": "{{i18n: alex-won-egg-hunt.{{Random:00,01,02}} }}$h",
             },
             "When": {
                 "EnableFor": "Alex"
@@ -111,6 +114,13 @@
             },
             "When": {
                 "EnableFor": "Vincent"
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Willy",
+            "Entries": {
+                "spring_19": "$query PLAYER_FISHING_LEVEL Current 2 #{{i18n: willy-pre-trout-y1}}$h|{{i18n: willy-pre-trout-y1-unprepared}}[219]"
             }
         }
     ]

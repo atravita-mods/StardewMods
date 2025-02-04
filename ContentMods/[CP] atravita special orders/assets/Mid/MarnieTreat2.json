@@ -32,7 +32,7 @@
                     },
                     {
                         "Type": "Ship",
-                        "Text": "[atravita.MarnieTreat2.ship]",
+                        "Text": "{{i18n:atravita.marnie_treat_2.ship}}",
                         "RequiredCount": "250",
                         "Data": {
                             "AcceptedContextTags": "item_amaranth"

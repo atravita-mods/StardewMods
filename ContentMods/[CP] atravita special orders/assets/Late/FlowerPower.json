@@ -11,7 +11,7 @@
                 "Repeatable": "False",
                 //because of the way Special Orders are coded, using CP's "When" field is fragile.
                 //using mail flags to delay these quests
-                "RequiredTags": "mail_pierreQualityCrops, mail_atravita_EvelynTulips_Reward, mail_winter_13_2, !season_winter",
+                "RequiredTags": "mail_pierreQualityCrops, mail_atravita_EvelynTulips_Reward, !season_winter",
                 "OrderType": "",
                 "Text": "{{i18n:atravita.flower_power.text}}",
                 "Objectives": [
@@ -58,6 +58,25 @@
         },
         "When": {
             "HasMod": "Cornucopia.ArtisanMachines",
+            "Delay": true
+        }
+    },
+    {
+        "Action": "EditData",
+        "Target": "Data/SpecialOrders",
+        "TextOperations": [
+            {
+                "Operation": "Append",
+                "Target": [
+                    "Fields",
+                    "atravita.FlowerPower",
+                    "RequiredTags"
+                ],
+                "Value": "mail_winter_13_2",
+                "Delimiter": ","
+            }
+        ],
+        "When": {
             "Delay": true
         }
     }

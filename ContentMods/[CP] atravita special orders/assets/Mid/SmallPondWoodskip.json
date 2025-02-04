@@ -9,8 +9,6 @@
                 "Requester": "Willy",
                 "Duration": "TwoWeeks",
                 "Repeatable": "{{Repeatability}}",
-                //because of the way Special Orders are coded, using CP's "When" field is fragile.
-                //using mail flags to delay these quests
                 "RequiredTags": "mail_willyBugWadCutscene",
                 "OrderType": "",
                 "Text": "{{i18n:atravita.small_pond.woodskip.text}}",

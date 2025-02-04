@@ -10,9 +10,7 @@
                     "Requester": "Lewis",
                     "Duration": "Week",
                     "Repeatable": "{{Repeatability}}",
-                    //because of the way Special Orders are coded, using CP's "When" field is fragile.
-                    //using mail flags to delay these quests
-                    "RequiredTags": "mail_gusGiantOmelet, mail_summer_21_2, !season_spring, mail_atravita_SturgeonChallenge_Reward",
+                    "RequiredTags": "mail_gusGiantOmelet, !season_spring, mail_atravita_SturgeonChallenge_Reward",
                     "OrderType": "",
                     "SpecialRule": "",
                     "ItemToRemoveOnEnd": null,
@@ -75,6 +73,25 @@
             },
             "When": {
                 "HasMod": "Cornucopia.ArtisanMachines",
+                "Delay": true
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Data/SpecialOrders",
+            "TextOperations": [
+                {
+                    "Operation": "Append",
+                    "Target": [
+                        "Fields",
+                        "atravita.CaviarTastes",
+                        "RequiredTags"
+                    ],
+                    "Value": "mail_summer_21_2",
+                    "Delimiter": ","
+                }
+            ],
+            "When": {
                 "Delay": true
             }
         }

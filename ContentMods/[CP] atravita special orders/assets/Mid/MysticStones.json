@@ -39,9 +39,7 @@
                 "Requester": "Wizard",
                 "Duration": "Week",
                 "Repeatable": "{{Repeatability}}",
-                //because of the way Special Orders are coded, using CP's "When" field is fragile.
-                //using mail flags to delay these quests
-                "RequiredTags": "mail_WizardReward, mail_WizardReward2, mail_spring_21_2",
+                "RequiredTags": "mail_WizardReward, mail_WizardReward2",
                 "OrderType": "",
                 "Text": "{{i18n:atravita.mystic_stones.text}}",
                 "Objectives": [
@@ -106,6 +104,25 @@
                     }
                 ]
             }
+        }
+    },
+    {
+        "Action": "EditData",
+        "Target": "Data/SpecialOrders",
+        "TextOperations": [
+            {
+                "Operation": "Append",
+                "Target": [
+                    "Fields",
+                    "atravita.MysticStones",
+                    "RequiredTags"
+                ],
+                "Value": "mail_spring_21_2",
+                "Delimiter": ","
+            }
+        ],
+        "When": {
+            "Delay": true
         }
     }
     ]

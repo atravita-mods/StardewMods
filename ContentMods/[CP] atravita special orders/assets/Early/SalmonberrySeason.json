@@ -1,51 +1,73 @@
-{"Changes": [
-    {
-        "LogName": "SalmonberrySeason - Special Order",
-        "Action": "EditData",
-        "Target": "Data/SpecialOrders",
-        "Entries": {
-            "atravita.SalmonberrySeason": {
-                "Name": "{{i18n:atravita.salmonberry_season.name}}",
-                "Requester": "Lewis",
-                "Duration": "Week",
-                "Repeatable": "False",
-                "RequiredTags": "season_spring, week_3, mail_linusTrashCleanup, mail_atravita_EvelynTulips_Reward",
-                "OrderType": "",
-                "Condition": "DAY_OF_MONTH 13 14 15 16 17 18",
-                "Text": "{{i18n:atravita.salmonberry_season.text}}",
-                "Objectives": [
-                    {
-                        "Type": "Collect",
-                        "Text": "{{i18n:atravita.salmonberry_season.gather}}",
-                        "RequiredCount": "300",
-                        "Data": {
-                            "AcceptedContextTags": "item_salmonberry"
+{
+    "Changes": [
+        {
+            "LogName": "SalmonberrySeason - Special Order",
+            "Action": "EditData",
+            "Target": "Data/SpecialOrders",
+            "Entries": {
+                "atravita.SalmonberrySeason": {
+                    "Name": "{{i18n:atravita.salmonberry_season.name}}",
+                    "Requester": "Lewis",
+                    "Duration": "Week",
+                    "Repeatable": "False",
+                    "RequiredTags": "season_spring, mail_linusTrashCleanup, mail_atravita_EvelynTulips_Reward",
+                    "OrderType": "",
+                    "Condition": "DAY_OF_MONTH 13 14 15 16 17 18",
+                    "Text": "{{i18n:atravita.salmonberry_season.text}}",
+                    "Objectives": [
+                        {
+                            "Type": "Collect",
+                            "Text": "{{i18n:atravita.salmonberry_season.gather}}",
+                            "RequiredCount": "300",
+                            "Data": {
+                                "AcceptedContextTags": "item_salmonberry"
+                            }
+                        },
+                        {
+                            "Type": "Ship",
+                            "Text": "{{i18n:atravita.salmonberry_season.ship}}",
+                            "RequiredCount": "300",
+                            "Data": {
+                                "AcceptedContextTags": "item_salmonberry"
+                            }
                         }
-                    },
-                    {
-                        "Type": "Ship",
-                        "Text": "{{i18n:atravita.salmonberry_season.ship}}",
-                        "RequiredCount": "300",
-                        "Data": {
-                            "AcceptedContextTags": "item_salmonberry"
+                    ],
+                    "Rewards": [
+                        {
+                            "Type": "Money",
+                            "Data": {
+                                "Amount": "5000"
+                            }
+                        },
+                        {
+                            "Type": "Mail",
+                            "Data": {
+                                "MailReceived": "atravita_SalmonberrySeason_Reward",
+                                "NoLetter": "false"
+                            }
                         }
-                    }
-                ],
-                "Rewards": [
-                    {
-                        "Type": "Money",
-                        "Data": {"Amount": "5000"}
-                    },
-                    {
-                        "Type": "Mail",
-                        "Data": {
-                            "MailReceived": "atravita_SalmonberrySeason_Reward",
-                            "NoLetter": "false"
-                        }
-                    }
-                ]
+                    ]
+                }
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Data/SpecialOrders",
+            "TextOperations": [
+                {
+                    "Operation": "Append",
+                    "Target": [
+                        "Fields",
+                        "atravita.SalmonberrySeason",
+                        "RequiredTags"
+                    ],
+                    "Value": "mail_summer_6_2",
+                    "Delimiter": ","
+                }
+            ],
+            "When": {
+                "Delay": true
             }
         }
-    }
     ]
 }

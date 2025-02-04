@@ -9,7 +9,7 @@
                 "Requester": "Gus",
                 "Duration": "TwoWeeks",
                 "Repeatable": "{{Repeatability}}",
-                "RequiredTags": "season_summer, mail_gusGiantOmelet, mail_fall_6_2, !dropbox_GusFridge, mail_DemetriusReward",
+                "RequiredTags": "season_summer, mail_gusGiantOmelet, !dropbox_GusFridge, mail_DemetriusReward",
                 "OrderType": "",
                 "Text": "{{i18n:atravita.seafood_bash.text}}",
                 "Objectives": [
@@ -101,6 +101,25 @@
         },
         "When": {
             "HasMod": "Cornucopia.ArtisanMachines",
+            "Delay": true
+        }
+    },
+    {
+        "Action": "EditData",
+        "Target": "Data/SpecialOrders",
+        "TextOperations": [
+            {
+                "Operation": "Append",
+                "Target": [
+                    "Fields",
+                    "atravita.SeafoodBash",
+                    "Condition"
+                ],
+                "Value": "mail_fall_6_2",
+                "Delimiter": ","
+            }
+        ],
+        "When": {
             "Delay": true
         }
     }

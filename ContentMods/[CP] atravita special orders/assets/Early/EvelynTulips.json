@@ -82,7 +82,7 @@
                 "Operation": "Append",
                 "Target": [
                     "Fields",
-                    "atravita.LocalCrops",
+                    "atravita.EvelynTulips",
                     "RequiredTags"
                 ],
                 "Value": "mail_summer_6_2",

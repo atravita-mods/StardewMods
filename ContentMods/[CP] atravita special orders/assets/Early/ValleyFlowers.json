@@ -30,7 +30,7 @@
                     "Repeatable": "{{Repeatability}}",
                     //because of the way Special Orders are coded, using CP's "When" field is fragile.
                     //using mail flags to delay these quests
-                    "RequiredTags": "mail_MSB_Lewis, !season_fall, !dropbox_SandyBox, !dropboxRoom_SandyHouse",
+                    "RequiredTags": "!season_fall, !dropbox_SandyBox, !dropboxRoom_SandyHouse",
                     "Condition": "PLAYER_FRIENDSHIP_POINTS Any Sandy 2000",
                     "OrderType": "",
                     "Text": "[atravita.ValleyFlowers.Text]",
@@ -98,6 +98,45 @@
                         }
                     ]
                 }
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Data/SpecialOrders",
+            "TextOperations": [
+                {
+                    "Operation": "Append",
+                    "Target": [
+                        "Fields",
+                        "atravita.ValleyFlowers",
+                        "RequiredTags"
+                    ],
+                    "Value": "mail_MSB_Lewis",
+                    "Delimiter": ","
+                }
+            ],
+            "When": {
+                "Delay": true
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Data/SpecialOrders",
+            "TextOperations": [
+                {
+                    "Operation": "Append",
+                    "Target": [
+                        "Fields",
+                        "atravita.ValleyFlowers",
+                        "Condition"
+                    ],
+                    "Value": "PLAYER_SPECIAL_ORDER_COMPLETE Any Cornucopia.ArtisanMachines_YogurtJar",
+                    "Delimiter": ","
+                }
+            ],
+            "When": {
+                "HasMod": "Cornucopia.ArtisanMachines",
+                "Delay": true
             }
         }
 ]}

@@ -3,7 +3,7 @@
         "Action":"EditData",
         "LogName": "Demetrius Apology - Dialogue",
         "Target": "Characters/Dialogue/Demetrius",
-        "Entries": 
+        "Entries":
         {
             "atravita.DemetriusApology_IsAvailable": "{{i18n:atravita.demetrius_apology_isavailable}}",
             "atravita.DemetriusApology_InProgress": "{{i18n:atravita.demetrius_apology_inprogress.001}}$s#$b#{{i18n:atravita.demetrius_apology_inprogress.002}}"
@@ -19,8 +19,6 @@
                 "Requester": "Demetrius",
                 "Duration": "TwoWeeks",
                 "Repeatable": "False",
-                //because of the way Special Orders are coded, using CP's "When" field is fragile.
-                //using mail flags to delay these quests
                 "RequiredTags": "mail_robinDeluxeBed, season_fall, !dropbox_RobinWood, event_1053978",
                 "OrderType": "",
                 "Text": "{{i18n:atravita.demetrius_apology.text}}",

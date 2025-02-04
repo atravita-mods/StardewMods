@@ -10,7 +10,7 @@
                 "Duration": "Week",
                 "Repeatable": "{{Repeatability}}",
                 "RequiredTags": "season_fall, mail_linusTrashCleanup, mail_atravita_SalmonberrySeason_Reward",
-                "Condition": "DAY_OF_MONTH 6 7 8 9 10 11 12 13 14 15",
+                "Condition": "DAY_OF_MONTH 6 7 8 9 10 11",
                 "OrderType": "",
                 "Text": "{{i18n:atravita.blackberry_season.text}}",
                 "Objectives": [
@@ -45,6 +45,26 @@
                     }
                 ]
             }
+        }
+    },
+    {
+        "Action": "EditData",
+        "Target": "Data/SpecialOrders",
+        "TextOperations": [
+            {
+                "Operation": "Append",
+                "Target": [
+                    "Fields",
+                    "atravita.BlackberrySeason",
+                    "Condition"
+                ],
+                "Value": "PLAYER_SPECIAL_ORDER_COMPLETE Any Cornucopia.ArtisanMachines_Alembic",
+                "Delimiter": ","
+            }
+        ],
+        "When": {
+            "HasMod": "Cornucopia.ArtisanMachines",
+            "Delay": true
         }
     }
     ]

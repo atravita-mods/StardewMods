@@ -11,6 +11,7 @@
                 "Repeatable": "False",
                 "RequiredTags": "season_spring, week_3, mail_linusTrashCleanup, mail_atravita_EvelynTulips_Reward",
                 "OrderType": "",
+                "Condition": "DAY_OF_MONTH 13 14 15 16 17 18",
                 "Text": "{{i18n:atravita.salmonberry_season.text}}",
                 "Objectives": [
                     {

@@ -20,7 +20,7 @@
                 "Requester": "George",
                 "Duration": "Week",
                 "Repeatable": "{{Repeatability}}",
-                "RequiredTags": "season_spring, mail_georgeGifts, mail_summer_6_2, !dropbox_EvelynKitchen",
+                "RequiredTags": "season_spring, mail_georgeGifts, !dropbox_EvelynKitchen",
                 "OrderType": "",
                 "Text": "{{i18n:atravita.evelyn_tulips.text}}",
                 "Objectives": [
@@ -72,6 +72,25 @@
                     }
                 ]
             }
+        }
+    },
+    {
+        "Action": "EditData",
+        "Target": "Data/SpecialOrders",
+        "TextOperations": [
+            {
+                "Operation": "Append",
+                "Target": [
+                    "Fields",
+                    "atravita.LocalCrops",
+                    "RequiredTags"
+                ],
+                "Value": "mail_summer_6_2",
+                "Delimiter": ","
+            }
+        ],
+        "When": {
+            "Delay": true
         }
     }
     ]

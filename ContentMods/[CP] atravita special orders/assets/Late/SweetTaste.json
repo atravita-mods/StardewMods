@@ -92,7 +92,7 @@
         "Target": "Data/SpecialOrders",
         "Fields": {
             "atravita.SweetTaste": {
-                "Condition": "Any \" PLAYER_SPECIAL_ORDER_COMPLETE Any Cornucopia.ArtisanMachines_WaxBarrel\" \"Year 4\""
+                "Condition": "Any \"PLAYER_SPECIAL_ORDER_COMPLETE Any Cornucopia.ArtisanMachines_WaxBarrel\" \"Year 4\""
             }
         },
         "When": {

@@ -70,7 +70,7 @@
             "Target": "Data/SpecialOrders",
             "Fields": {
                 "atravita.CaviarTastes": {
-                    "Condition": " PLAYER_SPECIAL_ORDER_COMPLETE Any Cornucopia.ArtisanMachines_Alembic"
+                    "Condition": "PLAYER_SPECIAL_ORDER_COMPLETE Any Cornucopia.ArtisanMachines_Alembic"
                 }
             },
             "When": {

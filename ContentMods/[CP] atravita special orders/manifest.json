@@ -1,7 +1,7 @@
 {
     "Name": "Additional Special Orders",
     "Author": "atravita",
-    "Version": "1.0.3",
+    "Version": "1.0.4",
     "Description": "More special orders.",
     "UniqueID": "atravita.SpecialOrders",
     "ContentPackFor": {

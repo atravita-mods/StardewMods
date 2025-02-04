@@ -1,53 +1,95 @@
-{"Changes": [
-    {
-        "LogName": "DeckTheHalls - Special Order",
-        "Action": "EditData",
-        "Target": "Data/SpecialOrders",
-        "Entries": {
-            "atravita.deckTheHalls": {
-                "Name": "{{i18n:atravita.deck_the_halls.name}}",
-                "Requester": "Caroline",
-                "Duration": "Month",
-                "Repeatable": "False",
-                "RequiredTags": "season_winter, mail_robinResource, !dropbox_PierreBox",
-                "OrderType": "",
-                "Text": "{{i18n:atravita.deck_the_halls.text}}",
-                "Objectives": [
-                    {
-                        "Type": "Collect",
-                        "Text": "{{i18n:atravita.deck_the_halls.gather}}",
-                        "RequiredCount": "15",
-                        "Data": {
-                            "AcceptedContextTags": "item_holly"
+{
+    "Changes": [
+        {
+            "LogName": "DeckTheHalls - Special Order",
+            "Action": "EditData",
+            "Target": "Data/SpecialOrders",
+            "Entries": {
+                "atravita.deckTheHalls": {
+                    "Name": "{{i18n:atravita.deck_the_halls.name}}",
+                    "Requester": "Caroline",
+                    "Duration": "Month",
+                    "Repeatable": "False",
+                    "RequiredTags": "season_winter, !dropbox_PierreBox",
+                    "OrderType": "",
+                    "Text": "{{i18n:atravita.deck_the_halls.text}}",
+                    "Objectives": [
+                        {
+                            "Type": "Collect",
+                            "Text": "{{i18n:atravita.deck_the_halls.gather}}",
+                            "RequiredCount": "15",
+                            "Data": {
+                                "AcceptedContextTags": "item_holly"
+                            }
+                        },
+                        {
+                            "Type": "Donate",
+                            "Text": "{{i18n: atravita.deck_the_halls.donate}}",
+                            "RequiredCount": "15",
+                            "Data": {
+                                "DropBox": "PierreBox",
+                                "DropBoxGameLocation": "SeedShop",
+                                "DropBoxIndicatorLocation": "18.5 27",
+                                "AcceptedContextTags": "item_holly"
+                            }
                         }
-                    },
-                    {
-                        "Type": "Donate",
-                        "Text": "{{i18n: atravita.deck_the_halls.donate}}",
-                        "RequiredCount": "15",
-                        "Data": {
-                            "DropBox": "PierreBox",
-                            "DropBoxGameLocation": "SeedShop",
-                            "DropBoxIndicatorLocation": "18.5 27",
-                            "AcceptedContextTags": "item_holly"
+                    ],
+                    "Rewards": [
+                        {
+                            "Type": "Money",
+                            "Data": {
+                                "Amount": "2000"
+                            }
+                        },
+                        {
+                            "Type": "Mail",
+                            "Data": {
+                                "MailReceived": "atravita_deckTheHalls_Invite",
+                                "NoLetter": "false"
+                            }
                         }
-                    }
-                ],
-                "Rewards": [
-                    {
-                        "Type": "Money",
-                        "Data": {"Amount": "2000"}
-                    },
-                    {
-                        "Type": "Mail",
-                        "Data": {
-                            "MailReceived": "atravita_deckTheHalls_Invite",
-                            "NoLetter": "false"
-                        }
-                    }
-                ]
+                    ]
+                }
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Data/SpecialOrders",
+            "TextOperations": [
+                {
+                    "Operation": "Append",
+                    "Target": [
+                        "Fields",
+                        "atravita.deckTheHalls",
+                        "RequiredTags"
+                    ],
+                    "Value": "mail_robinResource",
+                    "Delimiter": ","
+                }
+            ],
+            "When": {
+                "Delay": true
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Data/SpecialOrders",
+            "TextOperations": [
+                {
+                    "Operation": "Append",
+                    "Target": [
+                        "Fields",
+                        "atravita.deckTheHalls",
+                        "Condition"
+                    ],
+                    "Value": "PLAYER_SPECIAL_ORDER_COMPLETE Any Cornucopia.ArtisanMachines_YogurtJar",
+                    "Delimiter": ","
+                }
+            ],
+            "When": {
+                "HasMod": "Cornucopia.ArtisanMachines",
+                "Delay": true
             }
         }
-    }
     ]
 }

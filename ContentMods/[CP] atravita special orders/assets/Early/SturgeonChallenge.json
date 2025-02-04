@@ -47,7 +47,7 @@
         "Target": "Data/SpecialOrders",
         "Fields": {
             "atravita.SturgeonChallenge": {
-                "Condition": " PLAYER_SPECIAL_ORDER_COMPLETE Any Cornucopia.ArtisanMachines_YogurtJar"
+                "Condition": "PLAYER_SPECIAL_ORDER_COMPLETE Any Cornucopia.ArtisanMachines_YogurtJar"
             }
         },
         "When": {

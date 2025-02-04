@@ -7,7 +7,7 @@
                 "atravita.SpecialOrders.LocalFruits": {
                     "Id": "atravita.SpecialOrders.LocalFruits",
                     "Trigger": "DayEnding",
-                    "Condition": "PLAYER_VISITED_LOCATION Current Backwoods, PLAYER_FARMING_LEVEL Any 8, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMailSpacer, Random 0.5, DAY_OF_MONTH 1 7 8 14 15",
+                    "Condition": "PLAYER_VISITED_LOCATION Current Backwoods, PLAYER_FARMING_LEVEL Any 9, !PLAYER_HAS_CONVERSATION_TOPIC Current atravita.SpamMailSpacer, Random 0.5, DAY_OF_MONTH 1 7 8 14 15",
                     "Actions": [
                         "AddConversationTopic atravita.SpamMailSpacer",
                         "AddMail Current atravita_LocalFruits_Invite"
@@ -131,7 +131,7 @@
                     "Target": [
                         "Fields",
                         "atravita.LocalFruits",
-                        "Conditions"
+                        "Condition"
                     ],
                     "Value": "PLAYER_SPECIAL_ORDER_COMPLETE Any Cornucopia.ArtisanMachines_YogurtJar",
                     "Delimiter": ","

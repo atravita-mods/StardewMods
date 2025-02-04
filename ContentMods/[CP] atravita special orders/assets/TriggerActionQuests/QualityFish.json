@@ -71,7 +71,7 @@
                     "Target": [
                         "Fields",
                         "atravita.QualityFish",
-                        "Conditions"
+                        "Condition"
                     ],
                     "Value": "PLAYER_SPECIAL_ORDER_COMPLETE Any Cornucopia.ArtisanMachines_YogurtJar",
                     "Delimiter": ","

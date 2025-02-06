@@ -1,33 +1,27 @@
 ﻿using AtraCore.Framework.ReflectionManager;
 using AtraCore.Utilities;
-
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
 using AtraShared.Integrations.Interfaces;
 using AtraShared.Integrations.Interfaces.ContentPatcher;
 using AtraShared.MigrationManager;
 using AtraShared.Utils.Extensions;
-
 using HarmonyLib;
-
+using MiniAtraShared.Extensions;
+using MiniAtraShared.Models;
 using SpecialOrdersExtended.HarmonyPatches;
 using SpecialOrdersExtended.Managers;
 using SpecialOrdersExtended.Niceties;
-
 using StardewModdingAPI.Events;
-
 using StardewValley.GameData.SpecialOrders;
 using StardewValley.SpecialOrders;
-
 using AtraUtils = MiniAtraShared.Utils;
 using SharedUtils = AtraShared.Utils.Utils;
-
-using MiniAtraShared.Extensions;
 
 namespace SpecialOrdersExtended;
 
 /// <inheritdoc />
-internal sealed class ModEntry : Mod
+internal sealed class ModEntry : BaseMod<ModEntry>
 {
     private static readonly string[] ModsThatHandleTheBoard = ["Rafseazz.RidgesideVillage", "PurrplingCat.QuestFramework", "Esca.EMP"];
     private bool hasModsThatHandleBoard = false;
@@ -45,11 +39,6 @@ internal sealed class ModEntry : Mod
     /// </summary>
     /// <remarks>If null, was not able to be loaded.</remarks>
     internal static ISpaceCoreAPI? SpaceCoreAPI => spaceCoreAPI;
-
-    /// <summary>
-    /// Gets the logger for this mod.
-    /// </summary>
-    internal static IMonitor ModMonitor { get; private set; } = null!;
 
     /// <summary>
     /// Gets SMAPI's data helper for this mod.
@@ -74,13 +63,11 @@ internal sealed class ModEntry : Mod
     {
         // Bind useful SMAPI features.
         I18n.Init(helper.Translation);
+        base.Entry(helper);
         AssetManager.Initialize(helper.GameContent);
         CustomEmoji.Init(helper.GameContent);
-        ModMonitor = this.Monitor;
         DataHelper = helper.Data;
         MultiplayerHelper = helper.Multiplayer;
-
-        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
 
         Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
 
@@ -407,7 +394,7 @@ internal sealed class ModEntry : Mod
             if (specialOrder is not null)
             {
                 ModMonitor.Log($"\t{key} {I18n.Parsable()}", LogLevel.Debug);
-                if (specialOrder.orderType.Value.Length != 0 && specialOrder.orderType.Value != "Qi")
+                if (specialOrder.orderType.Value.Length != 0 && specialOrder.orderType.Value != "Qi" && specialOrder.orderType.Value != "DesertFestivalMarlon")
                 {
                     ModMonitor.Log($"\t\tNon-vanilla special order type {specialOrder.orderType.Value}", LogLevel.Debug);
                 }

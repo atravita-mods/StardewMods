@@ -18,7 +18,7 @@ public static class SMAPIHelperExtensions
         Task.Run(() => helper.WriteConfig(config))
             .ContinueWith(t =>
             {
-                switch(t.Status)
+                switch (t.Status)
                 {
                     case TaskStatus.RanToCompletion:
                         monitor.Log("Configuration written successfully!");

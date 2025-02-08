@@ -1,0 +1,35 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\MiniAtraShared\MiniAtraShared.projitems" Label="Shared" />
+  <Import Project="..\csproj_common" />
+
+  <PropertyGroup>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <EnableHarmony>True</EnableHarmony>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Name>Slightly More Dehardcoding</Name>
+    <Description>De-hardcodes a few more things in the game.</Description>
+    <Version>0.1.0</Version>
+    <UpdateKeys>Nexus:-1</UpdateKeys>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json" HintPath="$(GamePath)\smapi-internal\Newtonsoft.Json.dll" private="false" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="StardewValley" />
+    <Using Include="StardewModdingAPI" />
+    <Using Include="System.Diagnostics.CodeAnalysis" />
+    <Using Include="JetBrains.Annotations" />
+    <Using Alias="NotNullAttribute" Include="System.Diagnostics.CodeAnalysis.NotNullAttribute" />
+    <Using Alias="Object" Include="System.Object" />
+    <Using Alias="SObject" Include="StardewValley.Object" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="JetBrains.Annotations" Version="2023.3.0" />
+  </ItemGroup>
+
+</Project>

@@ -1,6 +1,6 @@
 ﻿using StardewValley.Delegates;
 
-namespace AtraCore.Framework.EventCommands;
+namespace SlightlyMoreDehardcoding.EventCommands;
 
 /// <summary>
 /// Branches event if the GSQ evaluates to true.

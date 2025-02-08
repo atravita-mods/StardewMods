@@ -25,7 +25,7 @@ internal static class LetterMenuPatch
 
     private static void Postfix(LetterViewerMenu __instance)
     {
-        if (__instance.isFromCollection|| AssetManager.GetExtendedMailData(__instance.mailTitle) is not { } data)
+        if (__instance.isFromCollection || AssetManager.GetExtendedMailData(__instance.mailTitle) is not { } data)
         {
             return;
         }

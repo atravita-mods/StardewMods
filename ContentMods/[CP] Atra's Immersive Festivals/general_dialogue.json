@@ -120,7 +120,8 @@
             "Action": "EditData",
             "Target": "Characters/Dialogue/Willy",
             "Entries": {
-                "spring_19": "$query PLAYER_FISHING_LEVEL Current 2 #{{i18n: willy-pre-trout-y1}}$h|{{i18n: willy-pre-trout-y1-unprepared}}[219]"
+                "spring_19": "$query PLAYER_FISHING_LEVEL Current 2 #{{i18n: willy-pre-trout-y1}}$h|{{i18n: willy-pre-trout-y1-unprepared}}[219]",
+                "winter_11": "$query PLAYER_FISHING_LEVEL Current 4#{{i18n: willy-pre-squid-y1}}$h|{{i18n:willy-pre-squid-y1-unprepared}}[219]"
             }
         }
     ]

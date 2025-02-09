@@ -715,6 +715,10 @@
     "willy-y2-fishing": "Hey, @, you up for the fishing competition this year?",
     "willy-y3-fishing": "Some days I wonder if I should let Pam win one day. It'd mean a lot to her.",
 
+    // squid fest
+    "willy-pre-squid-y1": "We'll be catching squids down at the beach tomorrow, if you cared to join us.",
+    "willy-pre-squid-y1-unprepared": "It's the squid fest tomorrow. Here, this might help ya out a bit...",
+
     // winter star!
     "abby-y2-xmas.00": "I wonder who's my secret gift giver this year...",
     "abby-y3-xmas.00": "Aww, I don't think there's any more spicy tomato soup.",

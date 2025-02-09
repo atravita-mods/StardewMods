@@ -32,7 +32,8 @@ internal sealed class ModEntry : BaseMod<ModEntry>
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
     {
         Event.RegisterCommand("atravita_" + nameof(BranchIf), BranchIf.BranchIfCommand);
-        Event.RegisterCommand("atravita_" + nameof(FestivalCommands), FestivalCommands.SetFestivalHost);
+        Event.RegisterCommand("atravita_" + nameof(FestivalCommands.SetFestivalHost), FestivalCommands.SetFestivalHost);
+        Event.RegisterCommand("atravita_" + nameof(PlayerControl), PlayerControl.Command);
     }
 
 }

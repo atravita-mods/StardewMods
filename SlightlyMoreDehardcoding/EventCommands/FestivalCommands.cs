@@ -1,16 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using HarmonyLib;
-using StardewValley.Objects;
+﻿using HarmonyLib;
 
 namespace SlightlyMoreDehardcoding.EventCommands;
 internal static class FestivalCommands
 {
-
     #region delegates
 
     private static readonly Lazy<AccessTools.FieldRef<Event, NPC>> _festivalHostSetter = new(() =>
@@ -41,12 +33,7 @@ internal static class FestivalCommands
 
         _festivalHostSetter.Value(@event) = npc;
 
-        if (!ArgUtility.TryGetOptional(args, 2, out string dialogue, out error, allowBlank: false))
-        {
-            context.LogErrorAndSkip(error);
-            return;
-        }
-
+        ArgUtility.TryGetOptionalRemainder(args, 2, out string dialogue);
         if (dialogue is not null)
         {
             _festivalHostMessageGetter.Value(@event) = dialogue;

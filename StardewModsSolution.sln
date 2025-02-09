@@ -158,7 +158,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RecipeSortFix", "RecipeSort
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RenderDisplayRewrite", "RenderDisplayRewrite\RenderDisplayRewrite.csproj", "{A1602FAA-71E9-438B-81CD-D3BE62D4DEC3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SlightlyMoreDehardcoding", "SlightlyMoreDehardcoding\SlightlyMoreDehardcoding.csproj", "{9CA101F0-D567-4335-AE74-AB8D74C43B65}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SlightlyMoreDehardcoding", "SlightlyMoreDehardcoding\SlightlyMoreDehardcoding.csproj", "{9CA101F0-D567-4335-AE74-AB8D74C43B65}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlwaysSonarBobber", "AlwaysSonarBobber\AlwaysSonarBobber.csproj", "{5FFEE2B9-E6D0-4732-A0CB-FE7C5F47D848}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -430,6 +432,10 @@ Global
 		{9CA101F0-D567-4335-AE74-AB8D74C43B65}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9CA101F0-D567-4335-AE74-AB8D74C43B65}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9CA101F0-D567-4335-AE74-AB8D74C43B65}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5FFEE2B9-E6D0-4732-A0CB-FE7C5F47D848}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5FFEE2B9-E6D0-4732-A0CB-FE7C5F47D848}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5FFEE2B9-E6D0-4732-A0CB-FE7C5F47D848}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5FFEE2B9-E6D0-4732-A0CB-FE7C5F47D848}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -450,6 +456,7 @@ Global
 		AtraBase\AtraBase\AtraBase.projitems*{3b016280-a267-4c67-affe-999c2b25e527}*SharedItemsImports = 5
 		AtraShared\AtraShared.projitems*{3b016280-a267-4c67-affe-999c2b25e527}*SharedItemsImports = 5
 		MiniAtraShared\MiniAtraShared.projitems*{3b016280-a267-4c67-affe-999c2b25e527}*SharedItemsImports = 5
+		MiniAtraShared\MiniAtraShared.projitems*{5ffee2b9-e6d0-4732-a0cb-fe7c5f47d848}*SharedItemsImports = 5
 		AtraShared\AtraShared.projitems*{7119b285-0356-4ce5-adca-cc008e9315da}*SharedItemsImports = 13
 		MiniAtraShared\MiniAtraShared.projitems*{98697a86-1709-4c62-89d2-329738b386d3}*SharedItemsImports = 5
 		MiniAtraShared\MiniAtraShared.projitems*{9ca101f0-d567-4335-ae74-ab8d74c43b65}*SharedItemsImports = 5

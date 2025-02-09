@@ -19,14 +19,15 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         I18n.Init(helper.Translation);
         base.Entry(helper);
 
-        helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
-
         AssetManager.Init(helper.GameContent, helper.ModRegistry.ModID);
         helper.Events.Content.AssetRequested += static (_, e) => AssetManager.Apply(e);
 
         Harmony harmony = new(helper.ModRegistry.ModID);
 
         LetterMenuPatch.Apply(harmony);
+        PlayerControl.Apply(harmony);
+
+        helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
     }
 
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)

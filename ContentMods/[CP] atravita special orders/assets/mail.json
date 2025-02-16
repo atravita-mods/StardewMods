@@ -6,7 +6,7 @@
       "Action": "EditData",
       "Target": "Data/Mail",
       "Entries": {
-        "atravita_AlcoholOrder_Reward": "@! ^{{i18n:atravita.alcohol_order.mail.text}}^^    -{{i18n:Gus}}%item object 599 5 %% %item object 621 5 %% %item bigobject 12 %% %item object 251 2 %%[#]{{i18n:atravita.alcohol_order.mail.title}}",
+        "atravita_AlcoholOrder_Reward": "@! ^{{i18n:atravita.alcohol_order.mail.text}}^^    -[CharacterName Gus]%item object 599 5 %% %item object 621 5 %% %item bigobject 12 %% %item object 251 2 %%[#]{{i18n:atravita.alcohol_order.mail.title}}",
         "atravita_BlackberrySeason_Reward": "@, ^{{i18n:atravita.blackberry_season.mail.text}}^^   -{{i18n:Lewis}}^^{{i18n:atravita.blackberry_season.mail.postscript}}%item object 770 40 %%[#]{{i18n:atravita.blackberry_season.mail.title}}",
         "atravita_CatfishChallenge_Reward": "@! ^{{i18n:atravita.catfish_challenge.mail.text}}^^    -{{i18n:Willy}}%item object 166 1 %%[#]{{i18n:atravita.catfish_challenge.mail.title}}",
         "atravita_QualityFish_Invite": "{{i18n:atravita.quality_fish.mail.greeting}},^{{i18n: atravita.quality_fish.invite.text}}^^    --{{i18n: Willy}}%item specialorder atravita.QualityFish %% [#]{{i18n:atravita.quality_fish.invite.title}}",

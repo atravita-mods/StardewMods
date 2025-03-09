@@ -234,9 +234,13 @@ public sealed class ModEntry : BaseMod<ModEntry>
 
     private void OnButtonPressed(object? sender, ButtonPressedEventArgs e)
     {
-        if (Config.FastForwardKeybind.JustPressed())
+        if (Game1.keyboardDispatcher.Subscriber is null && Config.FastForwardKeybind.Keybinds.Where(k => k.GetState() == SButtonState.Pressed).FirstOrDefault() is { } keybind)
         {
             this.ToggleFastForward();
+            foreach (SButton button in keybind.Buttons)
+            {
+                this.Helper.Input.Suppress(button);
+            }
         }
     }
 
@@ -458,19 +462,33 @@ public sealed class ModEntry : BaseMod<ModEntry>
     {
         foreach (string candidate in args)
         {
+            int count = 0;
+
+            ReadOnlySpan<char> cand = candidate.AsSpan().Trim();
             Func<string, bool> filter;
-            if (candidate.Contains('/'))
+            if (cand.Contains('/'))
             {
-                filter = (key) => key.Equals(candidate, StringComparison.OrdinalIgnoreCase);
+                var c = cand.ToString();
+                filter = (key) => key.Equals(c, StringComparison.OrdinalIgnoreCase);
+            }
+            else if (candidate == "*")
+            {
+                filter = (key) => true;
             }
             else if (candidate.EndsWith('*'))
             {
-                string startsWidth = candidate[..^1];
-                filter = (key) => key.GetNthChunk('/').StartsWith(startsWidth, StringComparison.OrdinalIgnoreCase);
+                string startsWith = cand[..^1].ToString();
+                filter = (key) => key.GetNthChunk('/').StartsWith(startsWith, StringComparison.OrdinalIgnoreCase);
+            }
+            else if (candidate.StartsWith('*'))
+            {
+                string endsWith = cand[1..].ToString();
+                filter = (key) => key.GetNthChunk('/').StartsWith(endsWith, StringComparison.OrdinalIgnoreCase);
             }
             else
             {
-                filter = (key) => key.GetNthChunk('/').Equals(candidate, StringComparison.OrdinalIgnoreCase);
+                var c = cand.ToString();
+                filter = (key) => key.GetNthChunk('/').Equals(c, StringComparison.OrdinalIgnoreCase);
             }
 
             foreach (GameLocation? location in Game1.locations)
@@ -482,14 +500,24 @@ public sealed class ModEntry : BaseMod<ModEntry>
 
                 foreach (string? key in events.Keys)
                 {
+
+                    if (!int.TryParse(key, out _) && !key.Contains('/'))
+                    {
+                        // an event to switch to.
+                        continue;
+                    }
                     if (filter(key))
                     {
                         EventRecord record = new (location.Name, key);
                         this.completed.Remove(record);
                         this.evts.Push(record);
+
+                        count++;
                     }
                 }
             }
+
+            this.Monitor.Log($"Adding {count} events for candidate {cand}");
         }
 
         if (this.evts.Count > 0)

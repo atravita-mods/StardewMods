@@ -1,6 +1,12 @@
 ﻿Changelog
 ===============
 
+### Version 0.1.13
+* Fix issue with `switchEvent` keys. Possibly fix issue with `eventById` not working sometimes.
+
+### Version 0.1.12
+* Prevent fast forward from toggling if a textbox is active.
+
 ### Version 0.1.11
 * Adds automated mail checking.
 

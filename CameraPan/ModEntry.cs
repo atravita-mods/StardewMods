@@ -214,7 +214,8 @@ internal sealed class ModEntry : BaseMod<ModEntry>
 
     private void OnClicked(object? sender, ButtonPressedEventArgs e)
     {
-        if (Context.IsPlayerFree && Config.ToggleBehavior == ToggleBehavior.Toggle
+        if (Game1.keyboardDispatcher.Subscriber is null &&
+            Context.IsPlayerFree && Config.ToggleBehavior == ToggleBehavior.Toggle
             && e.Button.IsUseToolButton() && ViewportAdjustmentPatches.ShouldOffset())
         {
             if (CameraButton.Value?.containsPoint(Game1.getMouseX(true), Game1.getMouseY(true)) == true)

@@ -17,6 +17,7 @@ internal static class PlayerControl
     private static PerScreen<HashSet<Point>> _currentControlPoints = new(() => []);
 
     private static PerScreen<Dictionary<Point, List<string>>> _currentActionPoints = new(() => []);
+    private static PerScreen<Dictionary<Point, List<string[]>>> _currentEventCommandPoints = new(() => []);
 
     internal static void AddActionForTile(Event @event, string[] args, EventContext context)
     {
@@ -31,12 +32,41 @@ internal static class PlayerControl
         Point point = new(x, y);
         var dictionary = _currentActionPoints.Value;
 
-        if (!dictionary.TryGetValue(point, out var data))
+        if (!dictionary.TryGetValue(point, out List<string>? data))
         {
             dictionary[point] = data = [];
         }
 
         data.Add(@action);
+        @event.CurrentCommand++;
+    }
+
+    internal static void AddEventCommandForTile(Event @event, string[] args, EventContext context)
+    {
+        if (!ArgUtility.TryGetInt(args, 1, out var x, out var error)
+            || !ArgUtility.TryGetInt(args, 2, out var y, out error))
+        {
+            @event.LogCommandErrorAndSkip(args, error);
+            return;
+        }
+
+        if (args.Length <= 3)
+        {
+            @event.LogCommandErrorAndSkip(args, "insufficient arguments");
+            return;
+        }
+
+        var command = args[3..];
+
+        Point point = new(x, y);
+        var dictionary = _currentEventCommandPoints.Value;
+
+        if (!dictionary.TryGetValue(point, out List<string[]>? data))
+        {
+            dictionary[point] = data = [];
+        }
+
+        data.Add(command);
         @event.CurrentCommand++;
     }
 
@@ -64,6 +94,13 @@ internal static class PlayerControl
         if (control.Count > 0)
         {
             @event.setUpPlayerControlSequence(Key);
+            @event.onEventFinished += () =>
+            {
+                ModEntry.ModMonitor.Log($"Event finished, cleaning up.");
+                _currentActionPoints.Value.Clear();
+                _currentControlPoints.Value.Clear();
+                _currentEventCommandPoints.Value.Clear();
+            };
             ModEntry.ModMonitor.Log($"okay, player control sequence set up with {string.Join(',', control)}");
         }
         else
@@ -83,7 +120,9 @@ internal static class PlayerControl
                 return;
             }
 
-            _currentActionPoints.Value.Remove(new(x, y));
+            Point p = new(x, y);
+            _currentActionPoints.Value.Remove(p);
+            _currentEventCommandPoints.Value.Remove(p);
         }
         @event.CurrentCommand++;
     }
@@ -91,6 +130,7 @@ internal static class PlayerControl
     internal static void RemoveActionForAllTiles(Event @event, string[] args, EventContext context)
     {
         _currentActionPoints.Value.Clear();
+        _currentControlPoints.Value.Clear();
         @event.CurrentCommand++;
     }
 
@@ -145,7 +185,26 @@ internal static class PlayerControl
                         }
                     }
                 }
+
                 _currentActionPoints.Value.Remove(target);
+            }
+
+            if (_currentEventCommandPoints.Value.TryGetValue(target, out var cmds))
+            {
+                int current_command = __instance.CurrentCommand;
+                foreach (var cmd in cmds)
+                {
+                    try
+                    {
+                        __instance.tryEventCommand(Game1.currentLocation, Game1.currentGameTime, cmd);
+                    }
+                    finally
+                    {
+                        __instance.CurrentCommand = current_command;
+                    }
+                }
+
+                _currentEventCommandPoints.Value.Remove(target);
             }
 
             if (_currentControlPoints.Value.Count == 0)

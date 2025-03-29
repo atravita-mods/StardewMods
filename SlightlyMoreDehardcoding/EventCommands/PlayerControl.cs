@@ -21,15 +21,13 @@ internal static class PlayerControl
 
     internal static void AddActionForTile(Event @event, string[] args, EventContext context)
     {
-        if (!ArgUtility.TryGetInt(args, 1, out var x, out var error)
-            || !ArgUtility.TryGetInt(args, 2, out var y, out error)
+        if (!!ArgUtility.TryGetPoint(args, 1, out var point, out var error)
             || !ArgUtility.TryGetRemainder(args, 3, out var @action, out error))
         {
             @event.LogCommandErrorAndSkip(args, error);
             return;
         }
 
-        Point point = new(x, y);
         var dictionary = _currentActionPoints.Value;
 
         if (!dictionary.TryGetValue(point, out List<string>? data))
@@ -56,10 +54,10 @@ internal static class PlayerControl
             return;
         }
 
-        var command = args[3..];
+        string[] command = args[3..];
 
         Point point = new(x, y);
-        var dictionary = _currentEventCommandPoints.Value;
+        Dictionary<Point, List<string[]>> dictionary = _currentEventCommandPoints.Value;
 
         if (!dictionary.TryGetValue(point, out List<string[]>? data))
         {
@@ -81,14 +79,13 @@ internal static class PlayerControl
         control.Clear();
         for (int i = 1; i < args.Length; i += 2)
         {
-            if (!ArgUtility.TryGetInt(args, i, out var x, out string error)
-                || !ArgUtility.TryGetInt(args, i + 1, out var y, out error))
+            if (!ArgUtility.TryGetPoint(args, i, out var p, out var error))
             {
                 @event.LogCommandErrorAndSkip(args, error);
                 return;
             }
 
-            control.Add(new Point(x, y));
+            control.Add(p);
         }
 
         if (control.Count > 0)
@@ -113,14 +110,12 @@ internal static class PlayerControl
     {
         for (int i = 1; i < args.Length; i += 2)
         {
-            if (!ArgUtility.TryGetInt(args, i, out var x, out string error)
-                || !ArgUtility.TryGetInt(args, i + 1, out var y, out error))
+            if (!ArgUtility.TryGetPoint(args, i, out var p, out var error))
             {
                 @event.LogCommandErrorAndSkip(args, error);
                 return;
             }
 
-            Point p = new(x, y);
             _currentActionPoints.Value.Remove(p);
             _currentEventCommandPoints.Value.Remove(p);
         }

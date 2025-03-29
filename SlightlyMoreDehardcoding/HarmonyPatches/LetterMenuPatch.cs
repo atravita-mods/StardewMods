@@ -1,19 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using HarmonyLib;
+﻿using HarmonyLib;
 
 using Microsoft.Xna.Framework;
 
 using SlightlyMoreDehardcoding.Framework;
 
-using StardewValley;
 using StardewValley.Menus;
 
 namespace SlightlyMoreDehardcoding.HarmonyPatches;
+
+/// <summary>
+/// A patch on lettermenu to add items.
+/// </summary>
 internal static class LetterMenuPatch
 {
     internal static void Apply(Harmony harmony)

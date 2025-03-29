@@ -392,7 +392,7 @@ internal static class Rescheduler
                 }
 
                 // insert into cache
-                string[] route = Unravel(node);
+                string[] route = node.Unravel();
                 InsertRoute(start.Name, node.Name, node.PathfindingGenderConstraint, route, token);
 
                 if (ret is not null)
@@ -715,22 +715,6 @@ internal static class Rescheduler
         return true;
     }
 
-    [MethodImpl(TKConstants.Hot)]
-    private static string[] Unravel(MacroNode node)
-    {
-        string[] ret = new string[node.Depth + 1];
-
-        MacroNode? workingNode = node;
-        do
-        {
-            ret[workingNode.Depth] = workingNode.Name;
-            workingNode = workingNode.Prev;
-        }
-        while (workingNode is not null);
-
-        return ret;
-    }
-
     /// <summary>
     /// Gets the locations leaving a specific place, keeping in mind the locations already visited.
     /// </summary>
@@ -864,9 +848,24 @@ internal static class Rescheduler
             this.PathfindingGenderConstraint = PathfindingGenderConstraint;
             this.Depth = prev?.Depth is int previousDepth ? previousDepth + 1 : 0;
         }
+
+        [MethodImpl(TKConstants.Hot)]
+        internal string[] Unravel()
+        {
+            string[] ret = new string[this.Depth + 1];
+
+            MacroNode? workingNode = this;
+            do
+            {
+                ret[workingNode.Depth] = workingNode.Name;
+                workingNode = workingNode.Prev;
+            }
+            while (workingNode is not null);
+
+            return ret;
+        }
     }
 
-    [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:Fields should be private", Justification = "The entire class is private?")]
     private record TaskAndTokenHolder(List<(GameLocation center, int radius)> Centers, LightWeightCancellationToken? Token);
 }
 

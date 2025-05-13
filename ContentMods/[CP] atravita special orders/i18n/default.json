@@ -426,6 +426,15 @@
     "atravita.monster_eradication.name": "Monster Eradication...",
     "atravita.monster_eradication.text": "Every now and then, it's necessary to keep our local monsters in check. Kill 500 monsters within a week.",
     "atravita.monster_eradication.slay": "Kill 500 monsters",
+
+    // *******************
+    // Pacifism
+    // *******************
+    "atravita.pacifism.name": "Pacifism",
+    "atravita.pacifism.text": "You've proven your warmongering abilities, yes. But do you have what it takes for peace?",
+    "atravita.pacifism.slay": "Kill no more than 10 monsters",
+    "atravita.pacifism.mine": "Descend to level 100 in the skull caverns",
+
     // *******************
     // The Quickest Way
     // *******************

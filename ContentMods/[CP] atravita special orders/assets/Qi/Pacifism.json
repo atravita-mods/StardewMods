@@ -1,0 +1,48 @@
+{
+    "Changes": [
+        {
+            "LogName": "Pacifism - Special Order",
+            "Action": "EditData",
+            "Target": "Data/SpecialOrders",
+            "Entries": {
+                "atravita.Pacifism": {
+                    "Name": "{{i18n:atravita.pacifism.name}}",
+                    "Requester": "Qi",
+                    "Duration": "Week",
+                    "Repeatable": "{{Repeatability}}",
+                    "RequiredTags": "mail_ClintReward, mail_winter_19_2",
+                    "OrderType": "Qi",
+                    "Condition": "ANY \"PLAYER_SPECIAL_ORDER_COMPLETE Any QiChallenge10, PLAYER_SPECIAL_ORDER_COMPLETE Any QiChallenge9\" {{Delay|contains=false}}",
+                    "Text": "{{i18n:atravita.pacifism.text}}",
+                    "Objectives": [
+                        {
+                            "Type": "Slay",
+                            "Text": "{{i18n:atravita.pacifism.slay}}",
+                            "RequiredCount": "10",
+                            "Data": {
+                                "TargetName": "a, e, i, o, u, y, A, E, I, O, U, Y",
+                                "FailOnCompletion": "true",
+                            }
+                        },
+                        {
+                            "Type": "ReachMineFloor",
+                            "Text": "{{i18n:atravita.pacifism.mine}}",
+                            "RequiredCount": "100",
+                            "Data": {
+                                "SkullCave": "true"
+                            }
+                        }
+                    ],
+                    "Rewards": [
+                        {
+                            "Type": "Gems",
+                            "Data": {
+                                "Amount": "25"
+                            }
+                        }
+                    ]
+                }
+            }
+        }
+    ]
+}

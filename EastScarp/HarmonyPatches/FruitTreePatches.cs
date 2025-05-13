@@ -15,7 +15,7 @@ using StardewValley.Tools;
 /// <summary>
 /// Patches against fruit trees.
 /// </summary>
-
+[HarmonyPatch]
 [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Named For Harmony")]
 internal static class FruitTreePatches
 {
@@ -82,7 +82,7 @@ internal static class FruitTreePatches
     {
         try
         {
-            if ((t is not Axe && explosion > 0) || __instance.health.Value <= -99f)
+            if (t is MeleeWeapon || __instance.health.Value <= -99f)
             {
                 return true;
             }

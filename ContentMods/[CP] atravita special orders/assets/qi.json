@@ -13,4 +13,12 @@
             "AllowedSkills": "Combat"
         }
     },
+    {
+        "Action": "Include",
+        "FromFile": "assets/Qi/Pacifism.json",
+        "When": {
+            "AllowedSkills": "Combat",
+            "HasMod": "atravita.SlightlyMoreDehardcoding"
+        }
+    }
 ]}

@@ -19,7 +19,6 @@ internal static class ChaosTotemPatcher
             ChaosTotemData data = GetRandomChaosTotemData(location);
 
             Game1.player.jitterStrength = 1f;
-            Color sprinkleColor = Utility.StringToColor(data.Color) ?? Color.White;
             location.playSound("warrior");
             Game1.player.faceDirection(2);
             Game1.player.CanMove = false;
@@ -31,6 +30,9 @@ internal static class ChaosTotemPatcher
                 new ((short)Game1.player.FarmerSprite.CurrentFrame, 0, secondaryArm: false, flip: false, (Farmer who) => DoWarp(who, data, location), behaviorAtEndOfFrame: true)
             ]);
             WarpAnimation(__instance, location);
+            __instance.Stack--;
+            if (__instance.Stack <= 0)
+                Game1.player.removeItemFromInventory(__instance);
             return false;
         }
 
@@ -122,7 +124,8 @@ internal static class ChaosTotemPatcher
         Game1.player.temporarilyInvincible = true;
         Game1.player.temporaryInvincibilityTimer = -2000;
         Game1.player.freezePause = 1000;
-        Game1.flashAlpha = 1f;
+        Color sprinkleColor = Utility.StringToColor(data.Color) ?? Color.White;
+        Game1.screenGlowOnce(sprinkleColor, false);
         DelayedAction.fadeAfterDelay(() => ActuallyDoWarp(data), 1000);
         Rectangle playerBounds = who.GetBoundingBox();
         new Rectangle(playerBounds.X, playerBounds.Y, 64, 64).Inflate(192, 192);

@@ -1,16 +1,16 @@
-<Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="..\csproj_common" />
-
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <ImplicitUsings>enable</ImplicitUsings>
     <EnableHarmony>true</EnableHarmony>
+	<LangVersion>latest</LangVersion>
+	<TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
 
   <PropertyGroup>
     <Name>Eli and Dylan Code</Name>
     <Description>Code unit for Eli and Dylan.</Description>
     <UpdateKeys>-1</UpdateKeys>
-    <Version>0.1.1</Version>
+    <Version>0.1.2</Version>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -18,10 +18,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Leclair.Stardew.ModManifestBuilder" Version="2.4.1" />
+    <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="4.4.0" />
+    <PackageReference Include="Pathoschild.Stardew.ModTranslationClassBuilder" Version="2.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Using Include="StardewValley" />
     <Using Include="StardewModdingAPI" />
     <Using Include="System.Diagnostics.CodeAnalysis" />
-    <Using Include="JetBrains.Annotations" />
     <Using Alias="NotNullAttribute" Include="System.Diagnostics.CodeAnalysis.NotNullAttribute" />
     <Using Alias="Object" Include="System.Object" />
     <Using Alias="SObject" Include="StardewValley.Object" />

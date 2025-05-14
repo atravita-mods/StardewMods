@@ -28,6 +28,8 @@ internal sealed class ModEntry : Mod
         PortraitsToShake = helper.Data.ReadJsonFile<Dictionary<string, int[]>>("assets/portrait_shake.json");
 
         helper.Events.GameLoop.DayStarted += this.OnDayStart;
+        helper.Events.Content.AssetRequested += ChaosTotemAsset.AssetRequested;
+        helper.Events.Content.AssetsInvalidated += ChaosTotemAsset.AssetsInvalidated;
 
         this.ApplyPatches(new(this.ModManifest.UniqueID));
     }

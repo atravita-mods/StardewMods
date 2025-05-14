@@ -56,7 +56,7 @@ internal class ScheduleUtilityFunctions
                 // GOTO season
                 if (newKey.Equals("Season", StringComparison.OrdinalIgnoreCase))
                 {
-                    newKey = date.Season.ToLowerInvariant();
+                    newKey = date.Season.ToString().ToLowerInvariant();
                 }
 
                 // GOTO newKey

@@ -7,7 +7,7 @@ using HarmonyLib;
 /// </summary>
 [HarmonyPatch(typeof(Event))]
 [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Named for Harmony")]
-internal static class EventNPCScaling
+internal static class EventNPCPatches
 {
     [HarmonyPatch("addActor")]
     private static void Postfix(Event __instance)
@@ -16,7 +16,7 @@ internal static class EventNPCScaling
         {
             if (__instance.actors.Count > 0)
             {
-                ScalePatches.ApplyScale(__instance.actors[^1]);
+                NPCPatches.ApplyScale(__instance.actors[^1]);
             }
         }
         catch (Exception ex)

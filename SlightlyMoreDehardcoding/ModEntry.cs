@@ -21,12 +21,15 @@ internal sealed class ModEntry : BaseMod<ModEntry>
 
         AssetManager.Init(helper.GameContent, helper.ModRegistry.ModID);
         helper.Events.Content.AssetRequested += static (_, e) => AssetManager.Apply(e);
+        helper.Events.Content.AssetsInvalidated += static (_, e) => AssetManager.Invalidate(e.NamesWithoutLocale);
 
         Harmony harmony = new(helper.ModRegistry.ModID);
 
         LetterMenuPatch.Apply(harmony);
         PlayerControl.Apply(harmony);
         ObjectivePatch.Apply(harmony);
+        NPCPatches.Apply(harmony);
+        ColorPatches.Apply(harmony);
 
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
     }

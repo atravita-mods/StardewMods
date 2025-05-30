@@ -1,6 +1,34 @@
 {
     "Changes": [
         {
+            "Action": "EditData",
+            "Target": "Data/TriggerActions",
+            "Entries": {
+                "{{ModId}}.RemoveTickets": {
+                    "Id": "{{ModId}}.RemoveTickets",
+                    "Trigger": "DayStarted",
+                    "SkipPermanentlyCondition": "DAYS_PLAYED 58",
+                    "Condition": "PLAYER_STAT Current specialOrderPrizeTickets 1",
+                    "Actions": [
+                        "IncrementStat {{ModId}}_Tickets 1",
+                        "IncrementStat specialOrderPrizeTickets -1"
+                    ],
+                    "MarkActionApplied": false
+                },
+                "{{ModId}}.ReaddTickets": {
+                    "Id": "{{ModId}}.ReaddTickets",
+                    "Trigger": "DayStarted",
+                    "SkipPermanentlyCondition": "DAYS_PLAYED 59, PLAYER_STAT Current {{ModId}}_Tickets 0 0",
+                    "Condition": "PLAYER_STAT Current {{ModId}}_Tickets 1",
+                    "Actions":[
+                        "IncrementStat {{ModId}}_Tickets -1",
+                        "IncrementStat specialOrderPrizeTickets 1"
+                    ],
+                    "MarkActionApplied": false
+                }
+            }
+        },
+        {
             "Action": "Include",
             "FromFile": "assets/TriggerActionQuests/QualityFish.json",
             "When": {

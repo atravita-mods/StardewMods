@@ -9,7 +9,7 @@ using HarmonyLib;
 /// </summary>
 [HarmonyPatch]
 [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Named for Harmony")]
-internal static class ScalePatches
+internal static class NPCPatches
 {
     private static IEnumerable<MethodBase> TargetMethods()
     {
@@ -35,6 +35,12 @@ internal static class ScalePatches
             {
                 ModEntry.ModMonitor.VerboseLog($"Assigning scale {scale} to npc {__instance.Name}");
                 __instance.Scale = scale;
+            }
+
+            if (data.CustomFields?.TryGetValue("EastScarpe.ForceOneTileWide", out val) == true && bool.TryParse(val, out bool shouldForce) && shouldForce)
+            {
+                ModEntry.ModMonitor.VerboseLog($"Forcing {__instance.Name} one tile wide.");
+                __instance.forceOneTileWide.Value = true;
             }
         }
         catch (Exception ex)

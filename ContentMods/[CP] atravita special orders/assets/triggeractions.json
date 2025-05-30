@@ -6,7 +6,7 @@
             "Entries": {
                 "{{ModId}}.RemoveTickets": {
                     "Id": "{{ModId}}.RemoveTickets",
-                    "Trigger": "DayStarted",
+                    "Trigger": "LocationChanged",
                     "SkipPermanentlyCondition": "DAYS_PLAYED 58",
                     "Condition": "PLAYER_STAT Current specialOrderPrizeTickets 1",
                     "Actions": [
@@ -17,7 +17,7 @@
                 },
                 "{{ModId}}.ReaddTickets": {
                     "Id": "{{ModId}}.ReaddTickets",
-                    "Trigger": "DayStarted",
+                    "Trigger": "LocationChanged",
                     "SkipPermanentlyCondition": "DAYS_PLAYED 59, PLAYER_STAT Current {{ModId}}_Tickets 0 0",
                     "Condition": "PLAYER_STAT Current {{ModId}}_Tickets 1, DAYS_PLAYED 58",
                     "Actions":[

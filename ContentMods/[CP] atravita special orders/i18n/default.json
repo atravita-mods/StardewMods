@@ -485,7 +485,7 @@
     // **********************
 
     "atravita.local_crops.name": "Local Crops",
-    "atravita.local_crops.text": "I hear there is great demand for our local crop, the {Crop}. Looking for someone to grow some. At haste!",
+    "atravita.local_crops.text": "I hear there is great demand for our local crop, the {Crop:Text}. Looking for someone to grow some. At haste!",
     "atravita.local_crops.spring": "I'm told our carrots have an especially nice crunch.",
     "atravita.local_crops.summer": "Squash is in right now as a low-carb alternative to pasta!",
     "atravita.local_crops.fall": "I hear that children will voluntarily eat our broccoli!",
@@ -502,7 +502,7 @@
     // **********************
 
     "atravita.local_fruits.name": "Local Fruits",
-    "atravita.local_fruits.text": "Market demand for our local fruit, the {Crop}, is surging. Let's grow some. And quickly!",
+    "atravita.local_fruits.text": "Market demand for our local fruit, the {Crop:Text}, is surging. Let's grow some. And quickly!",
     "atravita.local_fruits.spring": "All the new-years-resolutions folks are looking for healthy foods to add to their diet!",
     "atravita.local_fruits.summer": "There's nothing like a juicy fruit to cut the summer heat!",
     "atravita.local_fruits.fall": "It's pie season, and you know what all pies need - some tasty fruit!",

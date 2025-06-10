@@ -17,8 +17,9 @@ internal static class DuplicateNPCDetector
             return;
         }
 
-        Dictionary<string, NPC> found = new();
-        foreach (GameLocation loc in Game1.locations)
+        Dictionary<string, NPC> found = [];
+
+        Utility.ForEachLocation((loc) =>
         {
             for (int i = loc.characters.Count - 1; i >= 0; i--)
             {
@@ -31,7 +32,7 @@ internal static class DuplicateNPCDetector
                     continue;
                 }
 
-                if (!character.isVillager() || character.GetType() != typeof(NPC))
+                if (!character.IsVillager || character.GetType() != typeof(NPC))
                 {
                     continue;
                 }
@@ -58,6 +59,8 @@ internal static class DuplicateNPCDetector
                     }
                 }
             }
-        }
+
+            return true;
+        });
     }
 }

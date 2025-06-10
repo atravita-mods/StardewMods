@@ -73,7 +73,7 @@ internal static class DrawCulling
     [HarmonyPrefix]
     [HarmonyPriority(Priority.Last)]
     [MethodImpl(TKConstants.Hot)]
-    [HarmonyPatch(typeof(Character), nameof(Character.draw), new[] { typeof(SpriteBatch), typeof(float) })]
+    [HarmonyPatch(typeof(Character), nameof(Character.draw), [typeof(SpriteBatch), typeof(float)])]
     private static bool PrefixCharacterDraw(Character __instance, float alpha)
         => !ModEntry.Config.CullDraws || (alpha > 0f && Utility.isOnScreen(__instance.Position, 256));
 

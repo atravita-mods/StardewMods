@@ -9,6 +9,7 @@
     <Import_RootNamespace>MiniAtraShared</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)HotReloadManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\BaseMod.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\LogExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\PredicateInterpolatedStringHandler.cs" />

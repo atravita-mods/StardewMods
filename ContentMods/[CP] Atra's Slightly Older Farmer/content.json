@@ -1,0 +1,184 @@
+{
+    "$schema": "https://smapi.io/schemas/content-patcher.json",
+    "Format": "2.0.0",
+    "ConfigSchema": {
+        "GenderedTitle": {
+            "AllowBlank": true,
+        },
+        "EnableFor": {
+            "AllowValues": "Abigail, Alex, Caroline, Clint, Demetrius, Elliott, Emily, Evelyn, George, Governor, Gus, Haley, Harvey, Jas, Jodi, Kent, Leah, Lewis, Leo, Linus, Marlon, Marnie, Maru, Pam, Penny, Pierre, Robin, Sam, Sandy, Sebastian, Shane, Vincent, Willy",
+            "AllowMultiple": true,
+            "Default": "Abigail, Alex, Caroline, Clint, Demetrius, Elliott, Emily, Evelyn, George, Governor, Gus, Haley, Harvey, Jas, Jodi, Kent, Leah, Lewis, Linus, Leo, Marlon, Marnie, Maru, Pam, Penny, Pierre, Robin, Sam, Sandy, Sebastian, Shane, Vincent, Willy",
+            "AllowBlank": true
+        },
+    },
+    "DynamicTokens": [
+
+
+        // title
+        {
+            "Name": "Title",
+            "Value": "{{i18n:miss}}",
+            "When": {"PlayerGender": "Female"}
+        },
+        {
+            "Name": "Title",
+            "Value": "{{i18n:mrs}}",
+            "When": {
+                "PlayerGender": "Female",
+                "HasValue: {{Spouse}}": true,
+                "Relationship: {{Spouse}}": "Married"
+            }
+        },
+        {
+            "Name": "Title",
+            "Value": "{{i18n:mister}}",
+            "When": {"PlayerGender": "Male"}
+        },
+        {
+            "Name": "Title",
+            "Value": "{{Hana.GNMTokens/Title}}",
+            "When": {
+                "HasMod": "Hana.GNMTokens",
+                "HasValue: {{Hana.GNMTokens/Title}}": true
+            }
+        },
+        {
+            "Name": "Title",
+            "Value": "{{GenderedTitle}}",
+            "When": {"HasValue: {{GenderedTitle}}": true}
+        },
+
+        // shuffle randoms.
+        {
+            "Name": "DialogueRandom",
+            "Value": "{{Random:alpha, bravo, charlie, delta}}",
+        },
+
+        // year nonsense
+        {
+            "Name": "YearModulus",
+            "Value": "{{Query: {{Year}} % 5}}"
+        },
+        {
+            "Name": "YearRemainder",
+            "Value": "",
+            "When": {
+                "Year": "1"
+            }
+        },
+        {
+            "Name": "YearRemainder",
+            "Value": "_2",
+            "When": {
+                "Year|contains=1": false
+            }
+        },
+
+        // pet nonsense
+        {
+            "Name": "HasPet",
+            "Value": "{{HasSeenEvent:HostPlayer|contains=1590166, 897405}}",
+        },
+        {
+            "Name": "HasPet",
+            "Value": "false",
+            "When": {
+                "HasReadLetter:HostPlayer": "rejectedPet"
+            }
+        },
+
+        // child status
+        {
+            // no children, not pregnant
+            "Name": "ChildStatus",
+            "Value": "None",
+        },
+        {
+            // No children, expecting
+            "Name": "ChildStatus",
+            "Value": "Expecting",
+            "When": { "HavingChild": "@{{playerName}}" }
+        },
+        {
+            "Name": "ChildStatus",
+            "Value": "One",
+            "When": { "HasValue: {{ChildGenders}}": true }
+        },
+        {
+            "Name": "ChildStatus",
+            "Value": "Multiple",
+            "When": { "HasValue: {{ChildGenders|valueAt=1}}": true }
+        },
+        {
+            "Name": "ChildStatus",
+            "Value": "One",
+            "When": {
+                "HasMod": "Candidus42.LittleNPCs",
+                "HasValue: {{Candidus42.LittleNPCs/FirstLittleNPCName}}": true,
+                "HasValue: {{ChildGenders}}": false
+            }
+        },
+        {
+            "Name": "ChildStatus",
+            "Value": "Multiple",
+            "When": {
+                "HasMod": "Candidus42.LittleNPCs",
+                "HasValue: {{Candidus42.LittleNPCs/FirstLittleNPCName}}": true,
+                "HasValue: {{ChildGenders}}": true
+            }
+        },
+        {
+            "Name": "ChildStatus",
+            "Value": "Multiple",
+            "When": {
+                "HasMod": "Candidus42.LittleNPCs",
+                "HasValue: {{Candidus42.LittleNPCs/SecondLittleNPCName}}": true,
+            }
+        },
+
+        // movies!
+        {
+            "Name": "MovieStatus",
+            "Value": "None",
+        },
+        {
+            "Name": "MovieStatus",
+            "Value": "CC",
+            "When": {"HasReadLetter:hostPlayer": "ccMovieTheater"}
+        },
+        {
+            "Name": "MovieStatus",
+            "Value": "Joja",
+            "When": {"HasReadLetter:hostPlayer": "ccMovieTheaterJoja"}
+        },
+
+        // Marnie relationship status
+        {
+            "Name": "MarnieStatus",
+            "Value": "Unknown"
+        },
+        {
+            "Name": "MarnieStatus",
+            "Value": "Known",
+            "When": {
+                "HasSeenEvent": "639373" // town event
+            }
+        },
+        {
+            "Name": "MarnieStatus",
+            "Value": "Better",
+            "When": {
+                "HasMod": "IMS.CP.MarnieDeservesBetter, nraittanna.LifeCycleMarnieLewis",
+                "HasSeenEvent": "59020016, 639373" // the Life Cycle event OR the town event.
+            }
+        },
+    ],
+    "Changes": [
+        {
+            "Action": "Include",
+            "LogName": "Other Changes",
+            "FromFile": "general_dialogue.json"
+        }
+    ],
+}

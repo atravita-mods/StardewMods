@@ -1,0 +1,18 @@
+{
+
+    /****************
+    * Grammar bits
+    ****************/
+
+    // this isn't great because it's very English-specific.
+    "he": "he",
+    "she": "she",
+    "her": "her",
+    "him": "him",
+    "his": "his",
+    "hers": "hers",
+    "theirs": "theirs",
+    "mister": "Mister",
+    "miss": "Misses",
+    "mrs": "Mrs.",
+}

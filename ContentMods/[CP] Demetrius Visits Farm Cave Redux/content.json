@@ -91,6 +91,7 @@
                 "fishCaught_698": "{{i18n: dialogue.fishcaught.sturgeon}}",
                 "fishCaught_Goby": "{{i18n: dialogue.fishcaught.goby}}",
                 "fishCaught_148": "{{i18n: dialogue.fishcaught.eel}}",
+                "fishCaught_148_fourweeks": "{{i18n: dialogue.fishcaught.eel.fourweeks}}",
                 "fishCaught_149": "{{i18n: dialogue.fishcaught.octopus}}",
                 "fishCaught_151": "{{i18n: dialogue.fishcaught.squid}}",
 

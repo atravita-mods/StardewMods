@@ -344,7 +344,7 @@ public sealed class GMCMHelper : IntegrationHelper
     {
         this.AddEnumOption<TEnum>(
             name: name,
-            getValue: getValue().ToString,
+            getValue: () => getValue().ToString(),
             setValue: (value) => setValue(Enum.Parse<TEnum>(value)),
             tooltip: tooltip,
             fieldId: fieldId);
